@@ -10,7 +10,6 @@
 
 # Next.js build output
 /.next/
-/.next-recovery-backup/
 /out/
 
 # Production builds
