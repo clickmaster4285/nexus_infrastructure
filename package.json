@@ -5,15 +5,37 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.1.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
     "recharts": "^2.15.0",
-    "simple-icons": "^16.36.0"
+    "simple-icons": "^16.36.0",
+    "tailwind-merge": "^2.6.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.187.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^5.7.0"
   }
 }
