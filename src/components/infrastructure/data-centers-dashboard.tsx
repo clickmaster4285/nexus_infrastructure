@@ -1,0 +1,316 @@
+"use client";
+
+import { useState, type ComponentType, type SVGProps } from "react";
+import dynamic from "next/dynamic";
+import { Globe2, MoreVertical, Plus } from "lucide-react";
+import * as Flags from "country-flag-icons/react/3x2";
+import {
+  CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
+  ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from "recharts";
+
+import { PageHeading } from "@/components/layout/page-heading";
+import { PageMeta } from "@/components/layout/page-meta";
+import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
+import { MetricCard } from "@/components/shared/metric-card";
+import { Panel } from "@/components/shared/panel";
+import { Button } from "@/components/ui/button";
+import type { MetricStat } from "@/data/mock/dashboard";
+
+const InfrastructureMap = dynamic(
+  () => import("@/components/live-operations/infrastructure-map").then((module) => module.InfrastructureMap),
+  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-[#eef2f7] text-[12px] text-muted-foreground">Loading world map…</div> },
+);
+
+const stats: MetricStat[] = [
+  { label: "Total Data Centers", value: "5", change: "+1 new", trend: "up", tone: "blue", icon: "server" },
+  { label: "Total Locations", value: "12", change: "Worldwide", trend: "flat", tone: "blue", icon: "map-pin" },
+  { label: "Countries", value: "6", change: "Across 4 regions", trend: "flat", tone: "purple", icon: "globe" },
+  { label: "Healthy Sites", value: "10", change: "83.3% of total", trend: "up", tone: "green", icon: "online" },
+  { label: "Degraded Sites", value: "1", change: "8.3% of total", trend: "down", tone: "amber", icon: "warning" },
+  { label: "Offline Sites", value: "1", change: "8.3% of total", trend: "down", tone: "red", icon: "offline" },
+];
+
+type SiteStatus = "Healthy" | "Degraded" | "Offline";
+
+const centers: { name: string; location: string; status: SiteStatus; uptime: number; country: string }[] = [
+  { name: "DC-1", location: "New York, USA", status: "Healthy", uptime: 99.9, country: "United States" },
+  { name: "DC-2", location: "London, UK", status: "Healthy", uptime: 99.6, country: "United Kingdom" },
+  { name: "DC-3", location: "Dubai, UAE", status: "Degraded", uptime: 98.7, country: "UAE" },
+  { name: "DC-4", location: "Singapore, SG", status: "Healthy", uptime: 99.1, country: "Singapore" },
+  { name: "DC-5", location: "Sydney, AU", status: "Offline", uptime: 0, country: "Australia" },
+];
+
+const mapMarkers: InfrastructureMapMarker[] = [
+  { name: "DC-1 · New York", lat: 40.7128, lng: -74.006, status: "healthy", role: "Data center · 99.9% uptime" },
+  { name: "DC-2 · London", lat: 51.5072, lng: -0.1276, status: "healthy", role: "Data center · 99.6% uptime" },
+  { name: "DC-3 · Dubai", lat: 25.2048, lng: 55.2708, status: "warning", role: "Degraded · 98.7% uptime" },
+  { name: "DC-4 · Singapore", lat: 1.3521, lng: 103.8198, status: "healthy", role: "Data center · 99.1% uptime" },
+  { name: "DC-5 · Sydney", lat: -33.8688, lng: 151.2093, status: "critical", role: "Offline · 0% uptime" },
+];
+
+const countryLocations = [
+  { code: "US", name: "United States", count: 2, status: "healthy" },
+  { code: "GB", name: "United Kingdom", count: 2, status: "healthy" },
+  { code: "AE", name: "UAE", count: 2, status: "degraded" },
+  { code: "DE", name: "Germany", count: 2, status: "healthy" },
+  { code: "SG", name: "Singapore", count: 2, status: "healthy" },
+  { code: "AU", name: "Australia", count: 2, status: "offline" },
+];
+
+const FlagComponents = Flags as unknown as Record<
+  string,
+  ComponentType<SVGProps<SVGSVGElement>> | undefined
+>;
+
+const regionCount = 4;
+
+const centerStates = [
+  { name: "Healthy", value: 3, color: "#20b77a" },
+  { name: "Degraded", value: 1, color: "#f59e0b" },
+  { name: "Offline", value: 1, color: "#ef4444" },
+];
+
+const locationStates = [
+  { name: "Healthy", value: 10, color: "#20b77a" },
+  { name: "Degraded", value: 1, color: "#f59e0b" },
+  { name: "Offline", value: 1, color: "#ef4444" },
+];
+
+const performanceTimes = ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"];
+const performance = performanceTimes.map((time, index) => ({
+  time,
+  nyc: [72, 76, 69, 82, 78, 88, 81][index],
+  london: [68, 73, 70, 79, 75, 82, 76][index],
+  dubai: [55, 59, 63, 68, 72, 64, 60][index],
+}));
+
+const topLocations = [
+  { name: "New York (USA)", countryCode: "US", uptime: 99.9, color: "#3b82f6" },
+  { name: "London (UK)", countryCode: "GB", uptime: 99.6, color: "#8b5cf6" },
+  { name: "Dubai (UAE)", countryCode: "AE", uptime: 99.2, color: "#f59e0b" },
+  { name: "Singapore (SG)", countryCode: "SG", uptime: 98.9, color: "#06b6d4" },
+  { name: "Sydney (AU)", countryCode: "AU", uptime: 98.4, color: "#f43f5e" },
+];
+const averageLocationUptime = topLocations.reduce((sum, location) => sum + location.uptime, 0) / topLocations.length;
+const lowestUptimeLocation = topLocations.reduce((lowest, location) => location.uptime < lowest.uptime ? location : lowest);
+
+const centerOverviewStats = [
+  { label: "Total Capacity", value: "3.2 PB" },
+  { label: "Avg Uptime", value: `${averageLocationUptime.toFixed(1)}%` },
+  { label: "Active Incidents", value: "2" },
+];
+
+const locationAvailabilityStats = [
+  { label: "Uptime (30d)", value: `${averageLocationUptime.toFixed(1)}%` },
+  { label: "Incidents", value: "2" },
+  { label: "Avg Recovery (MTTR)", value: "18 min" },
+];
+
+const recentEvents = [
+  { time: "Apr 23, 14:20", type: "Info", message: "DC-1 maintenance completed", location: "New York", status: "Resolved", tone: "blue" },
+  { time: "Apr 23, 12:15", type: "Warning", message: "High latency detected", location: "Singapore", status: "Investigating", tone: "amber" },
+  { time: "Apr 23, 10:10", type: "Info", message: "New location added: Tokyo", location: "Tokyo", status: "Resolved", tone: "blue" },
+  { time: "Apr 23, 08:45", type: "Critical", message: "DC-5 is offline", location: "Sydney", status: "Open", tone: "red" },
+  { time: "Apr 23, 06:30", type: "Info", message: "Backup completed", location: "London", status: "Resolved", tone: "blue" },
+];
+
+function StatusDonut({
+  data,
+  centerValue,
+  centerLabel,
+  size = "regular",
+}: {
+  data: { name: string; value: number; color: string }[];
+  centerValue: string;
+  centerLabel: string;
+  size?: "regular" | "large";
+}) {
+  const large = size === "large";
+  return (
+    <div className={`flex min-w-0 flex-1 items-center ${large ? "min-h-[168px] gap-3" : "min-h-[152px] gap-2"}`}>
+      <div className={`relative shrink-0 ${large ? "h-[156px] w-[52%] max-w-[190px]" : "h-[144px] w-[52%] max-w-[168px]"}`}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie data={data} dataKey="value" nameKey="name" innerRadius="64%" outerRadius="91%" paddingAngle={1} stroke="none">
+              {data.map((item) => <Cell key={item.name} fill={item.color} />)}
+            </Pie>
+            <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+          <b className={`font-display font-extrabold leading-tight text-foreground ${large ? "text-[24px]" : "text-[22px]"}`}>{centerValue}</b>
+          <span className="text-center text-[11px] text-muted-foreground">{centerLabel}</span>
+        </div>
+      </div>
+      <div className={`min-w-0 flex-1 ${large ? "space-y-3" : "space-y-2.5"}`}>
+        {data.map((item) => <div key={item.name} className="grid grid-cols-[9px_minmax(0,1fr)_auto] items-center gap-2 text-[12px]"><i className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} /><span className="truncate text-foreground">{item.name}</span><b className="tabular-nums text-foreground">{item.value}</b></div>)}
+      </div>
+    </div>
+  );
+}
+
+function DataCenterPerformance({ range }: { range: string }) {
+  return (
+    <>
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-[11px] text-muted-foreground">
+        {[ ["DC-1 (NYC)", "#278cf0"], ["DC-2 (LON)", "#a855f7"], ["DC-3 (DUB)", "#20b77a"] ].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
+      </div>
+      <div className="h-[190px] w-full pt-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={performance} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
+            <CartesianGrid stroke="var(--border)" vertical={false} />
+            <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
+            <YAxis width={42} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
+            <Tooltip labelFormatter={(label) => `${label} · ${range}`} contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+            <Line dataKey="nyc" name="DC-1 (NYC)" type="monotone" stroke="#278cf0" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+            <Line dataKey="london" name="DC-2 (LON)" type="monotone" stroke="#a855f7" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+            <Line dataKey="dubai" name="DC-3 (DUB)" type="monotone" stroke="#20b77a" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </>
+  );
+}
+
+function StatusBadge({ status }: { status: SiteStatus }) {
+  const style = status === "Healthy"
+    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+    : status === "Degraded"
+      ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
+      : "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300";
+  return <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold ${style}`}><i className={`h-1.5 w-1.5 rounded-full ${status === "Healthy" ? "bg-emerald-500" : status === "Degraded" ? "bg-amber-500" : "bg-rose-500"}`} />{status}</span>;
+}
+
+function CountryFlag({ code, name }: { code: string; name: string }) {
+  const Flag = FlagComponents[code];
+
+  if (!Flag) {
+    return (
+      <span
+        role="img"
+        aria-label={`${name} flag unavailable`}
+        className="grid h-[18px] w-6 shrink-0 place-items-center rounded-[3px] bg-muted text-[9px] font-semibold text-muted-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+      >
+        {code}
+      </span>
+    );
+  }
+
+  return (
+    <Flag
+      title={`${name} flag`}
+      aria-label={`${name} flag`}
+      className="h-[18px] w-6 shrink-0 rounded-[3px] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+    />
+  );
+}
+
+export function DataCentersDashboard() {
+  const [range, setRange] = useState("24h");
+  const [mapScope, setMapScope] = useState("World");
+  const [notice, setNotice] = useState("");
+  const showNotice = (message: string) => { setNotice(message); window.setTimeout(() => setNotice(""), 2600); };
+
+  return (
+    <div className="flex flex-col gap-3 pb-3">
+      <PageMeta breadcrumbs={["Infrastructure", "Data Centers & Locations"]} variant="detail" />
+      <PageHeading title="Data Centers & Locations" description="Monitor data center health, location availability and infrastructure performance." actionsAlign="top" variant="detail">
+        <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-9 gap-1.5 px-3 text-[12px]"><Plus size={15} />Add Data Center</Button>
+        <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-9 gap-1.5 px-3 text-[12px]"><Globe2 size={15} />View Map</Button>
+      </PageHeading>
+
+      <section aria-label="Data center summary" className="grid grid-cols-2 items-stretch gap-2 sm:grid-cols-3 xl:grid-cols-6">
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[88px]" labelClassName="text-[12px] leading-4" valueClassName="text-[24px] leading-7" trendClassName="text-[11px] leading-4" />)}
+      </section>
+
+      <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
+        <Panel title="Global Infrastructure Map" className="min-h-[290px] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[11px] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[11px] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
+          <div id="global-data-centers" className="relative mt-2 min-h-[248px] flex-1 overflow-hidden rounded-md bg-[#eef2f7]">
+            <InfrastructureMap variant="light" markers={mapMarkers} center={[20, 20]} zoom={2} legendCounts={{ healthy: 10, warning: 1, critical: 1 }} title="Global Infrastructure Map" description="12 monitored locations · mock data" />
+            {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[11px] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
+          </div>
+        </Panel>
+
+        <Panel title="Data Centers Overview" className="min-w-0 p-4">
+          <StatusDonut data={centerStates} centerValue="5" centerLabel="Total centers" />
+          <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border pt-3">
+            {centerOverviewStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[10px] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[11px] text-foreground">{item.value}</b></div>)}
+          </div>
+        </Panel>
+
+        <Panel title="Locations by Country" className="min-w-0 p-4">
+          <div className="flex min-h-[192px] flex-1 flex-col justify-between gap-2 pt-3">
+            <div className="flex flex-1 flex-col justify-between gap-2">
+              {countryLocations.map((country) => (
+                <div
+                  key={country.code}
+                  className="grid min-h-6 grid-cols-[24px_minmax(0,1fr)_8px_auto] items-center gap-3 text-[12px]"
+                >
+                  <CountryFlag code={country.code} name={country.name} />
+                  <span className="truncate font-medium text-foreground">{country.name}</span>
+                  <i
+                    aria-label={`${country.status} status`}
+                    className={`h-2 w-2 rounded-full ${
+                      country.status === "healthy"
+                        ? "bg-emerald-500"
+                        : country.status === "degraded"
+                          ? "bg-amber-500"
+                          : "bg-rose-500"
+                    }`}
+                  />
+                  <b className="tabular-nums text-foreground">{country.count}</b>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between gap-2 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>{countryLocations.length} countries · {regionCount} regions</span><button onClick={() => showNotice("Showing all mock locations by country.")} className="shrink-0 font-semibold text-primary">View all</button></div>
+          </div>
+        </Panel>
+      </section>
+
+      <section aria-label="Performance and location availability" className="grid items-stretch gap-3 xl:grid-cols-[1.1fr_0.9fr_1.1fr]">
+        <Panel title="Data Center Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-[11px] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
+          <DataCenterPerformance range={range} />
+        </Panel>
+
+        <Panel title="Location Availability" className="min-w-0 p-4">
+          <StatusDonut data={locationStates} centerValue="98.7%" centerLabel="Overall" size="large" />
+          <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border pt-3">
+            {locationAvailabilityStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[10px] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[11px] text-foreground">{item.value}</b></div>)}
+          </div>
+        </Panel>
+
+        <Panel title="Top Locations by Uptime" className="min-w-0 p-4">
+          <div className="flex flex-1 flex-col justify-between gap-3 pt-3">
+            <div className="flex flex-1 flex-col justify-between gap-2.5">
+              {topLocations.map((location) => <div key={location.name} className="grid min-h-6 grid-cols-[24px_minmax(0,1.05fr)_minmax(60px,1.4fr)_44px] items-center gap-3 text-[12px]"><CountryFlag code={location.countryCode} name={location.name} /><span className="truncate font-medium text-foreground">{location.name}</span><div className="h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${location.uptime}%`, backgroundColor: location.color }} /></div><b className="text-right tabular-nums text-foreground">{location.uptime.toFixed(1)}%</b></div>)}
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>Average uptime: <b className="text-foreground">{averageLocationUptime.toFixed(1)}%</b></span><span>Lowest: <b className="text-foreground">{lowestUptimeLocation.name} {lowestUptimeLocation.uptime.toFixed(1)}%</b></span></div>
+          </div>
+        </Panel>
+      </section>
+
+      <section aria-label="Data center details and recent events" className="grid items-stretch gap-3 xl:grid-cols-[1.15fr_1fr]">
+        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="overflow-x-auto pt-2">
+            <table className="w-full min-w-[560px] text-left text-[12px]">
+              <thead><tr className="border-b border-border text-muted-foreground">{["Name", "Location", "Status", "Uptime", "Actions"].map((heading) => <th key={heading} className={`whitespace-nowrap px-2 pb-2 font-semibold ${heading === "Actions" ? "text-center" : ""}`}>{heading}</th>)}</tr></thead>
+              <tbody>{centers.map((center) => <tr key={center.name} className="h-[44px] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 font-semibold text-foreground">{center.name}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{center.location}</td><td className="px-2"><StatusBadge status={center.status} /></td><td className="px-2 tabular-nums text-foreground">{center.uptime.toFixed(1)}%</td><td className="w-16 px-2 text-center align-middle"><button type="button" aria-label={`More actions for ${center.name}`} onClick={() => showNotice(`${center.name} actions are a mockup for now.`)} className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-md border-0 bg-transparent text-muted-foreground shadow-none transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><MoreVertical size={18} /></button></td></tr>)}</tbody>
+            </table>
+          </div>
+        </Panel>
+
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="overflow-x-auto pt-2">
+            <table className="w-full min-w-[610px] text-left text-[12px]">
+              <thead><tr className="border-b border-border text-muted-foreground">{["Time", "Type", "Message", "Location", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-semibold">{heading}</th>)}</tr></thead>
+              <tbody>{recentEvents.map((event) => <tr key={event.time} className="h-[40px] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 text-muted-foreground">{event.time}</td><td className="px-2"><span className={`inline-flex items-center gap-1.5 font-semibold ${event.tone === "red" ? "text-rose-600" : event.tone === "amber" ? "text-amber-600" : "text-blue-600"}`}><i className={`h-2 w-2 rounded-full ${event.tone === "red" ? "bg-rose-500" : event.tone === "amber" ? "bg-amber-500" : "bg-blue-500"}`} />{event.type}</span></td><td className="whitespace-nowrap px-2 text-foreground">{event.message}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{event.location}</td><td className="px-2"><span className={`rounded-full px-2 py-1 text-[11px] font-medium ${event.status === "Resolved" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : event.status === "Open" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"}`}>{event.status}</span></td></tr>)}</tbody>
+            </table>
+          </div>
+        </Panel>
+      </section>
+
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+    </div>
+  );
+}

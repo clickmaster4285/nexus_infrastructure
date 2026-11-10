@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { PageHeading } from "@/components/layout/page-heading";
+import { PageMeta } from "@/components/layout/page-meta";
+import { DonutPanel } from "@/components/shared/donut-panel";
+import { MetricCard } from "@/components/shared/metric-card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AssetsEnvironmentPanel } from "@/components/infrastructure/panels/assets-environment-panel";
+import { InfrastructureEventsPanel } from "@/components/infrastructure/panels/infrastructure-events-panel";
+import { InfrastructureHealthPanel } from "@/components/infrastructure/panels/infrastructure-health-panel";
+import { TopologyPanel } from "@/components/infrastructure/panels/topology-panel";
+import { UnmonitoredAssetsPanel } from "@/components/infrastructure/panels/unmonitored-assets-panel";
+import { infrastructureStats, providerDistribution } from "@/data/mock/infrastructure";
+
+const ENVIRONMENT_OPTIONS = ["All Environments", "Production", "Staging", "Development", "Testing"] as const;
+const PROVIDER_OPTIONS = ["All Providers", "AWS", "DigitalOcean", "Hetzner", "On-Prem"] as const;
+const GROUP_BY_OPTIONS = ["Location", "Environment", "Provider", "Type"] as const;
+
+export function InfrastructureDashboard() {
+  const router = useRouter();
+  const [environment, setEnvironment] = useState<string>("All Environments");
+  const [provider, setProvider] = useState<string>("All Providers");
+  const [groupBy, setGroupBy] = useState<string>("Location");
+
+  return (
+    <>
+      <PageMeta breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} />
+      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="top">
+        <Select value={environment} onValueChange={setEnvironment}>
+          <SelectTrigger className="h-7 min-w-[145px] text-[9px]" aria-label="Filter by environment">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {ENVIRONMENT_OPTIONS.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={provider} onValueChange={setProvider}>
+          <SelectTrigger className="h-7 min-w-[145px] text-[9px]" aria-label="Filter by provider">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PROVIDER_OPTIONS.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={groupBy} onValueChange={setGroupBy}>
+          <SelectTrigger className="h-7 min-w-[160px] text-[9px]" aria-label="Group assets by">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {GROUP_BY_OPTIONS.map((option) => (
+              <SelectItem key={option} value={option}>
+                {`Group by: ${option}`}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </PageHeading>
+
+      <section aria-label="Infrastructure summary" className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-6">
+        {infrastructureStats.map((item) => (
+          <MetricCard key={item.label} item={item} className="h-[106px] items-start gap-2 p-3" />
+        ))}
+      </section>
+
+      <section aria-label="Topology and health" className="mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,2.1fr)_minmax(290px,0.82fr)]">
+        <TopologyPanel />
+        <InfrastructureHealthPanel
+          className="h-[472px]"
+          onAlertSelect={(severity) => router.push(severity ? `/alerts?severity=${severity}` : "/alerts")}
+        />
+      </section>
+
+      <section aria-label="Breakdown" className="mt-2.5 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+        <AssetsEnvironmentPanel className="h-[238px]" />
+        <DonutPanel title="Provider Distribution" data={providerDistribution} total={48} totalLabel="Total Assets" className="h-[238px]" />
+        <InfrastructureEventsPanel className="h-[238px]" />
+        <UnmonitoredAssetsPanel className="h-[238px]" />
+      </section>
+    </>
+  );
+}

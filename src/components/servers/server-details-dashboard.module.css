@@ -1,0 +1,67 @@
+.dashboard {
+  --server-details-page-padding: 24px;
+  --server-details-card-gap: 24px;
+  --server-details-card-padding: 20px;
+  --server-details-card-radius: 12px;
+  --server-details-card-border: var(--border);
+  --server-details-card-surface: var(--card);
+  --server-details-card-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.dashboard :global(.server-details-card) {
+  border-color: var(--server-details-card-border);
+  border-radius: var(--server-details-card-radius);
+  background-color: var(--server-details-card-surface);
+  box-shadow: var(--server-details-card-shadow);
+}
+
+.dashboard :global(.server-details-metric-value) {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  overflow: visible;
+  font-size: 28px;
+  line-height: 1.1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard :global(.server-details-table) {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 14px;
+}
+
+.dashboard :global(.server-details-table thead th) {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.dashboard :global(.server-details-table tbody td) {
+  height: 44px;
+  padding: 10px 16px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.dashboard :global(.server-details-table tbody tr:hover) {
+  background-color: var(--accent);
+}
+
+@media (max-width: 639px) {
+  .dashboard :global(.server-details-table) {
+    min-width: 600px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard :global(*) {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}

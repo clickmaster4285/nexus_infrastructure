@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f5f7fb;
+  --foreground: #15243b;
+  --card: #ffffff;
+  --card-foreground: #15243b;
+  --popover: #ffffff;
+  --popover-foreground: #15243b;
+  --primary: #1479e8;
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f8;
+  --secondary-foreground: #304159;
+  --muted: #eef2f8;
+  --muted-foreground: #738198;
+  --accent: #e9eef6;
+  --accent-foreground: #15243b;
+  --destructive: #e8414d;
+  --destructive-foreground: #ffffff;
+  --success: #18a96c;
+  --warning: #e39a23;
+  --border: #e3e9f1;
+  --input: #e3e9f1;
+  --ring: #1479e8;
+  --radius: 0.375rem;
+
+  --sidebar: #0f213b;
+  --sidebar-foreground: #c6d1df;
+  --sidebar-muted: #8a9cb4;
+  --sidebar-accent: #1266b7;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #263b56;
+
+  --shadow-card: 0 1px 3px rgb(21 36 59 / 0.04);
+}
+
+.dark {
+  --background: #0d1625;
+  --foreground: #e7edf6;
+  --card: #152236;
+  --card-foreground: #e7edf6;
+  --popover: #152236;
+  --popover-foreground: #e7edf6;
+  --primary: #3b8ef0;
+  --primary-foreground: #ffffff;
+  --secondary: #1c2b40;
+  --secondary-foreground: #c6d2e1;
+  --muted: #1c2b40;
+  --muted-foreground: #9babc0;
+  --accent: #1c2b40;
+  --accent-foreground: #e7edf6;
+  --destructive: #f0565f;
+  --destructive-foreground: #ffffff;
+  --success: #2bbd7d;
+  --warning: #eda83c;
+  --border: #29394e;
+  --input: #29394e;
+  --ring: #3b8ef0;
+
+  --sidebar: #0a1220;
+  --sidebar-foreground: #c6d1df;
+  --sidebar-muted: #7d8ea6;
+  --sidebar-accent: #1266b7;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #1f2c40;
+
+  --shadow-card: none;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", "DM Sans", ui-sans-serif, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  --shadow-card: var(--shadow-card);
+
+  --animate-drawer-in: drawer-in 0.18s ease-out;
+  --animate-fade-in: fade-in 0.15s ease-out;
+}
+
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes topology-overlay-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes topology-modal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.topology-overlay-enter {
+  animation: topology-overlay-fade 150ms ease-out both;
+}
+
+.topology-modal-enter {
+  animation: topology-modal-scale 150ms ease-out both;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
