@@ -1,11 +1,30 @@
-"use client";
+﻿"use client";
 
-import { useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { Download, Network, Plus } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, Download, Minus, MoreVertical, Plus, type LucideIcon } from "lucide-react";
+import * as echarts from "echarts/core";
+import {
+  BarChart as EBarChart,
+  HeatmapChart as EHeatmapChart,
+  LineChart as ELineChart,
+  PieChart as EPieChart,
+} from "echarts/charts";
+import {
+  AxisPointerComponent,
+  GridComponent,
+  MarkLineComponent,
+  MarkPointComponent,
+  TitleComponent,
+  TooltipComponent,
+  VisualMapComponent,
+} from "echarts/components";
+import { LabelLayout } from "echarts/features";
+import { CanvasRenderer } from "echarts/renderers";
+import type { EChartsOption } from "echarts";
 
 import { PageHeading } from "@/components/layout/page-heading";
 import { PageMeta } from "@/components/layout/page-meta";
@@ -13,6 +32,35 @@ import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
 import type { MetricStat } from "@/data/mock/dashboard";
+import { cn } from "@/lib/utils";
+
+echarts.use([
+  ELineChart,
+  EBarChart,
+  EPieChart,
+  EHeatmapChart,
+  GridComponent,
+  TooltipComponent,
+  MarkLineComponent,
+  MarkPointComponent,
+  TitleComponent,
+  AxisPointerComponent,
+  VisualMapComponent,
+  LabelLayout,
+  CanvasRenderer,
+]);
+
+/** Group id used to sync the crosshair between the three trend charts. */
+const CHART_GROUP = "network-monitor";
+
+/** Muted palette shared by every chart on the page. */
+const COLORS = {
+  inbound: "#60A5FA",
+  outbound: "#34D399",
+  errors: "#F87171",
+  capacity: "#FBBF24",
+  neutral: "#64748B",
+};
 
 const stats: MetricStat[] = [
   { label: "Total Interfaces", value: "128", change: "4 new", trend: "up", tone: "blue", icon: "network" },
@@ -24,10 +72,44 @@ const stats: MetricStat[] = [
   { label: "Network Alerts", value: "18", change: "2", trend: "down", tone: "amber", icon: "bell" },
 ];
 
-const hours = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00"];
-const bandwidth = hours.map((time, index) => ({ time, inbound: [74, 69, 76, 80, 68, 73, 71, 77, 65, 72, 76, 70, 75][index], outbound: [42, 45, 50, 46, 48, 41, 44, 49, 43, 47, 51, 42, 46][index] }));
-const traffic = hours.map((time, index) => ({ time, inbound: [390, 345, 410, 475, 390, 450, 365, 430, 385, 455, 420, 375, 445][index], outbound: [235, 250, 280, 265, 290, 235, 245, 295, 250, 275, 300, 240, 270][index] }));
-const packets = hours.map((time, index) => ({ time, inbound: [14, 13, 15, 16, 14, 15, 14, 16, 15, 14, 15, 14, 13][index], outbound: [8, 8.5, 9.5, 9, 8, 8.5, 9, 9.5, 8.5, 9, 8, 8.5, 8][index] }));
+/** Link capacity in Mbps, used to derive bandwidth utilisation from traffic. */
+const LINK_CAPACITY_MBPS = 600;
+
+export interface NetworkSample {
+  time: string;
+  /** Inbound traffic in Mbps. */
+  trafficIn: number;
+  /** Outbound traffic in Mbps. */
+  trafficOut: number;
+  /** Inbound packets per second. */
+  packetsIn: number;
+  /** Outbound packets per second. */
+  packetsOut: number;
+  /** Errored packets per second. */
+  errors: number;
+  /** Dropped packets per second. */
+  drops: number;
+}
+
+/**
+ * Single source of truth for the three trend charts. Bandwidth utilisation is
+ * derived from the traffic figures so every card stays consistent.
+ */
+export const networkSamples: NetworkSample[] = [
+  { time: "12:00", trafficIn: 390, trafficOut: 235, packetsIn: 14000, packetsOut: 8200, errors: 120, drops: 40 },
+  { time: "14:00", trafficIn: 345, trafficOut: 250, packetsIn: 13200, packetsOut: 8600, errors: 95, drops: 35 },
+  { time: "16:00", trafficIn: 410, trafficOut: 280, packetsIn: 15100, packetsOut: 9400, errors: 160, drops: 60 },
+  { time: "18:00", trafficIn: 475, trafficOut: 265, packetsIn: 16000, packetsOut: 9100, errors: 240, drops: 95 },
+  { time: "20:00", trafficIn: 390, trafficOut: 290, packetsIn: 14100, packetsOut: 9600, errors: 135, drops: 50 },
+  { time: "22:00", trafficIn: 450, trafficOut: 235, packetsIn: 15200, packetsOut: 8300, errors: 110, drops: 45 },
+  { time: "00:00", trafficIn: 365, trafficOut: 245, packetsIn: 13900, packetsOut: 8700, errors: 85, drops: 30 },
+  { time: "02:00", trafficIn: 430, trafficOut: 295, packetsIn: 16100, packetsOut: 9900, errors: 175, drops: 70 },
+  { time: "04:00", trafficIn: 385, trafficOut: 250, packetsIn: 14800, packetsOut: 8800, errors: 105, drops: 38 },
+  { time: "06:00", trafficIn: 455, trafficOut: 275, packetsIn: 15900, packetsOut: 9300, errors: 145, drops: 55 },
+  { time: "08:00", trafficIn: 420, trafficOut: 300, packetsIn: 15200, packetsOut: 9700, errors: 125, drops: 48 },
+  { time: "10:00", trafficIn: 375, trafficOut: 240, packetsIn: 14000, packetsOut: 8400, errors: 98, drops: 33 },
+  { time: "12:00", trafficIn: 445, trafficOut: 270, packetsIn: 15500, packetsOut: 9000, errors: 155, drops: 58 },
+];
 
 const interfaces = [
   { name: "eth0", device: "core-switch-01", bandwidth: 92.3, inbound: 862.5, outbound: 745.3 },
@@ -43,34 +125,45 @@ const interfaces = [
 ];
 
 const errorInterfaces = [
-  { name: "eth3", device: "app-server-01", errorsIn: "12,345", errorsOut: "8,765", discards: "2,341" },
-  { name: "ge-0/0/3", device: "edge-router-01", errorsIn: "9,876", errorsOut: "6,543", discards: "1,234" },
-  { name: "eth1", device: "cache-server-01", errorsIn: "6,432", errorsOut: "2,987", discards: "987" },
-  { name: "ge-0/0/1", device: "edge-router-02", errorsIn: "4,321", errorsOut: "2,123", discards: "643" },
-  { name: "eth0", device: "backup-server-01", errorsIn: "3,210", errorsOut: "1,876", discards: "521" },
-  { name: "eth2", device: "core-switch-02", errorsIn: "2,145", errorsOut: "1,258", discards: "312" },
+  { name: "eth3", device: "app-server-01", errorsIn: 12345, errorsOut: 8765, discards: 2341 },
+  { name: "ge-0/0/3", device: "edge-router-01", errorsIn: 9876, errorsOut: 6543, discards: 1234 },
+  { name: "eth1", device: "cache-server-01", errorsIn: 6432, errorsOut: 2987, discards: 987 },
+  { name: "ge-0/0/1", device: "edge-router-02", errorsIn: 4321, errorsOut: 2123, discards: 643 },
+  { name: "eth0", device: "backup-server-01", errorsIn: 3210, errorsOut: 1876, discards: 521 },
+  { name: "eth2", device: "core-switch-02", errorsIn: 2145, errorsOut: 1258, discards: 312 },
 ];
 
 const interfaceStates = [
-  { name: "Up", value: 112, color: "#35b879", percent: "87.5%" },
-  { name: "Warning", value: 10, color: "#f39a12", percent: "7.8%" },
-  { name: "Down", value: 6, color: "#ed3346", percent: "4.7%" },
-  { name: "Disabled", value: 0, color: "#aeb9c8", percent: "0%" },
+  { name: "Up", status: "up", value: 112, color: "#35b879", percent: "87.5%" },
+  { name: "Warning", status: "warning", value: 10, color: "#f39a12", percent: "7.8%" },
+  { name: "Down", status: "down", value: 6, color: "#ed3346", percent: "4.7%" },
+  { name: "Disabled", status: "disabled", value: 0, color: "#aeb9c8", percent: "0%" },
 ];
 
+/** Traffic split by category, in TB. Single source for the traffic totals. */
 const trafficDistribution = [
-  { name: "Web Traffic", value: 1.62, label: "1.62 TB (37.1%)", color: "#2878ed" },
-  { name: "DB Traffic", value: 1.15, label: "1.15 TB (26.3%)", color: "#35b879" },
-  { name: "Streaming", value: 0.85, label: "0.85 TB (19.5%)", color: "#8a45df" },
-  { name: "Other", value: 0.75, label: "0.75 TB (17.1%)", color: "#f39a12" },
+  { name: "Web Traffic", value: 1.62, percent: "37.1%", color: "#2878ed" },
+  { name: "DB Traffic", value: 1.15, percent: "26.3%", color: "#35b879" },
+  { name: "Streaming", value: 0.85, percent: "19.5%", color: "#8a45df" },
+  { name: "Other", value: 0.75, percent: "17.1%", color: "#f39a12" },
 ];
 
+/** Total traffic across the fleet, in TB (In + Out). */
+const TOTAL_TRAFFIC_TB = Number(trafficDistribution.reduce((sum, item) => sum + item.value, 0).toFixed(2));
+
+/** Protocol split, derived from the same total so both donuts always agree. */
 const protocols = [
-  { name: "TCP", value: 1.45, label: "1.45 TB (59.2%)", color: "#2878ed" },
-  { name: "UDP", value: 0.68, label: "0.68 TB (27.8%)", color: "#35b879" },
-  { name: "ICMP", value: 0.18, label: "0.18 TB (7.3%)", color: "#8a45df" },
-  { name: "Other", value: 0.14, label: "0.14 TB (5.7%)", color: "#f39a12" },
-];
+  { name: "TCP", share: 0.592, percent: "59.2%", color: "#2878ed" },
+  { name: "UDP", share: 0.278, percent: "27.8%", color: "#35b879" },
+  { name: "ICMP", share: 0.073, percent: "7.3%", color: "#8a45df" },
+  { name: "Other", share: 0.057, percent: "5.7%", color: "#f39a12" },
+].map((item) => ({
+  name: item.name,
+  value: Number((TOTAL_TRAFFIC_TB * item.share).toFixed(2)),
+  percent: item.percent,
+  label: `${(TOTAL_TRAFFIC_TB * item.share).toFixed(2)} TB (${item.percent})`,
+  color: item.color,
+}));
 
 const talkersByTraffic = [
   { address: "10.10.10.25", value: "652.4 GB", width: "100%", color: "bg-blue-500" },
@@ -96,60 +189,248 @@ const networkAlerts = [
   { alert: "High latency", device: "edge-router-01", iface: "ge-0/0/1", severity: "Warning", message: "Average latency is 125ms which is above the threshold (100ms)", time: "25m ago" },
 ];
 
-function TrendChart({
-  data,
-  max,
-  ticks,
-  formatter,
-  lines,
-  area = false,
-  bar = false,
-}: {
-  data: Record<string, string | number>[];
-  max: number;
-  ticks: number[];
-  formatter?: (value: number) => string;
-  lines: { key: string; name: string; color: string }[];
-  area?: boolean;
-  bar?: boolean;
+type Aggregation = "Average" | "Max" | "Min";
+type RangeKey = "1H" | "6H" | "12H" | "24H";
+
+const RANGE_POINTS: Record<RangeKey, number> = { "1H": 2, "6H": 5, "12H": 9, "24H": networkSamples.length };
+
+/** Interface names used by the utilisation heatmap. */
+const heatmapInterfaces = ["eth0", "eth1", "wan1", "wan2", "lo"];
+
+/** Hours of the day shown on the heatmap x-axis. */
+const heatmapHours = ["00", "02", "04", "06", "08", "10", "12", "14", "16", "18", "20", "22"];
+
+/**
+ * Deterministic interface utilisation per hour, derived from the interface
+ * bandwidth figures so the heatmap and the tables never disagree.
+ */
+const heatmapData = heatmapInterfaces.flatMap((name, rowIndex) => {
+  const base = interfaces.find((item) => item.name === name)?.bandwidth ?? 40;
+  return heatmapHours.map((hour, columnIndex) => {
+    const wave = Math.sin((columnIndex + rowIndex * 2) / 2.1) * 14;
+    const value = Math.max(4, Math.min(99, base * 0.72 + wave + ((rowIndex * 7 + columnIndex * 5) % 11)));
+    return [columnIndex, rowIndex, Math.round(value)];
+  });
+});
+
+/** Latency (ms) and packet loss (%) per sample, derived from the same source. */
+const latencyAndLoss = networkSamples.map((sample) => {
+  const totalPackets = sample.packetsIn + sample.packetsOut;
+  const loss = ((sample.errors + sample.drops) / Math.max(totalPackets, 1)) * 100;
+  return {
+    time: sample.time,
+    latency: Math.round(18 + (sample.trafficIn / LINK_CAPACITY_MBPS) * 26 + loss * 40),
+    loss: Number(loss.toFixed(2)),
+  };
+});
+
+/**
+ * Applies the selected aggregation to a series without flattening it:
+ * Average becomes a centred moving average, Max / Min become running peaks.
+ */
+function aggregateSeries(values: number[], mode: Aggregation): number[] {
+  if (mode === "Max") {
+    let peak = Number.NEGATIVE_INFINITY;
+    return values.map((value) => (peak = Math.max(peak, value)));
+  }
+  if (mode === "Min") {
+    let low = Number.POSITIVE_INFINITY;
+    return values.map((value) => (low = Math.min(low, value)));
+  }
+  return values.map((value, index) => {
+    const window = values.slice(Math.max(0, index - 1), index + 2);
+    return window.reduce((sum, item) => sum + item, 0) / window.length;
+  });
+}
+
+/** Theme colours resolved from the CSS variables (ECharts canvas cannot read them). */
+interface ChartTheme {
+  foreground: string;
+  muted: string;
+  mutedForeground: string;
+  border: string;
+  card: string;
+  popover: string;
+  popoverForeground: string;
+  dark: boolean;
+}
+
+const FALLBACK_THEME: ChartTheme = {
+  foreground: "#15243b",
+  muted: "#eef2f8",
+  mutedForeground: "#738198",
+  border: "#e3e9f1",
+  card: "#ffffff",
+  popover: "#ffffff",
+  popoverForeground: "#15243b",
+  dark: false,
+};
+
+/** Reads the current theme values from the DOM. */
+function readChartTheme(scope: Element | null): ChartTheme {
+  if (!scope) return FALLBACK_THEME;
+  const styles = getComputedStyle(scope);
+  const read = (name: string, fallback: string) => styles.getPropertyValue(name).trim() || fallback;
+  return {
+    foreground: read("--foreground", FALLBACK_THEME.foreground),
+    muted: read("--muted", FALLBACK_THEME.muted),
+    mutedForeground: read("--muted-foreground", FALLBACK_THEME.mutedForeground),
+    border: read("--border", FALLBACK_THEME.border),
+    card: read("--card", FALLBACK_THEME.card),
+    popover: read("--popover", FALLBACK_THEME.popover),
+    popoverForeground: read("--popover-foreground", FALLBACK_THEME.popoverForeground),
+    dark: scope.classList.contains("dark"),
+  };
+}
+
+/**
+ * Tracks the active theme. The shell toggles a `dark` class without
+ * re-rendering children, so a MutationObserver watches for the change.
+ */
+function useChartTheme(): ChartTheme {
+  const [theme, setTheme] = useState<ChartTheme>(FALLBACK_THEME);
+
+  useEffect(() => {
+    const scope = document.body.firstElementChild;
+    const resolve = () => {
+      const next = readChartTheme(scope);
+      setTheme((current) => (current.foreground === next.foreground && current.border === next.border && current.dark === next.dark ? current : next));
+    };
+    resolve();
+    if (!scope) return;
+    const observer = new MutationObserver(resolve);
+    observer.observe(scope, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return theme;
+}
+
+/** Vertical gradient used for the area fills. */
+function verticalGradient(color: string, from = 0.3, to = 0.05) {
+  const alpha = (value: number) => Math.round(value * 255).toString(16).padStart(2, "0");
+  return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+    { offset: 0, color: `${color}${alpha(from)}` },
+    { offset: 1, color: `${color}${alpha(to)}` },
+  ]);
+}
+
+/** Builds the shared tooltip card markup. */
+function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; value: string; color: string }[]) {
+  const body = rows
+    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px;line-height:18px"><span style="display:flex;align-items:center;gap:6px;color:${theme.mutedForeground}"><i style="width:8px;height:8px;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
+    .join("");
+  return `<div style="min-width:172px;border-radius:8px;border:1px solid ${theme.border};background:${theme.popover};box-shadow:0 8px 24px rgba(16,32,58,0.16);padding:8px 12px;font-size:12px;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:6px">${title}</div>${body}</div>`;
+}
+
+/**
+ * ECharts wrapper that only initialises once the container has a size and
+ * keeps the chart in sync with its container via a ResizeObserver.
+ */
+function EChart({ option, className }: { option: EChartsOption; className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<echarts.ECharts | null>(null);
+  const optionRef = useRef(option);
+  optionRef.current = option;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    let chart: echarts.ECharts | null = null;
+
+    const observer = new ResizeObserver(() => {
+      const { width, height } = container.getBoundingClientRect();
+      if (width <= 0 || height <= 0) return;
+      if (!chart) {
+        chart = echarts.init(container, undefined, { renderer: "canvas" });
+        chartRef.current = chart;
+        echarts.connect(CHART_GROUP);
+        chart.group = CHART_GROUP;
+        chart.setOption(optionRef.current, true);
+      } else {
+        chart.resize();
+      }
+    });
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      chart?.dispose();
+      chartRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    chartRef.current?.setOption(option, true);
+  }, [option]);
+
+  return <div ref={containerRef} className={className} />;
+}
+
+/** Legend chip that toggles a series on or off. */
+function SeriesChip({ name, color, value, unit, enabled, onToggle }: {
+  name: string; color: string; value: number; unit: string; enabled: boolean; onToggle: () => void;
 }) {
   return (
-    <div className="h-[165px] w-full pt-1">
-      <ResponsiveContainer width="100%" height="100%">
-        {bar ? (
-          <BarChart data={data} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="var(--border)" vertical />
-            <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis width={48} domain={[0, max]} ticks={ticks} tickFormatter={formatter} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-            {lines.map((item) => <Bar key={item.key} dataKey={item.key} name={item.name} fill={item.color} radius={[3, 3, 0, 0]} maxBarSize={12} />)}
-          </BarChart>
-        ) : area ? (
-          <AreaChart data={data} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="var(--border)" vertical />
-            <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis width={48} domain={[0, max]} ticks={ticks} tickFormatter={formatter} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-            {lines.map((item) => <Area key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={1.8} fill={item.color} fillOpacity={0.09} dot={false} />)}
-          </AreaChart>
-        ) : (
-          <LineChart data={data} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="var(--border)" vertical />
-            <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis width={48} domain={[0, max]} ticks={ticks} tickFormatter={formatter} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-            {lines.map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} dot={{ r: 2.2, strokeWidth: 1 }} activeDot={{ r: 4 }} />)}
-          </LineChart>
-        )}
-      </ResponsiveContainer>
-    </div>
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={enabled}
+      title={enabled ? `Hide ${name}` : `Show ${name}`}
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
+        enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through",
+      )}
+    >
+      <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: enabled ? color : "#94a3b8" }} />
+      {name}
+      <b className="tabular-nums">{value} {unit}</b>
+    </button>
   );
 }
 
-function TrafficDonut({ data, total, unit }: { data: { name: string; value: number; label: string; color: string }[]; total: string; unit?: string }) {
+/** Compact summary chip (grey label + bold value). */
+function SummaryChip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[12px]">
+      <span className="text-muted-foreground">{label}</span>
+      <b className="tabular-nums text-foreground">{value}</b>
+    </span>
+  );
+}
+
+/** Interface status shown across the page. */
+type InterfaceStatus = "up" | "down" | "warning" | "disabled";
+
+/** Status -> icon, label, colours and tooltip. */
+const statusBadges: Record<InterfaceStatus, { icon: LucideIcon; label: string; className: string; tooltip: string }> = {
+  up: { icon: ArrowUp, label: "Up", className: "bg-[#ECFDF5] text-[#059669] dark:bg-[#059669]/15", tooltip: "Interface is up" },
+  down: { icon: ArrowDown, label: "Down", className: "bg-[#FEF2F2] text-[#DC2626] dark:bg-[#DC2626]/15", tooltip: "Interface is down" },
+  warning: { icon: AlertTriangle, label: "Warning", className: "bg-[#FFFBEB] text-[#D97706] dark:bg-[#D97706]/15", tooltip: "Interface is in a warning state" },
+  disabled: { icon: Minus, label: "Disabled", className: "bg-[#F1F5F9] text-[#64748B] dark:bg-[#64748B]/15", tooltip: "Interface is disabled" },
+};
+
+/** Shared status badge so every status chip looks identical. */
+function StatusBadge({ status }: { status: InterfaceStatus }) {
+  const badge = statusBadges[status] ?? statusBadges.up;
+  const Icon = badge.icon;
+  return (
+    <span
+      title={badge.tooltip}
+      aria-label={badge.tooltip}
+      className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-medium", badge.className)}
+    >
+      <Icon size={12} aria-hidden="true" />
+      {badge.label}
+    </span>
+  );
+}
+
+function TrafficDonut({ data, total, unit }: { data: { name: string; value: number; label?: string; percent?: string; color: string }[]; total: string; unit?: string }) {
+  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
   return (
     <div className="flex h-[158px] items-center gap-2.5">
-      <div className="relative h-[140px] w-[45%] shrink-0">
+      <div className="relative h-[140px] w-[42%] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="60%" outerRadius="88%" paddingAngle={1} stroke="none">
@@ -162,8 +443,19 @@ function TrafficDonut({ data, total, unit }: { data: { name: string; value: numb
           <span className="text-[12px] text-muted-foreground">{unit ?? "Total"}</span>
         </div>
       </div>
-      <div className="min-w-0 flex-1 space-y-3">
-        {data.map((item) => <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 text-[12px]"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} /><span className="truncate text-foreground">{item.name}</span><b className="whitespace-nowrap text-foreground">{item.label}</b></div>)}
+      <div className="min-w-0 flex-1 overflow-x-auto">
+        <div className="grid grid-cols-[minmax(max-content,1fr)_auto_auto] items-center gap-x-2 gap-y-1.5 whitespace-nowrap text-[12px]">
+          {data.map((item) => (
+            <Fragment key={item.name}>
+              <span className="flex min-w-0 items-center gap-1.5 text-foreground">
+                <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
+                {item.name}
+              </span>
+              <b className="tabular-nums text-foreground">{item.value} TB</b>
+              <span className="tabular-nums text-muted-foreground">{item.percent ?? `(${Math.round((item.value / Math.max(totalValue, 1)) * 100)}%)`}</span>
+            </Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -183,34 +475,408 @@ function TalkerList({ title, items, onViewAll }: { title: string; items: { addre
 }
 
 export function NetworkMonitoringDashboard() {
+  const theme = useChartTheme();
   const [notice, setNotice] = useState("");
+  const [range, setRange] = useState<RangeKey>("24H");
+  const [aggregation, setAggregation] = useState<Aggregation>("Average");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [hiddenSeries, setHiddenSeries] = useState<string[]>([]);
+
   const toast = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2600);
   };
+
   const exportCsv = () => {
-    const header = ["Alert", "Device", "Interface", "Severity", "Message", "Time"];
-    const rows = networkAlerts.map((item) => [item.alert, item.device, item.iface, item.severity, item.message, item.time]);
-    const csv = [header, ...rows].map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(",")).join("\r\n");
+    const header = ["Time", "Traffic In (Mbps)", "Traffic Out (Mbps)", "Bandwidth In (%)", "Bandwidth Out (%)", "Packets In (pps)", "Packets Out (pps)", "Errors (pps)", "Drops (pps)"];
+    const rows = networkSamples.map((sample) => [
+      sample.time,
+      String(sample.trafficIn),
+      String(sample.trafficOut),
+      ((sample.trafficIn / LINK_CAPACITY_MBPS) * 100).toFixed(1),
+      ((sample.trafficOut / LINK_CAPACITY_MBPS) * 100).toFixed(1),
+      String(sample.packetsIn),
+      String(sample.packetsOut),
+      String(sample.errors),
+      String(sample.drops),
+    ]);
+    const csv = [header, ...rows].map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(",")).join("\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "network-monitoring-alerts.csv";
+    link.download = "network-monitoring.csv";
     link.click();
     URL.revokeObjectURL(url);
-    toast("Network alert report exported.");
+    toast("Network data exported.");
   };
-  const timeAction = (
-    <div className="flex items-center gap-0.5">
-      <select aria-label="Aggregation" className="h-6 rounded border border-border bg-card px-1 text-[11px] text-foreground"><option>Average</option><option>Maximum</option><option>Minimum</option></select>
-      {["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => toast(`${item} time range selected.`)} className={`rounded px-1.5 py-1 text-[11px] font-semibold ${item === "24H" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
+
+  const toggleSeries = (key: string) => {
+    setHiddenSeries((current) => current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key]);
+  };
+  const visible = (key: string) => !hiddenSeries.includes(key);
+
+  const rangeCount = RANGE_POINTS[range];
+  const samples = useMemo(() => networkSamples.slice(Math.max(0, networkSamples.length - rangeCount)), [rangeCount]);
+  const times = useMemo(() => samples.map((sample) => sample.time), [samples]);
+
+  const axisBase = {
+    axisLine: { show: false },
+    axisTick: { show: false },
+    axisLabel: { color: theme.mutedForeground, fontSize: 11 },
+    splitLine: { lineStyle: { color: theme.border, type: "dashed" as const, width: 1 } },
+  };
+
+  const pointerBase = {
+    type: "line" as const,
+    lineStyle: { color: theme.mutedForeground, type: "dashed" as const, width: 1 },
+    label: { show: false },
+  };
+
+  const bandwidthOption = useMemo<EChartsOption>(() => {
+    const inbound = aggregateSeries(samples.map((sample) => (sample.trafficIn / LINK_CAPACITY_MBPS) * 100), aggregation);
+    const outbound = aggregateSeries(samples.map((sample) => (sample.trafficOut / LINK_CAPACITY_MBPS) * 100), aggregation);
+    return {
+      animationDuration: 600,
+      grid: { top: 16, right: 16, bottom: 22, left: 46 },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: pointerBase,
+        backgroundColor: theme.popover,
+        borderColor: theme.border,
+        borderWidth: 1,
+        padding: 0,
+        textStyle: { color: theme.popoverForeground, fontSize: 12 },
+        formatter: (params: unknown) => {
+          const items = params as { axisValue: string; seriesName: string; value: number; color: string }[];
+          if (!items?.length) return "";
+          return tooltipCard(theme, items[0].axisValue, items
+            .filter((item) => visible(item.seriesName))
+            .map((item) => ({ name: item.seriesName, value: `${Math.abs(item.value).toFixed(1)} %`, color: item.color })));
+        },
+      },
+      xAxis: { type: "category", data: times, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, interval: Math.max(0, Math.ceil(times.length / 6) - 1) } },
+      yAxis: {
+        type: "value",
+        min: -100,
+        max: 100,
+        interval: 25,
+        ...axisBase,
+        axisLabel: { ...axisBase.axisLabel, formatter: (value: number) => `${Math.abs(value)}%` },
+      },
+      series: [
+        ...(visible("Inbound Usage") ? [{
+          name: "Inbound Usage",
+          type: "line" as const,
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: inbound.map((value) => Number(value.toFixed(1))),
+          lineStyle: { width: 2, color: COLORS.inbound },
+          itemStyle: { color: COLORS.inbound },
+          areaStyle: { color: verticalGradient(COLORS.inbound, 0.3, 0.05) },
+          markLine: {
+            silent: true,
+            symbol: "none",
+            lineStyle: { color: COLORS.capacity, type: "dashed" as const, width: 1 },
+            label: {
+              position: "insideEndTop" as const,
+              formatter: "Capacity warning",
+              color: COLORS.capacity,
+              fontSize: 10,
+              padding: [3, 6],
+              backgroundColor: `${COLORS.capacity}26`,
+              borderRadius: 8,
+            },
+            data: [{ yAxis: 80 }],
+          },
+        }] : []),
+        ...(visible("Outbound Usage") ? [{
+          name: "Outbound Usage",
+          type: "line" as const,
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: outbound.map((value) => Number((-value).toFixed(1))),
+          lineStyle: { width: 2, color: COLORS.outbound },
+          itemStyle: { color: COLORS.outbound },
+          areaStyle: { color: verticalGradient(COLORS.outbound, 0.3, 0.05) },
+        }] : []),
+      ],
+    };
+  }, [samples, aggregation, hiddenSeries, theme]);
+
+  const trafficOption = useMemo<EChartsOption>(() => {
+    const inbound = aggregateSeries(samples.map((sample) => sample.trafficIn), aggregation);
+    const outbound = aggregateSeries(samples.map((sample) => sample.trafficOut), aggregation);
+    const totals = inbound.map((value, index) => value + outbound[index]);
+    const peakIndex = totals.indexOf(Math.max(...totals));
+    const peakValue = Math.max(...totals);
+    const peakTime = times[peakIndex] ?? "";
+    return {
+      animationDuration: 600,
+      grid: { top: 26, right: 18, bottom: 22, left: 46 },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: pointerBase,
+        backgroundColor: theme.popover,
+        borderColor: theme.border,
+        borderWidth: 1,
+        padding: 0,
+        textStyle: { color: theme.popoverForeground, fontSize: 12 },
+        formatter: (params: unknown) => {
+          const items = params as { axisValue: string; seriesName: string; value: number; color: string }[];
+          if (!items?.length) return "";
+          return tooltipCard(theme, items[0].axisValue, items
+            .filter((item) => visible(item.seriesName))
+            .map((item) => ({ name: item.seriesName, value: `${item.value} Mbps`, color: item.color })));
+        },
+      },
+      xAxis: { type: "category", data: times, boundaryGap: false, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, interval: Math.max(0, Math.ceil(times.length / 6) - 1) } },
+      yAxis: { type: "value", scale: true, splitNumber: 4, ...axisBase, axisLabel: { ...axisBase.axisLabel, formatter: (value: number) => String(value) } },
+      series: [
+        ...(visible("Traffic In") ? [{
+          name: "Traffic In",
+          type: "line" as const,
+          stack: "total",
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: inbound.map((value) => Number(value.toFixed(1))),
+          lineStyle: { width: 2, color: COLORS.inbound },
+          itemStyle: { color: COLORS.inbound },
+          areaStyle: { color: verticalGradient(COLORS.inbound, 0.3, 0.05) },
+          markPoint: {
+            symbol: "circle",
+            symbolSize: 7,
+            itemStyle: { color: COLORS.inbound, borderColor: theme.card, borderWidth: 2 },
+            label: {
+              show: true,
+              position: "top" as const,
+              distance: 12,
+              formatter: `Peak ${Math.round(peakValue)} Mbps · ${peakTime}`,
+              color: theme.foreground,
+              fontSize: 11,
+              backgroundColor: theme.muted,
+              padding: [4, 8],
+              borderRadius: 8,
+            },
+            data: [{ name: "Peak", coord: [peakTime, peakValue] }],
+          },
+        }] : []),
+        ...(visible("Traffic Out") ? [{
+          name: "Traffic Out",
+          type: "line" as const,
+          stack: "total",
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: outbound.map((value) => Number(value.toFixed(1))),
+          lineStyle: { width: 2, color: COLORS.outbound },
+          itemStyle: { color: COLORS.outbound },
+          areaStyle: { color: verticalGradient(COLORS.outbound, 0.3, 0.05) },
+        }] : []),
+      ],
+    };
+  }, [samples, aggregation, hiddenSeries, theme]);
+
+  const packetsOption = useMemo<EChartsOption>(() => {
+    const inbound = aggregateSeries(samples.map((sample) => sample.packetsIn), aggregation);
+    const outbound = aggregateSeries(samples.map((sample) => sample.packetsOut), aggregation);
+    const errors = samples.map((sample) => sample.errors);
+    const drops = samples.map((sample) => sample.drops);
+    const maxLoss = Math.max(...errors, ...drops, 1);
+    return {
+      animationDuration: 600,
+      grid: [
+        { top: 16, right: 18, height: "56%", bottom: "30%" },
+        { top: "74%", right: 18, height: "12%", bottom: 22 },
+      ],
+      axisPointer: { link: [{ xAxisIndex: "all" }] },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: pointerBase,
+        backgroundColor: theme.popover,
+        borderColor: theme.border,
+        borderWidth: 1,
+        padding: 0,
+        textStyle: { color: theme.popoverForeground, fontSize: 12 },
+        formatter: (params: unknown) => {
+          const items = params as { axisValue: string; seriesName: string; value: number; color: string }[];
+          if (!items?.length) return "";
+          return tooltipCard(theme, items[0].axisValue, items.map((item) => ({
+            name: item.seriesName,
+            value: `${Math.round(item.value).toLocaleString()} pps`,
+            color: item.color,
+          })));
+        },
+      },
+      xAxis: [
+        { type: "category", data: times, gridIndex: 0, boundaryGap: false, ...axisBase, splitLine: { show: false }, axisLabel: { show: false } },
+        { type: "category", data: times, gridIndex: 1, boundaryGap: false, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, interval: Math.max(0, Math.ceil(times.length / 6) - 1) } },
+      ],
+      yAxis: [
+        { type: "value", gridIndex: 0, name: "pps", nameTextStyle: { color: theme.mutedForeground, fontSize: 11, align: "left" }, ...axisBase, axisLabel: { ...axisBase.axisLabel, formatter: (value: number) => `${Math.round(value / 1000)}K` } },
+        { type: "value", gridIndex: 1, max: maxLoss, ...axisBase, axisLabel: { show: false }, splitLine: { show: false } },
+      ],
+      series: [
+        {
+          name: "Packets In",
+          type: "line",
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: inbound.map((value) => Number(value.toFixed(0))),
+          lineStyle: { width: 2, color: COLORS.inbound },
+          itemStyle: { color: COLORS.inbound },
+        },
+        {
+          name: "Packets Out",
+          type: "line",
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          smooth: true,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: outbound.map((value) => Number(value.toFixed(0))),
+          lineStyle: { width: 2, color: COLORS.outbound },
+          itemStyle: { color: COLORS.outbound },
+        },
+        {
+          name: "Errors",
+          type: "bar",
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          barMaxWidth: 7,
+          data: errors,
+          itemStyle: { color: COLORS.errors, opacity: 0.9 },
+        },
+        {
+          name: "Drops",
+          type: "bar",
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          barMaxWidth: 7,
+          data: drops,
+          itemStyle: { color: COLORS.errors, opacity: 0.45 },
+        },
+      ],
+    };
+  }, [samples, aggregation, theme]);
+
+  const latencyOption = useMemo<EChartsOption>(() => {
+    const latency = aggregateSeries(latencyAndLoss.map((point) => point.latency), aggregation);
+    const loss = latencyAndLoss.map((point) => point.loss);
+    return {
+      animationDuration: 600,
+      grid: { top: 26, right: 18, bottom: 22, left: 44 },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: pointerBase,
+        backgroundColor: theme.popover,
+        borderColor: theme.border,
+        borderWidth: 1,
+        padding: 0,
+        textStyle: { color: theme.popoverForeground, fontSize: 12 },
+        formatter: (params: unknown) => {
+          const items = params as { axisValue: string; seriesName: string; value: number; color: string }[];
+          if (!items?.length) return "";
+          return tooltipCard(theme, items[0].axisValue, items.map((item) => ({
+            name: item.seriesName,
+            value: `${item.value} ${item.seriesName === "Latency" ? "ms" : "%"}`,
+            color: item.color,
+          })));
+        },
+      },
+      xAxis: { type: "category", data: latencyAndLoss.map((point) => point.time), boundaryGap: false, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, interval: Math.max(0, Math.ceil(latencyAndLoss.length / 6) - 1) } },
+      yAxis: [
+        { type: "value", name: "ms", nameTextStyle: { color: theme.mutedForeground, fontSize: 11 }, ...axisBase },
+        { type: "value", name: "%", nameTextStyle: { color: theme.mutedForeground, fontSize: 11 }, ...axisBase, splitLine: { show: false } },
+      ],
+      series: [
+        { name: "Latency", type: "line", smooth: true, showSymbol: false, data: latency.map((value) => Number(value.toFixed(0))), yAxisIndex: 0, lineStyle: { width: 2, color: COLORS.inbound }, itemStyle: { color: COLORS.inbound }, areaStyle: { color: verticalGradient(COLORS.inbound, 0.28, 0.03) } },
+        { name: "Packet Loss", type: "bar", yAxisIndex: 1, barMaxWidth: 8, data: loss, itemStyle: { color: COLORS.errors, opacity: 0.8 } },
+      ],
+    };
+  }, [aggregation, theme]);
+
+  const heatmapOption = useMemo<EChartsOption>(() => ({
+    animationDuration: 600,
+    grid: { top: 8, right: 12, bottom: 66, left: 48 },
+    tooltip: {
+      trigger: "item",
+      backgroundColor: theme.popover,
+      borderColor: theme.border,
+      borderWidth: 1,
+      padding: 0,
+      textStyle: { color: theme.popoverForeground, fontSize: 12 },
+      formatter: (params: unknown) => {
+        const item = params as { value: [number, number, number] };
+        const [column, row, value] = item.value;
+        return tooltipCard(theme, `${heatmapInterfaces[row]} · ${heatmapHours[column]}:00`, [{ name: "Utilisation", value: `${value}%`, color: COLORS.inbound }]);
+      },
+    },
+    xAxis: { type: "category", data: heatmapHours, splitArea: { show: false }, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, fontSize: 10 } },
+    yAxis: { type: "category", data: heatmapInterfaces, splitArea: { show: false }, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, fontSize: 10 } },
+    visualMap: {
+      min: 0,
+      max: 100,
+      calculable: false,
+      orient: "horizontal",
+      left: "center",
+      bottom: 8,
+      itemWidth: 12,
+      itemHeight: 110,
+      textStyle: { color: theme.mutedForeground, fontSize: 10 },
+      inRange: { color: ["#E8F1FE", "#60A5FA", "#1D4ED8"] },
+    },
+    series: [{
+      name: "Utilisation",
+      type: "heatmap",
+      data: heatmapData,
+      itemStyle: { borderColor: theme.card, borderWidth: 1 },
+      emphasis: { itemStyle: { borderColor: theme.foreground, borderWidth: 1 } },
+    }],
+  }), [theme]);
+
+  const timeControls = (
+    <div className="flex items-center gap-1">
+      <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">
+        {(["1H", "6H", "12H", "24H"] as RangeKey[]).map((item) => (
+          <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={cn("rounded px-1.5 py-1 text-[11px] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{item}</button>
+        ))}
+      </div>
+      <details className="relative" open={menuOpen} onToggle={(event) => setMenuOpen((event.currentTarget as HTMLDetailsElement).open)}>
+        <summary aria-label="Chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary>
+        <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
+          {(["Average", "Max", "Min"] as Aggregation[]).map((item) => (
+            <button key={item} type="button" onClick={() => { setAggregation(item); setMenuOpen(false); }} className={cn("block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent", aggregation === item && "font-semibold text-primary")}>{item}</button>
+          ))}
+          <div className="my-1 border-t border-border" />
+          <button type="button" onClick={() => { exportCsv(); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent">Export CSV</button>
+          <button type="button" onClick={() => { toast("Chart image export is a demo action."); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent">Export PNG</button>
+        </div>
+      </details>
     </div>
   );
+
+  const latest = samples[samples.length - 1];
+  const avg = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / Math.max(values.length, 1);
+  const inboundPct = (sample: NetworkSample) => (sample.trafficIn / LINK_CAPACITY_MBPS) * 100;
+  const outboundPct = (sample: NetworkSample) => (sample.trafficOut / LINK_CAPACITY_MBPS) * 100;
+  const peakTraffic = Math.max(...samples.map((sample) => sample.trafficIn + sample.trafficOut));
 
   return (
     <div className="space-y-2.5 pb-3">
       <PageMeta breadcrumbs={["Monitoring", "Network Monitoring"]} showRefresh={false} variant="detail" />
-      <PageHeading title="Network Monitoring" description="Real-time overview of your network performance, traffic, and connectivity." icon={<Network size={19} />} actionsAlign="top" variant="detail">
+      <PageHeading title="Network Monitoring" description="Real-time overview of your network performance, traffic, and connectivity." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
           <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Widget</Button>
@@ -221,37 +887,102 @@ export function NetworkMonitoringDashboard() {
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
       </section>
 
-      <section aria-label="Network traffic trends" className="grid gap-2.5 xl:grid-cols-3">
-        <Panel title="Bandwidth Usage Over Time" className="min-w-0" action={timeAction}>
-          <TrendChart data={bandwidth} max={100} ticks={[0, 25, 50, 75, 100]} formatter={(value) => `${value}%`} lines={[{ key: "inbound", name: "Inbound Usage", color: "#2878ed" }, { key: "outbound", name: "Outbound Usage", color: "#35b879" }]} area />
-          <div className="flex justify-center gap-4 pt-1 text-[12px] text-muted-foreground">{[["Inbound Usage", "#2878ed"], ["Outbound Usage", "#35b879"]].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>
+      <section aria-label="Network traffic trends" className="grid items-stretch gap-2.5 xl:grid-cols-3">
+        <Panel title="Bandwidth Usage Over Time" className="flex min-w-0 flex-col" showOptions={false} action={timeControls}>
+          <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <SeriesChip name="Inbound Usage" color={COLORS.inbound} value={Number(inboundPct(latest).toFixed(1))} unit="%" enabled={visible("Inbound Usage")} onToggle={() => toggleSeries("Inbound Usage")} />
+              <SeriesChip name="Outbound Usage" color={COLORS.outbound} value={Number(outboundPct(latest).toFixed(1))} unit="%" enabled={visible("Outbound Usage")} onToggle={() => toggleSeries("Outbound Usage")} />
+            </div>
+            <div className="relative min-h-[220px] min-w-0 flex-1">
+              <EChart option={bandwidthOption} className="absolute inset-0" />
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <SummaryChip label="Now" value={`${inboundPct(latest).toFixed(1)}%`} />
+              <SummaryChip label="Avg" value={`${avg(samples.map(inboundPct)).toFixed(1)}%`} />
+              <SummaryChip label="Peak" value={`${Math.max(...samples.map(inboundPct)).toFixed(1)}%`} />
+              <SummaryChip label="Out Avg" value={`${avg(samples.map(outboundPct)).toFixed(1)}%`} />
+            </div>
+          </div>
         </Panel>
-        <Panel title="Network Traffic (In/Out)" className="min-w-0" action={timeAction}>
-          <TrendChart data={traffic} max={600} ticks={[0, 150, 300, 450, 600]} formatter={(value) => String(value)} lines={[{ key: "inbound", name: "Traffic In (Mbps)", color: "#2878ed" }, { key: "outbound", name: "Traffic Out (Mbps)", color: "#35b879" }]} bar />
-          <div className="flex justify-center gap-4 pt-1 text-[12px] text-muted-foreground">{[["Traffic In (Mbps)", "#2878ed"], ["Traffic Out (Mbps)", "#35b879"]].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>
+
+        <Panel title="Network Traffic (In/Out)" className="flex min-w-0 flex-col" showOptions={false} action={timeControls}>
+          <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <SeriesChip name="Traffic In" color={COLORS.inbound} value={latest?.trafficIn ?? 0} unit="Mbps" enabled={visible("Traffic In")} onToggle={() => toggleSeries("Traffic In")} />
+              <SeriesChip name="Traffic Out" color={COLORS.outbound} value={latest?.trafficOut ?? 0} unit="Mbps" enabled={visible("Traffic Out")} onToggle={() => toggleSeries("Traffic Out")} />
+            </div>
+            <div className="relative min-h-[220px] min-w-0 flex-1">
+              <EChart option={trafficOption} className="absolute inset-0" />
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <SummaryChip label="Avg In" value={`${avg(samples.map((sample) => sample.trafficIn)).toFixed(0)} Mbps`} />
+              <SummaryChip label="Avg Out" value={`${avg(samples.map((sample) => sample.trafficOut)).toFixed(0)} Mbps`} />
+              <SummaryChip label="Peak Total" value={`${peakTraffic.toFixed(0)} Mbps`} />
+            </div>
+          </div>
         </Panel>
-        <Panel title="Packets In/Out" className="min-w-0" action={timeAction}>
-          <TrendChart data={packets} max={20} ticks={[0, 5, 10, 15, 20]} formatter={(value) => String(value)} lines={[{ key: "inbound", name: "Packets In (pps)", color: "#2878ed" }, { key: "outbound", name: "Packets Out (pps)", color: "#35b879" }]} />
-          <div className="flex justify-center gap-4 pt-1 text-[12px] text-muted-foreground">{[["Packets In (pps)", "#2878ed"], ["Packets Out (pps)", "#35b879"]].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>
+
+        <Panel title="Packets In/Out" className="flex min-w-0 flex-col" showOptions={false} action={timeControls}>
+          <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <SeriesChip name="Packets In" color={COLORS.inbound} value={latest?.packetsIn ?? 0} unit="pps" enabled onToggle={() => toast("Packets In is always visible.")} />
+              <SeriesChip name="Packets Out" color={COLORS.outbound} value={latest?.packetsOut ?? 0} unit="pps" enabled onToggle={() => toast("Packets Out is always visible.")} />
+            </div>
+            <div className="relative min-h-[220px] min-w-0 flex-1">
+              <EChart option={packetsOption} className="absolute inset-0" />
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <SummaryChip label="Avg pps" value={avg(samples.map((sample) => sample.packetsIn + sample.packetsOut)).toFixed(0)} />
+              <SummaryChip label="Errors" value={samples.reduce((sum, sample) => sum + sample.errors, 0).toLocaleString()} />
+              <SummaryChip label="Drops" value={samples.reduce((sum, sample) => sum + sample.drops, 0).toLocaleString()} />
+            </div>
+          </div>
+        </Panel>
+      </section>
+
+      <section aria-label="Network analysis" className="grid items-stretch gap-2.5 xl:grid-cols-2">
+        <Panel title="Interface Utilization Heatmap" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all interfaces.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="relative min-h-[220px] min-w-0 flex-1 pt-1">
+            <EChart option={heatmapOption} className="absolute inset-0" />
+          </div>
+        </Panel>
+
+        <Panel title="Latency & Packet Loss" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all latency samples.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <SeriesChip name="Latency" color={COLORS.inbound} value={latencyAndLoss[latencyAndLoss.length - 1]?.latency ?? 0} unit="ms" enabled onToggle={() => toast("Latency is always visible.")} />
+              <SeriesChip name="Packet Loss" color={COLORS.errors} value={latencyAndLoss[latencyAndLoss.length - 1]?.loss ?? 0} unit="%" enabled onToggle={() => toast("Packet loss is always visible.")} />
+            </div>
+            <div className="relative min-h-[220px] min-w-0 flex-1">
+              <EChart option={latencyOption} className="absolute inset-0" />
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <SummaryChip label="Avg Latency" value={`${avg(latencyAndLoss.map((point) => point.latency)).toFixed(0)} ms`} />
+              <SummaryChip label="Peak Loss" value={`${Math.max(...latencyAndLoss.map((point) => point.loss)).toFixed(2)} %`} />
+            </div>
+          </div>
         </Panel>
       </section>
 
       <section aria-label="Interface details" className="grid gap-2.5 xl:grid-cols-[1.14fr_1.04fr_0.82fr]">
         <Panel title="Top Interfaces by Bandwidth Usage" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by bandwidth.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[620px] text-left text-[12px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Bandwidth Usage", "In (Mbps)", "Out (Mbps)", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="px-1 py-[5px] text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="px-1 py-[5px] text-foreground">{item.inbound.toFixed(1)}</td><td className="px-1 py-[5px] text-foreground">{item.outbound.toFixed(1)}</td><td className="px-1 py-[5px] text-emerald-600">Up <svg viewBox="0 0 42 14" className="ml-1 inline h-3 w-8" aria-hidden="true"><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="#35b879" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
+            <table className="w-full min-w-[440px] table-fixed text-left text-[12px]">
+              <colgroup><col style={{ width: "17%" }} /><col style={{ width: "27%" }} /><col style={{ width: "21%" }} /><col style={{ width: "23%" }} /><col style={{ width: "12%" }} /></colgroup>
+              <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Bandwidth Usage", "In / Out (Mbps)", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
+              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.inbound.toFixed(1)} / {item.outbound.toFixed(1)}</td><td className="px-1 py-[5px]"><svg viewBox="0 0 42 14" className="h-3 w-8" aria-label={`Trend for ${item.name}`}><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="#35b879" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
             </table>
           </div>
-          <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page:　5　‹　<span className="rounded bg-primary px-1 text-white">1</span>　2　3　4　5　…　26　›</span></div>
+          <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page: 5 · 1 · 2 · 3 · 4 · 5 · … · 26</span></div>
         </Panel>
 
         <Panel title="Top Interfaces by Errors" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by errors.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[560px] text-left text-[12px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Errors In", "Errors Out", "Discards", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{errorInterfaces.slice(0, 5).map((item) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="px-1 py-[5px] text-foreground">{item.errorsIn}</td><td className="px-1 py-[5px] text-foreground">{item.errorsOut}</td><td className="px-1 py-[5px] text-foreground">{item.discards}</td><td className="px-1 py-[5px]"><span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Up</span></td></tr>)}</tbody>
+            <table className="w-full min-w-[420px] table-fixed text-left text-[12px]">
+              <colgroup><col style={{ width: "19%" }} /><col style={{ width: "29%" }} /><col style={{ width: "20%" }} /><col style={{ width: "18%" }} /><col style={{ width: "14%" }} /></colgroup>
+              <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Errors", "Discards", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
+              <tbody>{errorInterfaces.slice(0, 5).map((item) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{(item.errorsIn + item.errorsOut).toLocaleString()}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.discards.toLocaleString()}</td><td className="px-1 py-[5px]"><StatusBadge status="up" /></td></tr>)}</tbody>
             </table>
           </div>
           <div className="pt-1 text-[11px] text-muted-foreground">Showing 1-5 of 128 interfaces</div>
@@ -265,17 +996,17 @@ export function NetworkMonitoringDashboard() {
               </ResponsiveContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[22px] font-extrabold text-foreground">128</b><span className="text-[12px] text-muted-foreground">Total</span></div>
             </div>
-            <div className="min-w-0 flex-1 space-y-3">{interfaceStates.map((item) => <div key={item.name} className="grid grid-cols-[8px_1fr_auto] items-center gap-1.5 text-[12px]"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} /><span className="text-foreground">{item.name}</span><b className="text-foreground">{item.value} ({item.percent})</b></div>)}</div>
+            <div className="min-w-0 flex-1 space-y-2">{interfaceStates.map((item) => <div key={item.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 text-[12px]"><StatusBadge status={item.status as InterfaceStatus} /><b className="whitespace-nowrap text-right text-foreground">{item.value} ({item.percent})</b></div>)}</div>
           </div>
           <div className="grid grid-cols-2 gap-2 border-t border-border pt-3 text-[12px]"><div><span className="text-muted-foreground">Avg Inbound Utilization</span><b className="mt-1 block text-[16px] text-foreground">42.6% <span className="text-[11px] text-success">↑ 6.3%</span></b></div><div><span className="text-muted-foreground">Avg Outbound Utilization</span><b className="mt-1 block text-[16px] text-foreground">38.2% <span className="text-[11px] text-success">↑ 5.2%</span></b></div></div>
         </Panel>
       </section>
 
       <section aria-label="Traffic analysis" className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-        <Panel title="Traffic Distribution" className="min-w-0"><TrafficDonut data={trafficDistribution} total="4.37 TB" /></Panel>
+        <Panel title="Traffic Distribution" className="min-w-0"><TrafficDonut data={trafficDistribution} total={`${TOTAL_TRAFFIC_TB.toFixed(2)} TB`} /></Panel>
         <TalkerList title="Top Talkers (By Traffic)" items={talkersByTraffic} />
         <TalkerList title="Top Talkers (By Connections)" items={talkersByConnections} />
-        <Panel title="Top Protocols" className="min-w-0"><TrafficDonut data={protocols} total="2.45 TB" /></Panel>
+        <Panel title="Top Protocols" className="min-w-0"><TrafficDonut data={protocols} total={`${TOTAL_TRAFFIC_TB.toFixed(2)} TB`} /></Panel>
       </section>
 
       <Panel title="Recent Network Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all network alerts.")} className="text-[12px] font-semibold text-primary">View All →</button>}>

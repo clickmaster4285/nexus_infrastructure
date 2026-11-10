@@ -19,10 +19,10 @@ interface PageMetaProps {
   onRefresh?: () => void;
 }
 
-export function PageMeta({ breadcrumbs, demo = true, showRefresh = true, actions, variant = "default", lastUpdated = "Nov 7, 2026 12:09", onRefresh }: PageMetaProps) {
+export function PageMeta({ breadcrumbs, demo = true, showRefresh = true, actions, lastUpdated = "Nov 7, 2026 12:09", onRefresh }: PageMetaProps) {
   return (
-    <div className={`flex flex-wrap items-center justify-between gap-2 ${variant === "detail" ? "min-h-6" : "h-[22px]"}`}>
-      <nav aria-label="Breadcrumb" className={`flex items-center gap-1.5 text-muted-foreground ${variant === "detail" ? "text-[12px]" : "text-[10px]"}`}>
+    <div className="flex min-h-6 flex-wrap items-center justify-between gap-3">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted-foreground">
         <Home size={13} aria-hidden="true" className="text-muted-foreground" />
         {breadcrumbs.map((crumb) => (
           <span key={crumb} className="flex items-center gap-1.5">
@@ -31,10 +31,10 @@ export function PageMeta({ breadcrumbs, demo = true, showRefresh = true, actions
           </span>
         ))}
       </nav>
-      <div className={`flex items-center gap-2.5 text-muted-foreground sm:gap-4 ${variant === "detail" ? "text-[12px]" : "text-[9px]"}`}>
+      <div className="flex items-center gap-3 text-[13px] text-muted-foreground">
         {actions}
         {demo && (
-          <Badge variant="secondary" className={`border-transparent bg-[#e2efff] px-2.5 py-1 font-bold tracking-wide text-[#1476d4] dark:bg-[#17385c] dark:text-[#82c1ff] ${variant === "detail" ? "text-[12px]" : "text-[8px]"}`}>
+          <Badge variant="secondary" className="border-transparent bg-[#e2efff] px-2.5 py-1 text-[12px] font-semibold tracking-wide text-[#1476d4] dark:bg-[#17385c] dark:text-[#82c1ff]">
             DEMO DATA
           </Badge>
         )}

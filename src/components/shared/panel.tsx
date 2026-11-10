@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -8,21 +9,26 @@ import { cn } from "@/lib/utils";
 const RANGE_OPTIONS = ["24h", "7d", "30d"] as const;
 
 interface PanelProps {
-  title: string;
-  children?: React.ReactNode;
+  title: ReactNode;
+  children?: ReactNode;
   /** Optional default time-range for the panel toolbar, e.g. "24h". */
   range?: string;
   className?: string;
+  /** Optional title styling for page-scoped typography adjustments. */
+  titleClassName?: string;
   /** Extra controls rendered before the range select and options button. */
-  action?: React.ReactNode;
+  action?: ReactNode;
   showOptions?: boolean;
+  optionsButtonClassName?: string;
+  /** Optional classes for the header row, e.g. "h-10" for a taller header. */
+  headerClassName?: string;
 }
 
-export function Panel({ title, children, range, className, action, showOptions = true }: PanelProps) {
+export function Panel({ title, children, range, className, titleClassName, action, showOptions = true, optionsButtonClassName, headerClassName }: PanelProps) {
   return (
     <Card className={cn("flex min-w-0 flex-col p-2.5", className)}>
-      <div className="flex h-6 shrink-0 items-center justify-between gap-2">
-        <CardTitle className="truncate">{title}</CardTitle>
+      <div className={cn("flex shrink-0 items-center justify-between gap-2", headerClassName ?? "h-6")}>
+        <CardTitle className={cn("truncate", titleClassName)}>{title}</CardTitle>
         <div className="flex shrink-0 items-center gap-0.5">
           {action}
           {range && (
@@ -40,7 +46,7 @@ export function Panel({ title, children, range, className, action, showOptions =
             </Select>
           )}
           {showOptions && (
-            <Button variant="ghost" size="icon-sm" className="h-6 w-6 text-muted-foreground" aria-label={`${title} options`}>
+            <Button variant="ghost" size="icon-sm" className={cn("h-6 w-6 text-muted-foreground", optionsButtonClassName)} aria-label={`${title} options`}>
               <MoreVertical size={15} />
             </Button>
           )}

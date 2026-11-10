@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
-import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/shared/icon";
+import { StatCard } from "@/components/shared/stat-card";
 import { cn } from "@/lib/utils";
 import type { MetricStat } from "@/data/mock/dashboard";
 
@@ -23,38 +23,21 @@ interface MetricCardProps {
 
 export function MetricCard({ item, className, labelClassName, valueClassName, trendClassName }: MetricCardProps) {
   const isDown = item.trend === "down";
+  const trend = item.trend === "flat"
+    ? item.change
+    : <>{isDown ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />}{item.change}</>;
   return (
-    <Card className={cn("flex h-[77px] min-w-0 items-center gap-2.5 p-2.5 sm:p-3", className)}>
-      <div
-        aria-hidden="true"
-        className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-full", toneStyles[item.tone] ?? toneStyles.blue)}
-      >
-        <Icon name={item.icon} size={20} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className={cn("truncate text-[9px] text-[#47617f] dark:text-[#a9bcd2]", labelClassName)} title={item.label}>
-          {item.label}
-        </div>
-        <div className={cn("font-display whitespace-nowrap text-[22px] font-extrabold leading-tight tracking-tight text-[#10213b] dark:text-[#e6edf7]", valueClassName)}>
-          {item.value}
-        </div>
-        <div
-          className={cn(
-            "flex items-center gap-0.5 whitespace-nowrap text-[9px] leading-tight text-muted-foreground",
-            trendClassName,
-            item.trend !== "flat" && "text-success",
-          )}
-        >
-          {item.trend !== "flat" && (isDown ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />)}
-          {item.change}
-        </div>
-        {item.detail && (
-          <div className="mt-1 flex items-center gap-1.5 whitespace-nowrap text-[9px] text-[#657993] dark:text-[#a9bcd2]">
-            <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full bg-success shadow-[0_0_0_3px_#1eb57a18]" />
-            {item.detail}
-          </div>
-        )}
-      </div>
-    </Card>
+    <StatCard
+      icon={<Icon name={item.icon} size={20} />}
+      iconTone={toneStyles[item.tone] ?? toneStyles.blue}
+      label={item.label}
+      value={item.value}
+      trend={trend}
+      className={className}
+      labelClassName={labelClassName}
+      valueClassName={valueClassName}
+      trendClassName={cn(item.trend !== "flat" && "text-success", trendClassName)}
+      detail={item.detail}
+    />
   );
 }

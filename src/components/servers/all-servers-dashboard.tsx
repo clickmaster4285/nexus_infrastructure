@@ -17,7 +17,7 @@ import {
   type Server,
 } from "@/data/mock/servers";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 20;
 
 function downloadCsv(filename: string, rows: string[][]) {
   const csv = rows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");

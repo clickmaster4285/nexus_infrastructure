@@ -9,9 +9,9 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
+import { healthLocationCounts, healthLocations } from "@/data/mock/health-locations";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -41,13 +41,7 @@ const centers: { name: string; location: string; status: SiteStatus; uptime: num
   { name: "DC-5", location: "Sydney, AU", status: "Offline", uptime: 0, country: "Australia" },
 ];
 
-const mapMarkers: InfrastructureMapMarker[] = [
-  { name: "DC-1 · New York", lat: 40.7128, lng: -74.006, status: "healthy", role: "Data center · 99.9% uptime" },
-  { name: "DC-2 · London", lat: 51.5072, lng: -0.1276, status: "healthy", role: "Data center · 99.6% uptime" },
-  { name: "DC-3 · Dubai", lat: 25.2048, lng: 55.2708, status: "warning", role: "Degraded · 98.7% uptime" },
-  { name: "DC-4 · Singapore", lat: 1.3521, lng: 103.8198, status: "healthy", role: "Data center · 99.1% uptime" },
-  { name: "DC-5 · Sydney", lat: -33.8688, lng: 151.2093, status: "critical", role: "Offline · 0% uptime" },
-];
+const mapMarkers: InfrastructureMapMarker[] = healthLocations;
 
 const countryLocations = [
   { code: "US", name: "United States", count: 2, status: "healthy" },
@@ -60,7 +54,7 @@ const countryLocations = [
 
 const FlagComponents = Flags as unknown as Record<
   string,
-  ComponentType<SVGProps<SVGSVGElement>> | undefined
+  ComponentType<SVGProps<SVGSVGElement> & { title?: string }> | undefined
 >;
 
 const regionCount = 4;
@@ -72,9 +66,9 @@ const centerStates = [
 ];
 
 const locationStates = [
-  { name: "Healthy", value: 10, color: "#20b77a" },
-  { name: "Degraded", value: 1, color: "#f59e0b" },
-  { name: "Offline", value: 1, color: "#ef4444" },
+  { name: "Healthy", value: healthLocationCounts.healthy ?? 0, color: "#20b77a" },
+  { name: "Degraded", value: healthLocationCounts.warning ?? 0, color: "#f59e0b" },
+  { name: "Offline", value: healthLocationCounts.critical ?? 0, color: "#ef4444" },
 ];
 
 const performanceTimes = ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"];
@@ -214,20 +208,24 @@ export function DataCentersDashboard() {
 
   return (
     <div className="flex flex-col gap-3 pb-3">
-      <PageMeta breadcrumbs={["Infrastructure", "Data Centers & Locations"]} variant="detail" />
-      <PageHeading title="Data Centers & Locations" description="Monitor data center health, location availability and infrastructure performance." actionsAlign="top" variant="detail">
-        <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-9 gap-1.5 px-3 text-[12px]"><Plus size={15} />Add Data Center</Button>
-        <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-9 gap-1.5 px-3 text-[12px]"><Globe2 size={15} />View Map</Button>
-      </PageHeading>
+      <PageHeader
+        breadcrumbs={["Infrastructure", "Data Centers & Locations"]}
+        title="Data Centers & Locations"
+        subtitle="Monitor data center health, location availability and infrastructure performance."
+        actions={<>
+          <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Plus size={16} />Add Data Center</Button>
+          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Globe2 size={16} />View Map</Button>
+        </>}
+      />
 
-      <section aria-label="Data center summary" className="grid grid-cols-2 items-stretch gap-2 sm:grid-cols-3 xl:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[88px]" labelClassName="text-[12px] leading-4" valueClassName="text-[24px] leading-7" trendClassName="text-[11px] leading-4" />)}
+      <section aria-label="Data center summary" className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
+        {stats.map((item) => <MetricCard key={item.label} item={item} />)}
       </section>
 
       <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
         <Panel title="Global Infrastructure Map" className="min-h-[290px] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[11px] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[11px] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
           <div id="global-data-centers" className="relative mt-2 min-h-[248px] flex-1 overflow-hidden rounded-md bg-[#eef2f7]">
-            <InfrastructureMap variant="light" markers={mapMarkers} center={[20, 20]} zoom={2} legendCounts={{ healthy: 10, warning: 1, critical: 1 }} title="Global Infrastructure Map" description="12 monitored locations · mock data" />
+            <InfrastructureMap variant="light" markers={mapMarkers} center={[20, 20]} zoom={2} fitMarkers legendCounts={healthLocationCounts} title="Global Infrastructure Map" description="12 monitored locations · mock data" />
             {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[11px] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
           </div>
         </Panel>

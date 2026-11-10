@@ -1,184 +1,1124 @@
 "use client";
 
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
-  Tooltip, XAxis, YAxis,
-} from "recharts";
-import {
-  Bell, Check, Download, Globe, Plus, Rocket,
+  ArrowDown, ArrowUp, CheckCircle2, ChevronDown, Download, Expand, Globe, MoreVertical, Pause, Pencil,
+  Play, Plus, RefreshCw, Search, ShieldCheck, TriangleAlert, XCircle,
+  type LucideIcon,
 } from "lucide-react";
+import * as echarts from "echarts/core";
+import { LineChart as ELineChart } from "echarts/charts";
+import {
+  AxisPointerComponent,
+  GridComponent,
+  MarkAreaComponent,
+  TooltipComponent,
+} from "echarts/components";
+import { LabelLayout } from "echarts/features";
+import { CanvasRenderer } from "echarts/renderers";
+import type { EChartsOption } from "echarts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
+import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
+import { cn } from "@/lib/utils";
 
-const stats: MetricStat[] = [
-  { label: "Total Monitors", value: "24", change: "2 new", trend: "up", tone: "blue", icon: "globe-2" },
-  { label: "Healthy", value: "22", change: "91.7%", trend: "flat", tone: "green", icon: "online" },
-  { label: "Issues", value: "2", change: "8.3%", trend: "down", tone: "red", icon: "octagon-alert" },
-  { label: "Avg Response Time", value: "245 ms", change: "12.4%", trend: "down", tone: "blue", icon: "activity" },
-  { label: "Uptime", value: "99.95%", change: "0.01%", trend: "up", tone: "green", icon: "shield-check" },
-  { label: "Total Checks", value: "48,320", change: "12.5%", trend: "up", tone: "purple", icon: "pulse" },
+const InfrastructureMap = dynamic(
+  () => import("@/components/live-operations/infrastructure-map").then((module) => module.InfrastructureMap),
+  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-[#eef2f7] text-[12px] text-muted-foreground">Loading world map…</div> },
+);
+
+echarts.use([
+  ELineChart,
+  GridComponent,
+  TooltipComponent,
+  MarkAreaComponent,
+  AxisPointerComponent,
+  LabelLayout,
+  CanvasRenderer,
+]);
+
+/* ------------------------------------------------------------------ *
+ * Muted palette shared with the other monitoring dashboards
+ * ------------------------------------------------------------------ */
+
+const PALETTE = {
+  blue: "#60A5FA",
+  green: "#34D399",
+  purple: "#A78BFA",
+  amber: "#FBBF24",
+  red: "#F87171",
+  slate: "#94A3B8",
+} as const;
+
+/** Percentile of a sorted numeric list, using linear interpolation. */
+function percentileOf(sorted: number[], ratio: number): number {
+  if (!sorted.length) return 0;
+  const position = (sorted.length - 1) * ratio;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  return Math.round(sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower));
+}
+
+/* ------------------------------------------------------------------ *
+ * Data - single source of truth for every card on the page
+ * ------------------------------------------------------------------ */
+
+type MonitorStatus = "Healthy" | "Degraded" | "Down";
+type MonitorKind = "Website" | "API";
+type MonitorMethod = "GET" | "POST" | "PUT";
+
+interface Monitor {
+  id: string;
+  endpoint: string;
+  kind: MonitorKind;
+  method: MonitorMethod;
+  status: MonitorStatus;
+  code: number | null;
+  responseMs: number | null;
+  p95Ms: number;
+  uptime30d: number;
+  lastCheck: string;
+  /** Sparkline samples for the trend column. */
+  values: number[];
+  region: string;
+  /** Why the endpoint is unhealthy - shown instead of a code / response time. */
+  issueReason?: string;
+}
+
+const monitors: Monitor[] = [
+  { id: "m-01", endpoint: "/api/users", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 132, p95Ms: 168, uptime30d: 99.99, lastCheck: "30s ago", values: [9, 12, 10, 14, 11, 13, 9, 12, 10, 13], region: "Virginia" },
+  { id: "m-02", endpoint: "/api/products", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 178, p95Ms: 221, uptime30d: 99.97, lastCheck: "28s ago", values: [12, 10, 13, 11, 15, 12, 9, 12, 11, 13], region: "Virginia" },
+  { id: "m-03", endpoint: "/api/orders", kind: "API", method: "GET", status: "Down", code: null, responseMs: null, p95Ms: 0, uptime30d: 0, lastCheck: "12m ago", values: [15, 15, 14, 15, 15, 8, 8, 8, 8, 8], region: "Virginia", issueReason: "Connection refused" },
+  { id: "m-04", endpoint: "/api/payments", kind: "API", method: "POST", status: "Degraded", code: 200, responseMs: 845, p95Ms: 912, uptime30d: 98.2, lastCheck: "1m ago", values: [10, 12, 16, 18, 21, 19, 17, 16, 15, 14], region: "London", issueReason: "HTTP 503" },
+  { id: "m-05", endpoint: "/api/notifications", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 167, p95Ms: 205, uptime30d: 99.96, lastCheck: "35s ago", values: [10, 13, 11, 12, 9, 12, 14, 10, 13, 11], region: "Virginia" },
+  { id: "m-06", endpoint: "/api/reports", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 244, p95Ms: 302, uptime30d: 99.91, lastCheck: "41s ago", values: [14, 13, 15, 12, 14, 13, 12, 15, 14, 13], region: "Frankfurt" },
+  { id: "m-07", endpoint: "/api/inventory", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 151, p95Ms: 188, uptime30d: 99.98, lastCheck: "22s ago", values: [9, 10, 11, 10, 12, 11, 10, 9, 11, 10], region: "Virginia" },
+  { id: "m-08", endpoint: "/api/cart", kind: "API", method: "POST", status: "Healthy", code: 201, responseMs: 196, p95Ms: 240, uptime30d: 99.94, lastCheck: "19s ago", values: [11, 12, 10, 13, 11, 12, 13, 11, 12, 11], region: "London" },
+  { id: "m-09", endpoint: "/api/checkout", kind: "API", method: "POST", status: "Healthy", code: 200, responseMs: 274, p95Ms: 331, uptime30d: 99.89, lastCheck: "33s ago", values: [13, 12, 14, 13, 15, 14, 13, 14, 12, 13], region: "Singapore" },
+  { id: "m-10", endpoint: "/api/sessions", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 118, p95Ms: 149, uptime30d: 99.99, lastCheck: "17s ago", values: [8, 9, 10, 9, 11, 10, 9, 8, 10, 9], region: "Virginia" },
+  { id: "m-11", endpoint: "/api/webhooks", kind: "API", method: "POST", status: "Healthy", code: 202, responseMs: 223, p95Ms: 268, uptime30d: 99.93, lastCheck: "26s ago", values: [12, 11, 13, 12, 14, 13, 12, 11, 13, 12], region: "Sydney" },
+  { id: "m-12", endpoint: "/api/search", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 289, p95Ms: 355, uptime30d: 99.87, lastCheck: "37s ago", values: [14, 13, 15, 14, 16, 15, 14, 13, 15, 14], region: "Frankfurt" },
+  { id: "m-13", endpoint: "/api/catalog", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 163, p95Ms: 199, uptime30d: 99.95, lastCheck: "24s ago", values: [10, 12, 11, 13, 12, 11, 12, 10, 11, 12], region: "Singapore" },
+  { id: "m-14", endpoint: "/api/reviews", kind: "API", method: "POST", status: "Healthy", code: 201, responseMs: 207, p95Ms: 251, uptime30d: 99.92, lastCheck: "31s ago", values: [11, 13, 12, 14, 13, 12, 13, 11, 12, 13], region: "London" },
+  { id: "m-15", endpoint: "/api/shipping", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 186, p95Ms: 228, uptime30d: 99.96, lastCheck: "29s ago", values: [10, 11, 12, 11, 13, 12, 11, 12, 10, 11], region: "Frankfurt" },
+  { id: "m-16", endpoint: "/api/pricing", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 142, p95Ms: 177, uptime30d: 99.98, lastCheck: "20s ago", values: [9, 10, 11, 10, 12, 11, 10, 11, 9, 10], region: "Virginia" },
+  { id: "m-17", endpoint: "/api/analytics", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 258, p95Ms: 314, uptime30d: 99.9, lastCheck: "39s ago", values: [13, 12, 14, 13, 15, 14, 13, 14, 12, 13], region: "Sydney" },
+  { id: "m-18", endpoint: "www.example.com", kind: "Website", method: "GET", status: "Healthy", code: 200, responseMs: 126, p95Ms: 158, uptime30d: 99.97, lastCheck: "15s ago", values: [9, 10, 9, 11, 10, 11, 10, 9, 10, 9], region: "Virginia" },
+  { id: "m-19", endpoint: "api.example.com", kind: "Website", method: "GET", status: "Healthy", code: 200, responseMs: 174, p95Ms: 214, uptime30d: 99.95, lastCheck: "18s ago", values: [11, 12, 11, 13, 12, 11, 12, 11, 12, 11], region: "Singapore" },
+  { id: "m-20", endpoint: "status.example.com", kind: "Website", method: "GET", status: "Healthy", code: 200, responseMs: 158, p95Ms: 193, uptime30d: 99.99, lastCheck: "12s ago", values: [9, 9, 10, 10, 11, 10, 10, 9, 10, 10], region: "Frankfurt" },
+  { id: "m-21", endpoint: "shop.example.com", kind: "Website", method: "GET", status: "Healthy", code: 200, responseMs: 236, p95Ms: 288, uptime30d: 99.88, lastCheck: "27s ago", values: [13, 12, 14, 13, 15, 14, 13, 12, 14, 13], region: "Sydney" },
+  { id: "m-22", endpoint: "docs.example.com", kind: "Website", method: "GET", status: "Healthy", code: 200, responseMs: 195, p95Ms: 236, uptime30d: 99.94, lastCheck: "23s ago", values: [11, 12, 13, 12, 14, 13, 12, 13, 11, 12], region: "London" },
+  { id: "m-23", endpoint: "/api/audit", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 148, p95Ms: 183, uptime30d: 99.96, lastCheck: "21s ago", values: [10, 11, 10, 12, 11, 12, 11, 10, 11, 12], region: "Virginia" },
+  { id: "m-24", endpoint: "/api/flags", kind: "API", method: "GET", status: "Healthy", code: 200, responseMs: 112, p95Ms: 141, uptime30d: 99.99, lastCheck: "16s ago", values: [8, 9, 9, 10, 9, 10, 9, 9, 10, 9], region: "Frankfurt" },
 ];
 
-const times = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00"];
-const performance = times.map((time, index) => ({
+/* ---------------- Incidents - single source for card, chart and banner ---------------- */
+
+type IncidentStatus = "Down" | "Degraded";
+type IncidentSeverity = "Critical" | "Warning";
+
+interface Incident {
+  id: string;
+  endpoint: string;
+  status: IncidentStatus;
+  severity: IncidentSeverity;
+  /** Time slot on the performance chart where the incident starts. */
+  chartTime: string;
+  region: string;
+  /** Timestamp the incident started - used for the live duration. */
+  startedAt: number;
+}
+
+/** Timestamp for a fixed wall-clock time today - keeps incident times stable. */
+function todayAt(hour: number, minute: number): number {
+  const date = new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date.getTime();
+}
+
+const incidents: Incident[] = [
+  { id: "inc-01", endpoint: "/api/orders", status: "Down", severity: "Critical", chartTime: "12:00", region: "Virginia", startedAt: todayAt(12, 32) },
+  { id: "inc-02", endpoint: "/api/payments", status: "Degraded", severity: "Warning", chartTime: "20:00", region: "London", startedAt: todayAt(10, 20) },
+];
+
+interface ResolvedIncident {
+  id: string;
+  endpoint: string;
+  /** Minutes the incident took to resolve. */
+  resolvedInMinutes: number;
+}
+
+const resolvedIncidents: ResolvedIncident[] = [
+  { id: "res-01", endpoint: "/api/products", resolvedInMinutes: 14 },
+  { id: "res-02", endpoint: "/api/auth", resolvedInMinutes: 9 },
+  { id: "res-03", endpoint: "/api/search", resolvedInMinutes: 22 },
+];
+
+/** Mean time to resolve across today's resolved incidents. */
+const mttrMinutes = Math.round(resolvedIncidents.reduce((sum, item) => sum + item.resolvedInMinutes, 0) / resolvedIncidents.length);
+
+/** Incident totals - the stat card and the banner read from here. */
+const openIncidents = incidents;
+const issueCount = openIncidents.length;
+const downIncident = openIncidents.find((incident) => incident.status === "Down");
+const degradedIncident = openIncidents.find((incident) => incident.status === "Degraded");
+
+/** Finds the active incident for an endpoint, if there is one. */
+function incidentFor(endpoint: string): Incident | undefined {
+  return openIncidents.find((incident) => incident.endpoint === endpoint);
+}
+
+/** Formats a timestamp as a 12-hour clock time. */
+function formatSince(timestamp: number): string {
+  return new Date(timestamp).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+}
+
+/** Formats a duration as "3h 12m" or "45m". */
+function formatDuration(milliseconds: number): string {
+  const totalMinutes = Math.max(0, Math.floor(milliseconds / 60000));
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+}
+
+/** Formats the expiry date of a certificate, e.g. "Nov 22, 2026". */
+function formatExpiry(daysLeft: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() + daysLeft);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+/** Colour used for an incident marker on the chart. */
+function incidentColor(incident: Incident): string {
+  return incident.status === "Down" ? PALETTE.red : PALETTE.amber;
+}
+
+/* ---------------- Monitor totals ---------------- */
+
+const totalMonitors = monitors.length;
+const healthyMonitors = monitors.filter((monitor) => monitor.status === "Healthy").length;
+
+/* ---------------- Performance series ---------------- */
+
+const performanceTimes = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00"];
+const performance = performanceTimes.map((time, index) => ({
   time,
   response: [218, 234, 252, 237, 261, 249, 272, 255, 287, 244, 230, 251, 245][index],
   availability: [98.6, 98.8, 99.1, 98.7, 99.3, 99.2, 99.4, 99.1, 99.8, 99.2, 98.9, 99.1, 99.3][index],
 }));
 
-const endpointRows = [
-  { endpoint: "/api/users", status: "Healthy", response: "132 ms", uptime: "99.99%", values: [9, 12, 10, 14, 11, 13, 9, 12, 10, 13] },
-  { endpoint: "/api/products", status: "Healthy", response: "178 ms", uptime: "99.97%", values: [12, 10, 13, 11, 15, 12, 9, 12, 11, 13] },
-  { endpoint: "/api/orders", status: "Down", response: "—", uptime: "0.00%", values: [15, 15, 14, 15, 15, 8, 8, 8, 8, 8] },
-  { endpoint: "/api/payments", status: "Healthy", response: "205 ms", uptime: "99.98%", values: [11, 12, 14, 11, 13, 10, 12, 14, 11, 13] },
-  { endpoint: "/api/notifications", status: "Healthy", response: "167 ms", uptime: "99.96%", values: [10, 13, 11, 12, 9, 12, 14, 10, 13, 11] },
-];
+/** Response time percentiles - the single source used by the chart and the chips. */
+const sortedResponses = performance.map((point) => point.response).sort((a, b) => a - b);
+const responsePercentiles = {
+  p50: percentileOf(sortedResponses, 0.5),
+  p95: percentileOf(sortedResponses, 0.95),
+  p99: percentileOf(sortedResponses, 0.99),
+};
+
+/** P95 of the response time series, shared by the chart and the tiles. */
+const P95_RESPONSE_MS = responsePercentiles.p95;
+
+/** Availability - the single source for the Uptime card, the chart chip and the tile. */
+const avgAvailability = performance.reduce((sum, point) => sum + point.availability, 0) / performance.length;
+const latestAvailability = performance[performance.length - 1].availability;
+
+/** Average response time - shared by the stat card and the summary tile. */
+const avgResponseTime = performance.reduce((sum, point) => sum + point.response, 0) / performance.length;
+
+/** Vertical bands marking where each incident started - kept very light. */
+const incidentAreas = incidents.map((incident) => {
+  const index = performanceTimes.indexOf(incident.chartTime);
+  const end = performanceTimes[Math.min(index + 1, performanceTimes.length - 1)];
+  return [
+    { xAxis: incident.chartTime, itemStyle: { color: `${incidentColor(incident)}0F` } },
+    { xAxis: end },
+  ] as [{ xAxis: string; itemStyle?: { color: string } }, { xAxis: string }];
+});
+
+/** Thin vertical marker + label pill drawn at the start of each incident. */
+const incidentMarkers = incidents.map((incident) => ({
+  xAxis: incident.chartTime,
+  label: {
+    show: true,
+    formatter: `${incident.status === "Down" ? "API Down" : "Degraded"} ${formatSince(incident.startedAt)}`,
+    color: incidentColor(incident),
+    fontSize: 12,
+    backgroundColor: "var(--popover)",
+    borderColor: incidentColor(incident),
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: [2, 6],
+    position: "insideEndTop" as const,
+  },
+}));
 
 const serviceHealth = [
-  { label: "Web Apps", value: 98.7, color: "#20b77a" },
-  { label: "APIs", value: 99.2, color: "#20b77a" },
-  { label: "Databases", value: 97.9, color: "#20b77a" },
-  { label: "Infrastructure", value: 99.1, color: "#20b77a" },
+  { label: "Web Apps", value: 99.2 },
+  { label: "APIs", value: 98.4 },
+  { label: "Databases", value: 99.6 },
+  { label: "Infrastructure", value: 99.8 },
 ];
 
 const topServices = [
-  { name: "Web API", value: "99.9%", width: "99.9%" },
-  { name: "Payment API", value: "99.7%", width: "99.7%" },
-  { name: "User Service", value: "99.5%", width: "99.5%" },
-  { name: "Database", value: "99.3%", width: "99.3%" },
-  { name: "Notification API", value: "99.1%", width: "99.1%" },
+  { name: "Web API", value: 99.94, issue: undefined as string | undefined },
+  { name: "User Service", value: 99.86, issue: undefined as string | undefined },
+  { name: "Database", value: 99.71, issue: undefined as string | undefined },
+  { name: "CDN Edge", value: 99.97, issue: undefined as string | undefined },
+  { name: "Notification API", value: 99.42, issue: "3 failed checks in 24h" },
+  { name: "Payment API", value: 99.28, issue: "7 failed checks in 24h" },
+  { name: "Search API", value: 98.95, issue: "12 failed checks in 24h" },
 ];
 
-const events = [
-  { time: "12:32 PM", type: "API Down", color: "red", message: "/api/orders is not responding", status: "Open" },
-  { time: "11:45 AM", type: "Recovery", color: "blue", message: "/api/orders is back online", status: "Resolved" },
-  { time: "10:20 AM", type: "High Latency", color: "amber", message: "Response time is 845ms", status: "Investigating" },
-  { time: "09:50 AM", type: "New Monitor", color: "blue", message: "Added new endpoint /api/reports", status: "Info" },
+interface Region {
+  name: string;
+  /** Latency in ms for the region. */
+  latencyMs: number;
+  /** Geographic coordinates used by the shared map. */
+  lat: number;
+  lng: number;
+}
+
+const regions: Region[] = [
+  { name: "Virginia", latencyMs: 42, lat: 38.0, lng: -77.5 },
+  { name: "London", latencyMs: 58, lat: 51.51, lng: -0.13 },
+  { name: "Frankfurt", latencyMs: 64, lat: 50.11, lng: 8.68 },
+  { name: "Singapore", latencyMs: 91, lat: 1.35, lng: 103.82 },
+  { name: "Sydney", latencyMs: 118, lat: -33.87, lng: 151.21 },
 ];
 
-const responseDistribution = [
-  { label: "< 100ms", value: 42, color: "#2878ed" },
-  { label: "100-300ms", value: 33, color: "#22c55e" },
-  { label: "300-500ms", value: 15, color: "#39aee8" },
-  { label: "> 500ms", value: 8, color: "#8b5cf6" },
-];
+/** Region state derived from the monitors it hosts. */
+/**
+ * Region state - driven by the active incidents so a location hosting an
+ * incident is never shown as healthy.
+ */
+function regionState(region: Region): "online" | "warning" | "offline" {
+  const scoped = incidents.filter((incident) => incident.region === region.name);
+  if (scoped.some((incident) => incident.status === "Down")) return "offline";
+  if (scoped.some((incident) => incident.status === "Degraded")) return "warning";
+  return "online";
+}
 
-const statusClass: Record<string, string> = {
-  Open: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
-  Resolved: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-  Investigating: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-  Info: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+const regionStates = regions.map((region) => ({ ...region, state: regionState(region) }));
+
+/** Map markers - status comes from the active incidents, role carries the latency. */
+const availabilityMarkers: InfrastructureMapMarker[] = regionStates.map((region) => ({
+  name: region.name,
+  lat: region.lat,
+  lng: region.lng,
+  status: region.state === "offline" ? "critical" : region.state === "warning" ? "warning" : "healthy",
+  role: `${region.latencyMs}ms latency`,
+}));
+
+/** Map legend counts - same numbers as the header pill and the Issues card. */
+const availabilityLegendCounts = {
+  healthy: healthyMonitors,
+  warning: degradedIncident ? 1 : 0,
+  critical: downIncident ? 1 : 0,
 };
 
-function PerformanceChart({ period }: { period: string }) {
+/* ---------------- Events ---------------- */
+
+/** Builds a timestamp for a fixed wall-clock time today. */
+function eventTime(hour: number, minute: number): number {
+  const date = new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date.getTime();
+}
+
+interface MonitoringEvent {
+  /** Timestamp - events are sorted by it, newest first. */
+  at: number;
+  type: string;
+  message: string;
+  status: "Open" | "Resolved" | "Investigating" | "Info";
+}
+
+/** Feed of monitoring events - open incidents are injected from the incident source. */
+const monitoringEvents: MonitoringEvent[] = [
+  { at: eventTime(11, 45), type: "Recovery", message: "/api/orders is back online", status: "Resolved" },
+  { at: eventTime(9, 50), type: "New Monitor", message: "Added new endpoint /api/reports", status: "Info" },
+  { at: eventTime(9, 12), type: "SSL Renewal", message: "Certificate for www.example.com renewed", status: "Resolved" },
+  { at: eventTime(8, 35), type: "Deploy", message: "Released v2.14.2 across production", status: "Info" },
+  { at: eventTime(7, 58), type: "Threshold Update", message: "/api/search latency threshold set to 800ms", status: "Info" },
+];
+
+/** Total events recorded today - used by the Recent Events footer. */
+const TOTAL_EVENTS = 31;
+
+/**
+ * Events feed shown in Recent Events - open incidents are injected from the
+ * incident source so the timestamps match the banner and the incidents card.
+ */
+const sortedEvents = [
+  ...openIncidents.map((incident) => ({
+    key: `open-${incident.id}`,
+    at: incident.startedAt,
+    time: formatSince(incident.startedAt),
+    message: incident.status === "Down"
+      ? `API Down: ${incident.endpoint} down since ${formatSince(incident.startedAt)}`
+      : `High Latency: ${incident.endpoint} since ${formatSince(incident.startedAt)}`,
+    status: "Open" as const,
+  })),
+  ...monitoringEvents.map((event) => ({
+    key: `event-${event.at}-${event.type}`,
+    at: event.at,
+    time: formatSince(event.at),
+    message: event.message,
+    status: event.status,
+  })),
+].sort((a, b) => b.at - a.at);
+
+/** Response time buckets - percentages add up to 100. */
+const responseDistribution = [
+  { label: "< 100ms", value: 38, color: PALETTE.blue },
+  { label: "100-300ms", value: 27, color: PALETTE.green },
+  { label: "300-500ms", value: 20, color: PALETTE.purple },
+  { label: "> 500ms", value: 15, color: PALETTE.amber },
+];
+
+interface SslCertificate {
+  domain: string;
+  daysLeft: number;
+  /** Whether the certificate renews automatically. */
+  autoRenew: boolean;
+}
+
+const sslCertificates: SslCertificate[] = [
+  { domain: "api.example.com", daysLeft: 12, autoRenew: true },
+  { domain: "www.example.com", daysLeft: 74, autoRenew: true },
+  { domain: "shop.example.com", daysLeft: 26, autoRenew: false },
+  { domain: "status.example.com", daysLeft: 121, autoRenew: true },
+  { domain: "docs.example.com", daysLeft: 38, autoRenew: true },
+];
+
+/** Certificates sorted by expiry - the soonest to expire first. */
+const sortedSslCertificates = [...sslCertificates].sort((a, b) => a.daysLeft - b.daysLeft);
+
+/** Response time breakdown - the parts sum to the total. */
+const responseBreakdown = [
+  { label: "DNS", value: 18, color: PALETTE.blue },
+  { label: "Connect", value: 42, color: PALETTE.green },
+  { label: "TLS", value: 56, color: PALETTE.purple },
+  { label: "TTFB", value: 96, color: PALETTE.amber },
+];
+
+/** Total request time, derived from the breakdown parts. */
+const totalResponseMs = responseBreakdown.reduce((sum, part) => sum + part.value, 0);
+
+/** Per-endpoint response breakdown - the selector switches between them. */
+const responseBreakdownByEndpoint: Record<string, { label: string; value: number; color: string }[]> = {
+  all: responseBreakdown,
+  "/api/payments": [
+    { label: "DNS", value: 26, color: PALETTE.blue },
+    { label: "Connect", value: 58, color: PALETTE.green },
+    { label: "TLS", value: 74, color: PALETTE.purple },
+    { label: "TTFB", value: 110, color: PALETTE.amber },
+  ],
+  "/api/orders": [
+    { label: "DNS", value: 12, color: PALETTE.blue },
+    { label: "Connect", value: 28, color: PALETTE.green },
+    { label: "TLS", value: 34, color: PALETTE.purple },
+    { label: "TTFB", value: 22, color: PALETTE.amber },
+  ],
+  "/api/users": [
+    { label: "DNS", value: 9, color: PALETTE.blue },
+    { label: "Connect", value: 21, color: PALETTE.green },
+    { label: "TLS", value: 31, color: PALETTE.purple },
+    { label: "TTFB", value: 71, color: PALETTE.amber },
+  ],
+};
+
+/** Endpoints offered by the response breakdown selector. */
+const breakdownEndpoints = ["all", "/api/payments", "/api/orders", "/api/users"];
+
+/* ------------------------------------------------------------------ *
+ * Theme resolution - ECharts renders on canvas and cannot read CSS vars
+ * ------------------------------------------------------------------ */
+
+interface ChartTheme {
+  foreground: string;
+  muted: string;
+  mutedForeground: string;
+  border: string;
+  card: string;
+  popover: string;
+  popoverForeground: string;
+  /** Axis label colour - slightly brighter in dark mode. */
+  axisLabel: string;
+  dark: boolean;
+}
+
+const FALLBACK_THEME: ChartTheme = {
+  foreground: "#15243b",
+  muted: "#eef2f8",
+  mutedForeground: "#738198",
+  border: "#e3e9f1",
+  card: "#ffffff",
+  popover: "#ffffff",
+  popoverForeground: "#15243b",
+  axisLabel: "#64748B",
+  dark: false,
+};
+
+function readChartTheme(scope: Element | null): ChartTheme {
+  if (!scope) return FALLBACK_THEME;
+  const styles = getComputedStyle(scope);
+  const read = (name: string, fallback: string) => styles.getPropertyValue(name).trim() || fallback;
+  const dark = scope.classList.contains("dark");
+  return {
+    foreground: read("--foreground", FALLBACK_THEME.foreground),
+    muted: read("--muted", FALLBACK_THEME.muted),
+    mutedForeground: read("--muted-foreground", FALLBACK_THEME.mutedForeground),
+    border: read("--border", FALLBACK_THEME.border),
+    card: read("--card", FALLBACK_THEME.card),
+    popover: read("--popover", FALLBACK_THEME.popover),
+    popoverForeground: read("--popover-foreground", FALLBACK_THEME.popoverForeground),
+    axisLabel: dark ? "#94A3B8" : "#64748B",
+    dark,
+  };
+}
+
+function useChartTheme(): ChartTheme {
+  const [theme, setTheme] = useState<ChartTheme>(FALLBACK_THEME);
+
+  useEffect(() => {
+    const scope = document.body.firstElementChild;
+    const resolve = () => {
+      const next = readChartTheme(scope);
+      setTheme((current) => (current.foreground === next.foreground && current.border === next.border && current.dark === next.dark ? current : next));
+    };
+    resolve();
+    if (!scope) return;
+    const observer = new MutationObserver(resolve);
+    observer.observe(scope, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return theme;
+}
+
+/* ------------------------------------------------------------------ *
+ * Shared primitives
+ * ------------------------------------------------------------------ */
+
+function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; value: string; color: string }[]) {
+  const body = rows
+    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px;line-height:19px"><span style="display:flex;align-items:center;gap:6px;color:${theme.mutedForeground}"><i style="width:8px;height:8px;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
+    .join("");
+  return `<div style="min-width:176px;border-radius:8px;border:1px solid ${theme.border};background:${theme.popover};box-shadow:0 8px 24px rgba(16,32,58,0.16);padding:8px 12px;font-size:12px;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:6px">${title}</div>${body}</div>`;
+}
+
+/** ECharts wrapper - initialises only once the container has a real size. */
+function EChart({ option, className }: { option: EChartsOption; className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<echarts.ECharts | null>(null);
+  const optionRef = useRef(option);
+  optionRef.current = option;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    let chart: echarts.ECharts | null = null;
+
+    const observer = new ResizeObserver(() => {
+      const { width, height } = container.getBoundingClientRect();
+      if (width <= 0 || height <= 0) return;
+      if (!chart) {
+        chart = echarts.init(container, undefined, { renderer: "canvas" });
+        chartRef.current = chart;
+        chart.setOption(optionRef.current, true);
+      } else {
+        chart.resize();
+      }
+    });
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      chart?.dispose();
+      chartRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    chartRef.current?.setOption(option, true);
+  }, [option]);
+
+  return <div ref={containerRef} className={className} />;
+}
+
+/** Status pill with an icon so colour is never the only signal. */
+const statusStyles: Record<MonitorStatus, { icon: LucideIcon; className: string }> = {
+  Healthy: { icon: ShieldCheck, className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" },
+  Degraded: { icon: TriangleAlert, className: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" },
+  Down: { icon: XCircle, className: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" },
+};
+
+function StatusBadge({ status }: { status: MonitorStatus }) {
+  const { icon: Icon, className } = statusStyles[status];
   return (
-    <div className="h-[144px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={performance} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
-          <CartesianGrid stroke="var(--border)" vertical />
-          <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 8 }} axisLine={false} tickLine={false} />
-          <YAxis yAxisId="left" domain={[0, 400]} ticks={[0, 100, 200, 300, 400]} tickFormatter={(value) => `${value}ms`} tick={{ fill: "var(--muted-foreground)", fontSize: 8 }} axisLine={false} tickLine={false} />
-          <YAxis yAxisId="right" orientation="right" domain={[95, 100]} hide />
-          <Tooltip labelFormatter={(label) => `${label} · ${period}`} contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 10, background: "var(--popover)" }} />
-          <Line yAxisId="left" dataKey="response" name="Response Time (ms)" type="monotone" stroke="#2878ed" strokeWidth={1.8} dot={{ r: 1.8, fill: "#2878ed" }} activeDot={{ r: 3 }} />
-          <Line yAxisId="right" dataKey="availability" name="Availability (%)" type="monotone" stroke="#20b77a" strokeWidth={1.8} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", className)}>
+      <Icon size={11} aria-hidden="true" />
+      {status}
+    </span>
   );
 }
 
+/** HTTP method chip. */
+const methodStyles: Record<MonitorMethod, string> = {
+  GET: "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+  POST: "bg-violet-50 text-violet-700 dark:bg-violet-950 dark:text-violet-300",
+  PUT: "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
+};
+
+function MethodBadge({ method }: { method: MonitorMethod }) {
+  return (
+    <span className={cn("inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-semibold uppercase", methodStyles[method])}>
+      {method}
+    </span>
+  );
+}
+
+/** Response time colour by threshold. */
+function responseTone(value: number | null): string {
+  if (value === null) return "text-muted-foreground";
+  if (value < 200) return "text-emerald-600";
+  if (value <= 500) return "text-amber-600";
+  return "text-rose-600";
+}
+
+/** Inline sparkline for the trend column. */
 function Sparkline({ values, down = false }: { values: number[]; down?: boolean }) {
-  const data = values.map((value, index) => ({ index, value }));
-  const color = down ? "#ef4444" : "#20b77a";
+  const width = 60;
+  const height = 20;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const points = values.map((value, index) => {
+    const x = (index / (values.length - 1)) * width;
+    const y = height - ((value - min) / span) * (height - 4) - 2;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const color = down ? PALETTE.red : PALETTE.green;
   return (
-    <div className="h-[22px] w-[64px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <Line dataKey="value" type="monotone" stroke={color} strokeWidth={1.5} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-5 w-[60px]" role="img" aria-label="Recent trend">
+      <polyline points={points.join(" ")} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
   );
 }
 
-function HealthGauge({ label, value, color }: { label: string; value: number; color: string }) {
-  const radius = 30;
+/** Circular availability gauge. */
+function HealthGauge({ label, value }: { label: string; value: number }) {
+  const radius = 32;
   const circumference = 2 * Math.PI * radius;
+  const color = value >= 99.5 ? PALETTE.green : value >= 98 ? PALETTE.amber : PALETTE.red;
   return (
-    <div className="flex min-w-0 flex-col items-center gap-1">
-      <div className="relative h-[70px] w-[70px]">
-        <svg viewBox="0 0 72 72" className="h-full w-full -rotate-90" aria-label={`${label} availability ${value}%`}>
-          <circle cx="36" cy="36" r={radius} fill="none" stroke="var(--muted)" strokeWidth="5" />
-          <circle cx="36" cy="36" r={radius} fill="none" stroke={color} strokeWidth="5" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - value / 100)} />
+    <div className="flex min-w-0 flex-col items-center gap-1.5">
+      <div className="relative h-[90px] w-[90px]">
+        <svg viewBox="0 0 80 80" className="h-full w-full -rotate-90" role="img" aria-label={`${label} availability ${value}%`}>
+          <circle cx="40" cy="40" r={radius} fill="none" stroke="var(--muted)" strokeWidth="7" />
+          <circle cx="40" cy="40" r={radius} fill="none" stroke={color} strokeWidth="7" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - value / 100)} />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center font-display text-[13px] font-extrabold text-foreground">{value}%</div>
       </div>
-      <span className="truncate text-[8px] font-semibold text-foreground">{label}</span>
+      <span className="truncate text-[12px] font-medium text-foreground">{label}</span>
     </div>
   );
 }
 
-function TopServices() {
+/** Direction of a change that counts as an improvement for a metric. */
+type GoodDirection = "up" | "down";
+
+/** Summary tile config - the arrow and colour follow the metric's good direction. */
+interface SummaryTileConfig {
+  label: string;
+  value: string;
+  trend: string;
+  /** Whether the trend value is rising or falling. */
+  change: "up" | "down";
+  /** Which direction is good for this metric. */
+  good: GoodDirection;
+}
+
+/** Summary tile with a value and a metric-aware trend indicator. */
+function SummaryTile({ label, value, trend, change, good }: SummaryTileConfig) {
+  const improving = change === good;
   return (
-    <div className="space-y-[9px] pt-1">
-      {topServices.map((service) => (
-        <div key={service.name} className="grid grid-cols-[84px_minmax(0,1fr)_34px] items-center gap-2 text-[8px]">
-          <span className="truncate font-medium text-foreground">{service.name}</span>
-          <div className="h-[6px] rounded-full bg-muted"><div className="h-full rounded-full bg-emerald-500" style={{ width: service.width }} /></div>
-          <b className="text-right text-foreground">{service.value}</b>
-        </div>
-      ))}
+    <div className="rounded-lg bg-[#F8F9FB] px-3 py-2 dark:bg-[#1c2b40]">
+      <p className="text-[12px] text-muted-foreground">{label}</p>
+      <p className="font-display text-[16px] font-bold leading-tight text-foreground">{value}</p>
+      <p className={cn("mt-0.5 flex items-center gap-0.5 text-[12px]", improving ? "text-emerald-600" : "text-rose-600")}>
+        {change === "up" ? <ArrowUp size={12} aria-hidden="true" /> : <ArrowDown size={12} aria-hidden="true" />}
+        {trend}
+      </p>
     </div>
   );
 }
 
-function AvailabilityMap() {
-  const markers = [
-    { x: 16, y: 38, state: "online" }, { x: 21, y: 52, state: "online" }, { x: 30, y: 45, state: "online" },
-    { x: 48, y: 35, state: "online" }, { x: 53, y: 48, state: "online" }, { x: 56, y: 30, state: "online" },
-    { x: 65, y: 45, state: "online" }, { x: 72, y: 54, state: "warning" }, { x: 79, y: 59, state: "online" },
-    { x: 88, y: 71, state: "online" },
+/* ------------------------------------------------------------------ *
+ * Response time distribution chart (ECharts)
+ * ------------------------------------------------------------------ */
+
+function ResponseDistributionChart({ theme }: { theme: ChartTheme }) {
+  const option = useMemo<EChartsOption>(() => ({
+    animationDuration: 600,
+    grid: { top: 26, right: 16, bottom: 24, left: 40 },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: { type: "shadow" as const },
+      backgroundColor: theme.popover,
+      borderColor: theme.border,
+      borderWidth: 1,
+      padding: 0,
+      textStyle: { color: theme.popoverForeground, fontSize: 12 },
+      formatter: (params: unknown) => {
+        const items = params as { axisValue: string; value: number; color: string }[];
+        if (!items?.length) return "";
+        return tooltipCard(theme, items[0].axisValue, [{ name: "Share", value: `${items[0].value}%`, color: items[0].color }]);
+      },
+    },
+    xAxis: {
+      type: "category",
+      data: responseDistribution.map((bucket) => bucket.label),
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: { color: theme.axisLabel, fontSize: 12 },
+    },
+    yAxis: {
+      type: "value",
+      max: 50,
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: { color: theme.axisLabel, fontSize: 12, formatter: (value: number) => `${value}%` },
+      splitLine: { lineStyle: { color: theme.border, type: "dashed" as const, width: 1 } },
+    },
+    series: [{
+      name: "Share",
+      type: "bar",
+      barMaxWidth: 46,
+      data: responseDistribution.map((bucket) => ({
+        value: bucket.value,
+        itemStyle: { color: bucket.color, borderRadius: [4, 4, 0, 0] },
+      })),
+      label: { show: true, position: "top" as const, formatter: "{c}%", color: theme.foreground, fontSize: 12 },
+    }],
+  }), [theme]);
+
+  return (
+    <div className="relative min-h-[220px] min-w-0 flex-1">
+      <EChart option={option} className="absolute inset-0" />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Performance chart (ECharts)
+ * ------------------------------------------------------------------ */
+
+function PerformanceChart({ theme, hidden, onToggle }: {
+  theme: ChartTheme;
+  hidden: string[];
+  onToggle: (key: string) => void;
+}) {
+  const showResponse = !hidden.includes("response");
+  const showAvailability = !hidden.includes("availability");
+  const showP95 = !hidden.includes("p95");
+
+  const option = useMemo<EChartsOption>(() => {
+    const axisBase = {
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: { color: theme.axisLabel, fontSize: 12 },
+      splitLine: { lineStyle: { color: theme.border, type: "dashed" as const, width: 1 } },
+    };
+    const responseValues = performance.map((point) => point.response);
+    const responseMax = Math.max(...responseValues);
+    const responseMin = Math.min(...responseValues);
+    // Start the axis near the data so the lines use the full chart height.
+    const responseFloor = Math.max(0, Math.floor((responseMin - (responseMax - responseMin) * 0.35) / 10) * 10);
+    const responseCeil = Math.ceil((responseMax + (responseMax - responseMin) * 0.25) / 10) * 10;
+    const zoomed = responseFloor > 0;
+    return {
+      animationDuration: 600,
+      grid: { top: 18, right: 16, bottom: 24, left: 44 },
+      tooltip: {
+        trigger: "axis",
+        confine: true,
+        axisPointer: { type: "line" as const, lineStyle: { color: theme.mutedForeground, type: "dashed" as const, width: 1 }, label: { show: false } },
+        backgroundColor: theme.popover,
+        borderColor: theme.border,
+        borderWidth: 1,
+        padding: 0,
+        textStyle: { color: theme.popoverForeground, fontSize: 12 },
+        formatter: (params: unknown) => {
+          const items = params as { axisValue: string; seriesName: string; value: number; color: string }[];
+          if (!items?.length) return "";
+          const rows = items.map((item) => ({
+            name: item.seriesName,
+            value: item.seriesName === "Response Time" ? `${item.value} ms` : item.seriesName === "P95" ? `${item.value} ms` : `${item.value}%`,
+            color: item.color,
+          }));
+          const incident = incidents.find((entry) => entry.chartTime === items[0].axisValue);
+          if (incident) {
+            rows.push({
+              name: `${incident.status === "Down" ? "API Down" : "Degraded"}: ${incident.endpoint}`,
+              value: formatSince(incident.startedAt),
+              color: incidentColor(incident),
+            });
+          }
+          return tooltipCard(theme, items[0].axisValue, rows);
+        },
+      },
+      xAxis: {
+        type: "category",
+        data: performanceTimes,
+        ...axisBase,
+        splitLine: { show: false },
+        axisLabel: { ...axisBase.axisLabel, interval: Math.max(0, Math.ceil(performanceTimes.length / 6) - 1) },
+      },
+      yAxis: [
+        {
+          type: "value",
+          name: zoomed ? "ms · zoomed" : "ms",
+          nameTextStyle: { color: theme.axisLabel, fontSize: 12, align: "right" },
+          min: responseFloor,
+          max: responseCeil,
+          scale: true,
+          ...axisBase,
+          axisLabel: { ...axisBase.axisLabel, formatter: (value: number) => String(value) },
+        },
+        { type: "value", name: "%", nameTextStyle: { color: theme.axisLabel, fontSize: 12 }, min: 90, max: 100, interval: 2.5, ...axisBase, splitLine: { show: false }, axisLabel: { ...axisBase.axisLabel, formatter: (value: number) => `${value}%` } },
+      ],
+      series: [
+        ...(showResponse ? [{
+          name: "Response Time",
+          type: "line" as const,
+          yAxisIndex: 0,
+          smooth: 0.3,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: performance.map((point) => point.response),
+          lineStyle: { width: 2, color: PALETTE.blue },
+          itemStyle: { color: PALETTE.blue },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: `${PALETTE.blue}40` },
+              { offset: 1, color: `${PALETTE.blue}00` },
+            ]),
+          },
+          markArea: incidentAreas.length ? { silent: true, data: incidentAreas } : undefined,
+          markLine: {
+            silent: true,
+            symbol: "none",
+            lineStyle: { color: theme.mutedForeground, type: "dashed" as const, width: 1 },
+            data: incidentMarkers,
+          },
+        }] : []),
+        ...(showP95 ? [{
+          name: "P95",
+          type: "line" as const,
+          yAxisIndex: 0,
+          smooth: 0,
+          symbol: "none",
+          data: performance.map(() => P95_RESPONSE_MS),
+          lineStyle: { width: 1.5, color: `${PALETTE.purple}99`, type: "dotted" as const },
+          itemStyle: { color: PALETTE.purple },
+        }] : []),
+        ...(showAvailability ? [{
+          name: "Availability",
+          type: "line" as const,
+          yAxisIndex: 1,
+          smooth: 0.3,
+          symbol: "circle",
+          symbolSize: 6,
+          showSymbol: false,
+          data: performance.map((point) => point.availability),
+          lineStyle: { width: 2, color: PALETTE.green },
+          itemStyle: { color: PALETTE.green },
+        }] : []),
+      ],
+    };
+  }, [theme, showResponse, showAvailability, showP95]);
+
+  const latest = performance[performance.length - 1];
+
+  const chips = [
+    { key: "response", name: "Response Time", color: PALETTE.blue, value: `Now ${latest.response} ms` },
+    { key: "availability", name: "Availability", color: PALETTE.green, value: `Now ${latestAvailability}%` },
+    { key: "p95", name: "P95", color: `${PALETTE.purple}99`, value: `${P95_RESPONSE_MS} ms` },
   ];
+
+  /** Summary tiles - arrow and colour follow each metric's good direction. */
+  const summaryTiles: SummaryTileConfig[] = [
+    { label: "Avg Response", value: `${Math.round(avgResponseTime)} ms`, trend: "2.1% vs yesterday", change: "down", good: "down" },
+    { label: "P95", value: `${responsePercentiles.p95} ms`, trend: "4.2% vs yesterday", change: "down", good: "down" },
+    { label: "Avg Availability", value: `${avgAvailability.toFixed(2)}%`, trend: "0.2% vs yesterday", change: "up", good: "up" },
+    { label: "Incidents", value: String(issueCount), trend: issueCount ? "1 new today" : "none today", change: issueCount ? "up" : "down", good: "down" },
+  ];
+
   return (
-    <div className="relative h-[111px] min-w-0">
-      <svg viewBox="0 0 100 80" className="absolute inset-0 h-full w-full" aria-label="World map showing monitored service locations">
-        <g fill="#dbe7f4" stroke="#fff" strokeWidth=".45">
-          <path d="M5 20 12 13 22 11 29 16 28 22 33 26 29 31 25 32 23 39 19 44 14 42 13 36 9 33 11 28 7 26Z" />
-          <path d="m27 43 7 3 4 8-2 10-4 8-3-7-2-9-4-7Z" />
-          <path d="m43 20 4-5 9-2 4 3 9-1 6 4 8 1 4 4 9 2 2 4-5 3-7-2-4 4-6-2-4 7-5 2-1 6-5 3-4-4-6 2-4-5-7 1-3-5-7-2 1-8 5-2 4-7Z" />
-          <path d="m52 47 7-3 7 2 5 7-4 8-5 5-6-2-3-7-4-4Z" />
-          <path d="m76 58 6-2 8 4 4 6-4 6-6-2-5-5Z" />
-          <path d="m44 15 3-3 4 1-1 3Z" />
-        </g>
-        {markers.map((marker, index) => <circle key={index} cx={marker.x} cy={marker.y} r="1.7" fill={marker.state === "warning" ? "#f59e0b" : "#20b77a"} stroke="#fff" strokeWidth=".8" />)}
-      </svg>
-      <div className="absolute bottom-1 right-0 flex flex-col gap-1 text-[7px] font-semibold text-foreground">
-        <span className="flex items-center gap-1.5"><i className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Online <b>22</b></span>
-        <span className="flex items-center gap-1.5"><i className="h-1.5 w-1.5 rounded-full bg-amber-500" />Warning <b>1</b></span>
-        <span className="flex items-center gap-1.5"><i className="h-1.5 w-1.5 rounded-full bg-rose-500" />Offline <b>1</b></span>
+    <div className="flex min-h-0 flex-1 flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-1.5">
+        {chips.map((chip) => {
+          const enabled = !hidden.includes(chip.key);
+          return (
+            <button
+              key={chip.key}
+              type="button"
+              onClick={() => onToggle(chip.key)}
+              aria-pressed={enabled}
+              title={enabled ? `Hide ${chip.name}` : `Show ${chip.name}`}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-medium transition-colors",
+                enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through",
+              )}
+            >
+              <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: enabled ? chip.color : PALETTE.slate }} />
+              {chip.name} &middot; <b className="tabular-nums">{chip.value}</b>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="relative min-h-[260px] min-w-0 flex-1">
+        <EChart option={option} className="absolute inset-0" />
+      </div>
+
+      <div className="grid grid-cols-4 gap-3 border-t border-border pt-2">
+        {summaryTiles.map((tile) => <SummaryTile key={tile.label} {...tile} />)}
       </div>
     </div>
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * Active incidents card
+ * ------------------------------------------------------------------ */
+
+type IncidentFilter = "All" | IncidentStatus;
+
+function IncidentStatusBadge({ incident, acknowledged }: { incident: Incident; acknowledged: boolean }) {
+  if (acknowledged) {
+    return (
+      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-slate-100 px-2 py-0.5 text-[12px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+        <CheckCircle2 size={11} aria-hidden="true" />Acknowledged
+      </span>
+    );
+  }
+  const Icon = incident.status === "Down" ? XCircle : TriangleAlert;
+  const className = incident.status === "Down"
+    ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
+    : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300";
+  return (
+    <span className={cn("inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", className)}>
+      <Icon size={11} aria-hidden="true" />
+      {incident.status}
+    </span>
+  );
+}
+
+/** Severity shown as a small dot + text next to the region. */
+function SeverityDot({ severity }: { severity: IncidentSeverity }) {
+  const color = severity === "Critical" ? PALETTE.red : PALETTE.amber;
+  return (
+    <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[12px] text-muted-foreground">
+      <i aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+      {severity}
+    </span>
+  );
+}
+
+function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
+  now: number;
+  acknowledged: string[];
+  onAcknowledge: (id: string) => void;
+  onView: (incident: Incident) => void;
+}) {
+  const [filter, setFilter] = useState<IncidentFilter>("All");
+  const visible = filter === "All" ? openIncidents : openIncidents.filter((incident) => incident.status === filter);
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="mb-2 flex items-center gap-2">
+        <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Incident filter">
+          {(["All", "Down", "Degraded"] as IncidentFilter[]).map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setFilter(item)}
+              aria-pressed={filter === item}
+              className={cn("rounded px-2 py-1 text-[12px] font-semibold transition-colors", filter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
+        {visible.map((incident) => {
+          const isAcknowledged = acknowledged.includes(incident.id);
+          const duration = formatDuration(now - incident.startedAt);
+          return (
+            <div key={incident.id} className="flex shrink-0 flex-col gap-1.5 rounded-lg border border-border bg-card p-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <p className="truncate text-[12px] font-semibold text-foreground">{incident.endpoint}</p>
+                <IncidentStatusBadge incident={incident} acknowledged={isAcknowledged} />
+              </div>
+              <p className="text-[12px] text-muted-foreground">
+                {incident.status === "Down" ? "Down" : "Degraded"} since {formatSince(incident.startedAt)} &middot; {duration}
+              </p>
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+                  <Globe size={11} aria-hidden="true" />
+                  {incident.region}
+                </span>
+                <SeverityDot severity={incident.severity} />
+              </div>
+              <div className="flex items-center gap-1.5 pt-0.5">
+                <Button size="sm" onClick={() => onView(incident)} className="h-[30px] gap-1 px-2.5 text-[12px]">View</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isAcknowledged}
+                  onClick={() => onAcknowledge(incident.id)}
+                  className="h-[30px] gap-1 px-2.5 text-[12px]"
+                >
+                  {isAcknowledged ? "Acknowledged" : "Acknowledge"}
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+        {visible.length === 0 && (
+          <div className="flex min-h-16 flex-col items-center justify-center gap-1 text-[12px] text-muted-foreground">
+            <ShieldCheck size={16} aria-hidden="true" />
+            No {filter === "All" ? "" : filter.toLowerCase()} incidents
+          </div>
+        )}
+
+        <div className="mt-1 shrink-0 border-t border-border pt-2">
+          <p className="mb-1 text-[12px] font-semibold text-foreground">Recently Resolved</p>
+          <div className="flex flex-col gap-0.5">
+            {resolvedIncidents.map((item) => (
+              <div key={item.id} className="flex h-8 items-center justify-between gap-2 text-[12px] text-muted-foreground">
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <CheckCircle2 size={12} className="shrink-0 text-emerald-600" aria-hidden="true" />
+                  <span className="truncate">{item.endpoint}</span>
+                </span>
+                <span className="whitespace-nowrap">Resolved in {item.resolvedInMinutes}m</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border pt-2 text-[12px]">
+        <span className="text-muted-foreground">MTTR <b className="text-foreground">{mttrMinutes}m</b></span>
+        <span className="text-muted-foreground">Resolved today <b className="text-foreground">{resolvedIncidents.length}</b></span>
+        <span className="text-muted-foreground">Open <b className="text-foreground">{openIncidents.length}</b></span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Page
+ * ------------------------------------------------------------------ */
+
+type ViewStatus = "loading" | "ready" | "error";
+type RangeKey = "1H" | "6H" | "12H" | "24H" | "7D";
+
+const RANGE_POINTS: Record<RangeKey, number> = { "1H": 2, "6H": 5, "12H": 9, "24H": performance.length, "7D": 0 };
+const ROWS_PER_PAGE = 8;
+
 export function WebsiteApiMonitoringDashboard() {
+  const theme = useChartTheme();
   const [notice, setNotice] = useState("");
-  const [period, setPeriod] = useState("24h");
+  const [status, setStatus] = useState<ViewStatus>("loading");
+  const [range, setRange] = useState<RangeKey>("24H");
+  const [hiddenSeries, setHiddenSeries] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
+  const [kindFilter, setKindFilter] = useState<"All" | MonitorKind>("All");
+  const [statusFilter, setStatusFilter] = useState<"All" | MonitorStatus>("All");
+  const [page, setPage] = useState(1);
+  const [lastUpdated, setLastUpdated] = useState("Nov 7, 2026 12:09");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [acknowledged, setAcknowledged] = useState<string[]>([]);
+  const [now, setNow] = useState(() => Date.now());
+  const [breakdownEndpoint, setBreakdownEndpoint] = useState("all");
+
+  const activeBreakdown = responseBreakdownByEndpoint[breakdownEndpoint] ?? responseBreakdown;
+  const activeBreakdownTotal = activeBreakdown.reduce((sum, part) => sum + part.value, 0);
+  const slowestPhase = activeBreakdown.reduce((slowest, part) => (part.value > slowest.value ? part : slowest), activeBreakdown[0]);
+  const slowestShare = Math.round((slowestPhase.value / activeBreakdownTotal) * 100);
+
+  const pageCount = Math.max(1, Math.ceil(monitors.length / ROWS_PER_PAGE));
+
   const notify = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2600);
   };
-  const exportReport = () => {
-    const header = ["Time", "Type", "Message", "Status"];
-    const csvRows = events.map((event) => [event.time, event.type, event.message, event.status]);
-    const csv = [header, ...csvRows].map((row) => row.map((field) => `"${field.replaceAll('"', '""')}"`).join(",")).join("\r\n");
+
+  useEffect(() => {
+    setStatus("loading");
+    const timer = window.setTimeout(() => setStatus("ready"), 320);
+    return () => window.clearTimeout(timer);
+  }, [range]);
+
+  // Keeps the incident durations live.
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 30000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const filteredMonitors = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return monitors.filter((monitor) => {
+      const matchesQuery = !query || `${monitor.endpoint} ${monitor.region} ${monitor.method}`.toLowerCase().includes(query);
+      const matchesKind = kindFilter === "All" || monitor.kind === kindFilter;
+      const matchesStatus = statusFilter === "All" || monitor.status === statusFilter;
+      return matchesQuery && matchesKind && matchesStatus;
+    });
+  }, [search, kindFilter, statusFilter]);
+
+  const visibleMonitors = filteredMonitors.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE);
+  const hasData = RANGE_POINTS[range] > 0;
+  const hasFilters = search.trim() !== "" || kindFilter !== "All" || statusFilter !== "All";
+
+  const clearFilters = () => {
+    setSearch("");
+    setKindFilter("All");
+    setStatusFilter("All");
+    setPage(1);
+  };
+
+  const refresh = () => {
+    setStatus("loading");
+    window.setTimeout(() => {
+      setStatus("ready");
+      setLastUpdated(new Date().toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }));
+      notify("Monitoring data refreshed.");
+    }, 320);
+  };
+
+  const exportCsv = () => {
+    const header = ["Endpoint", "Type", "Method", "Status", "Code", "Response (ms)", "P95 (ms)", "Uptime 30d", "Region", "Last Check"];
+    const rows = filteredMonitors.map((monitor) => [
+      monitor.endpoint, monitor.kind, monitor.method, monitor.status,
+      monitor.code === null ? "-" : String(monitor.code),
+      monitor.responseMs === null ? "-" : String(monitor.responseMs),
+      String(monitor.p95Ms), `${monitor.uptime30d}%`, monitor.region, monitor.lastCheck,
+    ]);
+    const csv = [header, ...rows].map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
@@ -188,89 +1128,525 @@ export function WebsiteApiMonitoringDashboard() {
     notify("Monitoring report exported.");
   };
 
-  const periodControl = (
-    <div className="flex items-center gap-0.5">
-      {["1h", "6h", "12h", "24h"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded px-1.5 py-1 text-[7px] font-semibold ${period === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
+  const allHealthy = issueCount === 0;
+  const statusBadge = allHealthy ? (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+      <ShieldCheck size={12} aria-hidden="true" />All Systems Operational
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-[12px] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
+      <XCircle size={12} aria-hidden="true" />{issueCount} Incident{issueCount === 1 ? "" : "s"} Active
+    </span>
+  );
+
+  /** Compact incident list for the banner - first incident plus a "+N more" hint. */
+  const incidentSummary = openIncidents.length === 1
+    ? (() => {
+      const incident = openIncidents[0];
+      return incident.status === "Down"
+        ? `${incident.endpoint} down since ${formatSince(incident.startedAt)}`
+        : `${incident.endpoint} degraded`;
+    })()
+    : (() => {
+      const [first, ...rest] = openIncidents;
+      const firstText = first.status === "Down"
+        ? `${first.endpoint} down since ${formatSince(first.startedAt)}`
+        : `${first.endpoint} degraded`;
+      return `${firstText}, ${rest.map((incident) => incident.endpoint).join(", ")} +${rest.length} more`;
+    })();
+  const rangeControl = (
+    <div className="flex items-center gap-1">
+      <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">
+        {(["1H", "6H", "12H", "24H", "7D"] as RangeKey[]).map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => { setRange(item); setPage(1); }}
+            aria-pressed={range === item}
+            className={cn("rounded px-1.5 py-1 text-[12px] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+      <details className="relative" open={menuOpen} onToggle={(event) => setMenuOpen((event.currentTarget as HTMLDetailsElement).open)}>
+        <summary aria-label="Performance chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent">
+          <MoreVertical size={15} />
+        </summary>
+        <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
+          <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button>
+          <button onClick={() => notify("Chart image export is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button>
+          <button onClick={() => notify("Fullscreen is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button>
+          <div className="my-1 border-t border-border" />
+          <button onClick={() => { setStatus("error"); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><TriangleAlert size={14} />Simulate error</button>
+        </div>
+      </details>
     </div>
   );
 
+  const summaryCards: MetricStat[] = [
+    { label: "Total Monitors", value: String(totalMonitors), change: "2 new", trend: "up", tone: "blue", icon: "globe-2" },
+    { label: "Healthy", value: String(healthyMonitors), change: `${((healthyMonitors / totalMonitors) * 100).toFixed(1)}%`, trend: "flat", tone: "green", icon: "online" },
+    { label: "Issues", value: String(issueCount), change: `${downIncident ? 1 : 0} down, ${degradedIncident ? 1 : 0} degraded`, trend: "down", tone: "red", icon: "octagon-alert" },
+    { label: "Avg Response Time", value: `${Math.round(avgResponseTime)} ms`, change: "12.4%", trend: "down", tone: "blue", icon: "activity" },
+    { label: "Uptime 24h", value: `${avgAvailability.toFixed(2)}%`, change: "0.01%", trend: "up", tone: "green", icon: "shield-check" },
+    { label: "Total Checks", value: "48,320", change: "12.5%", trend: "up", tone: "purple", icon: "pulse" },
+  ];
+
   return (
-    <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Websites & API Monitoring"]} showRefresh={false} />
-      <PageHeading title="Websites & API Monitoring" description="Monitor your websites and APIs for performance, availability and response time." icon={<Globe size={19} />} actionsAlign="top">
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="hidden items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1.5 text-[8px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 sm:flex"><Check size={11} />All Systems Operational</span>
-          <Button size="sm" onClick={() => notify("Add Monitor is a mockup action.")} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[9px]"><Plus size={12} />Add Monitor</Button>
-          <Button variant="outline" size="sm" onClick={exportReport} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[9px]"><Download size={12} />Export Report</Button>
+    <div className="flex flex-col gap-4 pb-3">
+      <PageHeader
+        breadcrumbs={["Monitoring", "Websites & API Monitoring"]}
+        title="Websites & API Monitoring"
+        subtitle="Monitor your websites and APIs for performance, availability and response time."
+        icon={<Globe size={22} />}
+        statusBadge={statusBadge}
+        lastUpdated={lastUpdated}
+        onRefresh={refresh}
+        actions={
+          <div className="flex shrink-0 items-center gap-2">
+            <Button onClick={() => notify("Add Monitor is a mockup action.")} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Plus size={16} />Add Monitor</Button>
+            <Button variant="outline" onClick={exportCsv} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Download size={16} />Export Report</Button>
+          </div>
+        }
+      />
+
+      {openIncidents.length > 0 && (
+        <div role="alert" className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-rose-200 bg-rose-50 px-4 py-2 dark:border-rose-900/60 dark:bg-rose-950/40">
+          <p className="min-w-0 truncate text-[12px] font-medium text-rose-800 dark:text-rose-200">
+            <b className="font-semibold">{openIncidents.length} active incident{openIncidents.length === 1 ? "" : "s"}:</b>{" "}
+            {incidentSummary}
+          </p>
+          <Button size="sm" onClick={() => { setStatusFilter("All"); setKindFilter("All"); setSearch(""); setPage(1); notify("Showing all incidents."); }} className="h-8 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-3 text-[12px]">
+            View details
+          </Button>
         </div>
-      </PageHeading>
+      )}
 
-      <section aria-label="Website and API monitoring summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[70px] gap-2 p-2 sm:p-2.5" />)}
-      </section>
-
-      <section aria-label="Performance and endpoint status" className="grid gap-2.5 xl:grid-cols-[1.06fr_0.94fr]">
-        <Panel title="Performance Overview" className="min-w-0" action={periodControl}>
-          <div className="flex justify-center gap-4 pt-1 text-[8px] text-muted-foreground">
-            <span className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full bg-blue-500" />Response Time (ms)</span>
-            <span className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Availability (%)</span>
-          </div>
-          <PerformanceChart period={period} />
-        </Panel>
-
-        <Panel title="API Endpoints Status" className="min-w-0" action={<button onClick={() => notify("Showing all API endpoints.")} className="text-[8px] font-semibold text-primary">View All →</button>}>
-          <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[400px] text-left text-[8px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Endpoint", "Status", "Response Time", "Uptime", "Trend"].map((title) => <th key={title} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{title}</th>)}</tr></thead>
-              <tbody>{endpointRows.map((row) => <tr key={row.endpoint} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1.5 py-[6px] font-medium text-foreground">{row.endpoint}</td><td className="whitespace-nowrap px-1.5 py-[6px]"><span className={`inline-flex items-center gap-1 font-semibold ${row.status === "Down" ? "text-rose-600" : "text-emerald-600"}`}><i className={`h-1.5 w-1.5 rounded-full ${row.status === "Down" ? "bg-rose-500" : "bg-emerald-500"}`} />{row.status}</span></td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground">{row.response}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground">{row.uptime}</td><td className="px-1.5 py-[2px]"><Sparkline values={row.values} down={row.status === "Down"} /></td></tr>)}</tbody>
-            </table>
-          </div>
-        </Panel>
-      </section>
-
-      <section aria-label="Service health and availability" className="grid gap-2.5 xl:grid-cols-[1.06fr_0.9fr_1fr]">
-        <Panel title="Service Health" className="min-w-0" action={<button onClick={() => notify("Showing health details for all services.")} className="text-[8px] font-semibold text-primary">View All →</button>}>
-          <div className="grid grid-cols-4 items-center gap-1 pt-3">
-            {serviceHealth.map((service) => <HealthGauge key={service.label} {...service} />)}
-          </div>
-        </Panel>
-        <Panel title="Top Monitored Services" className="min-w-0"><TopServices /></Panel>
-        <Panel title="Global Availability" className="min-w-0" action={<Globe size={14} className="text-primary" />}>
-          <AvailabilityMap />
-        </Panel>
-      </section>
-
-      <section aria-label="Recent events and response times" className="grid gap-2.5 xl:grid-cols-[1.08fr_0.92fr_0.78fr]">
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => notify("Showing all monitoring events.")} className="text-[8px] font-semibold text-primary">View All →</button>}>
-          <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[350px] text-left text-[8px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Time", "Type", "Message", "Status"].map((title) => <th key={title} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{title}</th>)}</tr></thead>
-              <tbody>{events.map((event) => <tr key={event.time} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[6px] text-foreground">{event.time}</td><td className="whitespace-nowrap px-1 py-[6px]"><span className={`inline-flex items-center gap-1 font-semibold ${event.color === "red" ? "text-rose-600" : event.color === "amber" ? "text-amber-600" : "text-blue-600"}`}><i className={`h-1.5 w-1.5 rounded-full ${event.color === "red" ? "bg-rose-500" : event.color === "amber" ? "bg-amber-500" : "bg-blue-500"}`} />{event.type}</span></td><td className="px-1 py-[6px] text-foreground">{event.message}</td><td className="px-1 py-[6px]"><span className={`whitespace-nowrap rounded-full px-1.5 py-0.5 text-[7px] ${statusClass[event.status]}`}>{event.status}</span></td></tr>)}</tbody>
-            </table>
-          </div>
-        </Panel>
-
-        <Panel title="Response Time Distribution" className="min-w-0">
-          <div className="flex h-[121px] items-end justify-around gap-3 border-b border-border px-2 pb-0">
-            {responseDistribution.map((bucket) => <div key={bucket.label} className="flex h-full flex-1 flex-col items-center justify-end">
-              <b className="mb-1 text-[9px] text-foreground">{bucket.value}%</b>
-              <div className="w-full max-w-[48px] rounded-t-[4px]" style={{ height: `${bucket.value * 1.65}px`, backgroundColor: bucket.color }} />
-              <span className="h-5 pt-1 text-center text-[7px] text-muted-foreground">{bucket.label}</span>
-            </div>)}
-          </div>
-        </Panel>
-
-        <div className="relative flex min-h-[150px] flex-col justify-center overflow-hidden rounded-xl border border-sky-100 bg-gradient-to-br from-sky-50 via-blue-50 to-emerald-50 p-4 dark:border-sky-900 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950">
-          <div aria-hidden="true" className="absolute -bottom-8 -left-7 h-24 w-24 rounded-full bg-emerald-200/50 dark:bg-emerald-800/20" />
-          <div aria-hidden="true" className="absolute -right-7 -top-8 h-28 w-28 rounded-full bg-sky-200/50 dark:bg-sky-800/20" />
-          <Rocket size={32} className="relative mb-2 text-blue-500" />
-          <h2 className="relative font-display text-[13px] font-extrabold leading-tight text-foreground">Keep Your Services Healthy</h2>
-          <p className="relative mt-1 text-[8px] leading-relaxed text-muted-foreground">Get instant alerts and ensure maximum uptime for your APIs.</p>
-          <Button size="sm" onClick={() => notify("Configure Alerts is a mockup action.")} className="relative mt-2 h-7 w-fit gap-1.5 px-2.5 text-[8px]"><Bell size={11} />Configure Alerts →</Button>
+      {status === "loading" ? (
+        <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
+          {summaryCards.map((card) => (
+            <div key={card.label} className="flex h-[108px] items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-card">
+              <span className="h-11 w-11 shrink-0 animate-pulse rounded-full bg-muted" />
+              <div className="flex-1 space-y-2">
+                <span className="block h-3 w-24 animate-pulse rounded bg-muted" />
+                <span className="block h-6 w-16 animate-pulse rounded bg-muted" />
+                <span className="block h-3 w-20 animate-pulse rounded bg-muted" />
+              </div>
+            </div>
+          ))}
         </div>
-      </section>
+      ) : status === "error" ? (
+        <div className="flex min-h-[300px] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-6 text-center shadow-card">
+          <span aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-300">
+            <TriangleAlert size={22} />
+          </span>
+          <p className="text-[16px] font-semibold text-foreground">Could not load monitoring data</p>
+          <p className="max-w-sm text-[12px] text-muted-foreground">Something went wrong while fetching the latest monitor results. Please try again.</p>
+          <Button onClick={refresh} className="h-9 gap-1.5 px-3 text-[12px]"><RefreshCw size={15} />Retry</Button>
+        </div>
+      ) : (
+        <>
+          <section aria-label="Website and API monitoring summary" className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
+            {summaryCards.map((item) => (
+              <MetricCard key={item.label} item={item} className="h-[108px] self-stretch" labelClassName="text-[14px]" valueClassName="text-[28px]" trendClassName={item.label === "Issues" ? "text-rose-600" : undefined} />
+            ))}
+          </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[10px] text-foreground shadow-lg">{notice}</div>}
+          <section aria-label="Performance and active incidents" className="grid items-stretch gap-4 xl:grid-cols-[1.72fr_1fr]">
+            <Panel title="Performance Overview" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" showOptions={false} action={rangeControl}>
+              {hasData ? (
+                <PerformanceChart theme={theme} hidden={hiddenSeries} onToggle={(key) => setHiddenSeries((current) => current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key])} />
+              ) : (
+                <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-2 text-center">
+                  <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Globe size={20} /></span>
+                  <p className="text-[14px] font-semibold text-foreground">No data for this range</p>
+                  <p className="text-[12px] text-muted-foreground">Pick a shorter range to see the collected samples.</p>
+                  <Button variant="outline" size="sm" onClick={() => setRange("24H")} className="mt-1 h-8 gap-1.5 px-2.5 text-[12px]">Show last 24H</Button>
+                </div>
+              )}
+            </Panel>
+
+            <Panel
+              title="Active Incidents"
+              className="min-w-0"
+              action={<span className="rounded-full bg-rose-100 px-2 py-0.5 text-[12px] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">{openIncidents.length} open</span>}
+            >
+              <ActiveIncidentsCard
+                now={now}
+                acknowledged={acknowledged}
+                onAcknowledge={(id) => { setAcknowledged((current) => [...current, id]); notify("Incident acknowledged."); }}
+                onView={(incident) => { setSearch(incident.endpoint); setStatusFilter(incident.status); setPage(1); notify(`Showing ${incident.endpoint}.`); }}
+              />
+            </Panel>
+          </section>
+
+          <section aria-label="Monitored endpoints" className="grid items-stretch gap-4">
+            <Panel title="API Endpoints Status" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitored endpoints.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+              <div className="flex flex-wrap items-center gap-2 pb-2">
+                <div className="relative min-w-[200px] flex-1">
+                  <Search size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search endpoints..." aria-label="Search endpoints" className="h-8 pl-9 text-[12px]" />
+                </div>
+                <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Endpoint type filter">
+                  {(["All", "Website", "API"] as const).map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => { setKindFilter(item); setPage(1); }}
+                      aria-pressed={kindFilter === item}
+                      className={cn("rounded px-2 py-1 text-[12px] font-semibold transition-colors", kindFilter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+                    >
+                      {item === "API" ? "APIs" : item === "Website" ? "Websites" : "All"}
+                    </button>
+                  ))}
+                </div>
+                <Select value={statusFilter} onValueChange={(value) => { setStatusFilter(value as "All" | MonitorStatus); setPage(1); }}>
+                  <SelectTrigger aria-label="Filter by status" className="h-8 w-36 text-[12px]"><SelectValue /></SelectTrigger>
+                  <SelectContent>{(["All", "Healthy", "Degraded", "Down"] as const).map((item) => <SelectItem key={item} value={item}>{item === "All" ? "All statuses" : item}</SelectItem>)}</SelectContent>
+                </Select>
+                {hasFilters && (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {search.trim() && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                        &ldquo;{search.trim()}&rdquo;
+                        <button type="button" onClick={() => { setSearch(""); setPage(1); }} aria-label="Clear search filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
+                      </span>
+                    )}
+                    {kindFilter !== "All" && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                        {kindFilter === "API" ? "APIs" : "Websites"}
+                        <button type="button" onClick={() => { setKindFilter("All"); setPage(1); }} aria-label="Clear type filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
+                      </span>
+                    )}
+                    {statusFilter !== "All" && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                        {statusFilter}
+                        <button type="button" onClick={() => { setStatusFilter("All"); setPage(1); }} aria-label="Clear status filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
+                      </span>
+                    )}
+                    <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[12px] font-medium text-foreground transition-colors hover:bg-accent">
+                      <XCircle size={12} aria-hidden="true" />Clear filters
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {filteredMonitors.length === 0 ? (
+                <div className="flex min-h-[220px] flex-1 flex-col items-center justify-center gap-2 text-center">
+                  <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Search size={20} /></span>
+                  <p className="text-[14px] font-semibold text-foreground">No monitors match your filters</p>
+                  <p className="text-[12px] text-muted-foreground">Try a different search term or reset the filters.</p>
+                  <Button variant="outline" size="sm" onClick={clearFilters} className="mt-1 h-8 gap-1.5 px-2.5 text-[12px]"><XCircle size={13} />Clear filters</Button>
+                </div>
+              ) : (
+                <>
+                  <div className="min-h-0 flex-1 overflow-x-auto">
+                    <table className="w-full min-w-[820px] table-fixed text-[12px]">
+                      <colgroup>
+                        <col style={{ width: "20%" }} /><col style={{ width: "11%" }} /><col style={{ width: "9%" }} />
+                        <col style={{ width: "12%" }} /><col style={{ width: "8%" }} /><col style={{ width: "11%" }} />
+                        <col style={{ width: "9%" }} /><col style={{ width: "12%" }} /><col style={{ width: "8%" }} />
+                      </colgroup>
+                      <thead>
+                        <tr className="border-b border-border text-muted-foreground">
+                          {[
+                            { label: "Endpoint", align: "left" },
+                            { label: "Status", align: "left" },
+                            { label: "Code", align: "right" },
+                            { label: "Response", align: "right" },
+                            { label: "P95", align: "right" },
+                            { label: "Uptime 30d", align: "right" },
+                            { label: "Trend", align: "center" },
+                            { label: "Last Check", align: "left" },
+                            { label: "Actions", align: "center" },
+                          ].map((heading) => (
+                            <th key={heading.label} className={cn("whitespace-nowrap px-1.5 pb-1.5 text-[12px] font-medium", heading.align === "right" && "text-right", heading.align === "center" && "text-center")}>
+                              {heading.label}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {visibleMonitors.map((monitor) => {
+                          const incident = incidentFor(monitor.endpoint);
+                          const isUnhealthy = monitor.status !== "Healthy";
+                          return (
+                            <tr
+                              key={monitor.id}
+                              className={cn(
+                                "h-11 border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50",
+                                monitor.status === "Down" && "bg-rose-50/60 dark:bg-rose-950/25",
+                              )}
+                              style={monitor.status === "Down" ? { boxShadow: "inset 3px 0 0 0 #F87171" } : undefined}
+                            >
+                              <td className="whitespace-nowrap px-1.5 text-left">
+                                <span className="flex items-center gap-1.5">
+                                  <span className="truncate font-medium text-foreground">{monitor.endpoint}</span>
+                                  <MethodBadge method={monitor.method} />
+                                </span>
+                              </td>
+                              <td className="whitespace-nowrap px-1.5 text-left"><StatusBadge status={monitor.status} /></td>
+                              <td className={cn("whitespace-nowrap px-1.5 text-right tabular-nums", isUnhealthy ? "font-medium text-rose-600" : "text-foreground")}>
+                                {isUnhealthy ? (monitor.issueReason ?? "-") : monitor.code}
+                              </td>
+                              <td className={cn("whitespace-nowrap px-1.5 text-right font-medium tabular-nums", isUnhealthy ? "text-rose-600" : responseTone(monitor.responseMs))}>
+                                {isUnhealthy ? "-" : `${monitor.responseMs} ms`}
+                              </td>
+                              <td className="whitespace-nowrap px-1.5 text-right tabular-nums text-foreground">{monitor.p95Ms ? `${monitor.p95Ms} ms` : "-"}</td>
+                              <td className="whitespace-nowrap px-1.5 text-right tabular-nums text-foreground">{monitor.uptime30d}%</td>
+                              <td className="px-1.5 text-center"><Sparkline values={monitor.values} down={monitor.status === "Down"} /></td>
+                              <td className="whitespace-nowrap px-1.5 text-left text-muted-foreground">
+                                <span className="block">{monitor.lastCheck}</span>
+                                {incident && <span className="block text-[12px] text-rose-600">Down for {formatDuration(now - incident.startedAt)}</span>}
+                              </td>
+                              <td className="px-1.5 text-center">
+                                <details className="relative inline-block">
+                                  <summary aria-label={`Actions for ${monitor.endpoint}`} className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent">
+                                    <MoreVertical size={15} />
+                                  </summary>
+                                  <div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg">
+                                    <button onClick={() => notify(`Check queued for ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Play size={13} />Run check now</button>
+                                    <button onClick={() => notify(`${monitor.endpoint} paused.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Pause size={13} />Pause</button>
+                                    <button onClick={() => notify(`Editing ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Pencil size={13} />Edit</button>
+                                  </div>
+                                </details>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[12px] text-muted-foreground">
+                    <span className="whitespace-nowrap">
+                      {hasFilters
+                        ? `Showing ${filteredMonitors.length} of ${filteredMonitors.length} result${filteredMonitors.length === 1 ? "" : "s"} (${totalMonitors} monitors total)`
+                        : `Showing ${filteredMonitors.length ? (page - 1) * ROWS_PER_PAGE + 1 : 0}-${Math.min(page * ROWS_PER_PAGE, filteredMonitors.length)} of ${totalMonitors} monitors`}
+                    </span>
+                    {pageCount > 1 && (
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: pageCount }, (_, index) => index + 1).map((value) => (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => setPage(value)}
+                            aria-current={page === value ? "page" : undefined}
+                            className={cn(
+                              "grid h-7 w-7 place-items-center rounded-md transition-colors",
+                              page === value ? "bg-primary font-semibold text-primary-foreground" : "hover:bg-accent hover:text-foreground",
+                            )}
+                          >
+                            {value}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => setPage(Math.min(pageCount, page + 1))}
+                          disabled={page === pageCount}
+                          aria-label="Next page"
+                          className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                        >
+                          <ChevronDown size={13} className="-rotate-90" aria-hidden="true" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </Panel>
+          </section>
+
+          <section aria-label="Service health and availability" className="grid items-stretch gap-4 xl:grid-cols-[1.02fr_0.98fr_1.1fr]">
+            <Panel title="Service Health" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing health details for all services.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+              <div className="flex min-h-0 flex-1 flex-col">
+                <div className="grid flex-1 grid-cols-4 items-center gap-1 pt-2">
+                  {serviceHealth.map((service) => <HealthGauge key={service.label} label={service.label} value={service.value} />)}
+                </div>
+                <div className="mt-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-border pt-2 text-[12px] text-muted-foreground">
+                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#34D399]" />&ge; 99.5%</span>
+                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#FBBF24]" />99 - 99.5%</span>
+                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#F87171]" />&lt; 99%</span>
+                </div>
+                <p className="mt-1.5 text-center text-[12px] text-muted-foreground">
+                  Healthy <b className="text-foreground">{healthyMonitors}</b> &middot; Issues <b className="text-rose-600">{issueCount}</b>
+                </p>
+              </div>
+            </Panel>
+
+            <Panel title="Top Monitored Services" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<span className="text-[12px] text-muted-foreground">Scale 95-100%</span>}>
+              <div className="flex min-h-0 flex-1 flex-col gap-2.5 pt-1">
+                {topServices.map((service) => {
+                  const color = service.value >= 99.5 ? PALETTE.green : service.value >= 99 ? PALETTE.amber : PALETTE.red;
+                  const width = ((service.value - 95) / 5) * 100;
+                  return (
+                    <div
+                      key={service.name}
+                      title={service.issue}
+                      className="grid grid-cols-[minmax(0,1fr)_minmax(60px,1.4fr)_56px] items-center gap-2 text-[12px]"
+                    >
+                      <span className="truncate font-medium text-foreground">{service.name}</span>
+                      <span className="h-[6px] min-w-0 rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${width}%`, backgroundColor: color }} /></span>
+                      <b className="whitespace-nowrap text-right tabular-nums text-foreground">{service.value.toFixed(2)}%</b>
+                    </div>
+                  );
+                })}
+              </div>
+            </Panel>
+
+            <Panel title="Global Availability" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<Globe size={14} className="text-primary" aria-hidden="true" />}>
+              <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+                <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-md bg-[#eef2f7]">
+                  <InfrastructureMap
+                    variant="light"
+                    markers={availabilityMarkers}
+                    center={[20, 20]}
+                    zoom={2}
+                    fitMarkers
+                    legendCounts={availabilityLegendCounts}
+                    title="Global Availability"
+                    description="5 monitored regions · live latency"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[12px] text-muted-foreground">
+                  {regionStates.map((region) => (
+                    <span key={region.name} className="flex items-center justify-between gap-2 whitespace-nowrap">
+                      <span className="flex items-center gap-1.5 truncate">
+                        <i
+                          aria-hidden="true"
+                          className="h-2 w-2 shrink-0 rounded-full"
+                          style={{ background: region.state === "offline" ? PALETTE.red : region.state === "warning" ? PALETTE.amber : PALETTE.green }}
+                        />
+                        {region.name}
+                      </span>
+                      <b className="tabular-nums text-foreground">{region.latencyMs}ms</b>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Panel>
+          </section>
+
+          <section aria-label="Events, certificates and response analysis" className="grid items-stretch gap-4 xl:grid-cols-4">
+            <Panel title="Recent Events" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitoring events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                {sortedEvents.map((event) => (
+                  <div key={event.key} className="grid h-10 grid-cols-[78px_minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 text-[12px] last:border-0">
+                    <span className="whitespace-nowrap text-muted-foreground">{event.time}</span>
+                    <span className="truncate font-medium text-foreground" title={event.message}>{event.message}</span>
+                    <span className={cn(
+                      "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold",
+                      event.status === "Open" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
+                        : event.status === "Resolved" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                          : event.status === "Investigating" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
+                            : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+                    )}>
+                      {event.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+                Showing {sortedEvents.length} of {TOTAL_EVENTS} events
+              </div>
+            </Panel>
+
+            <Panel title="Response Time Distribution" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold">
+              <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: "P50", value: `${responsePercentiles.p50} ms` },
+                    { label: "P95", value: `${responsePercentiles.p95} ms` },
+                    { label: "P99", value: `${responsePercentiles.p99} ms` },
+                  ].map((item) => (
+                    <span key={item.label} className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                      {item.label} <b className="tabular-nums text-foreground">{item.value}</b>
+                    </span>
+                  ))}
+                </div>
+                <ResponseDistributionChart theme={theme} />
+              </div>
+            </Panel>
+
+            <Panel title="SSL Certificates" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all certificates.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+              <div className="flex min-h-0 flex-1 flex-col pt-1">
+                {sortedSslCertificates.map((certificate) => {
+                  const tone = certificate.daysLeft > 30
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                    : certificate.daysLeft >= 7
+                      ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
+                      : "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300";
+                  const Icon = certificate.daysLeft > 30 ? ShieldCheck : certificate.daysLeft >= 7 ? TriangleAlert : XCircle;
+                  return (
+                    <div key={certificate.domain} className="flex items-center justify-between gap-2 border-b border-border/70 py-1.5 last:border-0">
+                      <span className="min-w-0">
+                        <span className="block truncate text-[12px] font-medium text-foreground">{certificate.domain}</span>
+                        <span className="block text-[12px] text-muted-foreground">Expires {formatExpiry(certificate.daysLeft)}</span>
+                      </span>
+                      <span className="flex shrink-0 items-center gap-1">
+                        <span className={cn(
+                          "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold",
+                          certificate.autoRenew ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300" : "bg-muted text-muted-foreground",
+                        )}>
+                          {certificate.autoRenew ? <CheckCircle2 size={11} aria-hidden="true" /> : <XCircle size={11} aria-hidden="true" />}
+                          Auto-renew {certificate.autoRenew ? "On" : "Off"}
+                        </span>
+                        <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", tone)}>
+                          <Icon size={11} aria-hidden="true" />{certificate.daysLeft}d
+                        </span>
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+                Next expiry in <b className="text-foreground">{Math.min(...sslCertificates.map((certificate) => certificate.daysLeft))} days</b>
+              </div>
+            </Panel>
+
+            <Panel title="Response Time Breakdown" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={
+              <Select value={breakdownEndpoint} onValueChange={setBreakdownEndpoint}>
+                <SelectTrigger aria-label="Select endpoint for response breakdown" className="h-7 w-40 text-[12px]"><SelectValue /></SelectTrigger>
+                <SelectContent>{breakdownEndpoints.map((item) => <SelectItem key={item} value={item}>{item === "all" ? "All endpoints" : item}</SelectItem>)}</SelectContent>
+              </Select>
+            }>
+              <div className="flex min-h-0 flex-1 flex-col gap-2.5 pt-1">
+                <div className="flex h-3 w-full overflow-hidden rounded-full bg-muted">
+                  {activeBreakdown.map((part) => (
+                    <span key={part.label} style={{ width: `${(part.value / activeBreakdownTotal) * 100}%`, backgroundColor: part.color }} />
+                  ))}
+                </div>
+                <p className="text-[12px] text-muted-foreground">
+                  Total <b className="text-[14px] tabular-nums text-foreground">{activeBreakdownTotal} ms</b>
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {activeBreakdown.map((part) => {
+                    const share = Math.round((part.value / activeBreakdownTotal) * 100);
+                    const isSlowest = part.value === Math.max(...activeBreakdown.map((entry) => entry.value));
+                    return (
+                      <div key={part.label} className="min-w-0">
+                        <span className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+                          <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: part.color }} />
+                          {part.label}
+                        </span>
+                        <b className={cn("block text-[12px] tabular-nums", isSlowest ? "text-amber-600" : "text-foreground")}>{part.value} ms</b>
+                        <span className="block text-[12px] tabular-nums text-muted-foreground">{share}%</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+                  Slowest: <b className="text-foreground">{slowestPhase.label} {slowestShare}%</b>
+                </div>
+              </div>
+            </Panel>
+          </section>
+        </>
+      )}
+
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

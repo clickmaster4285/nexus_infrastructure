@@ -208,32 +208,18 @@ export function AllServersTable({
           <option>Clear selection</option>
         </select>
 
-        <div className="ml-auto flex items-center gap-1">
+        {totalFiltered > pageSize && <div className="ml-auto flex items-center gap-1">
           <span className="mr-1 hidden items-center gap-1.5 whitespace-nowrap sm:flex">
             Rows per page
-            <select defaultValue={pageSize} aria-label="Rows per page" disabled className="h-[28px] rounded border border-input bg-card px-1.5 text-[11px] text-[#536881]">
-              <option value={pageSize}>{pageSize}</option>
-            </select>
+            <span className="inline-grid h-[28px] min-w-9 place-items-center rounded border border-input bg-card px-1.5 text-[11px] text-[#536881]">{pageSize}</span>
           </span>
-          <span className="mr-1 whitespace-nowrap">
-            {start}-{end} of {totalFiltered}
-          </span>
-          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40">
-            <ChevronFirst size={13} />
-          </button>
-          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40">
-            <ChevronLeft size={13} />
-          </button>
-          <span aria-current="page" className="grid h-[24px] w-[24px] place-items-center rounded border border-primary bg-primary text-[9px] font-bold text-primary-foreground">
-            {page}
-          </span>
-          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40">
-            <ChevronRight size={13} />
-          </button>
-          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40">
-            <ChevronLast size={13} />
-          </button>
-        </div>
+          <span className="mr-1 whitespace-nowrap">{start}-{end} of {totalFiltered}</span>
+          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronFirst size={13} /></button>
+          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLeft size={13} /></button>
+          <span aria-current="page" className="grid h-[24px] w-[24px] place-items-center rounded border border-primary bg-primary text-[9px] font-bold text-primary-foreground">{page}</span>
+          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronRight size={13} /></button>
+          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[24px] w-[24px] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLast size={13} /></button>
+        </div>}
       </div>
     </>
   );

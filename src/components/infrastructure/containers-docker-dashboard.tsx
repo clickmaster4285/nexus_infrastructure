@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Boxes, Container, Download, RefreshCw,
+  Download, RefreshCw,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
@@ -11,6 +11,7 @@ import {
 
 import { PageHeading } from "@/components/layout/page-heading";
 import { PageMeta } from "@/components/layout/page-meta";
+import { TechLogo } from "@/components/shared/icon";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -47,11 +48,11 @@ const runningContainers = [
 ];
 
 const topImages = [
-  { name: "nginx:1.25", containers: 6, size: "187 MB", color: "text-emerald-600" },
-  { name: "node:18-alpine", containers: 5, size: "156 MB", color: "text-slate-600" },
-  { name: "postgres:15", containers: 2, size: "348 MB", color: "text-blue-600" },
-  { name: "redis:7-alpine", containers: 2, size: "120 MB", color: "text-red-600" },
-  { name: "kong:3.4", containers: 1, size: "211 MB", color: "text-cyan-600" },
+  { name: "nginx:1.25", containers: 6, size: "187 MB" },
+  { name: "node:18-alpine", containers: 5, size: "156 MB" },
+  { name: "postgres:15", containers: 2, size: "348 MB" },
+  { name: "redis:7-alpine", containers: 2, size: "120 MB" },
+  { name: "kong:3.4", containers: 1, size: "211 MB" },
 ];
 
 const hosts = [
@@ -233,8 +234,8 @@ export function ContainersDockerDashboard() {
               <tbody>
                 {runningContainers.map((item) => (
                   <tr key={item.name} className="border-b border-border/70 last:border-0">
-                    <td className="whitespace-nowrap px-1.5 py-2 font-semibold text-primary"><span className="mr-1.5 inline-flex align-middle text-foreground"><Container size={10} /></span>{item.name}</td>
-                    <td className="whitespace-nowrap px-1.5 py-2 text-foreground">{item.image}</td>
+                    <td className="whitespace-nowrap px-1.5 py-2 font-semibold text-primary">{item.name}</td>
+                    <td className="whitespace-nowrap px-1.5 py-2 text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={item.image} /></span>{item.image}</td>
                     <td className="px-1.5 py-2"><span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><i className="h-1 w-1 rounded-full bg-emerald-500" />Running</span></td>
                     <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 text-foreground">{item.cpu}<span className="h-[5px] w-10 rounded-full bg-muted"><i className="block h-full rounded-full bg-blue-500" style={{ width: item.cpuWidth }} /></span></span></td>
                     <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 whitespace-nowrap text-foreground">{item.memory}<span className="h-[5px] w-8 rounded-full bg-muted"><i className="block h-full rounded-full bg-emerald-500" style={{ width: item.memoryWidth }} /></span></span></td>
@@ -253,7 +254,7 @@ export function ContainersDockerDashboard() {
           <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[240px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Image</th><th className="pb-1.5">Containers</th><th className="pb-1.5 text-right">Size</th></tr></thead>
-            <tbody>{topImages.map((image) => <tr key={image.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-2 font-semibold text-foreground"><Boxes size={12} className={`mr-1.5 inline ${image.color}`} />{image.name}</td><td className="py-2 text-foreground">{image.containers}</td><td className="py-2 text-right text-foreground">{image.size}</td></tr>)}</tbody>
+            <tbody>{topImages.map((image) => <tr key={image.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-2 font-semibold text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={image.name} /></span>{image.name}</td><td className="py-2 text-foreground">{image.containers}</td><td className="py-2 text-right text-foreground">{image.size}</td></tr>)}</tbody>
             </table>
           </div>
         </Panel>

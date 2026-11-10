@@ -1,141 +1,94 @@
-import type { DonutDatum, MetricStat } from "./dashboard";
+import type { MetricStat } from "./dashboard";
+import { nocCollectors } from "./live-operations";
+
+export type HealthStatus = "healthy" | "warning" | "critical";
+export const SLA_TARGET = 99;
+export const statusForHealth = (value: number): HealthStatus => value >= SLA_TARGET ? "healthy" : value >= 98 ? "warning" : "critical";
+export const statusColors: Record<HealthStatus, string> = { healthy: "#34D399", warning: "#FBBF24", critical: "#F87171" };
+
+export const componentHealth = [
+  { name: "Servers", value: 99.1, icon: "server", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },
+  { name: "Databases", value: 98.9, icon: "database", belowMinutes: 72, lastIncident: "Replication lag recovered at 11:30" },
+  { name: "Network", value: 98.6, icon: "network", belowMinutes: 192, lastIncident: "Packet loss increased at 11:42" },
+  { name: "Applications", value: 98.8, icon: "workflow", belowMinutes: 96, lastIncident: "Response time recovered at 10:34" },
+  { name: "Services", value: 99.0, icon: "activity", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },
+];
+export const healthScore = Number((componentHealth.reduce((sum, item) => sum + item.value, 0) / componentHealth.length).toFixed(1));
 
 export const globalHealthStats: MetricStat[] = [
-  { label: "Infrastructure Health", value: "98.7%", change: "0.2%", trend: "up", tone: "blue", icon: "pulse" },
+  { label: "Infrastructure Health", value: `${healthScore}%`, change: "0.2%", trend: "up", tone: "blue", icon: "pulse" },
   { label: "Monitoring Coverage", value: "99.1%", change: "0.1%", trend: "up", tone: "green", icon: "online" },
-  { label: "Service Availability", value: "99.82%", change: "0.12%", trend: "up", tone: "green", icon: "shield" },
+  { label: "Service Availability", value: "98.9%", change: "0.12%", trend: "up", tone: "green", icon: "shield" },
   { label: "Active Incidents", value: "2", change: "1 new", trend: "up", tone: "red", icon: "flame" },
   { label: "Critical Alerts", value: "5", change: "2 new", trend: "up", tone: "red", icon: "bell" },
   { label: "Avg Response Time", value: "142 ms", change: "12%", trend: "down", tone: "blue", icon: "network" },
 ];
 
-// Dense multi-series health trend, 15-minute steps 00:00 → 24:00.
-// Seeded so server-side and client-side renders match exactly.
-const GH_POINTS = 97;
-
-function mulberry32(seed: number) {
-  return function () {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-const ghTimeLabel = (index: number) => {
-  const total = index * 15;
-  const hours = Math.floor(total / 60);
-  const minutes = total % 60;
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-};
-
-const ghTimes = Array.from({ length: GH_POINTS }, (_, index) => ghTimeLabel(index));
-
-function denseHealthSeries(seed: number, base: number, variance: number, dipAt: number, dipWidth: number, dipDepth: number): number[] {
-  const rand = mulberry32(seed);
-  const values: number[] = [];
-  let current = base;
-  for (let i = 0; i < GH_POINTS; i += 1) {
-    current += (Math.sin(i / 8 + seed) * 0.35 + (rand() - 0.5) * variance);
-    const dip = dipDepth * Math.exp(-((i - dipAt) ** 2) / (2 * dipWidth * dipWidth));
-    values.push(Math.round(Math.min(100, Math.max(82, current - dip)) * 10) / 10);
-  }
-  return values;
-}
-
-const infrastructureHealthLine = denseHealthSeries(11, 98.7, 0.32, 64, 5.5, 8.4);
-const monitoringCoverageLine = denseHealthSeries(29, 99.1, 0.14, 64, 6, 4.2);
-const availabilityLine = denseHealthSeries(47, 98.9, 0.22, 63, 5, 10.2);
-
-export interface HealthTrendPoint {
-  time: string;
-  infrastructureHealth: number;
-  monitoringCoverage: number;
-  availability: number;
-}
-
-export const globalHealthTrend: HealthTrendPoint[] = ghTimes.map((time, index) => ({
+const times = Array.from({ length: 49 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
+const wobble = (i: number, base: number, amp: number, phase: number) => Number(Math.max(90, Math.min(100, base + Math.sin(i / 4 + phase) * amp + Math.sin(i / 9 + phase) * amp * .35)).toFixed(1));
+export const componentHealthHistory = componentHealth.map((component, componentIndex) => {
+  const values = times.map((_, index) => wobble(index, component.value, 0.22 + componentIndex * 0.035, componentIndex * 0.8));
+  values[values.length - 1] = component.value;
+  const average = Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(1));
+  return { name: component.name, values, min: Math.min(...values), avg: average, max: Math.max(...values), lastIncident: component.lastIncident };
+});
+export const globalHealthTrend = times.map((time, i) => ({
   time,
-  infrastructureHealth: infrastructureHealthLine[index],
-  monitoringCoverage: monitoringCoverageLine[index],
-  availability: availabilityLine[index],
+  infrastructureHealth: Number((componentHealthHistory.reduce((sum, series) => sum + series.values[i], 0) / componentHealthHistory.length).toFixed(1)),
+  monitoringCoverage: wobble(i, 99.1, .35, 1.2),
+  availability: wobble(i, 98.92, .62, 2.4),
 }));
 
-export const healthScore = 98.7;
-
-export const componentHealth: DonutDatum[] = [
-  { name: "Servers", value: 99.1, color: "#288af0" },
-  { name: "Databases", value: 98.9, color: "#a647e8" },
-  { name: "Network", value: 98.6, color: "#fa9238" },
-  { name: "Applications", value: 98.8, color: "#10b981" },
-  { name: "Services", value: 99.0, color: "#22c55e" },
-];
-
 export const resourceHealth = [
-  { label: "CPU", value: 92, color: "#288af0" },
-  { label: "Memory", value: 78, color: "#22c55e" },
-  { label: "Storage", value: 85, color: "#10b981" },
-  { label: "Network", value: 88, color: "#38bdf8" },
+  { label: "CPU", value: 92, kind: "Usage", detail: "12 / 37 cores", trend: "2% vs 1h", trendDirection: "up", icon: "cpu" },
+  { label: "Memory", value: 78, kind: "Usage", detail: "11.0 / 16 GB", trend: "1% vs 1h", trendDirection: "up", icon: "memory" },
+  { label: "Storage", value: 85, kind: "Usage", detail: "92.6 / 224 GB", trend: "0.4% vs 1h", trendDirection: "down", icon: "storage" },
+  { label: "Network", value: 88, kind: "Utilization", detail: "142 Mbps in/out", trend: "3% vs 1h", trendDirection: "up", icon: "network" },
 ];
 
 export const topHealthyServices = [
-  { name: "Nginx Web Server", percent: 100 },
-  { name: "MySQL Database", percent: 100 },
-  { name: "Redis Cache", percent: 99.9 },
-  { name: "Docker Engine", percent: 99.8 },
-  { name: "API Service", percent: 99.7 },
+  { name: "Nginx Web Server", key: "nginx", percent: 100, period: "30d" },
+  { name: "MySQL Database", key: "mysql", percent: 100, period: "30d" },
+  { name: "Redis Cache", key: "redis", percent: 99.9, period: "30d" },
+  { name: "Docker Engine", key: "docker", percent: 99.8, period: "30d" },
+  { name: "API Service", key: "kong", percent: 99.7, period: "30d" },
+  { name: "Prometheus", key: "prometheus", percent: 99.6, period: "30d" },
+  { name: "PostgreSQL", key: "postgres", percent: 99.5, period: "30d" },
 ];
+export const totalHealthyServices = 18;
 
 export const environmentHealth = [
-  { name: "Production", value: 99.1, color: "#22c55e" },
-  { name: "Staging", value: 98.9, color: "#3b82f6" },
-  { name: "Development", value: 98.4, color: "#a647e8" },
-  { name: "Testing", value: 98.7, color: "#f59e0b" },
+  { name: "Production", value: 99.1, servers: 42, alerts: 0, belowMinutes: 0 },
+  { name: "Staging", value: 98.9, servers: 18, alerts: 1, belowMinutes: 72 },
+  { name: "Development", value: 98.4, servers: 12, alerts: 3, belowMinutes: 192 },
+  { name: "Testing", value: 98.7, servers: 9, alerts: 2, belowMinutes: 128 },
+  { name: "UAT", value: 98.6, servers: 7, alerts: 2, belowMinutes: 156 },
+  { name: "DR", value: 98.2, servers: 6, alerts: 4, belowMinutes: 246 },
 ];
 
-export const globalCollectors = [
-  "Prometheus",
-  "Loki",
-  "Blackbox Exporter",
-  "Node Exporter",
-  "Windows Exporter",
-  "Custom Agent",
+export const environmentHealthHistory = environmentHealth.map((environment, environmentIndex) => {
+  const values = times.map((_, index) => wobble(index, environment.value, 0.2 + environmentIndex * 0.025, environmentIndex * 0.67));
+  values[values.length - 1] = environment.value;
+  return { name: environment.name, values };
+});
+
+export const globalCollectors = nocCollectors.map((collector) => ({
+  name: collector.name,
+  key: collector.name.toLowerCase(),
+  version: collector.version,
+  targetsUp: collector.targetsUp,
+  targetsTotal: collector.targetsTotal,
+  lastSeen: collector.heartbeat,
+  status: collector.status === "Online" ? "healthy" as const : collector.status === "Stale" ? "warning" as const : "critical" as const,
+}));
+
+const healthChangeSources = [
+  ...componentHealthHistory.map((history) => ({ ...history, kind: "Component" as const })),
+  ...environmentHealthHistory.map((history) => ({ ...history, kind: "Environment" as const })),
 ];
-
-export type GlobalEventTone = "info" | "warning" | "critical";
-
-export interface GlobalEvent {
-  time: string;
-  type: string;
-  message: string;
-  source: string;
-  tone: GlobalEventTone;
-}
-
-export const recentGlobalEvents: GlobalEvent[] = [
-  { time: "14:32", type: "Info", message: "Metrics collection completed", source: "All Servers", tone: "info" },
-  { time: "14:28", type: "Warning", message: "High disk usage on db-01", source: "Production", tone: "warning" },
-  { time: "14:25", type: "Info", message: "Backup job completed", source: "Backup", tone: "info" },
-  { time: "14:20", type: "Critical", message: "Server unreachable: app-worker-01", source: "Production", tone: "critical" },
-  { time: "14:18", type: "Info", message: "Incident resolved", source: "Operations", tone: "info" },
-];
-
-export const infrastructureStatus = [
-  { label: "Servers", value: 100 },
-  { label: "Databases", value: 98 },
-  { label: "Network Devices", value: 99 },
-  { label: "Containers", value: 97 },
-  { label: "Web Services", value: 99 },
-  { label: "APIs", value: 98 },
-];
-
-export const quickActions = [
-  { title: "View All Servers", description: "Manage infrastructure", href: "/all-servers", tone: "blue", icon: "server" },
-  { title: "Check Alerts", description: "Review active alerts", href: "/alerts", tone: "red", icon: "bell" },
-  { title: "View Incidents", description: "Track incidents", href: "/incidents", tone: "amber", icon: "flame" },
-  { title: "Explore Metrics", description: "Analyze performance", href: "/metrics-explorer", tone: "blue", icon: "chart-no-axes-combined" },
-  { title: "View Logs", description: "Investigate issues", href: "/logs-explorer", tone: "purple", icon: "file-search" },
-  { title: "Generate Report", description: "Export health report", href: "/uptime-and-sla-reports", tone: "blue", icon: "scroll-text" },
-] as const;
-
-export const markerCounts = { healthy: 9, warning: 3, critical: 2 };
+export const recentHealthChanges = healthChangeSources.flatMap((source) => source.values.flatMap((to, index) => {
+  if (index === 0 || to === source.values[index - 1]) return [];
+  const from = source.values[index - 1];
+  const kind = to < from ? "drop" as const : "recovery" as const;
+  return [{ time: times[index], name: source.name, sourceType: source.kind, from, to, delta: Number((to - from).toFixed(1)), kind }];
+})).sort((a, b) => b.time.localeCompare(a.time)).slice(0, 8);

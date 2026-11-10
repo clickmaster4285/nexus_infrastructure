@@ -1,36 +1,41 @@
 import type { MetricStat } from "./dashboard";
 import type { DonutDatum } from "./dashboard";
 
-export const nocStats: MetricStat[] = [
-  { label: 'Total Servers', value: '12', change: '2 new', trend: 'up', tone: 'blue', icon: 'server' },
-  { label: 'Healthy', value: '10', change: '83% of total', trend: 'flat', tone: 'green', icon: 'online' },
-  { label: 'Degraded', value: '1', change: '8% of total', trend: 'flat', tone: 'amber', icon: 'warning' },
-  { label: 'Offline', value: '1', change: '8% of total', trend: 'flat', tone: 'red', icon: 'offline' },
-  { label: 'Critical Alerts', value: '5', change: '2 new', trend: 'up', tone: 'red', icon: 'bell' },
-  { label: 'Active Incidents', value: '2', change: '1 new', trend: 'up', tone: 'red', icon: 'flame' },
-];
-
-export const nocHealth = {
-  score: 83,
+/** One mock fleet source drives the NOC KPI cards, health donut and map legend. */
+export const nocFleet = {
+  total: 12,
   healthy: 10,
   degraded: 1,
   offline: 1,
+  criticalAlerts: 5,
+  activeIncidents: 2,
+};
+
+export const nocStats: MetricStat[] = [
+  { label: "Total Servers", value: `${nocFleet.total}`, change: "2 new", trend: "up", tone: "blue", icon: "server" },
+  { label: "Healthy", value: `${nocFleet.healthy}`, change: `${Math.round((nocFleet.healthy / nocFleet.total) * 100)}% of total`, trend: "flat", tone: "green", icon: "online" },
+  { label: "Degraded", value: `${nocFleet.degraded}`, change: `${Math.round((nocFleet.degraded / nocFleet.total) * 100)}% of total`, trend: "flat", tone: "amber", icon: "warning" },
+  { label: "Offline", value: `${nocFleet.offline}`, change: `${Math.round((nocFleet.offline / nocFleet.total) * 100)}% of total`, trend: "flat", tone: "red", icon: "offline" },
+  { label: "Critical Alerts", value: `${nocFleet.criticalAlerts}`, change: "2 new", trend: "up", tone: "red", icon: "bell" },
+  { label: "Active Incidents", value: `${nocFleet.activeIncidents}`, change: "1 new", trend: "up", tone: "red", icon: "flame" },
+];
+
+export const nocHealth = {
+  ...nocFleet,
+  score: Math.round(((nocFleet.healthy + nocFleet.degraded * 0.5) / nocFleet.total) * 100),
 };
 
 export const nocHealthSegments = [
-  { name: 'Healthy', value: 10, color: '#22c55e' },
-  { name: 'Degraded', value: 1, color: '#f59e0b' },
-  { name: 'Offline', value: 1, color: '#ef4444' },
+  { name: "Healthy", value: nocFleet.healthy, color: "#34d399" },
+  { name: "Degraded", value: nocFleet.degraded, color: "#fbbf24" },
+  { name: "Offline", value: nocFleet.offline, color: "#f87171" },
 ];
 
 export type NocResourceTab = "cpu" | "memory" | "network" | "disk";
-
+export type NocResourceRange = "5m" | "15m" | "1h";
 export interface ResourceUsagePoint { time: string; value: number; load: number }
 
-// One point per minute from 13:00 to 14:30 — deterministic seeded noise so the
-// server and client renders match exactly (no hydration drift).
 const NOC_POINTS = 91;
-
 function mulberry32(seed: number) {
   return function () {
     let t = (seed += 0x6d2b79f5);
@@ -39,17 +44,11 @@ function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-
 const minuteLabel = (index: number) => {
   const total = 13 * 60 + index;
-  const hours = Math.floor(total / 60);
-  const minutes = total % 60;
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 };
-
 const nocTimes = Array.from({ length: NOC_POINTS }, (_, index) => minuteLabel(index));
-
-/** Smooth deterministic random walk with a slow sine drift + one Gaussian spike. */
 function denseWalk(seed: number, base: number, drift: number, variance: number, spikeAt: number, spikeWidth: number, spikeAmount: number): number[] {
   const rand = mulberry32(seed);
   const values: number[] = [];
@@ -62,26 +61,12 @@ function denseWalk(seed: number, base: number, drift: number, variance: number, 
   }
   return values;
 }
-
 const nocSeries: Record<NocResourceTab, { value: number[]; load: number[] }> = {
-  cpu: {
-    value: denseWalk(11, 62, 0.4, 5.2, 61, 6.5, 15),
-    load: denseWalk(29, 52, 1.9, 4.6, 63, 7.5, 10),
-  },
-  memory: {
-    value: denseWalk(47, 50, 2.1, 3.4, 70, 8.5, 9),
-    load: denseWalk(83, 46, 3.0, 3.0, 72, 8, 7),
-  },
-  network: {
-    value: denseWalk(97, 33, 0.9, 4.8, 77, 5.5, 17),
-    load: denseWalk(131, 28, 1.5, 3.8, 78, 6, 12),
-  },
-  disk: {
-    value: denseWalk(163, 44, 0.2, 1.6, 82, 12, 3),
-    load: denseWalk(199, 40, 0.6, 1.4, 82, 12, 2),
-  },
+  cpu: { value: denseWalk(11, 62, 0.4, 5.2, 61, 6.5, 15), load: denseWalk(29, 52, 1.9, 4.6, 63, 7.5, 10) },
+  memory: { value: denseWalk(47, 50, 2.1, 3.4, 70, 8.5, 9), load: denseWalk(83, 46, 3.0, 3.0, 72, 8, 7) },
+  network: { value: denseWalk(97, 33, 0.9, 4.8, 77, 5.5, 17), load: denseWalk(131, 28, 1.5, 3.8, 78, 6, 12) },
+  disk: { value: denseWalk(163, 44, 0.2, 1.6, 82, 12, 3), load: denseWalk(199, 40, 0.6, 1.4, 82, 12, 2) },
 };
-
 export const nocResourceUsage: Record<NocResourceTab, ResourceUsagePoint[]> = {
   cpu: nocTimes.map((time, index) => ({ time, value: nocSeries.cpu.value[index], load: nocSeries.cpu.load[index] })),
   memory: nocTimes.map((time, index) => ({ time, value: nocSeries.memory.value[index], load: nocSeries.memory.load[index] })),
@@ -90,144 +75,106 @@ export const nocResourceUsage: Record<NocResourceTab, ResourceUsagePoint[]> = {
 };
 
 export type MarkerStatus = "healthy" | "warning" | "critical";
-
-export interface NocMarker {
-  name: string;
-  lat: number;
-  lng: number;
-  status: MarkerStatus;
-  role: string;
-}
-
+export interface NocMarker { name: string; lat: number; lng: number; status: MarkerStatus; role: string; servers: number; health: number }
 export const nocMarkers: NocMarker[] = [
-  { name: 'FRA — prod-api-01', lat: 50.11, lng: 8.68, status: 'healthy', role: 'API gateway' },
-  { name: 'HEL — db-primary', lat: 60.17, lng: 24.94, status: 'healthy', role: 'Primary database' },
-  { name: 'LHR — web-frontend-01', lat: 51.5, lng: -0.12, status: 'healthy', role: 'Web frontend' },
-  { name: 'IAD — cache-server-01', lat: 39.04, lng: -77.49, status: 'healthy', role: 'Cache (Redis)' },
-  { name: 'PDX — app-worker-02', lat: 45.52, lng: -122.68, status: 'warning', role: 'Queue worker' },
-  { name: 'GRU — local-office-01', lat: -23.55, lng: -46.63, status: 'warning', role: 'Office services' },
-  { name: 'ISB — win-app-01', lat: 33.69, lng: 73.06, status: 'healthy', role: 'Windows app server' },
-  { name: 'DXB — monitor-node-01', lat: 25.2, lng: 55.27, status: 'healthy', role: 'Monitoring agent' },
-  { name: 'SIN — api-staging-01', lat: 1.35, lng: 103.82, status: 'healthy', role: 'Staging API' },
-  { name: 'BOM — test-runner-01', lat: 19.07, lng: 72.87, status: 'warning', role: 'CI runners' },
-  { name: 'NRT — backup-node-02', lat: 35.68, lng: 139.69, status: 'healthy', role: 'Backup node' },
-  { name: 'SYD — dev-vps-01', lat: -33.87, lng: 151.21, status: 'healthy', role: 'Dev VPS' },
-  { name: 'CPT — legacy-db-01', lat: -33.92, lng: 18.42, status: 'critical', role: 'Legacy database' },
-  { name: 'ARN — prod-api-02', lat: 59.33, lng: 18.06, status: 'critical', role: 'API failover' },
+  { name: "FRA — prod-api-01", lat: 50.11, lng: 8.68, status: "healthy", role: "API gateway", servers: 2, health: 99.8 },
+  { name: "HEL — db-primary", lat: 60.17, lng: 24.94, status: "healthy", role: "Primary database", servers: 1, health: 99.6 },
+  { name: "LHR — web-frontend-01", lat: 51.5, lng: -0.12, status: "healthy", role: "Web frontend", servers: 2, health: 99.9 },
+  { name: "IAD — cache-server-01", lat: 39.04, lng: -77.49, status: "healthy", role: "Cache (Redis)", servers: 1, health: 99.8 },
+  { name: "PDX — app-worker-02", lat: 45.52, lng: -122.68, status: "healthy", role: "Queue worker", servers: 1, health: 99.7 },
+  { name: "GRU — local-office-01", lat: -23.55, lng: -46.63, status: "healthy", role: "Office services", servers: 1, health: 99.7 },
+  { name: "ISB — win-app-01", lat: 33.69, lng: 73.06, status: "healthy", role: "Windows app server", servers: 1, health: 99.9 },
+  { name: "DXB — monitor-node-01", lat: 25.2, lng: 55.27, status: "healthy", role: "Monitoring agent", servers: 1, health: 99.8 },
+  { name: "SIN — api-staging-01", lat: 1.35, lng: 103.82, status: "healthy", role: "Staging API", servers: 1, health: 99.6 },
+  { name: "BOM — test-runner-01", lat: 19.07, lng: 72.87, status: "healthy", role: "CI runners", servers: 1, health: 99.7 },
+  { name: "CPT — legacy-db-01", lat: -33.92, lng: 18.42, status: "warning", role: "Legacy database", servers: 1, health: 98.7 },
+  { name: "ARN — prod-api-02", lat: 59.33, lng: 18.06, status: "critical", role: "API failover", servers: 1, health: 96.4 },
 ];
+export const nocMapCounts = nocMarkers.reduce<Record<MarkerStatus, number>>((counts, marker) => {
+  counts[marker.status] += 1;
+  return counts;
+}, { healthy: 0, warning: 0, critical: 0 });
 
 export type AlertSeverity = "critical" | "high" | "medium";
-
-export interface NocAlert {
-  severity: AlertSeverity;
-  time: string;
-  title: string;
-  detail: string;
-}
-
+export interface NocAlert { id: string; severity: AlertSeverity; time: string; ageMinutes: number; title: string; detail: string }
 export const nocActiveAlerts: NocAlert[] = [
-  { severity: 'critical', time: '14:28', title: 'Database server high load', detail: 'prod-db-01' },
-  { severity: 'high', time: '14:25', title: 'Disk space low', detail: 'web-01' },
-  { severity: 'high', time: '14:20', title: 'API response time high', detail: 'api-gateway' },
-  { severity: 'medium', time: '14:15', title: 'Memory usage elevated', detail: 'app-worker-01' },
+  { id: "a-1", severity: "critical", time: "14:28", ageMinutes: 8, title: "Database server high load", detail: "prod-db-01" },
+  { id: "a-2", severity: "critical", time: "14:25", ageMinutes: 11, title: "Disk space critically low", detail: "web-01" },
+  { id: "a-3", severity: "critical", time: "14:20", ageMinutes: 16, title: "API availability below SLA", detail: "api-gateway" },
+  { id: "a-4", severity: "critical", time: "14:18", ageMinutes: 18, title: "Failover node is unreachable", detail: "prod-api-02" },
+  { id: "a-5", severity: "critical", time: "14:15", ageMinutes: 21, title: "Database replication lag", detail: "legacy-db-01" },
+  { id: "a-6", severity: "high", time: "14:12", ageMinutes: 24, title: "Memory usage elevated", detail: "app-worker-01" },
 ];
 
 export const nocServiceAvailability = [
-  { name: 'Web Servers', value: 99.8 },
-  { name: 'APIs', value: 99.7 },
-  { name: 'Databases', value: 99.9 },
-  { name: 'Services', value: 99.6 },
+  { name: "Web Servers", value: 99.8 }, { name: "APIs", value: 99.7 }, { name: "Databases", value: 99.9 },
+  { name: "Services", value: 99.6 }, { name: "CDN", value: 99.8 }, { name: "Cache", value: 99.5 },
 ];
+export const nocOverallAvailability = Number((nocServiceAvailability.reduce((sum, item) => sum + item.value, 0) / nocServiceAvailability.length).toFixed(1));
 
-export const nocServerGroups: DonutDatum[] = [
-  { name: 'Production', value: 7, color: '#288af0' },
-  { name: 'Staging', value: 2, color: '#ef4444' },
-  { name: 'Development', value: 2, color: '#f59e0b' },
-  { name: 'Testing', value: 1, color: '#22c55e' },
+export const nocServerGroups: Array<DonutDatum & { health: number }> = [
+  { name: "Production", value: 7, color: "#60a5fa", health: 99.4 }, { name: "Staging", value: 2, color: "#a78bfa", health: 98.8 },
+  { name: "Development", value: 2, color: "#2dd4bf", health: 98.1 }, { name: "Testing", value: 1, color: "#94a3b8", health: 97.6 },
 ];
-
 export type TopIssueTab = "cpu" | "memory" | "disk" | "network";
+export interface TopIssue { name: string; percent: number; duration: string }
+const issueRows = {
+  cpu: [{ name: "app-worker-02", percent: 92.4, duration: "high for 12m" }, { name: "prod-db-01", percent: 88.7, duration: "high for 8m" }, { name: "web-01", percent: 76.3, duration: "high for 5m" }, { name: "api-gateway", percent: 74.2, duration: "high for 4m" }, { name: "cache-01", percent: 71.8, duration: "high for 3m" }, { name: "worker-03", percent: 68.1, duration: "high for 2m" }],
+  memory: [{ name: "prod-db-01", percent: 91.2, duration: "high for 18m" }, { name: "prod-api-01", percent: 88.4, duration: "high for 10m" }, { name: "app-worker-02", percent: 85.1, duration: "high for 8m" }, { name: "web-01", percent: 78.4, duration: "high for 6m" }, { name: "cache-01", percent: 72.1, duration: "high for 4m" }, { name: "worker-03", percent: 69.2, duration: "high for 2m" }],
+  disk: [{ name: "prod-api-01", percent: 92, duration: "high for 22m" }, { name: "web-01", percent: 86.3, duration: "high for 9m" }, { name: "db-primary", percent: 82.4, duration: "high for 7m" }, { name: "cache-01", percent: 76.3, duration: "high for 5m" }, { name: "backup-01", percent: 73.4, duration: "high for 3m" }, { name: "worker-03", percent: 68.2, duration: "high for 2m" }],
+  network: [{ name: "web-frontend-01", percent: 93.2, duration: "high for 12m" }, { name: "prod-api-01", percent: 88.4, duration: "high for 8m" }, { name: "db-primary", percent: 82.7, duration: "high for 6m" }, { name: "edge-router-01", percent: 79.2, duration: "high for 5m" }, { name: "cache-01", percent: 72.6, duration: "high for 4m" }, { name: "worker-03", percent: 67.1, duration: "high for 2m" }],
+} satisfies Record<TopIssueTab, TopIssue[]>;
+export const nocTopIssues = issueRows;
 
-export interface TopIssue {
-  name: string;
-  percent: number;
-  tone: "red" | "amber" | "yellow";
-}
+export type EventTone = "green" | "amber" | "blue" | "red";
+export interface NocEvent { title: string; detail: string; time: string; tone: EventTone; icon: "server" | "flame" | "database" | "online" | "workflow" | "offline" }
+export const nocRecentEvents: NocEvent[] = [
+  { title: "Server recovered", detail: "web-01", time: "2m ago", tone: "green", icon: "online" },
+  { title: "Critical database load", detail: "prod-db-01", time: "3m ago", tone: "red", icon: "offline" },
+  { title: "High CPU usage", detail: "app-worker-02", time: "5m ago", tone: "amber", icon: "flame" },
+  { title: "New backup completed", detail: "db-01", time: "8m ago", tone: "blue", icon: "database" },
+  { title: "Agent connected", detail: "internal-api", time: "12m ago", tone: "green", icon: "online" },
+  { title: "Configuration changed", detail: "alert rule", time: "16m ago", tone: "blue", icon: "workflow" },
+  { title: "Node heartbeat missed", detail: "prod-api-02", time: "20m ago", tone: "red", icon: "server" },
+];
 
-export const nocTopIssues: Record<TopIssueTab, TopIssue[]> = {
-  cpu: [
-    { name: 'app-worker-02', percent: 92.4, tone: 'red' },
-    { name: 'prod-db-01', percent: 88.7, tone: 'amber' },
-    { name: 'web-01', percent: 76.3, tone: 'yellow' },
-  ],
-  memory: [
-    { name: 'prod-db-01', percent: 91.2, tone: 'red' },
-    { name: 'prod-api-01', percent: 78.4, tone: 'amber' },
-    { name: 'app-worker-02', percent: 65.1, tone: 'yellow' },
-  ],
-  disk: [
-    { name: 'prod-api-01', percent: 92.0, tone: 'red' },
-    { name: 'web-01', percent: 76.3, tone: 'yellow' },
-    { name: 'db-primary', percent: 55.4, tone: 'yellow' },
-  ],
-  network: [
-    { name: 'web-frontend-01', percent: 15.2, tone: 'amber' },
-    { name: 'prod-api-01', percent: 12.4, tone: 'yellow' },
-    { name: 'db-primary', percent: 8.7, tone: 'yellow' },
-  ],
+export type FeedTone = "green" | "blue" | "amber" | "red";
+export interface OperationsFeedItem { time: string; relativeTime: string; message: string; source: string; severity: "critical" | "warning" | "info" | "success"; tone: FeedTone; icon: "online" | "shield" | "warning" | "flame" | "database" | "server" }
+export const nocOperationsFeed: OperationsFeedItem[] = [
+  { time: "14:32", relativeTime: "2m ago", message: "Server heartbeat received", source: "app-worker-01", severity: "success", tone: "green", icon: "online" },
+  { time: "14:31", relativeTime: "3m ago", message: "Alert resolved: High memory usage", source: "web-01", severity: "success", tone: "green", icon: "shield" },
+  { time: "14:30", relativeTime: "4m ago", message: "Incident updated: Database latency investigation", source: "prod-db-01", severity: "info", tone: "blue", icon: "warning" },
+  { time: "14:29", relativeTime: "5m ago", message: "Critical CPU usage", source: "app-worker-02", severity: "critical", tone: "red", icon: "flame" },
+  { time: "14:28", relativeTime: "6m ago", message: "Backup job started", source: "db-01", severity: "info", tone: "blue", icon: "database" },
+  { time: "14:26", relativeTime: "8m ago", message: "Deploy completed: v2.4.0", source: "api-gateway", severity: "success", tone: "green", icon: "online" },
+  { time: "14:25", relativeTime: "9m ago", message: "Disk usage crossed 80%", source: "web-01", severity: "warning", tone: "amber", icon: "warning" },
+  { time: "14:22", relativeTime: "12m ago", message: "Agent enrolled", source: "monitor-node-01", severity: "info", tone: "blue", icon: "server" },
+  { time: "14:21", relativeTime: "13m ago", message: "Server added", source: "web-frontend-01", severity: "info", tone: "blue", icon: "server" },
+  { time: "14:18", relativeTime: "16m ago", message: "TLS certificate renewed", source: "api.example.com", severity: "success", tone: "green", icon: "shield" },
+];
+
+export interface NocCollector { name: string; status: "Online" | "Stale" | "Offline"; heartbeat: string; rate: string; spark: number[]; version: string; targetsUp: number; targetsTotal: number }
+export const nocCollectors: NocCollector[] = [
+  { name: "Prometheus", status: "Online", heartbeat: "12s ago", rate: "1.2k/s", spark: [12, 14, 13, 16, 15, 17, 19, 18, 16, 20, 22, 21], version: "2.51.0", targetsUp: 42, targetsTotal: 42 },
+  { name: "Node Exporter", status: "Online", heartbeat: "18s ago", rate: "980/s", spark: [10, 10, 11, 12, 11, 13, 12, 14, 13, 15, 14, 16], version: "1.7.0", targetsUp: 38, targetsTotal: 38 },
+  { name: "Windows Exporter", status: "Stale", heartbeat: "2m ago", rate: "720/s", spark: [8, 9, 8, 10, 9, 11, 10, 12, 11, 12, 13, 12], version: "0.25.1", targetsUp: 16, targetsTotal: 17 },
+  { name: "Blackbox Exporter", status: "Online", heartbeat: "22s ago", rate: "540/s", spark: [6, 6, 7, 7, 8, 8, 9, 9, 10, 9, 11, 10], version: "0.24.0", targetsUp: 24, targetsTotal: 24 },
+  { name: "Loki", status: "Online", heartbeat: "8s ago", rate: "860/s", spark: [9, 10, 11, 10, 12, 13, 12, 14, 15, 14, 16, 17], version: "3.0.0", targetsUp: 18, targetsTotal: 18 },
+  { name: "Grafana Agent", status: "Online", heartbeat: "11s ago", rate: "640/s", spark: [7, 8, 8, 9, 10, 9, 11, 12, 11, 12, 13, 14], version: "0.40.4", targetsUp: 16, targetsTotal: 16 },
+];
+
+export const nocCollectorSummary = {
+  total: nocCollectors.length,
+  healthy: nocCollectors.filter((collector) => collector.status === "Online").length,
+  stale: nocCollectors.filter((collector) => collector.status === "Stale").length,
+  offline: nocCollectors.filter((collector) => collector.status === "Offline").length,
 };
 
-export type EventTone = 'green' | 'amber' | 'blue';
+export const nocFeedBufferedCount = 3;
+export const nocAlertMetrics = { mttaMinutes: 6, acknowledgedBy: "Ayesha Khan", acknowledgedAgo: "2m ago" };
 
-export interface NocEvent {
-  title: string;
-  detail: string;
-  time: string;
-  tone: EventTone;
-  icon: 'server' | 'flame' | 'database' | 'online' | 'workflow';
-}
-
-export const nocRecentEvents: NocEvent[] = [
-  { title: 'Server recovered', detail: 'web-01', time: '2m ago', tone: 'green', icon: 'online' },
-  { title: 'High CPU usage', detail: 'app-worker-02', time: '3m ago', tone: 'amber', icon: 'flame' },
-  { title: 'New backup completed', detail: 'db-01', time: '5m ago', tone: 'blue', icon: 'database' },
-  { title: 'Agent connected', detail: 'internal-api', time: '7m ago', tone: 'green', icon: 'online' },
-  { title: 'Configuration changed', detail: 'alert rule', time: '10m ago', tone: 'blue', icon: 'workflow' },
-];
-
-export type FeedTone = 'green' | 'blue' | 'amber' | 'red';
-
-export interface OperationsFeedItem {
-  time: string;
-  message: string;
-  tone: FeedTone;
-  icon: 'online' | 'shield' | 'warning' | 'flame' | 'database' | 'server';
-}
-
-export const nocOperationsFeed: OperationsFeedItem[] = [
-  { time: '14:32', message: 'Server heartbeat received: app-worker-01', tone: 'green', icon: 'online' },
-  { time: '14:31', message: 'Alert resolved: High memory usage on web-01', tone: 'green', icon: 'shield' },
-  { time: '14:30', message: 'Incident updated: Database latency investigation', tone: 'blue', icon: 'warning' },
-  { time: '14:29', message: 'High CPU usage on app-worker-02', tone: 'red', icon: 'flame' },
-  { time: '14:28', message: 'Backup job started: db-01', tone: 'blue', icon: 'database' },
-  { time: '14:26', message: 'Deploy completed: api-gateway v2.4.0', tone: 'green', icon: 'online' },
-  { time: '14:25', message: 'Disk usage crossed 80% on web-01', tone: 'amber', icon: 'warning' },
-  { time: '14:22', message: 'Agent enrolled: monitor-node-01', tone: 'blue', icon: 'server' },
-  { time: '14:21', message: 'Server added: web-frontend-01', tone: 'blue', icon: 'server' },
-  { time: '14:18', message: 'TLS certificate renewed: api.example.com', tone: 'green', icon: 'shield' },
-];
-
-export interface NocCollector {
-  name: string;
-  status: 'Online' | 'Offline';
-  heartbeat: string;
-  rate: string;
-  spark: number[];
-}
-
-export const nocCollectors: NocCollector[] = [
-  { name: 'Prometheus', status: 'Online', heartbeat: '14:32', rate: '1.2k/s', spark: [12, 14, 13, 16, 15, 17, 19, 18, 16, 20, 22, 21] },
-  { name: 'Node Exporter', status: 'Online', heartbeat: '14:32', rate: '980/s', spark: [10, 10, 11, 12, 11, 13, 12, 14, 13, 15, 14, 16] },
-  { name: 'Windows Exporter', status: 'Online', heartbeat: '14:31', rate: '720/s', spark: [8, 9, 8, 10, 9, 11, 10, 12, 11, 12, 13, 12] },
-  { name: 'Blackbox Exporter', status: 'Online', heartbeat: '14:31', rate: '540/s', spark: [6, 6, 7, 7, 8, 8, 9, 9, 10, 9, 11, 10] },
-];
+export const nocOnCall = {
+  primary: { name: "Ayesha Khan", role: "Primary · SRE", since: "09:00 PKT" },
+  nextShift: "16:00 PKT · Omar Farooq",
+  escalations: [{ level: "L1", name: "Omar Farooq", role: "Platform engineer" }, { level: "L2", name: "Sara Ahmed", role: "Infrastructure lead" }],
+};

@@ -22,14 +22,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const isCloudAccountsPage = pathname === "/cloud-accounts-and-providers";
   const isDependenciesPage = pathname === "/dependencies";
   const isServerDetailsPage = pathname === "/server-details";
+  const isServerGroupsPage = pathname === "/server-groups";
+  const isAllServersPage = pathname === "/all-servers";
+  const isGlobalHealthPage = pathname === "/global-health";
   const isServerDashboard = pathname === "/server-details" || pathname === "/server-groups";
   const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
-    setDark(stored ? stored === "dark" : prefersDark);
+    // Light is the default - dark mode is opt-in via the header toggle.
+    setDark(stored ? stored === "dark" : false);
   }, []);
 
   function toggleTheme() {
@@ -49,7 +52,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             ? "mx-auto flex min-h-[calc(100dvh-54px)] w-full max-w-[1800px] flex-col px-6 pb-0 pt-6"
             : "mx-auto w-full max-w-[1800px] px-3 pb-4 pt-3 sm:px-5"}>
             {children}
-            {!isDataCentersPage && !isDiskStoragePage && !isCpuMemoryPage && !isMetricsExplorerPage && !isNetworkMonitoringPage && !isProcessesServicesPage && !isNetworkDevicesPage && !isContainersDockerPage && !isCloudAccountsPage && !isDependenciesPage && !isServerDetailsPage && <div className={isServerDashboard ? "mt-auto" : undefined}><Footer /></div>}
+            {!isDataCentersPage && !isDiskStoragePage && !isCpuMemoryPage && !isMetricsExplorerPage && !isNetworkMonitoringPage && !isProcessesServicesPage && !isNetworkDevicesPage && !isContainersDockerPage && !isCloudAccountsPage && !isDependenciesPage && !isServerDetailsPage && !isServerGroupsPage && !isAllServersPage && !isGlobalHealthPage && <div className={isServerDashboard ? "mt-auto" : undefined}><Footer /></div>}
           </main>
         </div>
       </div>

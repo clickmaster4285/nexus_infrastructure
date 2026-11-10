@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import {
   Area, AreaChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import {
-  Download, Plus, Server,
+  Activity, AppWindow, ArrowDown, ArrowUp, Cog, Database, Download, Globe, Info, Network, Plus, Server, Zap,
+  type LucideIcon,
 } from "lucide-react";
 
 import { PageHeading } from "@/components/layout/page-heading";
@@ -14,7 +15,10 @@ import { PageMeta } from "@/components/layout/page-meta";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
+import { memoryUsedGb, serverResourceMetrics, type ServerResourceMetrics } from "@/data/mock/servers";
+import { cn } from "@/lib/utils";
 
 const stats: MetricStat[] = [
   { label: "Avg CPU Usage", value: "32.4%", change: "12.6%", trend: "up", tone: "blue", icon: "cpu", detail: "vs last 24 hours" },
@@ -63,24 +67,6 @@ const memoryHistory = [
   { time: "08:00", used: 77, cached: 45, buffers: 22, free: 8 },
   { time: "10:00", used: 71, cached: 40, buffers: 19, free: 9 },
   { time: "12:00", used: 75, cached: 43, buffers: 21, free: 8 },
-];
-
-const cpuServers = [
-  { name: "web-01", usage: 78.6, user: 48.2, system: 22.1, ioWait: 6.3, cores: 8, load: "2.34" },
-  { name: "app-server-02", usage: 62.3, user: 35.6, system: 18.7, ioWait: 4.5, cores: 8, load: "1.82" },
-  { name: "db-01", usage: 45.8, user: 24.1, system: 15.9, ioWait: 3.2, cores: 16, load: "1.28" },
-  { name: "cache-01", usage: 32.1, user: 18.3, system: 10.2, ioWait: 1.6, cores: 4, load: "0.98" },
-  { name: "api-gateway", usage: 28.7, user: 16.2, system: 9.8, ioWait: 1.1, cores: 4, load: "0.76" },
-  { name: "worker-01", usage: 22.4, user: 12.6, system: 7.3, ioWait: 0.8, cores: 4, load: "0.61" },
-];
-
-const memoryServers = [
-  { name: "db-01", usage: 89.3, used: "57.2 GB / 64 GB", cached: "12.6 GB", free: "6.8 GB", swap: "2.1%" },
-  { name: "app-server-02", usage: 76.4, used: "48.9 GB / 64 GB", cached: "8.1 GB", free: "7.0 GB", swap: "1.3%" },
-  { name: "web-01", usage: 72.1, used: "46.1 GB / 64 GB", cached: "9.3 GB", free: "8.6 GB", swap: "0.8%" },
-  { name: "worker-01", usage: 55.6, used: "17.8 GB / 32 GB", cached: "2.6 GB", free: "8.0 GB", swap: "0.0%" },
-  { name: "api-gateway", usage: 42.3, used: "6.8 GB / 16 GB", cached: "2.1 GB", free: "6.8 GB", swap: "0.0%" },
-  { name: "cache-01", usage: 34.2, used: "5.5 GB / 16 GB", cached: "1.6 GB", free: "8.9 GB", swap: "0.0%" },
 ];
 
 const cpuDistribution = [
@@ -136,6 +122,220 @@ const memorySeries = [
   { key: "free", name: "Free Memory", color: "#8a45df" },
 ];
 
+const ROWS_PER_PAGE_OPTIONS = [8, 16, 32];
+
+/**
+ * Usage severity bands. The bar colour follows these thresholds while the
+ * percentage itself always stays in the regular foreground colour so the
+ * tables stay calm and readable.
+ */
+const USAGE_LEGEND = [
+  { label: "Critical (>85%)", light: "bg-[#ef4444]", dark: "bg-[#f87171]" },
+  { label: "High (70–85%)", light: "bg-[#f59e0b]", dark: "bg-[#fbbf24]" },
+  { label: "Normal", light: "bg-[#3b82f6]", dark: "bg-[#60a5fa]" },
+];
+
+/** Bar colours per severity band, with muted dark-mode variants. */
+function usageBarColor(value: number): string {
+  if (value > 85) return "bg-[#ef4444] dark:bg-[#f87171]";
+  if (value >= 70) return "bg-[#f59e0b] dark:bg-[#fbbf24]";
+  return "bg-[#3b82f6] dark:bg-[#60a5fa]";
+}
+
+/** Usage percentage with a small threshold-coloured progress bar. */
+function UsageCell({ value }: { value: number }) {
+  return (
+    <span className="flex items-center justify-end gap-2 whitespace-nowrap">
+      <span className="font-medium tabular-nums text-foreground">{value.toFixed(1)}%</span>
+      <span className="h-[5px] w-[110px] shrink-0 overflow-hidden rounded-full bg-muted">
+        <span className={cn("block h-full rounded-full", usageBarColor(value))} style={{ width: `${Math.min(value, 100)}%` }} />
+      </span>
+    </span>
+  );
+}
+
+/** Breakdown segments for the CPU stacked bar. */
+const CPU_BREAKDOWN_SEGMENTS = [
+  { label: "User", color: "bg-[#2878ed] dark:bg-[#60a5fa]" },
+  { label: "System", color: "bg-[#8a45df] dark:bg-[#a78bfa]" },
+  { label: "I/O Wait", color: "bg-[#f39a12] dark:bg-[#fbbf24]" },
+];
+
+/** Stacked bar summarising user / system / I/O wait split of CPU time. */
+function CpuBreakdown({ server }: { server: ServerResourceMetrics }) {
+  const total = server.user + server.system + server.ioWait;
+  const values = [server.user, server.system, server.ioWait];
+  return (
+    <span
+      title={`User ${server.user.toFixed(1)}% · System ${server.system.toFixed(1)}% · I/O Wait ${server.ioWait.toFixed(1)}%`}
+      className="flex h-[5px] w-[100px] shrink-0 overflow-hidden rounded-full bg-muted"
+    >
+      {CPU_BREAKDOWN_SEGMENTS.map((segment, index) => (
+        <span
+          key={segment.label}
+          className={cn("block h-full", segment.color)}
+          style={{ width: `${total ? (values[index] / total) * 100 : 0}%` }}
+        />
+      ))}
+    </span>
+  );
+}
+
+/** Info affordance explaining the CPU breakdown bar colours. */
+function BreakdownInfo() {
+  return (
+    <span
+      title="User (blue) · System (purple) · I/O Wait (orange) — hover a row for exact percentages"
+      className="inline-flex"
+    >
+      <Info size={11} aria-label="Breakdown legend: User, System, I/O Wait" className="cursor-help text-muted-foreground/70 transition-colors hover:text-foreground" />
+    </span>
+  );
+}
+
+/** Server role -> icon and brand colour used in the Server Name column. */
+const roleIcons: Record<string, { icon: LucideIcon; color: string }> = {
+  web: { icon: Globe, color: "#6366F1" },
+  db: { icon: Database, color: "#8B5CF6" },
+  app: { icon: AppWindow, color: "#14B8A6" },
+  gw: { icon: Network, color: "#06B6D4" },
+  worker: { icon: Cog, color: "#64748B" },
+  monitor: { icon: Activity, color: "#EC4899" },
+  cache: { icon: Zap, color: "#84CC16" },
+};
+
+/** Human readable role labels used for the icon tooltip. */
+const roleLabels: Record<string, string> = {
+  web: "Web",
+  db: "Database",
+  app: "Application",
+  gw: "Gateway",
+  worker: "Worker",
+  monitor: "Monitoring",
+  cache: "Cache",
+};
+
+/**
+ * Resolves the role icon for a server: the explicit role wins, otherwise the
+ * name prefix is used. Unknown roles fall back to a generic server icon.
+ */
+function roleIconFor(server: ServerResourceMetrics): { icon: LucideIcon; color: string; label: string } {
+  const role = server.role || server.name.split("-")[0];
+  const entry = roleIcons[role];
+  const label = roleLabels[role] ?? role;
+  if (!entry) return { icon: Server, color: "#64748B", label: label || "Server" };
+  return { ...entry, label };
+}
+
+/** Server name cell with a soft tinted role icon badge. */
+function ServerNameCell({ server }: { server: ServerResourceMetrics }) {
+  const { icon: RoleIcon, color, label } = roleIconFor(server);
+  return (
+    <span className="flex min-w-0 items-center gap-2.5">
+      <span
+        title={label}
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[color-mix(in_srgb,var(--role-color)_12%,transparent)] dark:bg-[color-mix(in_srgb,var(--role-color)_20%,transparent)]"
+        style={{ "--role-color": color, color } as CSSProperties}
+      >
+        <RoleIcon size={16} aria-label={`${label} server`} />
+      </span>
+      <span className="truncate font-medium text-slate-800 transition-colors hover:text-primary hover:underline dark:text-slate-100">{server.name}</span>
+    </span>
+  );
+}
+
+type SortKey = "name" | "cpu" | "memory" | "cores" | "load" | "used" | "cached" | "free" | "swap";
+
+/** Clickable table header that toggles ascending / descending sorting. */
+function SortableHeader({ label, sortKey, activeKey, direction, onSort, align = "left", children }: {
+  label: string; sortKey: SortKey; activeKey: SortKey; direction: "asc" | "desc"; onSort: (key: SortKey) => void; align?: "left" | "right"; children?: React.ReactNode;
+}) {
+  const isActive = activeKey === sortKey;
+  return (
+    <th scope="col" className={cn("whitespace-nowrap px-1 pb-1.5 text-[11px] font-medium text-muted-foreground", align === "right" && "text-right")}>
+      <button
+        type="button"
+        onClick={() => onSort(sortKey)}
+        aria-label={`Sort by ${label}`}
+        className={cn(
+          "inline-flex items-center gap-1 whitespace-nowrap rounded transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          isActive && "text-foreground",
+        )}
+      >
+        {label}
+        {isActive && (direction === "asc" ? <ArrowUp size={11} aria-hidden="true" /> : <ArrowDown size={11} aria-hidden="true" />)}
+        {children}
+      </button>
+    </th>
+  );
+}
+
+/** Legend describing the usage severity bands used by the bars. */
+function UsageLegend() {
+  return (
+    <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      {USAGE_LEGEND.map((item) => (
+        <span key={item.label} className="inline-flex items-center gap-1.5 whitespace-nowrap">
+          <i aria-hidden="true" className={cn("h-2 w-2 shrink-0 rounded-full", item.light, item.dark)} />
+          {item.label}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** Pagination footer shared by both server tables. */
+function TablePagination({ page, pageCount, rowsPerPage, onPageChange, onRowsPerPageChange, total }: {
+  page: number; pageCount: number; rowsPerPage: number; onPageChange: (page: number) => void; onRowsPerPageChange: (rows: number) => void; total: number;
+}) {
+  const from = total ? (page - 1) * rowsPerPage + 1 : 0;
+  const to = Math.min(page * rowsPerPage, total);
+  return (
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[12px] text-muted-foreground">
+      <UsageLegend />
+      <div className="flex flex-wrap items-center gap-1">
+        <span className="mr-2 whitespace-nowrap">Showing {from}-{to} of {total} servers</span>
+        <label className="mr-1 flex items-center gap-1 whitespace-nowrap">
+          Rows per page:
+          <Select value={String(rowsPerPage)} onValueChange={(value) => onRowsPerPageChange(Number(value))}>
+            <SelectTrigger aria-label="Rows per page" className="h-7 w-[62px] text-[12px]"><SelectValue /></SelectTrigger>
+            <SelectContent>{ROWS_PER_PAGE_OPTIONS.map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
+          </Select>
+        </label>
+        {Array.from({ length: Math.min(5, Math.max(1, pageCount)) }, (_, index) => index + 1).map((value) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => onPageChange(value)}
+            aria-current={page === value ? "page" : undefined}
+            className={cn(
+              "grid h-7 w-7 place-items-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              page === value ? "bg-primary font-semibold text-primary-foreground" : "hover:bg-accent hover:text-foreground",
+            )}
+          >
+            {value}
+          </button>
+        ))}
+        {pageCount > 5 && <span aria-hidden="true">…</span>}
+        {pageCount > 5 && (
+          <button type="button" onClick={() => onPageChange(pageCount)} className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground">
+            {pageCount}
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => onPageChange(Math.min(pageCount, page + 1))}
+          disabled={page === pageCount}
+          aria-label="Next page"
+          className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+        >
+          <ArrowDown size={12} aria-hidden="true" className="-rotate-90" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function UsageDistribution({ data }: { data: typeof cpuDistribution }) {
   return (
     <div className="flex h-[180px] w-full max-w-[360px] items-center justify-center gap-2.5">
@@ -177,16 +377,72 @@ export function CpuMemoryDashboard() {
   const [period, setPeriod] = useState("24H");
   const [cpuAverage, setCpuAverage] = useState("Average");
   const [memoryAverage, setMemoryAverage] = useState("Average");
+  const [cpuSort, setCpuSort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "cpu", direction: "desc" });
+  const [memorySort, setMemorySort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "memory", direction: "desc" });
+  const [cpuPage, setCpuPage] = useState(1);
+  const [memoryPage, setMemoryPage] = useState(1);
+  const [cpuRowsPerPage, setCpuRowsPerPage] = useState(8);
+  const [memoryRowsPerPage, setMemoryRowsPerPage] = useState(8);
+
   const toast = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2600);
   };
+
+  const sortedCpuServers = useMemo(() => {
+    const direction = cpuSort.direction === "asc" ? 1 : -1;
+    return [...serverResourceMetrics].sort((a, b) => {
+      if (cpuSort.key === "name") return a.name.localeCompare(b.name) * direction;
+      const left = cpuSort.key === "cpu" ? a.cpu : a[cpuSort.key as keyof ServerResourceMetrics] as number;
+      const right = cpuSort.key === "cpu" ? b.cpu : b[cpuSort.key as keyof ServerResourceMetrics] as number;
+      return (left - right) * direction;
+    });
+  }, [cpuSort]);
+
+  const sortedMemoryServers = useMemo(() => {
+    const direction = memorySort.direction === "asc" ? 1 : -1;
+    return [...serverResourceMetrics].sort((a, b) => {
+      if (memorySort.key === "name") return a.name.localeCompare(b.name) * direction;
+      const value = (server: ServerResourceMetrics): number => {
+        switch (memorySort.key) {
+          case "memory": return server.memory;
+          case "used": return memoryUsedGb(server);
+          case "cached": return server.memoryCached;
+          case "free": return server.memoryFree;
+          case "swap": return server.swap;
+          default: return 0;
+        }
+      };
+      return (value(a) - value(b)) * direction;
+    });
+  }, [memorySort]);
+
+  const cpuPageCount = Math.max(1, Math.ceil(sortedCpuServers.length / cpuRowsPerPage));
+  const memoryPageCount = Math.max(1, Math.ceil(sortedMemoryServers.length / memoryRowsPerPage));
+  const visibleCpuServers = sortedCpuServers.slice((cpuPage - 1) * cpuRowsPerPage, cpuPage * cpuRowsPerPage);
+  const visibleMemoryServers = sortedMemoryServers.slice((memoryPage - 1) * memoryRowsPerPage, memoryPage * memoryRowsPerPage);
+
+  function toggleSort(current: { key: SortKey; direction: "asc" | "desc" }, key: SortKey, setSort: (value: { key: SortKey; direction: "asc" | "desc" }) => void, resetPage: () => void) {
+    setSort(current.key === key ? { key, direction: current.direction === "asc" ? "desc" : "asc" } : { key, direction: "desc" });
+    resetPage();
+  }
+
   const exportCsv = () => {
     const header = ["Server", "CPU Usage", "User CPU", "System CPU", "I/O Wait", "Cores", "Load Average", "Memory Usage", "Memory Used", "Cached", "Free", "Swap"];
-    const rows = cpuServers.map((server, index) => {
-      const memory = memoryServers.find((item) => item.name === server.name);
-      return [server.name, `${server.usage}%`, `${server.user}%`, `${server.system}%`, `${server.ioWait}%`, String(server.cores), server.load, memory ? `${memory.usage}%` : "", memory?.used ?? "", memory?.cached ?? "", memory?.free ?? "", memory?.swap ?? ""];
-    });
+    const rows = sortedCpuServers.map((server) => [
+      server.name,
+      `${server.cpu}%`,
+      `${server.user}%`,
+      `${server.system}%`,
+      `${server.ioWait}%`,
+      String(server.cores),
+      String(server.load),
+      `${server.memory}%`,
+      `${memoryUsedGb(server)} GB / ${server.memoryTotal} GB`,
+      `${server.memoryCached} GB`,
+      `${server.memoryFree} GB`,
+      `${server.swap}%`,
+    ]);
     const csv = [header, ...rows].map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
@@ -272,25 +528,91 @@ export function CpuMemoryDashboard() {
         </Panel>
       </section>
 
-      <section aria-label="Top CPU and memory servers" className="grid gap-2.5 xl:grid-cols-2">
-        <Panel title="Top Servers by CPU Usage" className="min-w-0" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
-          <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[780px] text-left text-[12px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Server Name", "CPU Usage", "User %", "System %", "I/O Wait %", "Cores", "Load Average", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{cpuServers.map((server, index) => <tr key={server.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] font-semibold text-primary"><Server size={9} className="mr-1 inline text-muted-foreground" />{server.name}</td><td className={`whitespace-nowrap px-1 py-[5px] font-semibold ${server.usage > 60 ? "text-rose-600" : server.usage > 40 ? "text-amber-600" : "text-emerald-600"}`}>{server.usage.toFixed(1)}%</td><td className="px-1 py-[5px] text-foreground">{server.user.toFixed(1)}%</td><td className="px-1 py-[5px] text-foreground">{server.system.toFixed(1)}%</td><td className="px-1 py-[5px] text-foreground">{server.ioWait.toFixed(1)}%</td><td className="px-1 py-[5px] text-foreground">{server.cores}</td><td className="px-1 py-[5px] text-foreground">{server.load}</td><td className="px-1 py-[5px]"><svg viewBox="0 0 70 22" className="h-5 w-[52px]" aria-label={`CPU trend for ${server.name}`}><polyline points={`${index * 2},17 ${12 + index},${12 + index % 4} ${24 + index},${15 - index % 5} ${38 + index},${7 + index % 5} ${53 + index},${10 - index % 4} 68,${4 + index % 6}`} fill="none" stroke={server.usage > 60 ? "#f97316" : "#22bd83"} strokeWidth="1.4" /></svg></td></tr>)}</tbody>
-            </table>
+      <section aria-label="Top CPU and memory servers" className="grid items-stretch gap-2.5 xl:grid-cols-2">
+        <Panel title="Top Servers by CPU Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="flex min-h-0 flex-1 flex-col pt-1">
+            <div className="min-h-0 flex-1 overflow-auto">
+              <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
+                <colgroup>
+                  <col style={{ width: "26%" }} /><col style={{ width: "30%" }} /><col style={{ width: "24%" }} />
+                  <col style={{ width: "9%" }} /><col style={{ width: "11%" }} />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-border text-muted-foreground">
+                    <SortableHeader label="Server Name" sortKey="name" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} />
+                    <SortableHeader label="CPU Usage" sortKey="cpu" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} align="right" />
+                    <th scope="col" className="whitespace-nowrap px-1 pb-1.5 text-[11px] font-medium text-muted-foreground">
+                      <span className="inline-flex items-center gap-1">Breakdown<BreakdownInfo /></span>
+                    </th>
+                    <SortableHeader label="Cores" sortKey="cores" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} align="right" />
+                    <SortableHeader label="Load Avg" sortKey="load" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} align="right" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleCpuServers.map((server) => (
+                    <tr key={server.name} className="h-[34px] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
+                      <td className="px-1"><ServerNameCell server={server} /></td>
+                      <td className="px-1 text-right"><UsageCell value={server.cpu} /></td>
+                      <td className="px-1"><CpuBreakdown server={server} /></td>
+                      <td className="px-1 text-right font-normal tabular-nums text-muted-foreground">{server.cores}</td>
+                      <td className="px-1 text-right font-normal tabular-nums text-muted-foreground">{server.load.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <TablePagination
+              page={cpuPage}
+              pageCount={cpuPageCount}
+              rowsPerPage={cpuRowsPerPage}
+              total={sortedCpuServers.length}
+              onPageChange={setCpuPage}
+              onRowsPerPageChange={(rows) => { setCpuRowsPerPage(rows); setCpuPage(1); }}
+            />
           </div>
-          <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-6 of 48 servers</span><span>Rows per page:　10　 ‹　<span className="rounded bg-primary px-1 text-white">1</span>　2　3　4　5　…　›</span></div>
         </Panel>
 
-        <Panel title="Top Servers by Memory Usage" className="min-w-0" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
-          <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[760px] text-left text-[12px]">
-              <thead><tr className="border-b border-border text-muted-foreground">{["Server Name", "Memory Usage", "Used / Total", "Cached", "Free", "Swap Usage", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{memoryServers.map((server, index) => <tr key={server.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] font-semibold text-primary"><Server size={9} className="mr-1 inline text-muted-foreground" />{server.name}</td><td className={`whitespace-nowrap px-1 py-[5px] font-semibold ${server.usage > 75 ? "text-rose-600" : server.usage > 50 ? "text-amber-600" : "text-emerald-600"}`}>{server.usage.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{server.used}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{server.cached}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{server.free}</td><td className="px-1 py-[5px] text-foreground">{server.swap}</td><td className="px-1 py-[5px]"><svg viewBox="0 0 70 22" className="h-5 w-[52px]" aria-label={`Memory trend for ${server.name}`}><polyline points={`${index * 2},17 ${12 + index},${12 + index % 4} ${24 + index},${15 - index % 5} ${38 + index},${7 + index % 5} ${53 + index},${10 - index % 4} 68,${4 + index % 6}`} fill="none" stroke={server.usage > 75 ? "#ef4444" : server.usage > 50 ? "#f97316" : "#22bd83"} strokeWidth="1.4" /></svg></td></tr>)}</tbody>
-            </table>
+        <Panel title="Top Servers by Memory Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+          <div className="flex min-h-0 flex-1 flex-col pt-1">
+            <div className="min-h-0 flex-1 overflow-auto">
+              <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
+                <colgroup>
+                  <col style={{ width: "26%" }} /><col style={{ width: "30%" }} /><col style={{ width: "17%" }} />
+                  <col style={{ width: "9%" }} /><col style={{ width: "9%" }} /><col style={{ width: "9%" }} />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-border text-muted-foreground">
+                    <SortableHeader label="Server Name" sortKey="name" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} />
+                    <SortableHeader label="Memory Usage" sortKey="memory" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} align="right" />
+                    <SortableHeader label="Used / Total" sortKey="used" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} align="right" />
+                    <SortableHeader label="Cached" sortKey="cached" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} align="right" />
+                    <SortableHeader label="Free" sortKey="free" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} align="right" />
+                    <SortableHeader label="Swap" sortKey="swap" activeKey={memorySort.key} direction={memorySort.direction} onSort={(key) => toggleSort(memorySort, key, setMemorySort, () => setMemoryPage(1))} align="right" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleMemoryServers.map((server) => (
+                    <tr key={server.name} className="h-[34px] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
+                      <td className="px-1"><ServerNameCell server={server} /></td>
+                      <td className="px-1 text-right"><UsageCell value={server.memory} /></td>
+                      <td className="whitespace-nowrap px-1 text-right font-normal tabular-nums text-muted-foreground">{memoryUsedGb(server)} / {server.memoryTotal} GB</td>
+                      <td className="whitespace-nowrap px-1 text-right font-normal tabular-nums text-muted-foreground" title={`${server.memoryCached} GB cached`}>{server.memoryCached} GB</td>
+                      <td className="whitespace-nowrap px-1 text-right font-normal tabular-nums text-muted-foreground" title={`${server.memoryFree} GB free`}>{server.memoryFree} GB</td>
+                      <td className="whitespace-nowrap px-1 text-right font-normal tabular-nums text-muted-foreground">{server.swap.toFixed(1)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <TablePagination
+              page={memoryPage}
+              pageCount={memoryPageCount}
+              rowsPerPage={memoryRowsPerPage}
+              total={sortedMemoryServers.length}
+              onPageChange={setMemoryPage}
+              onRowsPerPageChange={(rows) => { setMemoryRowsPerPage(rows); setMemoryPage(1); }}
+            />
           </div>
-          <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-6 of 48 servers</span><span>Rows per page:　10　 ‹　<span className="rounded bg-primary px-1 text-white">1</span>　2　3　4　5　…　›</span></div>
         </Panel>
       </section>
 
