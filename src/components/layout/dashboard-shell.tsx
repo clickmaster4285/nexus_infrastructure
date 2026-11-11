@@ -10,7 +10,7 @@ const THEME_STORAGE_KEY = "nexus-theme";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isServerDashboard = pathname === "/server-details" || pathname === "/server-groups";
+  const isServerDashboard = pathname === "/server-details" || pathname.startsWith("/server-details/") || pathname === "/server-groups";
   const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 

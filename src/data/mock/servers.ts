@@ -20,6 +20,27 @@ export interface Server {
   tags: string[];
 }
 
+export function serverDetailsPath(server: Pick<Server, "name">): string {
+  return `/server-details/${encodeURIComponent(server.name)}`;
+}
+
+export function findServerById(serverId: string): Server | undefined {
+  let decodedId = serverId;
+  try {
+    decodedId = decodeURIComponent(serverId);
+  } catch {
+    return undefined;
+  }
+  return servers.find((server) => server.id === decodedId || server.name === decodedId);
+}
+
+export function serverGroupName(server: Pick<Server, "name">): string {
+  if (server.name.startsWith("web-")) return "Web Servers";
+  if (server.name.startsWith("db-")) return "Database Servers";
+  if (/api|app|worker/.test(server.name)) return "Application Servers";
+  return "Infrastructure";
+}
+
 export interface ServerStat {
   label: string;
   value: string;
@@ -178,14 +199,35 @@ function roleFromName(name: string): string {
   return ["web", "db", "app", "gw", "worker", "monitor", "cache"].includes(prefix) ? prefix : "";
 }
 
+const serverNameByResourceAlias: Record<string, string> = {
+  "web-01": "web-frontend-01",
+  "db-01": "db-primary",
+  "app-02": "app-worker-02",
+  "worker-02": "app-worker-02",
+  "cache-01": "cache-server-01",
+  "monitor-01": "monitor-node-01",
+};
+
 export const serverResourceMetrics: ServerResourceMetrics[] = resourceRows.map(
-  ([name, cpu, user, system, ioWait, cores, load, memory, memoryTotal, memoryCached, memoryFree, swap]) => ({
-    name, role: roleFromName(name), cpu, user, system, ioWait, cores, load, memory, memoryTotal, memoryCached, memoryFree, swap,
-  }),
+  ([name, cpu, user, system, ioWait, cores, load, memory, memoryTotal, memoryCached, memoryFree, swap]) => {
+    const canonicalServer = servers.find((server) => server.name === (serverNameByResourceAlias[name] ?? name));
+    if (!canonicalServer) {
+      return { name, role: roleFromName(name), cpu, user, system, ioWait, cores, load, memory, memoryTotal, memoryCached, memoryFree, swap };
+    }
+
+    const cpuScale = cpu === 0 ? 0 : canonicalServer.cpu / cpu;
+    const availableMemory = memoryTotal * (1 - canonicalServer.memory / 100);
+    const adjustedMemoryFree = Math.round(availableMemory * 0.6 * 10) / 10;
+    return {
+      name, role: roleFromName(name), cpu: canonicalServer.cpu, user: Math.round(user * cpuScale * 10) / 10,
+      system: Math.round(system * cpuScale * 10) / 10, ioWait: Math.round(ioWait * cpuScale * 10) / 10,
+      cores, load: Math.round(load * cpuScale * 100) / 100, memory: canonicalServer.memory, memoryTotal,
+      memoryCached: Math.round((availableMemory - adjustedMemoryFree) * 10) / 10, memoryFree: adjustedMemoryFree, swap,
+    };
+  },
 );
 
 /** Memory consumed in GB, derived from the utilisation percentage. */
 export function memoryUsedGb(server: ServerResourceMetrics): number {
   return Math.round((server.memory / 100) * server.memoryTotal * 10) / 10;
 }
-

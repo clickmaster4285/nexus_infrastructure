@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import * as echarts from "echarts";
 import {
   Activity, AlertCircle, ArrowDownRight, ArrowRight, ArrowUpRight, Bell, Check, CircleAlert, Clock3,
-  Cpu, CreditCard, Database, Expand, Gauge, HardDrive, HeartPulse, Info, ListOrdered, MapPin, Network, Pause, Play, RefreshCw,
+  Cpu, CreditCard, Database, Expand, Gauge, HardDrive, HeartPulse, Info, ListOrdered, Mail, MapPin, Network, Pause, Play, RefreshCw,
   Search,
   Server, Shield, Siren, Wifi, X,
 } from "lucide-react";
@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
-  nocActiveAlerts, nocAlertMetrics, nocCollectorSummary, nocCollectors, nocFeedBufferedCount, nocFleet, nocHealth, nocHealthSegments,
+  formatNocIngestionRate, nocActiveAlerts, nocAlertMetrics, nocCollectorSummary, nocCollectors, nocFeedBufferedCount, nocFleet, nocHealth, nocHealthSegments,
   nocHealthRangeData, nocHealthTrendData, nocOnCall, nocOperationsFeed, nocOverallAvailability, nocRecentEvents, nocResourceUsage,
   nocServerGroups, nocServerGroupsSla, nocServiceAvailability, nocServiceAvailabilitySla, nocStats, nocTopIssues,
   type AlertSeverity, type FeedTone, type NocHealthChangeStatus, type NocHealthRange, type NocHealthTrendPoint,
@@ -66,6 +66,9 @@ const issueTabs: Array<{ value: TopIssueTab; label: string }> = [
 const resourceTabs: Array<{ value: NocResourceTab; label: string }> = [
   { value: "cpu", label: "CPU" }, { value: "memory", label: "Memory" }, { value: "network", label: "Network" }, { value: "disk", label: "Disk" },
 ];
+
+/** Default map view on the NOC page: ISB (NEXUS DC-2) at street level. */
+const NOC_MAP_DEFAULT_CENTER: [number, number] = [33.69, 73.06];
 
 function Segmented<T extends string>({ value, options, onChange, label }: { value: T; options: Array<{ value: T; label: string }>; onChange: (value: T) => void; label: string }) {
   return <div role="group" aria-label={label} className="inline-flex max-w-full items-center gap-0.5 rounded-lg border border-border bg-muted/60 p-0.5">
@@ -138,7 +141,7 @@ function HealthSegmentsLegend({ data, total, onStatusSelect }: {
     status === "Healthy" ? <Check size={13} aria-hidden="true" /> : status === "Degraded" ? <Info size={13} aria-hidden="true" /> : <X size={13} aria-hidden="true" />;
   return (
     <div className="min-w-0 flex-1">
-      <p className="mb-1 text-[12px] text-muted-foreground">{total} Servers</p>
+      <p className="mb-0.5 text-[12px] leading-4 text-muted-foreground">{total} Servers</p>
       <div className="flex flex-col" aria-label="Server health breakdown">
         {data.map((segment) => {
           const names = segment.servers;
@@ -154,10 +157,10 @@ function HealthSegmentsLegend({ data, total, onStatusSelect }: {
                 onClick={() => onStatusSelect(segment.status, names)}
                 aria-describedby={`health-segment-${segment.status.toLowerCase()}-tooltip`}
                 aria-label={`Filter ${segment.value} ${segment.status} servers: ${names.join(", ")}`}
-                className="grid h-9 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded-md text-left text-[12px] hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="grid h-8 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded-md text-left text-[12px] hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span className="flex min-w-0 flex-col justify-center">
-                  <span className="flex min-w-0 items-center gap-1.5 whitespace-nowrap font-medium text-slate-500 dark:text-slate-400">
+                  <span className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-[12px] font-medium leading-4 text-slate-500 dark:text-slate-400">
                     <span style={{ color: segment.color }}><StatusIcon status={segment.status} /></span>
                     <span className="truncate">{segment.name}</span>
                   </span>
@@ -177,8 +180,8 @@ function HealthSegmentsLegend({ data, total, onStatusSelect }: {
   );
 }
 
-function CardFooter({ children }: { children: React.ReactNode }) {
-  return <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[12px] text-muted-foreground">{children}</div>;
+function CardFooter({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn("mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[12px] text-muted-foreground", className)}>{children}</div>;
 }
 
 function PanelTitle({ children }: { children: React.ReactNode }) {
@@ -202,7 +205,7 @@ function buildResourceOption(data: Array<{ time: string; value: number; load: nu
   const loadAxisMax = Math.max(60, Math.ceil(Math.max(...data.map((point) => point.load), 0) / 20) * 20);
   return {
     animationDuration: 400,
-    grid: { left: 46, right: 60, top: 24, bottom: 32, containLabel: false },
+    grid: { left: 46, right: 52, top: 12, bottom: 24, containLabel: false },
     legend: { show: false },
     tooltip: { trigger: "axis", axisPointer: { type: "cross", lineStyle: { color: isDark ? "#94a3b8" : "#64748b", type: "dashed" } }, backgroundColor: isDark ? "#0f172a" : "#fff", borderColor: gridColor, textStyle: { color: isDark ? "#e2e8f0" : "#1e293b", fontSize: 12 }, extraCssText: "border-radius:8px;box-shadow:0 8px 24px rgba(15,23,42,.14);", formatter: (items: unknown) => {
       const points = items as Array<{ axisValue: string; seriesName: string; value: number; color: string }>;
@@ -227,7 +230,7 @@ function buildHealthTrendOption(data: NocHealthTrendPoint[], isDark: boolean): e
   const markerColor = isDark ? "#e2e8f0" : "#1e293b";
   return {
     animationDuration: 300,
-    grid: { left: 34, right: 12, top: 26, bottom: 22 },
+    grid: { left: 32, right: 8, top: 18, bottom: 18 },
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "cross", lineStyle: { color: axisColor, type: "dashed" } },
@@ -272,7 +275,7 @@ function buildHealthTrendOption(data: NocHealthTrendPoint[], isDark: boolean): e
         symbol: "circle",
         symbolSize: 8,
         label: { show: true, position: "top", formatter: "{b}", fontSize: 12, color: markerColor, backgroundColor: isDark ? "#1e293b" : "#fff", borderRadius: 4, padding: [2, 4] },
-        data: data.filter((point) => point.eventLabel).map((point) => ({
+        data: data.filter((point): point is NocHealthTrendPoint & { eventLabel: string } => Boolean(point.eventLabel)).map((point) => ({
           name: point.eventLabel,
           coord: [point.time, point.health],
           itemStyle: { color: point.eventTone === "amber" ? "#f59e0b" : "#ef4444" },
@@ -450,11 +453,11 @@ export function LiveOperationsNoc() {
     </section>}
 
     <section aria-label="NOC overview" className="grid items-stretch gap-4 xl:grid-cols-3">
-      <Panel title={<PanelTitle>Infrastructure Health</PanelTitle>} className="min-h-[390px] p-4" headerClassName="h-10" action={<Segmented value={healthRange} options={[{ value: "24h", label: "24h" }, { value: "7d", label: "7d" }, { value: "30d", label: "30d" }]} onChange={setHealthRange} label="Health time range" />}>
+      <Panel title={<PanelTitle>Infrastructure Health</PanelTitle>} className="p-3" headerClassName="h-9" action={<Segmented value={healthRange} options={[{ value: "24h", label: "24h" }, { value: "7d", label: "7d" }, { value: "30d", label: "30d" }]} onChange={setHealthRange} label="Health time range" />}>
         <div className="flex min-h-0 flex-1 flex-col">
-          <div className="flex min-h-0 items-start gap-3 pt-1">
-            <div className="flex w-[150px] shrink-0 flex-col items-center gap-1">
-              <Donut data={healthLegend} total={healthServerTotal} label={`Current infrastructure health ${nocHealth.score}%`} size={130} cutout={72} centerValue={`${nocHealth.score}%`} centerLabel="Health" />
+          <div className="flex min-h-0 items-start gap-3">
+            <div className="flex w-[124px] shrink-0 flex-col items-center gap-0.5">
+              <Donut data={healthLegend} total={healthServerTotal} label={`Current infrastructure health ${nocHealth.score}%`} size={104} cutout={70} centerValue={`${nocHealth.score}%`} centerLabel="Health" centerValueClassName="text-[22px]" />
               <div className="inline-flex items-center gap-1 whitespace-nowrap text-[12px]" aria-label={`Now, ${healthMetrics.trend}% ${healthMetrics.trendDirection} ${healthMetrics.comparison}`}>
                 <span className="text-muted-foreground">Now ·</span>
                 <span className={cn("inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-semibold", healthMetrics.trendDirection === "up" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300")}>
@@ -464,22 +467,22 @@ export function LiveOperationsNoc() {
             </div>
             <HealthSegmentsLegend data={healthLegend} total={healthServerTotal} onStatusSelect={filterAlertsByStatus} />
           </div>
-          <section className="my-2 flex min-h-[185px] min-w-0 flex-1 flex-col border-y border-border py-2" aria-label={`Health trend and recent changes for ${healthRange}`}>
+          <section className="my-1.5 flex min-w-0 flex-col border-y border-border py-1.5" aria-label={`Health trend and recent changes for ${healthRange}`}>
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-[12px] font-semibold text-foreground">Health trend ({healthRange})</h3>
+              <h3 className="text-[12px] font-semibold leading-4 text-foreground">Health trend ({healthRange})</h3>
               <span className="text-[12px] text-muted-foreground">Zoomed axis</span>
             </div>
-            <EChart option={healthTrendOption} className="!min-h-[70px] !max-h-[80px] w-full" ariaLabel={`Infrastructure health trend for ${healthRange}, from 80 to 100 percent`} />
-            <div className="mt-1 flex min-h-0 flex-1 flex-col" aria-label="Recent health changes">
-              <h3 className="mb-1 text-[12px] font-semibold text-foreground">Recent changes</h3>
+            <EChart option={healthTrendOption} className="!h-[72px] !min-h-0 !max-h-[72px] w-full flex-none" ariaLabel={`Infrastructure health trend for ${healthRange}, from 80 to 100 percent`} />
+            <div className="mt-1 flex min-h-0 flex-col" aria-label="Recent health changes">
+              <h3 className="mb-0.5 text-[12px] font-semibold leading-4 text-foreground">Recent changes</h3>
               <ul className="flex flex-1 flex-col justify-between" aria-label="Recent server health changes">
                 {recentHealthChanges.length ? recentHealthChanges.map((change) => (
-                  <li key={change.id} className="min-h-6">
+                  <li key={change.id} className="min-h-5">
                     <button
                       type="button"
                       onClick={() => filterAlertsByStatus(change.status, [change.server])}
                       aria-label={`Show alerts for ${change.server}, ${HEALTH_CHANGE_LABEL[change.status]}, ${change.time}`}
-                      className="flex h-6 w-full min-w-0 items-center gap-2 rounded-md text-left text-[12px] hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-5 w-full min-w-0 items-center gap-2 rounded-md text-left text-[12px] hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <time className="w-12 shrink-0 text-[12px] tabular-nums text-muted-foreground">{change.time}</time>
                       <span className="h-2 w-2 shrink-0 rounded-full" aria-hidden="true" style={{ backgroundColor: HEALTH_CHANGE_COLOR[change.status] }} />
@@ -490,25 +493,29 @@ export function LiveOperationsNoc() {
               </ul>
             </div>
           </section>
-          <div className="mt-auto grid grid-cols-3 gap-2 pt-2" aria-label={`${healthRange} infrastructure metrics`}>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/60">
-              <span className="block text-[12px] text-muted-foreground">Avg Uptime</span>
-              <b className="mt-1 block text-[16px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.averageUptime.toFixed(1)}%</b>
-              <span className={cn("mt-1 inline-flex items-center gap-1 text-[12px]", healthMetrics.uptimeTrend >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400")}>
-                <UptimeTrendIcon size={12} aria-hidden="true" />{Math.abs(healthMetrics.uptimeTrend).toFixed(1)}%
+          <div className="mt-1.5 grid grid-cols-3 gap-1.5" aria-label={`${healthRange} infrastructure metrics`}>
+            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+              <span className="block text-[12px] leading-4 text-muted-foreground">Avg Uptime</span>
+              <span className="mt-0.5 flex items-baseline justify-between gap-1">
+                <b className="text-[15px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.averageUptime.toFixed(1)}%</b>
+                <span className={cn("inline-flex items-center gap-0.5 text-[12px]", healthMetrics.uptimeTrend >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400")}>
+                  <UptimeTrendIcon size={12} aria-hidden="true" />{Math.abs(healthMetrics.uptimeTrend).toFixed(1)}%
+                </span>
               </span>
             </div>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/60">
-              <span className="block text-[12px] text-muted-foreground">Open Incidents</span>
-              <b className="mt-1 block text-[16px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.openIncidents}</b>
-              <span className="mt-1 block text-[12px] text-muted-foreground">{healthMetrics.newIncidents} new</span>
+            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+              <span className="block text-[12px] leading-4 text-muted-foreground">Open Incidents</span>
+              <span className="mt-0.5 flex items-baseline justify-between gap-1">
+                <b className="text-[15px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.openIncidents}</b>
+                <span className="text-[12px] text-muted-foreground">{healthMetrics.newIncidents} new</span>
+              </span>
             </div>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/60">
-              <span className="block text-[12px] text-muted-foreground">MTTR</span>
-              <b className="mt-1 block text-[16px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.mttrMinutes}m</b>
+            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+              <span className="block text-[12px] leading-4 text-muted-foreground">MTTR</span>
+              <b className="mt-0.5 block text-[15px] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.mttrMinutes}m</b>
             </div>
           </div>
-          <CardFooter>
+          <CardFooter className="pt-2">
             <span>Updated {updatedSecondsAgo}s ago</span>
             <a href="/all-servers" className="group inline-flex items-center gap-1 whitespace-nowrap text-[12px] font-semibold text-[#2563EB] hover:underline">
               View servers
@@ -518,20 +525,20 @@ export function LiveOperationsNoc() {
         </div>
       </Panel>
 
-      <Panel title={<PanelTitle>Real-Time Resource Usage</PanelTitle>} className="min-h-[350px] p-4" headerClassName="h-10" action={<Segmented value={resourceRange} options={[{ value: "5m", label: "5m" }, { value: "15m", label: "15m" }, { value: "1h", label: "1h" }]} onChange={setResourceRange} label="Resource chart range" />}>
-        <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <Panel title={<PanelTitle>Real-Time Resource Usage</PanelTitle>} className="p-3" headerClassName="h-9" action={<Segmented value={resourceRange} options={[{ value: "5m", label: "5m" }, { value: "15m", label: "15m" }, { value: "1h", label: "1h" }]} onChange={setResourceRange} label="Resource chart range" />}>
+        <div className="flex min-h-0 flex-1 flex-col gap-2">
           <div className="flex flex-wrap items-center justify-between gap-2"><div className="flex flex-wrap gap-1" role="tablist" aria-label="Resource metric">{resourceTabs.map((tab) => <button key={tab.value} role="tab" aria-selected={resourceTab === tab.value} type="button" onClick={() => setResourceTab(tab.value)} className={cn("min-h-8 cursor-pointer rounded-lg px-3 text-[12px] font-medium text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", resourceTab === tab.value && "bg-primary/10 text-primary")}>{tab.label}</button>)}</div>
             <div className="flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-muted-foreground"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-[#a78bfa]" />Load avg {chartSummary.loadAverage.toFixed(1)}</span><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ background: RESOURCE[resourceTab].color }} />{RESOURCE[resourceTab].label} {chartSummary.now.toFixed(1)}{RESOURCE[resourceTab].unit}</span></div>
           </div>
-          <EChart option={chartOption} className="min-h-[220px]" />
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-border pt-2 text-[12px] text-muted-foreground"><span>Now <b className="text-foreground">{chartSummary.now.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span><span>Avg <b className="text-foreground">{chartSummary.average.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span><span>Peak <b className="text-foreground">{chartSummary.peak.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span></div>
+          <EChart option={chartOption} className="min-h-[132px]" />
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-border pt-1.5 text-[12px] text-muted-foreground"><span>Now <b className="text-foreground">{chartSummary.now.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span><span>Avg <b className="text-foreground">{chartSummary.average.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span><span>Peak <b className="text-foreground">{chartSummary.peak.toFixed(1)} {RESOURCE[resourceTab].unit}</b></span></div>
         </div>
       </Panel>
 
       <Panel
         title={<PanelTitle>Infrastructure Map</PanelTitle>}
-        className="min-h-[470px] p-4"
-        headerClassName="h-10"
+        className="p-3"
+        headerClassName="h-9"
         showOptions={false}
         action={
           <div className="flex items-center gap-2">
@@ -554,8 +561,8 @@ export function LiveOperationsNoc() {
           </div>
         }
       >
-        <div className="flex min-h-0 flex-1 flex-col gap-2">
-          <div className="min-h-[360px] flex-1 overflow-hidden rounded-lg"><NocOsmMap sites={mapSites} filterStatuses={issuesOnly ? ["warning", "critical"] : null} selectedSiteId={selectedSiteId} onSelectSite={handleSelectSite} /></div>
+        <div className="flex min-h-0 flex-1 flex-col gap-1.5">
+          <div className="min-h-[188px] flex-1 overflow-hidden rounded-lg"><NocOsmMap sites={mapSites} filterStatuses={issuesOnly ? ["warning", "critical"] : null} selectedSiteId={selectedSiteId} onSelectSite={handleSelectSite} center={NOC_MAP_DEFAULT_CENTER} initialZoom={13} /></div>
           <div className="flex items-center justify-between gap-2 text-[12px]"><b className="text-foreground">Worst locations</b><span className="text-muted-foreground">Status by site</span></div>
           <div className="grid grid-cols-3 gap-2">{worstSites.map((site) => {
             const selected = site.id === selectedSiteId;
@@ -567,7 +574,7 @@ export function LiveOperationsNoc() {
                 aria-pressed={selected}
                 title={`${site.code} — ${site.city}: ${site.health}%`}
                 className={cn(
-                  "min-w-0 rounded-lg px-2 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "min-w-0 rounded-lg px-2 py-1 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   selected ? "bg-primary/10 ring-1 ring-primary/50" : "bg-muted/60 hover:bg-muted",
                 )}
               >
@@ -599,7 +606,7 @@ export function LiveOperationsNoc() {
 
       <Panel title={<PanelTitle>Service Availability</PanelTitle>} className="min-h-[370px] p-4" headerClassName="h-10" action={<div className="flex items-center gap-2 whitespace-nowrap text-[12px] text-muted-foreground"><span>Scale 99–100%</span><span className="rounded-full bg-muted px-2 py-0.5 text-[12px] text-muted-foreground">SLA {nocServiceAvailabilitySla}%</span></div>}>
         <div className="flex min-h-0 flex-1 flex-col">
-          <ul className="flex flex-1 flex-col justify-between divide-y divide-border/60">{serviceHealthRows.map((service) => { const status = statusForAvailability(service.value, nocServiceAvailabilitySla); const width = Math.max(0, Math.min(100, (service.value - 99) * 100)); const markerPosition = Math.max(0, Math.min(100, (nocServiceAvailabilitySla - 99) * 100)); return <li key={service.name} className="grid h-[44px] shrink-0 grid-cols-[minmax(0,1fr)_minmax(70px,1.5fr)_auto] items-center gap-3"><span className="flex min-w-0 items-center gap-2 text-[13px] text-foreground"><ServiceGlyph name={service.name} /><span className="truncate">{service.name}</span></span><div className="relative h-2 rounded-full bg-muted" role="progressbar" aria-label={`${service.name} availability`} aria-valuenow={service.value} aria-valuemin={99} aria-valuemax={100}><span className="absolute inset-y-[-2px] z-[1] w-[1.5px] rounded-full bg-[#94A3B8] opacity-90 dark:bg-[#64748B]" style={{ left: `${markerPosition}%` }} title={`SLA target ${nocServiceAvailabilitySla}%`} /><span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${width}%`, backgroundColor: status.color }} /></div><b className="min-w-[50px] text-right text-[13px] tabular-nums text-foreground">{service.value}%</b></li>; })}</ul>
+          <ul className="mt-3 flex flex-1 flex-col content-start divide-y divide-border/60">{serviceHealthRows.map((service) => { const status = statusForAvailability(service.value, nocServiceAvailabilitySla); const width = Math.max(0, Math.min(100, (service.value - 99) * 100)); const markerPosition = Math.max(0, Math.min(100, (nocServiceAvailabilitySla - 99) * 100)); return <li key={service.name} className="grid h-[44px] shrink-0 grid-cols-[minmax(0,1fr)_minmax(70px,1.5fr)_auto] items-center gap-3"><span className="flex min-w-0 items-center gap-2 text-[13px] text-foreground"><ServiceGlyph name={service.name} /><span className="truncate">{service.name}</span></span><div className="relative h-2 rounded-full bg-muted" role="progressbar" aria-label={`${service.name} availability`} aria-valuenow={service.value} aria-valuemin={99} aria-valuemax={100}><span className="absolute inset-y-[-2px] z-[1] w-[1.5px] rounded-full bg-[#94A3B8] opacity-90 dark:bg-[#64748B]" style={{ left: `${markerPosition}%` }} title={`SLA target ${nocServiceAvailabilitySla}%`} /><span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${width}%`, backgroundColor: status.color }} /></div><b className="min-w-[50px] text-right text-[13px] tabular-nums text-foreground">{service.value}%</b></li>; })}</ul>
           <CardFooter><span>Overall availability</span><b className="text-foreground">{nocOverallAvailability}%</b></CardFooter>
         </div>
       </Panel>
@@ -727,7 +734,7 @@ export function LiveOperationsNoc() {
       </Panel>
 
       <Panel title={<PanelTitle>Monitoring Collectors</PanelTitle>} className="min-h-[390px] p-4" headerClassName="h-10" action={<a href="/metrics-explorer" className="text-[12px] font-medium text-primary hover:underline">Details <ArrowRight className="ml-1 inline" size={13} /></a>}>
-        <div className="flex flex-1 flex-col"><div className="grid grid-cols-[minmax(0,1fr)_minmax(72px,auto)_minmax(62px,auto)] gap-2 border-b border-border pb-2 text-[12px] font-medium text-muted-foreground"><span>Collector</span><span>Status</span><span className="text-right">Ingest</span></div><ul className="flex flex-1 flex-col divide-y divide-border/60">{nocCollectors.map((collector) => <li key={collector.name} className="grid h-[52px] shrink-0 grid-cols-[minmax(0,1fr)_minmax(72px,auto)_minmax(62px,auto)] items-center gap-2"><span className="flex min-w-0 items-center gap-2"><TechLogo name={collector.name} className="!h-8 !w-8 !rounded-lg [&_svg]:!h-[18px] [&_svg]:!w-[18px]" /><span className="min-w-0"><b className="block truncate text-[13px] font-medium text-foreground">{collector.name}</b><span className="block truncate whitespace-nowrap text-[12px] text-muted-foreground">v{collector.version} · {collector.targetsUp}/{collector.targetsTotal} · {collector.heartbeat}</span></span></span><CollectorStatus status={collector.status} /><span className="flex min-w-[62px] flex-col items-end gap-1"><b className="whitespace-nowrap text-[12px] tabular-nums text-foreground">{collector.rate}</b><CollectorSpark values={collector.spark} name={collector.name} /></span></li>)}</ul><CardFooter><span>{nocCollectorSummary.healthy}/{nocCollectorSummary.total} healthy</span><b className={cn(nocCollectorSummary.offline || nocCollectorSummary.stale ? "text-amber-600" : "text-emerald-600")}>{nocCollectorSummary.offline ? `${nocCollectorSummary.offline} collector${nocCollectorSummary.offline === 1 ? "" : "s"} down` : nocCollectorSummary.stale ? `${nocCollectorSummary.stale} collector${nocCollectorSummary.stale === 1 ? "" : "s"} stale` : "All collectors healthy"}</b></CardFooter></div>
+        <div className="flex flex-1 flex-col"><div className="grid grid-cols-[minmax(0,1fr)_minmax(72px,auto)_minmax(62px,auto)] gap-2 border-b border-border pb-2 text-[12px] font-medium text-muted-foreground"><span>Collector</span><span>Status</span><span className="text-right">Ingest</span></div><ul className="flex flex-1 flex-col divide-y divide-border/60">{nocCollectors.map((collector) => <li key={collector.name} className="grid h-[52px] shrink-0 grid-cols-[minmax(0,1fr)_minmax(72px,auto)_minmax(62px,auto)] items-center gap-2"><span className="flex min-w-0 items-center gap-2"><TechLogo name={collector.name} className="!h-8 !w-8 !rounded-lg [&_svg]:!h-[18px] [&_svg]:!w-[18px]" /><span className="min-w-0"><b className="block truncate text-[13px] font-medium text-foreground">{collector.name}</b><span className="block truncate whitespace-nowrap text-[12px] text-muted-foreground">v{collector.version} · {collector.targetsUp}/{collector.targetsTotal} · {collector.heartbeat}</span></span></span><CollectorStatus status={collector.status} /><span className="flex min-w-[62px] flex-col items-end gap-1"><b className="whitespace-nowrap text-[12px] tabular-nums text-foreground">{formatNocIngestionRate(collector.ingestionPerSecond)}</b><CollectorSpark values={collector.spark} name={collector.name} /></span></li>)}</ul><CardFooter><span>{nocCollectorSummary.healthy}/{nocCollectorSummary.total} healthy</span><b className={cn(nocCollectorSummary.offline || nocCollectorSummary.stale ? "text-amber-600" : "text-emerald-600")}>{nocCollectorSummary.offline ? `${nocCollectorSummary.offline} collector${nocCollectorSummary.offline === 1 ? "" : "s"} down` : nocCollectorSummary.stale ? `${nocCollectorSummary.stale} collector${nocCollectorSummary.stale === 1 ? "" : "s"} stale` : "All collectors healthy"}</b></CardFooter></div>
       </Panel>
     </section>
 
@@ -757,7 +764,7 @@ function MiniStat({ label, value }: { label: string; value: string }) {
 }
 
 function ServiceGlyph({ name }: { name: string }) {
-  const Entry = name === "Databases" ? Database : name === "Web Servers" ? Server : name === "APIs" ? WorkflowGlyph : name === "Cache" ? HardDrive : name === "CDN" ? GlobeGlyph : name === "Load Balancers" ? Network : name === "Payment Gateway" ? CreditCard : name === "Message Queue" ? ListOrdered : name === "Search" ? Search : SettingsGlyph;
+  const Entry = name === "Databases" ? Database : name === "Web Servers" ? Server : name === "APIs" ? WorkflowGlyph : name === "Cache" ? HardDrive : name === "CDN" ? GlobeGlyph : name === "Load Balancers" ? Network : name === "Payment Gateway" ? CreditCard : name === "Message Queue" ? ListOrdered : name === "Search" ? Search : name === "Email Service" ? Mail : SettingsGlyph;
   return <Entry size={15} className="shrink-0 text-muted-foreground" aria-hidden="true" />;
 }
 function WorkflowGlyph(props: React.ComponentProps<typeof Activity>) { return <Activity {...props} />; }

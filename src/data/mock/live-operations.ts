@@ -1,5 +1,6 @@
 import type { MetricStat } from "./dashboard";
 import type { DonutDatum } from "./dashboard";
+import { servers } from "./servers";
 
 /** One mock fleet source drives the NOC KPI cards, health donut and map legend. */
 export const nocFleet = {
@@ -120,6 +121,8 @@ export const nocActiveAlerts: NocAlert[] = [
 export const nocServiceAvailability = [
   { name: "Web Servers", value: 99.8 }, { name: "APIs", value: 99.7 }, { name: "Databases", value: 99.9 },
   { name: "Services", value: 99.6 }, { name: "CDN", value: 99.8 }, { name: "Cache", value: 99.5 },
+  { name: "Load Balancers", value: 99.9 }, { name: "Payment Gateway", value: 99.7 },
+  { name: "Message Queue", value: 99.6 }, { name: "Search", value: 99.7 }, { name: "Email Service", value: 99.8 },
 ];
 export const nocServiceAvailabilitySla = 99.5;
 export const nocOverallAvailability = Number((nocServiceAvailability.reduce((sum, item) => sum + item.value, 0) / nocServiceAvailability.length).toFixed(1));
@@ -180,11 +183,25 @@ export const nocServerGroups: Array<DonutDatum & { id: string; health: number; a
 ];
 export type TopIssueTab = "cpu" | "memory" | "disk" | "network";
 export interface TopIssue { name: string; percent: number; duration: string }
+function topIssuesFor(metric: TopIssueTab): TopIssue[] {
+  return [...servers]
+    .map((server) => ({
+      server,
+      percent: metric === "network" ? Number.parseFloat(server.network) || 0 : server[metric],
+    }))
+    .sort((left, right) => right.percent - left.percent)
+    .slice(0, 6)
+    .map(({ server, percent }) => ({
+      name: server.name,
+      percent: Math.round(percent * 10) / 10,
+      duration: server.heartbeat === "Not enrolled" ? "agent not enrolled" : `last sample ${server.heartbeat}`,
+    }));
+}
 const issueRows = {
-  cpu: [{ name: "app-worker-02", percent: 92.4, duration: "high for 12m" }, { name: "prod-db-01", percent: 88.7, duration: "high for 8m" }, { name: "web-01", percent: 76.3, duration: "high for 5m" }, { name: "api-gateway", percent: 74.2, duration: "high for 4m" }, { name: "cache-01", percent: 71.8, duration: "high for 3m" }, { name: "worker-03", percent: 68.1, duration: "high for 2m" }],
-  memory: [{ name: "prod-db-01", percent: 91.2, duration: "high for 18m" }, { name: "prod-api-01", percent: 88.4, duration: "high for 10m" }, { name: "app-worker-02", percent: 85.1, duration: "high for 8m" }, { name: "web-01", percent: 78.4, duration: "high for 6m" }, { name: "cache-01", percent: 72.1, duration: "high for 4m" }, { name: "worker-03", percent: 69.2, duration: "high for 2m" }],
-  disk: [{ name: "prod-api-01", percent: 92, duration: "high for 22m" }, { name: "web-01", percent: 86.3, duration: "high for 9m" }, { name: "db-primary", percent: 82.4, duration: "high for 7m" }, { name: "cache-01", percent: 76.3, duration: "high for 5m" }, { name: "backup-01", percent: 73.4, duration: "high for 3m" }, { name: "worker-03", percent: 68.2, duration: "high for 2m" }],
-  network: [{ name: "web-frontend-01", percent: 93.2, duration: "high for 12m" }, { name: "prod-api-01", percent: 88.4, duration: "high for 8m" }, { name: "db-primary", percent: 82.7, duration: "high for 6m" }, { name: "edge-router-01", percent: 79.2, duration: "high for 5m" }, { name: "cache-01", percent: 72.6, duration: "high for 4m" }, { name: "worker-03", percent: 67.1, duration: "high for 2m" }],
+  cpu: topIssuesFor("cpu"),
+  memory: topIssuesFor("memory"),
+  disk: topIssuesFor("disk"),
+  network: topIssuesFor("network"),
 } satisfies Record<TopIssueTab, TopIssue[]>;
 export const nocTopIssues = issueRows;
 
@@ -215,21 +232,28 @@ export const nocOperationsFeed: OperationsFeedItem[] = [
   { time: "14:18", relativeTime: "16m ago", message: "TLS certificate renewed", source: "api.example.com", severity: "success", tone: "green", icon: "shield" },
 ];
 
-export interface NocCollector { name: string; status: "Online" | "Stale" | "Offline"; heartbeat: string; rate: string; spark: number[]; version: string; targetsUp: number; targetsTotal: number }
+export interface NocCollector { name: string; status: "Online" | "Stale" | "Offline"; heartbeat: string; ingestionPerSecond: number; scrapeSeconds: number; spark: number[]; version: string; targetsUp: number; targetsTotal: number }
 export const nocCollectors: NocCollector[] = [
-  { name: "Prometheus", status: "Online", heartbeat: "12s ago", rate: "1.2k/s", spark: [12, 14, 13, 16, 15, 17, 19, 18, 16, 20, 22, 21], version: "2.51.0", targetsUp: 42, targetsTotal: 42 },
-  { name: "Node Exporter", status: "Online", heartbeat: "18s ago", rate: "980/s", spark: [10, 10, 11, 12, 11, 13, 12, 14, 13, 15, 14, 16], version: "1.7.0", targetsUp: 38, targetsTotal: 38 },
-  { name: "Windows Exporter", status: "Stale", heartbeat: "2m ago", rate: "720/s", spark: [8, 9, 8, 10, 9, 11, 10, 12, 11, 12, 13, 12], version: "0.25.1", targetsUp: 16, targetsTotal: 17 },
-  { name: "Blackbox Exporter", status: "Online", heartbeat: "22s ago", rate: "540/s", spark: [6, 6, 7, 7, 8, 8, 9, 9, 10, 9, 11, 10], version: "0.24.0", targetsUp: 24, targetsTotal: 24 },
-  { name: "Loki", status: "Online", heartbeat: "8s ago", rate: "860/s", spark: [9, 10, 11, 10, 12, 13, 12, 14, 15, 14, 16, 17], version: "3.0.0", targetsUp: 18, targetsTotal: 18 },
-  { name: "Grafana Agent", status: "Online", heartbeat: "11s ago", rate: "640/s", spark: [7, 8, 8, 9, 10, 9, 11, 12, 11, 12, 13, 14], version: "0.40.4", targetsUp: 16, targetsTotal: 16 },
+  { name: "Prometheus", status: "Online", heartbeat: "12s ago", ingestionPerSecond: 1200, scrapeSeconds: 0.8, spark: [12, 14, 13, 16, 15, 17, 19, 18, 16, 20, 22, 21], version: "2.51.0", targetsUp: 42, targetsTotal: 42 },
+  { name: "Node Exporter", status: "Online", heartbeat: "18s ago", ingestionPerSecond: 600, scrapeSeconds: 1, spark: [10, 10, 11, 12, 11, 13, 12, 14, 13, 15, 14, 16], version: "1.7.0", targetsUp: 38, targetsTotal: 38 },
+  { name: "Windows Exporter", status: "Stale", heartbeat: "2m ago", ingestionPerSecond: 450, scrapeSeconds: 2.4, spark: [8, 9, 8, 10, 9, 11, 10, 12, 11, 12, 13, 12], version: "0.25.1", targetsUp: 16, targetsTotal: 17 },
+  { name: "Blackbox Exporter", status: "Online", heartbeat: "22s ago", ingestionPerSecond: 350, scrapeSeconds: 1.1, spark: [6, 6, 7, 7, 8, 8, 9, 9, 10, 9, 11, 10], version: "0.24.0", targetsUp: 24, targetsTotal: 24 },
+  { name: "Loki", status: "Online", heartbeat: "8s ago", ingestionPerSecond: 500, scrapeSeconds: 1, spark: [9, 10, 11, 10, 12, 13, 12, 14, 15, 14, 16, 17], version: "3.0.0", targetsUp: 18, targetsTotal: 18 },
+  { name: "Grafana Agent", status: "Online", heartbeat: "11s ago", ingestionPerSecond: 300, scrapeSeconds: 0.9, spark: [7, 8, 8, 9, 10, 9, 11, 12, 11, 12, 13, 14], version: "0.40.4", targetsUp: 16, targetsTotal: 16 },
 ];
 
+export const formatNocIngestionRate = (rate: number) => rate >= 1000
+  ? `${Number((rate / 1000).toFixed(1))}k/s`
+  : `${rate}/s`;
 export const nocCollectorSummary = {
   total: nocCollectors.length,
   healthy: nocCollectors.filter((collector) => collector.status === "Online").length,
   stale: nocCollectors.filter((collector) => collector.status === "Stale").length,
   offline: nocCollectors.filter((collector) => collector.status === "Offline").length,
+  targetsUp: nocCollectors.reduce((total, collector) => total + collector.targetsUp, 0),
+  targetsTotal: nocCollectors.reduce((total, collector) => total + collector.targetsTotal, 0),
+  ingestionPerSecond: nocCollectors.reduce((total, collector) => total + collector.ingestionPerSecond, 0),
+  averageScrapeSeconds: nocCollectors.reduce((total, collector) => total + collector.scrapeSeconds, 0) / nocCollectors.length,
 };
 
 export const nocFeedBufferedCount = 3;

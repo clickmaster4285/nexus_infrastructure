@@ -1,3 +1,5 @@
+import { servers } from "./servers";
+
 export type TrendDirection = "up" | "down" | "flat";
 export type MetricTone = "blue" | "green" | "red" | "amber" | "purple";
 
@@ -56,12 +58,19 @@ export const alertSeverity: DonutDatum[] = [{name:'Critical',value:5,color:'#f04
 export const incidentStatus: DonutDatum[] = [{name:'Open',value:1,color:'#f04452'},{name:'Investigating',value:1,color:'#fa9238'},{name:'Monitoring',value:1,color:'#2684f5'},{name:'Resolved',value:1,color:'#1fba79'}];
 
 export interface MetricTableRow { name: string; usage: number; color: string; trend: string }
-export const cpuServers: MetricTableRow[] = [
-  {name:'prod-api-01',usage:82,color:'red',trend:'↑'},{name:'db-primary',usage:67,color:'amber',trend:'↑'},{name:'app-worker-02',usage:54,color:'yellow',trend:'→'},{name:'web-frontend-01',usage:43,color:'green',trend:'↓'},{name:'dev-vps-01',usage:32,color:'green',trend:'↓'},
-];
-export const memoryServers: MetricTableRow[] = [
-  {name:'db-primary',usage:91,color:'red',trend:'↑'},{name:'prod-api-01',usage:78,color:'red',trend:'↑'},{name:'app-worker-02',usage:65,color:'yellow',trend:'→'},{name:'web-frontend-01',usage:52,color:'green',trend:'↓'},{name:'dev-vps-01',usage:38,color:'green',trend:'↓'},
-];
+function serverMetricRows(metric: "cpu" | "memory"): MetricTableRow[] {
+  return [...servers]
+    .sort((left, right) => right[metric] - left[metric])
+    .slice(0, 5)
+    .map((server) => ({
+      name: server.name,
+      usage: server[metric],
+      color: server[metric] >= 80 ? "red" : server[metric] >= 60 ? "amber" : server[metric] >= 40 ? "yellow" : "green",
+      trend: server[metric] >= 70 ? "↑" : server[metric] <= 35 ? "↓" : "→",
+    }));
+}
+export const cpuServers = serverMetricRows("cpu");
+export const memoryServers = serverMetricRows("memory");
 
 export interface BackupTableRow { name: string; usage: number; free: string; color: string }
 export const backupServers: BackupTableRow[] = [

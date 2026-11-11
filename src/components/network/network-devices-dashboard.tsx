@@ -22,10 +22,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
 import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
+import type { NocMapSite, NocMapStatus } from "@/data/mock/noc-map";
 
-const InfrastructureMap = dynamic(
-  () => import("@/components/live-operations/infrastructure-map").then((module) => module.InfrastructureMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[170px] place-items-center rounded-md bg-[#eef2f7] text-[12px] text-muted-foreground">Loading location map…</div> },
+const NocOsmMap = dynamic(
+  () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
+  { ssr: false, loading: () => <div className="grid h-full min-h-[170px] place-items-center rounded-md bg-card text-[12px] text-muted-foreground">Loading location map…</div> },
 );
 
 type DeviceStatus = "Online" | "Warning" | "Offline";
@@ -83,6 +84,32 @@ const networkDeviceMapMarkers: InfrastructureMapMarker[] = [
   { name: "SW-DIST-02", lat: 33.5651, lng: 73.0169, status: "healthy", role: "Switch · Rawalpindi" },
 ];
 
+const HEALTH_BY_STATUS = { healthy: 99.1, warning: 98.4, critical: 97.6 } as const;
+const ALERTS_BY_STATUS = { healthy: 0, warning: 1, critical: 3 } as const;
+
+/** Adapts the network device location markers to the NOC map's site model. */
+const networkDeviceMapSites: NocMapSite[] = networkDeviceMapMarkers.map((marker) => {
+  const status: NocMapStatus = marker.status === "healthy" ? "online" : marker.status;
+  return {
+    id: marker.name.toLowerCase(),
+    code: marker.name,
+    city: marker.name,
+    country: marker.role,
+    region: marker.role,
+    provider: "—",
+    facility: "—",
+    lat: marker.lat,
+    lng: marker.lng,
+    status,
+    health: HEALTH_BY_STATUS[marker.status],
+    throughput: "—",
+    alerts: ALERTS_BY_STATUS[marker.status],
+    uptime: "—",
+    lastCheck: "just now",
+    servers: [],
+  };
+});
+
 const statusStyle: Record<DeviceStatus, string> = {
   Online: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
   Warning: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
@@ -130,7 +157,7 @@ export function NetworkDevicesDashboard() {
       </Panel>
 
       <Panel title="Device Status by Location" className="min-w-0">
-        <div className="relative h-[164px] overflow-hidden rounded-md bg-[#eef2f7]"><InfrastructureMap variant="light" markers={networkDeviceMapMarkers} center={[31.5, 72]} zoom={4} legendCounts={{ healthy: 78, warning: 5, critical: 3 }} /></div>
+        <div className="relative h-[164px] overflow-hidden rounded-lg"><NocOsmMap sites={networkDeviceMapSites} center={[34.0151, 71.5249]} initialZoom={13} /></div>
       </Panel>
     </div>
 

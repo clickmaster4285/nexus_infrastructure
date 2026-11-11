@@ -14,7 +14,9 @@ interface SidebarProps {
 }
 
 function groupContaining(pathname: string): string | null {
-  const group = NAV_GROUPS.find((entry) => entry.items.some((item) => item.href === pathname));
+  const group = NAV_GROUPS.find((entry) => entry.items.some((item) =>
+    item.href === pathname || (item.href === "/server-details" && pathname.startsWith("/server-details/")),
+  ));
   return group?.title ?? null;
 }
 
@@ -94,7 +96,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   <div className="min-h-0 overflow-hidden" inert={!isExpanded}>
                     <ul className="flex flex-col gap-0.5 pt-0.5">
                       {group.items.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = pathname === item.href || (item.href === "/server-details" && pathname.startsWith("/server-details/"));
                         const ItemIcon = item.icon;
                         return (
                           <li key={item.href}>

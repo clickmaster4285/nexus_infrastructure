@@ -2,7 +2,7 @@
 
 import { useState, type ComponentType, type SVGProps } from "react";
 import dynamic from "next/dynamic";
-import { Globe2, MoreVertical, Plus } from "lucide-react";
+import { Globe2, MoreVertical, Plus, ArrowRight } from "lucide-react";
 import * as Flags from "country-flag-icons/react/3x2";
 import {
   CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
@@ -10,16 +10,15 @@ import {
 } from "recharts";
 
 import { PageHeader } from "@/components/layout/page-header";
-import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
-import { healthLocationCounts, healthLocations } from "@/data/mock/health-locations";
+import { healthMapLocations, healthMapSites } from "@/data/mock/health-locations";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
 import type { MetricStat } from "@/data/mock/dashboard";
 
-const InfrastructureMap = dynamic(
-  () => import("@/components/live-operations/infrastructure-map").then((module) => module.InfrastructureMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-[#eef2f7] text-[12px] text-muted-foreground">Loading world map…</div> },
+const NocOsmMap = dynamic(
+  () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
+  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-card text-[12px] text-muted-foreground">Loading map…</div> },
 );
 
 const stats: MetricStat[] = [
@@ -40,8 +39,6 @@ const centers: { name: string; location: string; status: SiteStatus; uptime: num
   { name: "DC-4", location: "Singapore, SG", status: "Healthy", uptime: 99.1, country: "Singapore" },
   { name: "DC-5", location: "Sydney, AU", status: "Offline", uptime: 0, country: "Australia" },
 ];
-
-const mapMarkers: InfrastructureMapMarker[] = healthLocations;
 
 const countryLocations = [
   { code: "US", name: "United States", count: 2, status: "healthy" },
@@ -66,9 +63,9 @@ const centerStates = [
 ];
 
 const locationStates = [
-  { name: "Healthy", value: healthLocationCounts.healthy ?? 0, color: "#20b77a" },
-  { name: "Degraded", value: healthLocationCounts.warning ?? 0, color: "#f59e0b" },
-  { name: "Offline", value: healthLocationCounts.critical ?? 0, color: "#ef4444" },
+  { name: "Healthy", value: healthMapLocations.filter((location) => location.status === "healthy").length, color: "#20b77a" },
+  { name: "Degraded", value: healthMapLocations.filter((location) => location.status === "warning").length, color: "#f59e0b" },
+  { name: "Offline", value: healthMapLocations.filter((location) => location.status === "critical").length, color: "#ef4444" },
 ];
 
 const performanceTimes = ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"];
@@ -224,8 +221,8 @@ export function DataCentersDashboard() {
 
       <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
         <Panel title="Global Infrastructure Map" className="min-h-[290px] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[11px] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[11px] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
-          <div id="global-data-centers" className="relative mt-2 min-h-[248px] flex-1 overflow-hidden rounded-md bg-[#eef2f7]">
-            <InfrastructureMap variant="light" markers={mapMarkers} center={[20, 20]} zoom={2} fitMarkers legendCounts={healthLocationCounts} title="Global Infrastructure Map" description="12 monitored locations · mock data" />
+          <div id="global-data-centers" className="relative mt-2 min-h-[248px] flex-1 overflow-hidden rounded-lg">
+            <NocOsmMap sites={healthMapSites} center={[-33.9249, 18.4241]} initialZoom={13} />
             {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[11px] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
           </div>
         </Panel>
@@ -289,7 +286,7 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Data center details and recent events" className="grid items-stretch gap-3 xl:grid-cols-[1.15fr_1fr]">
-        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="inline-flex items-center gap-1 rounded text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
             <table className="w-full min-w-[560px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Name", "Location", "Status", "Uptime", "Actions"].map((heading) => <th key={heading} className={`whitespace-nowrap px-2 pb-2 font-semibold ${heading === "Actions" ? "text-center" : ""}`}>{heading}</th>)}</tr></thead>
@@ -298,7 +295,7 @@ export function DataCentersDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="inline-flex items-center gap-1 rounded text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
             <table className="w-full min-w-[610px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Time", "Type", "Message", "Location", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-semibold">{heading}</th>)}</tr></thead>

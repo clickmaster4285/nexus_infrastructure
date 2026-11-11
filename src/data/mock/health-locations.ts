@@ -1,4 +1,5 @@
 import type { InfrastructureMapMarker, MapLegendCounts } from "@/components/live-operations/infrastructure-map";
+import type { NocMapSite, NocMapStatus } from "@/data/mock/noc-map";
 
 export interface HealthLocation extends InfrastructureMapMarker { health: number }
 
@@ -22,3 +23,33 @@ export const healthLocationCounts: MapLegendCounts = healthLocations.reduce<MapL
   counts[location.status] = (counts[location.status] ?? 0) + 1;
   return counts;
 }, { healthy: 0, warning: 0, critical: 0 });
+
+/** Global Health fleet: shared locations plus the NEXUS Islamabad (DC-2) site so both maps open on Islamabad, like the live NOC map. */
+export const healthMapLocations = [
+  ...healthLocations,
+  { name: "Islamabad", lat: 33.69, lng: 73.06, status: "healthy" as const, role: "South Asia", health: 99.7 },
+];
+
+/** Adapts the fleet locations (including Islamabad) to the NOC map's site model. Shared by Global Health and Data Centers. */
+export const healthMapSites: NocMapSite[] = healthMapLocations.map((location) => {
+  const status: NocMapStatus = location.status === "healthy" ? "online" : location.status;
+  const code = location.name.normalize("NFD").replace(/\p{M}/gu, "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
+  return {
+    id: location.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    code,
+    city: location.name,
+    country: location.role,
+    region: location.role,
+    provider: "—",
+    facility: "—",
+    lat: location.lat,
+    lng: location.lng,
+    status,
+    health: location.health,
+    throughput: "—",
+    alerts: status === "critical" ? 3 : status === "warning" ? 1 : 0,
+    uptime: "—",
+    lastCheck: "just now",
+    servers: [],
+  };
+});

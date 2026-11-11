@@ -143,7 +143,7 @@ export const serviceIcons: Record<string, ServiceIconEntry> = {
   node: { icon: SiNodedotjs, color: "#5FA04E" },
   prometheus: { icon: SiPrometheus, color: "#E6522C" },
   loki: { icon: SiGrafana, color: "#F46800" },
-  "blackbox exporter": { icon: SiPrometheus, color: "#E6522C" },
+  "blackbox exporter": { icon: Radio, color: "#2563EB" },
   "windows exporter": { icon: FaWindows, color: "#0078D4" },
   "grafana agent": { icon: SiGrafana, color: "#F46800" },
   kong: { icon: SiKong, color: "#1B1F2B" },

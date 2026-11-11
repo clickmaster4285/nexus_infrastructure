@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Activity, Boxes, Check, ChevronDown, Cloud, Cpu, Database, Download, Globe2,
+  Activity, ArrowRight, Boxes, Check, ChevronDown, Cloud, Cpu, Database, Download, Globe2,
   HardDrive, Layers3, LayoutGrid, List, MapPin, Monitor, MoreVertical, Plus,
   RefreshCw, Server, Settings2, Shield, ShieldCheck, Sparkles, Users, X,
   type LucideIcon,
@@ -820,12 +820,12 @@ export function ServerGroupsDashboard() {
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {[{ label: "Active Alerts", value: String(activeAlerts) }, { label: "Last Incident", value: lastIncident === "No incidents" ? lastIncident : lastIncident.split(", ").at(-1) ?? lastIncident }].map((tile) => <div key={tile.label} className="min-w-0 rounded-lg bg-muted/70 p-2"><span className="block truncate text-[10px] text-muted-foreground">{tile.label}</span><b title={tile.value} className="mt-0.5 block truncate text-[12px] font-semibold text-foreground">{tile.value}</b></div>)}
               </div>
-              <Link href={"/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto self-end pt-3 text-[12px] font-semibold text-primary">View Details →</Link>
+              <Link href={"/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto inline-flex items-center gap-1 self-end pt-3 text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View Details <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>
             </div>
           </SectionCard> : null}
         </div>
         <div className="min-w-0 min-[1280px]:col-span-4">
-          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/events-explorer" className="shrink-0 whitespace-nowrap text-[11px] font-semibold text-primary">View All →</Link>}>
+          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>}>
             <div className="flex h-full min-h-[310px] flex-col">
               <div className="mb-2 flex gap-1 border-b border-border pb-2">{(["All", "Open", "Resolved"] as const).map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={cn("rounded-full px-2.5 py-1 text-[11px]", eventFilter === filter ? "bg-primary/10 font-semibold text-primary" : "text-muted-foreground hover:bg-accent")}>{filter}</button>)}</div>
               <div className="min-h-0 flex-1">
@@ -833,7 +833,7 @@ export function ServerGroupsDashboard() {
                   <time title={event.time.replace(", ", ", 2026 ")} className="whitespace-nowrap text-[11px] tabular-nums text-muted-foreground">{event.time.split(", ").at(-1)}</time><div className="min-w-0 leading-tight"><b title={event.group} className="block truncate text-[11px] font-semibold text-foreground">{event.group}</b><span title={event.event} className="block truncate text-[11px] text-muted-foreground">{event.event}</span></div><div className="flex justify-end"><EventBadge status={event.status} /></div>
                 </div>) : <p className="py-6 text-center text-[12px] text-muted-foreground">No {eventFilter.toLowerCase()} events.</p>}
               </div>
-              <div className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[11px] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/events-explorer" className="whitespace-nowrap font-semibold text-primary">View All →</Link></div>
+              <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link></div>
             </div>
           </SectionCard>
         </div>

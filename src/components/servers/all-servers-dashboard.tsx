@@ -8,10 +8,9 @@ import { Card } from "@/components/ui/card";
 import { MetricCard } from "@/components/shared/metric-card";
 import { AddServerDialog } from "@/components/servers/add-server-dialog";
 import { AllServersTable } from "@/components/servers/all-servers-table";
-import { ServerDetailPanel } from "@/components/servers/server-detail-panel";
 import { ServerToolbar, defaultServerFilters, type ServerFilters } from "@/components/servers/server-toolbar";
-import { cn } from "@/lib/utils";
 import {
+  serverGroupName,
   serverStats,
   servers as initialServers,
   type Server,
@@ -49,12 +48,9 @@ const serverToCsvRow = (server: Server) => [
 
 export function AllServersDashboard() {
   const [servers, setServers] = useState<Server[]>(initialServers);
-  const [activeServerId, setActiveServerId] = useState<string>(initialServers[0].id);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<ServerFilters>(defaultServerFilters);
   const [page, setPage] = useState(1);
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
   const filteredServers = useMemo(
@@ -73,13 +69,7 @@ export function AllServersDashboard() {
         const matchesOs = filters.os === "All" || server.os === filters.os;
         const matchesEnvironment = filters.environment === "All" || server.environment === filters.environment;
         const matchesProvider = filters.provider === "All" || server.provider === filters.provider;
-        const group = server.name.startsWith("web-")
-          ? "Web Servers"
-          : server.name.startsWith("db-")
-            ? "Database Servers"
-            : /api|app|worker/.test(server.name)
-              ? "Application Servers"
-              : "Infrastructure";
+        const group = serverGroupName(server);
         const matchesGroup = filters.group === "All" || group === filters.group;
         const matchesAgent = filters.agent === "All" || server.agent === filters.agent;
         return matchesSearch && matchesStatus && matchesOs && matchesEnvironment && matchesProvider && matchesGroup && matchesAgent;
@@ -89,7 +79,6 @@ export function AllServersDashboard() {
 
   const pageCount = Math.max(1, Math.ceil(filteredServers.length / PAGE_SIZE));
   const visibleServers = filteredServers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  const activeServer = detailsOpen ? (servers.find((server) => server.id === activeServerId) ?? filteredServers[0] ?? null) : null;
 
   const onlineCount = servers.filter((server) => server.agent === "Online").length;
   const offlineCount = servers.filter((server) => server.health === "Offline").length;
@@ -118,27 +107,8 @@ export function AllServersDashboard() {
     setPage(1);
   }
 
-  function toggleRow(id: string) {
-    setSelectedRows((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
-  }
-
-  function toggleAllOnPage() {
-    const visibleIds = visibleServers.map((server) => server.id);
-    const allSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedRows.includes(id));
-    setSelectedRows((current) => (allSelected ? current.filter((id) => !visibleIds.includes(id)) : [...new Set([...current, ...visibleIds])]));
-  }
-
-  function openServerDetails(id: string) {
-    setActiveServerId(id);
-    setDetailsOpen(true);
-  }
-
   function exportCsv() {
     downloadCsv("nexus-servers.csv", [csvHeaders, ...filteredServers.map(serverToCsvRow)]);
-  }
-
-  function exportServerCsv(server: Server) {
-    downloadCsv(`${server.name}.csv`, [csvHeaders, serverToCsvRow(server)]);
   }
 
   function addServer(name: string, environment: string) {
@@ -165,8 +135,6 @@ export function AllServersDashboard() {
       tags: [environment.toLowerCase(), "new"],
     };
     setServers((current) => [created, ...current]);
-    setActiveServerId(created.id);
-    setDetailsOpen(true);
     setSearch("");
     setFilters(defaultServerFilters);
     setPage(1);
@@ -175,8 +143,7 @@ export function AllServersDashboard() {
 
   return (
     <>
-      <div className={cn("grid items-start gap-3", detailsOpen && "lg:grid-cols-[minmax(0,1fr)_260px] xl:grid-cols-[minmax(0,1fr)_280px]")}>
-        <div className="min-w-0">
+      <div className="min-w-0">
           <PageMeta breadcrumbs={["Infrastructure", "All Servers"]} />
           <PageHeading title="All Servers" description="Monitor and manage your infrastructure fleet" />
 
@@ -198,20 +165,12 @@ export function AllServersDashboard() {
             <AllServersTable
               servers={visibleServers}
               totalFiltered={filteredServers.length}
-              selectedRows={selectedRows}
-              activeServerId={detailsOpen ? activeServerId : null}
               page={page}
               pageCount={pageCount}
               pageSize={PAGE_SIZE}
-              onToggleRow={toggleRow}
-              onToggleAllOnPage={toggleAllOnPage}
-              onOpenDetails={openServerDetails}
               onPageChange={setPage}
             />
           </Card>
-        </div>
-
-        {detailsOpen && <ServerDetailPanel server={activeServer} onClose={() => setDetailsOpen(false)} onExport={exportServerCsv} />}
       </div>
 
       <AddServerDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} onAdd={addServer} />

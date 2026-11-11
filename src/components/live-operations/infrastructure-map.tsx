@@ -80,7 +80,7 @@ function NocMap({
       style={{ background: tiles.background }}
     >
       <MapZoomControls center={center} zoom={zoom} light={variant === "light"} fitMarkers={fitMarkers} markers={markers} fitPadding={fitPadding} />
-      {fitMarkers && <FitMarkers markers={markers} padding={fitPadding} minZoom={minZoom} />}
+      {fitMarkers && <FitMarkers markers={markers} padding={fitPadding} />}
       <TileLayer url={tiles.url} attribution={tiles.attribution} maxZoom={16} eventHandlers={{ tileerror: () => onTileError?.() }} />
       {markers.flatMap((marker) => [
         ...(criticalPulseOnly && marker.status !== "critical" ? [] : [<CircleMarker
@@ -136,7 +136,7 @@ function MapZoomControls({ center, zoom, light, fitMarkers, markers, fitPadding 
   );
 }
 
-function FitMarkers({ markers, padding = 28, minZoom = 2 }: { markers: InfrastructureMapMarker[]; padding?: number; minZoom?: number }) {
+function FitMarkers({ markers, padding = 28 }: { markers: InfrastructureMapMarker[]; padding?: number }) {
   const map = useMap();
   useEffect(() => {
     if (!markers.length) return;

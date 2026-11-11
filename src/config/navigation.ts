@@ -31,7 +31,6 @@ import {
   Settings2,
   ShieldAlert,
   ShieldCheck,
-  SquareTerminal,
   Workflow,
 } from "lucide-react";
 
@@ -64,7 +63,6 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "All Servers", href: "/all-servers", icon: Server },
       { label: "Server Groups", href: "/server-groups", icon: Boxes },
-      { label: "Server Details", href: "/server-details", icon: SquareTerminal },
       { label: "Data Centers & Locations", href: "/data-centers-and-locations", icon: MapPin },
       { label: "Network Devices", href: "/network-devices", icon: Router },
       { label: "Containers & Docker", href: "/containers-and-docker", icon: Container },

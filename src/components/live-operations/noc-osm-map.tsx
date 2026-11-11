@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { divIcon, latLngBounds, type DivIcon, type Map as LeafletMap } from "leaflet";
@@ -9,7 +9,7 @@ import { AlertTriangle, CircleAlert, Expand, LocateFixed, Minus, Plus, Server, X
 import "leaflet/dist/leaflet.css";
 
 import { cn } from "@/lib/utils";
-import { MAP_TILE_BOUNDS, MAP_TILES } from "@/components/live-operations/map-tiles";
+import { MAP_TILE_BOUNDS } from "@/components/live-operations/map-tiles";
 import {
   NOC_MAP_STATUS_COLOR,
   NOC_MAP_STATUS_LABEL,
@@ -20,6 +20,32 @@ import {
 } from "@/data/mock/noc-map";
 
 const STATUS_ORDER: NocMapStatus[] = ["online", "warning", "critical"];
+
+/**
+ * OpenStreetMap standard tiles - free basemap, no API key.
+ * Light mode renders OSM as-is; dark mode applies an invert-based filter in NocMapStyles
+ * so the NEXUS dark theme is not blinded by the light basemap.
+ * Attribution shown on the map is required by the OSM tile usage policy.
+ */
+const OSM_TILES = {
+  light: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    background: "#aad3df",
+    ocean: "#aad3df",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+  },
+  dark: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    background: "#101826",
+    ocean: "#101826",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+  },
+} as const;
+
+/** Zoom used when the caller passes an explicit center but no zoom. */
+const EXPLICIT_CENTER_ZOOM = 13;
 
 /** Severity ranking - a cluster is coloured by its worst member. */
 const STATUS_WEIGHT: Record<NocMapStatus, number> = { online: 0, warning: 1, critical: 2 };
@@ -290,6 +316,19 @@ function MapReady({ onReady }: { onReady: (map: LeafletMap | null) => void }) {
   return null;
 }
 
+/** Fits the whole fleet into view once, on mount. Used when no explicit center is passed. */
+function FitOnMount({ sites, padding = FIT_PADDING }: { sites: NocMapSite[]; padding?: number | [number, number] }) {
+  const map = useMap();
+  const fitted = useRef(false);
+  useEffect(() => {
+    if (fitted.current) return;
+    fitted.current = true;
+    fitAllSites(map, sites, padding, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map]);
+  return null;
+}
+
 /**
  * Fits every site into the viewport with the given padding.
  *
@@ -298,26 +337,27 @@ function MapReady({ onReady }: { onReady: (map: LeafletMap | null) => void }) {
  * lowered for the duration of the fit. Afterwards the floor becomes min(2, fitted zoom) so the
  * world view stays reachable without any marker ever being clipped.
  */
-function fitAllSites(map: LeafletMap, sites: NocMapSite[], padding = 50, animate = false) {
-  if (!sites.length) return;
-  const bounds = latLngBounds(sites.map((site) => [site.lat, site.lng] as [number, number]));
+function fitAllSites(map: LeafletMap, sites: NocMapSite[], padding: number | [number, number] = FIT_PADDING, animate = false) {
+  const points = (sites ?? [])
+    .filter((site) => site && Number.isFinite(site.lat) && Number.isFinite(site.lng))
+    .map((site) => [site.lat, site.lng] as [number, number]);
+  if (!points.length) return;
+  const bounds = latLngBounds(points);
+  if (!bounds.isValid()) return;
   const declaredFloor = map.options.minZoom ?? 2;
-  map.options.minZoom = 0;
-  map.fitBounds(bounds, { padding: [padding, padding], maxZoom: 4, animate });
-  const fitted = map.getZoom();
-  map.options.minZoom = Math.min(declaredFloor, fitted);
+  try {
+    map.options.minZoom = 0;
+    map.fitBounds(bounds, { padding: Array.isArray(padding) ? padding : [padding, padding], maxZoom: 4, animate });
+    const fitted = map.getZoom();
+    map.options.minZoom = Math.min(declaredFloor, fitted);
+  } catch (error) {
+    map.options.minZoom = declaredFloor;
+    console.warn("[NocOsmMap] fitBounds skipped:", error);
+  }
 }
 
-function FitSites({ sites, padding = 50 }: { sites: NocMapSite[]; padding?: number }) {
-  const map = useMap();
-  useEffect(() => {
-    fitAllSites(map, sites, padding, false);
-  }, [map, sites, padding]);
-  return null;
-}
-
-/** Keeps the map sized to its container and re-fits the fleet when the card resizes. */
-function MapResizer({ sites, padding = 50 }: { sites: NocMapSite[]; padding?: number }) {
+/** Keeps the map sized to its container. The current view (default: ISB street level) is preserved. */
+function MapResizer() {
   const map = useMap();
   useEffect(() => {
     let frame = 0;
@@ -325,7 +365,6 @@ function MapResizer({ sites, padding = 50 }: { sites: NocMapSite[]; padding?: nu
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         map.invalidateSize({ pan: false });
-        fitAllSites(map, sites, padding, false);
       });
     });
     observer.observe(map.getContainer());
@@ -333,7 +372,7 @@ function MapResizer({ sites, padding = 50 }: { sites: NocMapSite[]; padding?: nu
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [map, sites, padding]);
+  }, [map]);
   return null;
 }
 
@@ -382,24 +421,38 @@ function buildClusters(sites: NocMapSite[], map: LeafletMap | null, zoom: number
   });
 }
 
-function MapLegend({ siteCounts, serverTotal }: { siteCounts: Record<NocMapStatus, number>; serverTotal: number }) {
-  return (
-    <div className="pointer-events-none absolute bottom-3 left-3 z-[500] max-w-[30%] min-w-[136px] rounded-[10px] border border-border bg-card/95 px-2.5 py-2 shadow-md backdrop-blur-sm">
-      <ul className="flex flex-col gap-1">
-        {STATUS_ORDER.map((status) => (
-          <li key={status} className="flex items-center gap-1.5 text-[12px] font-medium text-foreground">
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: NOC_MAP_STATUS_COLOR[status] }} />
-            <span className="flex-1 truncate">{NOC_MAP_STATUS_LABEL[status]}</span>
-            <span className="shrink-0 text-[12px] text-muted-foreground">{HEALTH_PANEL_LABEL[status]}</span>
-            <b className="shrink-0 tabular-nums">{siteCounts[status]}</b>
-          </li>
-        ))}
-        <li className="flex items-center gap-1.5 border-t border-border pt-1 text-[12px] font-medium text-foreground">
-          <Server size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
-          <span className="flex-1">Servers</span>
-          <b className="shrink-0 tabular-nums">{serverTotal}</b>
+const FIT_PADDING: [number, number] = [40, 40];
+const COMPACT_WIDTH_PX = 360;
+
+/** Single-row legend pill. White background, radius 999px, bottom-left inside the map; rendered below the map when the map is narrower than 360px. */
+function MapLegend({ siteCounts, serverTotal, below }: { siteCounts: Record<NocMapStatus, number>; serverTotal: number; below?: boolean }) {
+  const pill = (
+    <ul
+      className="flex w-max max-w-full items-center gap-3 overflow-hidden whitespace-nowrap rounded-full border border-black/5 bg-white/95 px-2.5 py-1.5 text-[12px] font-medium text-slate-800 shadow-md backdrop-blur-sm dark:border-white/10 dark:bg-slate-800/95 dark:text-slate-100"
+      aria-label="Site status counts"
+    >
+      {STATUS_ORDER.map((status) => (
+        <li key={status} className="flex items-center gap-1.5">
+          <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: NOC_MAP_STATUS_COLOR[status] }} />
+          <span>{HEALTH_PANEL_LABEL[status]}</span>
+          <b className="tabular-nums">{siteCounts[status]}</b>
         </li>
-      </ul>
+      ))}
+      {serverTotal > 0 ? (
+        <li className="flex items-center gap-1.5 border-l border-slate-200 pl-3 dark:border-slate-700">
+          <Server size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
+          <span>Servers</span>
+          <b className="tabular-nums">{serverTotal}</b>
+        </li>
+      ) : null}
+    </ul>
+  );
+  if (below) {
+    return <div className="flex shrink-0 items-center px-1 pb-1 pt-2">{pill}</div>;
+  }
+  return (
+    <div className="pointer-events-none absolute bottom-3 left-3 z-[500]">
+      {pill}
     </div>
   );
 }
@@ -438,7 +491,7 @@ function MapFallback({ sites, siteCounts, serverTotal }: { sites: NocMapSite[]; 
         ))}
       </ul>
       <p className="mt-3 text-[12px] text-muted-foreground">
-        {siteCounts.online} online · {siteCounts.warning} warning · {siteCounts.critical} critical · {serverTotal} servers
+        {siteCounts.online} Healthy · {siteCounts.warning} Degraded · {siteCounts.critical} Offline{serverTotal > 0 ? ` · ${serverTotal} servers` : ""}
       </p>
     </div>
   );
@@ -446,7 +499,10 @@ function MapFallback({ sites, siteCounts, serverTotal }: { sites: NocMapSite[]; 
 
 /**
  * Live Leaflet view of the NEXUS fleet.
- * Data center pins carry their hosted servers and are colour coded by status.
+ * Opens fit to the whole world by default so the global fleet is always visible.
+ * Pass `center` (and optionally `initialZoom`) to open on a specific location instead - e.g.
+ * `center={[33.69, 73.06]}` for the ISB data center. Data center pins carry their hosted
+ * servers and are colour coded by status.
  */
 export function NocOsmMap({
   sites = nocMapSites,
@@ -454,6 +510,8 @@ export function NocOsmMap({
   selectedSiteId = null,
   onSelectSite,
   className,
+  center,
+  initialZoom,
 }: {
   sites?: NocMapSite[];
   /** When set, only sites with one of these statuses are rendered on the map. */
@@ -461,16 +519,31 @@ export function NocOsmMap({
   selectedSiteId?: string | null;
   onSelectSite?: (site: NocMapSite) => void;
   className?: string;
+  /** Optional initial center, e.g. [33.69, 73.06] for the ISB (NEXUS DC-2) data center. When omitted the map fits the whole fleet on mount. */
+  center?: [number, number];
+  /** Optional initial zoom. Defaults to 13 when `center` is set; derived from the fit otherwise. */
+  initialZoom?: number;
 }) {
   const dark = useNexusDarkMode();
   const [expanded, setExpanded] = useState(false);
   const [map, setMap] = useState<LeafletMap | null>(null);
-  const [zoom, setZoom] = useState(2);
+  const [zoom, setZoom] = useState(initialZoom ?? 1);
   const [tilesFailed, setTilesFailed] = useState(false);
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const [compact, setCompact] = useState(false);
 
-  // Same Esri Canvas configuration the Data Centers page uses - light in light mode,
-  // its dark counterpart in dark mode. No second provider, no API key.
-  const tiles = MAP_TILES[dark ? "dark" : "light"];
+  useEffect(() => {
+    const node = surfaceRef.current;
+    if (!node) return undefined;
+    const update = () => setCompact(node.clientWidth < COMPACT_WIDTH_PX);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  // OpenStreetMap standard tiles - light in light mode, invert-filtered in dark mode.
+  const tiles = OSM_TILES[dark ? "dark" : "light"];
   const visibleSites = useMemo(
     () => (filterStatuses ? sites.filter((site) => filterStatuses.includes(site.status)) : sites),
     [sites, filterStatuses],
@@ -498,8 +571,12 @@ export function NocOsmMap({
 
   const resetView = useCallback(() => {
     if (!map) return;
-    fitAllSites(map, visibleSites, 50, true);
-  }, [map, visibleSites]);
+    if (center) {
+      map.setView(center, initialZoom ?? EXPLICIT_CENTER_ZOOM, { animate: true });
+      return;
+    }
+    fitAllSites(map, visibleSites, 40, true);
+  }, [map, center, initialZoom, visibleSites]);
 
   const focusSite = useCallback(
     (site: NocMapSite) => {
@@ -515,7 +592,7 @@ export function NocOsmMap({
     (cluster: NocMapCluster) => {
       if (!map) return;
       const bounds = latLngBounds(cluster.sites.map((site) => [site.lat, site.lng] as [number, number]));
-      map.flyToBounds(bounds, { padding: [50, 50], maxZoom: 10, duration: 0.6 });
+      map.flyToBounds(bounds, { padding: [50, 50], maxZoom: 12, duration: 0.6 });
     },
     [map],
   );
@@ -538,17 +615,17 @@ export function NocOsmMap({
   useEffect(() => {
     if (!expanded || !map) return;
     map.invalidateSize({ pan: false });
-    fitAllSites(map, visibleSites, 50, false);
-  }, [expanded, map, visibleSites]);
+  }, [expanded, map]);
 
   const surface = (
-    <div className={cn("relative h-full w-full overflow-hidden bg-card", className)}>
+    <div ref={surfaceRef} className={cn("relative flex h-full w-full flex-col overflow-hidden bg-card", className)}>
       <NocMapStyles />
+      <div className="relative min-h-0 w-full flex-1">
       <MapContainer
-        center={[25, 20]}
-        zoom={2}
+        center={center ?? [25, 20]}
+        zoom={center ? initialZoom ?? EXPLICIT_CENTER_ZOOM : 1}
         minZoom={2}
-        maxZoom={10}
+        maxZoom={18}
         zoomControl={false}
         scrollWheelZoom={expanded}
         worldCopyJump={false}
@@ -567,8 +644,8 @@ export function NocOsmMap({
         />
         <MapReady onReady={setMap} />
         <ClusterWatcher onZoom={setZoom} />
-        <FitSites sites={visibleSites} />
-        <MapResizer sites={visibleSites} />
+        {!center && <FitOnMount sites={visibleSites} />}
+        <MapResizer />
 
         {clusters.map((cluster) =>
           cluster.sites.length > 1 ? (
@@ -644,7 +721,7 @@ export function NocOsmMap({
       </MapContainer>
 
       <MapControls onZoomIn={() => map?.zoomIn()} onZoomOut={() => map?.zoomOut()} onReset={resetView} />
-      <MapLegend siteCounts={siteCounts} serverTotal={serverTotal} />
+      {!compact && <MapLegend siteCounts={siteCounts} serverTotal={serverTotal} />}
       {tilesFailed && <MapFallback sites={sites} siteCounts={siteCounts} serverTotal={serverTotal} />}
       {!expanded && (
         <button
@@ -657,6 +734,8 @@ export function NocOsmMap({
           <Expand size={14} />
         </button>
       )}
+      </div>
+      {compact && <MapLegend siteCounts={siteCounts} serverTotal={serverTotal} below />}
     </div>
   );
 
@@ -670,7 +749,7 @@ export function NocOsmMap({
               <p className="truncate text-[12px] text-muted-foreground">Global data center and server locations</p>
             </div>
             <span className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-0.5 text-[12px] font-medium text-foreground">
-              {sites.length} sites · {serverTotal} servers
+              {sites.length} sites{serverTotal > 0 ? ` · ${serverTotal} servers` : ""}
             </span>
           </div>
           <button
@@ -694,8 +773,8 @@ export function NocOsmMap({
 function NocMapStyles() {
   return (
     <style>{`
-.nexus-noc-map .leaflet-container { background: #eef2f7; font-family: var(--font-sans); }
-.nexus-noc-map .leaflet-control-attribution { border-radius: 6px 0 0 0; background: color-mix(in srgb, var(--popover) 86%, transparent) !important; color: var(--muted-foreground) !important; font-size: 12px; padding: 1px 6px; }
+.nexus-noc-map .leaflet-container { background: #aad3df; font-family: var(--font-sans); }
+.nexus-noc-map .leaflet-control-attribution { border-radius: 6px 0 0 0; background: color-mix(in srgb, var(--popover) 86%, transparent) !important; color: var(--muted-foreground) !important; font-size: 10px; line-height: 1.4; padding: 0 5px; white-space: nowrap; }
 .nexus-noc-map .leaflet-control-attribution a { color: var(--primary) !important; }
 .nexus-noc-map .leaflet-popup-content-wrapper { padding: 0; border-radius: 12px; background: var(--popover); color: var(--foreground); box-shadow: 0 14px 34px rgb(15 23 42 / .22); }
 .nexus-noc-map .leaflet-popup-content { margin: 0; line-height: 1.45; }
@@ -721,8 +800,8 @@ function NocMapStyles() {
 @keyframes nexus-noc-pulse { 0%,100% { opacity:.16; transform: scale(1); } 50% { opacity:.45; transform: scale(1.2); } }
 @keyframes nexus-noc-cluster-pulse { 0%,100% { box-shadow: 0 0 0 2px #ffffff, 0 2px 8px rgb(15 23 42 / .4); } 50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--noc-color) 40%, transparent), 0 2px 8px rgb(15 23 42 / .4); } }
 @media (prefers-reduced-motion: reduce) { .nexus-noc-site--pulse .nexus-noc-site__ring, .nexus-noc-cluster--pulse .nexus-noc-cluster__disc { animation: none; } .nexus-noc-site:hover { transform: none; } }
-.dark .nexus-noc-map .leaflet-container { background: #3f3f41; }
-.dark .nexus-noc-map .leaflet-tile-pane { filter: saturate(.72) brightness(.96) contrast(1.04); }
+.dark .nexus-noc-map .leaflet-container { background: #101826; }
+.dark .nexus-noc-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.35) brightness(0.9) contrast(0.92); }
 `}</style>
   );
 }

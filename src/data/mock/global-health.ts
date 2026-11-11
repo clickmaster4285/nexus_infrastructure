@@ -12,6 +12,10 @@ export const componentHealth = [
   { name: "Network", value: 98.6, icon: "network", belowMinutes: 192, lastIncident: "Packet loss increased at 11:42" },
   { name: "Applications", value: 98.8, icon: "workflow", belowMinutes: 96, lastIncident: "Response time recovered at 10:34" },
   { name: "Services", value: 99.0, icon: "activity", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },
+  { name: "Storage", value: 99.2, icon: "storage", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },
+  { name: "Load Balancers", value: 99.3, icon: "network", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },
+  { name: "Security", value: 98.9, icon: "shield", belowMinutes: 84, lastIncident: "Patch compliance recovered at 09:14" },
+  { name: "Backup", value: 98.3, icon: "hard-drive-download", belowMinutes: 268, lastIncident: "Backup job retried successfully at 06:45" },
 ];
 export const healthScore = Number((componentHealth.reduce((sum, item) => sum + item.value, 0) / componentHealth.length).toFixed(1));
 
@@ -37,7 +41,46 @@ export const globalHealthTrend = times.map((time, i) => ({
   infrastructureHealth: Number((componentHealthHistory.reduce((sum, series) => sum + series.values[i], 0) / componentHealthHistory.length).toFixed(1)),
   monitoringCoverage: wobble(i, 99.1, .35, 1.2),
   availability: wobble(i, 98.92, .62, 2.4),
-}));
+})).map((point, index, points) => index === points.length - 1
+  ? { ...point, infrastructureHealth: healthScore, monitoringCoverage: 99.1, availability: 98.9 }
+  : point);
+
+export type GlobalHealthTrendRange = "24H" | "7D" | "30D";
+export type GlobalHealthTrendPoint = (typeof globalHealthTrend)[number];
+
+const rangeHours: Record<GlobalHealthTrendRange, number> = { "24H": 24, "7D": 168, "30D": 720 };
+export const globalHealthRangeIntervalMinutes: Record<GlobalHealthTrendRange, number> = { "24H": 30, "7D": 210, "30D": 900 };
+const trendBases = { infrastructureHealth: healthScore, monitoringCoverage: 99.1, availability: 98.9 };
+
+export const globalHealthTrendByRange: Record<GlobalHealthTrendRange, GlobalHealthTrendPoint[]> = {
+  "24H": globalHealthTrend,
+  "7D": globalHealthTrend.map((point, index) => {
+    const time = new Date(Date.now() - rangeHours["7D"] * 60 * 60 * 1000 + index * (rangeHours["7D"] / (globalHealthTrend.length - 1)) * 60 * 60 * 1000)
+      .toLocaleString("en-US", { weekday: "short", hour: "2-digit", hour12: false, timeZone: "UTC" });
+    return { ...point, time };
+  }),
+  "30D": globalHealthTrend.map((point, index) => {
+    const time = new Date(Date.now() - rangeHours["30D"] * 60 * 60 * 1000 + index * (rangeHours["30D"] / (globalHealthTrend.length - 1)) * 60 * 60 * 1000)
+      .toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", hour12: false, timeZone: "UTC" });
+    return { ...point, time };
+  }),
+};
+
+Object.entries(globalHealthTrendByRange).forEach(([range, points]) => {
+  const key = range as GlobalHealthTrendRange;
+  const phase = key === "24H" ? 0 : key === "7D" ? 0.8 : 1.6;
+  points.forEach((point, index) => {
+    if (index === points.length - 1) {
+      point.infrastructureHealth = healthScore;
+      point.monitoringCoverage = 99.1;
+      point.availability = 98.9;
+      return;
+    }
+    point.infrastructureHealth = wobble(index, trendBases.infrastructureHealth, key === "30D" ? 0.42 : 0.28, phase);
+    point.monitoringCoverage = wobble(index, trendBases.monitoringCoverage, key === "30D" ? 0.48 : 0.35, phase + 1.2);
+    point.availability = wobble(index, trendBases.availability, key === "30D" ? 0.72 : 0.55, phase + 2.4);
+  });
+});
 
 export const resourceHealth = [
   { label: "CPU", value: 92, kind: "Usage", detail: "12 / 37 cores", trend: "2% vs 1h", trendDirection: "up", icon: "cpu" },
@@ -79,6 +122,9 @@ export const globalCollectors = nocCollectors.map((collector) => ({
   targetsUp: collector.targetsUp,
   targetsTotal: collector.targetsTotal,
   lastSeen: collector.heartbeat,
+  ingestionPerSecond: collector.ingestionPerSecond,
+  scrapeSeconds: collector.scrapeSeconds,
+  spark: collector.spark,
   status: collector.status === "Online" ? "healthy" as const : collector.status === "Stale" ? "warning" as const : "critical" as const,
 }));
 
