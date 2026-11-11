@@ -34,12 +34,12 @@ const TOPOLOGY_HEIGHT = 270;
 const TOPOLOGY_MODAL_FIT_OPTIONS = { padding: 0.04, minZoom: 0.4, maxZoom: 2.5, duration: 300 };
 
 const compactButton =
-  "flex h-[27px] min-w-[28px] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-[7px] text-[8px] text-[#516680] transition-colors hover:border-[#a9c8eb] hover:text-[#176dbb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[#c6d2e1]";
+  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[11px] font-medium text-[#516680] transition-colors hover:border-[#a9c8eb] hover:text-[#176dbb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[#c6d2e1]";
 
 function HealthBadge({ status }: { status: string }) {
   const degraded = status === "Degraded";
   return (
-    <span className="flex items-center gap-1 whitespace-nowrap text-[9px] text-[#61758e] dark:text-[#a9bcd2]">
+    <span className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#61758e] dark:text-[#a9bcd2]">
       <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full bg-[#20b475]", degraded && "bg-[#f0a02d]")} />
       {status}
     </span>
@@ -316,11 +316,11 @@ function TopologyNode({ node, compact = false, position, handlePrefix = "card", 
         <TopologyIcon name={node.icon} size={compact ? 16 : 19} tone={node.tone} />
       </span>
       <div className={cn("flex min-w-0 flex-col items-start gap-1", compact && "flex-1 flex-row items-center justify-between gap-2")}>
-        <b className="max-w-full truncate text-[10px] font-bold text-[#536b87] dark:text-[#c4d1e1]">{node.name}</b>
+        <b className="max-w-full truncate text-[11px] font-bold text-[#536b87] dark:text-[#c4d1e1]">{node.name}</b>
         {!compact && (
           <>
             <HealthBadge status={node.status} />
-            <small className="flex items-center gap-1 whitespace-nowrap text-[9px] text-[#8393a8] dark:text-[#9babc0]">
+            <small className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#8393a8] dark:text-[#9babc0]">
               <Icon name="workflow" size={9} /> {node.detail}
             </small>
           </>
@@ -516,7 +516,7 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
             style={{ left: layout["cloud-providers"].x, top: layout["cloud-providers"].y, width: layout["cloud-providers"].width, height: layout["cloud-providers"].height }}
             {...dragHandlers("cloud-providers")}
           >
-            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[10px] text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
+            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[11px] font-medium text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
               <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="cloud" size={17} />
               </span>
@@ -535,10 +535,10 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
                   <ProviderLogo provider={provider.name} className="h-[17px] w-[17px] text-white" />
                 </span>
                 <div className="min-w-0">
-                  <b className="block truncate text-[9px] font-semibold leading-tight text-[#536b87] dark:text-[#c4d1e1]">{provider.name}</b>
+                  <b className="block truncate text-[11px] font-semibold leading-tight text-[#536b87] dark:text-[#c4d1e1]">{provider.name}</b>
                   <HealthBadge status={provider.status} />
                 </div>
-                <small className="whitespace-nowrap text-[8px] text-[#8695a8] dark:text-[#9babc0]">{provider.assets} instances</small>
+                <small className="whitespace-nowrap text-[11px] text-[#8695a8] dark:text-[#9babc0]">{provider.assets} instances</small>
               </div>
             ))}
             <TopologyHandles nodeId={`${idPrefix}-cloud-providers`} />
@@ -567,9 +567,9 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
               <Icon name="globe" size={17} />
             </span>
             <div className="flex min-w-0 flex-col items-start gap-1">
-              <b className="whitespace-nowrap text-[10px] font-bold text-[#536b87] dark:text-[#c4d1e1]">External Endpoints</b>
+              <b className="whitespace-nowrap text-[11px] font-bold text-[#536b87] dark:text-[#c4d1e1]">External Endpoints</b>
               <HealthBadge status="Healthy" />
-              <small className="flex items-center gap-1 whitespace-nowrap text-[9px] text-[#8393a8] dark:text-[#9babc0]">
+              <small className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#8393a8] dark:text-[#9babc0]">
                 <Icon name="workflow" size={9} /> 3 endpoints
               </small>
             </div>
@@ -583,7 +583,7 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
             style={{ left: layout.databases.x, top: layout.databases.y, width: layout.databases.width, height: layout.databases.height }}
             {...dragHandlers("databases")}
           >
-            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[10px] text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
+            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[11px] font-medium text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
               <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="database" size={17} />
               </span>

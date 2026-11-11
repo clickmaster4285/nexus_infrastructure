@@ -71,11 +71,11 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "metric" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[10px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className={cn("px-2 py-1.5 text-center text-[10px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className={cn("px-2 py-1.5 text-center text-[13px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
                   <td className="px-2 py-1.5 text-center">
@@ -86,12 +86,12 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "backup" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[10px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className="px-2 py-1.5 text-center text-[10px] text-[#50647e] dark:text-[#b7c4d5]">{row.free}</td>
-                  <td className={cn("px-2 py-1.5 text-center text-[10px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className="px-2 py-1.5 text-center text-[13px] text-[#50647e] dark:text-[#b7c4d5]">{row.free}</td>
+                  <td className={cn("px-2 py-1.5 text-center text-[13px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
                 </tr>
@@ -99,13 +99,13 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "latency" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[10px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
                   <td
                     className={cn(
-                      "px-2 py-1.5 text-center text-[10px] font-semibold",
+                    "px-2 py-1.5 text-center text-[13px] font-semibold",
                       row.color === "green" || row.color === "teal"
                         ? "text-[#16a16a] dark:text-[#4fd69a]"
                         : row.color === "amber"
@@ -115,13 +115,15 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
                   >
                     {row.latency}
                   </td>
-                  <td className="truncate px-2 py-1.5 text-center text-[9px] text-muted-foreground">{row.trend}</td>
+                  <td className="truncate px-2 py-1.5 text-center text-[12px] text-muted-foreground">
+                    <LatencyTrendIndicator trend={row.trend} />
+                  </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
-      <Link href={link.href} className="mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[9px] font-semibold text-primary transition-colors hover:text-primary/80">
+      <Link href={link.href} className="executive-overview-trend mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[12px] font-semibold text-primary transition-colors hover:text-primary/80">
         View all {link.label} <ArrowRight size={12} aria-hidden="true" />
       </Link>
     </Panel>
@@ -131,21 +133,37 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
 function TrendIndicator({ trend }: { trend: string }) {
   if (trend === "↑") {
     return (
-      <span className="inline-flex items-center justify-center text-destructive" role="img" aria-label="Increasing">
+      <span className="executive-overview-trend inline-flex items-center justify-center text-destructive" role="img" aria-label="Increasing">
         <ArrowUp size={14} strokeWidth={2.6} />
       </span>
     );
   }
   if (trend === "↓") {
     return (
-      <span className="inline-flex items-center justify-center text-success" role="img" aria-label="Decreasing">
+      <span className="executive-overview-trend inline-flex items-center justify-center text-success" role="img" aria-label="Decreasing">
         <ArrowDown size={14} strokeWidth={2.6} />
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center justify-center text-muted-foreground" role="img" aria-label="Stable">
+    <span className="executive-overview-trend inline-flex items-center justify-center text-muted-foreground" role="img" aria-label="Stable">
       <ArrowRight size={14} strokeWidth={2.4} />
+    </span>
+  );
+}
+
+function LatencyTrendIndicator({ trend }: { trend: string }) {
+  const match = trend.match(/^([↑↓→])\s*(.*)$/);
+  if (!match) return <span className="whitespace-nowrap">{trend}</span>;
+
+  const [, direction, time] = match;
+  const Icon = direction === "↑" ? ArrowUp : direction === "↓" ? ArrowDown : ArrowRight;
+  const color = direction === "↑" ? "text-destructive" : direction === "↓" ? "text-success" : "text-muted-foreground";
+
+  return (
+    <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap">
+      <Icon className={color} size={14} strokeWidth={2.6} aria-hidden="true" />
+      {time && <span>{time}</span>}
     </span>
   );
 }

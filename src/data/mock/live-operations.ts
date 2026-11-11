@@ -26,10 +26,21 @@ export const nocHealth = {
 };
 
 export const nocHealthSegments = [
-  { name: "Healthy", value: nocFleet.healthy, color: "#34d399" },
-  { name: "Degraded", value: nocFleet.degraded, color: "#fbbf24" },
-  { name: "Offline", value: nocFleet.offline, color: "#f87171" },
+  { name: "Healthy", status: "Healthy", value: nocFleet.healthy, color: "#34d399", servers: ["prod-api-01", "db-primary", "web-frontend-01", "cache-server-01", "app-worker-02", "local-office-01", "win-app-01", "monitor-node-01", "api-staging-01", "test-runner-01"] },
+  { name: "Degraded", status: "Degraded", value: nocFleet.degraded, color: "#fbbf24", servers: ["app-worker-01"] },
+  { name: "Offline", status: "Offline", value: nocFleet.offline, color: "#f87171", servers: ["prod-api-02"] },
 ];
+
+export type NocHealthChangeStatus = "offline" | "degraded" | "recovered";
+export interface NocHealthTrendPoint {
+  time: string;
+  health: number;
+  healthy: number;
+  degraded: number;
+  offline: number;
+  eventLabel?: string;
+  eventTone?: "amber" | "red";
+}
 
 export type NocResourceTab = "cpu" | "memory" | "network" | "disk";
 export type NocResourceRange = "5m" | "15m" | "1h";
@@ -96,25 +107,76 @@ export const nocMapCounts = nocMarkers.reduce<Record<MarkerStatus, number>>((cou
 }, { healthy: 0, warning: 0, critical: 0 });
 
 export type AlertSeverity = "critical" | "high" | "medium";
-export interface NocAlert { id: string; severity: AlertSeverity; time: string; ageMinutes: number; title: string; detail: string }
+export interface NocAlert { id: string; severity: AlertSeverity; time: string; ageMinutes: number; title: string; detail: string; groupId: string; healthChange?: NocHealthChangeStatus }
 export const nocActiveAlerts: NocAlert[] = [
-  { id: "a-1", severity: "critical", time: "14:28", ageMinutes: 8, title: "Database server high load", detail: "prod-db-01" },
-  { id: "a-2", severity: "critical", time: "14:25", ageMinutes: 11, title: "Disk space critically low", detail: "web-01" },
-  { id: "a-3", severity: "critical", time: "14:20", ageMinutes: 16, title: "API availability below SLA", detail: "api-gateway" },
-  { id: "a-4", severity: "critical", time: "14:18", ageMinutes: 18, title: "Failover node is unreachable", detail: "prod-api-02" },
-  { id: "a-5", severity: "critical", time: "14:15", ageMinutes: 21, title: "Database replication lag", detail: "legacy-db-01" },
-  { id: "a-6", severity: "high", time: "14:12", ageMinutes: 24, title: "Memory usage elevated", detail: "app-worker-01" },
+  { id: "a-1", severity: "high", time: "14:28", ageMinutes: 8, title: "Database server high load", detail: "prod-db-01", groupId: "production" },
+  { id: "a-2", severity: "high", time: "14:25", ageMinutes: 11, title: "Disk space critically low", detail: "web-01", groupId: "production" },
+  { id: "a-3", severity: "medium", time: "14:20", ageMinutes: 16, title: "API availability below SLA", detail: "api-gateway", groupId: "production" },
+  { id: "a-4", severity: "high", time: "14:18", ageMinutes: 18, title: "Failover node is unreachable", detail: "prod-api-02", groupId: "production", healthChange: "offline" },
+  { id: "a-5", severity: "critical", time: "14:15", ageMinutes: 21, title: "Database replication lag", detail: "legacy-db-01", groupId: "staging" },
+  { id: "a-6", severity: "critical", time: "14:12", ageMinutes: 24, title: "Memory usage elevated", detail: "app-worker-01", groupId: "testing", healthChange: "degraded" },
 ];
 
 export const nocServiceAvailability = [
   { name: "Web Servers", value: 99.8 }, { name: "APIs", value: 99.7 }, { name: "Databases", value: 99.9 },
   { name: "Services", value: 99.6 }, { name: "CDN", value: 99.8 }, { name: "Cache", value: 99.5 },
 ];
+export const nocServiceAvailabilitySla = 99.5;
 export const nocOverallAvailability = Number((nocServiceAvailability.reduce((sum, item) => sum + item.value, 0) / nocServiceAvailability.length).toFixed(1));
+export type NocHealthRange = "24h" | "7d" | "30d";
+const healthTrendPoint = (time: string, healthy: number, degraded: number, offline: number, eventLabel?: string, eventTone?: "amber" | "red"): NocHealthTrendPoint => ({
+  time,
+  health: Math.round(((healthy + degraded * 0.5) / (healthy + degraded + offline)) * 100),
+  healthy,
+  degraded,
+  offline,
+  ...(eventLabel ? { eventLabel, eventTone } : {}),
+});
+const currentHealthTrendPoint = healthTrendPoint("Now", nocFleet.healthy, nocFleet.degraded, nocFleet.offline);
+export const nocHealthTrendData: Record<NocHealthRange, NocHealthTrendPoint[]> = {
+  "24h": [
+    healthTrendPoint("00:00", 12, 0, 0),
+    healthTrendPoint("06:00", 11, 1, 0),
+    healthTrendPoint("11:42", 10, 1, 1, "11:42 prod-api-02 offline", "red"),
+    healthTrendPoint("18:00", 10, 2, 0),
+    currentHealthTrendPoint,
+  ],
+  "7d": [
+    healthTrendPoint("Mon", 12, 0, 0),
+    healthTrendPoint("Tue", 11, 1, 0),
+    healthTrendPoint("Wed", 10, 2, 0, "Wed · app-worker-01 degraded", "amber"),
+    healthTrendPoint("Fri", 9, 2, 1),
+    currentHealthTrendPoint,
+  ],
+  "30d": [
+    healthTrendPoint("Feb 01", 11, 1, 0),
+    healthTrendPoint("Feb 08", 10, 2, 0),
+    healthTrendPoint("Feb 15", 9, 2, 1, "Feb 15 prod-api-02 offline", "red"),
+    healthTrendPoint("Feb 22", 10, 2, 0),
+    currentHealthTrendPoint,
+  ],
+};
+export const nocHealthRangeData: Record<NocHealthRange, {
+  averageUptime: number;
+  uptimeTrend: number;
+  trend: number;
+  trendDirection: "up" | "down";
+  comparison: string;
+  openIncidents: number;
+  newIncidents: number;
+  mttrMinutes: number;
+}> = {
+  "24h": { averageUptime: nocOverallAvailability, uptimeTrend: 0.1, trend: 2, trendDirection: "up", comparison: "vs yesterday", openIncidents: nocFleet.activeIncidents, newIncidents: 1, mttrMinutes: 18 },
+  "7d": { averageUptime: 99.8, uptimeTrend: 0.2, trend: 1.4, trendDirection: "up", comparison: "vs prior week", openIncidents: 3, newIncidents: 2, mttrMinutes: 22 },
+  "30d": { averageUptime: 99.9, uptimeTrend: 0.1, trend: 0.8, trendDirection: "down", comparison: "vs prior month", openIncidents: 4, newIncidents: 3, mttrMinutes: 24 },
+};
 
-export const nocServerGroups: Array<DonutDatum & { health: number }> = [
-  { name: "Production", value: 7, color: "#60a5fa", health: 99.4 }, { name: "Staging", value: 2, color: "#a78bfa", health: 98.8 },
-  { name: "Development", value: 2, color: "#2dd4bf", health: 98.1 }, { name: "Testing", value: 1, color: "#94a3b8", health: 97.6 },
+export const nocServerGroupsSla = 99;
+export const nocServerGroups: Array<DonutDatum & { id: string; health: number; avgCpu: number; avgMemory: number; lastIncident: string }> = [
+  { id: "production", name: "Production", value: 7, color: "#60a5fa", health: 99.4, avgCpu: 72.4, avgMemory: 68.2, lastIncident: "8m ago" },
+  { id: "staging", name: "Staging", value: 2, color: "#a78bfa", health: 98.8, avgCpu: 54.8, avgMemory: 61.2, lastIncident: "No recent incidents" },
+  { id: "development", name: "Development", value: 2, color: "#2dd4bf", health: 98.1, avgCpu: 42.6, avgMemory: 58.9, lastIncident: "21m ago" },
+  { id: "testing", name: "Testing", value: 1, color: "#94a3b8", health: 97.6, avgCpu: 87.1, avgMemory: 79.4, lastIncident: "24m ago" },
 ];
 export type TopIssueTab = "cpu" | "memory" | "disk" | "network";
 export interface TopIssue { name: string; percent: number; duration: string }
@@ -127,9 +189,9 @@ const issueRows = {
 export const nocTopIssues = issueRows;
 
 export type EventTone = "green" | "amber" | "blue" | "red";
-export interface NocEvent { title: string; detail: string; time: string; tone: EventTone; icon: "server" | "flame" | "database" | "online" | "workflow" | "offline" }
+export interface NocEvent { title: string; detail: string; time: string; tone: EventTone; icon: "server" | "flame" | "database" | "online" | "workflow" | "offline"; ageMinutes?: number; healthChange?: NocHealthChangeStatus }
 export const nocRecentEvents: NocEvent[] = [
-  { title: "Server recovered", detail: "web-01", time: "2m ago", tone: "green", icon: "online" },
+  { title: "Server recovered", detail: "web-01", time: "2m ago", tone: "green", icon: "online", ageMinutes: 2, healthChange: "recovered" },
   { title: "Critical database load", detail: "prod-db-01", time: "3m ago", tone: "red", icon: "offline" },
   { title: "High CPU usage", detail: "app-worker-02", time: "5m ago", tone: "amber", icon: "flame" },
   { title: "New backup completed", detail: "db-01", time: "8m ago", tone: "blue", icon: "database" },

@@ -1,0 +1,125 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.metrics,
+.trendGrid,
+.statusGrid,
+.tableGrid {
+  display: grid;
+  min-width: 0;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.trendGrid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.statusGrid,
+.tableGrid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.panel {
+  min-width: 0;
+  padding: 16px !important;
+}
+
+.panel > div:first-child {
+  min-height: 32px;
+  margin-bottom: 4px;
+}
+
+.panel :global(.font-display.text-sm) {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.25;
+}
+
+.panel :global(.recharts-cartesian-axis-tick-value) {
+  font-size: 12px !important;
+}
+
+.panel > div:last-child {
+  font-size: 12px;
+}
+
+.panel :global(.executive-overview-donut) {
+  height: 168px;
+  min-height: 0;
+}
+
+.panel :global(.executive-overview-donut-legend) {
+  gap: 10px;
+  font-size: 12px;
+}
+
+.panel :global(.executive-overview-donut-legend-row) {
+  font-size: 12px;
+}
+
+.panel :global(.executive-overview-availability-row) {
+  grid-template-columns: minmax(100px, 1fr) 42px minmax(90px, 1.2fr);
+  min-height: 25px;
+  font-size: 12px;
+}
+
+.panel table {
+  table-layout: fixed;
+}
+
+.panel th {
+  padding: 8px 8px;
+  font-size: 12px !important;
+  line-height: 1.2;
+}
+
+.panel td {
+  padding: 10px 8px;
+  font-size: 13px !important;
+  line-height: 1.25;
+}
+
+.panel :global(.executive-overview-trend) {
+  font-size: 12px !important;
+}
+
+@media (min-width: 640px) {
+  .metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .statusGrid,
+  .tableGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .trendGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .metrics {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .trendGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .statusGrid,
+  .tableGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

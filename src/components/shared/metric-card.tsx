@@ -19,9 +19,10 @@ interface MetricCardProps {
   labelClassName?: string;
   valueClassName?: string;
   trendClassName?: string;
+  detailClassName?: string;
 }
 
-export function MetricCard({ item, className, labelClassName, valueClassName, trendClassName }: MetricCardProps) {
+export function MetricCard({ item, className, labelClassName, valueClassName, trendClassName, detailClassName }: MetricCardProps) {
   const isDown = item.trend === "down";
   const trend = item.trend === "flat"
     ? item.change
@@ -37,6 +38,7 @@ export function MetricCard({ item, className, labelClassName, valueClassName, tr
       labelClassName={labelClassName}
       valueClassName={valueClassName}
       trendClassName={cn(item.trend !== "flat" && "text-success", trendClassName)}
+      detailClassName={detailClassName}
       detail={item.detail}
     />
   );

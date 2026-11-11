@@ -30,7 +30,7 @@ export function InfrastructureDashboard() {
       <PageMeta breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} />
       <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="top">
         <Select value={environment} onValueChange={setEnvironment}>
-          <SelectTrigger className="h-7 min-w-[145px] text-[9px]" aria-label="Filter by environment">
+          <SelectTrigger className="h-9 min-w-[145px] text-[12px]" aria-label="Filter by environment">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -42,7 +42,7 @@ export function InfrastructureDashboard() {
           </SelectContent>
         </Select>
         <Select value={provider} onValueChange={setProvider}>
-          <SelectTrigger className="h-7 min-w-[145px] text-[9px]" aria-label="Filter by provider">
+          <SelectTrigger className="h-9 min-w-[145px] text-[12px]" aria-label="Filter by provider">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -54,7 +54,7 @@ export function InfrastructureDashboard() {
           </SelectContent>
         </Select>
         <Select value={groupBy} onValueChange={setGroupBy}>
-          <SelectTrigger className="h-7 min-w-[160px] text-[9px]" aria-label="Group assets by">
+          <SelectTrigger className="h-9 min-w-[160px] text-[12px]" aria-label="Group assets by">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -67,13 +67,21 @@ export function InfrastructureDashboard() {
         </Select>
       </PageHeading>
 
-      <section aria-label="Infrastructure summary" className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-6">
+      <section aria-label="Infrastructure summary" className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {infrastructureStats.map((item) => (
-          <MetricCard key={item.label} item={item} className="h-[106px] items-start gap-2 p-3" />
+          <MetricCard
+            key={item.label}
+            item={item}
+            className="h-[112px] items-center gap-2.5 p-4"
+            labelClassName="text-[13px] leading-[18px]"
+            valueClassName="text-[26px] leading-[30px]"
+            trendClassName="text-[12px] leading-4"
+            detailClassName="mt-0.5 text-[12px] leading-4"
+          />
         ))}
       </section>
 
-      <section aria-label="Topology and health" className="mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,2.1fr)_minmax(290px,0.82fr)]">
+      <section aria-label="Topology and health" className="mt-4 grid items-stretch gap-4 lg:grid-cols-[minmax(0,2.1fr)_minmax(290px,0.82fr)]">
         <TopologyPanel />
         <InfrastructureHealthPanel
           className="h-[472px]"
@@ -81,7 +89,7 @@ export function InfrastructureDashboard() {
         />
       </section>
 
-      <section aria-label="Breakdown" className="mt-2.5 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Breakdown" className="mt-4 grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <AssetsEnvironmentPanel className="h-[238px]" />
         <DonutPanel title="Provider Distribution" data={providerDistribution} total={48} totalLabel="Total Assets" className="h-[238px]" />
         <InfrastructureEventsPanel className="h-[238px]" />

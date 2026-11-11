@@ -159,7 +159,7 @@ export function AvailabilityPanel({ className }: { className?: string }) {
     <Panel title="Server Availability" range="24h" className={className}>
       <div className="flex flex-1 flex-col gap-3 pt-3">
         {serverAvailability.map((server) => (
-          <div key={server.name} className="grid grid-cols-[minmax(100px,1fr)_29px_1.2fr] items-center gap-2 text-[10px] text-[#536782] dark:text-[#a9bcd2]">
+          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(100px,1fr)_29px_1.2fr] items-center gap-2 text-[12px] text-[#536782] dark:text-[#a9bcd2]">
             <span className="truncate">{server.name}</span>
             <span className="whitespace-nowrap text-right">{server.count}</span>
             <div className="flex h-2.5 overflow-hidden rounded-sm bg-muted" aria-hidden="true">

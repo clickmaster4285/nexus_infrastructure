@@ -52,7 +52,7 @@ interface InfrastructureHealthPanelProps {
 
 export function InfrastructureHealthPanel({ onAlertSelect, className }: InfrastructureHealthPanelProps) {
   return (
-    <Panel title="Infrastructure Health" className={cn("flex flex-col p-2.5", className)}>
+    <Panel title="Infrastructure Health" className={cn("flex flex-col p-4", className)}>
       {/* Summary */}
       <div className="border-b border-border pb-2.5">
         <div className="grid h-[57px] grid-cols-3 items-center">
@@ -63,7 +63,7 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
             >
               <item.icon size={17} aria-hidden="true" className={iconToneText[item.tone]} />
               <b className="font-display text-[20px] font-extrabold leading-none text-[#152842] dark:text-[#e6edf7]">{item.value}</b>
-              <span className="text-[9px] text-muted-foreground">{item.label}</span>
+              <span className="text-[12px] text-muted-foreground">{item.label}</span>
             </div>
           ))}
         </div>
@@ -80,19 +80,19 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
 
       {/* Resource utilization */}
       <div className="mb-3 mt-3 flex items-center justify-between">
-        <b className="font-display text-[11px] font-bold">Resource Utilization</b>
-        <button type="button" className="flex cursor-pointer items-center gap-1 text-[9px] text-[#4284c1] transition-colors hover:text-[#2f6ea8]">
+        <b className="font-display text-[14px] font-bold">Resource Utilization</b>
+        <button type="button" className="flex cursor-pointer items-center gap-1 text-[12px] text-[#4284c1] transition-colors hover:text-[#2f6ea8]">
           View Details <ArrowRight size={12} aria-hidden="true" />
         </button>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         {resourceUtilization.map((resource) => (
           <div key={resource.label} className="flex items-center gap-2">
             <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", resourceTone[resource.tone])}>
               <Icon name={resource.icon} size={14} />
             </span>
             <div className="min-w-0 flex-1">
-              <div className="mb-1 flex items-center justify-between text-[9px] text-[#61758d] dark:text-[#a9bcd2]">
+              <div className="mb-1 flex items-center justify-between text-[12px] text-[#61758d] dark:text-[#a9bcd2]">
                 <span>{resource.label}</span>
                 <b className="font-semibold text-foreground">{resource.value}%</b>
               </div>
@@ -107,11 +107,11 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
       {/* Active alerts */}
       <div className="mt-auto border-t border-border pt-3">
         <div className="mb-2 flex items-center justify-between">
-          <b className="font-display text-[10px] font-bold">Active Alerts</b>
+          <b className="font-display text-[13px] font-bold">Active Alerts</b>
           <button
             type="button"
             onClick={() => onAlertSelect?.()}
-            className="flex cursor-pointer items-center gap-1 text-[8px] text-[#4284c1] transition-colors hover:text-[#2f6ea8]"
+            className="flex cursor-pointer items-center gap-1 text-[12px] text-[#4284c1] transition-colors hover:text-[#2f6ea8]"
           >
             View all <ArrowRight size={12} aria-hidden="true" />
           </button>
@@ -122,7 +122,7 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
               key={chip.severity}
               type="button"
               onClick={() => onAlertSelect?.(chip.severity)}
-              className={cn("min-h-[25px] cursor-pointer whitespace-nowrap rounded-full px-2.5 text-[10px] font-medium transition-colors", chip.className)}
+              className={cn("min-h-[30px] cursor-pointer whitespace-nowrap rounded-full px-3 text-[12px] font-medium transition-colors", chip.className)}
             >
               {chip.label}
             </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { CircleMarker, MapContainer, Popup, TileLayer, Tooltip, useMap } from "react-leaflet";
 import { latLngBounds } from "leaflet";
 import { Expand, LocateFixed, Minimize2, X } from "lucide-react";
@@ -9,6 +9,7 @@ import "leaflet/dist/leaflet.css";
 
 import { cn } from "@/lib/utils";
 import { nocMarkers, type MarkerStatus, type NocMarker } from "@/data/mock/live-operations";
+import { MAP_TILES } from "@/components/live-operations/map-tiles";
 
 const statusColors: Record<MarkerStatus, string> = {
   healthy: "#22c55e",
@@ -17,25 +18,7 @@ const statusColors: Record<MarkerStatus, string> = {
 };
 
 // Esri World Canvas — free basemap, no API key (attribution shown on the map).
-const TILES = {
-  dark: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    background: "#0b1220",
-    attribution:
-      'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, HERE, MapmyIndia &mdash; <a href="https://www.esri.com/" target="_blank" rel="noreferrer">Esri</a>',
-  },
-  light: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    background: "#eef2f7",
-    attribution:
-      'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, HERE, MapmyIndia &mdash; <a href="https://www.esri.com/" target="_blank" rel="noreferrer">Esri</a>',
-  },
-} as const;
-
-const CARTO_TILES = {
-  dark: { url: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", background: "#111827", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
-  light: { url: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", background: "#eef2f7", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
-} as const;
+const TILES = MAP_TILES;
 
 export interface MapLegendCounts {
   healthy?: number;
@@ -53,6 +36,12 @@ export interface InfrastructureMapMarker {
   role: string;
   servers?: number;
   health?: number;
+  /** Optional compact badge shown on aggregated location markers. */
+  count?: number;
+  /** Optional page-specific details shown in the marker tooltip and popup. */
+  details?: string;
+  /** Optional page-specific React content shared by the hover tooltip and popup. */
+  content?: ReactNode;
 }
 
 function NocMap({
@@ -61,35 +50,37 @@ function NocMap({
   markers = nocMarkers,
   center = [31, 15],
   fitMarkers = false,
-  tileTheme = "default",
   fitPadding = 28,
+  minZoom = 2,
   criticalPulseOnly = false,
   onTileError,
+  onMarkerClick,
 }: {
   zoom?: number;
   variant?: MapVariant;
   markers?: InfrastructureMapMarker[];
   center?: [number, number];
   fitMarkers?: boolean;
-  tileTheme?: "default" | "carto";
   fitPadding?: number;
+  minZoom?: number;
   criticalPulseOnly?: boolean;
   onTileError?: () => void;
+  onMarkerClick?: (marker: InfrastructureMapMarker) => void;
 }) {
-  const tiles = (tileTheme === "carto" ? CARTO_TILES : TILES)[variant];
+  const tiles = TILES[variant];
   return (
     <MapContainer
       center={center}
       zoom={zoom}
       zoomControl={false}
-      minZoom={2}
+      minZoom={minZoom}
       maxZoom={12}
       scrollWheelZoom={false}
       className="h-full w-full"
       style={{ background: tiles.background }}
     >
-      <MapZoomControls center={center} zoom={zoom} light={variant === "light"} />
-      {fitMarkers && <FitMarkers markers={markers} padding={fitPadding} />}
+      <MapZoomControls center={center} zoom={zoom} light={variant === "light"} fitMarkers={fitMarkers} markers={markers} fitPadding={fitPadding} />
+      {fitMarkers && <FitMarkers markers={markers} padding={fitPadding} minZoom={minZoom} />}
       <TileLayer url={tiles.url} attribution={tiles.attribution} maxZoom={16} eventHandlers={{ tileerror: () => onTileError?.() }} />
       {markers.flatMap((marker) => [
         ...(criticalPulseOnly && marker.status !== "critical" ? [] : [<CircleMarker
@@ -108,20 +99,14 @@ function NocMap({
             fillColor: statusColors[marker.status],
             fillOpacity: 0.95,
           }}
+          eventHandlers={onMarkerClick ? { click: () => onMarkerClick(marker) } : undefined}
         >
-          <Tooltip direction="top" offset={[0, -6]} opacity={0.97}>
-            <div className="text-[12px] leading-snug">
-              <b>{marker.name}</b>
-              <br />
-              <span className="text-slate-500">{marker.status} · {marker.servers ?? "—"} servers · {marker.health ?? 0}% health</span>
-            </div>
+          {marker.count != null && marker.count > 1 && <Tooltip permanent direction="center" className="!border-0 !bg-transparent !p-0 !shadow-none"><span className="grid h-4 min-w-4 place-items-center rounded-full border border-white bg-white px-1 text-[10px] font-bold leading-none text-slate-800 shadow-sm">{marker.count}</span></Tooltip>}
+          <Tooltip direction="top" offset={[0, -12]} opacity={0.97} permanent={false} sticky={false} className="!z-[450] !max-w-[260px] !whitespace-normal !break-words !rounded-md !px-3 !py-2 !shadow-md">
+            {marker.content ?? <div className="max-w-[236px] whitespace-normal break-words text-[12px] leading-snug"><b>{marker.name}</b><br /><span className="text-slate-500">{marker.details ?? `${marker.status} · ${marker.servers ?? "—"} servers · ${marker.health ?? 0}% health`}</span></div>}
           </Tooltip>
           <Popup>
-            <div className="min-w-[120px] text-[11px] leading-snug">
-              <b>{marker.name}</b>
-              <br />
-              <span>{marker.role} · {marker.servers ?? "—"} servers · {marker.health ?? 0}% health</span>
-            </div>
+            {marker.content ?? <div className="min-w-[120px] max-w-[260px] whitespace-normal break-words text-[12px] leading-snug"><b>{marker.name}</b><br /><span>{marker.details ?? `${marker.role} · ${marker.servers ?? "—"} servers · ${marker.health ?? 0}% health`}</span></div>}
           </Popup>
         </CircleMarker>,
       ])}
@@ -129,8 +114,16 @@ function NocMap({
   );
 }
 
-function MapZoomControls({ center, zoom, light }: { center: [number, number]; zoom: number; light: boolean }) {
+function MapZoomControls({ center, zoom, light, fitMarkers, markers, fitPadding }: { center: [number, number]; zoom: number; light: boolean; fitMarkers: boolean; markers: InfrastructureMapMarker[]; fitPadding: number }) {
   const map = useMap();
+  const resetView = () => {
+    if (fitMarkers && markers.length) {
+      const bounds = latLngBounds(markers.map(({ lat, lng }) => [lat, lng] as [number, number]));
+      map.fitBounds(bounds, { padding: [fitPadding, fitPadding], maxZoom: 4, animate: true });
+    } else {
+      map.setView(center, zoom, { animate: true });
+    }
+  };
   const buttonTone = light
     ? "border-[#d8e2ef] bg-white/95 text-[#284466] hover:bg-[#eff6ff] focus-visible:ring-[#3788f3]"
     : "border-white/15 bg-slate-950/85 text-slate-100 hover:bg-slate-800 focus-visible:ring-cyan-400";
@@ -138,12 +131,12 @@ function MapZoomControls({ center, zoom, light }: { center: [number, number]; zo
     <div className="absolute left-2 top-2 z-[500] flex flex-col overflow-hidden rounded-md border border-white/30 shadow-md shadow-slate-900/15 backdrop-blur-sm" role="group" aria-label="Map navigation">
       <button type="button" onClick={() => map.zoomIn()} aria-label="Zoom in" title="Zoom in" className={cn("grid h-7 w-7 cursor-pointer place-items-center border-b text-base font-medium leading-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset", buttonTone)}>+</button>
       <button type="button" onClick={() => map.zoomOut()} aria-label="Zoom out" title="Zoom out" className={cn("grid h-7 w-7 cursor-pointer place-items-center text-base font-medium leading-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset", buttonTone)}>−</button>
-      <button type="button" onClick={() => map.setView(center, zoom, { animate: true })} aria-label="Reset map view" title="Reset map view" className={cn("grid h-6 w-7 cursor-pointer place-items-center border-t transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset", buttonTone)}><LocateFixed size={12} /></button>
+      <button type="button" onClick={resetView} aria-label="Reset map view" title="Reset map view" className={cn("grid h-6 w-7 cursor-pointer place-items-center border-t transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset", buttonTone)}><LocateFixed size={12} /></button>
     </div>
   );
 }
 
-function FitMarkers({ markers, padding = 28 }: { markers: InfrastructureMapMarker[]; padding?: number }) {
+function FitMarkers({ markers, padding = 28, minZoom = 2 }: { markers: InfrastructureMapMarker[]; padding?: number; minZoom?: number }) {
   const map = useMap();
   useEffect(() => {
     if (!markers.length) return;
@@ -174,7 +167,7 @@ const lightLegendLabel: Record<MarkerStatus, string> = {
 };
 
 const lightLegend = (counts?: MapLegendCounts, overlay = false, labels?: Partial<Record<MarkerStatus, string>>) => (
-  <div className={cn("flex items-center justify-center gap-3 text-[12px] font-medium", overlay ? "max-w-[54%] flex-wrap rounded-md bg-white/90 px-2.5 py-1.5 text-[#52637a] shadow-sm backdrop-blur-sm" : "flex-none border-t border-[#e3e9f1] bg-[#f5f7fb] px-2 py-1.5 text-[#52637a]")}>
+  <div className={cn("flex items-center justify-center gap-3 text-[12px] font-medium", overlay ? "max-w-none flex-nowrap rounded-full bg-white/90 px-2.5 py-1.5 text-[#52637a] shadow-md backdrop-blur-sm" : "flex-none border-t border-[#e3e9f1] bg-[#f5f7fb] px-2 py-1.5 text-[#52637a]")}>
     {(["healthy", "warning", "critical"] as const).map((status) => {
       return (
         <span key={status} className="flex items-center gap-1.5 whitespace-nowrap text-[12px] font-medium text-[#52637a]">
@@ -197,12 +190,13 @@ export function InfrastructureMap({
   description = "14 locations · live fleet status",
   zoom = 2,
   fitMarkers = false,
-  tileTheme = "default",
   fitPadding = 28,
+  minZoom = 2,
   criticalPulseOnly = false,
   legendPosition = "footer",
   legendLabels,
   fallbackOnTileError = false,
+  onMarkerClick,
 }: {
   variant?: MapVariant;
   legendCounts?: MapLegendCounts;
@@ -212,12 +206,13 @@ export function InfrastructureMap({
   description?: string;
   zoom?: number;
   fitMarkers?: boolean;
-  tileTheme?: "default" | "carto";
   fitPadding?: number;
+  minZoom?: number;
   criticalPulseOnly?: boolean;
   legendPosition?: "footer" | "overlay-left";
   legendLabels?: Partial<Record<MarkerStatus, string>>;
   fallbackOnTileError?: boolean;
+  onMarkerClick?: (marker: InfrastructureMapMarker) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [tileFailed, setTileFailed] = useState(false);
@@ -273,7 +268,7 @@ export function InfrastructureMap({
           </button>
         </div>
         <div className="relative min-h-0 flex-1">
-          <NocMap zoom={Math.max(zoom, 3)} variant={variant} markers={markers} center={center} fitMarkers={fitMarkers} tileTheme={tileTheme} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} />
+          <NocMap zoom={Math.max(zoom, minZoom)} variant={variant} markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} minZoom={minZoom} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} onMarkerClick={onMarkerClick} />
           {fallback}
           {!isLight && darkLegend(legendCounts, legendPosition === "overlay-left" ? "left" : "center", legendLabels)}
           {isLight && legendPosition === "overlay-left" && <div className="pointer-events-none absolute bottom-2 left-2 z-[500]">{lightLegend(legendCounts, true, legendLabels)}</div>}
@@ -287,21 +282,21 @@ export function InfrastructureMap({
     return (
       <div className="relative flex h-full w-full flex-col overflow-hidden rounded-md border border-[#e3e9f1]">
         {criticalPulseOnly && <CriticalPulseStyles />}
-        <div className="relative min-h-0 flex-1 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#eef2f7] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-white/85 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-[42%] [&_.leaflet-control-attribution]:!whitespace-normal [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[12px] [&_.leaflet-control-attribution]:!text-slate-500 [&_.leaflet-control-attribution_a]:!text-slate-600 [&_.leaflet-tile]:transition-opacity [&_.leaflet-tile]:duration-300 [&_.leaflet-control-attribution]:!z-[450]">
-          <NocMap zoom={zoom} variant="light" markers={markers} center={center} fitMarkers={fitMarkers} tileTheme={tileTheme} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} />
+        <div className="relative min-h-0 flex-1 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#eef2f7] [&_.leaflet-tooltip-pane]:!z-[450] [&_.leaflet-tooltip]:!max-w-[260px] [&_.leaflet-tooltip]:!whitespace-normal [&_.leaflet-tooltip]:!break-words [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-white/90 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[10px] [&_.leaflet-control-attribution]:!text-slate-500 [&_.leaflet-control-attribution_a]:!text-slate-600 [&_.leaflet-tile]:transition-opacity [&_.leaflet-tile]:duration-300 [&_.leaflet-control-attribution]:!z-[450]">
+          <NocMap zoom={zoom} variant="light" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} minZoom={minZoom} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} onMarkerClick={onMarkerClick} />
           {fallback}
           {expandButton}
-          {legendPosition === "overlay-left" && <div className="pointer-events-none absolute bottom-2 left-2 z-[500]">{lightLegend(legendCounts, true, legendLabels)}</div>}
+      {legendPosition === "overlay-left" && <div className="pointer-events-none absolute bottom-2 left-2 z-[500]">{lightLegend(legendCounts, true, legendLabels)}</div>}
         </div>
         {legendPosition === "footer" && lightLegend(legendCounts)}
       </div>
     );
   }
 
-  return (
-    <div className="relative h-full w-full overflow-hidden rounded-md border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#0b1220] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-slate-950/60 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-[42%] [&_.leaflet-control-attribution]:!whitespace-normal [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[12px] [&_.leaflet-control-attribution]:!text-slate-400 [&_.leaflet-control-attribution_a]:!text-slate-300">
+    return (
+    <div className="relative h-full w-full overflow-hidden rounded-md border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#0b1220] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-slate-950/70 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[10px] [&_.leaflet-control-attribution]:!text-slate-400 [&_.leaflet-control-attribution_a]:!text-slate-300">
       {criticalPulseOnly && <CriticalPulseStyles />}
-      <NocMap zoom={zoom} variant="dark" markers={markers} center={center} fitMarkers={fitMarkers} tileTheme={tileTheme} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} />
+      <NocMap zoom={zoom} variant="dark" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} onMarkerClick={onMarkerClick} />
       {expandButton}
       {fallback}
       {darkLegend(legendCounts, legendPosition === "overlay-left" ? "left" : "center", legendLabels)}
