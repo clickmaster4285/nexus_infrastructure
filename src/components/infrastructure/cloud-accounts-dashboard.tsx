@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  ArrowUp, Download, Plus, RefreshCw,
+  ArrowRight, ArrowUp, Download, Plus, RefreshCw,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Cell, Pie, PieChart,
@@ -211,7 +211,7 @@ function AccountStatusCard() {
       </div>
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[12px] text-muted-foreground">
         <span className="truncate">Last sync: {accountSyncInfo.lastSync} · {accountSyncInfo.providerCount} providers</span>
-        <button type="button" className="shrink-0 font-medium text-primary hover:underline">View all →</button>
+        <button type="button" className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>
       </div>
     </div>
   );
@@ -350,7 +350,7 @@ export function CloudAccountsDashboard() {
           </div>
           <div className="pt-1 text-[12px] text-muted-foreground">Showing 1-8 of 8 accounts</div>
         </Panel>
-        <Panel title="Top Services by Cost" className="min-w-0" action={<button onClick={() => toast("Showing all cloud services.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Services by Cost" className="min-w-0" action={<button onClick={() => toast("Showing all cloud services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[280px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Service</th><th className="pb-1.5">Provider</th><th className="pb-1.5 text-right">Monthly Cost</th></tr></thead>
@@ -361,14 +361,14 @@ export function CloudAccountsDashboard() {
       </section>
 
       <section aria-label="Cloud account breakdown" className="grid items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-        <Panel title="Resources by Provider" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing provider resource details.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Resources by Provider" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing provider resource details.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <ProviderResourcesCard />
         </Panel>
         <Panel title="Accounts by Status" className="flex h-full min-w-0 flex-col p-4"><AccountStatusCard /></Panel>
-        <Panel title="Top Regions by Resource Count" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud regions.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Regions by Resource Count" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud regions.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{regions.map((region) => <div key={region.name} className="grid grid-cols-[minmax(0,1fr)_minmax(45px,0.8fr)_30px] items-center gap-2 text-[12px]"><span className="truncate text-foreground" title={region.name}>{region.name}</span><div className="h-[5px] rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${Math.max(4, (region.count / maxRegionCount) * 100)}%`, backgroundColor: providerColors[region.provider] }} /></div><b className="text-right text-foreground">{region.count}</b></div>)}</div></div>
         </Panel>
-        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud account events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud account events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_64px] items-center gap-2 text-[12px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground" title={event.text}>{event.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{event.ago}</span></div>)}</div></div>
         </Panel>
       </section>

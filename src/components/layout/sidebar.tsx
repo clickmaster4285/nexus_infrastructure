@@ -105,7 +105,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                               aria-current={isActive ? "page" : undefined}
                               onClick={onClose}
                               className={cn(
-                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[26px] text-xs font-normal text-sidebar-foreground transition-colors hover:bg-white/5 hover:text-white",
+                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[26px] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40",
                                 isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                               )}
                             >

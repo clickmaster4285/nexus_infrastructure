@@ -6,7 +6,7 @@ import {
   ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import {
-  Download, Expand, MoreVertical, Plus, Save, Search, X,
+  ArrowRight, Download, Expand, MoreVertical, Plus, Save, Search, X,
 } from "lucide-react";
 
 import { PageHeading } from "@/components/layout/page-heading";
@@ -306,10 +306,6 @@ export function MetricsExplorerDashboard() {
     const end = Math.min(brushRange.endIndex, rangedChartData.length - 1);
     return rangedChartData.slice(start, Math.max(start + 1, end + 1));
   }, [brushRange, rangedChartData]);
-  const metricSummaries = useMemo(() => series.filter((item) => activeSeries.includes(item.key)).map((item) => {
-    const values = displayedChartData.map((point) => point[item.key] as number);
-    return { ...item, average: values.reduce((sum, value) => sum + value, 0) / Math.max(values.length, 1), peak: Math.max(...values), min: Math.min(...values), latest: values.at(-1) ?? 0 };
-  }), [activeSeries, displayedChartData]);
   const throughputPeak = useMemo(() => {
     const values = displayedChartData.flatMap((point) => series.filter((item) => item.axis === "throughput").map((item) => point[item.key] as number));
     return Math.max(1, ...values);
@@ -450,16 +446,13 @@ export function MetricsExplorerDashboard() {
           <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5" aria-label="Chart time range">{["1h", "6h", "24h", "7d", "30d"].map((range) => <button key={range} onClick={() => setQuickRange(range)} aria-pressed={chartRange === range} className={cn("rounded px-1.5 py-1 text-[10px] font-semibold", chartRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{range}</button>)}</div>
           <details className="relative"><summary aria-label="Metric chart actions" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg"><button onClick={exportChartPng} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button><button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button><button onClick={() => chartPanelRef.current?.requestFullscreen?.()} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button></div></details>
         </div>}>
-          <div ref={chartPanelRef} className="flex min-h-0 flex-1 flex-col gap-3 bg-card">
-            <div className="flex flex-wrap items-center gap-1.5">
+          <div ref={chartPanelRef} className="flex min-h-0 flex-1 flex-col gap-0 bg-card">
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {series.map((item) => {
                 const enabled = activeSeries.includes(item.key);
                 const latest = metricSeries.at(-1)?.[item.key as keyof (typeof metricSeries)[number]] as number;
                 return <button key={item.key} title={enabled ? `Hide ${item.name}` : "Click to show"} onClick={() => toggleSeries(item.key)} aria-pressed={enabled} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors", enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through")}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? item.color : "#94a3b8" }} />{item.name}<b className="tabular-nums">{latest} {item.unit}</b></button>;
               })}
-            </div>
-            <div className="flex min-h-[50px] items-center gap-3 overflow-x-auto rounded-lg bg-[#F8F9FB] px-3 py-2 dark:bg-[#1c2b40]">
-              {metricSummaries.map((item) => <div key={item.key} className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[11px]"><b style={{ color: item.color }}>{item.name}</b><span className="text-muted-foreground">Avg <strong className="text-foreground">{item.average.toFixed(1)} {item.unit}</strong></span><span className="text-muted-foreground">Peak <strong className="text-foreground">{item.peak} {item.unit}</strong></span><span className="text-muted-foreground">Min <strong className="text-foreground">{item.min} {item.unit}</strong></span></div>)}
             </div>
             <div ref={chartPlotRef} className="relative flex min-h-[340px] flex-1 touch-pan-y select-none flex-col gap-1" onPointerDown={beginChartSelection} onPointerMove={updateChartSelection} onPointerUp={finishChartSelection} onPointerCancel={finishChartSelection}>
               <div className="flex min-h-[190px] flex-[1.6] flex-col">
@@ -489,7 +482,7 @@ export function MetricsExplorerDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Metrics by Value" className="h-full min-h-[700px] min-w-0 p-4" action={<button onClick={() => toast("Showing all metrics by value.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Metrics by Value" className="h-full min-h-[700px] min-w-0 p-4" action={<button onClick={() => toast("Showing all metrics by value.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col overflow-x-auto pt-1">
             <table className="w-full min-w-[360px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Metric</th><th className="pb-1.5">Resource</th><th className="pb-1.5 text-right">Value</th><th className="pb-1.5 text-right">Change</th></tr></thead>
@@ -531,7 +524,7 @@ export function MetricsExplorerDashboard() {
           <div className="mt-auto pt-3 text-[12px] text-muted-foreground">Updated 1m ago</div>
         </Panel>
 
-        <Panel title="Recent Metric Alerts" className="min-w-0 p-4" headerClassName="h-10" action={<button onClick={() => toast("Showing all metric alerts.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Recent Metric Alerts" className="min-w-0 p-4" headerClassName="h-10" action={<button onClick={() => toast("Showing all metric alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 space-y-0 overflow-y-auto">
               {recentAlerts.map((alert) => <div key={alert.text} title={alert.text} className="grid h-11 grid-cols-[8px_minmax(0,1fr)_56px] items-center gap-2 text-[12px]"><i className={cn("h-2 w-2 shrink-0 rounded-full", alert.severity === "critical" ? "bg-rose-500" : alert.severity === "warning" ? "bg-amber-500" : "bg-blue-500")} /><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{alert.ago}</span></div>)}

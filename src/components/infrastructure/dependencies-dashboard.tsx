@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Download, Link2, Plus, RefreshCw,
+  ArrowRight, ChevronLeft, ChevronRight, Download, Link2, Plus, RefreshCw,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
@@ -57,7 +57,9 @@ const dependencyTypes = [
   { name: "Others", value: 16, color: "#9aa9be" },
 ];
 
-const dependencies: {
+const totalDependencyCount = Number(stats.find((item) => item.label === "Total Dependencies")?.value ?? 0);
+
+const dependencyTemplates: {
   name: string;
   type: string;
   parent: string;
@@ -78,7 +80,26 @@ const dependencies: {
   { name: "Search Service → Elasticsearch", type: "API / HTTP", parent: "Search Service", target: "Elasticsearch Cluster", status: "Warning", response: "340 ms", responseMs: 340, uptime: "98.90%" },
   { name: "Analytics Service → ClickHouse", type: "Database", parent: "Analytics Service", target: "ClickHouse Cluster", status: "Healthy", response: "74 ms", responseMs: 74, uptime: "99.98%" },
 ];
-const totalDependencyCount = Number(stats.find((item) => item.label === "Total Dependencies")?.value ?? 0);
+
+const dependencies = Array.from({ length: totalDependencyCount }, (_, index) => {
+  const template = dependencyTemplates[index % dependencyTemplates.length];
+  if (index < dependencyTemplates.length) return template;
+
+  const suffix = Math.floor(index / dependencyTemplates.length) + 1;
+  const responseMs = template.responseMs === 0
+    ? 0
+    : Math.max(8, template.responseMs + ((index * 17) % 90) - 45);
+
+  return {
+    ...template,
+    name: `${template.parent} ${suffix} → ${template.target}`,
+    parent: `${template.parent} ${suffix}`,
+    target: `${template.target} ${suffix}`,
+    responseMs,
+    response: responseMs === 0 ? "—" : `${responseMs} ms`,
+    uptime: `${(98 + ((index * 7) % 199) / 100).toFixed(2)}%`,
+  };
+});
 
 const topDependenciesByResponseTime = [
   { name: "Notification Service → SendGrid", type: "API / HTTP", responseMs: 780 },
@@ -172,11 +193,24 @@ function DistributionRows({ items, color = "bg-blue-500" }: { items: { name: str
 export function DependenciesDashboard() {
   const [notice, setNotice] = useState("");
   const [updatedAt, setUpdatedAt] = useState("Just now");
-  const [pageSize, setPageSize] = useState("10");
-  const currentPage = 1;
-  const pageSizeNumber = Number(pageSize);
-  const rangeStart = dependencies.length ? (currentPage - 1) * pageSizeNumber + 1 : 0;
-  const rangeEnd = Math.min(currentPage * pageSizeNumber, dependencies.length);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.ceil(totalDependencyCount / pageSize);
+  const rangeStart = totalDependencyCount ? (currentPage - 1) * pageSize + 1 : 0;
+  const rangeEnd = Math.min(currentPage * pageSize, totalDependencyCount);
+  const visiblePages = Array.from(
+    new Set([
+      1,
+      totalPages,
+      ...Array.from(
+        { length: Math.min(5, totalPages) },
+        (_, index) => Math.min(Math.max(currentPage - 2, 1), Math.max(totalPages - 4, 1)) + index,
+      ),
+    ]),
+  )
+    .filter((page) => page <= totalPages)
+    .sort((a, b) => a - b);
+  const pageDependencies = dependencies.slice(rangeStart - 1, rangeEnd);
   const toast = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2600);
@@ -249,7 +283,7 @@ export function DependenciesDashboard() {
               </colgroup>
               <thead><tr className="border-b border-border text-muted-foreground">{["Dependency Name", "Type", "Parent Service", "Dependency", "Status", "Health", "Response Time", "Uptime", "Actions"].map((heading) => <th key={heading} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 pb-2 font-semibold">{heading}</th>)}</tr></thead>
               <tbody>
-                {dependencies.map((item) => (
+                {pageDependencies.map((item) => (
                   <tr key={item.name} className="border-b border-border/70 last:border-0">
                     <td title={item.name} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 font-semibold text-foreground"><Link2 size={12} className={`mr-1.5 inline ${statusColor[item.status]}`} />{item.name}</td>
                     <td title={item.type} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.type}</td>
@@ -265,23 +299,28 @@ export function DependenciesDashboard() {
               </tbody>
             </table>
           </div>
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-2 text-[12px] text-muted-foreground">
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[12px] text-muted-foreground">
             <span>Showing {rangeStart}-{rangeEnd} of {totalDependencyCount} dependencies</span>
-            <div className="flex items-center gap-1.5">
-              <span>Rows per page:</span>
-              <select aria-label="Rows per page" value={pageSize} onChange={(event) => setPageSize(event.target.value)} className="h-8 rounded border border-border bg-card px-2 text-[12px] text-foreground">
-                {["10", "20", "50"].map((size) => <option key={size} value={size}>{size}</option>)}
-              </select>
-              <button aria-label="Previous page" disabled className="rounded px-1.5 py-1 hover:bg-accent disabled:opacity-40">‹</button>
-              {[1, 2, 3, 4, 5].map((page) => <button key={page} aria-label={`Go to page ${page}`} onClick={() => toast(`Page ${page} is a mockup action.`)} className={`rounded px-1.5 py-1 ${page === 1 ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}>{page}</button>)}
-              <span>…</span>
-              <button aria-label="Go to last page" onClick={() => toast("Last page is a mockup action.")} className="rounded px-1.5 py-1 hover:bg-accent">13</button>
-              <button aria-label="Next page" onClick={() => toast("Next page is a mockup action.")} className="rounded px-1.5 py-1 hover:bg-accent">›</button>
+            <div aria-label="Dependency pagination" className="flex items-center gap-1">
+              <button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={currentPage === 1} className="inline-flex h-8 items-center gap-1 rounded-md border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
+                <ChevronLeft size={15} aria-hidden="true" />
+                <span>Previous</span>
+              </button>
+              {visiblePages.map((page, index) => (
+                <span key={page} className="inline-flex items-center gap-1">
+                  {index > 0 && page - visiblePages[index - 1] > 1 && <span className="px-1 text-muted-foreground" aria-hidden="true">…</span>}
+                  <button type="button" aria-label={`Go to page ${page}`} aria-current={page === currentPage ? "page" : undefined} onClick={() => setCurrentPage(page)} className={`h-8 min-w-8 rounded-md px-2 font-medium transition-colors ${page === currentPage ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent"}`}>{page}</button>
+                </span>
+              ))}
+              <button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))} disabled={currentPage === totalPages} className="inline-flex h-8 items-center gap-1 rounded-md border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
+                <span>Next</span>
+                <ChevronRight size={15} aria-hidden="true" />
+              </button>
             </div>
           </div>
         </Panel>
 
-        <Panel title="Top Dependencies by Response Time" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all dependencies by response time.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Dependencies by Response Time" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all dependencies by response time.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="min-h-0 flex-1 overflow-auto pt-1">
             <table className="w-full min-w-[320px] table-fixed text-left text-[12px]">
               <colgroup><col className="w-[52%]" /><col className="w-[24%]" /><col className="w-[24%]" /></colgroup>
@@ -313,10 +352,10 @@ export function DependenciesDashboard() {
         <Panel title="Dependencies by Type" className="min-w-0">
           <DistributionRows items={dependencyTypes.map((item) => ({ name: item.name, count: item.value, width: `${item.value / 42 * 100}%`, color: item.color }))} />
         </Panel>
-        <Panel title="Top Parent Services" className="min-w-0" action={<button onClick={() => toast("Showing all parent services.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Parent Services" className="min-w-0" action={<button onClick={() => toast("Showing all parent services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <DistributionRows items={topParents} />
         </Panel>
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all dependency events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all dependency events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="space-y-2.5 pt-1.5">
             {events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_48px] items-center gap-2 text-[12px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
           </div>

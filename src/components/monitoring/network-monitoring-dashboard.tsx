@@ -5,7 +5,7 @@ import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { AlertTriangle, ArrowDown, ArrowUp, Download, Minus, MoreVertical, Plus, type LucideIcon } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowRight, ArrowUp, Download, Minus, MoreVertical, Plus, type LucideIcon } from "lucide-react";
 import * as echarts from "echarts/core";
 import {
   BarChart as EBarChart,
@@ -389,12 +389,19 @@ function SeriesChip({ name, color, value, unit, enabled, onToggle }: {
   );
 }
 
-/** Compact summary chip (grey label + bold value). */
-function SummaryChip({ label, value }: { label: string; value: string }) {
+/** Compact, color-coded chart summary. */
+function SummaryChip({ label, value, tone = "blue" }: { label: string; value: string; tone?: "blue" | "green" | "amber" | "rose" | "violet" }) {
+  const toneClasses = {
+    blue: "border-blue-100 bg-blue-50 text-blue-700 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-300",
+    green: "border-emerald-100 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-300",
+    amber: "border-amber-100 bg-amber-50 text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300",
+    rose: "border-rose-100 bg-rose-50 text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300",
+    violet: "border-violet-100 bg-violet-50 text-violet-700 dark:border-violet-900/50 dark:bg-violet-950/30 dark:text-violet-300",
+  };
   return (
-    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[12px]">
-      <span className="text-muted-foreground">{label}</span>
-      <b className="tabular-nums text-foreground">{value}</b>
+    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px]", toneClasses[tone])}>
+      <span className="opacity-80">{label}</span>
+      <b className="tabular-nums">{value}</b>
     </span>
   );
 }
@@ -463,7 +470,7 @@ function TrafficDonut({ data, total, unit }: { data: { name: string; value: numb
 
 function TalkerList({ title, items, onViewAll }: { title: string; items: { address: string; value: string; width: string; color: string }[]; onViewAll?: () => void }) {
   return (
-    <Panel title={title} className="min-w-0" action={onViewAll ? <button onClick={onViewAll} className="text-[12px] font-semibold text-primary">View All →</button> : undefined}>
+    <Panel title={title} className="min-w-0" action={onViewAll ? <button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button> : undefined}>
       <div className="flex flex-1 items-center py-2">
         <div className="w-full space-y-3">
           {items.map((item) => <div key={item.address} className="grid grid-cols-[minmax(0,1fr)_minmax(45px,1.3fr)_auto] items-center gap-2 text-[12px]"><span className="truncate text-foreground">{item.address}</span><div className="h-[7px] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}</b></div>)}
@@ -897,11 +904,11 @@ export function NetworkMonitoringDashboard() {
             <div className="relative min-h-[220px] min-w-0 flex-1">
               <EChart option={bandwidthOption} className="absolute inset-0" />
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <SummaryChip label="Now" value={`${inboundPct(latest).toFixed(1)}%`} />
-              <SummaryChip label="Avg" value={`${avg(samples.map(inboundPct)).toFixed(1)}%`} />
-              <SummaryChip label="Peak" value={`${Math.max(...samples.map(inboundPct)).toFixed(1)}%`} />
-              <SummaryChip label="Out Avg" value={`${avg(samples.map(outboundPct)).toFixed(1)}%`} />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <SummaryChip label="Now" value={`${inboundPct(latest).toFixed(1)}%`} tone="blue" />
+              <SummaryChip label="Avg" value={`${avg(samples.map(inboundPct)).toFixed(1)}%`} tone="green" />
+              <SummaryChip label="Peak" value={`${Math.max(...samples.map(inboundPct)).toFixed(1)}%`} tone="amber" />
+              <SummaryChip label="Out Avg" value={`${avg(samples.map(outboundPct)).toFixed(1)}%`} tone="violet" />
             </div>
           </div>
         </Panel>
@@ -915,10 +922,10 @@ export function NetworkMonitoringDashboard() {
             <div className="relative min-h-[220px] min-w-0 flex-1">
               <EChart option={trafficOption} className="absolute inset-0" />
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <SummaryChip label="Avg In" value={`${avg(samples.map((sample) => sample.trafficIn)).toFixed(0)} Mbps`} />
-              <SummaryChip label="Avg Out" value={`${avg(samples.map((sample) => sample.trafficOut)).toFixed(0)} Mbps`} />
-              <SummaryChip label="Peak Total" value={`${peakTraffic.toFixed(0)} Mbps`} />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <SummaryChip label="Avg In" value={`${avg(samples.map((sample) => sample.trafficIn)).toFixed(0)} Mbps`} tone="blue" />
+              <SummaryChip label="Avg Out" value={`${avg(samples.map((sample) => sample.trafficOut)).toFixed(0)} Mbps`} tone="green" />
+              <SummaryChip label="Peak Total" value={`${peakTraffic.toFixed(0)} Mbps`} tone="amber" />
             </div>
           </div>
         </Panel>
@@ -932,23 +939,23 @@ export function NetworkMonitoringDashboard() {
             <div className="relative min-h-[220px] min-w-0 flex-1">
               <EChart option={packetsOption} className="absolute inset-0" />
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <SummaryChip label="Avg pps" value={avg(samples.map((sample) => sample.packetsIn + sample.packetsOut)).toFixed(0)} />
-              <SummaryChip label="Errors" value={samples.reduce((sum, sample) => sum + sample.errors, 0).toLocaleString()} />
-              <SummaryChip label="Drops" value={samples.reduce((sum, sample) => sum + sample.drops, 0).toLocaleString()} />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <SummaryChip label="Avg pps" value={avg(samples.map((sample) => sample.packetsIn + sample.packetsOut)).toFixed(0)} tone="blue" />
+              <SummaryChip label="Errors" value={samples.reduce((sum, sample) => sum + sample.errors, 0).toLocaleString()} tone="rose" />
+              <SummaryChip label="Drops" value={samples.reduce((sum, sample) => sum + sample.drops, 0).toLocaleString()} tone="amber" />
             </div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Network analysis" className="grid items-stretch gap-2.5 xl:grid-cols-2">
-        <Panel title="Interface Utilization Heatmap" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all interfaces.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Interface Utilization Heatmap" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all interfaces.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="relative min-h-[220px] min-w-0 flex-1 pt-1">
             <EChart option={heatmapOption} className="absolute inset-0" />
           </div>
         </Panel>
 
-        <Panel title="Latency & Packet Loss" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all latency samples.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Latency & Packet Loss" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all latency samples.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
             <div className="flex flex-wrap items-center gap-1.5">
               <SeriesChip name="Latency" color={COLORS.inbound} value={latencyAndLoss[latencyAndLoss.length - 1]?.latency ?? 0} unit="ms" enabled onToggle={() => toast("Latency is always visible.")} />
@@ -957,16 +964,16 @@ export function NetworkMonitoringDashboard() {
             <div className="relative min-h-[220px] min-w-0 flex-1">
               <EChart option={latencyOption} className="absolute inset-0" />
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <SummaryChip label="Avg Latency" value={`${avg(latencyAndLoss.map((point) => point.latency)).toFixed(0)} ms`} />
-              <SummaryChip label="Peak Loss" value={`${Math.max(...latencyAndLoss.map((point) => point.loss)).toFixed(2)} %`} />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <SummaryChip label="Avg Latency" value={`${avg(latencyAndLoss.map((point) => point.latency)).toFixed(0)} ms`} tone="blue" />
+              <SummaryChip label="Peak Loss" value={`${Math.max(...latencyAndLoss.map((point) => point.loss)).toFixed(2)} %`} tone="rose" />
             </div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Interface details" className="grid gap-2.5 xl:grid-cols-[1.14fr_1.04fr_0.82fr]">
-        <Panel title="Top Interfaces by Bandwidth Usage" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by bandwidth.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Interfaces by Bandwidth Usage" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by bandwidth.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[440px] table-fixed text-left text-[12px]">
               <colgroup><col style={{ width: "17%" }} /><col style={{ width: "27%" }} /><col style={{ width: "21%" }} /><col style={{ width: "23%" }} /><col style={{ width: "12%" }} /></colgroup>
@@ -977,7 +984,7 @@ export function NetworkMonitoringDashboard() {
           <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page: 5 · 1 · 2 · 3 · 4 · 5 · … · 26</span></div>
         </Panel>
 
-        <Panel title="Top Interfaces by Errors" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by errors.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Interfaces by Errors" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by errors.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[420px] table-fixed text-left text-[12px]">
               <colgroup><col style={{ width: "19%" }} /><col style={{ width: "29%" }} /><col style={{ width: "20%" }} /><col style={{ width: "18%" }} /><col style={{ width: "14%" }} /></colgroup>
@@ -1009,7 +1016,7 @@ export function NetworkMonitoringDashboard() {
         <Panel title="Top Protocols" className="min-w-0"><TrafficDonut data={protocols} total={`${TOTAL_TRAFFIC_TB.toFixed(2)} TB`} /></Panel>
       </section>
 
-      <Panel title="Recent Network Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all network alerts.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+      <Panel title="Recent Network Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all network alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
         <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[960px] text-left text-[12px]">
             <thead><tr className="border-b border-border text-muted-foreground">{["Alert", "Device", "Interface", "Severity", "Message", "Time"].map((heading) => <th key={heading} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>

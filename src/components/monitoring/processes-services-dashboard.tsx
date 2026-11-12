@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as echarts from "echarts";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { Download, MoreVertical, Plus } from "lucide-react";
+import { ArrowRight, Download, MoreVertical, Plus } from "lucide-react";
 
 import { PageHeading } from "@/components/layout/page-heading";
 import { PageMeta } from "@/components/layout/page-meta";
@@ -512,8 +512,8 @@ export function ProcessesServicesDashboard() {
       </section>
 
       <section aria-label="Top processes and service health" className="grid items-stretch gap-2.5 xl:grid-cols-[1.08fr_1.08fr_0.9fr]">
-        <Panel title="Top Processes by CPU Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by CPU.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}><ProcessUsageTable rows={cpuProcesses} usageKey="cpu" secondaryKey="memory" totalLabel="processes" /></Panel>
-        <Panel title="Top Processes by Memory Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by memory usage.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}><ProcessUsageTable rows={memoryProcesses} usageKey="memory" secondaryKey="cpu" totalLabel="processes" /></Panel>
+        <Panel title="Top Processes by CPU Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by CPU.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={cpuProcesses} usageKey="cpu" secondaryKey="memory" totalLabel="processes" /></Panel>
+        <Panel title="Top Processes by Memory Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={memoryProcesses} usageKey="memory" secondaryKey="cpu" totalLabel="processes" /></Panel>
         <Panel title="Service Health Overview" className="flex min-h-[330px] min-w-0 flex-col">
           <div className="flex flex-1 flex-col justify-center gap-2 pt-1"><Donut data={serviceStates} total={serviceTotals} featured />
             <div className="mt-auto grid grid-cols-2 gap-2 border-t border-border/70 pt-2">{serviceHealthStats.map((stat) => <div key={stat.label} className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800"><div className="text-[11px] text-muted-foreground">{stat.label}</div><div className="mt-0.5 text-[16px] font-bold tabular-nums text-foreground">{stat.value}</div></div>)}</div>
@@ -535,12 +535,12 @@ export function ProcessesServicesDashboard() {
             <UsageRows items={topServicesTab === "CPU" ? topCpuServices : topMemoryServices} footer={`Showing 1-${Math.min(7, (topServicesTab === "CPU" ? topCpuServices : topMemoryServices).length)} of ${SERVICE_COUNTS.total.toLocaleString()} services`} />
           </FadeTabContent>
         </Panel>
-        <Panel title="Services by Host" className="flex min-h-[360px] min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing services on all hosts.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Services by Host" className="flex min-h-[360px] min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing services on all hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <UsageRows showLogos={false} items={servicesByHost.map((item) => ({ name: item.name, value: String(item.value), color: item.color }))} footer={`Showing ${Math.min(7, servicesByHost.length)} of ${servicesByHost.length} hosts`} />
         </Panel>
       </section>
 
-      <Panel title="Recent Process & Service Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all process and service alerts.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+      <Panel title="Recent Process & Service Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all process and service alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
         <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[960px] text-left text-[12px]">
             <thead><tr className="border-b border-border text-muted-foreground">{["Alert", "Type", "Server", "Process / Service", "Severity", "Message", "Time"].map((heading) => <th key={heading} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>

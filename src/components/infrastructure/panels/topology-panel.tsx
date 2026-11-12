@@ -660,7 +660,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
 
   return createPortal(
     <div
-      className="topology-overlay-enter fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(15,23,42,0.55)] p-4 backdrop-blur-[3px]"
+      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(15,23,42,0.55)] p-4 backdrop-blur-[3px] motion-reduce:animate-none"
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -669,7 +669,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-label="Infrastructure Topology"
-        className="topology-modal-enter flex h-[92vh] max-h-[1000px] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+        className="animate-topology-modal-scale flex h-[92vh] max-h-[1000px] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)] motion-reduce:animate-none"
       >
         <header className="flex h-14 min-h-14 items-center gap-3 border-b border-[#e2e8f0] px-5">
           <TopologyToolbar

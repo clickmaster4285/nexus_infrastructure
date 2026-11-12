@@ -37,7 +37,10 @@ export function MetricCard({ item, className, labelClassName, valueClassName, tr
       className={className}
       labelClassName={labelClassName}
       valueClassName={valueClassName}
-      trendClassName={cn(item.trend !== "flat" && "text-success", trendClassName)}
+      trendClassName={cn(
+        item.trend !== "flat" && ((item.tone === "red" || item.tone === "amber") && item.trend === "up" ? "text-rose-600" : "text-success"),
+        trendClassName,
+      )}
       detailClassName={detailClassName}
       detail={item.detail}
     />

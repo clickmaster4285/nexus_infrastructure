@@ -6,13 +6,12 @@ import {
   Tooltip, XAxis, YAxis,
 } from "recharts";
 import {
-  Bell, CalendarDays, ChevronLeft, ChevronRight, Download, Filter, List,
+  ArrowRight, Bell, CalendarDays, ChevronLeft, ChevronRight, Download, Filter, List,
   Plus, Search, Save, Settings2, Shield,
   X,
 } from "lucide-react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -87,16 +86,16 @@ const recentEvents = [
 ];
 
 const allEvents: EventRecord[] = [
-  { id: 1, time: "2025-11-04 12:48:17", severity: "Critical", message: "Database connection lost. Retrying...", source: "Database", host: "db-01", category: "Database" },
-  { id: 2, time: "2025-11-04 12:46:32", severity: "Warning", message: "High memory usage: 89%", source: "System", host: "web-app-01", category: "Performance" },
-  { id: 3, time: "2025-11-04 12:44:10", severity: "Info", message: "User login successful", source: "Auth", host: "api-server-01", category: "Authentication" },
-  { id: 4, time: "2025-11-04 12:42:55", severity: "Debug", message: "Cache refreshed", source: "Cache", host: "app-server-02", category: "Cache" },
-  { id: 5, time: "2025-11-04 12:40:22", severity: "Info", message: "New deployment completed", source: "Deployment", host: "web-02", category: "Deployment" },
-  { id: 6, time: "2025-11-04 12:38:04", severity: "Warning", message: "Payment API response delayed: 2.3s", source: "Application", host: "pay-01", category: "Performance" },
-  { id: 7, time: "2025-11-04 12:35:48", severity: "Critical", message: "Primary node health check failed", source: "System", host: "api-server-01", category: "Availability" },
-  { id: 8, time: "2025-11-04 12:32:19", severity: "Info", message: "Scheduled backup completed", source: "Database", host: "db-01", category: "Backup" },
-  { id: 9, time: "2025-11-04 12:29:53", severity: "Debug", message: "Health check passed", source: "Network", host: "edge-01", category: "Network" },
-  { id: 10, time: "2025-11-04 12:27:11", severity: "Warning", message: "Disk utilization reached 82%", source: "System", host: "storage-01", category: "Storage" },
+  { id: 1, time: new Date(Date.now() - 2 * 60 * 1000).toISOString(), severity: "Critical", message: "Database connection lost. Retrying...", source: "Database", host: "db-01", category: "Database" },
+  { id: 2, time: new Date(Date.now() - 4 * 60 * 1000).toISOString(), severity: "Warning", message: "High memory usage: 89%", source: "System", host: "web-app-01", category: "Performance" },
+  { id: 3, time: new Date(Date.now() - 6 * 60 * 1000).toISOString(), severity: "Info", message: "User login successful", source: "Auth", host: "api-server-01", category: "Authentication" },
+  { id: 4, time: new Date(Date.now() - 8 * 60 * 1000).toISOString(), severity: "Debug", message: "Cache refreshed", source: "Cache", host: "app-server-02", category: "Cache" },
+  { id: 5, time: new Date(Date.now() - 10 * 60 * 1000).toISOString(), severity: "Info", message: "New deployment completed", source: "Deployment", host: "web-02", category: "Deployment" },
+  { id: 6, time: new Date(Date.now() - 12 * 60 * 1000).toISOString(), severity: "Warning", message: "Payment API response delayed: 2.3s", source: "Application", host: "pay-01", category: "Performance" },
+  { id: 7, time: new Date(Date.now() - 14 * 60 * 1000).toISOString(), severity: "Critical", message: "Primary node health check failed", source: "System", host: "api-server-01", category: "Availability" },
+  { id: 8, time: new Date(Date.now() - 16 * 60 * 1000).toISOString(), severity: "Info", message: "Scheduled backup completed", source: "Database", host: "db-01", category: "Backup" },
+  { id: 9, time: new Date(Date.now() - 18 * 60 * 1000).toISOString(), severity: "Debug", message: "Health check passed", source: "Network", host: "edge-01", category: "Network" },
+  { id: 10, time: new Date(Date.now() - 20 * 60 * 1000).toISOString(), severity: "Warning", message: "Disk utilization reached 82%", source: "System", host: "storage-01", category: "Storage" },
 ];
 
 const severityStyles: Record<Severity, string> = {
@@ -112,6 +111,11 @@ const severityDots: Record<Severity, string> = {
   Info: "bg-blue-500",
   Debug: "bg-emerald-500",
 };
+
+function relativeTime(value: string) {
+  const minutes = Math.max(1, Math.round((Date.now() - Date.parse(value)) / 60000));
+  return minutes < 60 ? `${minutes}m ago` : `${Math.round(minutes / 60)}h ago`;
+}
 
 function EventsTrendChart({ range }: { range: string }) {
   return (
@@ -145,12 +149,12 @@ function SeverityDonut() {
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <b className="font-display text-[18px] font-extrabold leading-tight text-foreground">12.8K</b>
-          <span className="text-[8px] text-muted-foreground">Total</span>
+          <span className="text-xs text-muted-foreground">Total</span>
         </div>
       </div>
       <div className="min-w-0 flex-1 space-y-3">
         {severityData.map((item) => (
-          <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-2 text-[8px]">
+          <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-2 text-xs">
             <i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
             <span className="truncate text-foreground">{item.name}</span>
             <b className="whitespace-nowrap text-foreground">{item.label}</b>
@@ -167,7 +171,7 @@ function BreakdownBars({ rows, hosts = false }: { rows: typeof sourceData | type
       {rows.map((row) => {
         const Icon = "icon" in row ? row.icon : null;
         return (
-          <div key={row.name} className="grid grid-cols-[minmax(66px,0.8fr)_minmax(0,1fr)_38px] items-center gap-2 text-[8px]">
+          <div key={row.name} className="grid grid-cols-[minmax(66px,0.8fr)_minmax(0,1fr)_38px] items-center gap-2 text-xs">
             <span className="flex min-w-0 items-center gap-1.5 truncate font-medium text-foreground">
               {hosts ? <i className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" /> : Icon ? <Icon size={11} className="shrink-0 text-blue-600" /> : null}
               {row.name}
@@ -241,22 +245,18 @@ export function EventsExplorerDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Events Explorer"]} showRefresh={false} />
-      <PageHeading title="Events Explorer" description="Explore and analyze all system events across your infrastructure." icon={<CalendarDays size={19} />} actionsAlign="top">
-        <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[9px]"><Download size={12} />Export Events</Button>
-          <Button variant="outline" size="sm" onClick={() => notify("Event view saved to mock saved views.")} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[9px]"><Save size={12} />Save View</Button>
-          <Button size="sm" onClick={() => notify("New Alert Rule is a mockup action.")} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[9px]"><Plus size={12} />New Alert Rule</Button>
-        </div>
-      </PageHeading>
+      <PageHeader breadcrumbs={["Monitoring", "Events Explorer"]} title="Event Explorer" subtitle="Search, filter and explore infrastructure events across your environment." icon={<CalendarDays size={20} />} onRefresh={() => notify("Events refreshed.")} actions={<div className="flex shrink-0 items-center gap-2">
+        <Button variant="outline" size="sm" onClick={() => notify("Saved views opened.")} className="h-10 gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm"><Save size={14} />Saved Views</Button>
+        <Button size="sm" onClick={() => notify("New Alert Rule is a mockup action.")} className="h-10 gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm"><Plus size={14} />Create Alert Rule</Button>
+      </div>} />
 
-      <section aria-label="Event summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
-        {summary.map((item) => <MetricCard key={item.label} item={item} className="h-[68px] gap-2 p-2 sm:p-2.5" />)}
+      <section aria-label="Event summary" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5">
+        {summary.map((item) => <MetricCard key={item.label} item={item} className="h-[100px] min-w-0 rounded-xl p-4" labelClassName="whitespace-nowrap text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
       </section>
 
       <section aria-label="Event trends and severity" className="grid gap-2.5 xl:grid-cols-[1.65fr_1fr]">
-        <Panel title="Events Trend" className="min-w-0" action={<div className="flex items-center gap-0.5">{["1h", "6h", "12h", "24h"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-[7px] font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
-          <div className="flex justify-center gap-4 pt-1 text-[8px] text-muted-foreground">{[["Critical", "#ef3340"], ["Warning", "#f59e0b"], ["Info", "#2878ed"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>
+        <Panel title="Events Trend" className="min-w-0" action={<div className="flex items-center gap-0.5">{["1h", "6h", "12h", "24h"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-xs font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
+          <div className="flex justify-center gap-4 pt-1 text-xs text-muted-foreground">{[["Critical", "#ef3340"], ["Warning", "#f59e0b"], ["Info", "#2878ed"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>
           <EventsTrendChart range={range} />
         </Panel>
         <Panel title="Events by Severity" className="min-w-0"><SeverityDonut /></Panel>
@@ -264,10 +264,10 @@ export function EventsExplorerDashboard() {
 
       <section aria-label="Event sources, hosts and recent events" className="grid gap-2.5 xl:grid-cols-3">
         <Panel title="Top Event Sources" className="min-w-0"><BreakdownBars rows={sourceData} /></Panel>
-        <Panel title="Events by Host" className="min-w-0" action={<button onClick={() => notify("Showing all event hosts.")} className="text-[8px] font-semibold text-primary">View All →</button>}><BreakdownBars rows={hostData} hosts /></Panel>
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => { setApplied({ severity: "All Severities", source: "All Sources", search: "" }); notify("Showing all recent events in the table."); }} className="text-[8px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Events by Host" className="min-w-0" action={<button type="button" onClick={() => notify("Showing all event hosts.")} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">View All <ArrowRight size={14} aria-hidden="true" /></button>}><BreakdownBars rows={hostData} hosts /></Panel>
+        <Panel title="Recent Events" className="min-w-0" action={<button type="button" onClick={() => { setApplied({ severity: "All Severities", source: "All Sources", search: "" }); notify("Showing all recent events in the table."); }} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">View All <ArrowRight size={14} aria-hidden="true" /></button>}>
           <div className="space-y-[9px] pt-1">
-            {recentEvents.map((event) => <div key={`${event.severity}-${event.message}`} className="grid grid-cols-[58px_minmax(0,1fr)_38px] items-center gap-2 text-[8px]">
+            {recentEvents.map((event) => <div key={`${event.severity}-${event.message}`} className="grid grid-cols-[58px_minmax(0,1fr)_38px] items-center gap-2 text-xs">
               <span className={`inline-flex w-fit items-center gap-1 rounded-full px-1.5 py-0.5 font-semibold ${severityStyles[event.severity]}`}><i className={`h-1.5 w-1.5 rounded-full ${severityDots[event.severity]}`} />{event.severity}</span>
               <span className="truncate text-foreground">{event.message}</span>
               <span className="text-right text-muted-foreground">{event.time}</span>
@@ -277,35 +277,35 @@ export function EventsExplorerDashboard() {
       </section>
 
       <Panel title="All Events" className="min-w-0" action={<div className="flex flex-wrap items-center justify-end gap-1.5">
-        <Button variant="outline" size="sm" onClick={() => notify("Showing advanced event filters.")} className="h-6 gap-1 px-2 text-[8px]"><Filter size={10} />Filter</Button>
-        <Select value={source} onValueChange={(value) => { setSource(value); setApplied((current) => ({ ...current, source: value })); setPage(1); }}><SelectTrigger aria-label="Event source" className="h-6 w-[92px] text-[8px]"><SelectValue /></SelectTrigger><SelectContent>{["All Sources", "System", "Application", "Database", "Network", "Security", "Auth", "Cache", "Deployment"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
-        <Select value={severity} onValueChange={(value) => { setSeverity(value); setApplied((current) => ({ ...current, severity: value })); setPage(1); }}><SelectTrigger aria-label="Event severity" className="h-6 w-[102px] text-[8px]"><SelectValue /></SelectTrigger><SelectContent>{["All Severities", "Critical", "Warning", "Info", "Debug"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
-        <span className="relative hidden w-[110px] sm:block"><Input aria-label="Search events" value={search} onChange={(event) => setSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") applyFilters(); }} placeholder="Search events..." className="h-6 pr-6 text-[8px]" /><Search size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" /></span>
-        <Button size="sm" onClick={applyFilters} className="h-6 px-2 text-[8px]">Apply</Button>
+        <Button variant="outline" size="sm" onClick={() => notify("Showing advanced event filters.")} className="h-6 gap-1 px-2 text-xs"><Filter size={10} />Filter</Button>
+        <Select value={source} onValueChange={(value) => { setSource(value); setApplied((current) => ({ ...current, source: value })); setPage(1); }}><SelectTrigger aria-label="Event source" className="h-6 w-[92px] text-xs"><SelectValue /></SelectTrigger><SelectContent>{["All Sources", "System", "Application", "Database", "Network", "Security", "Auth", "Cache", "Deployment"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
+        <Select value={severity} onValueChange={(value) => { setSeverity(value); setApplied((current) => ({ ...current, severity: value })); setPage(1); }}><SelectTrigger aria-label="Event severity" className="h-6 w-[102px] text-xs"><SelectValue /></SelectTrigger><SelectContent>{["All Severities", "Critical", "Warning", "Info", "Debug"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
+        <span className="relative hidden w-[110px] sm:block"><Input aria-label="Search events" value={search} onChange={(event) => setSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") applyFilters(); }} placeholder="Search events..." className="h-6 pr-6 text-xs" /><Search size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" /></span>
+        <Button size="sm" onClick={applyFilters} className="h-6 px-2 text-xs">Apply</Button>
         <button onClick={clearFilters} aria-label="Clear event filters" className="rounded p-1 text-muted-foreground hover:bg-accent"><X size={12} /></button>
       </div>}>
-        {selected.length > 0 && <div className="flex items-center justify-between border-b border-border py-1.5 text-[8px]"><span className="text-muted-foreground">{selected.length} event{selected.length === 1 ? "" : "s"} selected</span><button onClick={exportCsv} className="font-semibold text-primary">Export filtered events</button></div>}
+        {selected.length > 0 && <div className="flex items-center justify-between border-b border-border py-1.5 text-xs"><span className="text-muted-foreground">{selected.length} event{selected.length === 1 ? "" : "s"} selected</span><button onClick={exportCsv} className="font-semibold text-primary">Export filtered events</button></div>}
         <div className="overflow-x-auto pt-1">
-          <table className="w-full min-w-[790px] text-left text-[8px]">
+          <table className="w-full min-w-[790px] text-left text-xs">
             <thead><tr className="border-b border-border bg-muted/40 text-muted-foreground">
               <th className="w-7 px-1.5 py-1.5"><input type="checkbox" aria-label="Select events on this page" checked={pageEvents.length > 0 && pageEvents.every((event) => selected.includes(event.id))} onChange={toggleCurrentPage} className="accent-primary" /></th>
               {["Time", "Severity", "Event Message", "Source", "Host", "Category", "Action"].map((heading) => <th key={heading} className="whitespace-nowrap px-1.5 py-1.5 font-semibold">{heading}{heading === "Time" && <span className="ml-1">↕</span>}</th>)}
             </tr></thead>
             <tbody>{pageEvents.map((event) => <tr key={event.id} className="border-b border-border/70 last:border-0 hover:bg-muted/30">
               <td className="px-1.5 py-[5px]"><input type="checkbox" aria-label={`Select event ${event.id}`} checked={selected.includes(event.id)} onChange={() => setSelected((items) => items.includes(event.id) ? items.filter((id) => id !== event.id) : [...items, event.id])} className="accent-primary" /></td>
-              <td className="whitespace-nowrap px-1.5 py-[5px] font-medium text-foreground">{event.time}</td>
-              <td className="px-1.5 py-[5px]"><span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[7px] font-semibold ${severityStyles[event.severity]}`}><i className={`h-1.5 w-1.5 rounded-full ${severityDots[event.severity]}`} />{event.severity}</span></td>
+              <td className="whitespace-nowrap px-1.5 py-[5px] font-medium text-foreground" title={event.time}>{relativeTime(event.time)}</td>
+              <td className="px-1.5 py-[5px]"><span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-semibold ${severityStyles[event.severity]}`}><i className={`h-1.5 w-1.5 rounded-full ${severityDots[event.severity]}`} />{event.severity}</span></td>
               <td className="whitespace-nowrap px-1.5 py-[5px] text-foreground">{event.message}</td>
               <td className="whitespace-nowrap px-1.5 py-[5px] text-foreground">{event.source}</td>
               <td className="whitespace-nowrap px-1.5 py-[5px] text-foreground">{event.host}</td>
               <td className="whitespace-nowrap px-1.5 py-[5px] text-foreground">{event.category}</td>
               <td className="px-1.5 py-[5px]"><button onClick={() => notify(`Event ${event.id}: ${event.message}`)} className="whitespace-nowrap font-semibold text-primary">View →</button></td>
             </tr>)}
-            {pageEvents.length === 0 && <tr><td colSpan={8} className="py-8 text-center text-[9px] text-muted-foreground">No events match these filters.</td></tr>}
+            {pageEvents.length === 0 && <tr><td colSpan={8} className="py-8 text-center text-xs text-muted-foreground">No events match these filters.</td></tr>}
             </tbody>
           </table>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[8px] text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-xs text-muted-foreground">
           <span>Showing {filteredEvents.length ? `${(currentPage - 1) * pageSize + 1}-${Math.min(currentPage * pageSize, filteredEvents.length)}` : "0"} of {filteredEvents.length} loaded events <span className="text-muted-foreground/70">(12.8K total in selected period)</span></span>
           <div className="flex items-center gap-1">
             <button onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1} aria-label="Previous page" className="grid h-6 w-6 place-items-center rounded border border-border disabled:opacity-40"><ChevronLeft size={12} /></button>
@@ -315,7 +315,7 @@ export function EventsExplorerDashboard() {
         </div>
       </Panel>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[10px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-xs text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

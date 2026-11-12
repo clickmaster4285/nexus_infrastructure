@@ -87,7 +87,7 @@ function NocMap({
           key={`${marker.name}-glow`}
           center={[marker.lat, marker.lng]}
           radius={marker.status === "critical" ? 15 : 13}
-          pathOptions={{ color: "transparent", weight: 0, fillColor: statusColors[marker.status], fillOpacity: 0.22, className: marker.status === "critical" && criticalPulseOnly ? "noc-critical-marker" : undefined }}
+          pathOptions={{ color: "transparent", weight: 0, fillColor: statusColors[marker.status], fillOpacity: 0.22,           className: marker.status === "critical" && criticalPulseOnly ? "animate-noc-marker-pulse motion-reduce:animate-none" : undefined }}
         />]),
         <CircleMarker
           key={marker.name}
@@ -252,7 +252,6 @@ export function InfrastructureMap({
   if (expanded) {
     return (
       <div className="fixed inset-0 z-[1000] flex flex-col bg-slate-950/95 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label={`${title} — expanded`}>
-        {criticalPulseOnly && <CriticalPulseStyles />}
         <div className="flex h-14 flex-none items-center justify-between border-b border-white/10 px-4">
           <div>
             <b className="font-display text-[12px] font-bold text-slate-100">{title}</b>
@@ -281,7 +280,6 @@ export function InfrastructureMap({
   if (isLight) {
     return (
       <div className="relative flex h-full w-full flex-col overflow-hidden rounded-md border border-[#e3e9f1]">
-        {criticalPulseOnly && <CriticalPulseStyles />}
         <div className="relative min-h-0 flex-1 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#eef2f7] [&_.leaflet-tooltip-pane]:!z-[450] [&_.leaflet-tooltip]:!max-w-[260px] [&_.leaflet-tooltip]:!whitespace-normal [&_.leaflet-tooltip]:!break-words [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-white/90 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[10px] [&_.leaflet-control-attribution]:!text-slate-500 [&_.leaflet-control-attribution_a]:!text-slate-600 [&_.leaflet-tile]:transition-opacity [&_.leaflet-tile]:duration-300 [&_.leaflet-control-attribution]:!z-[450]">
           <NocMap zoom={zoom} variant="light" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} minZoom={minZoom} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} onMarkerClick={onMarkerClick} />
           {fallback}
@@ -295,15 +293,10 @@ export function InfrastructureMap({
 
     return (
     <div className="relative h-full w-full overflow-hidden rounded-md border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#0b1220] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-slate-950/70 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[10px] [&_.leaflet-control-attribution]:!text-slate-400 [&_.leaflet-control-attribution_a]:!text-slate-300">
-      {criticalPulseOnly && <CriticalPulseStyles />}
       <NocMap zoom={zoom} variant="dark" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} onMarkerClick={onMarkerClick} />
       {expandButton}
       {fallback}
       {darkLegend(legendCounts, legendPosition === "overlay-left" ? "left" : "center", legendLabels)}
     </div>
   );
-}
-
-function CriticalPulseStyles() {
-  return <style>{`@keyframes noc-marker-pulse{0%,100%{opacity:.22}50%{opacity:.72}}.noc-critical-marker{animation:noc-marker-pulse 2.4s ease-in-out infinite}`}</style>;
 }

@@ -23,7 +23,7 @@ const STATUS_ORDER: NocMapStatus[] = ["online", "warning", "critical"];
 
 /**
  * OpenStreetMap standard tiles - free basemap, no API key.
- * Light mode renders OSM as-is; dark mode applies an invert-based filter in NocMapStyles
+ * Light mode renders OSM as-is; dark mode applies an invert-based filter (see globals.css)
  * so the NEXUS dark theme is not blinded by the light basemap.
  * Attribution shown on the map is required by the OSM tile usage policy.
  */
@@ -316,14 +316,30 @@ function MapReady({ onReady }: { onReady: (map: LeafletMap | null) => void }) {
   return null;
 }
 
-/** Fits the whole fleet into view once, on mount. Used when no explicit center is passed. */
+/**
+ * Fits every site into the viewport once, on mount. Used when no explicit center is passed.
+ * The leaflet instance is created before layout settles (dynamic import + flex parents), so a
+ * one-shot fit on mount can run against a zero-size container and clamp to maxZoom. Wait for a
+ * non-zero size (flex/grid parents, dynamic chunk) via ResizeObserver before fitting.
+ */
 function FitOnMount({ sites, padding = FIT_PADDING }: { sites: NocMapSite[]; padding?: number | [number, number] }) {
   const map = useMap();
   const fitted = useRef(false);
   useEffect(() => {
-    if (fitted.current) return;
-    fitted.current = true;
-    fitAllSites(map, sites, padding, false);
+    const container = map.getContainer();
+    const tryFit = () => {
+      if (fitted.current) return true;
+      if (container.clientWidth <= 0 || container.clientHeight <= 0) return false;
+      fitted.current = true;
+      fitAllSites(map, sites, padding, false);
+      return true;
+    };
+    if (tryFit()) return undefined;
+    const observer = new ResizeObserver(() => {
+      if (tryFit()) observer.disconnect();
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
   return null;
@@ -619,7 +635,6 @@ export function NocOsmMap({
 
   const surface = (
     <div ref={surfaceRef} className={cn("relative flex h-full w-full flex-col overflow-hidden bg-card", className)}>
-      <NocMapStyles />
       <div className="relative min-h-0 w-full flex-1">
       <MapContainer
         center={center ?? [25, 20]}
@@ -768,40 +783,4 @@ export function NocOsmMap({
   }
 
   return surface;
-}
-
-function NocMapStyles() {
-  return (
-    <style>{`
-.nexus-noc-map .leaflet-container { background: #aad3df; font-family: var(--font-sans); }
-.nexus-noc-map .leaflet-control-attribution { border-radius: 6px 0 0 0; background: color-mix(in srgb, var(--popover) 86%, transparent) !important; color: var(--muted-foreground) !important; font-size: 10px; line-height: 1.4; padding: 0 5px; white-space: nowrap; }
-.nexus-noc-map .leaflet-control-attribution a { color: var(--primary) !important; }
-.nexus-noc-map .leaflet-popup-content-wrapper { padding: 0; border-radius: 12px; background: var(--popover); color: var(--foreground); box-shadow: 0 14px 34px rgb(15 23 42 / .22); }
-.nexus-noc-map .leaflet-popup-content { margin: 0; line-height: 1.45; }
-.nexus-noc-map .leaflet-popup-tip { background: var(--popover); }
-.nexus-noc-map .leaflet-popup-close-button { padding: 7px 7px 0 0; color: var(--muted-foreground); }
-.nexus-noc-map .leaflet-popup-close-button:hover { color: var(--foreground); background: transparent; }
-.nexus-noc-map .leaflet-tooltip { border: none; border-radius: 8px; background: var(--popover); color: var(--foreground); box-shadow: 0 8px 20px rgb(15 23 42 / .18); font-size: 12px; padding: 5px 8px; }
-.nexus-noc-map .leaflet-tooltip-top::before { border-top-color: var(--popover); }
-.nexus-noc-icon { background: transparent; border: 0; }
-.nexus-noc-site { position: relative; display: block; width: 32px; height: 32px; transition: transform .16s ease; transform-origin: center bottom; }
-.nexus-noc-site:hover { transform: scale(1.1); }
-.nexus-noc-site__ring { position: absolute; inset: -3px; border-radius: 9999px; background: var(--noc-color); opacity: .16; }
-.nexus-noc-site__disc { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border-radius: 9999px; background: var(--noc-color); border: 2px solid #ffffff; box-shadow: 0 2px 6px rgb(15 23 42 / .32); }
-.nexus-noc-site__badge { position: absolute; right: -7px; top: -7px; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box; border-radius: 9999px; background: #0f172a; color: #ffffff; font-size: 12px; font-weight: 700; line-height: 16px; text-align: center; border: 1.5px solid #ffffff; box-shadow: 0 1px 4px rgb(15 23 42 / .35); }
-.nexus-noc-site__code { display: none; position: absolute; top: 36px; left: 50%; transform: translateX(-50%); padding: 1px 6px; border-radius: 9999px; background: #ffffff; color: #15243b; font-size: 12px; font-weight: 600; line-height: 16px; white-space: nowrap; box-shadow: 0 1px 4px rgb(15 23 42 / .3); }
-.nexus-noc-map--labels .nexus-noc-site__code { display: block; }
-.nexus-noc-server { display: block; width: 10px; height: 10px; box-sizing: border-box; border-radius: 2px; background: var(--noc-color); box-shadow: 0 0 0 2px #ffffff, 0 1px 4px rgb(15 23 42 / .45); }
-.nexus-noc-cluster { position: relative; display: block; width: 36px; height: 36px; }
-.nexus-noc-cluster__disc { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border-radius: 9999px; background: var(--noc-color); border: 2px solid #ffffff; color: #ffffff; font-size: 14px; font-weight: 700; box-shadow: 0 2px 8px rgb(15 23 42 / .4); }
-.nexus-noc-site--selected .nexus-noc-site__disc { box-shadow: 0 0 0 2.5px #ffffff, 0 0 0 5px color-mix(in srgb, var(--noc-color) 55%, transparent), 0 2px 8px rgb(15 23 42 / .4); }
-.nexus-noc-site--pulse .nexus-noc-site__ring { animation: nexus-noc-pulse 1.8s ease-in-out infinite; }
-.nexus-noc-cluster--pulse .nexus-noc-cluster__disc { animation: nexus-noc-cluster-pulse 1.8s ease-in-out infinite; }
-@keyframes nexus-noc-pulse { 0%,100% { opacity:.16; transform: scale(1); } 50% { opacity:.45; transform: scale(1.2); } }
-@keyframes nexus-noc-cluster-pulse { 0%,100% { box-shadow: 0 0 0 2px #ffffff, 0 2px 8px rgb(15 23 42 / .4); } 50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--noc-color) 40%, transparent), 0 2px 8px rgb(15 23 42 / .4); } }
-@media (prefers-reduced-motion: reduce) { .nexus-noc-site--pulse .nexus-noc-site__ring, .nexus-noc-cluster--pulse .nexus-noc-cluster__disc { animation: none; } .nexus-noc-site:hover { transform: none; } }
-.dark .nexus-noc-map .leaflet-container { background: #101826; }
-.dark .nexus-noc-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.35) brightness(0.9) contrast(0.92); }
-`}</style>
-  );
 }

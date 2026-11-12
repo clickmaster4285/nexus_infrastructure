@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Download, RefreshCw,
+  ArrowRight, Download, RefreshCw,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
@@ -250,7 +250,7 @@ export function ContainersDockerDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Images" className="min-w-0" action={<button onClick={() => toast("Showing all 52 images.")} className="text-[11px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Images" className="min-w-0" action={<button onClick={() => toast("Showing all 52 images.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
             <table className="w-full min-w-[240px] text-left text-[12px]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Image</th><th className="pb-1.5">Containers</th><th className="pb-1.5 text-right">Size</th></tr></thead>
@@ -262,9 +262,9 @@ export function ContainersDockerDashboard() {
 
       <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-4">
         <Panel title="Containers by State" className="min-w-0"><StateDonut compact /></Panel>
-        <Panel title="Containers by Host" className="min-w-0" action={<button onClick={() => toast("Showing all Docker hosts.")} className="text-[11px] font-semibold text-primary">View All →</button>}><DistributionBars items={hosts} /></Panel>
-        <Panel title="Top Networks" className="min-w-0" action={<button onClick={() => toast("Showing all Docker networks.")} className="text-[11px] font-semibold text-primary">View All →</button>}><DistributionBars items={networks} /></Panel>
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all container events.")} className="text-[11px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Containers by Host" className="min-w-0" action={<button onClick={() => toast("Showing all Docker hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={hosts} /></Panel>
+        <Panel title="Top Networks" className="min-w-0" action={<button onClick={() => toast("Showing all Docker networks.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={networks} /></Panel>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all container events.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
           <div className="space-y-3 pt-2">
             {events.map((event) => <div key={event.time} className="grid grid-cols-[8px_32px_minmax(0,1fr)_38px] items-center gap-1.5 text-[11px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="text-muted-foreground">{event.time}</span><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
           </div>

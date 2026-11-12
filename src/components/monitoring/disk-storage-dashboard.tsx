@@ -5,14 +5,13 @@ import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
   ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { ArrowDown, ArrowRight, ArrowUp, Download, MoreVertical, Plus, Server } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Download, MoreVertical, Plus, Server } from "lucide-react";
 
 import { PageHeading } from "@/components/layout/page-heading";
 import { PageMeta } from "@/components/layout/page-meta";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -319,7 +318,7 @@ function TrendChart({
         </AreaChart>}
       </ResponsiveContainer>
     </div>
-    <div className="flex h-10 min-h-10 flex-wrap content-center items-center gap-x-2 gap-y-0 text-[12px] leading-5 text-muted-foreground">
+    <div className="flex h-10 min-h-10 flex-wrap content-center items-center justify-center gap-x-2 gap-y-0 text-[12px] leading-5 text-muted-foreground">
       {[...summary, ...(kind === "area" && peak ? [{ label: "Peak", value: `${peak.value.toFixed(1)} MB/s · ${peak.time}` }] : [])].map((item, index) => <span key={item.label} className="whitespace-nowrap">{index > 0 && <span className="mr-2 text-muted-foreground/60">·</span>}{item.label} <b className={item.tone ?? "text-foreground"}>{item.value}</b></span>)}
     </div>
   </div>;
@@ -420,23 +419,22 @@ function SortHeader({ label, sortKey, activeKey, direction, onSort, align = "lef
 }
 
 /** Pagination footer shared by both disk tables. */
-function TableFooter({ page, pageCount, rowsPerPage, total, onPageChange, onRowsPerPageChange }: {
-  page: number; pageCount: number; rowsPerPage: number; total: number;
-  onPageChange: (page: number) => void; onRowsPerPageChange: (rows: number) => void;
+function TableFooter({ page, pageCount, onPageChange }: {
+  page: number; pageCount: number; onPageChange: (page: number) => void;
 }) {
-  const from = total ? (page - 1) * rowsPerPage + 1 : 0;
-  const to = Math.min(page * rowsPerPage, total);
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-[#F1F5F9] pt-2.5 text-[12px] text-[#64748B] dark:border-border dark:text-slate-400">
-      <span className="whitespace-nowrap">Showing {from}-{to} of {total} disks</span>
-      <div className="flex items-center gap-1">
-        <label className="mr-1 flex items-center gap-1 whitespace-nowrap">
-          Rows per page:
-          <Select value={String(rowsPerPage)} onValueChange={(value) => { onRowsPerPageChange(Number(value)); onPageChange(1); }}>
-            <SelectTrigger aria-label="Rows per page" className="h-7 w-[62px] text-[12px]"><SelectValue /></SelectTrigger>
-            <SelectContent>{[8, 16, 32].map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
-          </Select>
-        </label>
+      <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
+        <button
+          type="button"
+          onClick={() => onPageChange(Math.max(1, page - 1))}
+          disabled={page === 1}
+          aria-label="Previous page"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+        >
+          <ChevronLeft size={14} aria-hidden="true" />
+          <span>Previous</span>
+        </button>
         {Array.from({ length: Math.min(5, Math.max(1, pageCount)) }, (_, index) => index + 1).map((value) => (
           <button
             key={value}
@@ -462,9 +460,10 @@ function TableFooter({ page, pageCount, rowsPerPage, total, onPageChange, onRows
           onClick={() => onPageChange(Math.min(pageCount, page + 1))}
           disabled={page === pageCount}
           aria-label="Next page"
-          className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
         >
-          <ArrowRight size={12} aria-hidden="true" />
+          <span>Next</span>
+          <ChevronRight size={14} aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -532,8 +531,7 @@ export function DiskStorageDashboard() {
   const [ioSort, setIoSort] = useState<{ key: string; direction: SortDirection }>({ key: "read", direction: "desc" });
   const [usagePage, setUsagePage] = useState(1);
   const [ioPage, setIoPage] = useState(1);
-  const [usageRowsPerPage, setUsageRowsPerPage] = useState(8);
-  const [ioRowsPerPage, setIoRowsPerPage] = useState(8);
+  const rowsPerPage = 8;
 
   const sortedUsageRows = useMemo(() => {
     const direction = usageSort.direction === "asc" ? 1 : -1;
@@ -556,10 +554,10 @@ export function DiskStorageDashboard() {
     });
   }, [ioSort]);
 
-  const usagePageCount = Math.max(1, Math.ceil(sortedUsageRows.length / usageRowsPerPage));
-  const ioPageCount = Math.max(1, Math.ceil(sortedIoRows.length / ioRowsPerPage));
-  const visibleUsageRows = sortedUsageRows.slice((usagePage - 1) * usageRowsPerPage, usagePage * usageRowsPerPage);
-  const visibleIoRows = sortedIoRows.slice((ioPage - 1) * ioRowsPerPage, ioPage * ioRowsPerPage);
+  const usagePageCount = Math.max(1, Math.ceil(sortedUsageRows.length / rowsPerPage));
+  const ioPageCount = Math.max(1, Math.ceil(sortedIoRows.length / rowsPerPage));
+  const visibleUsageRows = sortedUsageRows.slice((usagePage - 1) * rowsPerPage, usagePage * rowsPerPage);
+  const visibleIoRows = sortedIoRows.slice((ioPage - 1) * rowsPerPage, ioPage * rowsPerPage);
 
   function sortUsage(key: string) {
     setUsageSort((current) => current.key === key ? { key, direction: current.direction === "asc" ? "desc" : "asc" } : { key, direction: "desc" });
@@ -648,7 +646,7 @@ export function DiskStorageDashboard() {
       </section>
 
       <section aria-label="Disk details" className="grid items-stretch gap-2.5 xl:grid-cols-[1.14fr_1.04fr_0.82fr] 2xl:grid-cols-[1.45fr_1.25fr_0.62fr]">
-        <Panel title="Top Disks by Usage" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all disks by usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Disks by Usage" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all disks by usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto 2xl:overflow-visible">
               <table className="w-full min-w-[520px] table-fixed text-left text-[12px]">
@@ -675,15 +673,12 @@ export function DiskStorageDashboard() {
             <TableFooter
               page={usagePage}
               pageCount={usagePageCount}
-              rowsPerPage={usageRowsPerPage}
-              total={TOTAL_DISKS}
               onPageChange={setUsagePage}
-              onRowsPerPageChange={setUsageRowsPerPage}
             />
           </div>
         </Panel>
 
-        <Panel title="Top Disks by I/O Activity" className="flex h-full min-w-0 flex-col" optionsButtonClassName="focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-1 focus-visible:ring-offset-card" action={<button onClick={() => toast("Showing all disks by I/O activity.")} className="mr-1.5 text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Disks by I/O Activity" className="flex h-full min-w-0 flex-col" optionsButtonClassName="focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-1 focus-visible:ring-offset-card" action={<button onClick={() => toast("Showing all disks by I/O activity.")} className="mr-1.5 inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto 2xl:overflow-visible">
               <table className="w-full min-w-[440px] table-fixed text-left text-[12px]">
@@ -713,10 +708,7 @@ export function DiskStorageDashboard() {
             <TableFooter
               page={ioPage}
               pageCount={ioPageCount}
-              rowsPerPage={ioRowsPerPage}
-              total={TOTAL_DISKS}
               onPageChange={setIoPage}
-              onRowsPerPageChange={setIoRowsPerPage}
             />
           </div>
         </Panel>
@@ -740,9 +732,9 @@ export function DiskStorageDashboard() {
       <section aria-label="Storage breakdown and alerts" className="grid items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
         <Panel title="Disk Usage Distribution" className="flex h-full min-w-0 flex-col p-4"><DistributionDonut data={usageBands} total={TOTAL_DISKS} /></Panel>
         <Panel title="File System Distribution" className="flex h-full min-w-0 flex-col p-4"><DistributionDonut data={fileSystems} total={totalFileSystems} /></Panel>
-        <Panel title="Disk Usage by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by disk usage.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}><TopDiskBars items={topDiskUsage} /></Panel>
-        <Panel title="I/O by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by I/O throughput.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}><TopDiskBars items={topThroughput} throughput /></Panel>
-        <Panel title="Recent Alerts" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all disk alerts.")} className="whitespace-nowrap text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Disk Usage by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by disk usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topDiskUsage} /></Panel>
+        <Panel title="I/O by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by I/O throughput.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topThroughput} throughput /></Panel>
+        <Panel title="Recent Alerts" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all disk alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="min-h-0 flex-1 space-y-2.5 overflow-y-auto pt-2">
             {alerts.map((alert) => <div key={alert.text} className="grid min-h-7 grid-cols-[8px_minmax(0,1fr)_56px] items-center gap-1 text-[12px]">
               <i aria-label={`${alert.tone} alert`} className="h-2 w-2 rounded-full" style={{ backgroundColor: alert.color }} />

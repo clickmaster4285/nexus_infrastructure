@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowDown, ArrowUp, CheckCircle2, ChevronDown, Download, Expand, Globe, MoreVertical, Pause, Pencil,
+  ArrowDown, ArrowDownRight, ArrowRight, ArrowUp, ArrowUpRight, CheckCircle2, ChevronDown, Download, Expand, Globe, MoreVertical, Pause, Pencil,
   Play, Plus, RefreshCw, Search, ShieldCheck, TriangleAlert, XCircle,
   type LucideIcon,
 } from "lucide-react";
@@ -20,18 +20,18 @@ import { CanvasRenderer } from "echarts/renderers";
 import type { EChartsOption } from "echarts";
 
 import { PageHeader } from "@/components/layout/page-header";
-import type { InfrastructureMapMarker } from "@/components/live-operations/infrastructure-map";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
+import type { NocMapSite, NocMapStatus } from "@/data/mock/noc-map";
 import { cn } from "@/lib/utils";
 
-const InfrastructureMap = dynamic(
-  () => import("@/components/live-operations/infrastructure-map").then((module) => module.InfrastructureMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-[#eef2f7] text-[12px] text-muted-foreground">Loading world map…</div> },
+const NocOsmMap = dynamic(
+  () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
+  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] animate-pulse place-items-center rounded-lg bg-slate-100 text-[12px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">Loading map…</div> },
 );
 
 echarts.use([
@@ -210,7 +210,7 @@ const healthyMonitors = monitors.filter((monitor) => monitor.status === "Healthy
 const performanceTimes = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00"];
 const performance = performanceTimes.map((time, index) => ({
   time,
-  response: [218, 234, 252, 237, 261, 249, 272, 255, 287, 244, 230, 251, 245][index],
+  response: [186, 200, 215, 203, 223, 213, 232, 218, 245, 209, 197, 215, 198][index],
   availability: [98.6, 98.8, 99.1, 98.7, 99.3, 99.2, 99.4, 99.1, 99.8, 99.2, 98.9, 99.1, 99.3][index],
 }));
 
@@ -259,11 +259,20 @@ const incidentMarkers = incidents.map((incident) => ({
   },
 }));
 
+/** Availability colour rule used by every gauge and bar on this page: >=99.5 green, 99-99.5 amber, below 99 red. */
+function availabilityTone(value: number): string {
+  if (value >= 99.5) return PALETTE.green;
+  if (value >= 99) return PALETTE.amber;
+  return PALETTE.red;
+}
+
 const serviceHealth = [
   { label: "Web Apps", value: 99.2 },
   { label: "APIs", value: 98.4 },
   { label: "Databases", value: 99.6 },
   { label: "Infrastructure", value: 99.8 },
+  { label: "CDN", value: 99.7 },
+  { label: "Payments", value: 99.1 },
 ];
 
 const topServices = [
@@ -274,6 +283,10 @@ const topServices = [
   { name: "Notification API", value: 99.42, issue: "3 failed checks in 24h" },
   { name: "Payment API", value: 99.28, issue: "7 failed checks in 24h" },
   { name: "Search API", value: 98.95, issue: "12 failed checks in 24h" },
+  { name: "Auth Service", value: 99.91, issue: undefined as string | undefined },
+  { name: "Email Service", value: 99.78, issue: undefined as string | undefined },
+  { name: "Storage", value: 99.63, issue: undefined as string | undefined },
+  { name: "Inventory API", value: 99.38, issue: "5 failed checks in 24h" },
 ];
 
 interface Region {
@@ -307,21 +320,52 @@ function regionState(region: Region): "online" | "warning" | "offline" {
 
 const regionStates = regions.map((region) => ({ ...region, state: regionState(region) }));
 
-/** Map markers - status comes from the active incidents, role carries the latency. */
-const availabilityMarkers: InfrastructureMapMarker[] = regionStates.map((region) => ({
-  name: region.name,
-  lat: region.lat,
-  lng: region.lng,
-  status: region.state === "offline" ? "critical" : region.state === "warning" ? "warning" : "healthy",
-  role: `${region.latencyMs}ms latency`,
-}));
-
-/** Map legend counts - same numbers as the header pill and the Issues card. */
-const availabilityLegendCounts = {
-  healthy: healthyMonitors,
-  warning: degradedIncident ? 1 : 0,
-  critical: downIncident ? 1 : 0,
+/** Islamabad (NEXUS DC-2) — map opens here at street level, like Global Health. */
+const ISLAMABAD_SITE: NocMapSite = {
+  id: "islamabad",
+  code: "ISL",
+  city: "Islamabad",
+  country: "Pakistan",
+  region: "South Asia",
+  provider: "—",
+  facility: "NEXUS DC-2",
+  lat: 33.69,
+  lng: 73.06,
+  status: "online",
+  health: 99.7,
+  throughput: "—",
+  alerts: 0,
+  uptime: "99.99%",
+  lastCheck: "just now",
+  servers: [],
 };
+
+/** Shared NOC map sites - status comes from the active incidents, health reflects region state. Same reusable component as Global Health. */
+const availabilitySites: NocMapSite[] = [
+  ...regionStates.map((region): NocMapSite => {
+  const status: NocMapStatus = region.state === "offline" ? "critical" : region.state === "warning" ? "warning" : "online";
+  const health = region.state === "offline" ? 96.2 : region.state === "warning" ? 98.4 : 99.9;
+  return {
+    id: `region-${region.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+    code: region.name.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3),
+    city: region.name,
+    country: region.name,
+    region: `${region.latencyMs}ms latency`,
+    provider: "—",
+    facility: "—",
+    lat: region.lat,
+    lng: region.lng,
+    status,
+    health,
+    throughput: `${region.latencyMs}ms latency`,
+    alerts: status === "critical" ? 3 : status === "warning" ? 1 : 0,
+    uptime: "—",
+    lastCheck: "just now",
+    servers: [],
+  };
+  }),
+  ISLAMABAD_SITE,
+];
 
 /* ---------------- Events ---------------- */
 
@@ -401,39 +445,58 @@ const sslCertificates: SslCertificate[] = [
 /** Certificates sorted by expiry - the soonest to expire first. */
 const sortedSslCertificates = [...sslCertificates].sort((a, b) => a.daysLeft - b.daysLeft);
 
-/** Response time breakdown - the parts sum to the total. */
-const responseBreakdown = [
-  { label: "DNS", value: 18, color: PALETTE.blue },
-  { label: "Connect", value: 42, color: PALETTE.green },
-  { label: "TLS", value: 56, color: PALETTE.purple },
-  { label: "TTFB", value: 96, color: PALETTE.amber },
+/* ------------------------------------------------------------------ *
+ * Worked targets and yesterday-deltas per phase (ms). Avg within target →
+ * green tone, above → amber. Percentages are derived from the averages.
+ * ------------------------------------------------------------------ */
+interface BreakdownPhase {
+  label: string;
+  /** Average phase time in ms. */
+  avg: number;
+  /** P95 phase time in ms. */
+  p95: number;
+  /** Phase target in ms (DNS < 20, Connect < 50, TLS < 60, TTFB < 80). */
+  target: number;
+  color: string;
+  /** Change vs yesterday in ms. Negative = improved (green), positive = regressed (red). */
+  deltaMs: number;
+}
+
+const breakdownAll: BreakdownPhase[] = [
+  { label: "DNS", avg: 18, p95: 32, target: 20, color: PALETTE.blue, deltaMs: -2 },
+  { label: "Connect", avg: 42, p95: 71, target: 50, color: PALETTE.green, deltaMs: 12 },
+  { label: "TLS", avg: 56, p95: 98, target: 60, color: PALETTE.purple, deltaMs: -1 },
+  { label: "TTFB", avg: 96, p95: 188, target: 80, color: PALETTE.amber, deltaMs: 9 },
 ];
 
-/** Total request time, derived from the breakdown parts. */
-const totalResponseMs = responseBreakdown.reduce((sum, part) => sum + part.value, 0);
-
 /** Per-endpoint response breakdown - the selector switches between them. */
-const responseBreakdownByEndpoint: Record<string, { label: string; value: number; color: string }[]> = {
-  all: responseBreakdown,
+const responseBreakdownByEndpoint: Record<string, BreakdownPhase[]> = {
+  all: breakdownAll,
   "/api/payments": [
-    { label: "DNS", value: 26, color: PALETTE.blue },
-    { label: "Connect", value: 58, color: PALETTE.green },
-    { label: "TLS", value: 74, color: PALETTE.purple },
-    { label: "TTFB", value: 110, color: PALETTE.amber },
+    { label: "DNS", avg: 26, p95: 44, target: 20, color: PALETTE.blue, deltaMs: 3 },
+    { label: "Connect", avg: 58, p95: 96, target: 50, color: PALETTE.green, deltaMs: 15 },
+    { label: "TLS", avg: 74, p95: 118, target: 60, color: PALETTE.purple, deltaMs: 6 },
+    { label: "TTFB", avg: 110, p95: 214, target: 80, color: PALETTE.amber, deltaMs: 14 },
   ],
   "/api/orders": [
-    { label: "DNS", value: 12, color: PALETTE.blue },
-    { label: "Connect", value: 28, color: PALETTE.green },
-    { label: "TLS", value: 34, color: PALETTE.purple },
-    { label: "TTFB", value: 22, color: PALETTE.amber },
+    { label: "DNS", avg: 12, p95: 21, target: 20, color: PALETTE.blue, deltaMs: -1 },
+    { label: "Connect", avg: 28, p95: 47, target: 50, color: PALETTE.green, deltaMs: 4 },
+    { label: "TLS", avg: 34, p95: 55, target: 60, color: PALETTE.purple, deltaMs: -2 },
+    { label: "TTFB", avg: 22, p95: 38, target: 80, color: PALETTE.amber, deltaMs: -6 },
   ],
   "/api/users": [
-    { label: "DNS", value: 9, color: PALETTE.blue },
-    { label: "Connect", value: 21, color: PALETTE.green },
-    { label: "TLS", value: 31, color: PALETTE.purple },
-    { label: "TTFB", value: 71, color: PALETTE.amber },
+    { label: "DNS", avg: 9, p95: 16, target: 20, color: PALETTE.blue, deltaMs: -1 },
+    { label: "Connect", avg: 21, p95: 36, target: 50, color: PALETTE.green, deltaMs: 3 },
+    { label: "TLS", avg: 31, p95: 52, target: 60, color: PALETTE.purple, deltaMs: -2 },
+    { label: "TTFB", avg: 71, p95: 141, target: 80, color: PALETTE.amber, deltaMs: 11 },
   ],
 };
+
+/** P95 response time per breakdown selection - shown as a chip next to the total. */
+const breakdownP95: Record<string, number> = { all: 389, "/api/payments": 512, "/api/orders": 214, "/api/users": 356 };
+
+/** Global slowest endpoint - independent of the breakdown selection. */
+const slowestEndpoint = { endpoint: "/api/payments", phase: "TTFB", value: 312 };
 
 /** Endpoints offered by the response breakdown selector. */
 const breakdownEndpoints = ["all", "/api/payments", "/api/orders", "/api/users"];
@@ -614,21 +677,21 @@ function Sparkline({ values, down = false }: { values: number[]; down?: boolean 
   );
 }
 
-/** Circular availability gauge. */
+/** Circular availability gauge. Ring colour follows availabilityTone. */
 function HealthGauge({ label, value }: { label: string; value: number }) {
   const radius = 32;
   const circumference = 2 * Math.PI * radius;
-  const color = value >= 99.5 ? PALETTE.green : value >= 98 ? PALETTE.amber : PALETTE.red;
+  const color = availabilityTone(value);
   return (
     <div className="flex min-w-0 flex-col items-center gap-1.5">
-      <div className="relative h-[90px] w-[90px]">
+      <div className="relative h-20 w-20">
         <svg viewBox="0 0 80 80" className="h-full w-full -rotate-90" role="img" aria-label={`${label} availability ${value}%`}>
           <circle cx="40" cy="40" r={radius} fill="none" stroke="var(--muted)" strokeWidth="7" />
           <circle cx="40" cy="40" r={radius} fill="none" stroke={color} strokeWidth="7" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - value / 100)} />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center font-display text-[13px] font-extrabold text-foreground">{value}%</div>
       </div>
-      <span className="truncate text-[12px] font-medium text-foreground">{label}</span>
+      <span className="truncate text-sm font-medium text-foreground">{label}</span>
     </div>
   );
 }
@@ -1056,10 +1119,10 @@ export function WebsiteApiMonitoringDashboard() {
   const [now, setNow] = useState(() => Date.now());
   const [breakdownEndpoint, setBreakdownEndpoint] = useState("all");
 
-  const activeBreakdown = responseBreakdownByEndpoint[breakdownEndpoint] ?? responseBreakdown;
-  const activeBreakdownTotal = activeBreakdown.reduce((sum, part) => sum + part.value, 0);
-  const slowestPhase = activeBreakdown.reduce((slowest, part) => (part.value > slowest.value ? part : slowest), activeBreakdown[0]);
-  const slowestShare = Math.round((slowestPhase.value / activeBreakdownTotal) * 100);
+  const activeBreakdown = responseBreakdownByEndpoint[breakdownEndpoint] ?? breakdownAll;
+  const activeBreakdownTotal = activeBreakdown.reduce((sum, part) => sum + part.avg, 0);
+  const activeBreakdownP95 = breakdownP95[breakdownEndpoint] ?? breakdownP95.all;
+  const slowestPhase = activeBreakdown.reduce((slowest, part) => (part.avg > slowest.avg ? part : slowest), activeBreakdown[0]);
 
   const pageCount = Math.max(1, Math.ceil(monitors.length / ROWS_PER_PAGE));
 
@@ -1282,7 +1345,7 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Monitored endpoints" className="grid items-stretch gap-4">
-            <Panel title="API Endpoints Status" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitored endpoints.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+            <Panel title="API Endpoints Status" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitored endpoints.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex flex-wrap items-center gap-2 pb-2">
                 <div className="relative min-w-[200px] flex-1">
                   <Search size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -1459,32 +1522,34 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Service health and availability" className="grid items-stretch gap-4 xl:grid-cols-[1.02fr_0.98fr_1.1fr]">
-            <Panel title="Service Health" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing health details for all services.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+            <Panel title="Service Health" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing health details for all services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col">
-                <div className="grid flex-1 grid-cols-4 items-center gap-1 pt-2">
+                <div className="grid grid-cols-3 gap-y-5 pt-3">
                   {serviceHealth.map((service) => <HealthGauge key={service.label} label={service.label} value={service.value} />)}
                 </div>
-                <div className="mt-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-border pt-2 text-[12px] text-muted-foreground">
-                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#34D399]" />&ge; 99.5%</span>
-                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#FBBF24]" />99 - 99.5%</span>
-                  <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#F87171]" />&lt; 99%</span>
+                <div className="mt-auto">
+                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-border pt-2 text-[12px] text-muted-foreground">
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#34D399]" />&ge; 99.5%</span>
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#FBBF24]" />99 - 99.5%</span>
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#F87171]" />&lt; 99%</span>
+                  </div>
+                  <p className="mt-1.5 text-center text-[12px] text-muted-foreground">
+                    Healthy <b className="text-foreground">{healthyMonitors}</b> &middot; Issues <b className="text-rose-600">{issueCount}</b>
+                  </p>
                 </div>
-                <p className="mt-1.5 text-center text-[12px] text-muted-foreground">
-                  Healthy <b className="text-foreground">{healthyMonitors}</b> &middot; Issues <b className="text-rose-600">{issueCount}</b>
-                </p>
               </div>
             </Panel>
 
             <Panel title="Top Monitored Services" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<span className="text-[12px] text-muted-foreground">Scale 95-100%</span>}>
-              <div className="flex min-h-0 flex-1 flex-col gap-2.5 pt-1">
+              <div className="flex min-h-0 flex-1 flex-col justify-between gap-0.5 pt-1">
                 {topServices.map((service) => {
-                  const color = service.value >= 99.5 ? PALETTE.green : service.value >= 99 ? PALETTE.amber : PALETTE.red;
+                  const color = availabilityTone(service.value);
                   const width = ((service.value - 95) / 5) * 100;
                   return (
                     <div
                       key={service.name}
                       title={service.issue}
-                      className="grid grid-cols-[minmax(0,1fr)_minmax(60px,1.4fr)_56px] items-center gap-2 text-[12px]"
+                      className="grid h-[28px] grid-cols-[minmax(0,1fr)_minmax(60px,1.4fr)_56px] items-center gap-2 text-[12px]"
                     >
                       <span className="truncate font-medium text-foreground">{service.name}</span>
                       <span className="h-[6px] min-w-0 rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${width}%`, backgroundColor: color }} /></span>
@@ -1497,17 +1562,8 @@ export function WebsiteApiMonitoringDashboard() {
 
             <Panel title="Global Availability" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<Globe size={14} className="text-primary" aria-hidden="true" />}>
               <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
-                <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-md bg-[#eef2f7]">
-                  <InfrastructureMap
-                    variant="light"
-                    markers={availabilityMarkers}
-                    center={[20, 20]}
-                    zoom={2}
-                    fitMarkers
-                    legendCounts={availabilityLegendCounts}
-                    title="Global Availability"
-                    description="5 monitored regions · live latency"
-                  />
+                <div className="relative mt-3 h-[230px] min-h-[230px] flex-1 overflow-hidden rounded-lg">
+                  <NocOsmMap sites={availabilitySites} center={[33.69, 73.06]} initialZoom={13} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[12px] text-muted-foreground">
@@ -1530,7 +1586,7 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Events, certificates and response analysis" className="grid items-stretch gap-4 xl:grid-cols-4">
-            <Panel title="Recent Events" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitoring events.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+            <Panel title="Recent Events" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitoring events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                 {sortedEvents.map((event) => (
                   <div key={event.key} className="grid h-10 grid-cols-[78px_minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 text-[12px] last:border-0">
@@ -1570,7 +1626,7 @@ export function WebsiteApiMonitoringDashboard() {
               </div>
             </Panel>
 
-            <Panel title="SSL Certificates" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all certificates.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+            <Panel title="SSL Certificates" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all certificates.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col pt-1">
                 {sortedSslCertificates.map((certificate) => {
                   const tone = certificate.daysLeft > 30
@@ -1606,39 +1662,48 @@ export function WebsiteApiMonitoringDashboard() {
               </div>
             </Panel>
 
-            <Panel title="Response Time Breakdown" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={
-              <Select value={breakdownEndpoint} onValueChange={setBreakdownEndpoint}>
-                <SelectTrigger aria-label="Select endpoint for response breakdown" className="h-7 w-40 text-[12px]"><SelectValue /></SelectTrigger>
-                <SelectContent>{breakdownEndpoints.map((item) => <SelectItem key={item} value={item}>{item === "all" ? "All endpoints" : item}</SelectItem>)}</SelectContent>
-              </Select>
-            }>
-              <div className="flex min-h-0 flex-1 flex-col gap-2.5 pt-1">
-                <div className="flex h-3 w-full overflow-hidden rounded-full bg-muted">
-                  {activeBreakdown.map((part) => (
-                    <span key={part.label} style={{ width: `${(part.value / activeBreakdownTotal) * 100}%`, backgroundColor: part.color }} />
-                  ))}
-                </div>
-                <p className="text-[12px] text-muted-foreground">
-                  Total <b className="text-[14px] tabular-nums text-foreground">{activeBreakdownTotal} ms</b>
-                </p>
-                <div className="grid grid-cols-4 gap-2">
+            <Panel
+              title="Response Time Breakdown"
+              className="flex h-full min-w-0 flex-col rounded-xl p-4"
+              titleClassName="text-[16px] font-semibold whitespace-nowrap overflow-visible"
+            >
+              <div className="flex min-h-0 flex-1 flex-col pt-1">
+                <Select value={breakdownEndpoint} onValueChange={setBreakdownEndpoint}>
+                  <SelectTrigger aria-label="Select endpoint for response breakdown" className="h-8 w-full text-sm"><SelectValue /></SelectTrigger>
+                  <SelectContent>{breakdownEndpoints.map((item) => <SelectItem key={item} value={item}>{item === "all" ? "All endpoints" : item}</SelectItem>)}</SelectContent>
+                </Select>
+
+                <div className="mt-3 flex h-3 w-full gap-[2px] overflow-hidden rounded-full bg-muted" role="group" aria-label="Response time breakdown by phase">
                   {activeBreakdown.map((part) => {
-                    const share = Math.round((part.value / activeBreakdownTotal) * 100);
-                    const isSlowest = part.value === Math.max(...activeBreakdown.map((entry) => entry.value));
-                    return (
-                      <div key={part.label} className="min-w-0">
-                        <span className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
-                          <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: part.color }} />
-                          {part.label}
-                        </span>
-                        <b className={cn("block text-[12px] tabular-nums", isSlowest ? "text-amber-600" : "text-foreground")}>{part.value} ms</b>
-                        <span className="block text-[12px] tabular-nums text-muted-foreground">{share}%</span>
-                      </div>
-                    );
+                    const share = Math.round((part.avg / activeBreakdownTotal) * 100);
+                    return <span key={part.label} role="img" aria-label={`${part.label}: ${part.avg} ms, ${share}% of total`} title={`${part.label}: ${part.avg} ms (${share}%)`} style={{ width: `${(part.avg / activeBreakdownTotal) * 100}%`, backgroundColor: part.color }} />;
                   })}
                 </div>
-                <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
-                  Slowest: <b className="text-foreground">{slowestPhase.label} {slowestShare}%</b>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <p className="text-[12px] text-muted-foreground">Total <b className="text-[14px] tabular-nums text-foreground">{activeBreakdownTotal} ms</b></p>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 px-2 py-0.5 text-xs font-semibold tabular-nums text-foreground" title="P95 response time">P95 {activeBreakdownP95} ms</span>
+                </div>
+
+                <ul className="mt-2 flex flex-1 flex-col justify-between divide-y divide-border/60">
+                  {activeBreakdown.map((part) => {
+                    const share = Math.round((part.avg / activeBreakdownTotal) * 100);
+                    const withinTarget = part.avg <= part.target;
+                    const improved = part.deltaMs <= 0;
+                    return (
+                      <li key={part.label} className="grid h-10 grid-cols-[84px_minmax(0,1fr)_auto_auto_auto] items-center gap-2">
+                        <span className="flex min-w-0 items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: part.color }} /><span className="truncate text-[13px] font-medium text-foreground">{part.label}</span></span>
+                        <span className="h-[6px] min-w-0 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${share}%`, backgroundColor: part.color }} /></span>
+                        <b className={cn("w-14 whitespace-nowrap text-right text-[13px] tabular-nums", withinTarget ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400")} title={withinTarget ? `Within target (${part.target} ms)` : `Above target (${part.target} ms)`}>{part.avg} ms</b>
+                        <span className="w-[74px] whitespace-nowrap text-right text-[12px] tabular-nums text-muted-foreground" title="P95 phase time">P95 {part.p95} ms</span>
+                        <span className={cn("flex w-[70px] items-center justify-end gap-0.5 whitespace-nowrap text-[12px] font-semibold tabular-nums", improved ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={improved ? "Faster than yesterday" : "Slower than yesterday"}>{improved ? <ArrowDownRight size={12} aria-hidden="true" /> : <ArrowUpRight size={12} aria-hidden="true" />}{Math.abs(part.deltaMs)} ms</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                <div className="mt-auto border-t border-border pt-2 text-[12px] leading-5 text-muted-foreground">
+                  <p>Slowest: <b className="text-foreground">{slowestPhase.label} {slowestPhase.avg} ms</b> <span>(target {slowestPhase.target} ms)</span></p>
+                  <p>Slowest endpoint: <b className="text-foreground">{slowestEndpoint.endpoint} &middot; {slowestEndpoint.phase} {slowestEndpoint.value} ms</b></p>
                 </div>
               </div>
             </Panel>

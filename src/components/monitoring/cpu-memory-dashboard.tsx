@@ -6,7 +6,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import {
-  Activity, AppWindow, ArrowDown, ArrowUp, Cog, Database, Download, Globe, Info, Network, Plus, Server, Zap,
+  Activity, AppWindow, ArrowDown, ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Cog, Database, Download, Globe, Info, Network, Plus, Server, Zap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -15,7 +15,6 @@ import { PageMeta } from "@/components/layout/page-meta";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { MetricStat } from "@/data/mock/dashboard";
 import { memoryUsedGb, serverResourceMetrics, type ServerResourceMetrics } from "@/data/mock/servers";
 import { cn } from "@/lib/utils";
@@ -122,7 +121,7 @@ const memorySeries = [
   { key: "free", name: "Free Memory", color: "#8a45df" },
 ];
 
-const ROWS_PER_PAGE_OPTIONS = [8, 16, 32];
+const ROWS_PER_PAGE = 8;
 
 /**
  * Usage severity bands. The bar colour follows these thresholds while the
@@ -285,23 +284,23 @@ function UsageLegend() {
 }
 
 /** Pagination footer shared by both server tables. */
-function TablePagination({ page, pageCount, rowsPerPage, onPageChange, onRowsPerPageChange, total }: {
-  page: number; pageCount: number; rowsPerPage: number; onPageChange: (page: number) => void; onRowsPerPageChange: (rows: number) => void; total: number;
+function TablePagination({ page, pageCount, onPageChange }: {
+  page: number; pageCount: number; onPageChange: (page: number) => void;
 }) {
-  const from = total ? (page - 1) * rowsPerPage + 1 : 0;
-  const to = Math.min(page * rowsPerPage, total);
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[12px] text-muted-foreground">
       <UsageLegend />
-      <div className="flex flex-wrap items-center gap-1">
-        <span className="mr-2 whitespace-nowrap">Showing {from}-{to} of {total} servers</span>
-        <label className="mr-1 flex items-center gap-1 whitespace-nowrap">
-          Rows per page:
-          <Select value={String(rowsPerPage)} onValueChange={(value) => onRowsPerPageChange(Number(value))}>
-            <SelectTrigger aria-label="Rows per page" className="h-7 w-[62px] text-[12px]"><SelectValue /></SelectTrigger>
-            <SelectContent>{ROWS_PER_PAGE_OPTIONS.map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
-          </Select>
-        </label>
+      <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
+        <button
+          type="button"
+          onClick={() => onPageChange(Math.max(1, page - 1))}
+          disabled={page === 1}
+          aria-label="Previous page"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+        >
+          <ChevronLeft size={14} aria-hidden="true" />
+          <span>Previous</span>
+        </button>
         {Array.from({ length: Math.min(5, Math.max(1, pageCount)) }, (_, index) => index + 1).map((value) => (
           <button
             key={value}
@@ -327,9 +326,10 @@ function TablePagination({ page, pageCount, rowsPerPage, onPageChange, onRowsPer
           onClick={() => onPageChange(Math.min(pageCount, page + 1))}
           disabled={page === pageCount}
           aria-label="Next page"
-          className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
         >
-          <ArrowDown size={12} aria-hidden="true" className="-rotate-90" />
+          <span>Next</span>
+          <ChevronRight size={14} aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -362,7 +362,7 @@ function UsageDistribution({ data }: { data: typeof cpuDistribution }) {
 
 function ProcessList({ title, items, onViewAll }: { title: string; items: { name: string; value: number; width: string; color: string }[]; onViewAll: () => void }) {
   return (
-    <Panel title={title} className="min-w-0" action={<button onClick={onViewAll} className="text-[12px] font-semibold text-primary">View All →</button>}>
+    <Panel title={title} className="min-w-0" action={<button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
       <div className="flex flex-1 items-center justify-center pb-1 pt-3">
         <div className="w-full translate-y-2 space-y-3">
           {items.map((item) => <div key={item.name} className="grid grid-cols-[minmax(0,1fr)_minmax(40px,1fr)_42px] items-center gap-2 text-[12px]"><span className="truncate text-foreground">{item.name}</span><div className="h-[7px] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}%</b></div>)}
@@ -381,8 +381,8 @@ export function CpuMemoryDashboard() {
   const [memorySort, setMemorySort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "memory", direction: "desc" });
   const [cpuPage, setCpuPage] = useState(1);
   const [memoryPage, setMemoryPage] = useState(1);
-  const [cpuRowsPerPage, setCpuRowsPerPage] = useState(8);
-  const [memoryRowsPerPage, setMemoryRowsPerPage] = useState(8);
+  const cpuRowsPerPage = ROWS_PER_PAGE;
+  const memoryRowsPerPage = ROWS_PER_PAGE;
 
   const toast = (message: string) => {
     setNotice(message);
@@ -529,7 +529,7 @@ export function CpuMemoryDashboard() {
       </section>
 
       <section aria-label="Top CPU and memory servers" className="grid items-stretch gap-2.5 xl:grid-cols-2">
-        <Panel title="Top Servers by CPU Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Servers by CPU Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto">
               <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
@@ -564,15 +564,12 @@ export function CpuMemoryDashboard() {
             <TablePagination
               page={cpuPage}
               pageCount={cpuPageCount}
-              rowsPerPage={cpuRowsPerPage}
-              total={sortedCpuServers.length}
               onPageChange={setCpuPage}
-              onRowsPerPageChange={(rows) => { setCpuRowsPerPage(rows); setCpuPage(1); }}
             />
           </div>
         </Panel>
 
-        <Panel title="Top Servers by Memory Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Top Servers by Memory Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto">
               <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
@@ -607,10 +604,7 @@ export function CpuMemoryDashboard() {
             <TablePagination
               page={memoryPage}
               pageCount={memoryPageCount}
-              rowsPerPage={memoryRowsPerPage}
-              total={sortedMemoryServers.length}
               onPageChange={setMemoryPage}
-              onRowsPerPageChange={(rows) => { setMemoryRowsPerPage(rows); setMemoryPage(1); }}
             />
           </div>
         </Panel>
@@ -621,7 +615,7 @@ export function CpuMemoryDashboard() {
         <Panel title="Memory Usage Distribution" className="min-w-0"><div className="flex min-h-[220px] flex-1 items-center justify-center"><UsageDistribution data={memoryDistribution} /></div></Panel>
         <ProcessList title="Top Processes by CPU" items={cpuProcesses} onViewAll={() => toast("Showing all CPU processes.")} />
         <ProcessList title="Top Processes by Memory" items={memoryProcesses} onViewAll={() => toast("Showing all memory processes.")} />
-        <Panel title="Recent Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all CPU and memory alerts.")} className="text-[12px] font-semibold text-primary">View All →</button>}>
+        <Panel title="Recent Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all CPU and memory alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="space-y-2.5 pt-1.5">{alerts.map((alert) => <div key={alert.text} className="grid grid-cols-[10px_minmax(0,1fr)_38px] items-center gap-1.5 text-[12px]"><i className={`grid h-2.5 w-2.5 place-items-center rounded-full text-white ${alert.tone === "critical" ? "bg-rose-500" : alert.tone === "warning" ? "bg-amber-500" : alert.tone === "healthy" ? "bg-emerald-500" : "bg-blue-500"}`}>{alert.tone === "critical" ? "×" : alert.tone === "warning" ? "!" : "•"}</i><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="text-right text-muted-foreground">{alert.ago}</span></div>)}</div>
         </Panel>
       </section>
