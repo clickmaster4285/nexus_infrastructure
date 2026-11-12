@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shared/coming-soon";
+import { AlertRulesDashboard } from "@/components/alert-rules/alert-rules-dashboard";
 
 export const metadata: Metadata = {
   title: "Alert Rules",
 };
 
 export default function AlertRulesPage() {
-  return (
-    <ComingSoon
-      title="Alert Rules"
-      description="Threshold, anomaly, and composite alert rules and notification policies."
-      breadcrumbs={["Operations", "Alert Rules"]}
-    />
-  );
+  return <AlertRulesDashboard />;
 }

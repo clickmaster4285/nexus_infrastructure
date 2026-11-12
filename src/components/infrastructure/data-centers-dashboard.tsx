@@ -15,6 +15,7 @@ import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
 import type { MetricStat } from "@/data/mock/dashboard";
+import { incidentStoreSnapshot } from "@/mocks/incidents";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
@@ -89,7 +90,7 @@ const lowestUptimeLocation = topLocations.reduce((lowest, location) => location.
 const centerOverviewStats = [
   { label: "Total Capacity", value: "3.2 PB" },
   { label: "Avg Uptime", value: `${averageLocationUptime.toFixed(1)}%` },
-  { label: "Active Incidents", value: "2" },
+  { label: "Active Incidents", value: `${incidentStoreSnapshot().open}` },
 ];
 
 const locationAvailabilityStats = [

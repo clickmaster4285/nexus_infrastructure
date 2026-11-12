@@ -1,4 +1,7 @@
 import { servers } from "./servers";
+import { incidentStoreSnapshot } from "@/mocks/incidents";
+
+const incidentsSnapshot = incidentStoreSnapshot();
 
 export type TrendDirection = "up" | "down" | "flat";
 export type MetricTone = "blue" | "green" | "red" | "amber" | "purple";
@@ -20,7 +23,7 @@ export const stats: MetricStat[] = [
   { label: 'Offline Servers', value: '1', change: '8% of total', trend: 'flat', tone: 'red', icon: 'offline' },
   { label: 'Degraded Servers', value: '1', change: '8% of total', trend: 'flat', tone: 'amber', icon: 'warning' },
   { label: 'Critical Alerts', value: '5', change: '2 new', trend: 'up', tone: 'red', icon: 'bell' },
-  { label: 'Active Incidents', value: '2', change: '1 new', trend: 'up', tone: 'red', icon: 'flame' },
+  { label: 'Active Incidents', value: `${incidentsSnapshot.open}`, change: '1 new', trend: 'up', tone: 'red', icon: 'flame' },
   { label: 'Avg. CPU Usage', value: '34%', change: '12%', trend: 'down', tone: 'blue', icon: 'cpu' },
   { label: 'Avg. Memory Usage', value: '56%', change: '8%', trend: 'down', tone: 'blue', icon: 'memory' },
   { label: 'Storage Utilization', value: '48%', change: '5%', trend: 'down', tone: 'blue', icon: 'storage' },

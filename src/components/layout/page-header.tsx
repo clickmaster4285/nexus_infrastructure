@@ -9,6 +9,8 @@ interface PageHeaderProps {
   subtitle: string;
   /** Optional page icon rendered in a soft green tile left of the title. */
   icon?: ReactNode;
+  /** Override the icon tile classes (colours), keeping the default sizing. */
+  iconClassName?: string;
   /** Optional status pill rendered next to the title, before the actions. */
   statusBadge?: ReactNode;
   actions?: ReactNode;
@@ -18,7 +20,7 @@ interface PageHeaderProps {
   demo?: boolean;
 }
 
-export function PageHeader({ breadcrumbs, title, subtitle, icon, statusBadge, actions, lastUpdated, onRefresh, demo = true }: PageHeaderProps) {
+export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = true }: PageHeaderProps) {
   return (
     <>
       <PageMeta breadcrumbs={breadcrumbs} variant="detail" demo={demo} lastUpdated={lastUpdated} onRefresh={onRefresh} />
@@ -26,7 +28,7 @@ export function PageHeader({ breadcrumbs, title, subtitle, icon, statusBadge, ac
         title={title}
         description={subtitle}
         icon={icon}
-        iconClassName="h-11 w-11 rounded-xl"
+        iconClassName={iconClassName ?? "h-11 w-11 rounded-xl"}
         statusBadge={statusBadge}
         actionsAlign="bottom"
         variant="detail"

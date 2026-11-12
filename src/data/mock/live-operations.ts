@@ -1,6 +1,9 @@
 import type { MetricStat } from "./dashboard";
 import type { DonutDatum } from "./dashboard";
 import { servers } from "./servers";
+import { incidentStoreSnapshot } from "@/mocks/incidents";
+
+const incidentsSnapshot = incidentStoreSnapshot();
 
 /** One mock fleet source drives the NOC KPI cards, health donut and map legend. */
 export const nocFleet = {
@@ -9,7 +12,7 @@ export const nocFleet = {
   degraded: 1,
   offline: 1,
   criticalAlerts: 5,
-  activeIncidents: 2,
+  activeIncidents: incidentsSnapshot.open,
 };
 
 export const nocStats: MetricStat[] = [

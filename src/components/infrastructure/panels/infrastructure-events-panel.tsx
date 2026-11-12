@@ -28,7 +28,7 @@ export function InfrastructureEventsPanel({ className }: { className?: string })
     <Panel title="Recent Infrastructure Events" action={action} className={className}>
       <div className="mt-1.5 flex flex-col">
         {infrastructureEvents.map((event) => (
-          <div key={event.title} className="flex h-[44px] min-w-0 items-center gap-2 border-b border-border/70 last:border-b-0">
+          <div key={event.title} className="flex h-[36px] min-w-0 items-center gap-2 border-b border-border/70 last:border-b-0">
             <span className={cn("grid h-[25px] w-[25px] shrink-0 place-items-center rounded-full", eventIconTone[event.tone] ?? eventIconTone.blue)}>
               <Icon name={event.icon} size={14} />
             </span>

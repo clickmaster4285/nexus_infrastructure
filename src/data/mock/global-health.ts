@@ -1,5 +1,8 @@
 import type { MetricStat } from "./dashboard";
 import { nocCollectors } from "./live-operations";
+import { incidentStoreSnapshot } from "@/mocks/incidents";
+
+const incidentsSnapshot = incidentStoreSnapshot();
 
 export type HealthStatus = "healthy" | "warning" | "critical";
 export const SLA_TARGET = 99;
@@ -23,7 +26,7 @@ export const globalHealthStats: MetricStat[] = [
   { label: "Infrastructure Health", value: `${healthScore}%`, change: "0.2%", trend: "up", tone: "blue", icon: "pulse" },
   { label: "Monitoring Coverage", value: "99.1%", change: "0.1%", trend: "up", tone: "green", icon: "online" },
   { label: "Service Availability", value: "98.9%", change: "0.12%", trend: "up", tone: "green", icon: "shield" },
-  { label: "Active Incidents", value: "2", change: "1 new", trend: "up", tone: "red", icon: "flame" },
+  { label: "Active Incidents", value: `${incidentsSnapshot.open}`, change: "1 new", trend: "up", tone: "red", icon: "flame" },
   { label: "Critical Alerts", value: "5", change: "2 new", trend: "up", tone: "red", icon: "bell" },
   { label: "Avg Response Time", value: "142 ms", change: "12%", trend: "down", tone: "blue", icon: "network" },
 ];

@@ -54,12 +54,12 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
   return (
     <Panel title="Infrastructure Health" className={cn("flex flex-col p-4", className)}>
       {/* Summary */}
-      <div className="border-b border-border pb-2.5">
-        <div className="grid h-[57px] grid-cols-3 items-center">
+      <div className="mt-1.5 border-b border-border pb-2.5">
+        <div className="grid h-[64px] grid-cols-3 items-center">
           {healthItems.map((item, index) => (
             <div
               key={item.label}
-              className={cn("flex flex-col items-center justify-center gap-0.5", index < healthItems.length - 1 && "border-r border-border")}
+              className={cn("flex flex-col items-center justify-center gap-1", index < healthItems.length - 1 && "border-r border-border")}
             >
               <item.icon size={17} aria-hidden="true" className={iconToneText[item.tone]} />
               <b className="font-display text-[20px] font-extrabold leading-none text-[#152842] dark:text-[#e6edf7]">{item.value}</b>

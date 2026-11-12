@@ -1,14 +1,92 @@
 "use client";
 
-import { Bell, ChevronDown, Menu, Moon, RefreshCw, Search, Sun } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Bell, ChevronDown, LogOut, Menu, Moon, RefreshCw, Search, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   onMenu: () => void;
   dark: boolean;
   onThemeToggle: () => void;
+}
+
+const PROFILE = { name: "Admin", email: "admin@gmail.com", role: "Super Administrator" } as const;
+
+function ProfileMenu() {
+  const router = useRouter();
+  const user = PROFILE;
+  const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState("");
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toastTimer = useRef<number | null>(null);
+
+  const notify = (message: string) => {
+    setToast(message);
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(""), 2600);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    const onScroll = (event: Event) => { if (menuRef.current?.contains(event.target as Node)) return; setOpen(false); };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", () => setOpen(false));
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("keydown", onKeyDown, true);
+      document.removeEventListener("scroll", onScroll, true);
+    };
+  }, [open]);
+
+  const handleLogout = () => {
+    notify("Logged out");
+    setOpen(false);
+    window.setTimeout(() => router.replace("/login"), 300);
+  };
+
+  const initials = "A";
+
+  return (
+    <div ref={menuRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="flex items-center gap-2 rounded-md py-0.5 pl-1 pr-1 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:pl-1.5"
+      >
+        <span className="grid h-7 w-7 place-items-center rounded-full bg-[#dce5ef] text-[12px] font-bold text-[#3c526c] dark:bg-[#263951] dark:text-[#e2ebf5]">{initials}</span>
+        <span className="hidden lg:block">
+          <span className="block text-[9px] font-semibold leading-tight text-foreground">{user?.name ?? "Admin"}</span>
+          <span className="mt-0.5 block text-[8px] leading-tight text-muted-foreground">{user?.role ?? "Super Administrator"}</span>
+        </span>
+        <ChevronDown size={13} aria-hidden="true" className={cn("hidden text-muted-foreground transition-transform duration-150 lg:block", open && "rotate-180")} />
+      </button>
+      {open && (
+        <div role="menu" aria-label="Account menu" className="absolute right-0 top-10 z-40 w-60 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] dark:border-border dark:bg-popover">
+          <div className="border-b border-border/70 px-3 py-2">
+            <b className="block text-[13px] text-foreground">{user?.name ?? "Admin"}</b>
+            <span className="block truncate text-[12px] text-muted-foreground">{user?.email ?? "admin@gmail.com"}</span>
+          </div>
+          <button type="button" role="menuitem" onClick={handleLogout} className="mt-1 flex h-9 w-full items-center gap-2 rounded-md px-3 text-[13px] font-medium text-rose-600 transition-colors hover:bg-rose-50 focus-visible:bg-rose-50 focus-visible:outline-none dark:text-rose-400 dark:hover:bg-rose-950/40 dark:focus-visible:bg-rose-950/40">
+            <LogOut size={15} className="shrink-0" aria-hidden="true" />
+            Logout
+          </button>
+        </div>
+      )}
+      {toast && <div role="status" className="fixed bottom-4 right-4 z-[1400] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-lg">{toast}</div>}
+    </div>
+  );
 }
 
 export function Header({ onMenu, dark, onThemeToggle }: HeaderProps) {
@@ -80,16 +158,7 @@ export function Header({ onMenu, dark, onThemeToggle }: HeaderProps) {
       </Button>
 
       {/* Profile */}
-      <button type="button" className="flex items-center gap-2 rounded-md py-0.5 pl-1 pr-1 text-left transition-colors hover:bg-accent md:pl-1.5">
-        <span className="grid h-7 w-7 place-items-center rounded-full bg-[#dce5ef] text-[12px] font-bold text-[#3c526c] dark:bg-[#263951] dark:text-[#e2ebf5]">
-          A
-        </span>
-        <span className="hidden lg:block">
-          <span className="block text-[9px] font-semibold leading-tight">Admin</span>
-          <span className="mt-0.5 block text-[8px] leading-tight text-muted-foreground">Super Administrator</span>
-        </span>
-        <ChevronDown size={13} aria-hidden="true" className="hidden text-muted-foreground lg:block" />
-      </button>
+      <ProfileMenu />
     </header>
   );
 }
