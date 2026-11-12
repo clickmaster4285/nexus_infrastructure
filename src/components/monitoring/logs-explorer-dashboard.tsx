@@ -28,7 +28,7 @@ import {
   type LogEntry, type LogLevel, type TrendRangeKey,
 } from "@/mocks/logs";
 
-echarts.use([BarChart, PieChart, BrushComponent, GridComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, BrushComponent, CanvasRenderer]);
 
 const CHART_COLORS: Record<LogLevel, string> = { ERROR: "#F87171", WARNING: "#FBBF24", INFO: "#60A5FA", DEBUG: "#94A3B8" };
 const LEVEL_ORDER: LogLevel[] = ["ERROR", "WARNING", "INFO", "DEBUG"];

@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shared/coming-soon";
+import { UptimeSlaReportsDashboard } from "@/components/monitoring/uptime-sla/uptime-sla-reports-dashboard";
 
 export const metadata: Metadata = {
   title: "Uptime & SLA Reports",
 };
 
 export default function UptimeAndSlaReportsPage() {
-  return (
-    <ComingSoon
-      title="Uptime & SLA Reports"
-      description="SLA attainment reports with exportable incident timelines."
-      breadcrumbs={["Monitoring", "Uptime & SLA Reports"]}
-    />
-  );
+  return <UptimeSlaReportsDashboard />;
 }

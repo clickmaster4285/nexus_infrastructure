@@ -37,6 +37,12 @@ type SummaryServerTableProps =
   | { title: string; kind: "backup"; rows: BackupTableRow[]; className?: string }
   | { title: string; kind: "latency"; rows: LatencyTableRow[]; className?: string };
 
+const linkArrowColor = (kind: SummaryServerTableProps["kind"], title: string) => {
+  if (kind === "backup") return "text-amber-500 dark:text-amber-400";
+  if (kind === "latency") return "text-emerald-500 dark:text-emerald-400";
+  return title.includes("CPU") ? "text-blue-500 dark:text-blue-400" : "text-violet-500 dark:text-violet-400";
+};
+
 export function SummaryServerTable(props: SummaryServerTableProps) {
   const { title, kind, className } = props;
   const link = linkHrefByKind[kind];
@@ -124,7 +130,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
         </table>
       </div>
       <Link href={link.href} className="executive-overview-trend mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[12px] font-semibold text-primary transition-colors hover:text-primary/80">
-        View all {link.label} <ArrowRight size={12} aria-hidden="true" />
+        View all {link.label} <ArrowRight className={linkArrowColor(kind, title)} size={12} aria-hidden="true" />
       </Link>
     </Panel>
   );
