@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { useLogs } from "@/mocks/useLogs";
 import {
   LEVEL_COUNTS, LOG_ENVIRONMENTS, LOG_HOSTS, LOG_SERVICES, LOG_SOURCES, LOG_TOTALS, LOG_TRENDS,
+  NOISY_LOG_SOURCES,
   RANGE_TEXT, TREND_RANGE_ORDER, TOP_ERROR_PATTERNS, TOP_SERVICES_BY_ERRORS, createLiveLog,
   formatClock, formatCompact, formatFull, fullTimestamp, parseLogQuery, timeAgo,
   type LogEntry, type LogLevel, type TrendRangeKey,
@@ -133,6 +134,23 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
           : <span key={index}>{part}</span>,
       )}
     </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Sparkline — tiny inline SVG trend line                                */
+/* ------------------------------------------------------------------ */
+function Sparkline({ values, stroke, className }: { values: number[]; stroke: string; className?: string }) {
+  const width = 100;
+  const height = 26;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const points = values.map((value, index) => `${((index * width) / Math.max(1, values.length - 1)).toFixed(2)},${(height - 2 - ((value - min) / range) * (height - 4)).toFixed(2)}`).join(" ");
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("h-[26px] w-16 shrink-0", className)} role="img" aria-label="Trend sparkline">
+      <polyline points={points} fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+    </svg>
   );
 }
 
@@ -637,6 +655,15 @@ export function LogsExplorerDashboard() {
     });
   };
 
+  /* Isolate a single level: keep only that series visible, or reset when already isolated */
+  const isolateLevel = (level: LogLevel) => {
+    setHiddenLevels((prev) => {
+      const visibleCount = LEVEL_ORDER.filter((item) => !prev.has(item)).length;
+      const soloed = visibleCount === 1 && !prev.has(level);
+      return soloed ? new Set() : new Set(LEVEL_ORDER.filter((item) => item !== level));
+    });
+  };
+
   const copyText = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -673,8 +700,10 @@ export function LogsExplorerDashboard() {
   };
 
   const trend = LOG_TRENDS[trendRange];
-  const trendSum = trend.reduce((acc, bucket) => acc + bucket.total, 0);
-  const trendPeak = trend.reduce((peak, bucket) => (bucket.total > peak.total ? bucket : peak), trend[0]);
+  const visibleBucketValue = (bucket: (typeof trend)[number]) => LEVEL_ORDER.filter((level) => !hiddenLevels.has(level)).reduce((sum, level) => sum + bucket[level.toLowerCase() as "error" | "warning" | "info" | "debug"], 0);
+  const trendSum = trend.reduce((acc, bucket) => acc + visibleBucketValue(bucket), 0);
+  const trendPeak = trend.reduce((peak, bucket) => (visibleBucketValue(bucket) > visibleBucketValue(peak) ? bucket : peak), trend[0]);
+  const trendPeakValue = visibleBucketValue(trendPeak);
   const trendAvg = Math.round(trendSum / Math.max(1, trend.length));
   const trendErrorRate = trendSum === 0 ? 0 : (trend.reduce((acc, bucket) => acc + bucket.error, 0) / trendSum) * 100;
 
@@ -782,7 +811,7 @@ export function LogsExplorerDashboard() {
             </div>
             <div className="mt-auto border-t border-border pt-2 text-sm text-muted-foreground">
               <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <li>Peak <b className="text-foreground">{trendPeak.label}</b> ({formatCompact(trendPeak.total)})</li>
+                <li>Peak <b className="text-foreground">{trendPeak.label}</b> ({formatCompact(trendPeakValue)})</li>
                 <li>Avg/bucket <b className="tabular-nums text-foreground">{formatCompact(trendAvg)}</b></li>
                 <li>Error rate <b className="tabular-nums text-foreground">{trendErrorRate.toFixed(2)}%</b></li>
               </ul>

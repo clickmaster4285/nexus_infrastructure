@@ -154,6 +154,28 @@
   }
 }
 
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--menu-slide, -4px)) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-menu-in {
+    animation: none !important;
+  }
+}
+
+.motion-menu-in {
+  animation: menu-in 120ms ease-out both;
+}
+
 @keyframes topology-overlay-fade {
   from {
     opacity: 0;

@@ -6,7 +6,7 @@ import {
   Area, AreaChart, CartesianGrid,
   ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { AlertTriangle, Check, CheckCircle2, Download, Expand, FileText, Hourglass, MoreVertical, Plus, ShieldCheck, X } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, CheckCircle2, Download, Expand, FileText, Hourglass, MoreVertical, Plus, ShieldCheck, X } from "lucide-react";
 import * as echarts from "echarts/core";
 import { LineChart as ELineChart } from "echarts/charts";
 import { GridComponent, MarkLineComponent, MarkPointComponent, TooltipComponent } from "echarts/components";
@@ -387,7 +387,7 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
 });
 
 function ViewAllLink({ label = "View all", onClick }: { label?: string; onClick?: () => void }) {
-  return <button type="button" onClick={onClick} className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[13px] font-medium text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{label} →</button>;
+  return <button type="button" onClick={onClick} className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[13px] font-medium text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{label}<ArrowRight size={14} aria-hidden="true" /></button>;
 }
 
 function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { databases: DatabaseRecord[]; onSelectDatabase: (name: string) => void; selectedDatabase: string }) {
@@ -508,7 +508,7 @@ function StorageUsage({ storage }: { storage: typeof databaseMonitoringData.stor
     </div></div>
     <div className="grid grid-cols-[minmax(0,1fr)_minmax(120px,40%)] items-center gap-3 border-t border-border pt-2"><div><div className="flex items-center justify-between gap-2 text-[12px]"><span className="text-muted-foreground">Growth (7d)</span><b className="whitespace-nowrap text-foreground">+{storage.dailyGrowthGb.toFixed(1)} GB/day</b></div><p className="mt-1 text-[12px] text-muted-foreground">Estimated full in <b className="text-foreground">~{fullDays} days</b></p></div><div className="h-[54px] min-w-0" aria-label="Seven day storage growth"><ResponsiveContainer width="100%" height="100%"><AreaChart data={growthData}><Tooltip content={<ChartTooltip />} /><Area dataKey="value" name="Storage used (GB)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.16} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
     <div id="database-size" className="flex min-h-0 flex-1 flex-col border-t border-border pt-2" aria-label="Top databases by storage size">
-      <div className="mb-1 flex items-center justify-between text-[12px]"><span className="font-semibold text-muted-foreground">Top Databases by Size</span><a href="#database-size" className="whitespace-nowrap font-semibold text-primary hover:underline">View all →</a></div>
+      <div className="mb-1 flex items-center justify-between text-[12px]"><span className="font-semibold text-muted-foreground">Top Databases by Size</span><a href="#database-size" className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></a></div>
       <div className="flex min-h-0 flex-1 flex-col justify-between">{topDatabases.map((item) => <div key={item.name} className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(60px,1.2fr)_56px] items-center gap-2 text-[12px] leading-5"><span className="truncate text-foreground" title={item.name}>{item.name}</span><span className="h-1.5 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${item.sizeGb / largestDatabase * 100}%` }} /></span><b className="whitespace-nowrap text-right tabular-nums text-foreground">{item.sizeGb} GB</b></div>)}</div>
     </div>
   </div>;

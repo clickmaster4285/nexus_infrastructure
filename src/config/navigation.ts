@@ -82,7 +82,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Website & API Monitoring", href: "/website-and-api-monitoring", icon: Globe },
       { label: "Database Monitoring", href: "/database-monitoring", icon: Database },
       { label: "Logs Explorer", href: "/logs-explorer", icon: FileSearch },
-      { label: "Events Explorer", href: "/events-explorer", icon: CalendarDays },
+      { label: "Event Explorer", href: "/events-explorer", icon: CalendarDays },
       { label: "Uptime & SLA Reports", href: "/uptime-and-sla-reports", icon: ChartNoAxesColumnIncreasing },
     ],
   },

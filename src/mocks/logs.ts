@@ -380,6 +380,23 @@ export function createLiveLog(sequence: number): LogEntry {
 const sampleErrorCount = SAMPLE_LOGS.filter((log) => log.level === "ERROR").length;
 const errorScale = sampleErrorCount > 0 ? LOG_TOTALS.errors / sampleErrorCount : 1;
 
+export interface NoisyLogSource {
+  service: string;
+  /** Scaled log volume across the full fleet (sums to LOG_TOTALS.total). */
+  count: number;
+}
+
+/** Noisy services ranked by scaled log volume — feeds the "Top Log Sources" panel. */
+export const NOISY_LOG_SOURCES: NoisyLogSource[] = (() => {
+  const counts = new Map<string, number>();
+  for (const log of SAMPLE_LOGS) counts.set(log.service, (counts.get(log.service) ?? 0) + 1);
+  const totalSample = SAMPLE_LOGS.length;
+  return [...counts.entries()]
+    .map(([service, count]) => ({ service, count: Math.round((count / totalSample) * LOG_TOTALS.total) }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+})();
+
 export interface ServiceErrorRow {
   service: string;
   count: number;
