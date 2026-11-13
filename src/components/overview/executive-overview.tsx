@@ -13,6 +13,8 @@ import {
   memoryServers,
   stats,
 } from "@/data/mock/dashboard";
+import { Wrench, ArrowRight } from "lucide-react";
+import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
 const PANEL = cn(
   "min-w-0 p-4!",
@@ -38,6 +40,13 @@ export function ExecutiveOverview() {
         title="Executive Overview"
         subtitle="Complete view of your infrastructure health and performance"
       />
+
+      {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return (
+        <div role="status" className="flex min-h-[44px] flex-wrap items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-[13px] text-violet-900 dark:border-violet-900/70 dark:bg-violet-950/30 dark:text-violet-200">
+          <div className="flex items-center gap-2"><Wrench size={16} aria-hidden="true" /><b>{active.length} maintenance window{active.length === 1 ? "" : "s"} active</b><span className="text-violet-800/80 dark:text-violet-200/80">· {hosts.length} servers in maintenance · alerts muted until {new Date(mutedUntil).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span></div>
+          <a href="/maintenance-windows" className="inline-flex h-8 items-center gap-1 rounded-lg border border-violet-200 bg-white px-3 text-[12px] font-semibold text-violet-800 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-900 dark:bg-transparent dark:text-violet-200">View windows <ArrowRight size={13} /></a>
+        </div>
+      ); })()}
 
       <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {stats.map((item) => (

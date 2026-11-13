@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -32,6 +32,7 @@ import {
   type Incident, type IncidentSeverity, type IncidentRestoreSnapshot, type StatusFilter, type TrendRange,
 } from "@/mocks/incidents";
 import { useIncidents } from "@/mocks/useIncidents";
+import { incidentsSuppressed24h } from "@/mocks/maintenanceWindows";
 import { fullTimestamp, timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";
 
@@ -231,6 +232,7 @@ export function IncidentsDashboard() {
   const isError = status === "error";
 
   const now = useNow(60_000);
+  const suppressedIncidents24h = useMemo(() => incidentsSuppressed24h(), [incidents]);
   const [filters, setFilters] = useState<IncidentFilters>(DEFAULT_FILTERS);
   const [trendRange, setTrendRange] = useState<TrendRange>("7D");
   const [density, setDensity] = useState<"default" | "compact">("default");
@@ -712,8 +714,6 @@ export function IncidentsDashboard() {
         breadcrumbs={["Operations", "Incidents"]}
         title="Incidents"
         subtitle="Track, manage and learn from incidents across your infrastructure."
-        icon={<Siren size={22} />}
-        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]"
         lastUpdated={timeAgo(lastRefreshedAt)}
         onRefresh={() => { reload(); setLastRefreshedAt(Date.now()); }}
         actions={
@@ -752,7 +752,7 @@ export function IncidentsDashboard() {
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
                 <span>oldest open for {formatMinutes(stats.oldestOpenMin)}</span>
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
-                <span>{stats.sev12Open} SEV1-2</span>
+                <span>{stats.sev12Open} SEV1-2</span>{suppressedIncidents24h > 0 && (<><span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span><a href="/maintenance-windows" className="inline-flex items-center gap-1 font-semibold text-red-900 underline decoration-red-300 underline-offset-2 hover:text-red-700 dark:text-red-100 dark:decoration-red-700">{suppressedIncidents24h} suppressed by maintenance</a></>)}
               </p>
               <button
                 type="button"
@@ -1449,3 +1449,4 @@ export function IncidentsDashboard() {
     </div>
   );
 }
+

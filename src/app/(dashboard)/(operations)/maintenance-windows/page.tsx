@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shared/coming-soon";
+import { WindowsDashboard } from "@/components/maintenance-windows/windows-dashboard";
 
 export const metadata: Metadata = {
   title: "Maintenance Windows",
 };
 
 export default function MaintenanceWindowsPage() {
-  return (
-    <ComingSoon
-      title="Maintenance Windows"
-      description="Silence monitoring during planned maintenance."
-      breadcrumbs={["Operations", "Maintenance Windows"]}
-    />
-  );
+  return <WindowsDashboard />;
 }

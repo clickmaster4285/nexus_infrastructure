@@ -24,9 +24,14 @@ interface StatCardProps {
   trendClassName?: string;
   detailClassName?: string;
   detail?: ReactNode;
+  /** When provided the card becomes keyboard-focusable and activates on click/Enter/Space. */
+  onClick?: () => void;
+  onClickLabel?: string;
 }
 
 export function StatCard({
+  onClick,
+  onClickLabel,
   icon,
   label,
   value,
@@ -63,7 +68,14 @@ export function StatCard({
       : "text-rose-600";
 
   return (
-    <Card className={cn("flex h-full min-h-[104px] w-full min-w-0 items-center gap-3 rounded-xl p-4", className)}>
+    <Card
+      className={cn("flex h-full min-h-[104px] w-full min-w-0 items-center gap-3 rounded-xl p-4", onClick && "cursor-pointer transition-colors hover:border-primary/40 focus-within:ring-2 focus-within:ring-ring", className)}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-label={onClick ? onClickLabel ?? label : undefined}
+      onClick={onClick}
+      onKeyDown={onClick ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onClick(); } } : undefined}
+    >
       <span aria-hidden="true" className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-full", iconTone)}>
         {icon}
       </span>

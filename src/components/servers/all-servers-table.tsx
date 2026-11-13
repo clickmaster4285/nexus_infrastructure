@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { LocationFlag, ProviderLogo } from "@/components/shared/provider-logo";
 import { cn } from "@/lib/utils";
 import { serverDetailsPath, type Server } from "@/data/mock/servers";
+import { isServerInMaintenance } from "@/mocks/maintenanceWindows";
 import {
   AgentCell,
   EnvironmentPill,
@@ -139,7 +140,7 @@ export function AllServersTable({
                   <td className="border-b border-border/60 px-[7px] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><NetworkCell server={server} readable /></Link></td>
                   <td className="whitespace-nowrap border-b border-border/60 px-[7px] py-2 align-middle text-[11px] text-[#5b718c] dark:text-[#b7c4d5]"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{server.uptime}</Link></td>
                   <td className="border-b border-border/60 px-[7px] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><AgentCell agent={server.agent} heartbeat={server.heartbeat} readable /></Link></td>
-                  <td className="border-b border-border/60 px-[7px] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><StatusPill status={server.health} readable /></Link></td>
+                  <td className="border-b border-border/60 px-[7px] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-1 text-[8px] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-current" />In Maintenance</span> : <StatusPill status={server.health} readable />}</Link></td>
                   <td className={cn("border-b border-border/60 px-[7px] py-2 text-center align-middle text-[11px] font-semibold text-[#617790] dark:text-[#b7c4d5]", server.alerts > 0 && "font-bold text-destructive")}>
                     <Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{server.alerts}</Link>
                   </td>
@@ -196,3 +197,4 @@ export function AllServersTable({
     </>
   );
 }
+

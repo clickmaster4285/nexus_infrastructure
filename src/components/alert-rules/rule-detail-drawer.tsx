@@ -9,6 +9,7 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AlertRule, NotificationChannel, RuleSeverity, RuleStatus, RuleType } from "@/mocks/alertRules";
+import { maintenanceWindowMutingRule } from "@/mocks/maintenanceWindows";
 import { formatCondition } from "@/utils/formatCondition";
 import { formatDateTime } from "@/utils/alertStats";
 import { timeAgo } from "@/mocks/logs";
@@ -151,6 +152,7 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
                 <BellOff size={12} aria-hidden="true" />Muted until {formatDateTime(new Date(rule.mutedUntil).getTime())}
               </span>
             )}
+            {(() => { const mutedBy = maintenanceWindowMutingRule(rule.id); return mutedBy ? <Link href={`/maintenance-windows/${mutedBy}`} className="inline-flex items-center gap-1 text-[12px] font-semibold text-violet-600 hover:underline dark:text-violet-400"><BellOff size={12} aria-hidden="true" />Muted by {mutedBy}</Link> : null; })()}
           </div>
         </header>
 

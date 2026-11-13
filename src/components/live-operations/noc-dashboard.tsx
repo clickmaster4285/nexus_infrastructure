@@ -7,8 +7,9 @@ import {
   Activity, AlertCircle, ArrowDownRight, ArrowRight, ArrowUpRight, Bell, Check, CircleAlert, Clock3,
   Cpu, CreditCard, Database, Expand, Gauge, HardDrive, HeartPulse, Info, ListOrdered, Mail, MapPin, Network, Pause, Play, RefreshCw,
   Search,
-  Server, Shield, Siren, Wifi, X,
+  Server, Shield, Siren, Wifi, Wrench, X,
 } from "lucide-react";
+import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { StatCard } from "@/components/shared/stat-card";
@@ -442,6 +443,11 @@ export function LiveOperationsNoc() {
         <Button variant="outline" className="h-9 gap-1.5 px-3 text-[12px]" onClick={() => setTvMode((value) => !value)} aria-label={tvMode ? "Exit full-screen TV mode" : "Enter full-screen TV mode"}><Expand size={14} />{tvMode ? "Exit TV" : "Full screen"}</Button>
       </div>}
     />
+
+    {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-[13px] text-violet-900 dark:border-violet-900/70 dark:bg-violet-950/30 dark:text-violet-200" role="status">
+      <div className="flex items-center gap-2"><Wrench size={16} aria-hidden="true" /><b>{active.length} maintenance window{active.length === 1 ? "" : "s"} active</b><span className="text-violet-800/80 dark:text-violet-200/80">· {hosts.length} servers in maintenance · alerts muted until {new Date(mutedUntil).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span></div>
+      <Button variant="outline" className="h-8 border-violet-200 bg-white px-3 text-[12px] text-violet-800 hover:bg-violet-100 dark:border-violet-900 dark:bg-transparent dark:text-violet-200" asChild><a href="/maintenance-windows">View windows <ArrowRight className="ml-1" size={13} /></a></Button>
+    </div>; })()}
 
     {healthMetrics.openIncidents > 0 || criticalCount > 0 ? <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-[13px] text-red-800 dark:border-red-900/70 dark:bg-red-950/30 dark:text-red-200" role="status">
       <div className="flex items-center gap-2"><Siren size={17} /><b>{healthMetrics.openIncidents} active incidents</b><span className="text-red-700/80 dark:text-red-200/80">· {criticalCount} critical alerts</span></div>

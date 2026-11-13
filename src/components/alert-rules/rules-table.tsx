@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Info, Mail, MessageSquare, Webhook, Zap, AlertTriangle, BellOff, CheckCircle2, Ban } from "lucide-react";
 
 import { AlertMenu, type AlertMenuItem } from "@/components/alerts/alert-menu";
+import { maintenanceWindowMutingRule } from "@/mocks/maintenanceWindows";
 import { ToggleSwitch } from "@/components/alert-rules/toggle-switch";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -239,6 +240,7 @@ export function RulesTable(props: RulesTableProps) {
             const conditionText = formatCondition(rule.condition);
             const statusMeta = STATUS_CHIP[rule.status];
             const StatusIcon = statusMeta.icon;
+            const mutedByWindow = maintenanceWindowMutingRule(rule.id);
             return (
               <tr
                 key={rule.id}
@@ -273,6 +275,7 @@ export function RulesTable(props: RulesTableProps) {
                       <StatusIcon size={10} aria-hidden="true" />
                       {rule.status}
                     </span>
+                    {mutedByWindow && <a href={`/maintenance-windows/${mutedByWindow}`} className="inline-flex items-center gap-1 text-[12px] font-semibold text-violet-600 hover:underline dark:text-violet-400" onClick={(event) => event.stopPropagation()}>by {mutedByWindow}</a>}
                   </div>
                 </td>
                 <td className="min-w-0 max-w-[320px] px-3 py-2.5 align-middle">
@@ -354,3 +357,4 @@ export function RulesTable(props: RulesTableProps) {
     </div>
   );
 }
+

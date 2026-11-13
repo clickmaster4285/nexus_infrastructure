@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown, BellOff, CheckCheck, CheckCircle2, ChevronLeft, ChevronRight, Info, Zap, AlertTriangle } from "lucide-react";
@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ALERT_ASSIGNEES, type Alert, type AlertSeverity, type AlertStatus } from "@/mocks/alerts";
 import { alertDuration, formatDateTime } from "@/utils/alertStats";
 import { timeAgo } from "@/mocks/logs";
+import { isServerInMaintenance } from "@/mocks/maintenanceWindows";
 import { cn } from "@/lib/utils";
 
 interface AlertsTableProps {
@@ -268,6 +269,7 @@ export function AlertsTable(props: AlertsTableProps) {
                 <td className="hidden px-3 py-2.5 align-middle lg:table-cell">
                   <p className="text-[13px] text-foreground">{alert.host}</p>
                   <p className="text-[12px] text-muted-foreground">{alert.service}</p>
+                  {isServerInMaintenance(alert.host) && <span className="mt-0.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-0.5 text-[12px] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-violet-500" />Suppressed</span>}
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle md:table-cell"><StatusBadge status={alert.status} /></td>
                 <td className="whitespace-nowrap px-3 py-2.5 align-middle">
@@ -338,3 +340,4 @@ export function AlertsTable(props: AlertsTableProps) {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -21,6 +21,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { findServerById, serverDetailsPath, serverGroupName, servers, type Server as ServerRecord } from "@/data/mock/servers";
+import { isServerInMaintenance } from "@/mocks/maintenanceWindows";
 import {
   getServerDetailEvents, mockServerActionUser, serverQuickActionGroups,
   type ServerActionId, type ServerDetailEvent, type ServerEventSeverity,
@@ -99,7 +100,7 @@ function ServerPicker() {
             <li key={server.id}>
               <Link href={serverDetailsPath(server)} className="flex items-center justify-between gap-3 py-3 hover:bg-accent/50">
                 <span><b className="block text-[13px] text-foreground">{server.name}</b><small className="text-[12px] text-muted-foreground">{server.ip}</small></span>
-                <span className={`rounded-full px-2 py-1 text-[12px] font-medium ${server.health === "Offline" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : server.health === "Degraded" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{server.health}</span>
+                {isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[12px] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />In Maintenance</span> : <span className={`rounded-full px-2 py-1 text-[12px] font-medium ${server.health === "Offline" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : server.health === "Degraded" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{server.health}</span>}
               </Link>
             </li>
           ))}
@@ -312,7 +313,7 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
 
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-3 pb-3">
-      <PageMeta breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} variant="detail" lastUpdated={lastUpdated} actions={<span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} />
+      <PageMeta breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} variant="detail" lastUpdated={lastUpdated} actions={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[12px] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} />
       <PageHeading title={server.name} description={`${server.host} · ${server.environment} server`} actionsAlign="top" variant="detail">
         <Button asChild variant="outline" className="h-9 gap-2 px-3 text-[13px]"><Link href="/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
         <Button variant="outline" onClick={refresh} className="h-9 gap-2 px-3 text-[13px]"><RotateCw size={15} />Refresh</Button>
@@ -542,3 +543,5 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
     </div>
   );
 }
+
+
