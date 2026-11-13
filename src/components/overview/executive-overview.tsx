@@ -32,7 +32,7 @@ const PANEL = cn(
 
 export function ExecutiveOverview() {
   return (
-    <div className="flex min-w-0 flex-col gap-4 pt-3">
+    <div className="flex min-w-0 flex-col gap-4">
       <PageHeader
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
