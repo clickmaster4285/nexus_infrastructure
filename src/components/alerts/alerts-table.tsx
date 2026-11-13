@@ -235,7 +235,6 @@ export function AlertsTable(props: AlertsTableProps) {
         <tbody>
           {visible.map((alert) => {
             const isSelected = selected.has(alert.id);
-            const isFocused = focusedId === alert.id;
             return (
               <tr
                 key={alert.id}
@@ -249,7 +248,6 @@ export function AlertsTable(props: AlertsTableProps) {
                   "relative cursor-pointer border-b border-border/70 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
                   "hover:bg-[#F8FAFC] dark:hover:bg-accent",
                   isSelected && "bg-primary/[0.06] dark:bg-primary/10",
-                  isFocused && "ring-2 ring-inset ring-ring",
                   alert.severity === "critical" && alert.status === "firing" && "shadow-[inset_3px_0_0_#DC2626]",
                 )}
               >

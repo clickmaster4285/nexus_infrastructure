@@ -1,5 +1,4 @@
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { AvailabilityPanel, HealthTrendPanel, NetworkTrafficPanel, StoragePanel, UsagePanel } from "@/components/shared/chart-panels";
 import { DonutPanel } from "@/components/shared/donut-panel";
 import { MetricCard } from "@/components/shared/metric-card";
@@ -33,9 +32,12 @@ const PANEL = cn(
 
 export function ExecutiveOverview() {
   return (
-    <div className="flex min-w-0 flex-col gap-4">
-      <PageMeta breadcrumbs={["Overview", "Executive Overview"]} />
-      <PageHeading title="Executive Overview" description="Complete view of your infrastructure health and performance" />
+    <div className="flex min-w-0 flex-col gap-4 pt-3">
+      <PageHeader
+        breadcrumbs={["Overview", "Executive Overview"]}
+        title="Executive Overview"
+        subtitle="Complete view of your infrastructure health and performance"
+      />
 
       <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {stats.map((item) => (

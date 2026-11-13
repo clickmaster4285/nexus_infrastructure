@@ -222,6 +222,6 @@ export function ImageIcon({ name, className }: { name: string; className?: strin
 }
 
 /** Shared brand mark used beside container images, processes and services. */
-export function TechLogo({ name, className, fallbackIcon = Terminal }: { name: string; className?: string; fallbackIcon?: ElementType }) {
-  return <ServiceIcon name={name} fallbackIcon={fallbackIcon} fallbackColor="#64748b" className={className} />;
+export function TechLogo({ name, className, fallbackIcon = Terminal, fallbackColor = "#64748b" }: { name: string; className?: string; fallbackIcon?: ElementType; fallbackColor?: string }) {
+  return <ServiceIcon name={name} fallbackIcon={fallbackIcon} fallbackColor={fallbackColor} className={className} />;
 }

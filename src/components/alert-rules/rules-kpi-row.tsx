@@ -95,7 +95,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
           <Card
             className={cn(
               "flex h-full min-h-[88px] w-full items-center gap-3 rounded-xl p-4 transition-colors hover:border-primary/50",
-              active === card.key && "border-primary ring-1 ring-primary",
+              active === card.key && "bg-primary/[0.04]",
             )}
           >
             <span aria-hidden="true" className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg", card.iconTone)}>

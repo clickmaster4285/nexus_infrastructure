@@ -81,6 +81,19 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
 
   useEffect(() => () => { if (toastTimer.current) window.clearTimeout(toastTimer.current); }, []);
 
+  /* Show the "INC-xxxx declared" toast handed off by the Declare page. */
+  useEffect(() => {
+    try {
+      const declared = window.sessionStorage.getItem("nexus:incident-declared");
+      if (declared) {
+        window.sessionStorage.removeItem("nexus:incident-declared");
+        showToast(`${declared} declared`);
+      }
+    } catch {
+      /* sessionStorage unavailable — toast skipped */
+    }
+  }, [showToast]);
+
   const goBack = useCallback(() => {
     if (typeof window !== "undefined" && window.history.length > 1 && document.referrer.includes("/incidents")) router.back();
     else router.push("/incidents");
