@@ -24,6 +24,8 @@ interface StatCardProps {
   trendClassName?: string;
   detailClassName?: string;
   detail?: ReactNode;
+  /** Optional node rendered right of the content column, vertically centred (e.g. a mini sparkline). */
+  valueAside?: ReactNode;
   /** When provided the card becomes keyboard-focusable and activates on click/Enter/Space. */
   onClick?: () => void;
   onClickLabel?: string;
@@ -46,6 +48,7 @@ export function StatCard({
   trendClassName,
   detailClassName,
   detail,
+  valueAside,
 }: StatCardProps) {
   const isGood = delta == null
     ? null
@@ -89,6 +92,7 @@ export function StatCard({
         )}
         {detail && <div className={cn("mt-1 text-[12px] leading-snug text-muted-foreground", detailClassName)}>{detail}</div>}
       </div>
+      {valueAside && <div className="shrink-0 self-center">{valueAside}</div>}
     </Card>
   );
 }

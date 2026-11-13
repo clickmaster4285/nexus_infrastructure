@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shared/coming-soon";
+import { TasksDashboard } from "@/components/scheduled-tasks/tasks-dashboard";
 
 export const metadata: Metadata = {
   title: "Scheduled Tasks",
 };
 
 export default function ScheduledTasksPage() {
-  return (
-    <ComingSoon
-      title="Scheduled Tasks"
-      description="Backups, reports, and recurring jobs with status history."
-      breadcrumbs={["Operations", "Scheduled Tasks"]}
-    />
-  );
+  return <TasksDashboard />;
 }
