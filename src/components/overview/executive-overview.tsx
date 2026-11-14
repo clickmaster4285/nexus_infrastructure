@@ -35,11 +35,12 @@ const PANEL = cn(
 
 export function ExecutiveOverview() {
   return (
-    <div className="flex min-w-0 flex-col gap-2.5">
+    <div className="flex min-w-0 flex-col gap-0">
       <PageHeader
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
         subtitle="Complete view of your infrastructure health and performance"
+        variant="default"
       />
 
       {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return (

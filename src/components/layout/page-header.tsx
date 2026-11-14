@@ -16,16 +16,18 @@ interface PageHeaderProps {
   actions?: ReactNode;
   lastUpdated?: string;
   onRefresh?: () => void;
-  /** Shows the "DEMO DATA" badge. Defaults to true for mock-driven pages. */
+  /** Shows the demo badge when explicitly enabled. */
   demo?: boolean;
   /** Actions rendered in the page title row. */
   children?: ReactNode;
+  /** Header density. Default keeps the larger detail-page rhythm. */
+  variant?: "default" | "detail";
 }
 
-export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = true, children }: PageHeaderProps) {
+export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = false, children, variant = "detail" }: PageHeaderProps) {
   return (
-    <>
-      <PageMeta breadcrumbs={breadcrumbs} variant="detail" demo={demo} lastUpdated={lastUpdated} onRefresh={onRefresh} />
+    <div className="min-w-0">
+      <PageMeta breadcrumbs={breadcrumbs} variant={variant} demo={demo} lastUpdated={lastUpdated} onRefresh={onRefresh} />
       <PageHeading
         title={title}
         description={subtitle}
@@ -33,11 +35,11 @@ export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, 
         iconClassName={iconClassName ?? "h-11 w-11 rounded-xl"}
         statusBadge={statusBadge}
         actionsAlign="bottom"
-        variant="detail"
+        variant={variant}
       >
         {actions}
         {children}
       </PageHeading>
-    </>
+    </div>
   );
 }

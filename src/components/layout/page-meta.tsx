@@ -8,7 +8,7 @@ interface PageMetaProps {
   /** Breadcrumb trail, e.g. ["Infrastructure", "All Servers"] */
   breadcrumbs: string[];
   breadcrumbLinks?: Record<string, string>;
-  /** Shows the "DEMO DATA" badge. Defaults to true for mock-driven pages. */
+  /** Shows the demo badge when explicitly enabled. */
   demo?: boolean;
   /** Hides the refresh button, e.g. on placeholder pages. */
   showRefresh?: boolean;
@@ -21,7 +21,7 @@ interface PageMetaProps {
   onRefresh?: () => void;
 }
 
-export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = true, showRefresh = true, actions, lastUpdated = "Nov 7, 2026 12:09", onRefresh }: PageMetaProps) {
+export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefresh = true, actions, lastUpdated = "Nov 7, 2026 12:09", onRefresh }: PageMetaProps) {
   return (
     <div className="flex min-h-6 flex-wrap items-center justify-between gap-3">
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted-foreground">

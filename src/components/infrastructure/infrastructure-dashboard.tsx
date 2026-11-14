@@ -28,7 +28,7 @@ export function InfrastructureDashboard() {
   return (
     <>
       <PageMeta breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} />
-      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="top">
+      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="bottom" className="mt-1 min-h-[72px]">
         <Select value={environment} onValueChange={setEnvironment}>
           <SelectTrigger className="h-9 min-w-[145px] text-[12px]" aria-label="Filter by environment">
             <SelectValue />
