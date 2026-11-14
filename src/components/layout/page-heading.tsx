@@ -15,11 +15,13 @@ interface PageHeadingProps {
   actionsAlign?: "top" | "bottom" | "end";
   /** Larger heading scale used by server detail dashboards. */
   variant?: "default" | "detail";
+  /** Extra classes merged onto the root row, e.g. tighter spacing. */
+  className?: string;
 }
 
-export function PageHeading({ title, description, icon, iconClassName, statusBadge, children, actionsAlign = "bottom" }: PageHeadingProps) {
+export function PageHeading({ title, description, icon, iconClassName, statusBadge, children, actionsAlign = "bottom", className }: PageHeadingProps) {
   return (
-    <div className="mb-2.5 mt-1 flex min-h-[72px] flex-wrap items-center justify-between gap-3">
+    <div className={cn("mb-2.5 mt-1 flex min-h-[72px] flex-wrap items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-center gap-2.5">
         {icon && (
           <span aria-hidden="true" className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#e6f8ef] text-[#22c55e] dark:bg-[#123a2a] dark:text-[#4fd69a]", iconClassName)}>

@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as echarts from "echarts";
 import type { EChartsOption } from "echarts";
 import {
-  AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, Check, CheckCircle2, ChevronRight, Copy, FileCog, FileDiff,
+  AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, ArrowRight, Check, CheckCircle2, ChevronRight, Copy, FileCog, FileDiff,
   Filter, Globe, Laptop, Monitor, MoreVertical, RotateCcw, ScanLine, Search, SearchX, ShieldCheck, ShieldAlert,
   ExternalLink, ListFilter, X, Bug, Eye, Timer, CircleAlert,
 } from "lucide-react";
@@ -659,14 +659,14 @@ export function ConfigChangesDashboard() {
 
       {/* Row 2 - donut, drift by group, compliance */}
       <section className="grid items-stretch gap-4 xl:grid-cols-3">
-        <ChartCard title="Changes by Type" actions={<AuthCardMenu label="Changes by type" onExport={() => handleExport("csv")} />}>
-          <div className="flex flex-1 flex-col items-center gap-3">
+        <ChartCard title="Changes by Type" className="min-h-[390px]" actions={<AuthCardMenu label="Changes by type" onExport={() => handleExport("csv")} />}>
+          <div className="flex flex-1 flex-col items-center gap-5">
             <TypeDonut onSelect={(category) => applyFilters({ category })} />
-            <ul className="grid w-full grid-cols-3 gap-x-2 gap-y-1.5 text-sm">
+            <ul className="grid w-full grid-cols-3 gap-x-4 gap-y-3 text-sm">
               {CONFIG_CATEGORY_MIX.slice(0, 6).map(([category, count]) => (
                 <li key={category}>
                   <button type="button" onClick={() => applyFilters({ category })} className="flex w-full flex-col items-start gap-0.5 rounded-md p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${category}`}>
-                    <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category] }} aria-hidden="true" /><span className="truncate">{category}</span></span>
+                    <span className="flex min-w-0 items-center gap-1.5 text-[11px] text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category] }} aria-hidden="true" /><span className="truncate">{category}</span></span>
                     <span className="flex w-full items-baseline justify-between gap-2"><b className="tabular-nums text-foreground">{count}</b><span className="text-[11px] tabular-nums text-muted-foreground">{Math.round((count / summary.total24h) * 100)}%</span></span>
                   </button>
                 </li>
@@ -752,7 +752,7 @@ export function ConfigChangesDashboard() {
               );
             })}
           </ul>
-          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Assets sampled from the 240 loaded changes · <button type="button" className="font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "all", range: "7D" })}>view 7D →</button></p>
+          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Assets sampled from the 240 loaded changes · <button type="button" className="inline-flex items-center gap-1 font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "all", range: "7D" })}>view 7D <ArrowRight size={12} aria-hidden="true" /></button></p>
         </ChartCard>
 
         <ChartCard title="Change Sources & Approval" actions={<AuthCardMenu label="Change sources and approval" onExport={() => handleExport("csv")} />}>
@@ -1270,10 +1270,10 @@ function TypeDonut({ onSelect }: { onSelect: (category: string) => void }) {
   }, [hostRef, onSelect]);
 
   return (
-    <div className="relative h-[130px] min-h-[130px] w-[130px]">
+    <div className="relative h-[160px] min-h-[160px] w-[160px]">
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Changes by category donut chart" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <b className="font-display text-[18px] leading-none text-foreground tabular-nums">{summary.total24h}</b>
+        <b className="font-display text-[22px] leading-none text-foreground tabular-nums">{summary.total24h}</b>
         <span className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">changes · 24h</span>
       </div>
     </div>

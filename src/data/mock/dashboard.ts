@@ -25,11 +25,11 @@ export const stats: MetricStat[] = [
   { label: 'Critical Alerts', value: '5', change: '2 new', trend: 'up', tone: 'red', icon: 'bell' },
   { label: 'Active Incidents', value: `${incidentsSnapshot.open}`, change: '1 new', trend: 'up', tone: 'red', icon: 'flame' },
   { label: 'Avg. CPU Usage', value: '34%', change: '12%', trend: 'down', tone: 'blue', icon: 'cpu' },
-  { label: 'Avg. Memory Usage', value: '56%', change: '8%', trend: 'down', tone: 'blue', icon: 'memory' },
-  { label: 'Storage Utilization', value: '48%', change: '5%', trend: 'down', tone: 'blue', icon: 'storage' },
-  { label: 'Network Throughput', value: '124 Mbps', change: '18%', trend: 'up', tone: 'blue', icon: 'network' },
-  { label: 'Service Availability', value: '99.82%', change: '0.12%', trend: 'up', tone: 'green', icon: 'shield' },
-  { label: 'Monitoring Coverage', value: '96%', change: '1%', trend: 'up', tone: 'blue', icon: 'pulse' },
+  { label: 'Avg. Memory', value: '56%', change: '8%', trend: 'down', tone: 'blue', icon: 'memory' },
+  { label: 'Storage Usage', value: '48%', change: '5%', trend: 'down', tone: 'blue', icon: 'storage' },
+  { label: 'Net Throughput', value: '124 Mbps', change: '18%', trend: 'up', tone: 'blue', icon: 'network' },
+  { label: 'Availability', value: '99.82%', change: '0.12%', trend: 'up', tone: 'green', icon: 'shield' },
+  { label: 'Monitoring', value: '96%', change: '1%', trend: 'up', tone: 'blue', icon: 'pulse' },
 ];
 
 const hours = ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','24:00'];

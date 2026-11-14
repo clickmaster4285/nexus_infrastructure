@@ -15,7 +15,6 @@ import {
   stats,
 } from "@/data/mock/dashboard";
 import { ArrowRight, MapPin, Wrench } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
 const PANEL = cn(
@@ -36,41 +35,47 @@ const PANEL = cn(
 
 export function ExecutiveOverview() {
   return (
-    <div className="flex min-w-0 flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-2.5">
       <PageHeader
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
         subtitle="Complete view of your infrastructure health and performance"
-      >
-        <Button asChild variant="outline" className="h-9 rounded-lg px-3 text-[13px]">
-          <Link href="/server-sites">
-            <MapPin size={15} aria-hidden="true" />
-            Server Sites
-            <ArrowRight size={14} aria-hidden="true" />
-          </Link>
-        </Button>
-      </PageHeader>
+      />
 
       {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return (
-        <div role="status" className="flex min-h-[44px] flex-wrap items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-[13px] text-violet-900 dark:border-violet-900/70 dark:bg-violet-950/30 dark:text-violet-200">
+        <div role="status" className="flex min-h-[44px] flex-wrap items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2 text-[13px] text-violet-900 dark:border-violet-900/70 dark:bg-violet-950/30 dark:text-violet-200">
           <div className="flex items-center gap-2"><Wrench size={16} aria-hidden="true" /><b>{active.length} maintenance window{active.length === 1 ? "" : "s"} active</b><span className="text-violet-800/80 dark:text-violet-200/80">· {hosts.length} servers in maintenance · alerts muted until {new Date(mutedUntil).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span></div>
           <a href="/maintenance-windows" className="inline-flex h-8 items-center gap-1 rounded-lg border border-violet-200 bg-white px-3 text-[12px] font-semibold text-violet-800 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-900 dark:bg-transparent dark:text-violet-200">View windows <ArrowRight size={13} /></a>
         </div>
       ); })()}
 
-      <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
+      <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-2 sm:grid-cols-3 sm:gap-2.5 xl:grid-cols-7">
         {stats.map((item) => (
-          <MetricCard key={item.label} item={item} className="h-[96px]" labelClassName="text-[13px]" valueClassName="text-[25px]" />
+          <MetricCard key={item.label} item={item} className="h-[86px]" labelClassName="text-[10px] whitespace-nowrap" valueClassName="text-[25px]" trendClassName="text-[10px]" />
         ))}
+        <Link
+          href="/server-sites"
+          aria-label="View all server sites"
+          className="group col-span-2 flex h-full min-h-[104px] min-w-0 items-center justify-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-3 xl:col-span-2"
+        >
+          <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#e2efff] text-[#1476d4] transition-transform group-hover:scale-105 dark:bg-[#17385c] dark:text-[#82c1ff]">
+            <MapPin size={20} />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[11px] font-medium leading-snug text-muted-foreground">Server Sites</span>
+            <span className="font-display mt-0.5 flex items-center gap-2 whitespace-nowrap text-[25px] font-bold leading-tight tracking-tight text-foreground">View all sites <ArrowRight size={17} aria-hidden="true" className="shrink-0 transition-transform group-hover:translate-x-0.5" /></span>
+            <span className="mt-0.5 block text-[10px] leading-tight text-muted-foreground">Topology, health &amp; capacity</span>
+          </span>
+        </Link>
       </section>
 
-      <section aria-label="Trends" className="grid min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section aria-label="Trends" className="grid min-w-0 grid-cols-1 items-stretch gap-2.5 md:grid-cols-2 xl:grid-cols-3">
         <HealthTrendPanel className={cn("h-[270px]", PANEL)} />
         <UsagePanel className={cn("h-[270px]", PANEL)} />
         <StoragePanel className={cn("h-[270px]", PANEL)} />
       </section>
 
-      <section aria-label="Status breakdown" className="grid min-w-0 grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Status breakdown" className="grid min-w-0 grid-cols-1 items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
         <NetworkTrafficPanel className={cn("h-[224px]", PANEL)} />
         <AvailabilityPanel className={cn("h-[224px]", PANEL)} />
         <DonutPanel title="Alerts by Severity" data={alertSeverity} total={23} className={cn("h-[224px]", PANEL)} />
