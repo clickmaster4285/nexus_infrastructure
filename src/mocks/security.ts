@@ -24,7 +24,46 @@ export type AuthDetectionType = "brute_force" | "password_spray" | "impossible_t
 export type AuthDetectionStatus = "Open" | "Investigating" | "Resolved" | "False positive";
 /** Grouped auth anomaly raised by the detection engine. */
 export interface AuthDetection { id: string; type: AuthDetectionType; severity: SecuritySeverity; /** User email or IP address. */ subject: string; count: number; firstSeen: string; lastSeen: string; status: AuthDetectionStatus; relatedEventIds: string[]; detail: string; }
-export interface ConfigChange { id: string; assetId: string; what: string; by: string; at: string; approved: boolean; driftFromBaseline: boolean; }
+export type ConfigCategory = "Network/Firewall" | "SSH/Auth" | "Services" | "Packages" | "Kernel/OS" | "Files" | "Registry" | "Users/Groups" | "Cron/Scheduled";
+export type ConfigChangeType = "Modified" | "Added" | "Removed";
+export type ConfigSource = "Manual" | "Automation/IaC" | "Agent-detected" | "Patch";
+export type ConfigApprovalStatus = "Approved" | "Unapproved" | "Pending" | "Expected";
+export type ConfigRisk = "Low" | "Medium" | "High" | "Critical";
+export type ConfigChangeStatus = "Open" | "Reviewed" | "Reverted" | "Rolled back" | "Accepted as new baseline";
+export interface ConfigTimelineEntry { seq: number; at: string; actor: string; action: string; detail?: string; }
+/** A single detected configuration change. `timeline` is append-only; actions append entries in-memory. */
+export interface ConfigChange {
+  id: string;
+  detectedAt: string;
+  assetId: string;
+  assetName: string;
+  assetOs: string;
+  /** Server group name, e.g. "API Services" (matches Server Groups mock). */
+  group: string;
+  category: ConfigCategory;
+  path: string;
+  changeType: ConfigChangeType;
+  source: ConfigSource;
+  changedBy: string;
+  approvalStatus: ConfigApprovalStatus;
+  approvedBy: string | null;
+  ticket: string | null;
+  maintenanceWindowId: string | null;
+  riskScore: number;
+  risk: ConfigRisk;
+  driftFromBaseline: boolean;
+  baselineValue: string;
+  beforeValue: string;
+  afterValue: string;
+  status: ConfigChangeStatus;
+  linkedIncidentId: string | null;
+  linkedAlertId: string | null;
+  rollbackAvailable: boolean;
+  snapshotIds: string[];
+  timeline: ConfigTimelineEntry[];
+}
+export interface ConfigSnapshot { id: string; assetId: string; takenAt: string; version: number; files: number; hash: string; }
+export interface BaselineCompliance { benchmark: string; passRate: number; failedRules: Array<{ id: string; name: string; assets: number }>; }
 export interface AccessAccount { id: string; user: string; role: string; privileged: boolean; mfa: boolean; lastLoginAt: string; keyAgeDays: number; type: "human" | "service"; locked: boolean; }
 export interface Exposure { assetId: string; publicFacing: boolean; openPorts: Array<{ port: number; service: string; risky: boolean }>; }
 export interface Finding { id: string; title: string; category: FindingCategory; severity: SecuritySeverity; assetId: string; status: SecurityStatus; owner: string; createdAt: string; dueAt: string; recommendation: string; evidence: string; linkedIncidentId?: string; acceptedUntil?: string; }
@@ -506,7 +545,139 @@ export function createAuthIncident(input: { title: string; severity: "SEV1" | "S
   return id;
 }
 
-const configChanges: ConfigChange[] = Array.from({ length: 8 }, (_, index) => ({ id: `CFG-${3200 + index}`, assetId: serverIds[index % serverIds.length], what: index % 2 ? "Firewall rule changed" : "Package baseline drift", by: index % 2 ? "ops@nexus.io" : "automation@nexus.io", at: iso(index + 1), approved: index % 3 !== 0, driftFromBaseline: index % 3 === 0 }));
+/* ---------------------------------------------------------------- *
+ * Configuration changes — single source of truth.
+ *
+ * 24h headline totals are FIXED constants; the table/charts show a
+ * seeded 240-row SAMPLE across the last 30 days (assets are the ops
+ * servers from this file). Buckets are distributed with largest-
+ * remainder rounding so series sums match the fixed totals exactly.
+ * Swap `loadConfigChanges` for a real `/api/config/drift` later — the
+ * types stay.
+ * ---------------------------------------------------------------- */
+
+export const CONFIG_TOTAL_24H = 186;
+export const CONFIG_UNAPPROVED_24H = 5;
+export const CONFIG_DRIFTED_ASSETS = 4;
+export const CONFIG_HIGH_CRITICAL_24H = 12;
+export const CONFIG_ROLLED_BACK_24H = 3;
+export const CONFIG_COMPLIANCE_PCT = 88;
+export const CONFIG_APPROVED_WITH_TICKET_24H = 164;
+
+export const CONFIG_APPROVAL_MIX = { approved: 164, unapproved: 5, pending: 9, expected: 8 } as const;
+export const CONFIG_CATEGORY_MIX: Array<[ConfigCategory, number]> = [
+  ["Packages", 41], ["Network/Firewall", 34], ["Services", 31], ["Files", 22],
+  ["SSH/Auth", 18], ["Registry", 12], ["Users/Groups", 11], ["Kernel/OS", 9], ["Cron/Scheduled", 8],
+];
+export const CONFIG_SOURCE_MIX: Array<[ConfigSource, number]> = [
+  ["Automation/IaC", 74], ["Manual", 66], ["Agent-detected", 29], ["Patch", 17],
+];
+
+export interface ConfigSummary {
+  total24h: number; unapproved: number; driftedAssets: number; highCriticalRisk: number; rolledBack: number; compliancePct: number; approvedWithTicket: number; approvedPct: number;
+  deltas: { total: number; totalPct: string; unapproved: number; driftedAssets: number; highCriticalRisk: number; rolledBack: number; compliance: number; };
+  driftedAssetNames: string[];
+}
+
+const CONFIG_SUMMARY: ConfigSummary = {
+  total24h: CONFIG_TOTAL_24H,
+  unapproved: CONFIG_UNAPPROVED_24H,
+  driftedAssets: CONFIG_DRIFTED_ASSETS,
+  highCriticalRisk: CONFIG_HIGH_CRITICAL_24H,
+  rolledBack: CONFIG_ROLLED_BACK_24H,
+  compliancePct: CONFIG_COMPLIANCE_PCT,
+  approvedWithTicket: CONFIG_APPROVED_WITH_TICKET_24H,
+  approvedPct: 88,
+  deltas: { total: 12, totalPct: "6.9%", unapproved: 2, driftedAssets: 1, highCriticalRisk: -3, rolledBack: 1, compliance: 1.4 },
+  driftedAssetNames: ["api-server-01", "edge-01", "app-server-02", "cache-01"],
+};
+
+export function getConfigSummary(): ConfigSummary {
+  return CONFIG_SUMMARY;
+}
+
+const CONFIG_ASSETS: Array<{ assetId: string; assetOs: string; group: string }> = [
+  { assetId: "api-server-01", assetOs: "Ubuntu 22.04", group: "API Services" },
+  { assetId: "api-server-02", assetOs: "Ubuntu 22.04", group: "API Services" },
+  { assetId: "db-01", assetOs: "Debian 12", group: "Database Cluster" },
+  { assetId: "web-app-01", assetOs: "Windows Server 2022", group: "Production Web" },
+  { assetId: "web-02", assetOs: "Windows Server 2022", group: "Production Web" },
+  { assetId: "app-server-02", assetOs: "Windows Server 2019", group: "API Services" },
+  { assetId: "cache-01", assetOs: "Ubuntu 22.04", group: "Cache Servers" },
+  { assetId: "edge-01", assetOs: "Debian 12", group: "Edge Locations" },
+  { assetId: "pay-01", assetOs: "Ubuntu 22.04", group: "Load Balancers" },
+  { assetId: "auth-01", assetOs: "Debian 12", group: "Security Services" },
+];
+
+export interface ConfigTrendBucket { label: string; approved: number; unapproved: number; pending: number; expected: number; total: number; }
+export type ConfigTrendRange = "24H" | "7D" | "30D";
+const configTrendCache = new Map<ConfigTrendRange, ConfigTrendBucket[]>();
+
+export function configTrendBuckets(range: ConfigTrendRange): ConfigTrendBucket[] {
+  const cached = configTrendCache.get(range);
+  if (cached) return cached;
+  const rand = authMulberry32(range === "24H" ? 9201 : range === "7D" ? 9202 : 9203);
+  const count = range === "24H" ? 24 : range === "7D" ? 7 : 30;
+  const total = range === "24H" ? CONFIG_TOTAL_24H : range === "7D" ? 1_282 : 5_430;
+  const approvedT = Math.round(total * (CONFIG_APPROVAL_MIX.approved / CONFIG_TOTAL_24H));
+  const unapprovedT = range === "24H" ? CONFIG_UNAPPROVED_24H : Math.round(total * (CONFIG_UNAPPROVED_24H / CONFIG_TOTAL_24H));
+  const pendingT = Math.round(total * (CONFIG_APPROVAL_MIX.pending / CONFIG_TOTAL_24H));
+  const expectedT = Math.max(0, total - approvedT - unapprovedT - pendingT);
+  const weights = Array.from({ length: count }, (_, index) => {
+    const hour = range === "24H" ? (() => { const d = new Date(); d.setMinutes(0, 0, 0); return new Date(d.getTime() - (count - 1 - index) * 3_600_000).getHours(); })() : index;
+    const business = range === "24H" ? (hour >= 8 && hour <= 18 ? 1.35 : 0.6) : (() => { const weekday = new Date(Date.now() - (count - 1 - index) * DAY).getDay(); return weekday === 0 || weekday === 6 ? 0.55 : 1; })();
+    const spike = range === "24H" && hour === 2 ? 2.4 : 1;
+    return (0.6 + rand() * 0.5) * business * spike;
+  });
+  const unapprovedWeights = weights.map((weight, index) => weight * (range === "24H" && index === count - 1 - 4 ? 4.2 : 1));
+  const approved = distribute(approvedT, weights);
+  const unapproved = distribute(unapprovedT, unapprovedWeights);
+  const pending = distribute(pendingT, weights);
+  const expected = distribute(expectedT, weights);
+  const buckets: ConfigTrendBucket[] = [];
+  for (let index = 0; index < count; index += 1) {
+    const label = range === "24H"
+      ? (() => { const d = new Date(); d.setMinutes(0, 0, 0); return new Date(d.getTime() - (count - 1 - index) * 3_600_000).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false }); })()
+      : new Date(Date.now() - (count - 1 - index) * DAY).toLocaleDateString(undefined, range === "7D" ? { weekday: "short", day: "numeric" } : { month: "short", day: "numeric" });
+    buckets.push({ label, approved: approved[index], unapproved: unapproved[index], pending: pending[index], expected: expected[index], total: approved[index] + unapproved[index] + pending[index] + expected[index] });
+  }
+  configTrendCache.set(range, buckets);
+  return buckets;
+}
+
+/** Maintenance windows referenced by seeded/showcase changes (times match the Maintenance Windows mock). */
+export const CONFIG_WINDOW_MARKERS = [
+  { id: "MW-1047", title: "App server OS patching - batch 2", assetId: "app-server-02", hoursAgo: 30, durationMinutes: 47 },
+  { id: "MW-1042", title: "Postgres minor version upgrade", assetId: "db-01", hoursAgo: 96, durationMinutes: 60 },
+] as const;
+
+/** Curated change → incident links; incident ids reference the Incidents mock. */
+export const CONFIG_INCIDENT_LINKS = [
+  { changeId: "CFG-2026-004812", incidentId: "INC-1048", minutesAfter: 12, confidence: "Likely cause" as const },
+  { changeId: "CFG-2026-004790", incidentId: "INC-1046", minutesAfter: 21, confidence: "Likely cause" as const },
+  { changeId: "CFG-2026-004701", incidentId: "INC-1044", minutesAfter: 17, confidence: "Possible factor" as const },
+  { changeId: "CFG-2026-004655", incidentId: "INC-1042", minutesAfter: 34, confidence: "Possible factor" as const },
+  { changeId: "CFG-2026-004540", incidentId: "INC-1039", minutesAfter: 27, confidence: "Likely cause" as const },
+];
+
+const CONFIG_SNAPSHOT_DEFS: ConfigSnapshot[] = CONFIG_ASSETS.flatMap((asset) => {
+  const hash = [...asset.assetId].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return [0, 1, 2].map((offset) => ({ id: `SNAP-${2201 - hash % 13 - offset * 7}`, assetId: asset.assetId, takenAt: new Date(now - (2 + offset * 3) * DAY).toISOString(), version: 41 - (hash % 7) - offset, files: 412 - (hash % 120) - offset * 31, hash: `${(hash * 2654435761 >>> 0).toString(16).padStart(8, "0")}${(hash * 97).toString(16)}` }));
+});
+export function configSnapshotsFor(assetId: string): ConfigSnapshot[] {
+  return CONFIG_SNAPSHOT_DEFS.filter((snapshot) => snapshot.assetId === assetId);
+}
+
+export const CONFIG_COMPLIANCE: BaselineCompliance = {
+  benchmark: "CIS Ubuntu 22.04",
+  passRate: CONFIG_COMPLIANCE_PCT,
+  failedRules: [
+    { id: "5.2.14", name: "Ensure SSH PermitRootLogin is disabled", assets: 3 },
+    { id: "3.1.1", name: "Ensure IP forwarding is disabled", assets: 2 },
+    { id: "6.1.10", name: "Ensure /etc/shadow mode is 0000", assets: 2 },
+    { id: "4.2.3", name: "Ensure rsyslog is configured and running", assets: 1 },
+  ],
+};
 const accounts: AccessAccount[] = ([
   ["ACC-01", "admin@nexus.io", "Super Administrator", true, true, 2, 14, "human", false], ["ACC-02", "ops@nexus.io", "Operations", true, true, 1, 31, "human", false],   ["ACC-03", "legacy@nexus.io", "Administrator", true, false, 120, 118, "human", true],   ["ACC-04", "backup-agent", "Service Account", false, false, 4, 182, "service", false], ["ACC-05", "deploy@nexus.io", "Developer", false, true, 7, 44, "human", false], ["ACC-06", "disabled@nexus.io", "Viewer", false, true, 140, 211, "human", true], ["ACC-07", "temp.contractor@nexus.io", "Viewer", false, false, 45, 30, "human", true], ["ACC-08", "svc-test@nexus.io", "Service Account", false, false, 61, 400, "service", true], ["ACC-09", "former.employee@nexus.io", "Developer", false, true, 200, 280, "human", true], ["ACC-10", "breakglass@nexus.io", "Break-glass Admin", true, true, 365, 365, "human", true],
 ] as Array<[string, string, string, boolean, boolean, number, number, "human" | "service", boolean]>).map(([id, user, role, privileged, mfa, lastLoginDays, keyAgeDays, type, locked]) => ({ id, user, role, privileged, mfa, lastLoginAt: iso(lastLoginDays), keyAgeDays, type, locked }));
@@ -522,10 +693,237 @@ const findings: Finding[] = [
   { id: "SEC-1065", title: "Risky MySQL port exposed", category: "Exposure", severity: "Critical", assetId: "web-app-01", status: "Open", owner: "Sara Iqbal", createdAt: iso(3), dueAt: due(1), recommendation: "Restrict port 3306 to the database security group.", evidence: "TCP 3306 is reachable from a public-facing asset." },
 ];
 
-export const SECURITY_SNAPSHOT: SecuritySnapshot = { vulnerabilities, patches, certificates, authEvents, configChanges, accounts, exposures, findings };
+interface ConfigChangeSeed { category: ConfigCategory; path: string; before: string; after: string; type?: ConfigChangeType }
+const CONFIG_TEMPLATES: ConfigChangeSeed[] = [
+  { category: "SSH/Auth", path: "/etc/ssh/sshd_config: PermitRootLogin", before: "no", after: "yes" },
+  { category: "SSH/Auth", path: "/etc/ssh/sshd_config: PasswordAuthentication", before: "yes", after: "no" },
+  { category: "SSH/Auth", path: "/etc/ssh/sshd_config: MaxAuthTries", before: "6", after: "4" },
+  { category: "SSH/Auth", path: "/etc/pam.d/common-auth: pam_tally2", before: "deny=5", after: "deny=10" },
+  { category: "Network/Firewall", path: "/etc/iptables/rules.v4: -A INPUT -p tcp --dport 22", before: "-j ACCEPT", after: "-s 10.10.0.0/16 -j ACCEPT" },
+  { category: "Network/Firewall", path: "firewalld: public zone rich rule 443/tcp", before: "accept 443", after: "reject 443" },
+  { category: "Network/Firewall", path: "nginx.conf: server_tokens", before: "on", after: "off" },
+  { category: "Network/Firewall", path: "/etc/hosts: db-01", before: "10.10.2.20", after: "10.10.2.21" },
+  { category: "Services", path: "/etc/systemd/system/nexus-agent.service: ExecStart", before: "node agent.js", after: "node agent.js --v2" },
+  { category: "Services", path: "postgresql.conf: max_connections", before: "100", after: "200" },
+  { category: "Services", path: "redis.conf: maxmemory", before: "2gb", after: "4gb" },
+  { category: "Services", path: "nginx.conf: worker_processes", before: "auto", after: "8" },
+  { category: "Packages", path: "openssl 3.0.2-0ubuntu1.14", before: "3.0.2-0ubuntu1.12", after: "3.0.2-0ubuntu1.14" },
+  { category: "Packages", path: "openssh-server 1:9.6p1-3ubuntu13", before: "1:9.3p1-1ubuntu3.6", after: "1:9.6p1-3ubuntu13" },
+  { category: "Packages", path: "curl 8.5.0-2ubuntu10.1", before: "8.5.0-1", after: "8.5.0-2ubuntu10.1" },
+  { category: "Packages", path: "rsync 3.2.7-1ubuntu1.1", before: "3.2.7-0ubuntu0.22.04.3", after: "3.2.7-1ubuntu1.1" },
+  { category: "Kernel/OS", path: "/etc/sysctl.conf: net.ipv4.ip_forward", before: "0", after: "1" },
+  { category: "Kernel/OS", path: "grub: GRUB_CMDLINE_LINUX", before: "quiet splash", after: "quiet splash iommu=pt" },
+  { category: "Kernel/OS", path: "kernel.sysrq", before: "176", after: "1" },
+  { category: "Files", path: "/etc/sudoers: %ops", before: "ALL=(ALL) NOPASSWD: ALL", after: "ALL=(ALL:ALL) NOPASSWD: /usr/bin/systemctl" },
+  { category: "Files", path: "/etc/shadow (mode)", before: "0640 root:shadow", after: "0640 root:shadow" },
+  { category: "Files", path: "/etc/ssl/certs/nexus-ca.pem", before: "sha256:9f2e�", after: "sha256:41bc�" },
+  { category: "Registry", path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\sshd: Start", before: "2", after: "3" },
+  { category: "Registry", path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate: AUOptions", before: "4", after: "3" },
+  { category: "Registry", path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters: DisableIPSourceRouting", before: "1", after: "2" },
+  { category: "Users/Groups", path: "/etc/passwd: deploy", before: "deploy:x:1001:1001:,,,:/home/deploy:/bin/bash", after: "deploy:x:1001:1001:,,,:/home/deploy:/usr/sbin/nologin" },
+  { category: "Users/Groups", path: "/etc/group: sudo", before: "sudo:x:27:ops,admin", after: "sudo:x:27:ops" },
+  { category: "Cron/Scheduled", path: "/etc/cron.d/nexus-backup", before: "0 2 * * * postgres /usr/bin/pg_dump", after: "30 2 * * * postgres /usr/bin/pg_dump" },
+  { category: "Cron/Scheduled", path: "systemd timer: backup.timer", before: "OnCalendar=*-*-* 02:00:00", after: "OnCalendar=*-*-* 02:30:00" },
+  { category: "Cron/Scheduled", path: "schtasks: DailyBackup (Windows)", before: "02:00", after: "02:30" },
+];
+
+function seedConfigChanges(): ConfigChange[] {
+  const rand = authMulberry32(20261114);
+  const nowMs = Date.now();
+  const changedByFor = (source: ConfigSource): string => source === "Manual" ? "ops@nexus.io" : source === "Automation/IaC" ? "automation@nexus.io" : source === "Patch" ? "apt" : "agent";
+  const isWindowsAsset = (assetId: string) => assetId === "web-app-01" || assetId === "web-02" || assetId === "app-server-02";
+  const events: Array<ConfigChange & { __ageHours: number; __showcase?: boolean }> = [];
+
+  // Showcase changes (hand-authored, ids assigned at the end).
+  const showcase: Array<Omit<ConfigChange, "id" | "snapshotIds" | "timeline">> = [
+    { detectedAt: new Date(nowMs - 12 * 60_000).toISOString(), assetId: "api-server-01", assetName: "api-server-01", assetOs: "Ubuntu 22.04", group: "API Services", category: "SSH/Auth", path: "/etc/ssh/sshd_config: PermitRootLogin", changeType: "Modified", source: "Agent-detected", changedBy: "unknown", approvalStatus: "Unapproved", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 70, risk: "High", driftFromBaseline: true, baselineValue: "no", beforeValue: "no", afterValue: "yes", status: "Open", linkedIncidentId: "INC-1048", linkedAlertId: "RUL-205", rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 47 * 60_000).toISOString(), assetId: "edge-01", assetName: "edge-01", assetOs: "Debian 12", group: "Edge Locations", category: "Network/Firewall", path: "nginx.conf: server_tokens", changeType: "Modified", source: "Agent-detected", changedBy: "ops@nexus.io", approvalStatus: "Unapproved", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 62, risk: "High", driftFromBaseline: true, baselineValue: "on", beforeValue: "on", afterValue: "off", status: "Open", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 3 * HOUR_MS).toISOString(), assetId: "app-server-02", assetName: "app-server-02", assetOs: "Windows Server 2019", group: "API Services", category: "Registry", path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\sshd: Start", changeType: "Modified", source: "Manual", changedBy: "marcus.lee@nexus.io", approvalStatus: "Pending", approvedBy: null, ticket: "CHG-2052", maintenanceWindowId: "MW-1047", riskScore: 38, risk: "Medium", driftFromBaseline: false, baselineValue: "2", beforeValue: "2", afterValue: "3", status: "Open", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 6 * HOUR_MS).toISOString(), assetId: "db-01", assetName: "db-01", assetOs: "Debian 12", group: "Database Cluster", category: "Packages", path: "postgresql-16 16.4-1", changeType: "Modified", source: "Patch", changedBy: "apt", approvalStatus: "Approved", approvedBy: "Tom Becker", ticket: "CHG-2048", maintenanceWindowId: "MW-1042", riskScore: 12, risk: "Low", driftFromBaseline: false, baselineValue: "16.3-1", beforeValue: "16.3-1", afterValue: "16.4-1", status: "Reviewed", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 26 * HOUR_MS).toISOString(), assetId: "cache-01", assetName: "cache-01", assetOs: "Ubuntu 22.04", group: "Cache Servers", category: "Kernel/OS", path: "/etc/sysctl.conf: net.ipv4.ip_forward", changeType: "Modified", source: "Manual", changedBy: "unknown", approvalStatus: "Unapproved", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 81, risk: "Critical", driftFromBaseline: true, baselineValue: "0", beforeValue: "0", afterValue: "1", status: "Open", linkedIncidentId: "INC-1046", linkedAlertId: null, rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 2 * DAY).toISOString(), assetId: "web-app-01", assetName: "web-app-01", assetOs: "Windows Server 2022", group: "Production Web", category: "Registry", path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate: AUOptions", changeType: "Modified", source: "Manual", changedBy: "sara.iqbal@nexus.io", approvalStatus: "Approved", approvedBy: "Sara Iqbal", ticket: "CHG-2044", maintenanceWindowId: null, riskScore: 22, risk: "Low", driftFromBaseline: false, baselineValue: "4", beforeValue: "4", afterValue: "3", status: "Accepted as new baseline", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: false },
+    { detectedAt: new Date(nowMs - 9 * HOUR_MS).toISOString(), assetId: "web-app-01", assetName: "web-app-01", assetOs: "Windows Server 2022", group: "Production Web", category: "Packages", path: "OpenSSH.Server 8.9.1.0", changeType: "Modified", source: "Patch", changedBy: "apt", approvalStatus: "Expected", approvedBy: "system", ticket: null, maintenanceWindowId: "MW-1047", riskScore: 9, risk: "Low", driftFromBaseline: false, baselineValue: "8.9.0.0", beforeValue: "8.9.0.0", afterValue: "8.9.1.0", status: "Reviewed", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true },
+    { detectedAt: new Date(nowMs - 30 * HOUR_MS).toISOString(), assetId: "edge-01", assetName: "edge-01", assetOs: "Debian 12", group: "Edge Locations", category: "Network/Firewall", path: "/etc/iptables/rules.v4: -A INPUT -p tcp --dport 22", changeType: "Modified", source: "Automation/IaC", changedBy: "automation@nexus.io", approvalStatus: "Unapproved", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 74, risk: "High", driftFromBaseline: true, baselineValue: "-j ACCEPT", beforeValue: "-j ACCEPT", afterValue: "-s 10.10.0.0/16 -j ACCEPT", status: "Open", linkedIncidentId: "INC-1044", linkedAlertId: "RUL-207", rollbackAvailable: true },
+  ];
+
+  for (const entry of showcase) {
+    events.push({ ...entry, id: "", snapshotIds: ["SNAP-2196", "SNAP-2189", "SNAP-2182"], timeline: [{ seq: 1, at: entry.detectedAt, actor: "agent", action: "detected", detail: `Drift detected on ${entry.assetName} (${entry.path}).` }], __ageHours: (nowMs - Date.parse(entry.detectedAt)) / HOUR_MS, __showcase: true });
+  }
+
+  for (let index = 0; index < 232; index += 1) {
+    const withinDay = index < 150;
+    const ageMs = withinDay ? rand() * 24 * HOUR_MS : 24 * HOUR_MS + rand() * 29 * DAY;
+    const at = new Date(nowMs - ageMs);
+    const template = CONFIG_TEMPLATES[Math.floor(rand() * CONFIG_TEMPLATES.length)];
+    const asset = CONFIG_ASSETS[Math.floor(rand() * CONFIG_ASSETS.length)];
+    if (isWindowsAsset(asset.assetId) && !/Registry|Windows|sshd: Start/.test(template.path)) continue;
+    const sourceRoll = rand();
+    const source: ConfigSource = sourceRoll < 0.36 ? "Automation/IaC" : sourceRoll < 0.72 ? "Manual" : sourceRoll < 0.88 ? "Agent-detected" : "Patch";
+    const drifted = rand() < 0.22;
+    const riskRoll = rand();
+    const riskScore = drifted ? (riskRoll < 0.28 ? 70 + Math.floor(rand() * 25) : 38 + Math.floor(rand() * 30)) : Math.floor(rand() * 34);
+    const risk: ConfigRisk = riskScore >= 80 ? "Critical" : riskScore >= 60 ? "High" : riskScore >= 35 ? "Medium" : "Low";
+    const withTicket = source === "Automation/IaC" || source === "Patch" || rand() < 0.55;
+    const approval: ConfigApprovalStatus = withTicket ? (rand() < 0.93 ? "Approved" : "Pending") : rand() < 0.5 ? "Unapproved" : "Pending";
+    const inWindow = rand() < 0.35;
+    events.push({
+      id: "", detectedAt: at.toISOString(), assetId: asset.assetId, assetName: asset.assetId, assetOs: asset.assetOs, group: asset.group,
+      category: template.category, path: template.path, changeType: template.type ?? "Modified", source, changedBy: changedByFor(source),
+      approvalStatus: approval, approvedBy: approval === "Approved" ? "Tom Becker" : null,
+      ticket: withTicket ? `CHG-${2040 + Math.floor(rand() * 30)}` : null, maintenanceWindowId: inWindow ? (rand() < 0.5 ? "MW-1047" : "MW-1042") : null,
+      riskScore, risk, driftFromBaseline: drifted, baselineValue: template.before, beforeValue: template.before, afterValue: template.after,
+      status: "Open", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: rand() < 0.85,
+      snapshotIds: [`SNAP-${2100 + Math.floor(rand() * 80)}`],
+      timeline: [{ seq: 1, at: at.toISOString(), actor: "agent", action: "detected" }],
+      __ageHours: ageMs / HOUR_MS,
+    });
+  }
+
+  // Sorted newest-first with stable ids (showcase items keep their headline ids).
+  const showcaseIds = ["CFG-2026-004812", "CFG-2026-004790", "CFG-2026-004755", "CFG-2026-004730", "CFG-2026-004701", "CFG-2026-004655", "CFG-2026-004612", "CFG-2026-004540"];
+  events.sort((a, b) => Date.parse(b.detectedAt) - Date.parse(a.detectedAt));
+  let showcaseIndex = 0;
+  let sequence = 400;
+  return events.map((event) => {
+    const { __ageHours: _age, __showcase, ...rest } = event;
+    void _age;
+    const id = __showcase === true && showcaseIndex < showcaseIds.length ? showcaseIds[showcaseIndex++] : `CFG-2026-${String(sequence += 7).padStart(6, "0")}`;
+    return { ...rest, id };
+  });
+}
+
+const configChangeStore: ConfigChange[] = seedConfigChanges();
+const configDelay = () => 200 + Math.random() * 200;
+
+export function loadConfigChanges(): Promise<ConfigChange[]> {
+  return new Promise((resolve) => {
+    const timer = typeof window !== "undefined" ? window.setTimeout : setTimeout;
+    timer(() => resolve(configChangeStore.map((change) => ({ ...change, timeline: change.timeline.map((entry) => ({ ...entry })) }))), configDelay());
+  });
+}
+
+export function getConfigChangeById(id: string): ConfigChange | undefined {
+  const change = configChangeStore.find((item) => item.id === id);
+  return change ? { ...change, timeline: change.timeline.map((entry) => ({ ...entry })) } : undefined;
+}
+
+function auditConfig(action: string, resourceId: string, resourceName: string, reason?: string): void {
+  logAudit({
+    actor: { id: "ACC-02", name: CURRENT_USER_NAME, type: "Human", role: "Operations" },
+    action,
+    category: "Config",
+    resource: { type: "Config change", id: resourceId, name: resourceName },
+    result: "Success",
+    reason,
+  });
+}
+
+function appendTimeline(change: ConfigChange, action: string, actor: string, detail?: string): void {
+  change.timeline.push({ seq: change.timeline.length + 1, at: new Date().toISOString(), actor, action, detail });
+}
+
+/** Append a free-text note to a change's timeline and the shared audit trail. */
+export function addConfigNote(id: string, note: string): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  appendTimeline(change, "note added", CURRENT_USER_NAME, note.trim());
+  auditConfig("Added note to configuration change", id, `${change.assetName} · ${change.path}`, note.trim());
+}
+
+export function approveConfigChange(id: string, opts: { ticket: string | null; reason: string }): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  change.approvalStatus = "Approved";
+  change.approvedBy = CURRENT_USER_NAME;
+  change.ticket = opts.ticket ?? change.ticket;
+  change.status = "Reviewed";
+  appendTimeline(change, "approved", CURRENT_USER_NAME, opts.reason);
+  auditConfig("Approved configuration change", id, `${change.assetName} � ${change.path}`, opts.reason);
+}
+
+export function rejectConfigChange(id: string, opts: { reason: string; createRollback: boolean }): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  change.approvalStatus = "Unapproved";
+  change.status = "Reverted";
+  appendTimeline(change, "rejected", CURRENT_USER_NAME, opts.reason + (opts.createRollback ? " � rollback task created" : ""));
+  auditConfig("Rejected configuration change", id, `${change.assetName} � ${change.path}`, opts.reason);
+}
+
+export function markConfigExpected(id: string, opts: { reason: string; expiresAt: string | null }): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  change.approvalStatus = "Expected";
+  change.approvedBy = "system";
+  change.driftFromBaseline = false;
+  change.status = "Reviewed";
+  appendTimeline(change, "marked expected", CURRENT_USER_NAME, opts.reason + (opts.expiresAt ? ` � expires ${opts.expiresAt}` : ""));
+  auditConfig("Marked change as expected", id, `${change.assetName} � ${change.path}`, opts.reason);
+}
+
+export function acceptConfigBaseline(id: string, opts: { reason: string }): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  change.driftFromBaseline = false;
+  change.baselineValue = change.afterValue;
+  change.status = "Accepted as new baseline";
+  change.approvalStatus = "Approved";
+  appendTimeline(change, "accepted as baseline", CURRENT_USER_NAME, opts.reason);
+  auditConfig("Accepted change as new baseline", id, `${change.assetName} � ${change.path}`, opts.reason);
+}
+
+export function rollbackConfigChange(id: string, opts: { snapshotId: string }): void {
+  const change = configChangeStore.find((item) => item.id === id);
+  if (!change) return;
+  change.afterValue = change.beforeValue;
+  change.driftFromBaseline = false;
+  change.status = "Rolled back";
+  appendTimeline(change, "rolled back", CURRENT_USER_NAME, `Restored from ${opts.snapshotId}.`);
+  auditConfig("Rolled back configuration change", id, `${change.assetName} � ${change.path}`, `Restored from ${opts.snapshotId}`);
+}
+
+export function createConfigIncident(input: { title: string; severity: "SEV1" | "SEV2" | "SEV3"; impact: string; hosts?: string[]; changeId: string }): string {
+  const id = nextIncidentId();
+  const at = new Date().toISOString();
+  const change = configChangeStore.find((item) => item.id === input.changeId);
+  appendIncidentToStore({
+    id, title: input.title.trim(), severity: input.severity, status: "Investigating",
+    commander: CURRENT_USER_NAME, assignee: null, team: "SRE",
+    affectedServices: ["configuration"], affectedHosts: input.hosts ?? (change ? [change.assetId] : ["unknown"]),
+    linkedAlertIds: change?.linkedAlertId ? [change.linkedAlertId] : [], impact: input.impact.trim() || "Configuration change under investigation.",
+    startedAt: at, acknowledgedAt: null, resolvedAt: null, rootCause: "Under investigation.",
+    timeline: [{ id: `${id}-tl-created`, at, epochMs: Date.parse(at), type: "created", author: CURRENT_USER_NAME, text: `Incident declared from configuration change ${input.changeId}.` }],
+    postmortem: { status: "None", summary: "", rootCause: "", impact: "", actionItems: [] },
+    tags: ["security", "config"],
+  });
+  if (change) {
+    appendTimeline(change, "incident created", CURRENT_USER_NAME, `Declared ${id} from this change.`);
+    change.linkedIncidentId = id;
+  }
+  auditConfig("Declared incident", id, input.title.trim().slice(0, 120), `Linked to ${input.changeId}`);
+  return id;
+}
+
+/** Mock drift scan: appends two fresh "agent-detected" drifts to the store and returns them. */
+export function runConfigDriftScan(scope: { label: string }): ConfigChange[] {
+  const at = new Date().toISOString();
+  const fresh: Array<Omit<ConfigChange, "id">> = [
+    { detectedAt: at, assetId: "api-server-01", assetName: "api-server-01", assetOs: "Ubuntu 22.04", group: "API Services", category: "SSH/Auth", path: "/etc/ssh/sshd_config: MaxAuthTries", changeType: "Modified", source: "Agent-detected", changedBy: "unknown", approvalStatus: "Unapproved", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 58, risk: "Medium", driftFromBaseline: true, baselineValue: "6", beforeValue: "6", afterValue: "10", status: "Open", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true, snapshotIds: ["SNAP-2201"], timeline: [{ seq: 1, at, actor: "agent", action: "detected", detail: `Scan scope: ${scope.label}` }] },
+    { detectedAt: at, assetId: "edge-01", assetName: "edge-01", assetOs: "Debian 12", group: "Edge Locations", category: "Cron/Scheduled", path: "/etc/cron.d/nexus-backup", changeType: "Modified", source: "Agent-detected", changedBy: "unknown", approvalStatus: "Pending", approvedBy: null, ticket: null, maintenanceWindowId: null, riskScore: 44, risk: "Medium", driftFromBaseline: true, baselineValue: "0 2 * * *", beforeValue: "0 2 * * *", afterValue: "30 3 * * *", status: "Open", linkedIncidentId: null, linkedAlertId: null, rollbackAvailable: true, snapshotIds: ["SNAP-2201"], timeline: [{ seq: 1, at, actor: "agent", action: "detected", detail: `Scan scope: ${scope.label}` }] },
+  ];
+  const added = fresh.map((entry, index) => {
+    const change: ConfigChange = { ...entry, id: `CFG-2026-${String(4813 + index + Math.floor(Math.random() * 40)).padStart(6, "0")}` };
+    configChangeStore.unshift(change);
+    return { ...change };
+  });
+  for (const change of added) auditConfig("Drift detected", change.id, `${change.assetName} � ${change.path}`, `Scan scope: ${scope.label}`);
+  return added;
+}
+export const SECURITY_SNAPSHOT: SecuritySnapshot = { vulnerabilities, patches, certificates, authEvents, configChanges: configChangeStore, accounts, exposures, findings };
 
 export function getSecuritySnapshot(): SecuritySnapshot { return SECURITY_SNAPSHOT; }
 export async function loadSecuritySnapshot(): Promise<SecuritySnapshot> { await new Promise((resolve) => setTimeout(resolve, 280)); return SECURITY_SNAPSHOT; }
 export function securityScore(snapshot: SecuritySnapshot): number { const vuln = Math.max(35, 100 - snapshot.vulnerabilities.filter((item) => item.status === "Open").length * 1.2); const patch = Math.round(snapshot.patches.filter((item) => item.compliant).length / snapshot.patches.length * 100); const cert = Math.round(snapshot.certificates.filter((item) => item.daysLeft > 30).length / snapshot.certificates.length * 100); const config = Math.round(snapshot.configChanges.filter((item) => !item.driftFromBaseline).length / snapshot.configChanges.length * 100); const access = Math.round(snapshot.accounts.filter((item) => !item.privileged || item.mfa).length / snapshot.accounts.length * 100); const exposure = Math.round(snapshot.exposures.filter((item) => item.openPorts.every((port) => !port.risky)).length / snapshot.exposures.length * 100); return Math.round(vuln * .3 + patch * .2 + cert * .1 + config * .15 + access * .15 + exposure * .1); }
 export function assetName(assetId: string): string { return servers.find((server) => server.id === assetId || server.name === assetId)?.name ?? assetId; }
+
 
