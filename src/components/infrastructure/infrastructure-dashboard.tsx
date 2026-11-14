@@ -62,8 +62,9 @@ export function InfrastructureDashboard() {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select
+        </Select>
       </PageHeader>
+
 
       <section aria-label="Infrastructure summary" className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {infrastructureStats.map((item) => (

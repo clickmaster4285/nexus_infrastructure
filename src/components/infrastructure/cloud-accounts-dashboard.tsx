@@ -281,8 +281,9 @@ export function CloudAccountsDashboard() {
       <PageHeader breadcrumbs={["Infrastructure", "Cloud Accounts & Providers"]} title="Cloud Accounts & Providers" subtitle="Monitor and manage your cloud accounts, usage, and provider health in real-time.">
         <Button variant="outline" onClick={refresh} ><RefreshCw size={15} />Refresh</Button>
         <Button variant="outline" onClick={exportCsv} ><Download size={15} />Export CSV</Button>
-        <Button onClick={() => toast("Add Account is a mockup action.")} ><Plus size={15} />Add Account</Button
+        <Button onClick={() => toast("Add Account is a mockup action.")} ><Plus size={15} />Add Account</Button>
       </PageHeader>
+
 
       <section aria-label="Cloud account metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}

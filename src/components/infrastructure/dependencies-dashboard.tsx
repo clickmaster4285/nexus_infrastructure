@@ -238,8 +238,9 @@ export function DependenciesDashboard() {
           <Button variant="outline" onClick={refresh} className="whitespace-nowrap"><RefreshCw size={15} />Refresh</Button>
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Add Dependency is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Dependency</Button>
-        </div
+        </div>
       </PageHeader>
+
 
       <section aria-label="Dependency metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}

@@ -416,8 +416,9 @@ export function MetricsExplorerDashboard() {
           <Button variant="outline" onClick={() => toast("View saved.")} className="whitespace-nowrap"><Save size={15} />Save View</Button>
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Create Metric is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Create Metric</Button>
-        </div
+        </div>
       </PageHeader>
+
 
       <section aria-label="Metric summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName={item.label === "Avg. Ingestion Rate" ? "text-[1.125rem]" : "text-[1.5rem]"} trendClassName="text-[0.6875rem]" />)}
