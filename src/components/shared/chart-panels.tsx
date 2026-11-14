@@ -127,7 +127,7 @@ export function NetworkTrafficPanel({ className }: { className?: string }) {
     <Panel title="Network Traffic" range="24h" className={className}>
       <div className="min-h-0 w-full flex-1 pt-1">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={traffic} margin={{ top: 5, right: 4, left: -16, bottom: 0 }}>
+          <AreaChart data={traffic} margin={{ top: 5, right: 18, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="inbound" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#288af0" stopOpacity={0.15} />
@@ -140,7 +140,7 @@ export function NetworkTrafficPanel({ className }: { className?: string }) {
             </defs>
             <CartesianGrid stroke="var(--border)" vertical={false} />
             <XAxis dataKey="time" tickCount={7} interval={1} {...axis} />
-            <YAxis domain={[0, 150]} ticks={[0, 50, 100, 150]} tickFormatter={(value: number) => `${value} Mbps`} {...axis} />
+            <YAxis width={68} domain={[0, 150]} ticks={[0, 50, 100, 150]} tickFormatter={(value: number) => `${value} Mbps`} {...axis} />
             <Tooltip {...tooltip} />
             <Area type="monotone" dataKey="inbound" stroke="#288af0" fill="url(#inbound)" strokeWidth={2} dot={false} />
             <Area type="monotone" dataKey="outbound" stroke="#a647e8" fill="url(#outbound)" strokeWidth={2} dot={false} />
@@ -157,7 +157,7 @@ const segmentColors = ["#31c883", "#63d899", "#efa937", "#a247df", "#8448d4"];
 export function AvailabilityPanel({ className }: { className?: string }) {
   return (
     <Panel title="Server Availability" range="24h" className={className}>
-      <div className="flex flex-1 flex-col gap-3 pt-3">
+      <div className="flex flex-1 flex-col gap-3 pt-2">
         {serverAvailability.map((server) => (
           <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(100px,1fr)_29px_1.2fr] items-center gap-2 text-[12px] text-[#536782] dark:text-[#a9bcd2]">
             <span className="truncate">{server.name}</span>

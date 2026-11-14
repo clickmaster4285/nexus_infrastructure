@@ -169,7 +169,7 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Trend chart â€” stacked bars (Critical/Warning/Info/Debug) + brush    */
+/* Trend chart — stacked bars (Critical/Warning/Info/Debug) + brush    */
 /* ------------------------------------------------------------------ */
 interface TrendChartProps {
   data: (typeof EVENT_TRENDS)[TrendRangeKey];
@@ -412,7 +412,7 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
 }
 
 /* ------------------------------------------------------------------ */
-/* Donut â€” severity split; debug toggleable                            */
+/* Donut — severity split; debug toggleable                            */
 /* ------------------------------------------------------------------ */
 function SeverityDonut({ includeDebug, onToggleSeverity, activeSeverities }: { includeDebug: boolean; onToggleSeverity: (severity: EventSeverity) => void; activeSeverities: ReadonlySet<EventSeverity> }) {
   const hostRef = useRef<HTMLDivElement>(null);
