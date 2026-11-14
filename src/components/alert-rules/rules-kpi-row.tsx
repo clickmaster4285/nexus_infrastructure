@@ -23,7 +23,7 @@ function Sparkline({ values, label }: { values: number[]; label: string }) {
   const points = values.map((value, index) => `${(index * step).toFixed(1)},${(height - 2 - (value / max) * (height - 4)).toFixed(1)}`);
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} className="shrink-0">
-      <polyline points={points.join(" ")} fill="none" stroke="#64748B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={points.join(" ")} fill="none" stroke="oklch(0.5544 0.0407 257.42)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -55,7 +55,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
       label: "Enabled",
       value: String(stats.enabled),
       icon: CheckCircle2,
-      iconTone: "bg-[#E9F9EF] text-green-600 dark:bg-emerald-950/60 dark:text-emerald-400",
+      iconTone: "bg-[oklch(0.9675_0.0214_158.6)] text-green-600 dark:bg-emerald-950/60 dark:text-emerald-400",
       hint: <span>{stats.enabledPct}% of rules</span>,
     },
     {

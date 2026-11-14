@@ -85,15 +85,15 @@ function persistSavedViews(views: Array<{ name: string; patch: Record<string, st
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Packages": "#60A5FA",
-  "Network/Firewall": "#F87171",
-  "Services": "#A78BFA",
-  "Files": "#94A3B8",
-  "SSH/Auth": "#FBBF24",
-  "Registry": "#34D399",
-  "Users/Groups": "#F472B6",
-  "Kernel/OS": "#FB923C",
-  "Cron/Scheduled": "#38BDF8",
+  "Packages": "oklch(0.7137 0.1434 254.62)",
+  "Network/Firewall": "oklch(0.7106 0.1661 22.22)",
+  "Services": "oklch(0.709 0.1592 293.54)",
+  "Files": "oklch(0.7107 0.0351 256.79)",
+  "SSH/Auth": "oklch(0.8369 0.1644 84.43)",
+  "Registry": "oklch(0.7729 0.1535 163.22)",
+  "Users/Groups": "oklch(0.7253 0.1752 349.76)",
+  "Kernel/OS": "oklch(0.7576 0.159 55.93)",
+  "Cron/Scheduled": "oklch(0.7535 0.139 232.66)",
 };
 
 function bucketWindow(range: "24H" | "7D" | "30D", index: number): { start: number; end: number; label: string } {
@@ -553,10 +553,10 @@ export function ConfigChangesDashboard() {
           {chartMode === "approval" && (
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm" aria-label="Toggle approval series">
               {[
-                { name: "Approved", count: CONFIG_APPROVAL_MIX.approved, color: "#34D399" },
-                { name: "Unapproved", count: CONFIG_APPROVAL_MIX.unapproved, color: "#F87171" },
-                { name: "Pending", count: CONFIG_APPROVAL_MIX.pending, color: "#FBBF24" },
-                { name: "Expected", count: CONFIG_APPROVAL_MIX.expected, color: "#94A3B8" },
+                { name: "Approved", count: CONFIG APPROVAL MIX.approved, color: "oklch(0.7729 0.1535 163.22)" },
+                { name: "Unapproved", count: CONFIG APPROVAL MIX.unapproved, color: "oklch(0.7106 0.1661 22.22)" },
+                { name: "Pending", count: CONFIG APPROVAL MIX.pending, color: "oklch(0.8369 0.1644 84.43)" },
+                { name: "Expected", count: CONFIG APPROVAL MIX.expected, color: "oklch(0.7107 0.0351 256.79)" },
               ].map((entry) => {
                 const active = !hiddenSeries.has(entry.name);
                 return (
@@ -586,7 +586,7 @@ export function ConfigChangesDashboard() {
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm" aria-label="Toggle source series">
               {CONFIG_SOURCE_MIX.map(([source, count]) => {
                 const active = !hiddenSeries.has(source);
-                const color = { "Manual": "#60A5FA", "Automation/IaC": "#A78BFA", "Agent-detected": "#FBBF24", "Patch": "#34D399" }[source];
+                const color = { "Manual": "oklch(0.7137 0.1434 254.62)", "Automation/IaC": "oklch(0.709 0.1592 293.54)", "Agent-detected": "oklch(0.8369 0.1644 84.43)", "Patch": "oklch(0.7729 0.1535 163.22)" }[source];
                 return (
                   <button key={source} type="button" onClick={() => toggleSeries(source)} aria-pressed={active} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active ? "border-border bg-card text-foreground" : "border-border/60 bg-muted/40 text-muted-foreground opacity-60")}>
                     <i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} aria-hidden="true" />
@@ -1095,21 +1095,21 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
       const grid = { left: 40, right: 16, top: 24, bottom: 26 } as const;
       const axis = {
         axisTick: { show: false },
-        axisLine: { lineStyle: { color: "#E2E8F0" } },
-        axisLabel: { color: "#64748B", fontSize: 10, interval: labels.length > 16 ? Math.floor(labels.length / 6) : 0 },
+        axisLine: { lineStyle: { color: "oklch(0.9288 0.0126 255.51)" } },
+        axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10, interval: labels.length > 16 ? Math.floor(labels.length / 6) : 0 },
       } as const;
       const tooltip = {
         trigger: "axis" as const,
         confine: true,
         axisPointer: { type: "shadow" as const },
-        backgroundColor: "#0f172a",
+        backgroundColor: "oklch(0.2077 0.0398 265.75)",
         borderWidth: 0,
-        textStyle: { color: "#fff", fontSize: 12 },
+        textStyle: { color: "oklch(1 0 89.88)", fontSize: 12 },
       };
       const yAxis = {
         type: "value" as const,
-        splitLine: { lineStyle: { type: "dashed" as const, color: "#E2E8F0" } },
-        axisLabel: { color: "#64748B", fontSize: 10 },
+        splitLine: { lineStyle: { type: "dashed" as const, color: "oklch(0.9288 0.0126 255.51)" } },
+        axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10 },
       };
       const maxTotal = buckets.reduce((acc, bucket) => Math.max(acc, bucket.total), 0);
       const yAxisMax = { ...yAxis, max: Math.ceil(maxTotal * 1.15) };
@@ -1130,10 +1130,10 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
 
       if (mode === "approval") {
         const series = [
-          { name: "Approved", color: "#34D399", data: buckets.map((bucket) => bucket.approved) },
-          { name: "Unapproved", color: "#F87171", data: buckets.map((bucket) => bucket.unapproved) },
-          { name: "Pending", color: "#FBBF24", data: buckets.map((bucket) => bucket.pending) },
-          { name: "Expected", color: "#94A3B8", data: buckets.map((bucket) => bucket.expected) },
+          { name: "Approved", color: "oklch(0.7729 0.1535 163.22)", data: buckets.map((bucket) => bucket.approved) },
+          { name: "Unapproved", color: "oklch(0.7106 0.1661 22.22)", data: buckets.map((bucket) => bucket.unapproved) },
+          { name: "Pending", color: "oklch(0.8369 0.1644 84.43)", data: buckets.map((bucket) => bucket.pending) },
+          { name: "Expected", color: "oklch(0.7107 0.0351 256.79)", data: buckets.map((bucket) => bucket.expected) },
         ].filter((entry) => !hidden.has(entry.name));
         const spikeIndex = series.findIndex((entry) => entry.name === "Unapproved");
         return {
@@ -1153,8 +1153,8 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
               markPoint: {
                 symbol: "pin",
                 symbolSize: 34,
-                itemStyle: { color: "#FBBF24" },
-                label: { color: "#0f172a", fontSize: 8, fontWeight: 700, formatter: `${buckets[unapprovedMax]?.unapproved ?? 0} unappr.` },
+                itemStyle: { color: "oklch(0.8369 0.1644 84.43)" },
+                label: { color: "oklch(0.2077 0.0398 265.75)", fontSize: 8, fontWeight: 700, formatter: `${buckets[unapprovedMax]?.unapproved ?? 0} unappr.` },
                 data: [{ type: "max" as const, name: "Unapproved spike" }],
               },
             } : {}),
@@ -1182,7 +1182,7 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
               type: "bar" as const,
               stack: "total",
               barMaxWidth: 24,
-              itemStyle: { color: CATEGORY_COLORS[category] ?? "#94A3B8" },
+              itemStyle: { color: CATEGORY_COLORS[category] ?? "oklch(0.7107 0.0351 256.79)" },
               emphasis: { focus: "series" as const },
               data,
             };
@@ -1190,7 +1190,7 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
         };
       }
       // Source mode
-      const sourceColors: Record<string, string> = { "Manual": "#60A5FA", "Automation/IaC": "#A78BFA", "Agent-detected": "#FBBF24", "Patch": "#34D399" };
+      const sourceColors: Record<string, string> = { "Manual": "oklch(0.7137 0.1434 254.62)", "Automation/IaC": "oklch(0.709 0.1592 293.54)", "Agent-detected": "oklch(0.8369 0.1644 84.43)", "Patch": "oklch(0.7729 0.1535 163.22)" };
       const sourceWeights = CONFIG_SOURCE_MIX.map(([, count]) => count);
       const sourceNames = CONFIG_SOURCE_MIX.map(([source]) => source).filter((source) => !hidden.has(source));
       return {
@@ -1240,7 +1240,7 @@ function TypeDonut({ onSelect }: { onSelect: (category: string) => void }) {
   const summary = getConfigSummary();
   const hostRef = useEChart(
     useMemo<EChartsOption>(() => ({
-      tooltip: { trigger: "item", confine: true, backgroundColor: "#0f172a", borderWidth: 0, textStyle: { color: "#fff", fontSize: 12 } },
+      tooltip: { trigger: "item", confine: true, backgroundColor: "oklch(0.2077 0.0398 265.75)", borderWidth: 0, textStyle: { color: "oklch(1 0 89.88)", fontSize: 12 } },
       series: [
         {
           name: "Changes by type",
@@ -1287,9 +1287,9 @@ function ComplianceGauge({ pct }: { pct: number }) {
   return (
     <svg width="110" height="110" viewBox="0 0 110 110" role="img" aria-label={`Baseline compliance ${pct}%`}>
       <circle cx="55" cy="55" r={radius} stroke="currentColor" strokeOpacity="0.12" strokeWidth="12" fill="none" />
-      <circle cx="55" cy="55" r={radius} stroke="#34D399" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} transform="rotate(-90 55 55)" />
+      <circle cx="55" cy="55" r={radius} stroke="oklch(0.7729 0.1535 163.22)" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} transform="rotate(-90 55 55)" />
       <text x="55" y="52" textAnchor="middle" fontSize="22" fontWeight="800" fill="currentColor">{pct}%</text>
-      <text x="55" y="70" textAnchor="middle" fontSize="8" fill="#64748B">CIS PASS</text>
+      <text x="55" y="70" textAnchor="middle" fontSize="8" fill="oklch(0.5544 0.0407 257.42)">CIS PASS</text>
     </svg>
   );
 }

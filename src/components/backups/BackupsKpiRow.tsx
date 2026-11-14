@@ -44,7 +44,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         value={stats.successRate7d == null ? "—" : `${stats.successRate7d}%`}
         trend={deltaNode}
         trendClassName={cn(deltaClass, "whitespace-nowrap")}
-        valueAside={<Sparkline values={stats.successSparkline} color="#34D399" label="Success rate - trailing 14 days" className="block h-6 w-20" />}
+        valueAside={<Sparkline values={stats.successSparkline} color="oklch(0.7729 0.1535 163.22)" label="Success rate - trailing 14 days" className="block h-6 w-20" />}
         onClick={() => onKpiClick("success-rate")}
         onClickLabel="Show successful backup jobs"
         className="h-full min-h-[5.5rem] p-4"
@@ -69,7 +69,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         value={String(stats.failedRuns24h)}
         trend={<span className="font-normal text-muted-foreground">{stats.failedJobs24h} jobs</span>}
         trendClassName="text-muted-foreground whitespace-nowrap"
-        valueAside={<Sparkline values={stats.failedSparkline} color="#F87171" label="Failed runs - trailing 14 days" className="block h-6 w-20" />}
+        valueAside={<Sparkline values={stats.failedSparkline} color="oklch(0.7106 0.1661 22.22)" label="Failed runs - trailing 14 days" className="block h-6 w-20" />}
         goodDirection="down"
         onClick={() => onKpiClick("failed")}
         onClickLabel="Show failed backup jobs"

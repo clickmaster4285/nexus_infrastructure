@@ -59,7 +59,7 @@ export function ExecutiveOverview() {
           aria-label="View all server sites"
           className="group col-span-2 flex h-full min-h-[6.5rem] min-w-0 items-center justify-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-3 xl:col-span-2"
         >
-          <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#e2efff] text-[#1476d4] transition-transform group-hover:scale-105 dark:bg-[#17385c] dark:text-[#82c1ff]">
+          <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[oklch(0.9472_0.0257_253.57)] text-[oklch(0.5651_0.1667_253.22)] transition-transform group-hover:scale-105 dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7922_0.1099_248.98)]">
             <MapPin size={20} />
           </span>
           <span className="min-w-0">

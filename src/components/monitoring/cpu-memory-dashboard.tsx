@@ -69,17 +69,17 @@ const memoryHistory = [
 ];
 
 const cpuDistribution = [
-  { name: "0% - 25%", value: 18, color: "#35b879" },
-  { name: "25% - 50%", value: 12, color: "#2878ed" },
-  { name: "50% - 75%", value: 10, color: "#f39a12" },
-  { name: "75% - 100%", value: 8, color: "#ed3346" },
+  { name: "0% - 25%", value: 18, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "25% - 50%", value: 12, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "50% - 75%", value: 10, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "75% - 100%", value: 8, color: "oklch(0.6197 0.2192 21.68)" },
 ];
 
 const memoryDistribution = [
-  { name: "0% - 25%", value: 8, color: "#35b879" },
-  { name: "25% - 50%", value: 16, color: "#2878ed" },
-  { name: "50% - 75%", value: 16, color: "#f39a12" },
-  { name: "75% - 100%", value: 8, color: "#ed3346" },
+  { name: "0% - 25%", value: 8, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "25% - 50%", value: 16, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "50% - 75%", value: 16, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "75% - 100%", value: 8, color: "oklch(0.6197 0.2192 21.68)" },
 ];
 
 const cpuProcesses = [
@@ -107,18 +107,18 @@ const alerts = [
 ];
 
 const cpuSeries = [
-  { key: "average", name: "Average CPU", color: "#2878ed" },
-  { key: "user", name: "User CPU", color: "#35b879" },
-  { key: "system", name: "System CPU", color: "#f39a12" },
-  { key: "ioWait", name: "I/O Wait", color: "#8a45df" },
-  { key: "steal", name: "Steal CPU", color: "#20b9d1" },
+  { key: "average", name: "Average CPU", color: "oklch(0.5906 0.1926 258.69)" },
+  { key: "user", name: "User CPU", color: "oklch(0.6969 0.146 157.59)" },
+  { key: "system", name: "System CPU", color: "oklch(0.7593 0.163 68.27)" },
+  { key: "ioWait", name: "I/O Wait", color: "oklch(0.5571 0.2214 299.62)" },
+  { key: "steal", name: "Steal CPU", color: "oklch(0.723 0.1206 211.73)" },
 ];
 
 const memorySeries = [
-  { key: "used", name: "Used Memory", color: "#2878ed" },
-  { key: "cached", name: "Cached", color: "#35b879" },
-  { key: "buffers", name: "Buffers", color: "#f39a12" },
-  { key: "free", name: "Free Memory", color: "#8a45df" },
+  { key: "used", name: "Used Memory", color: "oklch(0.5906 0.1926 258.69)" },
+  { key: "cached", name: "Cached", color: "oklch(0.6969 0.146 157.59)" },
+  { key: "buffers", name: "Buffers", color: "oklch(0.7593 0.163 68.27)" },
+  { key: "free", name: "Free Memory", color: "oklch(0.5571 0.2214 299.62)" },
 ];
 
 const ROWS_PER_PAGE = 8;
@@ -155,9 +155,9 @@ function UsageCell({ value }: { value: number }) {
 
 /** Breakdown segments for the CPU stacked bar. */
 const CPU_BREAKDOWN_SEGMENTS = [
-  { label: "User", color: "bg-[#2878ed] dark:bg-blue-400" },
-  { label: "System", color: "bg-[#8a45df] dark:bg-violet-400" },
-  { label: "I/O Wait", color: "bg-[#f39a12] dark:bg-amber-400" },
+  { label: "User", color: "bg-[oklch(0.5906_0.1926_258.69)] dark:bg-blue-400" },
+  { label: "System", color: "bg-[oklch(0.5571_0.2214_299.62)] dark:bg-violet-400" },
+  { label: "I/O Wait", color: "bg-[oklch(0.7593_0.163_68.27)] dark:bg-amber-400" },
 ];
 
 /** Stacked bar summarising user / system / I/O wait split of CPU time. */
@@ -194,13 +194,13 @@ function BreakdownInfo() {
 
 /** Server role -> icon and brand colour used in the Server Name column. */
 const roleIcons: Record<string, { icon: LucideIcon; color: string }> = {
-  web: { icon: Globe, color: "#6366F1" },
-  db: { icon: Database, color: "#8B5CF6" },
-  app: { icon: AppWindow, color: "#14B8A6" },
-  gw: { icon: Network, color: "#06B6D4" },
-  worker: { icon: Cog, color: "#64748B" },
-  monitor: { icon: Activity, color: "#EC4899" },
-  cache: { icon: Zap, color: "#84CC16" },
+  web: { icon: Globe, color: "oklch(0.5854 0.2041 277.12)" },
+  db: { icon: Database, color: "oklch(0.6056 0.2189 292.72)" },
+  app: { icon: AppWindow, color: "oklch(0.7038 0.123 182.5)" },
+  gw: { icon: Network, color: "oklch(0.7148 0.1257 215.22)" },
+  worker: { icon: Cog, color: "oklch(0.5544 0.0407 257.42)" },
+  monitor: { icon: Activity, color: "oklch(0.6559 0.2118 354.31)" },
+  cache: { icon: Zap, color: "oklch(0.7681 0.2044 130.85)" },
 };
 
 /** Human readable role labels used for the icon tooltip. */
@@ -222,7 +222,7 @@ function roleIconFor(server: ServerResourceMetrics): { icon: LucideIcon; color: 
   const role = server.role || server.name.split("-")[0];
   const entry = roleIcons[role];
   const label = roleLabels[role] ?? role;
-  if (!entry) return { icon: Server, color: "#64748B", label: label || "Server" };
+  if (!entry) return { icon: Server, color: "oklch(0.5544 0.0407 257.42)", label: label || "Server" };
   return { ...entry, label };
 }
 
@@ -485,7 +485,7 @@ export function CpuMemoryDashboard() {
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-                <Area dataKey="average" name="Average CPU" type="monotone" stroke="#2878ed" strokeWidth={2} fill="#2878ed" fillOpacity={0.12} dot={{ r: 1.8 }} />
+                <Area dataKey="average" name="Average CPU" type="monotone" stroke="oklch(0.5906 0.1926 258.69)" strokeWidth={2} fill="oklch(0.5906 0.1926 258.69)" fillOpacity={0.12} dot={{ r: 1.8 }} />
                 {cpuSeries.filter((item) => item.key !== "average").map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={1.8} dot={{ r: 1.6 }} />)}
               </AreaChart>
             </ResponsiveContainer>
@@ -513,8 +513,8 @@ export function CpuMemoryDashboard() {
             <div className="relative h-[7rem] w-[49%] shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={[{ name: "Used CPU", value: 32.4, color: "#2878ed" }, { name: "CPU remaining", value: 67.6, color: "#e7eef8" }, { name: "Used memory", value: 68.7, color: "#35b879" }, { name: "Memory remaining", value: 31.3, color: "#e7eef8" }]} dataKey="value" cx="50%" cy="50%" innerRadius="67%" outerRadius="89%" startAngle={90} endAngle={-270} stroke="none">
-                    <Cell fill="#35b879" /><Cell fill="#e7eef8" /><Cell fill="#2878ed" /><Cell fill="#e7eef8" />
+                  <Pie data={[{ name: "Used CPU", value: 32.4, color: "oklch(0.5906 0.1926 258.69)" }, { name: "CPU remaining", value: 67.6, color: "oklch(0.9467 0.0154 257.2)" }, { name: "Used memory", value: 68.7, color: "oklch(0.6969 0.146 157.59)" }, { name: "Memory remaining", value: 31.3, color: "oklch(0.9467 0.0154 257.2)" }]} dataKey="value" cx="50%" cy="50%" innerRadius="67%" outerRadius="89%" startAngle={90} endAngle={-270} stroke="none">
+                    <Cell fill="oklch(0.6969 0.146 157.59)" /><Cell fill="oklch(0.9467 0.0154 257.2)" /><Cell fill="oklch(0.5906 0.1926 258.69)" /><Cell fill="oklch(0.9467 0.0154 257.2)" />
                   </Pie>
                   <Tooltip />
                 </PieChart>

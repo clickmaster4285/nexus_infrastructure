@@ -178,7 +178,7 @@ const tooltipStyle = {
   fontSize: 12,
   background: "var(--popover)",
   color: "var(--popover-foreground)",
-  boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
+  boxShadow: "0 0.25rem 0.875rem oklch(0.2779 0.0632 258.88 / 0.07)",
 } as const;
 
 function TrendTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ dataKey?: string; value?: number }>; label?: string }) {
@@ -772,12 +772,12 @@ export function IncidentsDashboard() {
 
           {/* Stat cards */}
           <section aria-label="Incident key performance indicators" className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-3 xl:grid-cols-6">
-            <StatCard icon={<Siren size={20} aria-hidden="true" />} iconTone="bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" label="Open Incidents" value={nfLocale(stats.open)} delta={2} deltaPercent="50.0%" goodDirection="down" className="h-full" />
+            <StatCard icon={<Siren size={20} aria-hidden="true" />} iconTone="bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" label="Open Incidents" value={nfLocale(stats.open)} delta={2} deltaPercent="50.0%" goodDirection="down" className="h-full" />
             <StatCard icon={<TriangleAlert size={20} aria-hidden="true" />} iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" label="Critical (SEV1-2)" value={nfLocale(stats.criticalOpen)} delta={1} deltaPercent="33.3%" goodDirection="down" className="h-full" />
-            <StatCard icon={<CheckCheck size={20} aria-hidden="true" />} iconTone="bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]" label="Acknowledged" value={nfLocale(stats.ackOpen)} delta={2} deltaPercent="66.7%" goodDirection="up" detail={`of ${stats.open} open`} className="h-full" />
+            <StatCard icon={<CheckCheck size={20} aria-hidden="true" />} iconTone="bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]" label="Acknowledged" value={nfLocale(stats.ackOpen)} delta={2} deltaPercent="66.7%" goodDirection="up" detail={`of ${stats.open} open`} className="h-full" />
             <StatCard icon={<Clock3 size={20} aria-hidden="true" />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" label="MTTA" value={stats.mtta == null ? "—" : formatMinutes(stats.mtta)} delta={2} deltaPercent="20.0%" goodDirection="down" className="h-full" />
             <StatCard icon={<Timer size={20} aria-hidden="true" />} iconTone="bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300" label="MTTR" value={stats.mttr == null ? "—" : formatMinutes(stats.mttr)} delta={-24} deltaPercent="9.6%" goodDirection="down" className="h-full" />
-            <StatCard icon={<CheckCircle2 size={20} aria-hidden="true" />} iconTone="bg-[#dff7eb] text-green-600 dark:bg-[#123a2a] dark:text-[#4fd69a]" label="Resolved (30d)" value={nfLocale(stats.resolved30d)} delta={6} deltaPercent="33.3%" goodDirection="up" className="h-full" />
+            <StatCard icon={<CheckCircle2 size={20} aria-hidden="true" />} iconTone="bg-[oklch(0.9553_0.0297_164.3)] text-green-600 dark:bg-[oklch(0.3149_0.0537_163.8)] dark:text-[oklch(0.7869_0.1465_160.69)]" label="Resolved (30d)" value={nfLocale(stats.resolved30d)} delta={6} deltaPercent="33.3%" goodDirection="up" className="h-full" />
           </section>
 
           {/* Insights row 1: trend / severity donut / top services */}
@@ -1121,7 +1121,7 @@ export function IncidentsDashboard() {
                     <thead>
                       <tr className="border-b border-border text-[0.75rem] text-muted-foreground">
                         <th scope="col" className="w-10 px-2 pb-2.5">
-                          <input ref={selectAllRef} type="checkbox" checked={allFilteredSelected} onChange={pageToggleAll} aria-label="Select all incidents on this page" className="h-4 w-4 accent-[#DC2626]" />
+                          <input ref={selectAllRef} type="checkbox" checked={allFilteredSelected} onChange={pageToggleAll} aria-label="Select all incidents on this page" className="h-4 w-4 accent-[oklch(0.5771_0.2152_27.33)]" />
                         </th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium">ID</th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium">Title</th>
@@ -1170,7 +1170,7 @@ export function IncidentsDashboard() {
                             )}
                           >
                             <td className={cn("w-10 px-2", meta.stripe)} onClick={(event) => event.stopPropagation()}>
-                              <input type="checkbox" checked={selected} onChange={(event) => selectIncident(incident.id, event.target.checked)} aria-label={`Select ${incident.id}`} className="h-4 w-4 accent-[#DC2626]" />
+                              <input type="checkbox" checked={selected} onChange={(event) => selectIncident(incident.id, event.target.checked)} aria-label={`Select ${incident.id}`} className="h-4 w-4 accent-[oklch(0.5771_0.2152_27.33)]" />
                             </td>
                             <td className="whitespace-nowrap pr-3">
                               <Link href={`/incidents/${incident.id}`} className="font-mono text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{incident.id}</Link>

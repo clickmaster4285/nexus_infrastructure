@@ -268,12 +268,12 @@ export function AccessControlDashboard() {
           <div className="h-[14.375rem] min-h-[13.75rem] w-full flex-1" role="img" aria-label="Successful vs failed sign-ins">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={signInData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="4 4" />
-                <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748B", fontSize: 10 }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fill: "#64748B", fontSize: 10 }} width={26} allowDecimals={false} />
-                <Tooltip cursor={{ stroke: "#94A3B8" }} contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} />
-                <Area type="monotone" dataKey="success" name="Successful" stroke="#16A34A" fill="#16A34A" fillOpacity={0.25} />
-                <Area type="monotone" dataKey="failed" name="Failed" stroke="#DC2626" fill="#DC2626" fillOpacity={0.35} />
+                <CartesianGrid vertical={false} stroke="oklch(0.9276 0.0058 264.53)" strokeDasharray="4 4" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "oklch(0.5544 0.0407 257.42)", fontSize: 10 }} />
+                <YAxis tickLine={false} axisLine={false} tick={{ fill: "oklch(0.5544 0.0407 257.42)", fontSize: 10 }} width={26} allowDecimals={false} />
+                <Tooltip cursor={{ stroke: "oklch(0.7107 0.0351 256.79)" }} contentStyle={{ background: "oklch(0.2077 0.0398 265.75)", border: 0, borderRadius: 8, color: "oklch(1 0 89.88)", fontSize: 12 }} />
+                <Area type="monotone" dataKey="success" name="Successful" stroke="oklch(0.6271 0.1699 149.21)" fill="oklch(0.6271 0.1699 149.21)" fillOpacity={0.25} />
+                <Area type="monotone" dataKey="failed" name="Failed" stroke="oklch(0.5771 0.2152 27.33)" fill="oklch(0.5771 0.2152 27.33)" fillOpacity={0.35} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -285,9 +285,9 @@ export function AccessControlDashboard() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={userRoleShare.slice(0, 5).map((item) => ({ name: item.label, value: item.count }))} dataKey="value" innerRadius="62%" outerRadius="100%" paddingAngle={2}>
-                    {userRoleShare.slice(0, 5).map((entry, index) => <Cell key={index} fill={["#0EA5E9", "#8B5CF6", "#F59E0B", "#16A34A", "#94A3B8"][index % 5]} />)}
+                    {userRoleShare.slice(0, 5).map((entry, index) => <Cell key={index} fill={["oklch(0.6847 0.1479 237.32)", "oklch(0.6056 0.2189 292.72)", "oklch(0.7686 0.1647 70.08)", "oklch(0.6271 0.1699 149.21)", "oklch(0.7107 0.0351 256.79)"][index % 5]} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} />
+                  <Tooltip contentStyle={{ background: "oklch(0.2077 0.0398 265.75)", border: 0, borderRadius: 8, color: "oklch(1 0 89.88)", fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.125rem] leading-none text-foreground tabular-nums">{users.length}</b><span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">users</span></div>
@@ -295,7 +295,7 @@ export function AccessControlDashboard() {
             <ul className="min-w-0 flex-1 space-y-1.5 text-sm">
               {userRoleShare.slice(0, 5).map((entry, index) => (
                 <li key={entry.roleId} className="flex items-center gap-2">
-                  <i className="h-2 w-2 rounded-full" style={{ backgroundColor: ["#0EA5E9", "#8B5CF6", "#F59E0B", "#16A34A", "#94A3B8"][index % 5] }} aria-hidden="true" />
+                  <i className="h-2 w-2 rounded-full" style={{ backgroundColor: ["oklch(0.6847 0.1479 237.32)", "oklch(0.6056 0.2189 292.72)", "oklch(0.7686 0.1647 70.08)", "oklch(0.6271 0.1699 149.21)", "oklch(0.7107 0.0351 256.79)"][index % 5] }} aria-hidden="true" />
                   <span className="min-w-0 flex-1 truncate text-muted-foreground" title={entry.label}>{entry.label}</span>
                   <b className="tabular-nums text-foreground">{entry.count}</b>
                 </li>

@@ -73,10 +73,10 @@ const memoryProcesses = [
 ];
 
 const serviceStates = [
-  { name: "Running", value: SERVICE_COUNTS.running, percent: servicePercent(SERVICE_COUNTS.running), color: "#35b879" },
-  { name: "Failed", value: SERVICE_COUNTS.failed, percent: servicePercent(SERVICE_COUNTS.failed), color: "#ed3346" },
-  { name: "Stopped", value: 0, percent: servicePercent(0), color: "#f39a12" },
-  { name: "Unknown", value: SERVICE_COUNTS.total - SERVICE_COUNTS.running - SERVICE_COUNTS.failed, percent: servicePercent(SERVICE_COUNTS.total - SERVICE_COUNTS.running - SERVICE_COUNTS.failed), color: "#9aa9be" },
+  { name: "Running", value: SERVICE COUNTS.running, percent: servicePercent(SERVICE COUNTS.running), color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Failed", value: SERVICE COUNTS.failed, percent: servicePercent(SERVICE COUNTS.failed), color: "oklch(0.6197 0.2192 21.68)" },
+  { name: "Stopped", value: 0, percent: servicePercent(0), color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Unknown", value: SERVICE COUNTS.total - SERVICE COUNTS.running - SERVICE COUNTS.failed, percent: servicePercent(SERVICE COUNTS.total - SERVICE COUNTS.running - SERVICE COUNTS.failed), color: "oklch(0.73 0.0349 256.79)" },
 ];
 const serviceTotals = serviceStates.reduce((sum, item) => sum + item.value, 0);
 const serviceHealthStats = [
@@ -85,9 +85,9 @@ const serviceHealthStats = [
 ];
 
 const startupCounts = [
-  { name: "Automatic", value: 276, color: "#35b879" },
-  { name: "Manual", value: 102, color: "#f39a12" },
-  { name: "Disabled", value: 20, color: "#2878ed" },
+  { name: "Automatic", value: 276, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Manual", value: 102, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Disabled", value: 20, color: "oklch(0.5906 0.1926 258.69)" },
 ];
 const startupTotal = startupCounts.reduce((sum, item) => sum + item.value, 0);
 const startupStates = startupCounts.map((item) => ({
@@ -108,11 +108,11 @@ const topMemoryServices = [
   { name: "Node.js", value: "3.8%" },
 ];
 const servicesByHost = [
-  { name: "app-server-01", value: 78, width: "100%", color: "#06b6d4" }, { name: "app-server-02", value: 74, width: "95%", color: "#8a45df" },
-  { name: "web-01", value: 56, width: "72%", color: "#f39a12" }, { name: "db-01", value: 48, width: "62%", color: "#35b879" },
-  { name: "worker-01", value: 42, width: "54%", color: "#2878ed" },
-  { name: "api-gateway", value: 38, width: "49%", color: "#06b6d4" },
-  { name: "db-02", value: 36, width: "46%", color: "#8a45df" },
+  { name: "app-server-01", value: 78, width: "100%", color: "oklch(0.7148 0.1257 215.22)" }, { name: "app-server-02", value: 74, width: "95%", color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "web-01", value: 56, width: "72%", color: "oklch(0.7593 0.163 68.27)" }, { name: "db-01", value: 48, width: "62%", color: "oklch(0.6969 0.146 157.59)" },
+  { name: "worker-01", value: 42, width: "54%", color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "api-gateway", value: 38, width: "49%", color: "oklch(0.7148 0.1257 215.22)" },
+  { name: "db-02", value: 36, width: "46%", color: "oklch(0.5571 0.2214 299.62)" },
 ];
 
 const alerts = [
@@ -131,7 +131,7 @@ const severityStyles: Record<string, string> = {
 
 type ProcessPoint = { time: string; [key: string]: string | number };
 type ProcessSeries = { key: string; name: string; color: string; unit: string };
-const processPalette = { blue: "#60A5FA", green: "#34D399", purple: "#A78BFA", amber: "#FBBF24", red: "#F87171" };
+const processPalette = { blue: "oklch(0.7137 0.1434 254.62)", green: "oklch(0.7729 0.1535 163.22)", purple: "oklch(0.709 0.1592 293.54)", amber: "oklch(0.8369 0.1644 84.43)", red: "oklch(0.7106 0.1661 22.22)" };
 const connectedProcessCharts = "nexus-process-service-trends";
 const cpuSeries: ProcessSeries[] = [
   { key: "user", name: "User", color: processPalette.blue, unit: "%" },
@@ -154,9 +154,9 @@ const processCountSeries: ProcessSeries[] = [
 function chartThemeColors() {
   const style = typeof document === "undefined" ? null : getComputedStyle(document.documentElement);
   return {
-    axis: style?.getPropertyValue("--muted-foreground").trim() || "#64748B",
-    grid: style?.getPropertyValue("--border").trim() || "#E2E8F0",
-    popover: style?.getPropertyValue("--popover").trim() || "#fff",
+    axis: style?.getPropertyValue("--muted-foreground").trim() || "oklch(0.5544 0.0407 257.42)",
+    grid: style?.getPropertyValue("--border").trim() || "oklch(0.9288 0.0126 255.51)",
+    popover: style?.getPropertyValue("--popover").trim() || "oklch(1 0 89.88)",
   };
 }
 
@@ -254,7 +254,7 @@ function buildAreaOption({
       type: "category", boundaryGap: false, data: data.map((point) => point.time),
       axisLine: { show: false }, axisTick: { show: false },
       axisLabel: { color: axisColor, fontSize: 10, hideOverlap: true, formatter: (value: string, index: number) => ticks.has(index) ? value : "" },
-      axisPointer: { show: true, type: "line", lineStyle: { color: "#94A3B8", width: 1, type: "dashed" } },
+      axisPointer: { show: true, type: "line", lineStyle: { color: "oklch(0.7107 0.0351 256.79)", width: 1, type: "dashed" } },
     },
     yAxis: {
       type: "value", min: 0, max: maxValue,
@@ -267,8 +267,8 @@ function buildAreaOption({
       trigger: "axis", confine: true, appendToBody: true,
       backgroundColor: colors.popover,
       borderColor: gridColor, borderWidth: 1, borderRadius: 8, padding: [10, 12],
-      extraCssText: "box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14);min-width:9.25rem;",
-      axisPointer: { type: "line", lineStyle: { color: "#94A3B8", type: "dashed", width: 1 } },
+      extraCssText: "box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14);min-width:9.25rem;",
+      axisPointer: { type: "line", lineStyle: { color: "oklch(0.7107 0.0351 256.79)", type: "dashed", width: 1 } },
       position: (point, _params, _dom, _rect, size) => {
         const x = Number(point[0]); const y = Number(point[1]);
         const width = Number(size.viewSize[0]); const tipWidth = Number(size.contentSize[0]);
@@ -289,10 +289,10 @@ function buildAreaOption({
       stack, smooth: 0.32, showSymbol: false, symbol: "circle", symbolSize: 6,
       lineStyle: { color: item.color, width: 2 },
       areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${item.color}55` }, { offset: 1, color: `${item.color}08` }]) },
-      emphasis: { focus: "series", scale: 1.08, itemStyle: { borderWidth: 2, borderColor: "#fff" } },
-      ...(kind === "cpu" && item.key === "ioWait" && markArea.length ? { markArea: { silent: true, itemStyle: { color: "rgba(251,191,36,.10)" }, data: markArea } } : {}),
+      emphasis: { focus: "series", scale: 1.08, itemStyle: { borderWidth: 2, borderColor: "oklch(1 0 89.88)" } },
+      ...(kind === "cpu" && item.key === "ioWait" && markArea.length ? { markArea: { silent: true, itemStyle: { color: "oklch(0.8369 0.1644 84.43 / 0.1)" }, data: markArea } } : {}),
       ...(kind === "memory" && item.key === "used" ? { markLine: { silent: true, symbol: "none", lineStyle: { color: processPalette.red, type: "dashed", width: 1 }, label: { show: true, formatter: "85%", position: "insideEndTop", color: processPalette.red, fontSize: 10 }, data: [{ yAxis: 85 }] } } : {}),
-      ...(kind === "count" && item.key === "stopped" ? { markPoint: { symbol: "pin", symbolSize: 38, itemStyle: { color: processPalette.red }, label: { show: true, formatter: "!", color: "#fff", fontWeight: 700 }, data: [{ type: "max", name: "Stopped spike" }] } } : {}),
+      ...(kind === "count" && item.key === "stopped" ? { markPoint: { symbol: "pin", symbolSize: 38, itemStyle: { color: processPalette.red }, label: { show: true, formatter: "!", color: "oklch(1 0 89.88)", fontWeight: 700 }, data: [{ type: "max", name: "Stopped spike" }] } } : {}),
     })),
   };
 }
@@ -317,7 +317,7 @@ function ProcessTrendCard({
   const menuAction = (action: "png" | "csv" | "fullscreen") => {
     const chart = chartRefs.current[id];
     if (action === "png" && chart) {
-      const link = document.createElement("a"); link.href = chart.getDataURL({ pixelRatio: 2, backgroundColor: "#fff" }); link.download = `${id}.png`; link.click();
+      const link = document.createElement("a"); link.href = chart.getDataURL({ pixelRatio: 2, backgroundColor: "oklch(1 0 89.88)" }); link.download = `${id}.png`; link.click();
     }
     if (action === "csv") {
       const rows = [["Time", ...series.filter((item) => enabledKeys.includes(item.key)).map((item) => item.name)], ...data.map((point) => [point.time, ...series.filter((item) => enabledKeys.includes(item.key)).map((item) => String(point[item.key] ?? ""))])];
@@ -344,7 +344,7 @@ function ProcessTrendCard({
       <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={`${title} series`}>
         {series.map((item) => {
           const active = enabledKeys.includes(item.key); const latest = Number(visibleData[visibleData.length - 1]?.[item.key] ?? 0);
-          return <button key={item.key} type="button" aria-pressed={active} onClick={() => setEnabledKeys((keys) => active ? keys.filter((key) => key !== item.key) : [...keys, item.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 rounded-full border px-2 text-[0.6875rem] ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: active ? item.color : "#94A3B8" }} />{item.name}<b className="font-semibold tabular-nums no-underline">{kind === "count" ? Math.round(latest).toLocaleString() : `${latest.toFixed(1)} ${item.unit}`}</b></button>;
+          return <button key={item.key} type="button" aria-pressed={active} onClick={() => setEnabledKeys((keys) => active ? keys.filter((key) => key !== item.key) : [...keys, item.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 rounded-full border px-2 text-[0.6875rem] ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: active ? item.color : "oklch(0.7107 0.0351 256.79)" }} />{item.name}<b className="font-semibold tabular-nums no-underline">{kind === "count" ? Math.round(latest).toLocaleString() : `${latest.toFixed(1)} ${item.unit}`}</b></button>;
         })}
       </div>
       <EChartCanvas options={options} group={connectedProcessCharts} onReady={(chart) => { chartRefs.current[id] = chart; }} />
@@ -432,14 +432,14 @@ function FadeTabContent({ tab, children }: { tab: string; children: React.ReactN
 
 function UsageRows({ items, showLogos = true, footer }: { items: { name: string; value: string; color?: string }[]; showLogos?: boolean; footer?: React.ReactNode }) {
   const max = Math.max(...items.map((item) => Number.parseFloat(item.value)), 1);
-  const tones = ["#2878ed", "#35b879", "#8a45df", "#f39a12", "#06b6d4"];
+  const tones = ["oklch(0.5906 0.1926 258.69)", "oklch(0.6969 0.146 157.59)", "oklch(0.5571 0.2214 299.62)", "oklch(0.7593 0.163 68.27)", "oklch(0.7148 0.1257 215.22)"];
   return <div className="flex min-h-0 flex-1 flex-col pt-2">
     <div className="flex flex-1 flex-col justify-between">
       {items.slice(0, 7).map((item, index) => {
         const amount = Number.parseFloat(item.value);
         return <div key={item.name} className="grid h-9 grid-cols-[minmax(0,1fr)_minmax(2.25rem,8.75rem)_3.5rem] items-center gap-2 text-[0.75rem]">
           <span className="flex min-w-0 items-center gap-2 truncate text-foreground" title={item.name}>{showLogos && <TechLogo name={item.name} className="h-7 w-7 rounded-md [&_svg]:h-[1.125rem] [&_svg]:w-[1.125rem]" />}<span className="truncate">{item.name}</span></span>
-          <div className="h-[0.375rem] min-w-0 rounded-full bg-[#EEF2F7] dark:bg-slate-700"><div className="h-full max-w-[8.75rem] rounded-full" style={{ width: `${Math.min(100, amount / max * 100)}%`, backgroundColor: item.color ?? tones[index % tones.length] }} /></div>
+          <div className="h-[0.375rem] min-w-0 rounded-full bg-[oklch(0.9595_0.008_253.85)] dark:bg-slate-700"><div className="h-full max-w-[8.75rem] rounded-full" style={{ width: `${Math.min(100, amount / max * 100)}%`, backgroundColor: item.color ?? tones[index % tones.length] }} /></div>
           <b className="whitespace-nowrap text-right font-bold tabular-nums text-foreground">{item.value}</b>
         </div>;
       })}
@@ -453,7 +453,7 @@ function ProcessUsageTable({ rows, usageKey, secondaryKey, totalLabel }: {
   usageKey: "cpu" | "memory"; secondaryKey: "cpu" | "memory"; totalLabel: string;
 }) {
   const amountOf = (value: string) => Number.parseFloat(value);
-  const colorFor = (value: number) => value >= 85 ? "#F87171" : value >= 70 ? "#FBBF24" : "#60A5FA";
+  const colorFor = (value: number) => value >= 85 ? "oklch(0.7106 0.1661 22.22)" : value >= 70 ? "oklch(0.8369 0.1644 84.43)" : "oklch(0.7137 0.1434 254.62)";
   const columns = "grid-cols-[minmax(0,1.05fr)_minmax(8.125rem,1.35fr)_minmax(4.125rem,.55fr)_minmax(5.625rem,.8fr)]";
   return <div className="flex min-h-0 flex-1 flex-col pt-1">
     <div className={`grid ${columns} items-center gap-2 border-b border-border px-1 pb-1.5 text-[0.6875rem] font-semibold text-muted-foreground`}><span>Process</span><span>Usage</span><span className="text-right">Secondary</span><span>Server</span></div>

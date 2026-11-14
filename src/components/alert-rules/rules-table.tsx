@@ -51,7 +51,7 @@ const SEVERITY_BADGE: Record<RuleSeverity, { icon: typeof Zap; className: string
 };
 
 const TYPE_BADGE: Record<RuleType, string> = {
-  Threshold: "bg-[#EEF2F7] text-[#33415C] dark:bg-slate-500/15 dark:text-slate-300",
+  Threshold: "bg-[oklch(0.9595_0.008_253.85)] text-[oklch(0.3753_0.0501_263.06)] dark:bg-slate-500/15 dark:text-slate-300",
   Anomaly: "bg-purple-100 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
   Composite: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
 };
@@ -225,7 +225,7 @@ export function RulesTable(props: RulesTableProps) {
                 aria-label="Select all rows on this page"
                 checked={allVisibleSelected}
                 onChange={toggleAll}
-                className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
               />
             </th>
             <th scope="col" className="w-[4.5rem] px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Enabled</th>
@@ -256,7 +256,7 @@ export function RulesTable(props: RulesTableProps) {
                   "relative cursor-pointer border-b border-border/70 outline-none transition-colors",
                   "hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring dark:hover:bg-accent",
                   isSelected && "bg-primary/[0.06] dark:bg-primary/10",
-                  rule.severity === "Critical" && rule.status === "Enabled" && "shadow-[inset_3px_0_0_#DC2626]",
+                  rule.severity === "Critical" && rule.status === "Enabled" && "shadow-[inset_3px_0_0_oklch(0.5771_0.2152_27.33)]",
                 )}
               >
                 <td className="px-3 py-2.5 align-middle" onClick={(event) => event.stopPropagation()}>
@@ -265,7 +265,7 @@ export function RulesTable(props: RulesTableProps) {
                     aria-label={`Select rule ${rule.id}`}
                     checked={isSelected}
                     onChange={() => toggleRow(rule)}
-                    className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                    className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                   />
                 </td>
                 <td className="px-3 py-2.5 align-middle" onClick={(event) => event.stopPropagation()}>

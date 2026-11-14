@@ -26,10 +26,10 @@ const stats: MetricStat[] = [
 ];
 
 const providerColors: Record<string, string> = {
-  AWS: "#f28a13",
-  Azure: "#2878ed",
-  GCP: "#43b779",
-  DigitalOcean: "#8051df",
+  AWS: "oklch(0.7307 0.1673 59.98)",
+  Azure: "oklch(0.5906 0.1926 258.69)",
+  GCP: "oklch(0.698 0.1391 156.33)",
+  DigitalOcean: "oklch(0.5625 0.2055 294.01)",
 };
 
 const providerData = [
@@ -67,10 +67,10 @@ const accounts = [
 
 const accountTotal = accounts.length;
 const accountStatusData = [
-  { name: "Active", value: accounts.filter((account) => account.status === "Active").length, color: "#36bb79" },
-  { name: "Inactive", value: accounts.filter((account) => account.status === "Inactive").length, color: "#f28a13" },
-  { name: "Suspended", value: accounts.filter((account) => account.status === "Suspended").length, color: "#ed3150" },
-  { name: "Pending", value: accounts.filter((account) => account.status === "Pending").length, color: "#9aa9be" },
+  { name: "Active", value: accounts.filter((account) => account.status === "Active").length, color: "oklch(0.7049 0.1497 156.85)" },
+  { name: "Inactive", value: accounts.filter((account) => account.status === "Inactive").length, color: "oklch(0.7307 0.1673 59.98)" },
+  { name: "Suspended", value: accounts.filter((account) => account.status === "Suspended").length, color: "oklch(0.6199 0.2202 18.35)" },
+  { name: "Pending", value: accounts.filter((account) => account.status === "Pending").length, color: "oklch(0.73 0.0349 256.79)" },
 ].map((item) => ({ ...item, percent: `${accountTotal ? ((item.value / accountTotal) * 100).toFixed(0) : 0}%` }));
 const accountStatusSummary = [
   { label: "Healthy", value: `${accounts.filter((account) => account.health === "Healthy").length} / ${accountTotal}` },
@@ -203,7 +203,7 @@ function AccountStatusCard() {
       <StatusDonut />
       <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
         {accountStatusSummary.map((item) => (
-          <div key={item.label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-muted/60">
+          <div key={item.label} className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-muted/60">
             <div className="truncate text-[0.75rem] text-muted-foreground">{item.label}</div>
             <div className="mt-1 truncate text-[1rem] font-bold leading-5 tabular-nums text-foreground">{item.value}</div>
           </div>
@@ -240,7 +240,7 @@ function ProviderResourcesCard() {
       </div>
       <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
         {providerResourcesSummary.map((item) => (
-          <div key={item.label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-muted/60">
+          <div key={item.label} className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-muted/60">
             <div className="truncate text-[0.75rem] text-muted-foreground">{item.label}</div>
             <div className="mt-1 truncate text-[1rem] font-bold leading-5 text-foreground">{item.value}</div>
           </div>
@@ -300,12 +300,12 @@ export function CloudAccountsDashboard() {
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
-                <Area dataKey="healthy" name="Healthy" type="monotone" stroke="#288af0" strokeWidth={1.8} fill="#288af0" fillOpacity={0.09} dot={{ r: 1.5 }} />
+                <Area dataKey="healthy" name="Healthy" type="monotone" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={1.8} fill="oklch(0.6311 0.1762 253.47)" fillOpacity={0.09} dot={{ r: 1.5 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[0.75rem] text-muted-foreground">
-            {[["Healthy", "#43b779"], ["Warning", "#f28a13"], ["Critical", "#ed3150"], ["Unknown", "#9aa9be"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
+            {[["Healthy", "oklch(0.698 0.1391 156.33)"], ["Warning", "oklch(0.7307 0.1673 59.98)"], ["Critical", "oklch(0.6199 0.2202 18.35)"], ["Unknown", "oklch(0.73 0.0349 256.79)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
           </div>
         </Panel>
         <Panel title="Cost Overview" action={<span className="rounded border border-border px-2 py-1 text-[0.6875rem] text-muted-foreground">Monthly⌄</span>} className="min-w-0">
@@ -315,11 +315,11 @@ export function CloudAccountsDashboard() {
           <div className="h-[7.5rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={costs} margin={{ top: 5, right: 2, left: -24, bottom: 0 }}>
-                <defs><linearGradient id="cloud-cost-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#288af0" stopOpacity={0.2} /><stop offset="100%" stopColor="#288af0" stopOpacity={0.01} /></linearGradient></defs>
+                <defs><linearGradient id="cloud-cost-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.6311 0.1762 253.47)" stopOpacity={0.2} /><stop offset="100%" stopColor="oklch(0.6311 0.1762 253.47)" stopOpacity={0.01} /></linearGradient></defs>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="day" interval={2} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip formatter={(value) => [`$${Number(value).toLocaleString()}`, "Cost"]} contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
-                <Area dataKey="value" name="Cost" type="monotone" stroke="#288af0" strokeWidth={1.7} fill="url(#cloud-cost-fill)" dot={{ r: 1.5 }} />
+                <Area dataKey="value" name="Cost" type="monotone" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={1.7} fill="url(#cloud-cost-fill)" dot={{ r: 1.5 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

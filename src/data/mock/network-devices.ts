@@ -144,10 +144,10 @@ export const networkDeviceSites: NetworkDeviceSiteRow[] = SITE_PLANS.map((site) 
 export const networkWorstSites = [...networkDeviceSites].sort((a, b) => a.health - b.health).slice(0, 3);
 
 export const networkDeviceTypes = ([
-  { key: "Switch" as const, name: "Switches", color: "#288af0" },
-  { key: "Router" as const, name: "Routers", color: "#34D399" },
-  { key: "Firewall" as const, name: "Firewalls", color: "#A78BFA" },
-  { key: "Access Point" as const, name: "Access Points", color: "#FBBF24" },
+  { key: "Switch" as const, name: "Switches", color: "oklch(0.6311 0.1762 253.47)" },
+  { key: "Router" as const, name: "Routers", color: "oklch(0.7729 0.1535 163.22)" },
+  { key: "Firewall" as const, name: "Firewalls", color: "oklch(0.709 0.1592 293.54)" },
+  { key: "Access Point" as const, name: "Access Points", color: "oklch(0.8369 0.1644 84.43)" },
 ]).map((entry) => {
   const count = networkDevices.filter((device) => device.type === entry.key).length;
   return { ...entry, count, percent: `${((count / NETWORK_TOTAL) * 100).toFixed(1)}%`, width: Math.round((count / NETWORK_TOTAL) * 100) };

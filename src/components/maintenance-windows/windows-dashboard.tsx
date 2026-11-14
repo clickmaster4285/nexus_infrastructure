@@ -212,7 +212,7 @@ const tooltipStyle = {
   fontSize: 12,
   background: "var(--popover)",
   color: "var(--popover-foreground)",
-  boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
+  boxShadow: "0 0.25rem 0.875rem oklch(0.2779 0.0632 258.88 / 0.07)",
 } as const;
 
 function SuppressedTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value?: number }>; label?: string }) {
@@ -225,7 +225,7 @@ function SuppressedTooltip({ active, payload, label }: { active?: boolean; paylo
   );
 }
 
-const GROUP_SHARE_COLORS = ["#7C3AED", "#8B5CF6", "#A78BFA", "#C4B5FD", "#64748B", "#94A3B8"];
+const GROUP_SHARE_COLORS = ["oklch(0.5413 0.2466 293.01)", "oklch(0.6056 0.2189 292.72)", "oklch(0.709 0.1592 293.54)", "oklch(0.8112 0.1013 293.57)", "oklch(0.5544 0.0407 257.42)", "oklch(0.7107 0.0351 256.79)"];
 
 const STATUS_FILTER_ORDER: Array<"All" | MaintenanceWindowStatus> = ["All", "In Progress", "Scheduled", "Completed", "Cancelled"];
 const TYPE_ICON: Record<MaintenanceWindowType, typeof Zap> = { Planned: CalendarDays, Emergency: Zap, Recurring: RefreshCw };
@@ -1067,7 +1067,7 @@ export function WindowsDashboard() {
             <StatCard icon={<CalendarClock size={18} aria-hidden="true" />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" label="Upcoming 7d" value={nfLocale(upcoming7d)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "upcoming" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("upcoming")} onClickLabel="Filter table to scheduled windows in the next 7 days" />
             <StatCard icon={<CheckCheck size={18} aria-hidden="true" />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400" label="Completed 30d" value={nfLocale(completed30d)} trend={trendNode(6, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "completed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("completed")} onClickLabel="Filter table to completed windows" />
             <StatCard icon={<BellOff size={18} aria-hidden="true" />} iconTone="bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" label="In Maintenance" value={nfLocale(serversInMaintenance.length)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "inMaintenance" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("inMaintenance")} onClickLabel="Filter table to windows in progress" />
-            <StatCard icon={<Bell size={18} aria-hidden="true" />} iconTone="bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]" label="Suppressed 24h" value={nfLocale(alertsSuppressed24h)} trend={trendNode(142, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "suppressed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("suppressed")} onClickLabel="Filter table to last 7 days" />
+            <StatCard icon={<Bell size={18} aria-hidden="true" />} iconTone="bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]" label="Suppressed 24h" value={nfLocale(alertsSuppressed24h)} trend={trendNode(142, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "suppressed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("suppressed")} onClickLabel="Filter table to last 7 days" />
             <StatCard icon={<ShieldCheck size={18} aria-hidden="true" />} iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" label="Pending Approval" value={nfLocale(pendingApproval)} trend={trendNode(1, "vs last week")} trendClassName="text-rose-600 dark:text-rose-400" goodDirection="down" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "pending" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("pending")} onClickLabel="Filter table to windows pending approval" />
           </section>
 
@@ -1198,7 +1198,7 @@ export function WindowsDashboard() {
                           aria-label="Select all windows on this page"
                           checked={allPageSelected}
                           onChange={pageToggleAll}
-                          className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                          className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                         />
                       </th>
                       <th scope="col" aria-sort={sortKey === "title" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("title", "Window")}</th>
@@ -1238,7 +1238,7 @@ export function WindowsDashboard() {
                               aria-label={`Select ${window.id}`}
                               checked={selected}
                               onChange={(event) => selectWindow(window.id, event.target.checked)}
-                              className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                              className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                             />
                           </td>
                           <td className="min-w-0 px-3 py-1.5 align-middle">
@@ -1356,7 +1356,7 @@ export function WindowsDashboard() {
                         checked={selected}
                         onChange={(event) => { event.stopPropagation(); selectWindow(window.id, event.target.checked); }}
                         onClick={(event) => event.stopPropagation()}
-                        className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]"
+                        className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                       />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center justify-between gap-2">
@@ -1680,7 +1680,7 @@ export function WindowsDashboard() {
                     <XAxis dataKey="label" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                     <YAxis allowDecimals={false} width={28} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                     <Tooltip content={<SuppressedTooltip />} cursor={{ fill: "var(--muted)", fillOpacity: 0.45 }} />
-                    <Bar dataKey="alerts" fill="#8B5CF6" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="alerts" fill="oklch(0.6056 0.2189 292.72)" radius={[3, 3, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1720,9 +1720,9 @@ export function WindowsDashboard() {
                   return (
                     <>
                       <div role="img" aria-label={`SEV2 ${suppressedBySeverity.SEV2}, SEV3 ${suppressedBySeverity.SEV3}, SEV4 ${suppressedBySeverity.SEV4} alerts suppressed`} className="mt-1.5 flex h-2 w-full overflow-hidden rounded-full">
-                        <span style={{ width: `${pct(suppressedBySeverity.SEV2)}%`, background: "#DC2626" }} />
-                        <span style={{ width: `${pct(suppressedBySeverity.SEV3)}%`, background: "#D97706" }} />
-                        <span style={{ width: `${pct(suppressedBySeverity.SEV4)}%`, background: "#3B82F6" }} />
+                        <span style={{ width: `${pct(suppressedBySeverity.SEV2)}%`, background: "oklch(0.5771 0.2152 27.33)" }} />
+                        <span style={{ width: `${pct(suppressedBySeverity.SEV3)}%`, background: "oklch(0.6658 0.1574 58.32)" }} />
+                        <span style={{ width: `${pct(suppressedBySeverity.SEV4)}%`, background: "oklch(0.6231 0.188 259.81)" }} />
                       </div>
                       <p className="mt-1.5 text-[0.75rem] tabular-nums text-muted-foreground">
                         <span className="text-red-600 dark:text-red-400">SEV2 {nfLocale(suppressedBySeverity.SEV2)}</span>

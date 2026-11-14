@@ -33,10 +33,10 @@ const healthTrend = [78, 79, 84, 79, 74, 77, 87, 76, 88, 79, 87, 77, 86].map((he
 }));
 
 const containerStates = [
-  { name: "Running", value: 28, color: "#22bd83", percent: "77.8%" },
-  { name: "Stopped", value: 8, color: "#f04452", percent: "22.2%" },
-  { name: "Paused", value: 0, color: "#f4b740", percent: "0%" },
-  { name: "Restarting", value: 0, color: "#9857e8", percent: "0%" },
+  { name: "Running", value: 28, color: "oklch(0.7087 0.1492 161.5)", percent: "77.8%" },
+  { name: "Stopped", value: 8, color: "oklch(0.6406 0.2075 21.05)", percent: "22.2%" },
+  { name: "Paused", value: 0, color: "oklch(0.8158 0.1472 80.2)", percent: "0%" },
+  { name: "Restarting", value: 0, color: "oklch(0.6018 0.2107 300.85)", percent: "0%" },
 ];
 
 const runningContainers = [
@@ -56,17 +56,17 @@ const topImages = [
 ];
 
 const hosts = [
-  { name: "host-01", count: 14, percent: "38.9%", width: "100%", color: "#2563eb" },
-  { name: "host-02", count: 10, percent: "27.8%", width: "72%", color: "#8b5cf6" },
-  { name: "host-03", count: 8, percent: "22.2%", width: "57%", color: "#10b981" },
-  { name: "host-04", count: 4, percent: "11.1%", width: "29%", color: "#f59e0b" },
+  { name: "host-01", count: 14, percent: "38.9%", width: "100%", color: "oklch(0.5461 0.2152 262.88)" },
+  { name: "host-02", count: 10, percent: "27.8%", width: "72%", color: "oklch(0.6056 0.2189 292.72)" },
+  { name: "host-03", count: 8, percent: "22.2%", width: "57%", color: "oklch(0.6959 0.1491 162.48)" },
+  { name: "host-04", count: 4, percent: "11.1%", width: "29%", color: "oklch(0.7686 0.1647 70.08)" },
 ];
 
 const networks = [
-  { name: "bridge", count: 18, percent: "50.0%", width: "100%", color: "#8b5cf6" },
-  { name: "frontend", count: 8, percent: "22.2%", width: "44%", color: "#2563eb" },
-  { name: "backend", count: 6, percent: "16.7%", width: "33%", color: "#10b981" },
-  { name: "monitoring", count: 4, percent: "11.1%", width: "22%", color: "#f59e0b" },
+  { name: "bridge", count: 18, percent: "50.0%", width: "100%", color: "oklch(0.6056 0.2189 292.72)" },
+  { name: "frontend", count: 8, percent: "22.2%", width: "44%", color: "oklch(0.5461 0.2152 262.88)" },
+  { name: "backend", count: 6, percent: "16.7%", width: "33%", color: "oklch(0.6959 0.1491 162.48)" },
+  { name: "monitoring", count: 4, percent: "11.1%", width: "22%", color: "oklch(0.7686 0.1647 70.08)" },
 ];
 
 const events = [
@@ -81,11 +81,11 @@ const totalContainerCount = Number(stats.find((item) => item.label === "Total Co
 const dockerDisk = { used: 18.4, total: 92.6 };
 
 const resourceUsage = [
-  { name: "CPU Usage", used: 32.4, total: 100, detail: "12 of 37.1 cores", color: "#2563eb" },
-  { name: "Memory Usage", used: 68.7, total: 100, detail: "11.0 GB of 16.0 GB", color: "#16a34a" },
-  { name: "Disk Usage", used: 41.2, total: 100, detail: "92.6 GB of 224 GB", color: "#f59e0b" },
-  { name: "Containers", used: runningContainerCount, total: totalContainerCount, detail: `${runningContainerCount} of ${totalContainerCount} running`, color: "#8B5CF6" },
-  { name: "Docker", used: dockerDisk.used, total: dockerDisk.total, detail: `${dockerDisk.used.toFixed(1)} GB of ${dockerDisk.total.toFixed(1)} GB`, color: "#06B6D4" },
+  { name: "CPU Usage", used: 32.4, total: 100, detail: "12 of 37.1 cores", color: "oklch(0.5461 0.2152 262.88)" },
+  { name: "Memory Usage", used: 68.7, total: 100, detail: "11.0 GB of 16.0 GB", color: "oklch(0.6271 0.1699 149.21)" },
+  { name: "Disk Usage", used: 41.2, total: 100, detail: "92.6 GB of 224 GB", color: "oklch(0.7686 0.1647 70.08)" },
+  { name: "Containers", used: runningContainerCount, total: totalContainerCount, detail: `${runningContainerCount} of ${totalContainerCount} running`, color: "oklch(0.6056 0.2189 292.72)" },
+  { name: "Docker", used: dockerDisk.used, total: dockerDisk.total, detail: `${dockerDisk.used.toFixed(1)} GB of ${dockerDisk.total.toFixed(1)} GB`, color: "oklch(0.7148 0.1257 215.22)" },
 ];
 
 function StateDonut({ compact = false }: { compact?: boolean }) {
@@ -207,7 +207,7 @@ export function ContainersDockerDashboard() {
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-                <Area dataKey="health" name="Healthy containers" type="monotone" stroke="#288af0" strokeWidth={2} fill="#288af0" fillOpacity={0.08} dot={{ r: 2 }} />
+                <Area dataKey="health" name="Healthy containers" type="monotone" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={2} fill="oklch(0.6311 0.1762 253.47)" fillOpacity={0.08} dot={{ r: 2 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

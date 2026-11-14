@@ -14,7 +14,7 @@ export function ErrorBudgetCard({ budget }: ErrorBudgetCardProps) {
   const circumference = 2 * Math.PI * radius;
   const remaining = Math.max(0, Math.min(100, budget.remainingPct));
   const dashOffset = circumference * (1 - remaining / 100);
-  const tone = remaining > 50 ? "#16A34A" : remaining > 15 ? "#D97706" : "#DC2626";
+  const tone = remaining > 50 ? "oklch(0.6271 0.1699 149.21)" : remaining > 15 ? "oklch(0.6658 0.1574 58.32)" : "oklch(0.5771 0.2152 27.33)";
   const burnTone = budget.burnRate <= 1 ? "text-emerald-700 dark:text-emerald-400" : budget.burnRate <= 2 ? "text-amber-700 dark:text-amber-300" : "text-rose-700 dark:text-rose-300";
 
   return (

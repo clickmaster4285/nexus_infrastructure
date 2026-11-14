@@ -29,7 +29,7 @@ const tooltip = {
     fontSize: 12,
     background: "var(--popover)",
     color: "var(--popover-foreground)",
-    boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
+    boxShadow: "0 0.25rem 0.875rem oklch(0.2779 0.0632 258.88 / 0.07)",
   },
   labelStyle: { color: "var(--muted-foreground)", marginBottom: 4 },
 };
@@ -82,7 +82,7 @@ function TrendChart({ data, keys, colors }: TrendChartProps) {
 }
 
 export function HealthTrendPanel({ className }: { className?: string }) {
-  const colors = ["#27b974", "#f2b51c", "#f04452"];
+  const colors = ["oklch(0.6958 0.1561 156.66)", "oklch(0.808 0.161 83.12)", "oklch(0.6406 0.2075 21.05)"];
   return (
     <Panel title="Infrastructure Health Trend" range="24h" className={className}>
       <TrendChart data={healthTrend as unknown as Record<string, unknown>[]} keys={["healthy", "warning", "critical"]} colors={colors} />
@@ -92,7 +92,7 @@ export function HealthTrendPanel({ className }: { className?: string }) {
 }
 
 export function UsagePanel({ className }: { className?: string }) {
-  const colors = ["#288af0", "#a647e8"];
+  const colors = ["oklch(0.6311 0.1762 253.47)", "oklch(0.598 0.234 307.76)"];
   return (
     <Panel title="CPU & Memory Usage" range="24h" className={className}>
       <TrendChart data={usageTrend as unknown as Record<string, unknown>[]} keys={["cpu", "memory"]} colors={colors} />
@@ -112,12 +112,12 @@ export function StoragePanel({ className }: { className?: string }) {
             <YAxis yAxisId="left" domain={[0, 8]} ticks={[0, 2, 4, 6, 8]} tickFormatter={(value: number) => `${value} TB`} {...axis} />
             <YAxis yAxisId="right" orientation="right" hide domain={[0, 8]} />
             <Tooltip {...tooltip} />
-            <Bar yAxisId="left" dataKey="used" fill="#398cf0" radius={[2, 2, 0, 0]} barSize={15} />
-            <Line yAxisId="right" dataKey="growth" stroke="#28bf77" strokeWidth={1.7} dot={{ r: 2.5, fill: "#28bf77" }} />
+            <Bar yAxisId="left" dataKey="used" fill="oklch(0.6397 0.1698 255.17)" radius={[2, 2, 0, 0]} barSize={15} />
+            <Line yAxisId="right" dataKey="growth" stroke="oklch(0.7122 0.1608 156.39)" strokeWidth={1.7} dot={{ r: 2.5, fill: "oklch(0.7122 0.1608 156.39)" }} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <Legend items={[{ name: "Used Space", color: "#288af0" }, { name: "Growth", color: "#28bf77" }]} />
+      <Legend items={[{ name: "Used Space", color: "oklch(0.6311 0.1762 253.47)" }, { name: "Growth", color: "oklch(0.7122 0.1608 156.39)" }]} />
     </Panel>
   );
 }
@@ -130,36 +130,36 @@ export function NetworkTrafficPanel({ className }: { className?: string }) {
           <AreaChart data={traffic} margin={{ top: 5, right: 18, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="inbound" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#288af0" stopOpacity={0.15} />
-                <stop offset="100%" stopColor="#288af0" stopOpacity={0} />
+                <stop offset="0%" stopColor="oklch(0.6311 0.1762 253.47)" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="oklch(0.6311 0.1762 253.47)" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="outbound" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#a647e8" stopOpacity={0.13} />
-                <stop offset="100%" stopColor="#a647e8" stopOpacity={0} />
+                <stop offset="0%" stopColor="oklch(0.598 0.234 307.76)" stopOpacity={0.13} />
+                <stop offset="100%" stopColor="oklch(0.598 0.234 307.76)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="var(--border)" vertical={false} />
             <XAxis dataKey="time" tickCount={7} interval={1} {...axis} />
             <YAxis width={68} domain={[0, 150]} ticks={[0, 50, 100, 150]} tickFormatter={(value: number) => `${value} Mbps`} {...axis} />
             <Tooltip {...tooltip} />
-            <Area type="monotone" dataKey="inbound" stroke="#288af0" fill="url(#inbound)" strokeWidth={2} dot={false} />
-            <Area type="monotone" dataKey="outbound" stroke="#a647e8" fill="url(#outbound)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="inbound" stroke="oklch(0.6311 0.1762 253.47)" fill="url(#inbound)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="outbound" stroke="oklch(0.598 0.234 307.76)" fill="url(#outbound)" strokeWidth={2} dot={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <Legend items={[{ name: "Inbound", color: "#288af0" }, { name: "Outbound", color: "#a647e8" }]} />
+      <Legend items={[{ name: "Inbound", color: "oklch(0.6311 0.1762 253.47)" }, { name: "Outbound", color: "oklch(0.598 0.234 307.76)" }]} />
     </Panel>
   );
 }
 
-const segmentColors = ["#31c883", "#63d899", "#efa937", "#a247df", "#8448d4"];
+const segmentColors = ["oklch(0.7395 0.1592 157.98)", "oklch(0.7981 0.1404 157.39)", "oklch(0.7835 0.1473 74.85)", "oklch(0.587 0.2241 308.42)", "oklch(0.5462 0.2048 299.14)"];
 
 export function AvailabilityPanel({ className }: { className?: string }) {
   return (
     <Panel title="Server Availability" range="24h" className={className}>
       <div className="flex flex-1 flex-col gap-3 pt-2">
         {serverAvailability.map((server) => (
-          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(6.25rem,1fr)_29px_1.2fr] items-center gap-2 text-[0.75rem] text-[#536782] dark:text-[#a9bcd2]">
+          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(6.25rem,1fr)_29px_1.2fr] items-center gap-2 text-[0.75rem] text-[oklch(0.5082_0.0495_256.03)] dark:text-[oklch(0.7879_0.0377_252.13)]">
             <span className="truncate">{server.name}</span>
             <span className="whitespace-nowrap text-right">{server.count}</span>
             <div className="flex h-2.5 overflow-hidden rounded-sm bg-muted" aria-hidden="true">

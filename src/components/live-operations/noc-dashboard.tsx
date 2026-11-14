@@ -34,9 +34,9 @@ const NocOsmMap = dynamic(
 );
 
 const STATUS = {
-  critical: { label: "Critical", color: "#ef4444", badge: "border-red-200 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300", Icon: AlertCircle },
-  high: { label: "High", color: "#f59e0b", badge: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-300", Icon: AlertCircle },
-  medium: { label: "Medium", color: "#60a5fa", badge: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300", Icon: Activity },
+  critical: { label: "Critical", color: "oklch(0.6368 0.2078 25.33)", badge: "border-red-200 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300", Icon: AlertCircle },
+  high: { label: "High", color: "oklch(0.7686 0.1647 70.08)", badge: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-300", Icon: AlertCircle },
+  medium: { label: "Medium", color: "oklch(0.7137 0.1434 254.62)", badge: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300", Icon: Activity },
 } as const;
 const FEED_TONE: Record<FeedTone, string> = {
   green: "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-300",
@@ -45,10 +45,10 @@ const FEED_TONE: Record<FeedTone, string> = {
   red: "bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-300",
 };
 const RESOURCE = {
-  cpu: { label: "CPU", color: "#60a5fa", unit: "%", icon: Cpu },
-  memory: { label: "Memory", color: "#34d399", unit: "%", icon: Database },
-  network: { label: "Network", color: "#a78bfa", unit: "Mbps", icon: Wifi },
-  disk: { label: "Disk", color: "#fbbf24", unit: "%", icon: HardDrive },
+  cpu: { label: "CPU", color: "oklch(0.7137 0.1434 254.62)", unit: "%", icon: Cpu },
+  memory: { label: "Memory", color: "oklch(0.7729 0.1535 163.22)", unit: "%", icon: Database },
+  network: { label: "Network", color: "oklch(0.709 0.1592 293.54)", unit: "Mbps", icon: Wifi },
+  disk: { label: "Disk", color: "oklch(0.8369 0.1644 84.43)", unit: "%", icon: HardDrive },
 } as const;
 const HEALTH_CHANGE_LABEL: Record<NocHealthChangeStatus, string> = {
   offline: "went offline",
@@ -56,9 +56,9 @@ const HEALTH_CHANGE_LABEL: Record<NocHealthChangeStatus, string> = {
   recovered: "recovered",
 };
 const HEALTH_CHANGE_COLOR: Record<NocHealthChangeStatus, string> = {
-  offline: "#ef4444",
-  degraded: "#f59e0b",
-  recovered: "#22c55e",
+  offline: "oklch(0.6368 0.2078 25.33)",
+  degraded: "oklch(0.7686 0.1647 70.08)",
+  recovered: "oklch(0.7227 0.192 149.58)",
 };
 const RANGE_COUNT: Record<NocResourceRange, number> = { "5m": 5, "15m": 15, "1h": 60 };
 const issueTabs: Array<{ value: TopIssueTab; label: string }> = [
@@ -128,7 +128,7 @@ function Donut({ data, total, label, size = 132, centerValue, centerLabel, cente
     return segment;
   });
   return <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={`${label}: ${total}`}>
-    <div className="absolute inset-0 rounded-full" style={{ background: `conic-gradient(${stops.join(",")})`, mask: `radial-gradient(farthest-side, transparent ${cutout}%, #000 ${cutout + 1}%)`, WebkitMask: `radial-gradient(farthest-side, transparent ${cutout}%, #000 ${cutout + 1}%)` }} />
+    <div className="absolute inset-0 rounded-full" style={{ background: `conic-gradient(${stops.join(",")})`, mask: `radial-gradient(farthest-side, transparent ${cutout}%, oklch(0 0 0) ${cutout + 1}%)`, WebkitMask: `radial-gradient(farthest-side, transparent ${cutout}%, oklch(0 0 0) ${cutout + 1}%)` }} />
     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className={cn("font-display text-[1.5rem] font-bold leading-none tabular-nums text-foreground", centerValueClassName)}>{centerValue ?? total}</b><span className="mt-1 text-[0.75rem] text-muted-foreground">{centerLabel ?? label}</span></div>
   </div>;
 }
@@ -190,9 +190,9 @@ function PanelTitle({ children }: { children: React.ReactNode }) {
 }
 
 function statusForAvailability(value: number, sla: number) {
-  if (value >= sla) return { color: "#34d399", label: "Healthy" };
-  if (value >= sla - 0.3) return { color: "#fbbf24", label: "Warning" };
-  return { color: "#f87171", label: "Critical" };
+  if (value >= sla) return { color: "oklch(0.7729 0.1535 163.22)", label: "Healthy" };
+  if (value >= sla - 0.3) return { color: "oklch(0.8369 0.1644 84.43)", label: "Warning" };
+  return { color: "oklch(0.7106 0.1661 22.22)", label: "Critical" };
 }
 
 function buildResourceOption(data: Array<{ time: string; value: number; load: number }>, tab: NocResourceTab, isDark: boolean): echarts.EChartsOption {
@@ -201,44 +201,44 @@ function buildResourceOption(data: Array<{ time: string; value: number; load: nu
   const average = values.reduce((sum, value) => sum + value, 0) / Math.max(values.length, 1);
   const peak = Math.max(...values);
   const loadAverage = data[data.length - 1]?.load ?? 0;
-  const axisColor = isDark ? "#94a3b8" : "#64748b";
-  const gridColor = isDark ? "#334155" : "#e2e8f0";
+  const axisColor = isDark ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)";
+  const gridColor = isDark ? "oklch(0.3717 0.0392 257.29)" : "oklch(0.9288 0.0126 255.51)";
   const loadAxisMax = Math.max(60, Math.ceil(Math.max(...data.map((point) => point.load), 0) / 20) * 20);
   return {
     animationDuration: 400,
     grid: { left: 46, right: 52, top: 12, bottom: 24, containLabel: false },
     legend: { show: false },
-    tooltip: { trigger: "axis", axisPointer: { type: "cross", lineStyle: { color: isDark ? "#94a3b8" : "#64748b", type: "dashed" } }, backgroundColor: isDark ? "#0f172a" : "#fff", borderColor: gridColor, textStyle: { color: isDark ? "#e2e8f0" : "#1e293b", fontSize: 12 }, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14);", formatter: (items: unknown) => {
+    tooltip: { trigger: "axis", axisPointer: { type: "cross", lineStyle: { color: isDark ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)", type: "dashed" } }, backgroundColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)", borderColor: gridColor, textStyle: { color: isDark ? "oklch(0.9288 0.0126 255.51)" : "oklch(0.2795 0.0368 260.03)", fontSize: 12 }, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14);", formatter: (items: unknown) => {
       const points = items as Array<{ axisValue: string; seriesName: string; value: number; color: string }>;
       return `<b>${points[0]?.axisValue ?? ""}</b><br/>${points.map((point) => `<span style="color:${point.color}">●</span> ${point.seriesName}: <b>${point.value}${point.seriesName === "Load Average" ? "" : ` ${config.unit}`}</b>`).join("<br/>")}`;
     } },
     xAxis: { type: "category", boundaryGap: false, data: data.map((point) => point.time), axisLabel: { color: axisColor, fontSize: 12, hideOverlap: true, interval: Math.max(1, Math.ceil((data.length - 1) / 5)), showMaxLabel: true, margin: 9 }, axisLine: { lineStyle: { color: gridColor } }, axisTick: { show: false } },
     yAxis: [
       { type: "value", min: 0, max: 100, interval: 25, axisLabel: { color: axisColor, fontSize: 12, formatter: (value: number) => `${Math.round(value)}${config.unit === "%" ? "%" : ""}` }, splitLine: { lineStyle: { color: gridColor, type: "dashed" } }, axisLine: { show: false } },
-      { type: "value", min: 0, max: loadAxisMax, interval: 20, axisLabel: { color: "#a78bfa", fontSize: 12 }, splitLine: { show: false }, axisLine: { show: false } },
+      { type: "value", min: 0, max: loadAxisMax, interval: 20, axisLabel: { color: "oklch(0.709 0.1592 293.54)", fontSize: 12 }, splitLine: { show: false }, axisLine: { show: false } },
     ],
     series: [
       { name: `${config.label} Usage`, type: "line", smooth: 0.3, showSymbol: false, emphasis: { focus: "series", showSymbol: true, symbolSize: 7 }, lineStyle: { width: 2, color: config.color }, itemStyle: { color: config.color }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${config.color}44` }, { offset: 1, color: `${config.color}00` }]) }, data: values },
-      { name: "Load Average", type: "line", yAxisIndex: 1, smooth: 0.3, showSymbol: false, emphasis: { focus: "series", showSymbol: true, symbolSize: 7 }, lineStyle: { width: 1.5, color: "#a78bfa", type: "dashed" }, itemStyle: { color: "#a78bfa" }, data: data.map((point) => point.load) },
+      { name: "Load Average", type: "line", yAxisIndex: 1, smooth: 0.3, showSymbol: false, emphasis: { focus: "series", showSymbol: true, symbolSize: 7 }, lineStyle: { width: 1.5, color: "oklch(0.709 0.1592 293.54)", type: "dashed" }, itemStyle: { color: "oklch(0.709 0.1592 293.54)" }, data: data.map((point) => point.load) },
     ],
     __nocSummary: { now: values.at(-1) ?? 0, average, peak, loadAverage },
   } as echarts.EChartsOption & { __nocSummary: { now: number; average: number; peak: number; loadAverage: number } };
 }
 
 function buildHealthTrendOption(data: NocHealthTrendPoint[], isDark: boolean): echarts.EChartsOption {
-  const axisColor = isDark ? "#94a3b8" : "#64748b";
-  const gridColor = isDark ? "#334155" : "#e2e8f0";
-  const markerColor = isDark ? "#e2e8f0" : "#1e293b";
+  const axisColor = isDark ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)";
+  const gridColor = isDark ? "oklch(0.3717 0.0392 257.29)" : "oklch(0.9288 0.0126 255.51)";
+  const markerColor = isDark ? "oklch(0.9288 0.0126 255.51)" : "oklch(0.2795 0.0368 260.03)";
   return {
     animationDuration: 300,
     grid: { left: 32, right: 8, top: 18, bottom: 18 },
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "cross", lineStyle: { color: axisColor, type: "dashed" } },
-      backgroundColor: isDark ? "#0f172a" : "#fff",
+      backgroundColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)",
       borderColor: gridColor,
-      textStyle: { color: isDark ? "#e2e8f0" : "#1e293b", fontSize: 12 },
-      extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14);",
+      textStyle: { color: isDark ? "oklch(0.9288 0.0126 255.51)" : "oklch(0.2795 0.0368 260.03)", fontSize: 12 },
+      extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14);",
       formatter: (items: unknown) => {
         const points = items as Array<{ axisValue?: string }>;
         const point = data.find((item) => item.time === points[0]?.axisValue);
@@ -268,18 +268,18 @@ function buildHealthTrendOption(data: NocHealthTrendPoint[], isDark: boolean): e
       type: "line",
       smooth: true,
       showSymbol: false,
-      lineStyle: { width: 2, color: "#3b82f6" },
-      itemStyle: { color: "#3b82f6" },
-      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: "rgba(59,130,246,0.28)" }, { offset: 1, color: "rgba(59,130,246,0.02)" }]) },
+      lineStyle: { width: 2, color: "oklch(0.6231 0.188 259.81)" },
+      itemStyle: { color: "oklch(0.6231 0.188 259.81)" },
+      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: "oklch(0.6231 0.188 259.81 / 0.28)" }, { offset: 1, color: "oklch(0.6231 0.188 259.81 / 0.02)" }]) },
       data: data.map((point) => point.health),
       markPoint: {
         symbol: "circle",
         symbolSize: 8,
-        label: { show: true, position: "top", formatter: "{b}", fontSize: 12, color: markerColor, backgroundColor: isDark ? "#1e293b" : "#fff", borderRadius: 4, padding: [2, 4] },
+        label: { show: true, position: "top", formatter: "{b}", fontSize: 12, color: markerColor, backgroundColor: isDark ? "oklch(0.2795 0.0368 260.03)" : "oklch(1 0 89.88)", borderRadius: 4, padding: [2, 4] },
         data: data.filter((point): point is NocHealthTrendPoint & { eventLabel: string } => Boolean(point.eventLabel)).map((point) => ({
           name: point.eventLabel,
           coord: [point.time, point.health],
-          itemStyle: { color: point.eventTone === "amber" ? "#f59e0b" : "#ef4444" },
+          itemStyle: { color: point.eventTone === "amber" ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.6368 0.2078 25.33)" },
         })),
       },
     }],
@@ -495,7 +495,7 @@ export function LiveOperationsNoc() {
             </div>
           </section>
           <div className="mt-1.5 grid grid-cols-3 gap-1.5" aria-label={`${healthRange} infrastructure metrics`}>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+            <div className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] px-2 py-1.5 dark:bg-slate-800/60">
               <span className="block text-[0.75rem] leading-4 text-muted-foreground">Avg Uptime</span>
               <span className="mt-0.5 flex items-baseline justify-between gap-1">
                 <b className="text-[0.9375rem] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.averageUptime.toFixed(1)}%</b>
@@ -504,14 +504,14 @@ export function LiveOperationsNoc() {
                 </span>
               </span>
             </div>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+            <div className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] px-2 py-1.5 dark:bg-slate-800/60">
               <span className="block text-[0.75rem] leading-4 text-muted-foreground">Open Incidents</span>
               <span className="mt-0.5 flex items-baseline justify-between gap-1">
                 <b className="text-[0.9375rem] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.openIncidents}</b>
                 <span className="text-[0.75rem] text-muted-foreground">{healthMetrics.newIncidents} new</span>
               </span>
             </div>
-            <div className="min-w-0 rounded-lg bg-[#F8F9FB] px-2 py-1.5 dark:bg-slate-800/60">
+            <div className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] px-2 py-1.5 dark:bg-slate-800/60">
               <span className="block text-[0.75rem] leading-4 text-muted-foreground">MTTR</span>
               <b className="mt-0.5 block text-[0.9375rem] font-bold leading-tight tabular-nums text-foreground">{healthMetrics.mttrMinutes}m</b>
             </div>
@@ -686,7 +686,7 @@ export function LiveOperationsNoc() {
             </div>
           </div>
           <div className="mt-auto grid grid-cols-3 gap-2">
-            <div className="min-w-0 rounded-lg bg-[#f8f9fb] p-2.5 dark:bg-[#1c2b40]">
+            <div className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-[oklch(0.2863_0.0439_256.9)]">
               <span className="block text-[0.75rem] text-muted-foreground">Healthiest group</span>
               <b className="mt-1 block truncate whitespace-nowrap text-[0.9375rem] font-bold leading-tight text-foreground" title={`${healthiestGroup.name} ${healthiestGroup.health}%`}>{healthiestGroup.name} {healthiestGroup.health}%</b>
               <span className="mt-1 block truncate text-[0.75rem] text-muted-foreground">
@@ -701,7 +701,7 @@ export function LiveOperationsNoc() {
                 document.getElementById("noc-active-alerts")?.scrollIntoView({ behavior: "smooth", block: "center" });
               }}
               aria-label={`Show ${attentionGroup.name} alerts`}
-              className="min-w-0 rounded-lg bg-[#f8f9fb] p-2.5 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-[#1c2b40] dark:hover:bg-muted"
+              className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-[oklch(0.2863_0.0439_256.9)] dark:hover:bg-muted"
             >
               <span className="block text-[0.75rem] text-muted-foreground">Needs attention</span>
               <b className="mt-1 block truncate whitespace-nowrap text-[0.9375rem] font-bold leading-tight text-foreground" title={`${attentionGroup.name} ${attentionGroup.health}%`}>{attentionGroup.name} {attentionGroup.health}%</b>
@@ -711,7 +711,7 @@ export function LiveOperationsNoc() {
                   : "No active alerts"}
               </span>
             </button>
-            <div className="min-w-0 rounded-lg bg-[#f8f9fb] p-2.5 dark:bg-[#1c2b40]">
+            <div className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-[oklch(0.2863_0.0439_256.9)]">
               <span className="block text-[0.75rem] text-muted-foreground">Open alerts</span>
               <b className="mt-1 block truncate whitespace-nowrap text-[0.9375rem] font-bold leading-tight text-foreground">{serverGroupAlertCount}</b>
             </div>
@@ -726,7 +726,7 @@ export function LiveOperationsNoc() {
 
     <section aria-label="Issues, events and collectors" className="grid items-stretch gap-4 xl:grid-cols-3">
       <Panel title={<PanelTitle>Top Issues</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<Segmented value={topIssueTab} options={issueTabs} onChange={setTopIssueTab} label="Top issue metric" />}>
-        <div className="flex flex-1 flex-col"><ul className="flex flex-1 flex-col justify-between divide-y divide-border/60">{nocTopIssues[topIssueTab].map((issue, index) => { const color = issue.percent > 90 ? "#ef4444" : issue.percent >= 75 ? "#f59e0b" : "#60a5fa"; return <li key={issue.name} className="grid min-h-[3rem] grid-cols-[minmax(5.625rem,.8fr)_minmax(3.75rem,1fr)_auto] items-center gap-2 py-1"><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground" title={issue.name}>{issue.name}</b><span className="text-[0.75rem] text-muted-foreground">{issue.duration}</span></span><span className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${issue.percent}%`, backgroundColor: color }} /></span><b className="w-[3rem] text-right text-[0.8125rem] tabular-nums text-foreground">{issue.percent}%</b></li>; })}</ul><CardFooter><span>Showing {nocTopIssues[topIssueTab].length} of {nocFleet.total} servers</span><span className="flex gap-2 text-[0.75rem]"><span className="text-red-600">● &gt;90%</span><span className="text-amber-600">● 75–90%</span></span></CardFooter></div>
+        <div className="flex flex-1 flex-col"><ul className="flex flex-1 flex-col justify-between divide-y divide-border/60">{nocTopIssues[topIssueTab].map((issue, index) => { const color = issue.percent > 90 ? "oklch(0.6368 0.2078 25.33)" : issue.percent >= 75 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.7137 0.1434 254.62)"; return <li key={issue.name} className="grid min-h-[3rem] grid-cols-[minmax(5.625rem,.8fr)_minmax(3.75rem,1fr)_auto] items-center gap-2 py-1"><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground" title={issue.name}>{issue.name}</b><span className="text-[0.75rem] text-muted-foreground">{issue.duration}</span></span><span className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${issue.percent}%`, backgroundColor: color }} /></span><b className="w-[3rem] text-right text-[0.8125rem] tabular-nums text-foreground">{issue.percent}%</b></li>; })}</ul><CardFooter><span>Showing {nocTopIssues[topIssueTab].length} of {nocFleet.total} servers</span><span className="flex gap-2 text-[0.75rem]"><span className="text-red-600">● &gt;90%</span><span className="text-amber-600">● 75–90%</span></span></CardFooter></div>
       </Panel>
 
       <Panel title={<PanelTitle>Recent Events</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<a href="/events-explorer" className="text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight className="ml-1 inline" size={13} /></a>}>
@@ -742,7 +742,7 @@ export function LiveOperationsNoc() {
     <section aria-label="Operations and on-call" className="grid items-stretch gap-4 xl:grid-cols-3">
       <Panel title={<PanelTitle>Live Operations Feed</PanelTitle>} className="min-h-[24.375rem] p-4 xl:col-span-2" headerClassName="h-10" action={<div className="flex items-center gap-2"><Badge variant="success" className="gap-1.5 border-transparent bg-emerald-50 text-[0.75rem] text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300"><span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />Live Stream</Badge><Button variant="outline" className="h-8 gap-1.5 px-2.5 text-[0.75rem]" aria-pressed={feedPaused} onClick={() => setFeedPaused((value) => !value)}>{feedPaused ? <Play size={13} /> : <Pause size={13} />}{feedPaused ? "Resume" : "Pause"}</Button></div>}>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div className="flex flex-wrap gap-1" role="group" aria-label="Filter operations feed">{([{ value: "all", label: "All" }, { value: "critical", label: "Critical" }, { value: "warning", label: "Warning" }, { value: "info", label: "Info" }, { value: "success", label: "Success" }] as const).map(({ value, label }) => <button key={value} type="button" onClick={() => setFeedFilter(value)} aria-pressed={feedFilter === value} className={cn("rounded-full border px-2.5 py-1 text-[0.75rem]", feedFilter === value ? "border-primary/30 bg-primary/10 font-semibold text-primary" : "border-border text-muted-foreground")}>{label}</button>)}</div><span className="text-[0.75rem] text-muted-foreground">{feedPaused ? `${nocFeedBufferedCount} new events` : "Newest first"}</span></div>
-        <ul ref={feedRef} onScroll={(event) => { feedWasAtTop.current = event.currentTarget.scrollTop < 8; }} className="max-h-[19.25rem] flex-1 divide-y divide-border/60 overflow-y-auto [scrollbar-color:#94a3b8_transparent] [scrollbar-width:thin]" aria-label="Live operations events">{feedItems.length ? feedItems.map((item) => <li key={`${item.time}-${item.message}`} className="grid h-11 grid-cols-[44px_28px_minmax(0,1fr)_auto_3.375rem] items-center gap-2 animate-noc-feed-slide-in motion-reduce:animate-none"><time className="w-11 shrink-0 whitespace-nowrap text-[0.75rem] tabular-nums text-muted-foreground">{item.time}</time><span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full", FEED_TONE[item.tone])}><Icon name={item.icon} size={14} /></span><span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={item.message}>{item.message}</span><span className="max-w-[7.375rem] truncate rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground" title={item.source}>{item.source}</span><span className={cn("text-right text-[0.75rem] font-semibold capitalize", item.severity === "critical" ? "text-red-600 dark:text-red-400" : item.severity === "warning" ? "text-amber-600 dark:text-amber-400" : item.severity === "success" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400")}>{item.severity}<small className="block whitespace-nowrap font-normal text-muted-foreground">{item.relativeTime}</small></span></li>) : <li className="grid h-20 place-items-center text-[0.8125rem] text-muted-foreground">No events match this filter.</li>}</ul>
+        <ul ref={feedRef} onScroll={(event) => { feedWasAtTop.current = event.currentTarget.scrollTop < 8; }} className="max-h-[19.25rem] flex-1 divide-y divide-border/60 overflow-y-auto [scrollbar-color:oklch(0.7107_0.0351_256.79)_transparent] [scrollbar-width:thin]" aria-label="Live operations events">{feedItems.length ? feedItems.map((item) => <li key={`${item.time}-${item.message}`} className="grid h-11 grid-cols-[44px_28px_minmax(0,1fr)_auto_3.375rem] items-center gap-2 animate-noc-feed-slide-in motion-reduce:animate-none"><time className="w-11 shrink-0 whitespace-nowrap text-[0.75rem] tabular-nums text-muted-foreground">{item.time}</time><span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full", FEED_TONE[item.tone])}><Icon name={item.icon} size={14} /></span><span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={item.message}>{item.message}</span><span className="max-w-[7.375rem] truncate rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground" title={item.source}>{item.source}</span><span className={cn("text-right text-[0.75rem] font-semibold capitalize", item.severity === "critical" ? "text-red-600 dark:text-red-400" : item.severity === "warning" ? "text-amber-600 dark:text-amber-400" : item.severity === "success" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400")}>{item.severity}<small className="block whitespace-nowrap font-normal text-muted-foreground">{item.relativeTime}</small></span></li>) : <li className="grid h-20 place-items-center text-[0.8125rem] text-muted-foreground">No events match this filter.</li>}</ul>
       </Panel>
 
       <Panel title={<PanelTitle>On-Call &amp; Escalation</PanelTitle>} className="min-h-[20.625rem] p-4" headerClassName="h-10" action={<Badge variant="outline" className="gap-1 text-[0.75rem]"><span className="h-2 w-2 rounded-full bg-emerald-500" />On duty</Badge>}>
@@ -781,5 +781,5 @@ function CollectorSpark({ values, name }: { values: number[]; name: string }) {
   const width = 56, height = 16, min = Math.min(...values), max = Math.max(...values), range = max - min || 1;
   const points = values.map((value, index) => [2 + index * ((width - 4) / Math.max(1, values.length - 1)), height - 2 - ((value - min) / range) * (height - 4)] as const);
   const path = points.map(([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
-  return <svg viewBox={`0 0 ${width} ${height}`} className="h-4 w-14" role="img" aria-label={`${name} ingestion trend`}><path d={path} fill="none" stroke="#60a5fa" strokeWidth="1.7" strokeLinecap="round" /></svg>;
+  return <svg viewBox={`0 0 ${width} ${height}`} className="h-4 w-14" role="img" aria-label={`${name} ingestion trend`}><path d={path} fill="none" stroke="oklch(0.7137 0.1434 254.62)" strokeWidth="1.7" strokeLinecap="round" /></svg>;
 }

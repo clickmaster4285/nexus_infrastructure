@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export const SEVERITY_META: Record<"SEV1" | "SEV2" | "SEV3" | "SEV4", { label: string; icon: LucideIcon; badge: string; stripe: string; dot: string }> = {
-  SEV1: { label: "SEV1 Critical", icon: ChevronsUp, badge: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400", stripe: "shadow-[inset_3px_0_0_0_#DC2626]", dot: "#DC2626" },
-  SEV2: { label: "SEV2 High", icon: ChevronUp, badge: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400", stripe: "shadow-[inset_3px_0_0_0_#EA580C]", dot: "#EA580C" },
-  SEV3: { label: "SEV3 Medium", icon: Minus, badge: "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-400", stripe: "shadow-[inset_3px_0_0_0_#D97706]", dot: "#F59E0B" },
-  SEV4: { label: "SEV4 Low", icon: ChevronDown, badge: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "shadow-[inset_3px_0_0_0_#3B82F6]", dot: "#3B82F6" },
+  SEV1: { label: "SEV1 Critical", icon: ChevronsUp, badge: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.5771_0.2152_27.33)]", dot: "oklch(0.5771 0.2152 27.33)" },
+  SEV2: { label: "SEV2 High", icon: ChevronUp, badge: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6461_0.1943_41.12)]", dot: "oklch(0.6461 0.1943 41.12)" },
+  SEV3: { label: "SEV3 Medium", icon: Minus, badge: "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6658_0.1574_58.32)]", dot: "oklch(0.7686 0.1647 70.08)" },
+  SEV4: { label: "SEV4 Low", icon: ChevronDown, badge: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6231_0.188_259.81)]", dot: "oklch(0.6231 0.188 259.81)" },
 };
 
 export const STATUS_META: Record<"Investigating" | "Identified" | "Monitoring" | "Resolved", { icon: LucideIcon; badge: string }> = {

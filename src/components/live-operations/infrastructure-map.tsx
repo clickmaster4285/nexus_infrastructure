@@ -12,9 +12,9 @@ import { nocMarkers, type MarkerStatus, type NocMarker } from "@/data/mock/live-
 import { MAP_TILES } from "@/components/live-operations/map-tiles";
 
 const statusColors: Record<MarkerStatus, string> = {
-  healthy: "#22c55e",
-  warning: "#f59e0b",
-  critical: "#ef4444",
+  healthy: "oklch(0.7227 0.192 149.58)",
+  warning: "oklch(0.7686 0.1647 70.08)",
+  critical: "oklch(0.6368 0.2078 25.33)",
 };
 
 // Esri World Canvas — free basemap, no API key (attribution shown on the map).
@@ -94,7 +94,7 @@ function NocMap({
           center={[marker.lat, marker.lng]}
           radius={marker.status === "critical" ? 7.5 : 5.5}
           pathOptions={{
-            color: "#ffffff",
+            color: "oklch(1 0 89.88)",
             weight: 1.6,
             fillColor: statusColors[marker.status],
             fillOpacity: 0.95,
@@ -125,7 +125,7 @@ function MapZoomControls({ center, zoom, light, fitMarkers, markers, fitPadding 
     }
   };
   const buttonTone = light
-    ? "border-[#d8e2ef] bg-white/95 text-[#284466] hover:bg-blue-50 focus-visible:ring-[#3788f3]"
+    ? "border-[oklch(0.9091_0.0208_254.92)] bg-white/95 text-[oklch(0.3812_0.0677_254.12)] hover:bg-blue-50 focus-visible:ring-[oklch(0.6325_0.1785_256.79)]"
     : "border-white/15 bg-slate-950/85 text-slate-100 hover:bg-slate-800 focus-visible:ring-cyan-400";
   return (
     <div className="absolute left-2 top-2 z-[500] flex flex-col overflow-hidden rounded-md border border-white/30 shadow-md shadow-slate-900/15 backdrop-blur-sm" role="group" aria-label="Map navigation">
@@ -167,10 +167,10 @@ const lightLegendLabel: Record<MarkerStatus, string> = {
 };
 
 const lightLegend = (counts?: MapLegendCounts, overlay = false, labels?: Partial<Record<MarkerStatus, string>>) => (
-  <div className={cn("flex items-center justify-center gap-3 text-[0.75rem] font-medium", overlay ? "max-w-none flex-nowrap rounded-full bg-white/90 px-2.5 py-1.5 text-[#52637a] shadow-md backdrop-blur-sm" : "flex-none border-t border-border bg-[#f5f7fb] px-2 py-1.5 text-[#52637a]")}>
+  <div className={cn("flex items-center justify-center gap-3 text-[0.75rem] font-medium", overlay ? "max-w-none flex-nowrap rounded-full bg-white/90 px-2.5 py-1.5 text-[oklch(0.4946_0.0425_256.06)] shadow-md backdrop-blur-sm" : "flex-none border-t border-border bg-[oklch(0.9758_0.0057_264.53)] px-2 py-1.5 text-[oklch(0.4946_0.0425_256.06)]")}>
     {(["healthy", "warning", "critical"] as const).map((status) => {
       return (
-        <span key={status} className="flex items-center gap-1.5 whitespace-nowrap text-[0.75rem] font-medium text-[#52637a]">
+        <span key={status} className="flex items-center gap-1.5 whitespace-nowrap text-[0.75rem] font-medium text-[oklch(0.4946_0.0425_256.06)]">
           <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: statusColors[status] }} />
           {labels?.[status] ?? lightLegendLabel[status]}
           {counts?.[status] != null && <b className="tabular-nums text-foreground">{counts[status]}</b>}
@@ -217,7 +217,7 @@ export function InfrastructureMap({
   const [expanded, setExpanded] = useState(false);
   const [tileFailed, setTileFailed] = useState(false);
   const isLight = variant === "light";
-  const fallback = fallbackOnTileError && tileFailed ? <div className="absolute inset-0 z-[430] overflow-y-auto bg-[#eef2f7] p-3 text-slate-700" role="status" aria-label="Map tiles unavailable; location list fallback"><p className="mb-2 text-[0.75rem] font-semibold">Map tiles unavailable · Locations</p><ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">{markers.map((marker) => <li key={marker.name} className="flex min-w-0 items-center justify-between gap-2 rounded-md bg-white/90 px-2.5 py-1.5 text-[0.75rem] shadow-sm"><span className="flex min-w-0 items-center gap-2 truncate"><i className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: statusColors[marker.status] }} />{marker.name}</span><b className="shrink-0 tabular-nums">{marker.health ?? "—"}%</b></li>)}</ul></div> : null;
+  const fallback = fallbackOnTileError && tileFailed ? <div className="absolute inset-0 z-[430] overflow-y-auto bg-[oklch(0.9595_0.008_253.85)] p-3 text-slate-700" role="status" aria-label="Map tiles unavailable; location list fallback"><p className="mb-2 text-[0.75rem] font-semibold">Map tiles unavailable · Locations</p><ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">{markers.map((marker) => <li key={marker.name} className="flex min-w-0 items-center justify-between gap-2 rounded-md bg-white/90 px-2.5 py-1.5 text-[0.75rem] shadow-sm"><span className="flex min-w-0 items-center gap-2 truncate"><i className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: statusColors[marker.status] }} />{marker.name}</span><b className="shrink-0 tabular-nums">{marker.health ?? "—"}%</b></li>)}</ul></div> : null;
 
   useEffect(() => {
     if (!expanded) return undefined;
@@ -241,7 +241,7 @@ export function InfrastructureMap({
       className={cn(
         "absolute right-2 top-2 z-[500] grid h-7 w-7 cursor-pointer place-items-center rounded-md border backdrop-blur-sm transition-colors",
         isLight
-          ? "border-border bg-white/85 text-[#52637a] hover:bg-white"
+          ? "border-border bg-white/85 text-[oklch(0.4946_0.0425_256.06)] hover:bg-white"
           : "border-white/10 bg-slate-950/70 text-slate-100 hover:bg-slate-800",
       )}
     >
@@ -280,7 +280,7 @@ export function InfrastructureMap({
   if (isLight) {
     return (
       <div className="relative flex h-full w-full flex-col overflow-hidden rounded-md border border-border">
-        <div className="relative min-h-0 flex-1 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#eef2f7] [&_.leaflet-tooltip-pane]:!z-[450] [&_.leaflet-tooltip]:!max-w-[16.25rem] [&_.leaflet-tooltip]:!whitespace-normal [&_.leaflet-tooltip]:!break-words [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-white/90 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[0.625rem] [&_.leaflet-control-attribution]:!text-slate-500 [&_.leaflet-control-attribution_a]:!text-slate-600 [&_.leaflet-tile]:transition-opacity [&_.leaflet-tile]:duration-300 [&_.leaflet-control-attribution]:!z-[450]">
+        <div className="relative min-h-0 flex-1 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[oklch(0.9595_0.008_253.85)] [&_.leaflet-tooltip-pane]:!z-[450] [&_.leaflet-tooltip]:!max-w-[16.25rem] [&_.leaflet-tooltip]:!whitespace-normal [&_.leaflet-tooltip]:!break-words [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-white/90 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[0.625rem] [&_.leaflet-control-attribution]:!text-slate-500 [&_.leaflet-control-attribution_a]:!text-slate-600 [&_.leaflet-tile]:transition-opacity [&_.leaflet-tile]:duration-300 [&_.leaflet-control-attribution]:!z-[450]">
           <NocMap zoom={zoom} variant="light" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} minZoom={minZoom} criticalPulseOnly={criticalPulseOnly} onTileError={() => setTileFailed(true)} onMarkerClick={onMarkerClick} />
           {fallback}
           {expandButton}
@@ -292,7 +292,7 @@ export function InfrastructureMap({
   }
 
     return (
-    <div className="relative h-full w-full overflow-hidden rounded-md border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[#0b1220] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-slate-950/70 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[0.625rem] [&_.leaflet-control-attribution]:!text-slate-400 [&_.leaflet-control-attribution_a]:!text-slate-300">
+    <div className="relative h-full w-full overflow-hidden rounded-md border border-white/10 [&_.leaflet-container]:h-full [&_.leaflet-container]:w-full [&_.leaflet-container]:bg-[oklch(0.1831_0.0309_263.38)] [&_.leaflet-control-attribution]:!rounded [&_.leaflet-control-attribution]:!bg-slate-950/70 [&_.leaflet-control-attribution]:!px-1.5 [&_.leaflet-control-attribution]:!py-0.5 [&_.leaflet-control-attribution]:!max-w-none [&_.leaflet-control-attribution]:!whitespace-nowrap [&_.leaflet-control-attribution]:!text-right [&_.leaflet-control-attribution]:!text-[0.625rem] [&_.leaflet-control-attribution]:!text-slate-400 [&_.leaflet-control-attribution_a]:!text-slate-300">
       <NocMap zoom={zoom} variant="dark" markers={markers} center={center} fitMarkers={fitMarkers} fitPadding={fitPadding} criticalPulseOnly={criticalPulseOnly} onMarkerClick={onMarkerClick} />
       {expandButton}
       {fallback}

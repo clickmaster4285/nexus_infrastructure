@@ -15,33 +15,33 @@ interface HealthItem {
 }
 
 const healthItems: HealthItem[] = [
-  { label: "Healthy", value: infrastructureHealth.healthy, percent: 79, icon: ShieldCheck, tone: "green", color: "#22c55e" },
-  { label: "Degraded", value: infrastructureHealth.degraded, percent: 17, icon: TriangleAlert, tone: "amber", color: "#f59e0b" },
-  { label: "Offline", value: infrastructureHealth.offline, percent: 4, icon: CircleAlert, tone: "red", color: "#ef4444" },
+  { label: "Healthy", value: infrastructureHealth.healthy, percent: 79, icon: ShieldCheck, tone: "green", color: "oklch(0.7227 0.192 149.58)" },
+  { label: "Degraded", value: infrastructureHealth.degraded, percent: 17, icon: TriangleAlert, tone: "amber", color: "oklch(0.7686 0.1647 70.08)" },
+  { label: "Offline", value: infrastructureHealth.offline, percent: 4, icon: CircleAlert, tone: "red", color: "oklch(0.6368 0.2078 25.33)" },
 ];
 
 const resourceTone: Record<string, string> = {
-  blue: "bg-[#e8f2ff] text-[#2784e4]",
-  purple: "bg-[#f0eaff] text-[#9152df]",
-  teal: "bg-[#e3f7f5] text-[#27aa9d]",
+  blue: "bg-[oklch(0.9575_0.0205_254.91)] text-[oklch(0.6101_0.1679_253.22)]",
+  purple: "bg-[oklch(0.9479_0.0287_298.89)] text-[oklch(0.5813_0.2061_300.67)]",
+  teal: "bg-[oklch(0.9609_0.0211_189.57)] text-[oklch(0.6677_0.1093_184.8)]",
 };
 
 const resourceBar: Record<string, string> = {
-  blue: "bg-gradient-to-r from-[#479bf0] to-[#3385e5]",
-  purple: "bg-gradient-to-r from-[#ad70eb] to-[#9254df]",
-  teal: "bg-gradient-to-r from-[#50caba] to-[#32b5a6]",
+  blue: "bg-gradient-to-r from-[oklch(0.6769_0.1501_251.25)] to-[oklch(0.6159_0.1651_254.79)]",
+  purple: "bg-gradient-to-r from-[oklch(0.6619_0.1826_304.82)] to-[oklch(0.5851_0.2036_300.78)]",
+  teal: "bg-gradient-to-r from-[oklch(0.7664_0.1108_183.29)] to-[oklch(0.7006_0.1121_183.72)]",
 };
 
 const iconToneText: Record<string, string> = {
-  green: "text-[#20b475] fill-[#20b47520]",
-  amber: "text-[#efa333] fill-[#efa33320]",
-  red: "text-[#ef4b59] fill-[#ef4b5920]",
+  green: "text-[oklch(0.6818_0.1505_158.51)] fill-[oklch(0.6818_0.1505_158.51_/_0.125)]",
+  amber: "text-[oklch(0.7721_0.1492_71.68)] fill-[oklch(0.7721_0.1492_71.68_/_0.125)]",
+  red: "text-[oklch(0.6469_0.1996_20.06)] fill-[oklch(0.6469_0.1996_20.06_/_0.125)]",
 };
 
 const alertChips = [
-  { severity: "critical", label: "3 Critical", className: "bg-[#fef0f0] text-[#dc3d46] hover:bg-[#fde3e3] dark:bg-[#492a35] dark:text-[#ff8b98]" },
-  { severity: "warning", label: "5 Warning", className: "bg-[#fff4e7] text-amber-600 hover:bg-[#ffe8d1] dark:bg-[#493a29] dark:text-[#ffc16e]" },
-  { severity: "info", label: "2 Info", className: "bg-[#edf5ff] text-[#2876cc] hover:bg-[#dcebfb] dark:bg-[#243b58] dark:text-[#9bc9f4]" },
+  { severity: "critical", label: "3 Critical", className: "bg-[oklch(0.9661_0.0151_17.42)] text-[oklch(0.5987_0.1952_22.48)] hover:bg-[oklch(0.937_0.0286_17.67)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" },
+  { severity: "warning", label: "5 Warning", className: "bg-[oklch(0.9722_0.0209_72.16)] text-amber-600 hover:bg-[oklch(0.9436_0.0395_67.32)] dark:bg-[oklch(0.3598_0.0347_69.88)] dark:text-[oklch(0.8508_0.123_72.9)]" },
+  { severity: "info", label: "2 Info", className: "bg-[oklch(0.967_0.0159_253.9)] text-[oklch(0.5638_0.1524_253.98)] hover:bg-[oklch(0.9337_0.027_249.85)] dark:bg-[oklch(0.3478_0.0588_254.82)] dark:text-[oklch(0.8185_0.0779_247.08)]" },
 ] as const;
 
 interface InfrastructureHealthPanelProps {
@@ -81,7 +81,7 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
       {/* Resource utilization */}
       <div className="mb-3 mt-3 flex items-center justify-between">
         <b className="font-display text-[0.875rem] font-bold">Resource Utilization</b>
-        <button type="button" className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[#4284c1] transition-colors hover:text-[#2f6ea8]">
+        <button type="button" className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[oklch(0.5977_0.1154_248.69)] transition-colors hover:text-[oklch(0.5254_0.1121_249.21)]">
           View Details <ArrowRight size={12} aria-hidden="true" />
         </button>
       </div>
@@ -92,7 +92,7 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
               <Icon name={resource.icon} size={14} />
             </span>
             <div className="min-w-0 flex-1">
-              <div className="mb-1 flex items-center justify-between text-[0.75rem] text-[#61758d] dark:text-[#a9bcd2]">
+              <div className="mb-1 flex items-center justify-between text-[0.75rem] text-[oklch(0.5553_0.0444_253.21)] dark:text-[oklch(0.7879_0.0377_252.13)]">
                 <span>{resource.label}</span>
                 <b className="font-semibold text-foreground">{resource.value}%</b>
               </div>
@@ -111,7 +111,7 @@ export function InfrastructureHealthPanel({ onAlertSelect, className }: Infrastr
           <button
             type="button"
             onClick={() => onAlertSelect?.()}
-            className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[#4284c1] transition-colors hover:text-[#2f6ea8]"
+            className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[oklch(0.5977_0.1154_248.69)] transition-colors hover:text-[oklch(0.5254_0.1121_249.21)]"
           >
             View all <ArrowRight size={12} aria-hidden="true" />
           </button>

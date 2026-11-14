@@ -58,11 +58,11 @@ export const infrastructureNodes: InfrastructureNodes = {
 };
 
 export const providerDistribution: DonutDatum[] = [
-  { name: 'AWS', value: 22, color: '#f49a24' },
-  { name: 'DigitalOcean', value: 12, color: '#2684f5' },
-  { name: 'Hetzner', value: 6, color: '#ef4655' },
-  { name: 'On-Prem', value: 4, color: '#974be8' },
-  { name: 'Others', value: 4, color: '#95a7bd' },
+  { name: 'AWS', value: 22, color: 'oklch(0.7611 0.1594 66.41)' },
+  { name: 'DigitalOcean', value: 12, color: 'oklch(0.6211 0.1895 256.06)' },
+  { name: 'Hetzner', value: 6, color: 'oklch(0.6413 0.2045 20.38)' },
+  { name: 'On-Prem', value: 4, color: 'oklch(0.5853 0.2258 301.97)' },
+  { name: 'Others', value: 4, color: 'oklch(0.7217 0.0379 253.52)' },
 ];
 
 export interface AssetsByEnvironment { name: string; total: number; segments: number[] }

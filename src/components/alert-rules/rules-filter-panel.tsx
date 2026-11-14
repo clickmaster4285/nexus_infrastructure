@@ -42,13 +42,13 @@ interface RulesFilterPanelProps {
 const SEVERITY_OPTIONS: MultiSelectOption[] = RULE_SEVERITIES.map((severity) => ({
   value: severity,
   label: severity,
-  dot: severity === "Critical" ? "#DC2626" : severity === "Warning" ? "#D97706" : "#3B82F6",
+  dot: severity === "Critical" ? "oklch(0.5771 0.2152 27.33)" : severity === "Warning" ? "oklch(0.6658 0.1574 58.32)" : "oklch(0.6231 0.188 259.81)",
 }));
 
 const STATUS_OPTIONS: MultiSelectOption[] = RULE_STATUSES.map((status) => ({
   value: status,
   label: status,
-  dot: status === "Enabled" ? "#16A34A" : status === "Muted" ? "#94A3B8" : "#64748B",
+  dot: status === "Enabled" ? "oklch(0.6271 0.1699 149.21)" : status === "Muted" ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)",
 }));
 
 const TARGET_OPTIONS: MultiSelectOption[] = TARGET_TYPES.map((type) => ({ value: type, label: type }));

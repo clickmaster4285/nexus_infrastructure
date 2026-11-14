@@ -49,12 +49,12 @@ echarts.use([
  * ------------------------------------------------------------------ */
 
 const PALETTE = {
-  blue: "#60A5FA",
-  green: "#34D399",
-  purple: "#A78BFA",
-  amber: "#FBBF24",
-  red: "#F87171",
-  slate: "#94A3B8",
+  blue: "oklch(0.7137 0.1434 254.62)",
+  green: "oklch(0.7729 0.1535 163.22)",
+  purple: "oklch(0.709 0.1592 293.54)",
+  amber: "oklch(0.8369 0.1644 84.43)",
+  red: "oklch(0.7106 0.1661 22.22)",
+  slate: "oklch(0.7107 0.0351 256.79)",
 } as const;
 
 /** Percentile of a sorted numeric list, using linear interpolation. */
@@ -519,14 +519,14 @@ interface ChartTheme {
 }
 
 const FALLBACK_THEME: ChartTheme = {
-  foreground: "#15243b",
-  muted: "#eef2f8",
-  mutedForeground: "#738198",
-  border: "#e3e9f1",
-  card: "#ffffff",
-  popover: "#ffffff",
-  popoverForeground: "#15243b",
-  axisLabel: "#64748B",
+  foreground: "oklch(0.2595 0.0482 258.68)",
+  muted: "oklch(0.9598 0.0091 258.34)",
+  mutedForeground: "oklch(0.6001 0.0389 260.33)",
+  border: "oklch(0.9318 0.0126 255.51)",
+  card: "oklch(1 0 89.88)",
+  popover: "oklch(1 0 89.88)",
+  popoverForeground: "oklch(0.2595 0.0482 258.68)",
+  axisLabel: "oklch(0.5544 0.0407 257.42)",
   dark: false,
 };
 
@@ -543,7 +543,7 @@ function readChartTheme(scope: Element | null): ChartTheme {
     card: read("--card", FALLBACK_THEME.card),
     popover: read("--popover", FALLBACK_THEME.popover),
     popoverForeground: read("--popover-foreground", FALLBACK_THEME.popoverForeground),
-    axisLabel: dark ? "#94A3B8" : "#64748B",
+    axisLabel: dark ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)",
     dark,
   };
 }
@@ -575,7 +575,7 @@ function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; val
   const body = rows
     .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1.25rem;line-height:1.1875rem"><span style="display:flex;align-items:center;gap:0.375rem;color:${theme.mutedForeground}"><i style="width:0.5rem;height:0.5rem;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
     .join("");
-  return `<div style="min-width:11rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem rgba(16,32,58,0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
+  return `<div style="min-width:11rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem oklch(0.2447 0.0544 259.66 / 0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
 }
 
 /** ECharts wrapper - initialises only once the container has a real size. */
@@ -714,7 +714,7 @@ interface SummaryTileConfig {
 function SummaryTile({ label, value, trend, change, good }: SummaryTileConfig) {
   const improving = change === good;
   return (
-    <div className="rounded-lg bg-[#F8F9FB] px-3 py-2 dark:bg-[#1c2b40]">
+    <div className="rounded-lg bg-[oklch(0.9819_0.0029_264.54)] px-3 py-2 dark:bg-[oklch(0.2863_0.0439_256.9)]">
       <p className="text-[0.75rem] text-muted-foreground">{label}</p>
       <p className="font-display text-[1rem] font-bold leading-tight text-foreground">{value}</p>
       <p className={cn("mt-0.5 flex items-center gap-0.5 text-[0.75rem]", improving ? "text-emerald-600" : "text-rose-600")}>
@@ -1441,7 +1441,7 @@ export function WebsiteApiMonitoringDashboard() {
                                 "h-11 border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50",
                                 monitor.status === "Down" && "bg-rose-50/60 dark:bg-rose-950/25",
                               )}
-                              style={monitor.status === "Down" ? { boxShadow: "inset 0.1875rem 0 0 0 #F87171" } : undefined}
+                              style={monitor.status === "Down" ? { boxShadow: "inset 0.1875rem 0 0 0 oklch(0.7106 0.1661 22.22)" } : undefined}
                             >
                               <td className="whitespace-nowrap px-1.5 text-left">
                                 <span className="flex items-center gap-1.5">

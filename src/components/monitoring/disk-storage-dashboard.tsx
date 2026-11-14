@@ -152,27 +152,27 @@ const topThroughput = (() => {
 })();
 
 const storageSlices = [
-  { name: "Used", value: 12.45, color: "#2878ed" },
-  { name: "Free", value: 7.85, color: "#35b879" },
-  { name: "Snapshots", value: 1.25, color: "#8a45df" },
-  { name: "Other", value: 0.75, color: "#f39a12" },
+  { name: "Used", value: 12.45, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "Free", value: 7.85, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Snapshots", value: 1.25, color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Other", value: 0.75, color: "oklch(0.7593 0.163 68.27)" },
 ];
 const totalStorageTB = storageSlices.reduce((total, item) => total + item.value, 0);
 const totalPartitions = TOTAL_DISKS * 2;
 
 const usageBands = [
-  { name: "0-50%", value: 24, color: "#35b879" },
-  { name: "50-75%", value: 18, color: "#2878ed" },
-  { name: "75-90%", value: 8, color: "#f39a12" },
-  { name: "90-100%", value: 6, color: "#ed3346" },
+  { name: "0-50%", value: 24, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "50-75%", value: 18, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "75-90%", value: 8, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "90-100%", value: 6, color: "oklch(0.6197 0.2192 21.68)" },
 ];
 
 const fileSystems = [
-  { name: "xfs", value: 42, color: "#35b879" },
-  { name: "ext4", value: 30, color: "#8a45df" },
-  { name: "ntfs", value: 12, color: "#f39a12" },
-  { name: "btrfs", value: 8, color: "#2878ed" },
-  { name: "other", value: 6, color: "#20b9d1" },
+  { name: "xfs", value: 42, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "ext4", value: 30, color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "ntfs", value: 12, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "btrfs", value: 8, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "other", value: 6, color: "oklch(0.723 0.1206 211.73)" },
 ];
 const totalFileSystems = fileSystems.reduce((total, item) => total + item.value, 0);
 
@@ -203,13 +203,13 @@ const throughputWriteValues = throughputHistory.map((point) => point.write);
 const iopsValues = iopsHistory.map((point) => point.read + point.write);
 
 const alerts = [
-  { text: "Disk usage high on web-01 (/dev/sda1)", ago: "2m ago", tone: "critical", color: "#F87171" },
-  { text: "Disk I/O wait time high on db-01", ago: "8m ago", tone: "warning", color: "#FBBF24" },
-  { text: "Disk usage high on app-server-02 (/)", ago: "12m ago", tone: "warning", color: "#FBBF24" },
-  { text: "Disk space low on logs-01 (/var/log)", ago: "18m ago", tone: "warning", color: "#FBBF24" },
-  { text: "Disk temperature high on backup-01", ago: "25m ago", tone: "info", color: "#60A5FA" },
-  { text: "Disk I/O latency elevated on db-02", ago: "31m ago", tone: "warning", color: "#FBBF24" },
-  { text: "Filesystem check completed on archive-01", ago: "42m ago", tone: "info", color: "#60A5FA" },
+  { text: "Disk usage high on web-01 (/dev/sda1)", ago: "2m ago", tone: "critical", color: "oklch(0.7106 0.1661 22.22)" },
+  { text: "Disk I/O wait time high on db-01", ago: "8m ago", tone: "warning", color: "oklch(0.8369 0.1644 84.43)" },
+  { text: "Disk usage high on app-server-02 (/)", ago: "12m ago", tone: "warning", color: "oklch(0.8369 0.1644 84.43)" },
+  { text: "Disk space low on logs-01 (/var/log)", ago: "18m ago", tone: "warning", color: "oklch(0.8369 0.1644 84.43)" },
+  { text: "Disk temperature high on backup-01", ago: "25m ago", tone: "info", color: "oklch(0.7137 0.1434 254.62)" },
+  { text: "Disk I/O latency elevated on db-02", ago: "31m ago", tone: "warning", color: "oklch(0.8369 0.1644 84.43)" },
+  { text: "Filesystem check completed on archive-01", ago: "42m ago", tone: "info", color: "oklch(0.7137 0.1434 254.62)" },
 ];
 const TOTAL_ALERTS = 24;
 
@@ -278,7 +278,7 @@ function TrendChart({
       canvas.height = image.naturalHeight || 360;
       const context = canvas.getContext("2d");
       if (context) {
-        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "#ffffff";
+        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "oklch(1 0 89.88)";
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, 0, 0);
         const link = document.createElement("a");
@@ -300,7 +300,7 @@ function TrendChart({
       {lines.map((line) => {
         const isOn = enabled.includes(line.key);
         const latest = Number(visibleData.at(-1)?.[line.key] ?? 0);
-        return <button key={line.key} title={isOn ? `Hide ${line.name}` : "Click to show"} aria-pressed={isOn} onClick={() => setEnabled((current) => isOn ? current.filter((key) => key !== line.key) : [...current, line.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[0.75rem] font-medium ${isOn ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: isOn ? line.color : "#94a3b8" }} />{line.name}<b className="tabular-nums">{latest.toFixed(line.unit === "%" ? 1 : 0)} {line.unit}</b></button>;
+        return <button key={line.key} title={isOn ? `Hide ${line.name}` : "Click to show"} aria-pressed={isOn} onClick={() => setEnabled((current) => isOn ? current.filter((key) => key !== line.key) : [...current, line.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[0.75rem] font-medium ${isOn ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: isOn ? line.color : "oklch(0.7107 0.0351 256.79)" }} />{line.name}<b className="tabular-nums">{latest.toFixed(line.unit === "%" ? 1 : 0)} {line.unit}</b></button>;
       })}
     </div>
     <div ref={chartRef} data-chart-id={id} className="relative min-h-[13.75rem] flex-1" aria-label={`${id} chart, latest point ${latestTime ?? ""}`}>
@@ -312,7 +312,7 @@ function TrendChart({
         </BarChart> : <AreaChart data={visibleData} syncId="disk-storage-trends" syncMethod="value" stackOffset={kind === "stacked" ? "none" : undefined} margin={{ top: 8, right: 16, left: 2, bottom: 0 }}>
           <defs>{lines.map((line) => <linearGradient key={line.key} id={`${id}-${line.key}-fill`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={line.color} stopOpacity={line.key === "other" ? 0.25 : 0.35} /><stop offset="100%" stopColor={line.color} stopOpacity={0.05} /></linearGradient>)}</defs>
           <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical /><XAxis dataKey="time" ticks={ticks} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} padding={{ left: 4, right: 16 }} /><YAxis domain={kind === "stacked" ? [0, 100] : [0, maxY]} ticks={kind === "stacked" ? [0, 25, 50, 75, 100] : [0, 100, 200, 300]} tickFormatter={(value) => unitTitle ? String(value) : `${value}%`} width={40} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<DiskChartTooltip lines={lines} />} />
-          {kind === "stacked" && <ReferenceLine y={85} stroke="#F87171" strokeDasharray="4 4" />}
+          {kind === "stacked" && <ReferenceLine y={85} stroke="oklch(0.7106 0.1661 22.22)" strokeDasharray="4 4" />}
           {peak && <ReferenceDot x={peak.time} y={peak.value} r={4} fill={lines[0]?.color} stroke="var(--card)" strokeWidth={2} />}
           {activeLines.map((line) => <Area key={line.key} dataKey={line.key} name={line.name} type="monotone" stroke={line.color} strokeWidth={2} fill={`url(#${id}-${line.key}-fill)`} dot={false} activeDot={{ r: 4 }} stackId={kind === "stacked" ? "capacity" : undefined} />)}
         </AreaChart>}
@@ -595,7 +595,7 @@ export function DiskStorageDashboard() {
       canvas.height = image.naturalHeight || 360;
       const context = canvas.getContext("2d");
       if (context) {
-        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "#ffffff";
+        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "oklch(1 0 89.88)";
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, 0, 0);
         const link = document.createElement("a");
@@ -634,14 +634,14 @@ export function DiskStorageDashboard() {
       </section>
 
       <section aria-label="Storage trends" className="grid items-stretch gap-2.5 xl:grid-cols-3">
-        <Panel title="Disk Usage Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("disk-usage-trend")} exportCsv={() => exportChartCsv("disk-usage-trend", diskUsageHistory, [{ key: "used", name: "Used", color: "#2878ed", unit: "%" }, { key: "other", name: "Other", color: "#f39a12", unit: "%" }, { key: "free", name: "Free", color: "#35b879", unit: "%" }])} toast={toast} />}>
-          <TrendChart id="disk-usage-trend" data={diskUsageHistory} lines={[{ key: "used", name: "Used", color: "#2878ed", unit: "%" }, { key: "other", name: "Other", color: "#f39a12", unit: "%" }, { key: "free", name: "Free", color: "#35b879", unit: "%" }]} kind="stacked" range={chartRange} aggregation={aggregation} summary={[{ label: "Used", value: `${diskUsagePercent.toFixed(1)}%` }, { label: "Trend vs yesterday", value: "▲ 0.4%", tone: "text-success" }, { label: "Forecast", value: `Full in ~${Math.round((100 - diskUsagePercent) / 1.02)} days` }]} onToast={toast} />
+        <Panel title="Disk Usage Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("disk-usage-trend")} exportCsv={() => exportChartCsv("disk-usage-trend", diskUsageHistory, [{ key: "used", name: "Used", color: "oklch(0.5906 0.1926 258.69)", unit: "%" }, { key: "other", name: "Other", color: "oklch(0.7593 0.163 68.27)", unit: "%" }, { key: "free", name: "Free", color: "oklch(0.6969 0.146 157.59)", unit: "%" }])} toast={toast} />}>
+          <TrendChart id="disk-usage-trend" data={diskUsageHistory} lines={[{ key: "used", name: "Used", color: "oklch(0.5906 0.1926 258.69)", unit: "%" }, { key: "other", name: "Other", color: "oklch(0.7593 0.163 68.27)", unit: "%" }, { key: "free", name: "Free", color: "oklch(0.6969 0.146 157.59)", unit: "%" }]} kind="stacked" range={chartRange} aggregation={aggregation} summary={[{ label: "Used", value: `${diskUsagePercent.toFixed(1)}%` }, { label: "Trend vs yesterday", value: "▲ 0.4%", tone: "text-success" }, { label: "Forecast", value: `Full in ~${Math.round((100 - diskUsagePercent) / 1.02)} days` }]} onToast={toast} />
         </Panel>
-        <Panel title="I/O Throughput Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("io-throughput-trend")} exportCsv={() => exportChartCsv("io-throughput-trend", throughputHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "MB/s" }, { key: "write", name: "Write", color: "#35b879", unit: "MB/s" }])} toast={toast} />}>
-          <TrendChart id="io-throughput-trend" data={throughputHistory} lines={[{ key: "read", name: "Read", color: "#2878ed", unit: "MB/s" }, { key: "write", name: "Write", color: "#35b879", unit: "MB/s" }]} kind="area" range={chartRange} aggregation={aggregation} unitTitle="MB/s" summary={[{ label: "Avg Read", value: `${averageOf(throughputReadValues).toFixed(1)} MB/s` }, { label: "Avg Write", value: `${averageOf(throughputWriteValues).toFixed(1)} MB/s` }]} onToast={toast} />
+        <Panel title="I/O Throughput Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("io-throughput-trend")} exportCsv={() => exportChartCsv("io-throughput-trend", throughputHistory, [{ key: "read", name: "Read", color: "oklch(0.5906 0.1926 258.69)", unit: "MB/s" }, { key: "write", name: "Write", color: "oklch(0.6969 0.146 157.59)", unit: "MB/s" }])} toast={toast} />}>
+          <TrendChart id="io-throughput-trend" data={throughputHistory} lines={[{ key: "read", name: "Read", color: "oklch(0.5906 0.1926 258.69)", unit: "MB/s" }, { key: "write", name: "Write", color: "oklch(0.6969 0.146 157.59)", unit: "MB/s" }]} kind="area" range={chartRange} aggregation={aggregation} unitTitle="MB/s" summary={[{ label: "Avg Read", value: `${averageOf(throughputReadValues).toFixed(1)} MB/s` }, { label: "Avg Write", value: `${averageOf(throughputWriteValues).toFixed(1)} MB/s` }]} onToast={toast} />
         </Panel>
-        <Panel title="IOPS Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("iops-trend")} exportCsv={() => exportChartCsv("iops-trend", iopsHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "IOPS" }, { key: "write", name: "Write", color: "#35b879", unit: "IOPS" }])} toast={toast} />}>
-          <TrendChart id="iops-trend" data={iopsHistory} lines={[{ key: "read", name: "Read", color: "#2878ed", unit: "IOPS" }, { key: "write", name: "Write", color: "#35b879", unit: "IOPS" }]} kind="bar" range={chartRange} aggregation={aggregation} summary={[{ label: "Avg IOPS", value: `${Math.round(averageOf(iopsValues)).toLocaleString()}` }, { label: "Peak IOPS", value: `${Math.max(...iopsValues).toLocaleString()}` }]} onToast={toast} />
+        <Panel title="IOPS Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("iops-trend")} exportCsv={() => exportChartCsv("iops-trend", iopsHistory, [{ key: "read", name: "Read", color: "oklch(0.5906 0.1926 258.69)", unit: "IOPS" }, { key: "write", name: "Write", color: "oklch(0.6969 0.146 157.59)", unit: "IOPS" }])} toast={toast} />}>
+          <TrendChart id="iops-trend" data={iopsHistory} lines={[{ key: "read", name: "Read", color: "oklch(0.5906 0.1926 258.69)", unit: "IOPS" }, { key: "write", name: "Write", color: "oklch(0.6969 0.146 157.59)", unit: "IOPS" }]} kind="bar" range={chartRange} aggregation={aggregation} summary={[{ label: "Avg IOPS", value: `${Math.round(averageOf(iopsValues)).toLocaleString()}` }, { label: "Peak IOPS", value: `${Math.max(...iopsValues).toLocaleString()}` }]} onToast={toast} />
         </Panel>
       </section>
 
@@ -720,7 +720,7 @@ export function DiskStorageDashboard() {
               { label: "Total Disks", value: TOTAL_DISKS.toLocaleString() },
               { label: "Total Partitions", value: totalPartitions.toLocaleString() },
               { label: "Total File Systems", value: totalFileSystems.toLocaleString() },
-            ].map(({ label, value }) => <div key={label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/70">
+            ].map(({ label, value }) => <div key={label} className="min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-slate-800/70">
               <div className="text-[0.75rem] leading-tight text-muted-foreground">{label}</div>
               <b className="mt-1 block text-[1rem] font-bold tabular-nums text-foreground">{value}</b>
             </div>)}

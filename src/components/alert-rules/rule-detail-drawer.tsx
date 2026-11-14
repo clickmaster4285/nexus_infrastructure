@@ -37,7 +37,7 @@ const STATUS_BADGE: Record<RuleStatus, { label: string; icon: typeof Zap; classN
 };
 
 const TYPE_BADGE: Record<RuleType, string> = {
-  Threshold: "bg-[#EEF2F7] text-[#33415C] dark:bg-slate-500/15 dark:text-slate-300",
+  Threshold: "bg-[oklch(0.9595_0.008_253.85)] text-[oklch(0.3753_0.0501_263.06)] dark:bg-slate-500/15 dark:text-slate-300",
   Anomaly: "bg-purple-100 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
   Composite: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
 };
@@ -179,7 +179,7 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
                 <XAxis dataKey="hour" interval={5} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
                 <YAxis allowDecimals={false} width={30} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
                 <Tooltip cursor={{ fill: "var(--muted)" }} contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
-                <Bar dataKey="fires" name="Fires" fill="#D97706" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="fires" name="Fires" fill="oklch(0.6658 0.1574 58.32)" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

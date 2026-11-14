@@ -38,34 +38,34 @@ echarts.use([BarChart, PieChart, BrushComponent, GridComponent, TooltipComponent
 /** Theme palette — resolved from the .dark class on <html>. */
 const TREND_THEME = {
   light: {
-    gridLine: "#E5E7EB",
-    baseline: "#D1D5DB",
-    axisLabel: "#6B7280",
-    cardGap: "#ffffff",
-    tooltipBg: "#ffffff",
-    tooltipBorder: "#E5E7EB",
+    gridLine: "oklch(0.9276 0.0058 264.53)",
+    baseline: "oklch(0.8717 0.0093 258.34)",
+    axisLabel: "oklch(0.551 0.0234 264.36)",
+    cardGap: "oklch(1 0 89.88)",
+    tooltipBg: "oklch(1 0 89.88)",
+    tooltipBorder: "oklch(0.9276 0.0058 264.53)",
     tooltipShadow: "none",
-    tooltipText: "#111827",
-    tooltipMuted: "#6B7280",
-    pointerLine: "#CBD5E1",
-    brushColor: "rgba(59, 130, 246, 0.10)",
-    brushBorder: "#3B82F6",
-    bar: { Critical: "#DC2626", Warning: "#D97706", Info: "#3B82F6", Debug: "#94A3B8" } as Record<EventSeverity, string>,
+    tooltipText: "oklch(0.2101 0.0318 264.66)",
+    tooltipMuted: "oklch(0.551 0.0234 264.36)",
+    pointerLine: "oklch(0.869 0.0198 252.89)",
+    brushColor: "oklch(0.6231 0.188 259.81 / 0.1)",
+    brushBorder: "oklch(0.6231 0.188 259.81)",
+    bar: { Critical: "oklch(0.5771 0.2152 27.33)", Warning: "oklch(0.6658 0.1574 58.32)", Info: "oklch(0.6231 0.188 259.81)", Debug: "oklch(0.7107 0.0351 256.79)" } as Record<EventSeverity, string>,
   },
   dark: {
-    gridLine: "#2A3342",
-    baseline: "#3A4658",
-    axisLabel: "#94A3B8",
-    cardGap: "#152236",
-    tooltipBg: "#152236",
-    tooltipBorder: "#2A3342",
+    gridLine: "oklch(0.3193 0.0296 260.54)",
+    baseline: "oklch(0.3911 0.0345 258.35)",
+    axisLabel: "oklch(0.7107 0.0351 256.79)",
+    cardGap: "oklch(0.2507 0.0423 258.76)",
+    tooltipBg: "oklch(0.2507 0.0423 258.76)",
+    tooltipBorder: "oklch(0.3193 0.0296 260.54)",
     tooltipShadow: "none",
-    tooltipText: "#E7EDF6",
-    tooltipMuted: "#94A3B8",
-    pointerLine: "#54617C",
-    brushColor: "rgba(59, 130, 246, 0.12)",
-    brushBorder: "#60A5FA",
-    bar: { Critical: "#EF4444", Warning: "#F59E0B", Info: "#60A5FA", Debug: "#94A3B8" } as Record<EventSeverity, string>,
+    tooltipText: "oklch(0.9442 0.0137 258.35)",
+    tooltipMuted: "oklch(0.7107 0.0351 256.79)",
+    pointerLine: "oklch(0.4923 0.0464 264.68)",
+    brushColor: "oklch(0.6231 0.188 259.81 / 0.12)",
+    brushBorder: "oklch(0.7137 0.1434 254.62)",
+    bar: { Critical: "oklch(0.6368 0.2078 25.33)", Warning: "oklch(0.7686 0.1647 70.08)", Info: "oklch(0.7137 0.1434 254.62)", Debug: "oklch(0.7107 0.0351 256.79)" } as Record<EventSeverity, string>,
   },
 } as const;
 
@@ -74,7 +74,7 @@ function getTrendTheme() {
   return TREND_THEME[dark ? "dark" : "light"];
 }
 
-const SEVERITY_COLORS: Record<EventSeverity, string> = { Critical: "#DC2626", Warning: "#D97706", Info: "#3B82F6", Debug: "#94A3B8" };
+const SEVERITY_COLORS: Record<EventSeverity, string> = { Critical: "oklch(0.5771 0.2152 27.33)", Warning: "oklch(0.6658 0.1574 58.32)", Info: "oklch(0.6231 0.188 259.81)", Debug: "oklch(0.7107 0.0351 256.79)" };
 const SEVERITY_BADGE: Record<EventSeverity, string> = {
   Critical: "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300",
   Warning: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
@@ -289,8 +289,8 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
         markPoint: {
           symbol: "circle",
           symbolSize: 7,
-          itemStyle: { color: "#94A3B8" },
-          label: { formatter: `Peak ${peakVisibleTotal.toLocaleString("en-US")}`, position: "top" as const, fontSize: 12, fontWeight: 700, color: "#6B7280", distance: 2 },
+          itemStyle: { color: "oklch(0.7107 0.0351 256.79)" },
+          label: { formatter: `Peak ${peakVisibleTotal.toLocaleString("en-US")}`, position: "top" as const, fontSize: 12, fontWeight: 700, color: "oklch(0.551 0.0234 264.36)", distance: 2 },
           data: [{ name: "Peak", coord: [peakLabel, peakVisibleTotal] }],
         },
       } : {}),
@@ -558,13 +558,13 @@ function Sparkline({ values, stroke, className }: { values: number[]; stroke: st
 
 /* Location / source / host horizontal bars */
 const ROW_HUES = [
-  { bar: "#38BDF8", icon: "text-sky-500 dark:text-sky-400" },
-  { bar: "#34D399", icon: "text-emerald-500 dark:text-emerald-400" },
-  { bar: "#A78BFA", icon: "text-violet-500 dark:text-violet-400" },
-  { bar: "#FBBF24", icon: "text-amber-500 dark:text-amber-400" },
-  { bar: "#FB7185", icon: "text-rose-500 dark:text-rose-400" },
-  { bar: "#2DD4BF", icon: "text-teal-500 dark:text-teal-400" },
-  { bar: "#F97316", icon: "text-orange-500 dark:text-orange-400" },
+  { bar: "oklch(0.7535 0.139 232.66)", icon: "text-sky-500 dark:text-sky-400" },
+  { bar: "oklch(0.7729 0.1535 163.22)", icon: "text-emerald-500 dark:text-emerald-400" },
+  { bar: "oklch(0.709 0.1592 293.54)", icon: "text-violet-500 dark:text-violet-400" },
+  { bar: "oklch(0.8369 0.1644 84.43)", icon: "text-amber-500 dark:text-amber-400" },
+  { bar: "oklch(0.7192 0.169 13.43)", icon: "text-rose-500 dark:text-rose-400" },
+  { bar: "oklch(0.7845 0.1325 181.91)", icon: "text-teal-500 dark:text-teal-400" },
+  { bar: "oklch(0.7049 0.1867 47.6)", icon: "text-orange-500 dark:text-orange-400" },
 ] as const;
 const SOURCE_TRENDS: Record<string, number> = { System: 12, Application: 8, Database: 15, Network: -5, Security: 3, Storage: 4 };
 const HOST_TRENDS: Record<string, number> = { "api-server-01": 12, "web-app-01": 9, "db-01": 15, "app-server-02": -4, "web-02": -7, "storage-01": 6 };
@@ -576,7 +576,7 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
   return (
     <div className="flex flex-1 flex-col justify-start gap-2 pt-3">
       {headerLabel && (
-        <div className="hidden grid-cols-[140px_minmax(0,1fr)_56px_4rem] items-center gap-x-3 border-b border-[#EEF0F4] pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.04em] text-muted-foreground dark:border-border sm:grid" aria-hidden="true">
+        <div className="hidden grid-cols-[140px_minmax(0,1fr)_56px_4rem] items-center gap-x-3 border-b border-[oklch(0.9548_0.0058_264.53)] pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.04em] text-muted-foreground dark:border-border sm:grid" aria-hidden="true">
           <span>{headerLabel}</span>
           <span>Volume</span>
           <span aria-hidden="true" />
@@ -603,7 +603,7 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
                   {trendUp ? <ArrowUpRight size={12} aria-hidden="true" /> : <ArrowDownRight size={12} aria-hidden="true" />}{Math.abs(trend ?? 0)}%
                 </span>
               ) : <span className="order-3 sm:order-4" aria-hidden="true" />}
-              <span className="order-4 col-span-full h-2 min-w-0 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700 sm:order-2 sm:col-span-1">
+              <span className="order-4 col-span-full h-2 min-w-0 overflow-hidden rounded-full bg-[oklch(0.9548_0.0058_264.53)] dark:bg-slate-700 sm:order-2 sm:col-span-1">
                 <span
                   className="block h-full rounded-full transition-all duration-300"
                   style={{ width: `${(row.count / max) * 100}%`, background: hue.bar }}
@@ -728,10 +728,10 @@ function SeverityWeekTrend({ activeSeverities }: { activeSeverities: ReadonlySet
 
 /* Distinct premium matte hues for the Top Database Sources rows (icons + bars) */
 const DB_SOURCE_HUES = [
-  { bar: "#38BDF8", icon: "text-sky-500 dark:text-sky-400" },
-  { bar: "#34D399", icon: "text-emerald-500 dark:text-emerald-400" },
-  { bar: "#A78BFA", icon: "text-violet-500 dark:text-violet-400" },
-  { bar: "#FBBF24", icon: "text-amber-500 dark:text-amber-400" },
+  { bar: "oklch(0.7535 0.139 232.66)", icon: "text-sky-500 dark:text-sky-400" },
+  { bar: "oklch(0.7729 0.1535 163.22)", icon: "text-emerald-500 dark:text-emerald-400" },
+  { bar: "oklch(0.709 0.1592 293.54)", icon: "text-violet-500 dark:text-violet-400" },
+  { bar: "oklch(0.8369 0.1644 84.43)", icon: "text-amber-500 dark:text-amber-400" },
 ] as const;
 
 /* Top database-backed sources — counts scale with severity filter */
@@ -758,7 +758,7 @@ function TopDatabaseSources({ activeSeverities, onSelect }: { activeSeverities: 
                 className="grid h-7 w-full grid-cols-[minmax(0,1fr)_minmax(4.375rem,1.4fr)_auto] items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span className="flex min-w-0 items-center gap-1.5 truncate font-mono text-[0.75rem] font-medium text-foreground"><Database size={11} className={cn("shrink-0", hue.icon)} aria-hidden="true" />{row.name}</span>
-                <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(row.visible / max) * 100}%`, background: hue.bar }} /></span>
+                <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[oklch(0.9548_0.0058_264.53)] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(row.visible / max) * 100}%`, background: hue.bar }} /></span>
                 <b className="w-9 text-right text-[0.75rem] tabular-nums text-foreground">{row.visible}</b>
               </button>
             </li>
@@ -786,7 +786,7 @@ function QuickInsightStrip() {
 /* ------------------------------------------------------------------ */
 /* Resolution status — stacked bar + legend; Open filters the table    */
 /* ------------------------------------------------------------------ */
-const RESOLUTION_BAR_COLOR: Record<string, string> = { Resolved: "#16A34A", Acknowledged: "#D97706", Open: "#DC2626" };
+const RESOLUTION_BAR_COLOR: Record<string, string> = { Resolved: "oklch(0.6271 0.1699 149.21)", Acknowledged: "oklch(0.6658 0.1574 58.32)", Open: "oklch(0.5771 0.2152 27.33)" };
 const RESOLUTION_BADGE: Record<string, string> = {
   Resolved: "text-emerald-700 dark:text-emerald-300",
   Acknowledged: "text-amber-800 dark:text-amber-300",
@@ -1059,12 +1059,12 @@ function RowActionMenu({ eventId, open, onToggle, onClose, onAcknowledge, onAssi
 /* Stat cards                                                          */
 /* ------------------------------------------------------------------ */
 const STAT_CARDS = [
-  { label: "Total Events", value: formatCompact(EVENT_TOTALS.total), icon: Bell, tone: "bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]", delta: 142, pct: "6.1%", dir: "up" as const },
-  { label: "Open Events", value: EVENT_TOTALS.open.toLocaleString("en-US"), icon: CircleAlert, tone: "bg-[#ffeaec] text-[#e83f4d] dark:bg-[#492a35] dark:text-[#ff8b98]", delta: 26, pct: "9.1%", dir: "down" as const },
-  { label: "Resolved", value: formatCompact(EVENT_TOTALS.resolved), icon: CheckCircle2, tone: "bg-[#dff7eb] text-[#13a564] dark:bg-[#123a2a] dark:text-[#4fd69a]", delta: 118, pct: "7.4%", dir: "up" as const },
-  { label: "Critical", value: EVENT_TOTALS.critical.toLocaleString("en-US"), icon: ShieldAlert, tone: "bg-[#ffeaec] text-[#e83f4d] dark:bg-[#492a35] dark:text-[#ff8b98]", delta: 8, pct: "6.9%", dir: "down" as const },
-  { label: "Warning", value: EVENT_TOTALS.warning.toLocaleString("en-US"), icon: Shield, tone: "bg-[#fff1d7] text-[#dc941c] dark:bg-[#493a29] dark:text-[#ffc16e]", delta: 21, pct: "6.8%", dir: "down" as const },
-  { label: "MTTR", value: `${EVENT_TOTALS.mttrMinutes}m`, icon: Activity, tone: "bg-[#f1eaff] text-[#874fe0] dark:bg-[#35264d] dark:text-[#bd98ff]", delta: -3, pct: "14.3%", dir: "down" as const },
+  { label: "Total Events", value: formatCompact(EVENT TOTALS.total), icon: Bell, tone: "bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]", delta: 142, pct: "6.1%", dir: "up" as const },
+  { label: "Open Events", value: EVENT_TOTALS.open.toLocaleString("en-US"), icon: CircleAlert, tone: "bg-[oklch(0.9544_0.023_10.96)] text-[oklch(0.6219_0.2045_21.23)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]", delta: 26, pct: "9.1%", dir: "down" as const },
+  { label: "Resolved", value: formatCompact(EVENT_TOTALS.resolved), icon: CheckCircle2, tone: "bg-[oklch(0.9553_0.0297_164.3)] text-[oklch(0.6367_0.1492_156.39)] dark:bg-[oklch(0.3149_0.0537_163.8)] dark:text-[oklch(0.7869_0.1465_160.69)]", delta: 118, pct: "7.4%", dir: "up" as const },
+  { label: "Critical", value: EVENT_TOTALS.critical.toLocaleString("en-US"), icon: ShieldAlert, tone: "bg-[oklch(0.9544_0.023_10.96)] text-[oklch(0.6219_0.2045_21.23)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]", delta: 8, pct: "6.9%", dir: "down" as const },
+  { label: "Warning", value: EVENT_TOTALS.warning.toLocaleString("en-US"), icon: Shield, tone: "bg-[oklch(0.9624_0.0373_83.03)] text-[oklch(0.7213_0.1471_72.82)] dark:bg-[oklch(0.3598_0.0347_69.88)] dark:text-[oklch(0.8508_0.123_72.9)]", delta: 21, pct: "6.8%", dir: "down" as const },
+  { label: "MTTR", value: `${EVENT_TOTALS.mttrMinutes}m`, icon: Activity, tone: "bg-[oklch(0.9487_0.0289_301)] text-[oklch(0.5675_0.2098_296.93)] dark:bg-[oklch(0.306_0.07_300.04)] dark:text-[oklch(0.7536_0.1483_299.39)]", delta: -3, pct: "14.3%", dir: "down" as const },
 ];
 
 const SEVERITY_FILTER_ORDER: Array<"All" | EventSeverity> = ["All", "Critical", "Warning", "Info"];
@@ -1467,7 +1467,7 @@ export function EventsExplorerDashboard() {
                 const count = EVENT_TRENDS[trendRange].reduce((sum, bucket) => sum + bucket[severity.toLowerCase() as "critical"], 0);
                 return (
                   <button key={severity} type="button" aria-pressed={!hidden} onClick={() => toggleSeries(severity)} title={`${hidden ? "Show" : "Hide"} ${severity} series`} className={cn("inline-flex h-8 items-center gap-1.5 rounded-full border px-2.5 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", hidden ? "border-transparent bg-muted text-muted-foreground opacity-60 line-through" : "border-border bg-card text-foreground")}>
-                    <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: hidden ? "#94a3b8" : SEVERITY_COLORS[severity] }} />
+                    <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: hidden ? "oklch(0.7107 0.0351 256.79)" : SEVERITY_COLORS[severity] }} />
                     {severity}
                     <b className="tabular-nums">{formatCompact(count)}</b>
                   </button>
@@ -1483,9 +1483,9 @@ export function EventsExplorerDashboard() {
             ) : (<>
               <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Trend summary statistics">
                 {[
-                  { label: "Total Events", value: visibleTotal.toLocaleString("en-US"), icon: Bell, spark: EVENT_TRENDS[trendRange].map((bucket) => bucket.total), stroke: "#94A3B8" },
-                  { label: "Peak Hour", value: trendSummary.peakTime, icon: Clock, spark: EVENT_TRENDS[trendRange].map((bucket) => bucket.critical), stroke: "#94A3B8" },
-                  { label: "Error Rate", value: `${trendSummary.errorRate.toFixed(1)}%`, icon: ShieldAlert, spark: EVENT_TRENDS[trendRange].map((bucket) => (bucket.total > 0 ? (bucket.critical / bucket.total) * 100 : 0)), stroke: "#DC2626" },
+                  { label: "Total Events", value: visibleTotal.toLocaleString("en-US"), icon: Bell, spark: EVENT_TRENDS[trendRange].map((bucket) => bucket.total), stroke: "oklch(0.7107 0.0351 256.79)" },
+                  { label: "Peak Hour", value: trendSummary.peakTime, icon: Clock, spark: EVENT_TRENDS[trendRange].map((bucket) => bucket.critical), stroke: "oklch(0.7107 0.0351 256.79)" },
+                  { label: "Error Rate", value: `${trendSummary.errorRate.toFixed(1)}%`, icon: ShieldAlert, spark: EVENT_TRENDS[trendRange].map((bucket) => (bucket.total > 0 ? (bucket.critical / bucket.total) * 100 : 0)), stroke: "oklch(0.5771 0.2152 27.33)" },
                 ].map((tile) => (
                   <div key={tile.label} className="flex h-[5.25rem] min-w-0 flex-col justify-between rounded-lg border border-border bg-card p-2">
                     <span className="flex items-center gap-1.5 truncate text-[0.75rem] font-medium text-muted-foreground"><tile.icon size={12} aria-hidden="true" className="shrink-0" />{tile.label}</span>
@@ -1499,7 +1499,7 @@ export function EventsExplorerDashboard() {
                   <span className="flex items-center gap-1.5 truncate text-[0.75rem] font-medium text-muted-foreground"><ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-rose-500" />vs Previous 24H</span>
                   <div className="flex items-end justify-between gap-1.5">
                     <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-1.5 py-0.5 text-[0.75rem] font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300"><ArrowUpRight size={11} aria-hidden="true" />6%</span>
-                    <span className="flex flex-col items-end"><Sparkline values={EVENT_TRENDS[trendRange].map((bucket) => bucket.total)} stroke="#94A3B8" /><span className="text-[0.75rem] text-muted-foreground">vs yesterday</span></span>
+                    <span className="flex flex-col items-end"><Sparkline values={EVENT_TRENDS[trendRange].map((bucket) => bucket.total)} stroke="oklch(0.7107 0.0351 256.79)" /><span className="text-[0.75rem] text-muted-foreground">vs yesterday</span></span>
                   </div>
                 </div>
               </div>
@@ -1527,7 +1527,7 @@ export function EventsExplorerDashboard() {
                         >
                           <span className="whitespace-nowrap text-[0.8125rem] font-medium tabular-nums text-foreground">{spike.label}</span>
                           <span className="text-[0.8125rem] tabular-nums text-muted-foreground">{spike.total.toLocaleString("en-US")} ev</span>
-                          <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(spike.total / maxSpike) * 100}%`, background: hue.bar }} /></span>
+                          <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[oklch(0.9548_0.0058_264.53)] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(spike.total / maxSpike) * 100}%`, background: hue.bar }} /></span>
                           <span className={cn("inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold", SEVERITY_BADGE[spike.dominant])}>{spike.dominant}</span>
                           <ArrowRight size={14} className="justify-self-end text-muted-foreground" aria-hidden="true" />
                         </button>

@@ -65,7 +65,7 @@ function ProfileMenu() {
         aria-expanded={open}
         className="flex items-center gap-2 rounded-md py-0.5 pl-1 pr-1 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:pl-1.5"
       >
-        <span className="grid h-7 w-7 place-items-center rounded-full bg-[#dce5ef] text-[0.75rem] font-bold text-[#3c526c] dark:bg-[#263951] dark:text-[#e2ebf5]">{initials}</span>
+        <span className="grid h-7 w-7 place-items-center rounded-full bg-[oklch(0.918_0.0167_250.85)] text-[0.75rem] font-bold text-[oklch(0.4317_0.0512_253.07)] dark:bg-[oklch(0.3399_0.0491_254.72)] dark:text-[oklch(0.9362_0.0166_250.85)]">{initials}</span>
         <span className="hidden lg:block">
           <span className="block text-[0.5625rem] font-semibold leading-tight text-foreground">{user?.name ?? "Admin"}</span>
           <span className="mt-0.5 block text-[0.5rem] leading-tight text-muted-foreground">{user?.role ?? "Super Administrator"}</span>

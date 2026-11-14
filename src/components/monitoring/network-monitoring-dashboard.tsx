@@ -55,11 +55,11 @@ const CHART_GROUP = "network-monitor";
 
 /** Muted palette shared by every chart on the page. */
 const COLORS = {
-  inbound: "#60A5FA",
-  outbound: "#34D399",
-  errors: "#F87171",
-  capacity: "#FBBF24",
-  neutral: "#64748B",
+  inbound: "oklch(0.7137 0.1434 254.62)",
+  outbound: "oklch(0.7729 0.1535 163.22)",
+  errors: "oklch(0.7106 0.1661 22.22)",
+  capacity: "oklch(0.8369 0.1644 84.43)",
+  neutral: "oklch(0.5544 0.0407 257.42)",
 };
 
 const stats: MetricStat[] = [
@@ -134,18 +134,18 @@ const errorInterfaces = [
 ];
 
 const interfaceStates = [
-  { name: "Up", status: "up", value: 112, color: "#35b879", percent: "87.5%" },
-  { name: "Warning", status: "warning", value: 10, color: "#f39a12", percent: "7.8%" },
-  { name: "Down", status: "down", value: 6, color: "#ed3346", percent: "4.7%" },
-  { name: "Disabled", status: "disabled", value: 0, color: "#aeb9c8", percent: "0%" },
+  { name: "Up", status: "up", value: 112, color: "oklch(0.6969 0.146 157.59)", percent: "87.5%" },
+  { name: "Warning", status: "warning", value: 10, color: "oklch(0.7593 0.163 68.27)", percent: "7.8%" },
+  { name: "Down", status: "down", value: 6, color: "oklch(0.6197 0.2192 21.68)", percent: "4.7%" },
+  { name: "Disabled", status: "disabled", value: 0, color: "oklch(0.7819 0.0246 256.12)", percent: "0%" },
 ];
 
 /** Traffic split by category, in TB. Single source for the traffic totals. */
 const trafficDistribution = [
-  { name: "Web Traffic", value: 1.62, percent: "37.1%", color: "#2878ed" },
-  { name: "DB Traffic", value: 1.15, percent: "26.3%", color: "#35b879" },
-  { name: "Streaming", value: 0.85, percent: "19.5%", color: "#8a45df" },
-  { name: "Other", value: 0.75, percent: "17.1%", color: "#f39a12" },
+  { name: "Web Traffic", value: 1.62, percent: "37.1%", color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "DB Traffic", value: 1.15, percent: "26.3%", color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Streaming", value: 0.85, percent: "19.5%", color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Other", value: 0.75, percent: "17.1%", color: "oklch(0.7593 0.163 68.27)" },
 ];
 
 /** Total traffic across the fleet, in TB (In + Out). */
@@ -153,10 +153,10 @@ const TOTAL_TRAFFIC_TB = Number(trafficDistribution.reduce((sum, item) => sum + 
 
 /** Protocol split, derived from the same total so both donuts always agree. */
 const protocols = [
-  { name: "TCP", share: 0.592, percent: "59.2%", color: "#2878ed" },
-  { name: "UDP", share: 0.278, percent: "27.8%", color: "#35b879" },
-  { name: "ICMP", share: 0.073, percent: "7.3%", color: "#8a45df" },
-  { name: "Other", share: 0.057, percent: "5.7%", color: "#f39a12" },
+  { name: "TCP", share: 0.592, percent: "59.2%", color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "UDP", share: 0.278, percent: "27.8%", color: "oklch(0.6969 0.146 157.59)" },
+  { name: "ICMP", share: 0.073, percent: "7.3%", color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Other", share: 0.057, percent: "5.7%", color: "oklch(0.7593 0.163 68.27)" },
 ].map((item) => ({
   name: item.name,
   value: Number((TOTAL_TRAFFIC_TB * item.share).toFixed(2)),
@@ -256,13 +256,13 @@ interface ChartTheme {
 }
 
 const FALLBACK_THEME: ChartTheme = {
-  foreground: "#15243b",
-  muted: "#eef2f8",
-  mutedForeground: "#738198",
-  border: "#e3e9f1",
-  card: "#ffffff",
-  popover: "#ffffff",
-  popoverForeground: "#15243b",
+  foreground: "oklch(0.2595 0.0482 258.68)",
+  muted: "oklch(0.9598 0.0091 258.34)",
+  mutedForeground: "oklch(0.6001 0.0389 260.33)",
+  border: "oklch(0.9318 0.0126 255.51)",
+  card: "oklch(1 0 89.88)",
+  popover: "oklch(1 0 89.88)",
+  popoverForeground: "oklch(0.2595 0.0482 258.68)",
   dark: false,
 };
 
@@ -320,7 +320,7 @@ function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; val
   const body = rows
     .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1.25rem;line-height:1.125rem"><span style="display:flex;align-items:center;gap:0.375rem;color:${theme.mutedForeground}"><i style="width:0.5rem;height:0.5rem;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
     .join("");
-  return `<div style="min-width:10.75rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem rgba(16,32,58,0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
+  return `<div style="min-width:10.75rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem oklch(0.2447 0.0544 259.66 / 0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
 }
 
 /**
@@ -382,7 +382,7 @@ function SeriesChip({ name, color, value, unit, enabled, onToggle }: {
         enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through",
       )}
     >
-      <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: enabled ? color : "#94a3b8" }} />
+      <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: enabled ? color : "oklch(0.7107 0.0351 256.79)" }} />
       {name}
       <b className="tabular-nums">{value} {unit}</b>
     </button>
@@ -842,7 +842,7 @@ export function NetworkMonitoringDashboard() {
       itemWidth: 12,
       itemHeight: 110,
       textStyle: { color: theme.mutedForeground, fontSize: 10 },
-      inRange: { color: ["#E8F1FE", "#60A5FA", "#1D4ED8"] },
+      inRange: { color: ["oklch(0.9552 0.02 257.47)", "oklch(0.7137 0.1434 254.62)", "oklch(0.4882 0.2172 264.38)"] },
     },
     series: [{
       name: "Utilisation",
@@ -978,7 +978,7 @@ export function NetworkMonitoringDashboard() {
             <table className="w-full min-w-[27.5rem] table-fixed text-left text-[0.75rem]">
               <colgroup><col style={{ width: "17%" }} /><col style={{ width: "27%" }} /><col style={{ width: "21%" }} /><col style={{ width: "23%" }} /><col style={{ width: "12%" }} /></colgroup>
               <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Bandwidth Usage", "In / Out (Mbps)", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[0.3125rem] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.inbound.toFixed(1)} / {item.outbound.toFixed(1)}</td><td className="px-1 py-[0.3125rem]"><svg viewBox="0 0 42 14" className="h-3 w-8" aria-label={`Trend for ${item.name}`}><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="#35b879" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
+              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[0.3125rem] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.inbound.toFixed(1)} / {item.outbound.toFixed(1)}</td><td className="px-1 py-[0.3125rem]"><svg viewBox="0 0 42 14" className="h-3 w-8" aria-label={`Trend for ${item.name}`}><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="oklch(0.6969 0.146 157.59)" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
             </table>
           </div>
           <div className="flex justify-between pt-1 text-[0.6875rem] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page: 5 · 1 · 2 · 3 · 4 · 5 · … · 26</span></div>

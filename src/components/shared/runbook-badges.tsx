@@ -30,10 +30,10 @@ export function RunbookStatusBadge({ status, className }: { status: RunbookStatu
 
 /** Canonical Critical/High/Medium/Low colours, icon + text (never colour alone). */
 export const RUNBOOK_SEVERITY_META: Record<RunbookSeverity, { icon: ComponentType<IconProps>; badgeClass: string; stripe: string; dot: string }> = {
-  Critical: { icon: ChevronsUp, badgeClass: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400", stripe: "#DC2626", dot: "#DC2626" },
-  High: { icon: ChevronUp, badgeClass: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400", stripe: "#EA580C", dot: "#EA580C" },
-  Medium: { icon: Minus, badgeClass: "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-400", stripe: "#D97706", dot: "#D97706" },
-  Low: { icon: ChevronDown, badgeClass: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "#3B82F6", dot: "#3B82F6" },
+  Critical: { icon: ChevronsUp, badgeClass: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400", stripe: "oklch(0.5771 0.2152 27.33)", dot: "oklch(0.5771 0.2152 27.33)" },
+  High: { icon: ChevronUp, badgeClass: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400", stripe: "oklch(0.6461 0.1943 41.12)", dot: "oklch(0.6461 0.1943 41.12)" },
+  Medium: { icon: Minus, badgeClass: "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-400", stripe: "oklch(0.6658 0.1574 58.32)", dot: "oklch(0.6658 0.1574 58.32)" },
+  Low: { icon: ChevronDown, badgeClass: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "oklch(0.6231 0.188 259.81)", dot: "oklch(0.6231 0.188 259.81)" },
 };
 
 export function RunbookSeverityBadge({ severity, className }: { severity: RunbookSeverity; className?: string }) {

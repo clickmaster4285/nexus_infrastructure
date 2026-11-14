@@ -158,7 +158,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     <span className="shrink-0 text-xs font-semibold text-primary">{logRunId === run.id ? "Hide log" : "Log"}</span>
                   </button>
                   {logRunId === run.id && (
-                    <pre className="mt-2 max-h-64 overflow-auto rounded-lg border border-border bg-[#0B1220] p-3 font-mono text-[0.6875rem] leading-[1.7] text-slate-200">{run.log}</pre>
+                    <pre className="mt-2 max-h-64 overflow-auto rounded-lg border border-border bg-[oklch(0.1831_0.0309_263.38)] p-3 font-mono text-[0.6875rem] leading-[1.7] text-slate-200">{run.log}</pre>
                   )}
                 </li>
               ))}

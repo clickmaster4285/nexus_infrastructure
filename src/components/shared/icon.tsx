@@ -128,30 +128,30 @@ export interface ServiceIconEntry {
 
 /** Service name (lowercase) -> brand icon + brand colour. */
 export const serviceIcons: Record<string, ServiceIconEntry> = {
-  nginx: { icon: SiNginx, color: "#009639" },
-  mysql: { icon: SiMysql, color: "#4479A1" },
-  redis: { icon: SiRedis, color: "#DC382D" },
-  docker: { icon: SiDocker, color: "#2496ED" },
-  ssh: { icon: Terminal, color: "#475569" },
-  postgres: { icon: SiPostgresql, color: "#336791" },
-  postgresql: { icon: SiPostgresql, color: "#336791" },
-  mongodb: { icon: SiMongodb, color: "#47A248" },
-  mongod: { icon: SiMongodb, color: "#47A248" },
-  apache: { icon: SiApache, color: "#D22128" },
-  rabbitmq: { icon: SiRabbitmq, color: "#FF6600" },
-  elasticsearch: { icon: SiElasticsearch, color: "#00BFB3" },
-  node: { icon: SiNodedotjs, color: "#5FA04E" },
-  prometheus: { icon: SiPrometheus, color: "#E6522C" },
-  loki: { icon: SiGrafana, color: "#F46800" },
-  "blackbox exporter": { icon: Radio, color: "#2563EB" },
-  "windows exporter": { icon: FaWindows, color: "#0078D4" },
-  "grafana agent": { icon: SiGrafana, color: "#F46800" },
-  kong: { icon: SiKong, color: "#1B1F2B" },
-  java: { icon: Terminal, color: "#E76F00" },
-  python: { icon: Terminal, color: "#3776AB" },
-  mysqld: { icon: SiMysql, color: "#4479A1" },
-  cron: { icon: CalendarClock, color: "#64748B" },
-  sshd: { icon: Terminal, color: "#475569" },
+  nginx: { icon: SiNginx, color: "oklch(0.5868 0.1712 147.69)" },
+  mysql: { icon: SiMysql, color: "oklch(0.5565 0.0844 242.88)" },
+  redis: { icon: SiRedis, color: "oklch(0.591 0.2022 28.73)" },
+  docker: { icon: SiDocker, color: "oklch(0.6551 0.1613 247.55)" },
+  ssh: { icon: Terminal, color: "oklch(0.4455 0.0374 257.28)" },
+  postgres: { icon: SiPostgresql, color: "oklch(0.4973 0.0875 245.25)" },
+  postgresql: { icon: SiPostgresql, color: "oklch(0.4973 0.0875 245.25)" },
+  mongodb: { icon: SiMongodb, color: "oklch(0.636 0.1543 143.68)" },
+  mongod: { icon: SiMongodb, color: "oklch(0.636 0.1543 143.68)" },
+  apache: { icon: SiApache, color: "oklch(0.5561 0.2089 26.02)" },
+  rabbitmq: { icon: SiRabbitmq, color: "oklch(0.6958 0.2043 43.49)" },
+  elasticsearch: { icon: SiElasticsearch, color: "oklch(0.7244 0.1266 186.86)" },
+  node: { icon: SiNodedotjs, color: "oklch(0.6425 0.1333 139.43)" },
+  prometheus: { icon: SiPrometheus, color: "oklch(0.6342 0.1906 35.18)" },
+  loki: { icon: SiGrafana, color: "oklch(0.6818 0.1924 45.78)" },
+  "blackbox exporter": { icon: Radio, color: "oklch(0.5461 0.2152 262.88)" },
+  "windows exporter": { icon: FaWindows, color: "oklch(0.5677 0.1665 251.31)" },
+  "grafana agent": { icon: SiGrafana, color: "oklch(0.6818 0.1924 45.78)" },
+  kong: { icon: SiKong, color: "oklch(0.2409 0.0238 270.23)" },
+  java: { icon: Terminal, color: "oklch(0.6726 0.1752 51.04)" },
+  python: { icon: Terminal, color: "oklch(0.5489 0.1053 246.67)" },
+  mysqld: { icon: SiMysql, color: "oklch(0.5565 0.0844 242.88)" },
+  cron: { icon: CalendarClock, color: "oklch(0.5544 0.0407 257.42)" },
+  sshd: { icon: Terminal, color: "oklch(0.4455 0.0374 257.28)" },
 };
 
 /**
@@ -222,6 +222,6 @@ export function ImageIcon({ name, className }: { name: string; className?: strin
 }
 
 /** Shared brand mark used beside container images, processes and services. */
-export function TechLogo({ name, className, fallbackIcon = Terminal, fallbackColor = "#64748b" }: { name: string; className?: string; fallbackIcon?: ElementType; fallbackColor?: string }) {
+export function TechLogo({ name, className, fallbackIcon = Terminal, fallbackColor = "oklch(0.5544 0.0407 257.42)" }: { name: string; className?: string; fallbackIcon?: ElementType; fallbackColor?: string }) {
   return <ServiceIcon name={name} fallbackIcon={fallbackIcon} fallbackColor={fallbackColor} className={className} />;
 }

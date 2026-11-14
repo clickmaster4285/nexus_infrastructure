@@ -34,13 +34,13 @@ const TOPOLOGY_HEIGHT = 270;
 const TOPOLOGY_MODAL_FIT_OPTIONS = { padding: 0.04, minZoom: 0.4, maxZoom: 2.5, duration: 300 };
 
 const compactButton =
-  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[0.6875rem] font-medium text-[#516680] transition-colors hover:border-[#a9c8eb] hover:text-[#176dbb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[#c6d2e1]";
+  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[0.6875rem] font-medium text-[oklch(0.5035_0.0488_254.04)] transition-colors hover:border-[oklch(0.8218_0.0598_251.66)] hover:text-[oklch(0.5285_0.1443_251.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[oklch(0.8592_0.0246_253.97)]";
 
 function HealthBadge({ status }: { status: string }) {
   const degraded = status === "Degraded";
   return (
-    <span className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#61758e] dark:text-[#a9bcd2]">
-      <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full bg-[#20b475]", degraded && "bg-[#f0a02d]")} />
+    <span className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.5557_0.0457_254.2)] dark:text-[oklch(0.7879_0.0377_252.13)]">
+      <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full bg-[oklch(0.6818_0.1505_158.51)]", degraded && "bg-[oklch(0.7675_0.1525_70.29)]")} />
       {status}
     </span>
   );
@@ -69,7 +69,7 @@ function TopologyIcon({ name, size, tone }: { name: string; size: number; tone?:
   }
   if (name === "vpc") {
     return (
-      <svg className="shrink-0 text-[#2782df]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <svg className="shrink-0 text-[oklch(0.6025_0.1638_252.96)]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
         <circle cx="12" cy="12" r="3" fill="currentColor" />
         <circle cx="5" cy="6" r="2" fill="currentColor" />
         <circle cx="19" cy="6" r="2" fill="currentColor" />
@@ -81,18 +81,18 @@ function TopologyIcon({ name, size, tone }: { name: string; size: number; tone?:
   }
   if (name === "staging-cloud") {
     return (
-      <svg className="shrink-0" style={{ color: tone === "purple" ? "#9252df" : "#2685e7" }} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <svg className="shrink-0" style={{ color: tone === "purple" ? "oklch(0.5824 0.2063 301.07)" : "oklch(0.614 0.1708 253.32)" }} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
         <path d="M7.1 19.5a5.1 5.1 0 0 1-.4-10.2A6.1 6.1 0 0 1 18.4 8a5.8 5.8 0 0 1-.2 11.5H7.1Z" fill="currentColor" />
       </svg>
     );
   }
   if (name === "web-services") {
     return (
-      <svg className="shrink-0 text-[#2685e7]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <svg className="shrink-0 text-[oklch(0.614_0.1708_253.32)]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
         <path d="M4 6.2A2.2 2.2 0 0 1 6.2 4h11.6A2.2 2.2 0 0 1 20 6.2v3.1H4zm0 5.8h16v5.8a2.2 2.2 0 0 1-2.2 2.2H6.2A2.2 2.2 0 0 1 4 17.8z" fill="currentColor" />
-        <circle cx="7" cy="7.7" r=".8" fill="#fff" />
-        <circle cx="9.5" cy="7.7" r=".8" fill="#fff" />
-        <path d="M7 14h10m-10 2.5h6" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" />
+        <circle cx="7" cy="7.7" r=".8" fill="oklch(1 0 89.88)" />
+        <circle cx="9.5" cy="7.7" r=".8" fill="oklch(1 0 89.88)" />
+        <path d="M7 14h10m-10 2.5h6" stroke="oklch(1 0 89.88)" strokeWidth="1.2" strokeLinecap="round" />
       </svg>
     );
   }
@@ -250,10 +250,10 @@ interface TopologyCanvasHandle {
 }
 
 const iconToneStyles: Record<string, string> = {
-  blue: "bg-[#e6f2ff] text-[#2685e7]",
-  green: "bg-[#e6f8ef] text-[#24ad72]",
-  purple: "bg-[#f1eaff] text-[#9252df]",
-  teal: "bg-[#e5f8f5] text-[#24aa9c]",
+  blue: "bg-[oklch(0.956_0.0217_250.21)] text-[oklch(0.614_0.1708_253.32)]",
+  green: "bg-[oklch(0.9634_0.0223_164.52)] text-[oklch(0.6633_0.1432_158.85)]",
+  purple: "bg-[oklch(0.9487_0.0289_301)] text-[oklch(0.5824_0.2063_301.07)]",
+  teal: "bg-[oklch(0.9643_0.0203_185.5)] text-[oklch(0.6669_0.1106_184.12)]",
 };
 
 const handleIds = ["left", "right", "top", "bottom"] as const;
@@ -304,9 +304,9 @@ function TopologyNode({ node, compact = false, position, handlePrefix = "card", 
     <article
       data-topology-node={key}
       className={cn(
-        "flex min-w-0 touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] dark:border-border",
+        "flex min-w-0 touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-card p-2.5 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] dark:border-border",
         !compact && "absolute",
-        compact && "relative h-[2.1875rem] w-full shrink-0 items-center gap-1.5 border-0 border-b border-[#eff2f6] bg-transparent px-2 py-1.5 shadow-none last:border-b-0 dark:border-border",
+        compact && "relative h-[2.1875rem] w-full shrink-0 items-center gap-1.5 border-0 border-b border-[oklch(0.96_0.0063_255.48)] bg-transparent px-2 py-1.5 shadow-none last:border-b-0 dark:border-border",
         dragHandlers && "cursor-grab active:cursor-grabbing",
       )}
       style={compact ? undefined : style}
@@ -316,11 +316,11 @@ function TopologyNode({ node, compact = false, position, handlePrefix = "card", 
         <TopologyIcon name={node.icon} size={compact ? 16 : 19} tone={node.tone} />
       </span>
       <div className={cn("flex min-w-0 flex-col items-start gap-1", compact && "flex-1 flex-row items-center justify-between gap-2")}>
-        <b className="max-w-full truncate text-[0.6875rem] font-bold text-[#536b87] dark:text-[#c4d1e1]">{node.name}</b>
+        <b className="max-w-full truncate text-[0.6875rem] font-bold text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">{node.name}</b>
         {!compact && (
           <>
             <HealthBadge status={node.status} />
-            <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#8393a8] dark:text-muted-foreground">
+            <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.6577_0.0364_255.27)] dark:text-muted-foreground">
               <Icon name="workflow" size={9} /> {node.detail}
             </small>
           </>
@@ -494,17 +494,17 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
         <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" viewBox="0 0 895 270" aria-hidden="true">
           <defs>
             <marker id={arrowId} markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0,0 L9,4.5 L0,9 z" fill="#8fb8ee" />
+              <path d="M0,0 L9,4.5 L0,9 z" fill="oklch(0.7731 0.0895 255.52)" />
             </marker>
           </defs>
-          <g fill="none" stroke="#8fb8ee" strokeWidth="1" strokeOpacity="0.9" strokeLinecap="round" strokeLinejoin="round" markerEnd={`url(#${arrowId})`}>
+          <g fill="none" stroke="oklch(0.7731 0.0895 255.52)" strokeWidth="1" strokeOpacity="0.9" strokeLinecap="round" strokeLinejoin="round" markerEnd={`url(#${arrowId})`}>
             {edges.providerEdges.map((path, index) => (
               <path key={`provider-${index}`} d={path} />
             ))}
             {edges.connections.map((path, index) => (
               <path key={`connection-${index}`} d={path} />
             ))}
-            <circle cx={edges.branch.x} cy={edges.branch.y} r="2.4" fill="#8fb8ee" stroke="none" markerEnd="none" />
+            <circle cx={edges.branch.x} cy={edges.branch.y} r="2.4" fill="oklch(0.7731 0.0895 255.52)" stroke="none" markerEnd="none" />
           </g>
         </svg>
 
@@ -512,33 +512,33 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* Cloud providers column */}
           <section
             data-topology-node="cloud-providers"
-            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border dark:bg-[#152236]"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-white/85 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border dark:bg-[oklch(0.2507_0.0423_258.76)]"
             style={{ left: layout["cloud-providers"].x, top: layout["cloud-providers"].y, width: layout["cloud-providers"].width, height: layout["cloud-providers"].height }}
             {...dragHandlers("cloud-providers")}
           >
-            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[#e8edf4] px-2 text-[0.6875rem] font-medium text-[#526882] dark:border-border dark:text-[#c4d1e1]">
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[oklch(0.9443_0.0109_256.7)] px-2 text-[0.6875rem] font-medium text-[oklch(0.5098_0.0492_252.93)] dark:border-border dark:text-[oklch(0.8557_0.0264_253.59)]">
               <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="cloud" size={17} />
               </span>
               <b>Cloud Providers</b>
             </div>
             {cloudProviders.map((provider) => (
-              <div key={provider.name} className="grid h-[3rem] grid-cols-[27px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[#f0f3f7] px-2 py-1 last:border-b-0 dark:border-border">
+              <div key={provider.name} className="grid h-[3rem] grid-cols-[27px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[oklch(0.963_0.0062_255.48)] px-2 py-1 last:border-b-0 dark:border-border">
                 <span
                   className={cn(
                     "grid h-[1.5625rem] w-[1.5625rem] place-items-center rounded-full",
-                    provider.tone === "orange" && "bg-[#f49a24] text-white",
-                    provider.tone === "blue" && "bg-[#2684f5] text-white",
-                    provider.tone === "red" && "rounded-[0.3125rem] bg-[#d7193f] text-white",
+                    provider.tone === "orange" && "bg-[oklch(0.7611_0.1594_66.41)] text-white",
+                    provider.tone === "blue" && "bg-[oklch(0.6211_0.1895_256.06)] text-white",
+                    provider.tone === "red" && "rounded-[0.3125rem] bg-[oklch(0.5643_0.2157_19.13)] text-white",
                   )}
                 >
                   <ProviderLogo provider={provider.name} className="h-[1.0625rem] w-[1.0625rem] text-white" />
                 </span>
                 <div className="min-w-0">
-                  <b className="block truncate text-[0.6875rem] font-semibold leading-tight text-[#536b87] dark:text-[#c4d1e1]">{provider.name}</b>
+                  <b className="block truncate text-[0.6875rem] font-semibold leading-tight text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">{provider.name}</b>
                   <HealthBadge status={provider.status} />
                 </div>
-                <small className="whitespace-nowrap text-[0.6875rem] text-[#8695a8] dark:text-muted-foreground">{provider.assets} instances</small>
+                <small className="whitespace-nowrap text-[0.6875rem] text-[oklch(0.6643_0.0331_254.39)] dark:text-muted-foreground">{provider.assets} instances</small>
               </div>
             ))}
             <TopologyHandles nodeId={`${idPrefix}-cloud-providers`} />
@@ -559,7 +559,7 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* External endpoints */}
           <article
             data-topology-node="external-endpoints"
-            className="absolute flex min-w-0 cursor-grab touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border"
+            className="absolute flex min-w-0 cursor-grab touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-card p-2.5 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border"
             style={{ left: layout["external-endpoints"].x, top: layout["external-endpoints"].y, width: layout["external-endpoints"].width, height: layout["external-endpoints"].height }}
             {...dragHandlers("external-endpoints")}
           >
@@ -567,9 +567,9 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
               <Icon name="globe" size={17} />
             </span>
             <div className="flex min-w-0 flex-col items-start gap-1">
-              <b className="whitespace-nowrap text-[0.6875rem] font-bold text-[#536b87] dark:text-[#c4d1e1]">External Endpoints</b>
+              <b className="whitespace-nowrap text-[0.6875rem] font-bold text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">External Endpoints</b>
               <HealthBadge status="Healthy" />
-              <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#8393a8] dark:text-muted-foreground">
+              <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.6577_0.0364_255.27)] dark:text-muted-foreground">
                 <Icon name="workflow" size={9} /> 3 endpoints
               </small>
             </div>
@@ -579,11 +579,11 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* Databases column */}
           <section
             data-topology-node="databases"
-            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border dark:bg-[#152236]"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-white/85 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border dark:bg-[oklch(0.2507_0.0423_258.76)]"
             style={{ left: layout.databases.x, top: layout.databases.y, width: layout.databases.width, height: layout.databases.height }}
             {...dragHandlers("databases")}
           >
-            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[#e8edf4] px-2 text-[0.6875rem] font-medium text-[#526882] dark:border-border dark:text-[#c4d1e1]">
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[oklch(0.9443_0.0109_256.7)] px-2 text-[0.6875rem] font-medium text-[oklch(0.5098_0.0492_252.93)] dark:border-border dark:text-[oklch(0.8557_0.0264_253.59)]">
               <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="database" size={17} />
               </span>
@@ -660,7 +660,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
 
   return createPortal(
     <div
-      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(15,23,42,0.55)] p-4 backdrop-blur-[0.1875rem] motion-reduce:animate-none"
+      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[oklch(0.2077_0.0398_265.75_/_0.55)] p-4 backdrop-blur-[0.1875rem] motion-reduce:animate-none"
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -684,7 +684,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
             type="button"
             aria-label="Close topology"
             onClick={onClose}
-            className="grid h-[1.6875rem] w-[1.75rem] shrink-0 cursor-pointer select-none place-items-center rounded-md border border-border bg-card text-[#516680] transition-colors hover:bg-accent"
+            className="grid h-[1.6875rem] w-[1.75rem] shrink-0 cursor-pointer select-none place-items-center rounded-md border border-border bg-card text-[oklch(0.5035_0.0488_254.04)] transition-colors hover:bg-accent"
           >
             <X size={16} />
           </button>

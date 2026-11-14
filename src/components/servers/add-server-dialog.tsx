@@ -50,7 +50,7 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
           <DialogDescription>Add a demo server to the mock inventory.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[#536780] dark:text-[#a9bcd2]">
+          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[oklch(0.5073_0.0467_254.24)] dark:text-[oklch(0.7879_0.0377_252.13)]">
             Server name
             <Input
               autoFocus
@@ -61,7 +61,7 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
               className="h-[2.125rem] text-[0.6875rem]"
             />
           </label>
-          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[#536780] dark:text-[#a9bcd2]">
+          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[oklch(0.5073_0.0467_254.24)] dark:text-[oklch(0.7879_0.0377_252.13)]">
             Environment
             <Select value={environment} onValueChange={setEnvironment}>
               <SelectTrigger className="h-[2.125rem] text-[0.6875rem]" aria-label="Environment">

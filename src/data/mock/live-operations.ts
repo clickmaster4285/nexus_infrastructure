@@ -30,9 +30,9 @@ export const nocHealth = {
 };
 
 export const nocHealthSegments = [
-  { name: "Healthy", status: "Healthy", value: nocFleet.healthy, color: "#34d399", servers: ["prod-api-01", "db-primary", "web-frontend-01", "cache-server-01", "app-worker-02", "local-office-01", "win-app-01", "monitor-node-01", "api-staging-01", "test-runner-01"] },
-  { name: "Degraded", status: "Degraded", value: nocFleet.degraded, color: "#fbbf24", servers: ["app-worker-01"] },
-  { name: "Offline", status: "Offline", value: nocFleet.offline, color: "#f87171", servers: ["prod-api-02"] },
+  { name: "Healthy", status: "Healthy", value: nocFleet.healthy, color: "oklch(0.7729 0.1535 163.22)", servers: ["prod-api-01", "db-primary", "web-frontend-01", "cache-server-01", "app-worker-02", "local-office-01", "win-app-01", "monitor-node-01", "api-staging-01", "test-runner-01"] },
+  { name: "Degraded", status: "Degraded", value: nocFleet.degraded, color: "oklch(0.8369 0.1644 84.43)", servers: ["app-worker-01"] },
+  { name: "Offline", status: "Offline", value: nocFleet.offline, color: "oklch(0.7106 0.1661 22.22)", servers: ["prod-api-02"] },
 ];
 
 export type NocHealthChangeStatus = "offline" | "degraded" | "recovered";
@@ -179,10 +179,10 @@ export const nocHealthRangeData: Record<NocHealthRange, {
 
 export const nocServerGroupsSla = 99;
 export const nocServerGroups: Array<DonutDatum & { id: string; health: number; avgCpu: number; avgMemory: number; lastIncident: string }> = [
-  { id: "production", name: "Production", value: 7, color: "#60a5fa", health: 99.4, avgCpu: 72.4, avgMemory: 68.2, lastIncident: "8m ago" },
-  { id: "staging", name: "Staging", value: 2, color: "#a78bfa", health: 98.8, avgCpu: 54.8, avgMemory: 61.2, lastIncident: "No recent incidents" },
-  { id: "development", name: "Development", value: 2, color: "#2dd4bf", health: 98.1, avgCpu: 42.6, avgMemory: 58.9, lastIncident: "21m ago" },
-  { id: "testing", name: "Testing", value: 1, color: "#94a3b8", health: 97.6, avgCpu: 87.1, avgMemory: 79.4, lastIncident: "24m ago" },
+  { id: "production", name: "Production", value: 7, color: "oklch(0.7137 0.1434 254.62)", health: 99.4, avgCpu: 72.4, avgMemory: 68.2, lastIncident: "8m ago" },
+  { id: "staging", name: "Staging", value: 2, color: "oklch(0.709 0.1592 293.54)", health: 98.8, avgCpu: 54.8, avgMemory: 61.2, lastIncident: "No recent incidents" },
+  { id: "development", name: "Development", value: 2, color: "oklch(0.7845 0.1325 181.91)", health: 98.1, avgCpu: 42.6, avgMemory: 58.9, lastIncident: "21m ago" },
+  { id: "testing", name: "Testing", value: 1, color: "oklch(0.7107 0.0351 256.79)", health: 97.6, avgCpu: 87.1, avgMemory: 79.4, lastIncident: "24m ago" },
 ];
 export type TopIssueTab = "cpu" | "memory" | "disk" | "network";
 export interface TopIssue { name: string; percent: number; duration: string }

@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import type { MaintenanceApprovalStatus, MaintenanceWindowStatus, MaintenanceWindowType } from "@/mocks/maintenanceWindows";
 
 export const WINDOW_STATUS_META: Record<MaintenanceWindowStatus, { icon: LucideIcon; badge: string; stripe: string; dot: string }> = {
-  "Scheduled": { icon: CalendarClock, badge: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "shadow-[inset_3px_0_0_0_#3B82F6]", dot: "#3B82F6" },
-  "In Progress": { icon: Clock3, badge: "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", stripe: "shadow-[inset_3px_0_0_0_#8B5CF6]", dot: "#8B5CF6" },
-  "Completed": { icon: CheckCircle2, badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400", stripe: "shadow-[inset_3px_0_0_0_#16A34A]", dot: "#16A34A" },
-  "Cancelled": { icon: Ban, badge: "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300", stripe: "shadow-[inset_3px_0_0_0_#64748B]", dot: "#64748B" },
+  "Scheduled": { icon: CalendarClock, badge: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6231_0.188_259.81)]", dot: "oklch(0.6231 0.188 259.81)" },
+  "In Progress": { icon: Clock3, badge: "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6056_0.2189_292.72)]", dot: "oklch(0.6056 0.2189 292.72)" },
+  "Completed": { icon: CheckCircle2, badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400", stripe: "shadow-[inset_3px_0_0_0_oklch(0.6271_0.1699_149.21)]", dot: "oklch(0.6271 0.1699 149.21)" },
+  "Cancelled": { icon: Ban, badge: "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300", stripe: "shadow-[inset_3px_0_0_0_oklch(0.5544_0.0407_257.42)]", dot: "oklch(0.5544 0.0407 257.42)" },
 };
 
 export const WINDOW_TYPE_META: Record<MaintenanceWindowType, { icon: LucideIcon; badge: string }> = {
@@ -70,4 +70,4 @@ export function ConflictBadge({ className }: { className?: string }) {
   );
 }
 
-export const MAINTENANCE_CONFLICT_STRIPE = "shadow-[inset_3px_0_0_0_#DC2626]";
+export const MAINTENANCE_CONFLICT_STRIPE = "shadow-[inset_3px_0_0_0_oklch(0.5771_0.2152_27.33)]";

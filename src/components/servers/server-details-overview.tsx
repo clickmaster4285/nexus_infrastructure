@@ -46,10 +46,10 @@ const processRows = [
 ];
 
 const healthChecks = [
-  { name: "Ping", detail: "12 ms", tone: "bg-emerald-500", color: "#22b981", values: [16, 13, 14, 11, 12, 12, 10, 12] },
-  { name: "HTTP :80", detail: "28 ms", tone: "bg-emerald-500", color: "#2789ee", values: [31, 28, 29, 27, 30, 26, 28, 28] },
-  { name: "HTTPS :443", detail: "34 ms", tone: "bg-emerald-500", color: "#2789ee", values: [37, 35, 36, 31, 33, 32, 34, 34] },
-  { name: "SSH :22", detail: "18 ms", tone: "bg-emerald-500", color: "#9b63e6", values: [20, 18, 19, 17, 18, 16, 18, 18] },
+  { name: "Ping", detail: "12 ms", tone: "bg-emerald-500", color: "oklch(0.6978 0.1459 161.8)", values: [16, 13, 14, 11, 12, 12, 10, 12] },
+  { name: "HTTP :80", detail: "28 ms", tone: "bg-emerald-500", color: "oklch(0.6274 0.175 253.33)", values: [31, 28, 29, 27, 30, 26, 28, 28] },
+  { name: "HTTPS :443", detail: "34 ms", tone: "bg-emerald-500", color: "oklch(0.6274 0.175 253.33)", values: [37, 35, 36, 31, 33, 32, 34, 34] },
+  { name: "SSH :22", detail: "18 ms", tone: "bg-emerald-500", color: "oklch(0.6207 0.1922 300.63)", values: [20, 18, 19, 17, 18, 16, 18, 18] },
 ];
 
 const diskPartitions = [
@@ -274,7 +274,7 @@ export function ServerDetailsOverview({
           <div className="relative mx-auto grid h-36 w-36 place-items-center">
             <svg viewBox="0 0 144 144" className="absolute inset-0 h-full w-full -rotate-90" role="img" aria-label="Overall health 98.7 percent">
               <circle cx="72" cy="72" r="61" fill="none" stroke="var(--muted)" strokeWidth="10" />
-              <circle cx="72" cy="72" r="61" fill="none" stroke="#28bf87" strokeWidth="10" strokeLinecap="round" strokeDasharray={2 * Math.PI * 61} strokeDashoffset={2 * Math.PI * 61 * 0.013} />
+              <circle cx="72" cy="72" r="61" fill="none" stroke="oklch(0.7157 0.1468 162.25)" strokeWidth="10" strokeLinecap="round" strokeDasharray={2 * Math.PI * 61} strokeDashoffset={2 * Math.PI * 61 * 0.013} />
             </svg>
             <div className="text-center"><strong className="font-display text-[1.5625rem] font-extrabold text-foreground">98.7%</strong><div className="text-[0.8125rem] font-medium text-muted-foreground">Overall Health</div><div className="mt-1 text-[0.8125rem] text-emerald-600">+0.2% today</div></div>
           </div>
@@ -287,7 +287,7 @@ export function ServerDetailsOverview({
       <SpanCard><SectionCard title="Performance Overview" icon={Activity} loading={loading} action={<span className="text-xs text-muted-foreground">Last 24 hours</span>}>
         <div className="flex h-full min-h-48 flex-col">
           <div className="flex flex-wrap gap-x-4 gap-y-2 pb-2 text-xs text-muted-foreground">
-            {[["CPU", "#288af0"], ["Memory", "#27bd91"], ["Disk", "#7163c8"], ["Network", "#f2a339"]].map(([name, color]) => <span key={name} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{name}</span>)}
+            {[["CPU", "oklch(0.6311 0.1762 253.47)"], ["Memory", "oklch(0.7128 0.1367 167.48)"], ["Disk", "oklch(0.562 0.1512 286.83)"], ["Network", "oklch(0.776 0.1483 69.58)"]].map(([name, color]) => <span key={name} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{name}</span>)}
           </div>
           <div className="min-h-40 flex-1">
             <ResponsiveContainer width="100%" height="100%">
@@ -296,9 +296,9 @@ export function ServerDetailsOverview({
                 <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-                <Line dataKey="cpu" name="CPU" stroke="#288af0" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
-                <Line dataKey="memory" name="Memory" stroke="#27bd91" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
-                <Line dataKey="disk" name="Disk" stroke="#7163c8" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
+                <Line dataKey="cpu" name="CPU" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
+                <Line dataKey="memory" name="Memory" stroke="oklch(0.7128 0.1367 167.48)" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
+                <Line dataKey="disk" name="Disk" stroke="oklch(0.562 0.1512 286.83)" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -322,10 +322,10 @@ export function ServerDetailsOverview({
       <SpanCard><SectionCard title="Resources Usage" icon={HardDrive} loading={loading}>
         <div className="flex h-full flex-col">
           <div className="grid flex-1 grid-cols-2 items-center gap-4 min-[80rem]:grid-cols-2">
-            <Gauge label="CPU" value={32 + liveTick % 3} color="#22bb83" />
-            <Gauge label="Memory" value={46 + liveTick % 2} color="#27a9d4" />
-            <Gauge label="Disk" value={diskUsage} color="#9a61df" />
-            <Gauge label="Network" value={28 + liveTick % 4} color="#efa229" />
+            <Gauge label="CPU" value={32 + liveTick % 3} color="oklch(0.7035 0.1467 162.06)" />
+            <Gauge label="Memory" value={46 + liveTick % 2} color="oklch(0.6868 0.1224 226.14)" />
+            <Gauge label="Disk" value={diskUsage} color="oklch(0.6122 0.1867 302.04)" />
+            <Gauge label="Network" value={28 + liveTick % 4} color="oklch(0.7697 0.1533 72.36)" />
           </div>
           <div className="mt-5 grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
             {[["Swap", "12%"], ["Inodes", "34%"], ["Processes", "187"]].map(([label, value]) => <div key={label}><div className="text-[0.8125rem] text-muted-foreground">{label}</div><div className="mt-1 text-[0.9375rem] font-semibold text-foreground">{value}</div></div>)}
@@ -412,12 +412,12 @@ export function ServerDetailsOverview({
                 <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-                <Line dataKey="inbound" name="Inbound Mbps" stroke="#288af0" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
-                <Line dataKey="outbound" name="Outbound Mbps" stroke="#27bd91" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
+                <Line dataKey="inbound" name="Inbound Mbps" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
+                <Line dataKey="outbound" name="Outbound Mbps" stroke="oklch(0.7128 0.1367 167.48)" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-2 flex gap-4 text-xs text-muted-foreground"><span><i className="mr-2 inline-block h-2 w-2 rounded-full bg-[#288af0]" />Inbound</span><span><i className="mr-2 inline-block h-2 w-2 rounded-full bg-[#27bd91]" />Outbound</span></div>
+          <div className="mt-2 flex gap-4 text-xs text-muted-foreground"><span><i className="mr-2 inline-block h-2 w-2 rounded-full bg-[oklch(0.6311_0.1762_253.47)]" />Inbound</span><span><i className="mr-2 inline-block h-2 w-2 rounded-full bg-[oklch(0.7128_0.1367_167.48)]" />Outbound</span></div>
         </div>
       </SectionCard></SpanCard>
 
@@ -477,7 +477,7 @@ export function ServerDetailsOverview({
         <button type="button" onClick={() => setLogs([])} title="Clear logs" aria-label="Clear logs" className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="text-xs">Clear</span></button>
         <button type="button" onClick={() => onTabChange("logs")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open Logs</button>
       </div>}>
-        <div className="flex h-full min-h-72 flex-col rounded-lg bg-[#101a2a] p-4 font-mono text-xs text-slate-200">
+        <div className="flex h-full min-h-72 flex-col rounded-lg bg-[oklch(0.2169_0.0349_259.51)] p-4 font-mono text-xs text-slate-200">
           <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3 text-slate-400"><span>web-01 / var / log / syslog</span><span className="flex items-center gap-2">{logPaused ? <Pause size={13} /> : <span className="h-2 w-2 rounded-full bg-emerald-400" />}{logPaused ? "Paused" : "Live"}</span></div>
           <div className="min-h-0 flex-1 space-y-2 overflow-auto" aria-live="polite" aria-label="Live server log">
             {logs.length === 0 ? <EmptyState>Log buffer is empty.</EmptyState> : logs.map((log, index) => <div key={`${log.time}-${index}-${log.text}`} className="flex gap-3 opacity-100 transition-opacity duration-500">

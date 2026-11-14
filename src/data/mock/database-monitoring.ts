@@ -109,9 +109,9 @@ export const databaseMonitoringData = {
     p95Ms: 386,
     p99Ms: 642,
     breakdown: [
-      { name: "Fast", count: 1244, color: "#34d399" },
-      { name: "Normal", count: 12, color: "#60a5fa" },
-      { name: "Slow", count: 4, color: "#fbbf24" },
+      { name: "Fast", count: 1244, color: "oklch(0.7729 0.1535 163.22)" },
+      { name: "Normal", count: 12, color: "oklch(0.7137 0.1434 254.62)" },
+      { name: "Slow", count: 4, color: "oklch(0.8369 0.1644 84.43)" },
     ],
   },
   events: [

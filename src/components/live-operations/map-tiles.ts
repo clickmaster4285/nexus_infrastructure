@@ -8,15 +8,15 @@
 export const MAP_TILES = {
   dark: {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    background: "#3f3f41",
-    ocean: "#3f3f41",
+    background: "oklch(0.3684 0.0034 286.23)",
+    ocean: "oklch(0.3684 0.0034 286.23)",
     attribution:
       'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, HERE, MapmyIndia &mdash; <a href="https://www.esri.com/" target="_blank" rel="noreferrer">Esri</a>',
   },
   light: {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    background: "#eaeaea",
-    ocean: "#eaeaea",
+    background: "oklch(0.937 0 89.88)",
+    ocean: "oklch(0.937 0 89.88)",
     attribution:
       'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, HERE, MapmyIndia &mdash; <a href="https://www.esri.com/" target="_blank" rel="noreferrer">Esri</a>',
   },

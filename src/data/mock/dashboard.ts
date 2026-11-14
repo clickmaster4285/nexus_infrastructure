@@ -57,8 +57,8 @@ export const serverAvailability: AvailabilityGroup[] = [
 ];
 
 export interface DonutDatum { name: string; value: number; color: string }
-export const alertSeverity: DonutDatum[] = [{name:'Critical',value:5,color:'#f04452'},{name:'High',value:7,color:'#fa9238'},{name:'Medium',value:6,color:'#f4c83d'},{name:'Low',value:3,color:'#2684f5'},{name:'Info',value:2,color:'#16b8a2'}];
-export const incidentStatus: DonutDatum[] = [{name:'Open',value:1,color:'#f04452'},{name:'Investigating',value:1,color:'#fa9238'},{name:'Monitoring',value:1,color:'#2684f5'},{name:'Resolved',value:1,color:'#1fba79'}];
+export const alertSeverity: DonutDatum[] = [{name:'Critical',value:5,color:'oklch(0.6406 0.2075 21.05)'},{name:'High',value:7,color:'oklch(0.7561 0.1598 57.02)'},{name:'Medium',value:6,color:'oklch(0.8485 0.1554 90.4)'},{name:'Low',value:3,color:'oklch(0.6211 0.1895 256.06)'},{name:'Info',value:2,color:'oklch(0.7027 0.1244 179.91)'}];
+export const incidentStatus: DonutDatum[] = [{name:'Open',value:1,color:'oklch(0.6406 0.2075 21.05)'},{name:'Investigating',value:1,color:'oklch(0.7561 0.1598 57.02)'},{name:'Monitoring',value:1,color:'oklch(0.6211 0.1895 256.06)'},{name:'Resolved',value:1,color:'oklch(0.6982 0.1548 158.61)'}];
 
 export interface MetricTableRow { name: string; usage: number; color: string; trend: string }
 function serverMetricRows(metric: "cpu" | "memory"): MetricTableRow[] {

@@ -18,7 +18,7 @@ const STATUS_META = {
   breached: { label: "Breached", className: "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300" },
 } as const;
 
-/** Horizontal bars — flat `#3B82F6` Met / `#D97706` at-risk / `#DC2626` breached, SLA target marker, delta, summary strip and footer. */
+/** Horizontal bars — flat `oklch(0.6231 0.188 259.81)` Met / `oklch(0.6658 0.1574 58.32)` at-risk / `oklch(0.5771 0.2152 27.33)` breached, SLA target marker, delta, summary strip and footer. */
 export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
   const values = entries.map((entry) => entry.uptime);
   const min = Math.min(...values, target);
@@ -54,7 +54,7 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
               >
                 <span className="min-w-[4.5rem] text-[0.8125rem] font-medium text-foreground sm:w-[5.5rem]">{entry.type}</span>
                 <div className="relative order-5 h-2 w-full min-w-0 sm:order-none sm:w-auto sm:flex-1">
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700" aria-hidden="true">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-[oklch(0.9548_0.0058_264.53)] dark:bg-slate-700" aria-hidden="true">
                     <span className={cn("block h-full rounded-full", barColor)} style={{ width: `${toPct(entry.uptime)}%` }} />
                   </div>
                   <span aria-hidden="true" className="absolute -top-0.5 h-3 w-[0.125rem] -translate-x-1/2 bg-gray-900 dark:bg-slate-100" style={{ left: `${markerPct}%` }} />

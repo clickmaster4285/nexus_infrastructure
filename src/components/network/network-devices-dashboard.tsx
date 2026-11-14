@@ -48,18 +48,18 @@ const trend = Array.from({ length: 25 }, (_, i) => ({
 }));
 
 const deviceTypes = [
-  { name: "Switches", value: 33, color: "#288af0", percent: "38.4%" },
-  { name: "Routers", value: 29, color: "#22bb83", percent: "33.7%" },
-  { name: "Firewalls", value: 14, color: "#a15be3", percent: "16.3%" },
-  { name: "Access Points", value: 10, color: "#f4a329", percent: "11.6%" },
+  { name: "Switches", value: 33, color: "oklch(0.6311 0.1762 253.47)", percent: "38.4%" },
+  { name: "Routers", value: 29, color: "oklch(0.7035 0.1467 162.06)", percent: "33.7%" },
+  { name: "Firewalls", value: 14, color: "oklch(0.6136 0.2015 304.89)", percent: "16.3%" },
+  { name: "Access Points", value: 10, color: "oklch(0.7773 0.1563 71.03)", percent: "11.6%" },
 ];
 
 const manufacturers = [
-  { name: "Cisco", value: "32.6%", width: "65%", color: "#288af0", icon: "◈" },
-  { name: "HP", value: "27.9%", width: "56%", color: "#22bb83", icon: "hp" },
-  { name: "Juniper", value: "19.8%", width: "40%", color: "#a15be3", icon: "juniper" },
-  { name: "Huawei", value: "11.6%", width: "23%", color: "#f4a329", icon: "✿" },
-  { name: "Others", value: "8.1%", width: "16%", color: "#8fa2bb", icon: "●" },
+  { name: "Cisco", value: "32.6%", width: "65%", color: "oklch(0.6311 0.1762 253.47)", icon: "◈" },
+  { name: "HP", value: "27.9%", width: "56%", color: "oklch(0.7035 0.1467 162.06)", icon: "hp" },
+  { name: "Juniper", value: "19.8%", width: "40%", color: "oklch(0.6136 0.2015 304.89)", icon: "juniper" },
+  { name: "Huawei", value: "11.6%", width: "23%", color: "oklch(0.7773 0.1563 71.03)", icon: "✿" },
+  { name: "Others", value: "8.1%", width: "16%", color: "oklch(0.706 0.0425 255.35)", icon: "●" },
 ];
 
 const alerts = [
@@ -119,7 +119,7 @@ const statusStyle: Record<DeviceStatus, string> = {
 function HealthRing() {
   const circumference = 2 * Math.PI * 51;
   return <div className="relative h-[9.375rem] w-[9.375rem] shrink-0">
-    <svg viewBox="0 0 142 142" className="h-full w-full -rotate-90"><circle cx="71" cy="71" r="51" fill="none" stroke="var(--muted)" strokeWidth="12" /><circle cx="71" cy="71" r="51" fill="none" stroke="#22bd83" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${circumference * 0.907} ${circumference}`} /></svg>
+    <svg viewBox="0 0 142 142" className="h-full w-full -rotate-90"><circle cx="71" cy="71" r="51" fill="none" stroke="var(--muted)" strokeWidth="12" /><circle cx="71" cy="71" r="51" fill="none" stroke="oklch(0.7087 0.1492 161.5)" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${circumference * 0.907} ${circumference}`} /></svg>
     <div className="absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.5rem] font-extrabold leading-tight text-foreground">90.7%</b><span className="text-center text-[0.75rem] font-semibold leading-tight text-muted-foreground">Overall<br />Health</span></div>
   </div>;
 }
@@ -152,8 +152,8 @@ export function NetworkDevicesDashboard() {
         <div className="flex min-h-[10.25rem] items-center justify-around gap-3"><HealthRing /><div className="space-y-3 text-[0.75rem]">{[["Healthy", "78", "bg-emerald-500"], ["Warning", "5", "bg-amber-500"], ["Offline", "3", "bg-rose-500"]].map(([label, value, color]) => <div key={label} className="flex min-w-[6.25rem] items-center gap-2"><i className={`h-2.5 w-2.5 rounded-full ${color}`} /><span className="flex-1 text-foreground">{label}</span><b className="text-foreground">{value}</b></div>)}</div></div>
       </Panel>
 
-      <Panel title="Health Trend" className="min-w-0" action={<div className="flex items-center gap-3 text-[0.75rem] text-muted-foreground">{[["Healthy", "#288af0"], ["Warning", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>}>
-        <div className="h-[10.25rem] w-full pt-1"><ResponsiveContainer width="100%" height="100%"><AreaChart data={trend} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} /><YAxis width={44} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} /><Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} /><Area dataKey="healthy" type="monotone" stroke="#288af0" strokeWidth={2} fill="#288af0" fillOpacity={0.05} dot={{ r: 2 }} /><Area dataKey="warning" type="monotone" stroke="#f59e0b" strokeWidth={1.8} fill="#f59e0b" fillOpacity={0.06} dot={{ r: 1.8 }} /><Area dataKey="offline" type="monotone" stroke="#ef4444" strokeWidth={1.7} fill="#ef4444" fillOpacity={0.05} dot={{ r: 1.6 }} /></AreaChart></ResponsiveContainer></div>
+      <Panel title="Health Trend" className="min-w-0" action={<div className="flex items-center gap-3 text-[0.75rem] text-muted-foreground">{[["Healthy", "oklch(0.6311 0.1762 253.47)"], ["Warning", "oklch(0.7686 0.1647 70.08)"], ["Offline", "oklch(0.6368 0.2078 25.33)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div>}>
+        <div className="h-[10.25rem] w-full pt-1"><ResponsiveContainer width="100%" height="100%"><AreaChart data={trend} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} /><YAxis width={44} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} /><Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} /><Area dataKey="healthy" type="monotone" stroke="oklch(0.6311 0.1762 253.47)" strokeWidth={2} fill="oklch(0.6311 0.1762 253.47)" fillOpacity={0.05} dot={{ r: 2 }} /><Area dataKey="warning" type="monotone" stroke="oklch(0.7686 0.1647 70.08)" strokeWidth={1.8} fill="oklch(0.7686 0.1647 70.08)" fillOpacity={0.06} dot={{ r: 1.8 }} /><Area dataKey="offline" type="monotone" stroke="oklch(0.6368 0.2078 25.33)" strokeWidth={1.7} fill="oklch(0.6368 0.2078 25.33)" fillOpacity={0.05} dot={{ r: 1.6 }} /></AreaChart></ResponsiveContainer></div>
       </Panel>
 
       <Panel title="Device Status by Location" className="min-w-0">
@@ -175,7 +175,7 @@ export function NetworkDevicesDashboard() {
       </Panel>
 
       <Panel title="Quick Actions" className="min-w-0" showOptions={false}>
-        <div className="grid grid-cols-2 gap-2 pt-1">{[[Search, "Explore Devices"], [Network, "Manage Devices"], [Plus, "Add Device"], [Download, "Export Report"]].map(([IconComponent, label]) => <button key={label as string} onClick={() => toast(`${label as string} is a mockup action.`)} className="flex min-h-[3.625rem] flex-col items-center justify-center gap-1.5 rounded-lg border border-border bg-card px-1.5 text-[0.6875rem] font-semibold text-[#526b87] transition-colors hover:border-primary/30 hover:bg-accent dark:text-[#c6d2e1]"><IconComponent size={17} className="text-primary" />{label as string}</button>)}</div>
+        <div className="grid grid-cols-2 gap-2 pt-1">{[[Search, "Explore Devices"], [Network, "Manage Devices"], [Plus, "Add Device"], [Download, "Export Report"]].map(([IconComponent, label]) => <button key={label as string} onClick={() => toast(`${label as string} is a mockup action.`)} className="flex min-h-[3.625rem] flex-col items-center justify-center gap-1.5 rounded-lg border border-border bg-card px-1.5 text-[0.6875rem] font-semibold text-[oklch(0.5191_0.0535_251.69)] transition-colors hover:border-primary/30 hover:bg-accent dark:text-[oklch(0.8592_0.0246_253.97)]"><IconComponent size={17} className="text-primary" />{label as string}</button>)}</div>
       </Panel>
     </div>
 

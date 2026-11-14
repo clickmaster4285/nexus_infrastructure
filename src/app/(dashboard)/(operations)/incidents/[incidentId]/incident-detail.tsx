@@ -32,7 +32,7 @@ const TIMELINE_META: Record<string, { icon: LucideIcon; tone: string; label: str
   resolved: { icon: CheckCircle2, tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400", label: "Resolved" },
 };
 
-const ALERT_SEVERITY_DOT: Record<string, string> = { critical: "#DC2626", warning: "#D97706", info: "#3B82F6" };
+const ALERT_SEVERITY_DOT: Record<string, string> = { critical: "oklch(0.5771 0.2152 27.33)", warning: "oklch(0.6658 0.1574 58.32)", info: "oklch(0.6231 0.188 259.81)" };
 
 /** Re-render on an interval so "2h 14m" style durations stay live. */
 function useNow(intervalMs: number): number {
@@ -154,7 +154,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident details…" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident details…" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" />
         <div aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
             <div className="h-[16.25rem] animate-pulse rounded-xl bg-muted" />
@@ -174,7 +174,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (isError) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="The incident could not be loaded." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="The incident could not be loaded." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" />
         <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
@@ -190,7 +190,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (!incident) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident not found" subtitle="No incident with this ID exists." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident not found" subtitle="No incident with this ID exists." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" />
         <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Siren size={20} /></span>
@@ -229,7 +229,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         title={incident.title}
         subtitle={incident.impact}
         icon={<Siren size={22} />}
-        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]"
+        iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]"
         statusBadge={<span className="flex items-center gap-1.5"><SeverityBadge severity={incident.severity} /><StatusBadge status={incident.status} /></span>}
         onRefresh={reload}
         lastUpdated={timeAgo(now)}
@@ -248,7 +248,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">Change status</Button>}
               items={statusItems}
             />
-            <Button onClick={handleResolve} disabled={!open} className="h-10 gap-1.5 rounded-lg bg-green-600 px-4 text-sm font-semibold text-white hover:bg-[#128A3E]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
+            <Button onClick={handleResolve} disabled={!open} className="h-10 gap-1.5 rounded-lg bg-green-600 px-4 text-sm font-semibold text-white hover:bg-[oklch(0.5553_0.1498_149.26)]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
           </div>
         }
       />

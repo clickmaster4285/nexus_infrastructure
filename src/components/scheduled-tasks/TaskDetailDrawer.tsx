@@ -256,7 +256,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                       labelStyle={{ color: "var(--foreground)", fontWeight: 700 }}
                       formatter={(value: number) => [`${value}s`, "Duration"]}
                     />
-                    <Line type="monotone" dataKey="seconds" stroke="#3B82F6" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="seconds" stroke="oklch(0.6231 0.188 259.81)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

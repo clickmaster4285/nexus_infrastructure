@@ -44,17 +44,17 @@ const healthData = [
 ];
 
 const healthSlices = [
-  { name: "Healthy", value: 96, color: "#35b879" },
-  { name: "Warning", value: 24, color: "#f39a12" },
-  { name: "Critical", value: 8, color: "#ed3346" },
+  { name: "Healthy", value: 96, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Warning", value: 24, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Critical", value: 8, color: "oklch(0.6197 0.2192 21.68)" },
 ];
 
 const dependencyTypes = [
-  { name: "Database", value: 42, color: "#2878ed" },
-  { name: "API / HTTP", value: 36, color: "#35b879" },
-  { name: "Cache / Queue", value: 18, color: "#f39a12" },
-  { name: "Storage", value: 16, color: "#8a45df" },
-  { name: "Others", value: 16, color: "#9aa9be" },
+  { name: "Database", value: 42, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "API / HTTP", value: 36, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Cache / Queue", value: 18, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Storage", value: 16, color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Others", value: 16, color: "oklch(0.73 0.0349 256.79)" },
 ];
 
 const totalDependencyCount = Number(stats.find((item) => item.label === "Total Dependencies")?.value ?? 0);
@@ -117,11 +117,11 @@ const topDependenciesByResponseTime = [
 ].sort((a, b) => b.responseMs - a.responseMs);
 
 const topParents = [
-  { name: "User Service", count: 24, width: "100%", color: "#2878ed" },
-  { name: "Order Service", count: 18, width: "75%", color: "#35b879" },
-  { name: "Inventory Service", count: 16, width: "67%", color: "#f39a12" },
-  { name: "Payment Service", count: 12, width: "50%", color: "#8a45df" },
-  { name: "Reporting Service", count: 10, width: "42%", color: "#06b6d4" },
+  { name: "User Service", count: 24, width: "100%", color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "Order Service", count: 18, width: "75%", color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Inventory Service", count: 16, width: "67%", color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Payment Service", count: 12, width: "50%", color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Reporting Service", count: 10, width: "42%", color: "oklch(0.7148 0.1257 215.22)" },
 ];
 
 const events = [
@@ -259,14 +259,14 @@ export function DependenciesDashboard() {
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-                <Line dataKey="healthy" name="Healthy" type="monotone" stroke="#27ad5a" strokeWidth={1.7} dot={{ r: 1.5 }} />
-                <Line dataKey="warning" name="Warning" type="monotone" stroke="#f28a13" strokeWidth={1.7} dot={{ r: 1.5 }} />
-                <Line dataKey="critical" name="Critical" type="monotone" stroke="#ed3346" strokeWidth={1.7} dot={{ r: 1.5 }} />
+                <Line dataKey="healthy" name="Healthy" type="monotone" stroke="oklch(0.6592 0.1645 150.89)" strokeWidth={1.7} dot={{ r: 1.5 }} />
+                <Line dataKey="warning" name="Warning" type="monotone" stroke="oklch(0.7307 0.1673 59.98)" strokeWidth={1.7} dot={{ r: 1.5 }} />
+                <Line dataKey="critical" name="Critical" type="monotone" stroke="oklch(0.6197 0.2192 21.68)" strokeWidth={1.7} dot={{ r: 1.5 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[0.75rem] text-muted-foreground">
-            {[["Healthy", "#27ad5a"], ["Warning", "#f28a13"], ["Critical", "#ed3346"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
+            {[["Healthy", "oklch(0.6592 0.1645 150.89)"], ["Warning", "oklch(0.7307 0.1673 59.98)"], ["Critical", "oklch(0.6197 0.2192 21.68)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
           </div>
         </Panel>
         <Panel title="Dependency Type" className="min-w-0">

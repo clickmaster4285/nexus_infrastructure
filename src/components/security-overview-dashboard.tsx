@@ -111,12 +111,12 @@ function RiskTrend({ range, onRangeChange, snapshot }: { range: string; onRangeC
   }, [range, snapshot]);
   const option = useMemo(() => ({
     grid: { left: 32, right: 8, top: 16, bottom: 26 },
-    tooltip: { trigger: "axis" as const, axisPointer: { type: "shadow" as const }, backgroundColor: "#0f172a", borderWidth: 0, textStyle: { color: "#fff", fontSize: 12 } },
-    xAxis: { type: "category" as const, data: buckets.labels, axisTick: { show: false }, axisLine: { lineStyle: { color: "#E2E8F0" } }, axisLabel: { color: "#64748B", fontSize: 10, interval: range === "30D" ? 4 : range === "90D" ? 1 : 0 } },
-    yAxis: { type: "value" as const, minInterval: 1, splitLine: { lineStyle: { type: "dashed" as const, color: "#E2E8F0" } }, axisLabel: { color: "#64748B", fontSize: 10 } },
+    tooltip: { trigger: "axis" as const, axisPointer: { type: "shadow" as const }, backgroundColor: "oklch(0.2077 0.0398 265.75)", borderWidth: 0, textStyle: { color: "oklch(1 0 89.88)", fontSize: 12 } },
+    xAxis: { type: "category" as const, data: buckets.labels, axisTick: { show: false }, axisLine: { lineStyle: { color: "oklch(0.9288 0.0126 255.51)" } }, axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10, interval: range === "30D" ? 4 : range === "90D" ? 1 : 0 } },
+    yAxis: { type: "value" as const, minInterval: 1, splitLine: { lineStyle: { type: "dashed" as const, color: "oklch(0.9288 0.0126 255.51)" } }, axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10 } },
     series: [
-      { name: "Findings opened", type: "bar" as const, barMaxWidth: 18, itemStyle: { color: "#60A5FA", borderRadius: [4, 4, 0, 0] }, data: buckets.openedSeries },
-      { name: "Fixed", type: "bar" as const, barMaxWidth: 18, itemStyle: { color: "#34D399", borderRadius: [4, 4, 0, 0] }, data: buckets.fixedSeries },
+      { name: "Findings opened", type: "bar" as const, barMaxWidth: 18, itemStyle: { color: "oklch(0.7137 0.1434 254.62)", borderRadius: [4, 4, 0, 0] }, data: buckets.openedSeries },
+      { name: "Fixed", type: "bar" as const, barMaxWidth: 18, itemStyle: { color: "oklch(0.7729 0.1535 163.22)", borderRadius: [4, 4, 0, 0] }, data: buckets.fixedSeries },
     ],
   }), [buckets, range]);
   return <ChartCard title="Risk Trend" className="xl:col-span-8" actions={<div className="flex items-center gap-2"><div className="flex rounded-lg border border-border p-0.5">{["7D", "30D", "90D"].map((item) => <button key={item} type="button" onClick={() => onRangeChange(item)} className={cn("rounded-md px-2.5 py-1 text-sm", range === item ? "bg-card font-semibold shadow-sm" : "text-muted-foreground")}>{item}</button>)}</div><CardMenu label="Risk trend" /></div>}><div className="flex min-h-[15rem] flex-1 flex-col justify-end gap-3"><TrendChart option={option} label="Findings opened and fixed per day" /><div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground"><span><i className="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue-300" />Findings opened</span><span><i className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-300" />Fixed</span><span className="ml-auto">Opened {opened} · Fixed {fixed} · Net +{opened - fixed}</span></div></div></ChartCard>; }

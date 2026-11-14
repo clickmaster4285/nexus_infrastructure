@@ -29,22 +29,22 @@ const IMPACT_MAX = 500;
 const TAG_MAX = 10;
 
 const SEVERITY_CARDS: Array<{ severity: IncidentSeverity; icon: LucideIcon; title: string; description: string; active: string; radio: string }> = [
-  { severity: "SEV1", icon: ChevronsUp, title: "SEV1 · Critical", description: "Major outage or data loss. Page everyone now; exec visibility.", active: "border-red-500 bg-red-50 ring-1 ring-red-500/40 dark:border-red-500/60 dark:bg-red-500/10", radio: "accent-[#DC2626]" },
-  { severity: "SEV2", icon: ChevronUp, title: "SEV2 · High", description: "Significant degradation for many users. Respond now.", active: "border-orange-500 bg-orange-50 ring-1 ring-orange-500/40 dark:border-orange-500/60 dark:bg-orange-500/10", radio: "accent-[#EA580C]" },
-  { severity: "SEV3", icon: Minus, title: "SEV3 · Medium", description: "Limited impact or partial degradation. Fix during business hours.", active: "border-amber-500 bg-amber-50 ring-1 ring-amber-500/40 dark:border-amber-500/60 dark:bg-amber-500/10", radio: "accent-[#D97706]" },
-  { severity: "SEV4", icon: ChevronDownIcon, title: "SEV4 · Low", description: "Minor or cosmetic issue. Track and schedule.", active: "border-blue-500 bg-blue-50 ring-1 ring-blue-500/40 dark:border-blue-500/60 dark:bg-blue-500/10", radio: "accent-[#3B82F6]" },
+  { severity: "SEV1", icon: ChevronsUp, title: "SEV1 · Critical", description: "Major outage or data loss. Page everyone now; exec visibility.", active: "border-red-500 bg-red-50 ring-1 ring-red-500/40 dark:border-red-500/60 dark:bg-red-500/10", radio: "accent-[oklch(0.5771_0.2152_27.33)]" },
+  { severity: "SEV2", icon: ChevronUp, title: "SEV2 · High", description: "Significant degradation for many users. Respond now.", active: "border-orange-500 bg-orange-50 ring-1 ring-orange-500/40 dark:border-orange-500/60 dark:bg-orange-500/10", radio: "accent-[oklch(0.6461_0.1943_41.12)]" },
+  { severity: "SEV3", icon: Minus, title: "SEV3 · Medium", description: "Limited impact or partial degradation. Fix during business hours.", active: "border-amber-500 bg-amber-50 ring-1 ring-amber-500/40 dark:border-amber-500/60 dark:bg-amber-500/10", radio: "accent-[oklch(0.6658_0.1574_58.32)]" },
+  { severity: "SEV4", icon: ChevronDownIcon, title: "SEV4 · Low", description: "Minor or cosmetic issue. Track and schedule.", active: "border-blue-500 bg-blue-50 ring-1 ring-blue-500/40 dark:border-blue-500/60 dark:bg-blue-500/10", radio: "accent-[oklch(0.6231_0.188_259.81)]" },
 ];
 
 const SERVICE_ICONS: Record<string, { icon: LucideIcon; color: string }> = {
-  "api-server": { icon: Server, color: "#2563EB" },
-  "app-server": { icon: Server, color: "#0EA5E9" },
-  "web-app": { icon: Globe, color: "#0891B2" },
-  database: { icon: Database, color: "#336791" },
-  cache: { icon: MemoryStick, color: "#DC382D" },
-  "edge-proxy": { icon: Router, color: "#7C3AED" },
-  scheduler: { icon: CalendarClock, color: "#64748B" },
-  payment: { icon: CreditCard, color: "#16A34A" },
-  storage: { icon: HardDrive, color: "#0F766E" },
+  "api-server": { icon: Server, color: "oklch(0.5461 0.2152 262.88)" },
+  "app-server": { icon: Server, color: "oklch(0.6847 0.1479 237.32)" },
+  "web-app": { icon: Globe, color: "oklch(0.6089 0.1109 221.72)" },
+  database: { icon: Database, color: "oklch(0.4973 0.0875 245.25)" },
+  cache: { icon: MemoryStick, color: "oklch(0.591 0.2022 28.73)" },
+  "edge-proxy": { icon: Router, color: "oklch(0.5413 0.2466 293.01)" },
+  scheduler: { icon: CalendarClock, color: "oklch(0.5544 0.0407 257.42)" },
+  payment: { icon: CreditCard, color: "oklch(0.6271 0.1699 149.21)" },
+  storage: { icon: HardDrive, color: "oklch(0.5109 0.0861 186.39)" },
 };
 
 const NOTIFY_CHANNELS: Array<{ id: string; label: string; icon: LucideIcon; hint?: string }> = [
@@ -361,7 +361,7 @@ export function DeclareIncident() {
         title="Declare Incident"
         subtitle="Open a new incident, page responders and start the timeline."
         icon={<Siren size={22} />}
-        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]"
+        iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]"
         actions={
           <>
             <Button variant="ghost" onClick={cancel} className="h-10 gap-1.5 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>

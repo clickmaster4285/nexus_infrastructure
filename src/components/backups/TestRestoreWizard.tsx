@@ -260,7 +260,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
                 { id: "cleanup", label: "Auto-cleanup sandbox after 24h", detail: "The scratch VM is destroyed after 24h; the restore point is untouched.", checked: autoCleanup, set: setAutoCleanup },
               ].map((option) => (
                 <label key={option.id} className="flex cursor-pointer items-start gap-2 rounded-lg border border-border p-3 transition-colors hover:bg-accent">
-                  <input type="checkbox" checked={option.checked} onChange={(event) => option.set(event.target.checked)} className="mt-0.5 h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]" />
+                  <input type="checkbox" checked={option.checked} onChange={(event) => option.set(event.target.checked)} className="mt-0.5 h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]" />
                   <span>
                     <span className="block text-[0.8125rem] font-semibold text-foreground">{option.label}</span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">{option.detail}</span>

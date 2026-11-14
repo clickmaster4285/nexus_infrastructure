@@ -6,20 +6,20 @@ import { cn } from "@/lib/utils";
 import { infrastructureEvents } from "@/data/mock/infrastructure";
 
 const eventIconTone: Record<string, string> = {
-  green: "bg-[#e6f8ef] text-[#20ad71]",
-  blue: "bg-[#e9f5ff] text-[#3286d5]",
-  amber: "bg-[#fff3df] text-[#e89b2d]",
+  green: "bg-[oklch(0.9634_0.0223_164.52)] text-[oklch(0.6624_0.1451_158.7)]",
+  blue: "bg-[oklch(0.9641_0.0185_242.96)] text-[oklch(0.6081_0.1442_250.41)]",
+  amber: "bg-[oklch(0.9683_0.0293_80.66)] text-[oklch(0.7491_0.1479_70.33)]",
 };
 
 const environmentDot: Record<string, string> = {
-  production: "bg-[#25b578]",
-  staging: "bg-[#eca232]",
-  office: "bg-[#aaa88d]",
+  production: "bg-[oklch(0.6858_0.1479_159.12)]",
+  staging: "bg-[oklch(0.7668_0.1478_72.4)]",
+  office: "bg-[oklch(0.7259_0.0377_103.81)]",
 };
 
 export function InfrastructureEventsPanel({ className }: { className?: string }) {
   const action = (
-    <button type="button" className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[#4284c1] transition-colors hover:text-[#2f6ea8]">
+    <button type="button" className="flex cursor-pointer items-center gap-1 text-[0.75rem] text-[oklch(0.5977_0.1154_248.69)] transition-colors hover:text-[oklch(0.5254_0.1121_249.21)]">
       View All <ArrowRight size={12} aria-hidden="true" />
     </button>
   );
@@ -33,11 +33,11 @@ export function InfrastructureEventsPanel({ className }: { className?: string })
               <Icon name={event.icon} size={14} />
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <b className="truncate text-[0.75rem] font-semibold text-[#556d88] dark:text-[#c4d1e1]">{event.title}</b>
+              <b className="truncate text-[0.75rem] font-semibold text-[oklch(0.5263_0.0514_251.75)] dark:text-[oklch(0.8557_0.0264_253.59)]">{event.title}</b>
               <small className="text-[0.75rem] text-muted-foreground">{event.date}</small>
             </div>
-            <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#54708d] dark:text-[#a9bcd2]">
-              <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", environmentDot[event.environment.toLowerCase()] ?? "bg-[#aaa88d]")} />
+            <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.5348_0.0563_249.79)] dark:text-[oklch(0.7879_0.0377_252.13)]">
+              <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", environmentDot[event.environment.toLowerCase()] ?? "bg-[oklch(0.7259_0.0377_103.81)]")} />
               {event.environment}
             </span>
           </div>

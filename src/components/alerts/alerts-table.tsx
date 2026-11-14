@@ -220,7 +220,7 @@ export function AlertsTable(props: AlertsTableProps) {
                 aria-label="Select all rows on this page"
                 checked={allVisibleSelected}
                 onChange={toggleAll}
-                className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
               />
             </th>
             {header("severity", "Severity", "hidden sm:table-cell")}
@@ -249,7 +249,7 @@ export function AlertsTable(props: AlertsTableProps) {
                   "relative cursor-pointer border-b border-border/70 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
                   "hover:bg-slate-50 dark:hover:bg-accent",
                   isSelected && "bg-primary/[0.06] dark:bg-primary/10",
-                  alert.severity === "critical" && alert.status === "firing" && "shadow-[inset_3px_0_0_#DC2626]",
+                  alert.severity === "critical" && alert.status === "firing" && "shadow-[inset_3px_0_0_oklch(0.5771_0.2152_27.33)]",
                 )}
               >
                 <td className="px-3 py-2.5 align-middle" onClick={(event) => event.stopPropagation()}>
@@ -258,7 +258,7 @@ export function AlertsTable(props: AlertsTableProps) {
                     aria-label={`Select alert ${alert.id}`}
                     checked={isSelected}
                     onChange={() => toggleRow(alert)}
-                    className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                    className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                   />
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle sm:table-cell"><SeverityBadge severity={alert.severity} /></td>

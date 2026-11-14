@@ -37,7 +37,7 @@ export function DonutPanel({ title, data, total, range, totalLabel = "Total", ac
           </ResponsiveContainer>
           <div className="executive-overview-donut-center pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <b className="font-display text-[1.25rem] font-extrabold leading-none text-foreground">{total}</b>
-            <span className="mt-0.5 text-[0.75rem] font-medium text-[#3a4a63] dark:text-[#a9bcd2]">{totalLabel}</span>
+            <span className="mt-0.5 text-[0.75rem] font-medium text-[oklch(0.4062_0.047_259.16)] dark:text-[oklch(0.7879_0.0377_252.13)]">{totalLabel}</span>
           </div>
         </div>
         <div className="executive-overview-donut-legend flex min-w-0 flex-1 flex-col gap-2.5">
@@ -46,7 +46,7 @@ export function DonutPanel({ title, data, total, range, totalLabel = "Total", ac
               <span aria-hidden="true" className="h-[0.5rem] w-[0.5rem] rounded-full" style={{ background: item.color }} />
               <span className="truncate">{item.name}</span>
               <span className="font-semibold tabular-nums">
-                {item.value} <em className="not-italic font-medium text-[#3a4a63] dark:text-[#a9bcd2]">({Math.round((item.value / total) * 100)}%)</em>
+                {item.value} <em className="not-italic font-medium text-[oklch(0.4062_0.047_259.16)] dark:text-[oklch(0.7879_0.0377_252.13)]">({Math.round((item.value / total) * 100)}%)</em>
               </span>
             </div>
           ))}

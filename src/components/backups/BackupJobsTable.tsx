@@ -166,7 +166,7 @@ export function BackupJobsTable({
                   checked={allVisibleSelected}
                   onChange={toggleAllVisible}
                   aria-label="Select all backups on this page"
-                  className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                  className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                 />
               </th>
               <th scope="col" aria-sort={sortKey === "asset" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("asset", "Job")}</th>
@@ -219,7 +219,7 @@ export function BackupJobsTable({
                       disabled={!job}
                       onChange={() => job && toggleOne(job.id)}
                       aria-label={job ? `Select ${name}` : `${name} is not backed up`}
-                      className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)] disabled:cursor-not-allowed disabled:opacity-40"
                     />
                   </td>
                   {/* Job */}

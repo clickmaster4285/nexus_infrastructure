@@ -112,11 +112,11 @@ function mulberry32(seed: number): () => number {
 }
 
 const METHOD_SERIES = [
-  { name: "Password", color: "#38BDF8", weight: 8_214 },
-  { name: "SSO/SAML", color: "#A78BFA", weight: 5_893 },
-  { name: "MFA/TOTP", color: "#FBBF24", weight: 2_213 },
-  { name: "SSH key", color: "#34D399", weight: 1_471 },
-  { name: "API token", color: "#94A3B8", weight: 629 },
+  { name: "Password", color: "oklch(0.7535 0.139 232.66)", weight: 8 214 },
+  { name: "SSO/SAML", color: "oklch(0.709 0.1592 293.54)", weight: 5 893 },
+  { name: "MFA/TOTP", color: "oklch(0.8369 0.1644 84.43)", weight: 2 213 },
+  { name: "SSH key", color: "oklch(0.7729 0.1535 163.22)", weight: 1 471 },
+  { name: "API token", color: "oklch(0.7107 0.0351 256.79)", weight: 629 },
 ];
 
 function splitByWeights(total: number, weights: number[], rand: () => number): number[] {
@@ -620,10 +620,10 @@ export function AuthEventsDashboard() {
           {chartMode === "result" ? (
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm" aria-label="Toggle result series">
               {[
-                { name: "Success", count: summary.success, color: "#34D399" },
-                { name: "Failed", count: failedBreakdown.failed, color: "#F87171" },
-                { name: "Blocked", count: failedBreakdown.blocked, color: "#B91C1C" },
-                { name: "Challenged", count: failedBreakdown.challenged, color: "#FBBF24" },
+                { name: "Success", count: summary.success, color: "oklch(0.7729 0.1535 163.22)" },
+                { name: "Failed", count: failedBreakdown.failed, color: "oklch(0.7106 0.1661 22.22)" },
+                { name: "Blocked", count: failedBreakdown.blocked, color: "oklch(0.5054 0.1905 27.52)" },
+                { name: "Challenged", count: failedBreakdown.challenged, color: "oklch(0.8369 0.1644 84.43)" },
               ].map((entry) => {
                 const active = !hiddenSeries.has(entry.name);
                 return (
@@ -1181,30 +1181,30 @@ function LoginActivityChart({ mode, buckets, methodDistribution, hidden, peakBuc
       const grid = { left: 40, right: 16, top: 38, bottom: 26 } as const;
       const axis = {
         axisTick: { show: false },
-        axisLine: { lineStyle: { color: "#E2E8F0" } },
-        axisLabel: { color: "#64748B", fontSize: 10, interval: labels.length > 16 ? Math.floor(labels.length / 6) : 0 },
+        axisLine: { lineStyle: { color: "oklch(0.9288 0.0126 255.51)" } },
+        axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10, interval: labels.length > 16 ? Math.floor(labels.length / 6) : 0 },
       } as const;
       const tooltip = {
         trigger: "axis" as const,
         confine: true,
         axisPointer: { type: "shadow" as const },
-        backgroundColor: "#0f172a",
+        backgroundColor: "oklch(0.2077 0.0398 265.75)",
         borderWidth: 0,
-        textStyle: { color: "#fff", fontSize: 12 },
+        textStyle: { color: "oklch(1 0 89.88)", fontSize: 12 },
       };
       const maxStack = buckets.reduce((acc, bucket) => Math.max(acc, bucket.total), 0);
       const valueAxis = {
         type: "value" as const,
         max: Math.ceil(maxStack * 1.18),
-        splitLine: { lineStyle: { type: "dashed" as const, color: "#E2E8F0" } },
-        axisLabel: { color: "#64748B", fontSize: 10 },
+        splitLine: { lineStyle: { type: "dashed" as const, color: "oklch(0.9288 0.0126 255.51)" } },
+        axisLabel: { color: "oklch(0.5544 0.0407 257.42)", fontSize: 10 },
       };
       if (mode === "result") {
         const series = [
-          { name: "Success", color: "#34D399", data: buckets.map((bucket) => bucket.success) },
-          { name: "Failed", color: "#F87171", data: buckets.map((bucket) => bucket.failed) },
-          { name: "Blocked", color: "#B91C1C", data: buckets.map((bucket) => bucket.blocked) },
-          { name: "Challenged", color: "#FBBF24", data: buckets.map((bucket) => bucket.challenged) },
+          { name: "Success", color: "oklch(0.7729 0.1535 163.22)", data: buckets.map((bucket) => bucket.success) },
+          { name: "Failed", color: "oklch(0.7106 0.1661 22.22)", data: buckets.map((bucket) => bucket.failed) },
+          { name: "Blocked", color: "oklch(0.5054 0.1905 27.52)", data: buckets.map((bucket) => bucket.blocked) },
+          { name: "Challenged", color: "oklch(0.8369 0.1644 84.43)", data: buckets.map((bucket) => bucket.challenged) },
         ].filter((entry) => !hidden.has(entry.name));
         const failureSeriesIndex = series.findIndex((entry) => entry.name === "Failed");
         return {
@@ -1224,8 +1224,8 @@ function LoginActivityChart({ mode, buckets, methodDistribution, hidden, peakBuc
               markPoint: {
                 symbol: "pin",
                 symbolSize: 38,
-                itemStyle: { color: "#EF4444" },
-                label: { color: "#fff", fontSize: 8, formatter: `Brute force\n${peakBucket.label}` },
+                itemStyle: { color: "oklch(0.6368 0.2078 25.33)" },
+                label: { color: "oklch(1 0 89.88)", fontSize: 8, formatter: `Brute force\n${peakBucket.label}` },
                 data: [{ type: "max" as const, name: "Peak failures" }],
               },
             } : {}),
@@ -1273,7 +1273,7 @@ function MethodDonut({ onSelect }: { onSelect: (method: string) => void }) {
   const summary = getAuthSummary();
   const hostRef = useEChart(
     useMemo<EChartsOption>(() => ({
-      tooltip: { trigger: "item", confine: true, backgroundColor: "#0f172a", borderWidth: 0, textStyle: { color: "#fff", fontSize: 12 } },
+      tooltip: { trigger: "item", confine: true, backgroundColor: "oklch(0.2077 0.0398 265.75)", borderWidth: 0, textStyle: { color: "oklch(1 0 89.88)", fontSize: 12 } },
       series: [
         {
           name: "Auth methods",

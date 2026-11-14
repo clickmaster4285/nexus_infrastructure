@@ -47,7 +47,7 @@ function MiniSparkline({ values }: { values: number[] }) {
   }).join(" ");
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="h-[3.75rem] w-full" preserveAspectRatio="none" role="img" aria-label="30-day uptime trend">
-      <polyline points={points} fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+      <polyline points={points} fill="none" stroke="oklch(0.6231 0.188 259.81)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }

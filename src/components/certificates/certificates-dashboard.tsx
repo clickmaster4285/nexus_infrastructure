@@ -48,7 +48,7 @@ const TABS: Array<{ key: MainTab; label: string }> = [
   { key: "selfsigned", label: "Self-signed" },
 ];
 
-const STATUS_COLORS: Record<CertStatus, string> = { Expired: "#DC2626", Critical: "#EA580C", "Expiring soon": "#D97706", Healthy: "#16A34A", Revoked: "#94A3B8" };
+const STATUS_COLORS: Record<CertStatus, string> = { Expired: "oklch(0.5771 0.2152 27.33)", Critical: "oklch(0.6461 0.1943 41.12)", "Expiring soon": "oklch(0.6658 0.1574 58.32)", Healthy: "oklch(0.6271 0.1699 149.21)", Revoked: "oklch(0.7107 0.0351 256.79)" };
 
 function isWeak(cert: Certificate): boolean {
   return /sha1/i.test(cert.signatureAlgorithm) || cert.keySize < 2048;
@@ -214,9 +214,9 @@ export function CertificatesDashboard() {
     const selfSigned = certs.filter((c) => c.issuerType === "Self-signed").length;
     const total = publicCA + internalCA + selfSigned || 1;
     return [
-      { type: "Public CAs", count: publicCA, pct: Math.round((publicCA / total) * 100), color: "#0EA5E9" },
-      { type: "Internal CA", count: internalCA, pct: Math.round((internalCA / total) * 100), color: "#8B5CF6" },
-      { type: "Self-signed", count: selfSigned, pct: Math.round((selfSigned / total) * 100), color: "#F59E0B" },
+      { type: "Public CAs", count: publicCA, pct: Math.round((publicCA / total) * 100), color: "oklch(0.6847 0.1479 237.32)" },
+      { type: "Internal CA", count: internalCA, pct: Math.round((internalCA / total) * 100), color: "oklch(0.6056 0.2189 292.72)" },
+      { type: "Self-signed", count: selfSigned, pct: Math.round((selfSigned / total) * 100), color: "oklch(0.7686 0.1647 70.08)" },
     ];
   }, [certs]);
 
@@ -261,9 +261,9 @@ export function CertificatesDashboard() {
     const total = counts.ACME + counts.Vendor + counts.Manual;
     const max = Math.max(counts.ACME, counts.Vendor, counts.Manual, 1);
     return [
-      { method: "ACME", count: counts.ACME, pct: Math.round((counts.ACME / max) * 100), color: "#16A34A" },
-      { method: "Vendor", count: counts.Vendor, pct: Math.round((counts.Vendor / max) * 100), color: "#0EA5E9" },
-      { method: "Manual", count: counts.Manual, pct: Math.round((counts.Manual / max) * 100), color: "#F59E0B" },
+      { method: "ACME", count: counts.ACME, pct: Math.round((counts.ACME / max) * 100), color: "oklch(0.6271 0.1699 149.21)" },
+      { method: "Vendor", count: counts.Vendor, pct: Math.round((counts.Vendor / max) * 100), color: "oklch(0.6847 0.1479 237.32)" },
+      { method: "Manual", count: counts.Manual, pct: Math.round((counts.Manual / max) * 100), color: "oklch(0.7686 0.1647 70.08)" },
     ];
   }, [certs]);
 
@@ -404,14 +404,14 @@ export function CertificatesDashboard() {
             <div className="h-[14.375rem] min-h-[13.75rem] w-full flex-1" role="img" aria-label="Certificates expiring stacked area chart">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={timelineData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                  <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="4 4" />
-                  <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748B", fontSize: 10 }} />
-                  <YAxis tickLine={false} axisLine={false} tick={{ fill: "#64748B", fontSize: 10 }} width={26} allowDecimals={false} />
-                  <Tooltip cursor={{ stroke: "#94A3B8" }} contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} labelStyle={{ color: "#fff" }} />
-                  <Area type="monotone" dataKey="expired" name="Expired" stackId="1" stroke="#DC2626" fill="#DC2626" fillOpacity={0.85} />
-                  <Area type="monotone" dataKey="critical" name="Critical" stackId="1" stroke="#EA580C" fill="#EA580C" fillOpacity={0.85} />
-                  <Area type="monotone" dataKey="soon" name="Expiring soon" stackId="1" stroke="#D97706" fill="#D97706" fillOpacity={0.85} />
-                  <Area type="monotone" dataKey="healthy" name="Healthy" stackId="1" stroke="#16A34A" fill="#16A34A" fillOpacity={0.85} />
+                  <CartesianGrid vertical={false} stroke="oklch(0.9276 0.0058 264.53)" strokeDasharray="4 4" />
+                  <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "oklch(0.5544 0.0407 257.42)", fontSize: 10 }} />
+                  <YAxis tickLine={false} axisLine={false} tick={{ fill: "oklch(0.5544 0.0407 257.42)", fontSize: 10 }} width={26} allowDecimals={false} />
+                  <Tooltip cursor={{ stroke: "oklch(0.7107 0.0351 256.79)" }} contentStyle={{ background: "oklch(0.2077 0.0398 265.75)", border: 0, borderRadius: 8, color: "oklch(1 0 89.88)", fontSize: 12 }} labelStyle={{ color: "oklch(1 0 89.88)" }} />
+                  <Area type="monotone" dataKey="expired" name="Expired" stackId="1" stroke="oklch(0.5771 0.2152 27.33)" fill="oklch(0.5771 0.2152 27.33)" fillOpacity={0.85} />
+                  <Area type="monotone" dataKey="critical" name="Critical" stackId="1" stroke="oklch(0.6461 0.1943 41.12)" fill="oklch(0.6461 0.1943 41.12)" fillOpacity={0.85} />
+                  <Area type="monotone" dataKey="soon" name="Expiring soon" stackId="1" stroke="oklch(0.6658 0.1574 58.32)" fill="oklch(0.6658 0.1574 58.32)" fillOpacity={0.85} />
+                  <Area type="monotone" dataKey="healthy" name="Healthy" stackId="1" stroke="oklch(0.6271 0.1699 149.21)" fill="oklch(0.6271 0.1699 149.21)" fillOpacity={0.85} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -426,7 +426,7 @@ export function CertificatesDashboard() {
                   <Pie data={statusData} dataKey="value" innerRadius="62%" outerRadius="100%" startAngle={90} endAngle={-270} paddingAngle={2}>
                     {statusData.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} />
+                  <Tooltip contentStyle={{ background: "oklch(0.2077 0.0398 265.75)", border: 0, borderRadius: 8, color: "oklch(1 0 89.88)", fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.25rem] leading-none text-foreground tabular-nums">{summary.total}</b><span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">certs</span></div>

@@ -81,10 +81,10 @@ function EChart({ option, label, className, apiRef }: { option: EChartsOption; l
 }
 
 const dark = (isDark: boolean) => ({
-  text: isDark ? "#cbd5e1" : "#64748B",
-  axis: isDark ? "#475569" : "#dbe3ee",
-  tooltipBg: isDark ? "#111827" : "#ffffff",
-  tooltipText: isDark ? "#e2e8f0" : "#1E293B",
+  text: isDark ? "oklch(0.869 0.0198 252.89)" : "oklch(0.5544 0.0407 257.42)",
+  axis: isDark ? "oklch(0.4455 0.0374 257.28)" : "oklch(0.913 0.0173 256.28)",
+  tooltipBg: isDark ? "oklch(0.2101 0.0318 264.66)" : "oklch(1 0 89.88)",
+  tooltipText: isDark ? "oklch(0.9288 0.0126 255.51)" : "oklch(0.2795 0.0368 260.03)",
 });
 
 function useDarkMode() {
@@ -144,7 +144,7 @@ function CollectorIngestionSpark({ values, name }: { values: number[]; name: str
     return `${x.toFixed(1)},${y.toFixed(1)}`;
   }).join(" ");
   return <svg viewBox="0 0 50 18" className="h-[1.125rem] w-[3.125rem] shrink-0" role="img" aria-label={`${name} ingestion trend`}>
-    <polyline points={points} fill="none" stroke="#60A5FA" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <polyline points={points} fill="none" stroke="oklch(0.7137 0.1434 254.62)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
   </svg>;
 }
 
@@ -185,9 +185,9 @@ export function GlobalHealthDashboard() {
   const locationList = [...healthLocations].sort((a, b) => a.health - b.health).slice(0, 7);
 
   const trendItems = [
-    { key: "infrastructureHealth", name: "Infrastructure Health", color: "#60A5FA" },
-    { key: "monitoringCoverage", name: "Monitoring Coverage", color: "#34D399" },
-    { key: "availability", name: "Service Availability", color: "#A78BFA" },
+    { key: "infrastructureHealth", name: "Infrastructure Health", color: "oklch(0.7137 0.1434 254.62)" },
+    { key: "monitoringCoverage", name: "Monitoring Coverage", color: "oklch(0.7729 0.1535 163.22)" },
+    { key: "availability", name: "Service Availability", color: "oklch(0.709 0.1592 293.54)" },
   ] as const;
   const trendRows = globalHealthTrendByRange[trendRange];
   const trendStats = (key: typeof trendItems[number]["key"]) => {
@@ -227,7 +227,7 @@ export function GlobalHealthDashboard() {
     return {
       animationDuration: 650,
       grid: { top: 30, right: 20, bottom: 30, left: 48, containLabel: false },
-      tooltip: { trigger: "axis", triggerOn: "mousemove", alwaysShowContent: false, hideDelay: 0, confine: true, transitionDuration: 0, position: (point: [number, number]) => [point[0] + 14, Math.max(8, point[1] - 24)], axisPointer: { type: "cross", lineStyle: { type: "dashed", color: theme.text } }, backgroundColor: theme.tooltipBg, borderColor: theme.axis, textStyle: { color: theme.tooltipText, fontSize: 12 }, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14);padding:0.625rem 0.75rem", formatter: (params: unknown) => { const list = Array.isArray(params) ? params as Array<{ axisValue: string; marker: string; seriesName: string; value: number }> : []; return `<b>${list[0]?.axisValue ?? ""}</b><br/>${list.map((p) => `${p.marker}${p.seriesName}: <b>${Number(p.value).toFixed(1)}%</b>`).join("<br/>")}`; } },
+      tooltip: { trigger: "axis", triggerOn: "mousemove", alwaysShowContent: false, hideDelay: 0, confine: true, transitionDuration: 0, position: (point: [number, number]) => [point[0] + 14, Math.max(8, point[1] - 24)], axisPointer: { type: "cross", lineStyle: { type: "dashed", color: theme.text } }, backgroundColor: theme.tooltipBg, borderColor: theme.axis, textStyle: { color: theme.tooltipText, fontSize: 12 }, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14);padding:0.625rem 0.75rem", formatter: (params: unknown) => { const list = Array.isArray(params) ? params as Array<{ axisValue: string; marker: string; seriesName: string; value: number }> : []; return `<b>${list[0]?.axisValue ?? ""}</b><br/>${list.map((p) => `${p.marker}${p.seriesName}: <b>${Number(p.value).toFixed(1)}%</b>`).join("<br/>")}`; } },
       xAxis: { type: "category", boundaryGap: false, data: trendRows.map((point) => point.time), axisLabel: { color: theme.text, fontSize: 11, hideOverlap: true, interval: Math.max(1, Math.floor(trendRows.length / 5)) }, axisLine: { lineStyle: { color: theme.axis } }, axisTick: { show: false } },
       yAxis: { type: "value", min: 97, max: 100, interval: 1, name: "Zoomed axis", nameTextStyle: { color: theme.text, fontSize: 11, align: "left", padding: [0, 0, 0, -4] }, axisLabel: { color: theme.text, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: theme.axis, type: "dashed" } } },
       legend: { show: false, selected: visibleSeries },
@@ -236,18 +236,18 @@ export function GlobalHealthDashboard() {
         const lowestValue = Math.min(...seriesValues);
         const lowestIndex = seriesValues.indexOf(lowestValue);
         const lowestAt = trendRows[lowestIndex]?.time ?? "—";
-        return { name: item.name, type: "line", smooth: 0.3, showSymbol: false, symbolSize: 7, emphasis: { focus: "series", showSymbol: true }, lineStyle: { width: 2, color: item.color }, itemStyle: { color: item.color }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${item.color}35` }, { offset: 1, color: `${item.color}00` }]) }, data: seriesValues, markPoint: { symbol: "circle", symbolSize: 6, label: { show: false }, itemStyle: { color: item.color, borderColor: isDark ? "#0f172a" : "#ffffff", borderWidth: 1.5 }, data: [{ coord: [lowestIndex, lowestValue] }], tooltip: { trigger: "item", formatter: `Lowest ${lowestValue.toFixed(1)}% · ${lowestAt}` } }, markArea: item.key === "infrastructureHealth" ? { silent: true, itemStyle: { color: "rgba(245,158,11,0.06)" }, data: [[{ yAxis: 97 }, { yAxis: SLA_TARGET }]] } : undefined, markLine: item.key === "infrastructureHealth" ? { symbol: "none", lineStyle: { color: "#F87171", type: "dashed", width: 1 }, label: { show: true, formatter: "SLA 99%", position: "insideEndTop", color: "#be123c", fontSize: 11, backgroundColor: isDark ? "#4c1d32" : "#fff1f2", padding: [3, 6], borderRadius: 8 }, data: [{ yAxis: SLA_TARGET }] } : undefined, } as unknown as echarts.SeriesOption;
+        return { name: item.name, type: "line", smooth: 0.3, showSymbol: false, symbolSize: 7, emphasis: { focus: "series", showSymbol: true }, lineStyle: { width: 2, color: item.color }, itemStyle: { color: item.color }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${item.color}35` }, { offset: 1, color: `${item.color}00` }]) }, data: seriesValues, markPoint: { symbol: "circle", symbolSize: 6, label: { show: false }, itemStyle: { color: item.color, borderColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)", borderWidth: 1.5 }, data: [{ coord: [lowestIndex, lowestValue] }], tooltip: { trigger: "item", formatter: `Lowest ${lowestValue.toFixed(1)}% · ${lowestAt}` } }, markArea: item.key === "infrastructureHealth" ? { silent: true, itemStyle: { color: "oklch(0.7686 0.1647 70.08 / 0.06)" }, data: [[{ yAxis: 97 }, { yAxis: SLA_TARGET }]] } : undefined, markLine: item.key === "infrastructureHealth" ? { symbol: "none", lineStyle: { color: "oklch(0.7106 0.1661 22.22)", type: "dashed", width: 1 }, label: { show: true, formatter: "SLA 99%", position: "insideEndTop", color: "oklch(0.5143 0.1978 16.93)", fontSize: 11, backgroundColor: isDark ? "oklch(0.3079 0.0759 354.51)" : "oklch(0.9694 0.0152 12.42)", padding: [3, 6], borderRadius: 8 }, data: [{ yAxis: SLA_TARGET }] } : undefined, } as unknown as echarts.SeriesOption;
       }),
     };
   }, [palette, trendRows, isDark, visibleSeries]);
 
   const donutOption = useMemo<EChartsOption>(() => ({
     animationDuration: 700,
-    tooltip: { trigger: "item", backgroundColor: palette.tooltipBg, textStyle: { color: palette.tooltipText }, borderColor: palette.axis, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14)" },
-    series: [{ type: "pie", radius: ["64.8%", "90%"], center: ["50%", "50%"], startAngle: 90, avoidLabelOverlap: true, itemStyle: { borderColor: isDark ? "#111827" : "#fff", borderWidth: 3, borderRadius: 4 }, label: { show: false }, data: [
-      { name: "Up", value: healthyCollectorCount, itemStyle: { color: "#34D399" } },
-      { name: "Stale", value: staleCollectorCount, itemStyle: { color: "#FBBF24" } },
-      { name: "Down", value: downCollectorCount, itemStyle: { color: "#F87171" } },
+    tooltip: { trigger: "item", backgroundColor: palette.tooltipBg, textStyle: { color: palette.tooltipText }, borderColor: palette.axis, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14)" },
+    series: [{ type: "pie", radius: ["64.8%", "90%"], center: ["50%", "50%"], startAngle: 90, avoidLabelOverlap: true, itemStyle: { borderColor: isDark ? "oklch(0.2101 0.0318 264.66)" : "oklch(1 0 89.88)", borderWidth: 3, borderRadius: 4 }, label: { show: false }, data: [
+      { name: "Up", value: healthyCollectorCount, itemStyle: { color: "oklch(0.7729 0.1535 163.22)" } },
+      { name: "Stale", value: staleCollectorCount, itemStyle: { color: "oklch(0.8369 0.1644 84.43)" } },
+      { name: "Down", value: downCollectorCount, itemStyle: { color: "oklch(0.7106 0.1661 22.22)" } },
     ] }],
   }), [palette, isDark, healthyCollectorCount, staleCollectorCount, downCollectorCount]);
 
@@ -261,7 +261,7 @@ export function GlobalHealthDashboard() {
     <section aria-label="Health trend, components and locations" className="mt-4 grid items-stretch gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       <Panel title="Health Trend" titleClassName="text-[1rem] font-semibold" className="flex min-h-[21.875rem] min-w-0 flex-col p-4" action={<div className="flex rounded-lg border border-border p-0.5" role="group" aria-label="Trend range">{(["24H", "7D", "30D"] as const).map((range) => <button key={range} type="button" aria-pressed={trendRange === range} onClick={() => { setTrendRange(range); trendChartApi.current?.dispatchAction({ type: "downplay" }); }} className={cn(controlClass, trendRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted")}>{range}</button>)}</div>}>
         <div className="flex h-full min-h-0 flex-col">
-        <div className="mt-3 flex flex-nowrap items-center gap-1.5 overflow-x-auto whitespace-nowrap pb-0.5">{trendItems.map((item) => { const stats = trendStats(item.key); const active = visibleSeries[item.name]; return <button key={item.name} type="button" aria-pressed={active} onClick={() => setVisibleSeries((old) => ({ ...old, [item.name]: !old[item.name] }))} aria-label={`${active ? "Hide" : "Show"} ${item.name}, latest ${stats.now.toFixed(1)}%`} className={cn("inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[0.75rem] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active ? "border-border bg-card text-slate-700 dark:text-slate-200" : "border-transparent bg-slate-100 text-slate-400 line-through dark:bg-slate-800")}><i className="h-2 w-2 shrink-0 rounded-full" style={{ background: active ? item.color : "#94a3b8" }} /><span className="truncate">{item.name}</span><b className="shrink-0 tabular-nums">{stats.now.toFixed(1)}%</b></button>; })}</div>
+        <div className="mt-3 flex flex-nowrap items-center gap-1.5 overflow-x-auto whitespace-nowrap pb-0.5">{trendItems.map((item) => { const stats = trendStats(item.key); const active = visibleSeries[item.name]; return <button key={item.name} type="button" aria-pressed={active} onClick={() => setVisibleSeries((old) => ({ ...old, [item.name]: !old[item.name] }))} aria-label={`${active ? "Hide" : "Show"} ${item.name}, latest ${stats.now.toFixed(1)}%`} className={cn("inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[0.75rem] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active ? "border-border bg-card text-slate-700 dark:text-slate-200" : "border-transparent bg-slate-100 text-slate-400 line-through dark:bg-slate-800")}><i className="h-2 w-2 shrink-0 rounded-full" style={{ background: active ? item.color : "oklch(0.7107 0.0351 256.79)" }} /><span className="truncate">{item.name}</span><b className="shrink-0 tabular-nums">{stats.now.toFixed(1)}%</b></button>; })}</div>
         <div className="mt-2 flex min-h-[10.625rem] min-w-0 flex-1 flex-col"><EChart apiRef={trendChartApi} option={trendOption} label="Infrastructure health, monitoring coverage, and service availability over time" className="!min-h-[10.625rem] h-full" /></div>
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-2">
           <span className="text-[0.75rem] font-semibold text-slate-600 dark:text-slate-300">Series summary</span>
@@ -374,7 +374,7 @@ export function GlobalHealthDashboard() {
 
     <section aria-label="Resource, service, and environment health" className="mt-4 grid items-stretch gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       <Panel title="Resource Health" titleClassName="text-[1rem] font-semibold" className="flex min-h-[20.9375rem] min-w-0 flex-col p-4">
-        <div className="mt-3 grid flex-1 grid-cols-2 gap-3">{resourceHealth.map((resource) => { const barColor = resource.value >= 85 ? "#F87171" : resource.value >= 70 ? "#FBBF24" : "#60A5FA"; return <article key={resource.label} className="flex min-w-0 flex-col justify-center rounded-lg border border-border/70 bg-slate-50 p-3 dark:bg-slate-800/60"><div className="flex items-center justify-between gap-2"><span className="flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200"><Icon name={resource.icon} size={15} className="text-blue-500" />{resource.label}</span><StatusIcon value={resource.value} size={14} /></div><b className="mt-2 text-[1.25rem] tabular-nums text-slate-900 dark:text-white">{resource.value}%</b><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div className="h-full rounded-full" style={{ width: `${resource.value}%`, backgroundColor: barColor }} /></div><span className="mt-1.5 text-[0.75rem] text-slate-500">{resource.kind}</span></article>; })}</div>
+        <div className="mt-3 grid flex-1 grid-cols-2 gap-3">{resourceHealth.map((resource) => { const barColor = resource.value >= 85 ? "oklch(0.7106 0.1661 22.22)" : resource.value >= 70 ? "oklch(0.8369 0.1644 84.43)" : "oklch(0.7137 0.1434 254.62)"; return <article key={resource.label} className="flex min-w-0 flex-col justify-center rounded-lg border border-border/70 bg-slate-50 p-3 dark:bg-slate-800/60"><div className="flex items-center justify-between gap-2"><span className="flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200"><Icon name={resource.icon} size={15} className="text-blue-500" />{resource.label}</span><StatusIcon value={resource.value} size={14} /></div><b className="mt-2 text-[1.25rem] tabular-nums text-slate-900 dark:text-white">{resource.value}%</b><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div className="h-full rounded-full" style={{ width: `${resource.value}%`, backgroundColor: barColor }} /></div><span className="mt-1.5 text-[0.75rem] text-slate-500">{resource.kind}</span></article>; })}</div>
       </Panel>
 
       <Panel title="Top Healthy Services" titleClassName="text-[1rem] font-semibold" className="flex min-h-[20.9375rem] min-w-0 flex-col p-4" action={<Link href="/processes-and-services" className="inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link>}>
@@ -410,7 +410,7 @@ export function GlobalHealthDashboard() {
             { label: "Ingestion", value: formatNocIngestionRate(collectorIngestion) },
             { label: "Avg scrape", value: `${averageCollectorScrape.toFixed(1)}s` },
           ].map((tile) => (
-            <div key={tile.label} className={cn("min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/60", collectorNeedsAttention && "bg-amber-50 dark:bg-amber-950/20")}>
+            <div key={tile.label} className={cn("min-w-0 rounded-lg bg-[oklch(0.9819_0.0029_264.54)] p-2.5 dark:bg-slate-800/60", collectorNeedsAttention && "bg-amber-50 dark:bg-amber-950/20")}>
               <span className="block truncate text-[0.75rem] text-slate-500">{tile.label}</span>
               <b className="mt-1 block truncate text-[1rem] font-bold tabular-nums text-slate-900 dark:text-white">{tile.value}</b>
             </div>
@@ -498,7 +498,7 @@ export function GlobalHealthDashboard() {
             const targetId = item.kind === "Component" ? `health-component-${item.name.toLowerCase()}` : `health-environment-${item.name.toLowerCase().replace(/\s+/g, "-")}`;
             return <li key={`${item.kind}-${item.name}`} className="flex min-h-[3rem] flex-col justify-center gap-1 py-1">
               <span className="flex min-w-0 items-center justify-between gap-2"><span className="flex min-w-0 items-center gap-1.5"><b className="truncate text-[0.8125rem] font-medium text-slate-800 dark:text-slate-100">{item.name}</b><span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[0.75rem] text-slate-600 dark:bg-slate-800 dark:text-slate-300">{item.kind}</span></span><span className="flex shrink-0 items-center gap-1.5"><b className="text-[0.75rem] tabular-nums text-slate-700 dark:text-slate-200">{item.value.toFixed(1)}%</b><b className={cn("text-[0.75rem] tabular-nums", severityClass)}>−{gap.toFixed(1)}%</b><span className={cn("whitespace-nowrap rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold", critical ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300")}>{critical ? "Critical" : "Warning"}</span><StatusIcon value={item.value} size={14} /></span></span>
-              <span className="flex min-w-0 items-center justify-between gap-2 pl-0.5 text-[0.75rem] text-slate-500"><span className="truncate">below SLA for {duration}</span><ComponentSparkline values={item.history} color={critical ? "#F87171" : "#FBBF24"} label={`${item.name} attention trend`} /><Link href={`#${targetId}`} title={`View ${item.name} health details`} aria-label={`View ${item.name} health details`} className="shrink-0 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">View</Link></span>
+              <span className="flex min-w-0 items-center justify-between gap-2 pl-0.5 text-[0.75rem] text-slate-500"><span className="truncate">below SLA for {duration}</span><ComponentSparkline values={item.history} color={critical ? "oklch(0.7106 0.1661 22.22)" : "oklch(0.8369 0.1644 84.43)"} label={`${item.name} attention trend`} /><Link href={`#${targetId}`} title={`View ${item.name} health details`} aria-label={`View ${item.name} health details`} className="shrink-0 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">View</Link></span>
             </li>;
           })}</ul>
         </> : <div className="my-auto flex flex-col items-center gap-2 py-8 text-center"><CircleCheck size={28} className="text-emerald-500" /><b className="text-[0.875rem] text-slate-800 dark:text-slate-100">Everything is within SLA</b></div>}
@@ -509,7 +509,7 @@ export function GlobalHealthDashboard() {
         <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[0.75rem]"><span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">{recentDrops} drops</span><span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">{recentRecoveries} recoveries</span><span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600 dark:bg-slate-800 dark:text-slate-300">Last 6h</span></div>
         <div className="relative mt-1 min-h-0 flex-1"><i aria-hidden="true" className="absolute bottom-4 left-[3.8125rem] top-4 w-px bg-slate-200 dark:bg-slate-700" /><ol className="relative flex h-full flex-col justify-between" aria-label="Health changes in the last six hours">{recent.map((event) => {
           const drop = event.kind === "drop";
-          const changeColor = drop ? "#FBBF24" : "#34D399";
+          const changeColor = drop ? "oklch(0.8369 0.1644 84.43)" : "oklch(0.7729 0.1535 163.22)";
           return <li key={`${event.time}-${event.name}`} className="grid min-h-[2.75rem] grid-cols-[42px_12px_minmax(0,1fr)] items-center gap-2 py-1">
             <time className="whitespace-nowrap text-[0.75rem] tabular-nums text-slate-500">{event.time}</time>
             <span className="relative z-10 mx-auto grid h-3 w-3 place-items-center rounded-full bg-card"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: changeColor }} /></span>

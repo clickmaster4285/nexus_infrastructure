@@ -28,9 +28,9 @@ import {
 import { cn } from "@/lib/utils";
 
 const statusColor: Record<GroupStatus, string> = {
-  Healthy: "#22C55E",
-  Degraded: "#F59E0B",
-  Offline: "#EF4444",
+  Healthy: "oklch(0.7227 0.192 149.58)",
+  Degraded: "oklch(0.7686 0.1647 70.08)",
+  Offline: "oklch(0.6368 0.2078 25.33)",
 };
 
 const statusTone: Record<GroupStatus, string> = {
@@ -96,9 +96,9 @@ interface GroupPerformancePoint {
 }
 
 const performanceSeries = [
-  { key: "production" as const, name: "Production Web", groupId: "production-web", color: "#1479e8" },
-  { key: "database" as const, name: "Database Cluster", groupId: "database-cluster", color: "#8a45df" },
-  { key: "api" as const, name: "API Services", groupId: "api-services", color: "#1fb971" },
+  { key: "production" as const, name: "Production Web", groupId: "production-web", color: "oklch(0.5855 0.1885 255.72)" },
+  { key: "database" as const, name: "Database Cluster", groupId: "database-cluster", color: "oklch(0.5571 0.2214 299.62)" },
+  { key: "api" as const, name: "API Services", groupId: "api-services", color: "oklch(0.694 0.1607 156.12)" },
 ];
 
 function GroupPerformanceTooltip({ active, payload, label }: {
@@ -814,7 +814,7 @@ export function ServerGroupsDashboard() {
               <div className="mt-3 border-t border-border pt-3">
                 <p className="mb-2 text-[0.75rem] font-semibold text-foreground">Current Load</p>
                 <div className="space-y-2.5">
-                  {([["CPU", selectedGroup.cpu], ["Memory", selectedGroup.memory], ["Disk", selectedGroup.disk]] as [string, number][]).map(([label, value]) => { const color = value < 70 ? "#22C55E" : value <= 85 ? "#F59E0B" : "#EF4444"; return <div key={label}><div className="mb-1 flex items-center justify-between text-[0.6875rem]"><span className="text-muted-foreground">{label}</span><b className="tabular-nums text-foreground">{value}%</b></div><div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full transition-[width] duration-500" style={{ width: Math.max(0, Math.min(value, 100)) + "%", backgroundColor: color }} /></div></div>; })}
+                  {([["CPU", selectedGroup.cpu], ["Memory", selectedGroup.memory], ["Disk", selectedGroup.disk]] as [string, number][]).map(([label, value]) => { const color = value < 70 ? "oklch(0.7227 0.192 149.58)" : value <= 85 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.6368 0.2078 25.33)"; return <div key={label}><div className="mb-1 flex items-center justify-between text-[0.6875rem]"><span className="text-muted-foreground">{label}</span><b className="tabular-nums text-foreground">{value}%</b></div><div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full transition-[width] duration-500" style={{ width: Math.max(0, Math.min(value, 100)) + "%", backgroundColor: color }} /></div></div>; })}
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2">

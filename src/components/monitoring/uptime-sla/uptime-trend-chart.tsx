@@ -46,7 +46,7 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
         borderColor: "var(--border)",
         borderWidth: 1,
         textStyle: { color: "var(--popover-foreground)", fontSize: 12 },
-        axisPointer: { type: "line", lineStyle: { color: "#CBD5E1", width: 1 } },
+        axisPointer: { type: "line", lineStyle: { color: "oklch(0.869 0.0198 252.89)", width: 1 } },
         formatter: (params: unknown) => {
           const list = (Array.isArray(params) ? params : [params]) as Array<{ axisValue: string; value: number; dataIndex: number }>;
           const point = list[0];
@@ -65,7 +65,7 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
         boundaryGap: false,
         data: labels,
         axisTick: { show: false },
-        axisLine: { show: true, lineStyle: { color: "#D1D5DB" } },
+        axisLine: { show: true, lineStyle: { color: "oklch(0.8717 0.0093 258.34)" } },
         axisLabel: { color: "var(--muted-foreground)", fontSize: 12, hideOverlap: true, interval: Math.max(0, Math.ceil(labels.length / 7) - 1) },
       },
       yAxis: {
@@ -73,7 +73,7 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
         min: yMin,
         max: 100,
         splitNumber: 4,
-        splitLine: { lineStyle: { color: "#E5E7EB", type: "solid", width: 1 } },
+        splitLine: { lineStyle: { color: "oklch(0.9276 0.0058 264.53)", type: "solid", width: 1 } },
         axisLine: { show: false },
         axisLabel: { color: "var(--muted-foreground)", fontSize: 12, formatter: "{value}%" },
       },
@@ -85,23 +85,23 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
         symbolSize: 7,
         showSymbol: true,
         data: points,
-        lineStyle: { width: 2, color: "#3B82F6" },
-        itemStyle: { color: "#3B82F6" },
+        lineStyle: { width: 2, color: "oklch(0.6231 0.188 259.81)" },
+        itemStyle: { color: "oklch(0.6231 0.188 259.81)" },
         emphasis: { focus: "series" },
         areaStyle: {
-          color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(59,130,246,0.18)" }, { offset: 1, color: "rgba(59,130,246,0)" }] },
+          color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "oklch(0.6231 0.188 259.81 / 0.18)" }, { offset: 1, color: "oklch(0.6231 0.188 259.81 / 0)" }] },
         },
         markLine: {
           silent: true,
           symbol: "none",
-          lineStyle: { type: "dashed", color: "#94A3B8", width: 1.5 },
-          label: { formatter: `SLA ${target}%`, position: "insideEndTop", color: "#94A3B8", fontSize: 12 },
+          lineStyle: { type: "dashed", color: "oklch(0.7107 0.0351 256.79)", width: 1.5 },
+          label: { formatter: `SLA ${target}%`, position: "insideEndTop", color: "oklch(0.7107 0.0351 256.79)", fontSize: 12 },
           data: [{ yAxis: target }],
         },
         markPoint: {
           symbol: "circle",
           symbolSize: 9,
-          itemStyle: { color: "#DC2626" },
+          itemStyle: { color: "oklch(0.5771 0.2152 27.33)" },
           data: daily.map((day, index) => ({ name: `low-${index}`, coord: [index, Number(day.uptime.toFixed(2))] })).filter((_, index) => daily[index].uptime < target),
           label: { show: false },
         },

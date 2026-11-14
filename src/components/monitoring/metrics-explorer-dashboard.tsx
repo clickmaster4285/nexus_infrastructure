@@ -44,14 +44,14 @@ const stats: MetricStat[] = [
 ];
 
 const series = [
-  { key: "cpu", name: "CPU", color: "#60A5FA", unit: "%", axis: "percent" },
-  { key: "memory", name: "Memory", color: "#34D399", unit: "%", axis: "percent" },
-  { key: "networkIn", name: "Network In", color: "#A78BFA", unit: "Mbps", axis: "throughput" },
-  { key: "networkOut", name: "Network Out", color: "#C4B5FD", unit: "Mbps", axis: "throughput" },
-  { key: "disk", name: "Disk I/O", color: "#FBBF77", unit: "MB/s", axis: "throughput" },
+  { key: "cpu", name: "CPU", color: "oklch(0.7137 0.1434 254.62)", unit: "%", axis: "percent" },
+  { key: "memory", name: "Memory", color: "oklch(0.7729 0.1535 163.22)", unit: "%", axis: "percent" },
+  { key: "networkIn", name: "Network In", color: "oklch(0.709 0.1592 293.54)", unit: "Mbps", axis: "throughput" },
+  { key: "networkOut", name: "Network Out", color: "oklch(0.8112 0.1013 293.57)", unit: "Mbps", axis: "throughput" },
+  { key: "disk", name: "Disk I/O", color: "oklch(0.8442 0.1129 70.36)", unit: "MB/s", axis: "throughput" },
 ];
 
-const CRITICAL_COLOR = "#F87171";
+const CRITICAL_COLOR = "oklch(0.7106 0.1661 22.22)";
 const CRITICAL_THRESHOLD = 85;
 
 
@@ -110,32 +110,32 @@ function CriticalThresholdLabel({ viewBox }: { viewBox?: { x?: number; y?: numbe
   const width = 52;
   const x = viewBox.x + viewBox.width - width - 4;
   return <g aria-label="Critical threshold">
-    <rect x={x} y={viewBox.y - 9} width={width} height={18} rx={9} fill="#F87171" fillOpacity={0.16} stroke="#F87171" strokeOpacity={0.5} />
-    <text x={x + width / 2} y={viewBox.y + 3.5} fill="#F87171" fontSize={10} fontWeight={600} textAnchor="middle">Critical</text>
+    <rect x={x} y={viewBox.y - 9} width={width} height={18} rx={9} fill="oklch(0.7106 0.1661 22.22)" fillOpacity={0.16} stroke="oklch(0.7106 0.1661 22.22)" strokeOpacity={0.5} />
+    <text x={x + width / 2} y={viewBox.y + 3.5} fill="oklch(0.7106 0.1661 22.22)" fontSize={10} fontWeight={600} textAnchor="middle">Critical</text>
   </g>;
 }
 
 const metrics: MetricRecord[] = [
-  { name: "CPU Usage", type: "System", resource: "web-01", value: 92.3, unit: "%", change: 6.2, color: "#2878ed" },
-  { name: "Memory Usage", type: "System", resource: "db-01", value: 78.6, unit: "%", change: 3.8, color: "#35b879" },
-  { name: "Disk I/O", type: "Storage", resource: "storage-01", value: 245.7, unit: "MB/s", change: 12.4, color: "#f39a12" },
-  { name: "Network In", type: "Network", resource: "edge-router-01", value: 312.5, unit: "Mbps", change: 8.7, color: "#8a45df" },
-  { name: "Network Out", type: "Network", resource: "edge-router-01", value: 198.3, unit: "Mbps", change: 5.5, color: "#20b9d1", improving: true },
-  { name: "Request Rate", type: "Application", resource: "api-gateway", value: 1542, unit: "req/s", change: 7.1, color: "#ed6b83" },
-  { name: "Database Connections", type: "Database", resource: "db-01", value: 83, unit: "connections", change: 2.4, color: "#7952dc" },
-  { name: "CPU Usage", type: "System", resource: "app-02", value: 64.8, unit: "%", change: 4.1, color: "#2878ed" },
-  { name: "Memory Usage", type: "System", resource: "cache-01", value: 72.1, unit: "%", change: 1.8, color: "#35b879" },
-  { name: "Disk I/O", type: "Storage", resource: "storage-02", value: 198.6, unit: "MB/s", change: 9.2, color: "#f39a12" },
-  { name: "Disk Usage", type: "Storage", resource: "db-01", value: 84.1, unit: "%", change: 2.3, color: "#ef4444" },
-  { name: "Response Time", type: "Application", resource: "api-gateway", value: 218, unit: "ms", change: 9.1, color: "#14b8a6" },
-  { name: "Error Rate", type: "Application", resource: "api-gateway", value: 1.7, unit: "%", change: 0.6, color: "#ef4444" },
-  { name: "Cache Hit Ratio", type: "Database", resource: "cache-01", value: 96.4, unit: "%", change: 1.2, color: "#7952dc" },
-  { name: "Disk I/O", type: "Storage", resource: "storage-03", value: 164.2, unit: "MB/s", change: 5.9, color: "#f39a12" },
-  { name: "Network In", type: "Network", resource: "gw-02", value: 274.1, unit: "Mbps", change: 6.4, color: "#8a45df" },
-  { name: "CPU Usage", type: "System", resource: "worker-03", value: 58.7, unit: "%", change: 2.9, color: "#2878ed" },
-  { name: "Memory Usage", type: "System", resource: "worker-03", value: 69.3, unit: "%", change: 3.4, color: "#35b879" },
-  { name: "Network Out", type: "Network", resource: "gw-02", value: 143.8, unit: "Mbps", change: 4.7, color: "#20b9d1" },
-  { name: "Request Rate", type: "Application", resource: "payment-svc", value: 968, unit: "req/s", change: 5.2, color: "#ed6b83" },
+  { name: "CPU Usage", type: "System", resource: "web-01", value: 92.3, unit: "%", change: 6.2, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "Memory Usage", type: "System", resource: "db-01", value: 78.6, unit: "%", change: 3.8, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Disk I/O", type: "Storage", resource: "storage-01", value: 245.7, unit: "MB/s", change: 12.4, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Network In", type: "Network", resource: "edge-router-01", value: 312.5, unit: "Mbps", change: 8.7, color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "Network Out", type: "Network", resource: "edge-router-01", value: 198.3, unit: "Mbps", change: 5.5, color: "oklch(0.723 0.1206 211.73)", improving: true },
+  { name: "Request Rate", type: "Application", resource: "api-gateway", value: 1542, unit: "req/s", change: 7.1, color: "oklch(0.691 0.1614 10.85)" },
+  { name: "Database Connections", type: "Database", resource: "db-01", value: 83, unit: "connections", change: 2.4, color: "oklch(0.555 0.2004 291.51)" },
+  { name: "CPU Usage", type: "System", resource: "app-02", value: 64.8, unit: "%", change: 4.1, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "Memory Usage", type: "System", resource: "cache-01", value: 72.1, unit: "%", change: 1.8, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Disk I/O", type: "Storage", resource: "storage-02", value: 198.6, unit: "MB/s", change: 9.2, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Disk Usage", type: "Storage", resource: "db-01", value: 84.1, unit: "%", change: 2.3, color: "oklch(0.6368 0.2078 25.33)" },
+  { name: "Response Time", type: "Application", resource: "api-gateway", value: 218, unit: "ms", change: 9.1, color: "oklch(0.7038 0.123 182.5)" },
+  { name: "Error Rate", type: "Application", resource: "api-gateway", value: 1.7, unit: "%", change: 0.6, color: "oklch(0.6368 0.2078 25.33)" },
+  { name: "Cache Hit Ratio", type: "Database", resource: "cache-01", value: 96.4, unit: "%", change: 1.2, color: "oklch(0.555 0.2004 291.51)" },
+  { name: "Disk I/O", type: "Storage", resource: "storage-03", value: 164.2, unit: "MB/s", change: 5.9, color: "oklch(0.7593 0.163 68.27)" },
+  { name: "Network In", type: "Network", resource: "gw-02", value: 274.1, unit: "Mbps", change: 6.4, color: "oklch(0.5571 0.2214 299.62)" },
+  { name: "CPU Usage", type: "System", resource: "worker-03", value: 58.7, unit: "%", change: 2.9, color: "oklch(0.5906 0.1926 258.69)" },
+  { name: "Memory Usage", type: "System", resource: "worker-03", value: 69.3, unit: "%", change: 3.4, color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Network Out", type: "Network", resource: "gw-02", value: 143.8, unit: "Mbps", change: 4.7, color: "oklch(0.723 0.1206 211.73)" },
+  { name: "Request Rate", type: "Application", resource: "payment-svc", value: 968, unit: "req/s", change: 5.2, color: "oklch(0.691 0.1614 10.85)" },
 ];
 
 const recentAlerts = [
@@ -152,9 +152,9 @@ const recentAlerts = [
 ];
 
 const alertSeverityLegend = [
-  { name: "Critical", color: "#ef4444" },
-  { name: "Warning", color: "#f59e0b" },
-  { name: "Info", color: "#3b82f6" },
+  { name: "Critical", color: "oklch(0.6368 0.2078 25.33)" },
+  { name: "Warning", color: "oklch(0.7686 0.1647 70.08)" },
+  { name: "Info", color: "oklch(0.6231 0.188 259.81)" },
 ];
 
 /** Metrics where a rising value is a regression rather than normal growth. */
@@ -163,14 +163,14 @@ const higherIsWorseMetrics = new Set(["CPU Usage", "Memory Usage", "Disk Usage",
 /** Rows shown in the "Top Metrics by Value" card. */
 const topMetricsByValue: MetricRecord[] = [
   ...metrics.slice(0, 5),
-  { name: "Disk Usage", type: "Storage", resource: "db-01", value: 84.1, unit: "%", change: 2.3, color: "#ef4444" },
-  { name: "Response Time", type: "Application", resource: "api-gateway", value: 218, unit: "ms", change: 9.1, color: "#14b8a6" },
-  { name: "Error Rate", type: "Application", resource: "payment-svc", value: 1.8, unit: "%", change: 0.4, color: "#ef4444", trendTone: "bad", critical: true },
-  { name: "Request Rate", type: "Application", resource: "api-gateway", value: 1542, unit: "req/s", change: 6.2, color: "#ed6b83", trendTone: "good" },
-  { name: "Database Connections", type: "Database", resource: "db-01", value: 83, unit: "conn", change: 1.1, color: "#7952dc", direction: "down", trendTone: "good" },
-  { name: "Cache Hit Ratio", type: "Database", resource: "cache-01", value: 94.2, unit: "%", change: 0.8, color: "#34D399", direction: "down", trendTone: "good", improving: true },
-  { name: "Queue Depth", type: "Queue", resource: "rabbitmq-01", value: 128, unit: "msgs", change: 14.3, color: "#FBBF77", trendTone: "bad", critical: true },
-  { name: "Packet Loss", type: "Network", resource: "edge-router-01", value: 0.4, unit: "%", change: 0.1, color: "#F87171", trendTone: "bad", critical: true },
+  { name: "Disk Usage", type: "Storage", resource: "db-01", value: 84.1, unit: "%", change: 2.3, color: "oklch(0.6368 0.2078 25.33)" },
+  { name: "Response Time", type: "Application", resource: "api-gateway", value: 218, unit: "ms", change: 9.1, color: "oklch(0.7038 0.123 182.5)" },
+  { name: "Error Rate", type: "Application", resource: "payment-svc", value: 1.8, unit: "%", change: 0.4, color: "oklch(0.6368 0.2078 25.33)", trendTone: "bad", critical: true },
+  { name: "Request Rate", type: "Application", resource: "api-gateway", value: 1542, unit: "req/s", change: 6.2, color: "oklch(0.691 0.1614 10.85)", trendTone: "good" },
+  { name: "Database Connections", type: "Database", resource: "db-01", value: 83, unit: "conn", change: 1.1, color: "oklch(0.555 0.2004 291.51)", direction: "down", trendTone: "good" },
+  { name: "Cache Hit Ratio", type: "Database", resource: "cache-01", value: 94.2, unit: "%", change: 0.8, color: "oklch(0.7729 0.1535 163.22)", direction: "down", trendTone: "good", improving: true },
+  { name: "Queue Depth", type: "Queue", resource: "rabbitmq-01", value: 128, unit: "msgs", change: 14.3, color: "oklch(0.8442 0.1129 70.36)", trendTone: "bad", critical: true },
+  { name: "Packet Loss", type: "Network", resource: "edge-router-01", value: 0.4, unit: "%", change: 0.1, color: "oklch(0.7106 0.1661 22.22)", trendTone: "bad", critical: true },
 ];
 
 /**
@@ -184,11 +184,11 @@ function changeTone(metric: MetricRecord): string {
 }
 
 const typeBreakdown = [
-  { name: "System", value: 1024, color: "#2878ed", percent: "41.7%" },
-  { name: "Network", value: 612, color: "#35b879", percent: "24.9%" },
-  { name: "Storage", value: 410, color: "#f39a12", percent: "16.7%" },
-  { name: "Application", value: 282, color: "#8a45df", percent: "11.5%" },
-  { name: "Database", value: 130, color: "#20b9d1", percent: "5.3%" },
+  { name: "System", value: 1024, color: "oklch(0.5906 0.1926 258.69)", percent: "41.7%" },
+  { name: "Network", value: 612, color: "oklch(0.6969 0.146 157.59)", percent: "24.9%" },
+  { name: "Storage", value: 410, color: "oklch(0.7593 0.163 68.27)", percent: "16.7%" },
+  { name: "Application", value: 282, color: "oklch(0.5571 0.2214 299.62)", percent: "11.5%" },
+  { name: "Database", value: 130, color: "oklch(0.723 0.1206 211.73)", percent: "5.3%" },
 ];
 
 const typeMiniStats = [
@@ -246,7 +246,7 @@ function MetricTypeDonut() {
 
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4">
         {typeMiniStats.map((stat) => (
-          <div key={stat.label} className="rounded-lg bg-[#f8f9fb] px-2.5 py-2.5 text-center dark:bg-[#1c2b40]">
+          <div key={stat.label} className="rounded-lg bg-[oklch(0.9819_0.0029_264.54)] px-2.5 py-2.5 text-center dark:bg-[oklch(0.2863_0.0439_256.9)]">
             <div className="font-display text-[1rem] font-bold leading-tight text-foreground">{stat.value}</div>
             <div className="mt-0.5 whitespace-nowrap text-[0.6875rem] text-muted-foreground">{stat.label}</div>
           </div>
@@ -339,7 +339,7 @@ export function MetricsExplorerDashboard() {
       canvas.height = image.naturalHeight || 600;
       const context = canvas.getContext("2d");
       if (context) {
-        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "#ffffff";
+        context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card") || "oklch(1 0 89.88)";
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, 0, 0);
         const link = document.createElement("a");
@@ -451,7 +451,7 @@ export function MetricsExplorerDashboard() {
               {series.map((item) => {
                 const enabled = activeSeries.includes(item.key);
                 const latest = metricSeries.at(-1)?.[item.key as keyof (typeof metricSeries)[number]] as number;
-                return <button key={item.key} title={enabled ? `Hide ${item.name}` : "Click to show"} onClick={() => toggleSeries(item.key)} aria-pressed={enabled} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through")}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? item.color : "#94a3b8" }} />{item.name}<b className="tabular-nums">{latest} {item.unit}</b></button>;
+                return <button key={item.key} title={enabled ? `Hide ${item.name}` : "Click to show"} onClick={() => toggleSeries(item.key)} aria-pressed={enabled} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through")}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? item.color : "oklch(0.7107 0.0351 256.79)" }} />{item.name}<b className="tabular-nums">{latest} {item.unit}</b></button>;
               })}
             </div>
             <div ref={chartPlotRef} className="relative flex min-h-[21.25rem] flex-1 touch-pan-y select-none flex-col gap-1" onPointerDown={beginChartSelection} onPointerMove={updateChartSelection} onPointerUp={finishChartSelection} onPointerCancel={finishChartSelection}>
@@ -461,10 +461,10 @@ export function MetricsExplorerDashboard() {
                   <ResponsiveContainer width="100%" height="100%">
                     {mode === "Line" ? <LineChart data={displayedChartData} syncId="metrics-time" syncMethod="value" margin={{ top: 12, right: 20, left: 0, bottom: 0 }}>
                       <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} /><XAxis dataKey="time" hide /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} width={44} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<MetricChartTooltip axis="percent" activeKeys={activeSeries} />} />
-                      {(activeSeries.includes("cpu") || activeSeries.includes("memory")) && <ReferenceLine y={85} stroke="#F87171" strokeDasharray="4 4" label={<CriticalThresholdLabel />} />}
+                      {(activeSeries.includes("cpu") || activeSeries.includes("memory")) && <ReferenceLine y={85} stroke="oklch(0.7106 0.1661 22.22)" strokeDasharray="4 4" label={<CriticalThresholdLabel />} />}
                       {series.filter((item) => item.axis === "percent" && activeSeries.includes(item.key)).map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} dot={false} activeDot={{ r: 4 }} />)}
                     </LineChart> : <AreaChart data={displayedChartData} syncId="metrics-time" syncMethod="value" margin={{ top: 12, right: 20, left: 0, bottom: 0 }}>
-                      <defs>{series.filter((item) => item.axis === "percent").map((item) => <linearGradient key={item.key} id={`metric-fill-${item.key}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={item.color} stopOpacity={0.2} /><stop offset="100%" stopColor={item.color} stopOpacity={0} /></linearGradient>)}</defs><CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} /><XAxis dataKey="time" hide /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} width={44} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<MetricChartTooltip axis="percent" activeKeys={activeSeries} />} />{(activeSeries.includes("cpu") || activeSeries.includes("memory")) && <ReferenceLine y={85} stroke="#F87171" strokeDasharray="4 4" label={<CriticalThresholdLabel />} />}{series.filter((item) => item.axis === "percent" && activeSeries.includes(item.key)).map((item) => <Area key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} fill={`url(#metric-fill-${item.key})`} activeDot={{ r: 4 }} />)}
+                      <defs>{series.filter((item) => item.axis === "percent").map((item) => <linearGradient key={item.key} id={`metric-fill-${item.key}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={item.color} stopOpacity={0.2} /><stop offset="100%" stopColor={item.color} stopOpacity={0} /></linearGradient>)}</defs><CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} /><XAxis dataKey="time" hide /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} width={44} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<MetricChartTooltip axis="percent" activeKeys={activeSeries} />} />{(activeSeries.includes("cpu") || activeSeries.includes("memory")) && <ReferenceLine y={85} stroke="oklch(0.7106 0.1661 22.22)" strokeDasharray="4 4" label={<CriticalThresholdLabel />} />}{series.filter((item) => item.axis === "percent" && activeSeries.includes(item.key)).map((item) => <Area key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} fill={`url(#metric-fill-${item.key})`} activeDot={{ r: 4 }} />)}
                     </AreaChart>}
                   </ResponsiveContainer>
                 </div>

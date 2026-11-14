@@ -40,7 +40,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     <>
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 flex w-[14.5rem] flex-col overflow-y-auto border-r border-sidebar-border bg-gradient-to-b from-[#10233e] to-[#0d1e35] text-sidebar-foreground transition-transform duration-200 ease-in-out [scrollbar-width:thin] [scrollbar-color:#31465e_transparent]",
+          "fixed inset-y-0 left-0 z-30 flex w-[14.5rem] flex-col overflow-y-auto border-r border-sidebar-border bg-gradient-to-b from-[oklch(0.2558_0.057_257.39)] to-[oklch(0.2338_0.0502_256.48)] text-sidebar-foreground transition-transform duration-200 ease-in-out [scrollbar-width:thin] [scrollbar-color:oklch(0.3874_0.0489_252.35)_transparent]",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           "lg:translate-x-0",
         )}
@@ -50,12 +50,12 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         <div className="flex h-[3.375rem] min-h-[3.375rem] items-center gap-2 border-b border-sidebar-border px-4">
           <div
             aria-hidden="true"
-            className="font-display -skew-x-6 select-none text-[2.0625rem] font-extrabold italic leading-[2.125rem] text-[#1aa1ef] [text-shadow:0_0_12px_#168ce744]"
+            className="font-display -skew-x-6 select-none text-[2.0625rem] font-extrabold italic leading-[2.125rem] text-[oklch(0.6798_0.1556_242.18)] [text-shadow:0_0_12px_oklch(0.627_0.1664_249.09_/_0.267)]"
           >
             N
           </div>
           <div className="min-w-0">
-            <div className="font-display text-[0.875rem] font-bold tracking-[0.1875rem] text-[#f0f5fa]">NEXUS</div>
+            <div className="font-display text-[0.875rem] font-bold tracking-[0.1875rem] text-[oklch(0.9678_0.0086_247.91)]">NEXUS</div>
             <div className="mt-0.5 text-[0.5rem] leading-none text-sidebar-muted">Infrastructure Monitor</div>
           </div>
           <button
@@ -81,14 +81,14 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   aria-expanded={isExpanded}
                   aria-controls={submenuId}
                   onClick={() => setExpanded((current) => (current === group.title ? null : group.title))}
-                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[0.8125rem] font-medium text-[#f0f5fa] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
+                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[0.8125rem] font-medium text-[oklch(0.9678_0.0086_247.91)] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
                 >
-                  <GroupIcon size={15} className="shrink-0 text-[#c9d5e4]" aria-hidden="true" />
+                  <GroupIcon size={15} className="shrink-0 text-[oklch(0.8684_0.0245_253.96)]" aria-hidden="true" />
                   <span className="min-w-0 flex-1 truncate">{group.title}</span>
                   <ChevronDown
                     size={13}
                     aria-hidden="true"
-                    className={cn("shrink-0 text-[#96a7bd] transition-transform duration-200 motion-reduce:transition-none", !isExpanded && "-rotate-90")}
+                    className={cn("shrink-0 text-[oklch(0.7225_0.0374_254.92)] transition-transform duration-200 motion-reduce:transition-none", !isExpanded && "-rotate-90")}
                   />
                 </button>
                 <div
@@ -115,7 +115,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                                 isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                               )}
                             >
-                              <ItemIcon size={14} aria-hidden="true" className={cn("shrink-0", isActive ? "text-white" : "text-[#b8c7da]")} />
+                              <ItemIcon size={14} aria-hidden="true" className={cn("shrink-0", isActive ? "text-white" : "text-[oklch(0.8242_0.0314_254.34)]")} />
                               <span className="truncate">{item.label}</span>
                             </Link>
                           </li>
@@ -132,7 +132,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         {/* Footer status */}
         <div className="border-t border-sidebar-border p-3.5">
           <div className="flex items-center justify-center gap-2 text-[0.625rem] text-sidebar-muted">
-            <span>Powered by <span className="font-semibold text-[#d8e5f5]">Click Master</span></span>
+            <span>Powered by <span className="font-semibold text-[oklch(0.9169_0.0259_253.57)]">Click Master</span></span>
             <span className="rounded bg-white/5 px-1.5 py-0.5 font-medium">V1.0</span>
           </div>
         </div>
@@ -144,7 +144,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           type="button"
           aria-label="Close menu"
           onClick={onClose}
-          className="fixed inset-0 z-20 cursor-default bg-[#09172a]/60 lg:hidden"
+          className="fixed inset-0 z-20 cursor-default bg-[oklch(0.2035_0.043_256.48)]/60 lg:hidden"
         />
       )}
     </>

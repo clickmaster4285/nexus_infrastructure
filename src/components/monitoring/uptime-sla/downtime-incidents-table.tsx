@@ -3,7 +3,7 @@ import { CheckCircle2, ChevronRight, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DowntimeIncident, IncidentSeverity, IncidentStatus } from "@/mocks/uptimeSla";
 
-const SEVERITY_BAR: Record<IncidentSeverity, string> = { Critical: "#DC2626", Warning: "#D97706", Info: "#3B82F6" };
+const SEVERITY_BAR: Record<IncidentSeverity, string> = { Critical: "oklch(0.5771 0.2152 27.33)", Warning: "oklch(0.6658 0.1574 58.32)", Info: "oklch(0.6231 0.188 259.81)" };
 const SEVERITY_BADGE: Record<IncidentSeverity, string> = {
   Critical: "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300",
   Warning: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
@@ -104,13 +104,13 @@ export function DowntimeIncidentsTable({ incidents }: { incidents: DowntimeIncid
       </div>
 
       {/* Downtime by service */}
-      <div className="mt-3 border-t border-[#EEF0F4] pt-3 dark:border-slate-700">
+      <div className="mt-3 border-t border-[oklch(0.9548_0.0058_264.53)] pt-3 dark:border-slate-700">
         <span className="mb-2 block text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Downtime by Service</span>
         <div className="space-y-1.5">
           {byService.map((row) => (
             <div key={row.service} className="flex items-center gap-2">
               <span className="w-28 shrink-0 truncate text-[0.8125rem] font-medium text-foreground">{row.service}</span>
-              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700" aria-label={`${row.service} downtime ${row.minutes} minutes`}>
+              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-[oklch(0.9548_0.0058_264.53)] dark:bg-slate-700" aria-label={`${row.service} downtime ${row.minutes} minutes`}>
                 <div className="h-full rounded-full bg-blue-500" style={{ width: `${(row.minutes / maxServiceMinutes) * 100}%` }} />
               </div>
               <span className="w-10 shrink-0 text-right text-[0.75rem] tabular-nums text-foreground">{row.minutes}m</span>
@@ -120,7 +120,7 @@ export function DowntimeIncidentsTable({ incidents }: { incidents: DowntimeIncid
       </div>
 
       {/* By severity split */}
-      <div className="mt-3 border-t border-[#EEF0F4] pt-3 dark:border-slate-700">
+      <div className="mt-3 border-t border-[oklch(0.9548_0.0058_264.53)] pt-3 dark:border-slate-700">
         <span className="mb-2 block text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">By Severity</span>
         <div className="flex h-2 w-full gap-[0.125rem] overflow-hidden rounded-full" role="img" aria-label={`Severity split: ${bySeverity.map((r) => `${r.severity} ${r.count}`).join(", ")}`}>
           {bySeverity.map((row) => (
@@ -141,7 +141,7 @@ export function DowntimeIncidentsTable({ incidents }: { incidents: DowntimeIncid
       </div>
 
       {/* Footer pinned to bottom */}
-      <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-[#EEF0F4] pt-2 text-[0.75rem] text-muted-foreground dark:border-slate-700">
+      <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-[oklch(0.9548_0.0058_264.53)] pt-2 text-[0.75rem] text-muted-foreground dark:border-slate-700">
         <span>Total downtime: <b className="text-foreground">{totalMinutes}m</b></span>
         <span>Longest: <b className="text-foreground">{longest}m</b></span>
         <span>MTTR: <b className="text-foreground">{mttr}m</b></span>

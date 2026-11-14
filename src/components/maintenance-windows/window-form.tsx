@@ -98,7 +98,7 @@ function SearchableMultiSelect({ label, options, selected, onChange, placeholder
               const checked = selected.includes(option.value);
               return (
                 <label key={option.value} className="flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 dark:hover:bg-accent">
-                  <input type="checkbox" checked={checked} onChange={() => toggle(option.value)} className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]" />
+                  <input type="checkbox" checked={checked} onChange={() => toggle(option.value)} className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]" />
                   <span className="min-w-0 flex-1 truncate">{option.label}</span>
                 </label>
               );
@@ -477,7 +477,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
       "flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors",
       checked ? (tone === "red" ? "border-red-300 bg-red-50/60 dark:border-red-500/40 dark:bg-red-500/10" : "border-primary/50 bg-primary/5") : "border-border hover:bg-accent/50",
     )}>
-      <input id={id} type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]" />
+      <input id={id} type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]" />
       <span aria-hidden="true" className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-muted text-foreground">{icon}</span>
       <span className="min-w-0">
         <span className="block text-sm font-semibold text-foreground">{titleText}</span>
@@ -789,7 +789,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                           type="checkbox"
                           checked={checked}
                           onChange={() => setMutedRuleIds((current) => checked ? current.filter((id) => id !== rule.id) : [...current, rule.id])}
-                          className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]"
+                          className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                           aria-label={`Mute ${rule.id} ${rule.name}`}
                         />
                         <span className="w-16 shrink-0 font-mono text-[0.75rem] text-muted-foreground">{rule.id}</span>

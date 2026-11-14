@@ -360,7 +360,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                 {/* Warning acknowledgement */}
                 {isWarningStep && (
                   <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-lg border border-amber-300 bg-amber-50/60 p-2.5 text-xs font-semibold text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-                    <input type="checkbox" checked={acknowledgedCurrent} onChange={(event) => setAcknowledged((current) => ({ ...current, [currentStep.id]: event.target.checked }))} className="mt-0.5 h-4 w-4 accent-[#D97706]" />
+                    <input type="checkbox" checked={acknowledgedCurrent} onChange={(event) => setAcknowledged((current) => ({ ...current, [currentStep.id]: event.target.checked }))} className="mt-0.5 h-4 w-4 accent-[oklch(0.6658_0.1574_58.32)]" />
                     I understand — this step is destructive or hard to reverse.
                   </label>
                 )}
@@ -465,7 +465,7 @@ function RollbackChecklistItem({ step, index, onToast }: { step: RunbookStep; in
   return (
     <li className={cn("rounded-lg border p-3", checked ? "border-emerald-300 bg-emerald-50/50 dark:border-emerald-500/20 dark:bg-emerald-500/5" : "border-border")}>
       <label className="flex cursor-pointer items-start gap-2">
-        <input type="checkbox" checked={checked} onChange={(event) => { setChecked(event.target.checked); if (event.target.checked) onToast(`Rollback step ${index + 1} marked done.`); }} className="mt-0.5 h-4 w-4 accent-[#16A34A]" />
+        <input type="checkbox" checked={checked} onChange={(event) => { setChecked(event.target.checked); if (event.target.checked) onToast(`Rollback step ${index + 1} marked done.`); }} className="mt-0.5 h-4 w-4 accent-[oklch(0.6271_0.1699_149.21)]" />
         <span className="min-w-0"><span className="block text-[0.8125rem] font-semibold text-foreground">{index + 1}. {step.title}</span><span className="mt-0.5 block text-xs text-muted-foreground">{step.description}</span>{step.command && <pre className="mt-1.5 overflow-x-auto rounded border border-border bg-slate-900 p-2 font-mono text-[0.6875rem] text-slate-100"><code>{step.command}</code></pre>}</span>
       </label>
     </li>

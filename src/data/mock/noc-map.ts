@@ -3,9 +3,9 @@ export type NocMapStatus = "online" | "warning" | "critical";
 
 /** Marker palette - green, orange and red, aligned with the NEXUS status tones. */
 export const NOC_MAP_STATUS_COLOR: Record<NocMapStatus, string> = {
-  online: "#22c55e",
-  warning: "#f59e0b",
-  critical: "#ef4444",
+  online: "oklch(0.7227 0.192 149.58)",
+  warning: "oklch(0.7686 0.1647 70.08)",
+  critical: "oklch(0.6368 0.2078 25.33)",
 };
 
 export const NOC_MAP_STATUS_LABEL: Record<NocMapStatus, string> = {

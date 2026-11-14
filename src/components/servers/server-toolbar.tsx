@@ -80,7 +80,7 @@ export function ServerToolbar({ search, filters, onSearchChange, onFilterChange,
           <Plus size={13} aria-hidden="true" />
           Add Server
         </Button>
-        <Button size="sm" variant="outline" className="h-[2.375rem] text-[0.75rem] text-[#526780]" onClick={onExport}>
+        <Button size="sm" variant="outline" className="h-[2.375rem] text-[0.75rem] text-[oklch(0.5066_0.0474_253.09)]" onClick={onExport}>
           <Download size={13} aria-hidden="true" />
           Export
         </Button>

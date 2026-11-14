@@ -198,22 +198,22 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           smooth: 0.3,
           symbol: "none",
           data: series.map((p) => p.query),
-          lineStyle: { width: 2, color: "#60A5FA" },
-          itemStyle: { color: "#60A5FA" },
-          areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(96,165,250,0.32)" }, { offset: 1, color: "rgba(96,165,250,0)" }] } },
+          lineStyle: { width: 2, color: "oklch(0.7137 0.1434 254.62)" },
+          itemStyle: { color: "oklch(0.7137 0.1434 254.62)" },
+          areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "oklch(0.7137 0.1434 254.62 / 0.32)" }, { offset: 1, color: "oklch(0.7137 0.1434 254.62 / 0)" }] } },
           emphasis: { focus: "series" },
           markLine: {
             silent: true,
             symbol: "none",
-            lineStyle: { type: "dashed", color: "#FBBF24" },
-            label: { formatter: "Slow query threshold", position: "insideEndTop", color: "#b45309", fontSize: 12 },
+            lineStyle: { type: "dashed", color: "oklch(0.8369 0.1644 84.43)" },
+            label: { formatter: "Slow query threshold", position: "insideEndTop", color: "oklch(0.5553 0.1455 49)", fontSize: 12 },
             data: [{ yAxis: 100 }],
           },
           markPoint: {
             symbol: "circle",
             symbolSize: 7,
-            itemStyle: { color: "#f59e0b", borderColor: "#ffffff", borderWidth: 1.5 },
-            label: { formatter: `Peak ${peakPoint.query} ms · ${peakPoint.time}`, position: "top", fontSize: 12, color: "#b45309", distance: 4 },
+            itemStyle: { color: "oklch(0.7686 0.1647 70.08)", borderColor: "oklch(1 0 89.88)", borderWidth: 1.5 },
+            label: { formatter: `Peak ${peakPoint.query} ms · ${peakPoint.time}`, position: "top", fontSize: 12, color: "oklch(0.5553 0.1455 49)", distance: 4 },
             data: [{ coord: [peakPoint.time, peakPoint.query] }],
           },
         }] : []),
@@ -223,8 +223,8 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           smooth: 0.3,
           symbol: "none",
           data: series.map((p) => p.p95),
-          lineStyle: { width: 1.5, type: "dotted", color: "#A78BFA" },
-          itemStyle: { color: "#A78BFA" },
+          lineStyle: { width: 1.5, type: "dotted", color: "oklch(0.709 0.1592 293.54)" },
+          itemStyle: { color: "oklch(0.709 0.1592 293.54)" },
           emphasis: { focus: "series" },
         }] : []),
       ],
@@ -280,15 +280,15 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           symbol: "none",
           yAxisIndex: 0,
           data: series.map((p) => p.connections),
-          lineStyle: { width: 2, color: "#34D399" },
-          itemStyle: { color: "#34D399" },
-          areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(52,211,153,0.3)" }, { offset: 1, color: "rgba(52,211,153,0)" }] } },
+          lineStyle: { width: 2, color: "oklch(0.7729 0.1535 163.22)" },
+          itemStyle: { color: "oklch(0.7729 0.1535 163.22)" },
+          areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "oklch(0.7729 0.1535 163.22 / 0.3)" }, { offset: 1, color: "oklch(0.7729 0.1535 163.22 / 0)" }] } },
           emphasis: { focus: "series" },
           markLine: {
             silent: true,
             symbol: "none",
-            lineStyle: { type: "dashed", color: "#F87171" },
-            label: { formatter: "Max 600", position: "insideEndTop", color: "#b91c1c", fontSize: 12 },
+            lineStyle: { type: "dashed", color: "oklch(0.7106 0.1661 22.22)" },
+            label: { formatter: "Max 600", position: "insideEndTop", color: "oklch(0.5054 0.1905 27.52)", fontSize: 12 },
             data: [{ yAxis: 600 }],
           },
         }] : []),
@@ -299,8 +299,8 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           symbol: "none",
           yAxisIndex: 1,
           data: series.map((p) => p.qps),
-          lineStyle: { width: 1.5, color: "#A78BFA" },
-          itemStyle: { color: "#A78BFA" },
+          lineStyle: { width: 1.5, color: "oklch(0.709 0.1592 293.54)" },
+          itemStyle: { color: "oklch(0.709 0.1592 293.54)" },
           emphasis: { focus: "series" },
         }] : []),
       ],
@@ -313,7 +313,7 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
     exportPng: () => {
       const chart = chart1Ref.current;
       if (!chart) return;
-      const url = chart.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#ffffff" });
+      const url = chart.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "oklch(1 0 89.88)" });
       const anchor = document.createElement("a");
       anchor.href = url;
       anchor.download = "database-latency.png";
@@ -332,9 +332,9 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
   }), [series]);
 
   const chips: Array<{ key: string; label: string; value: string; color: string }> = [
-    { key: "query", label: "Query Time", value: `${last.query} ms`, color: "#60A5FA" },
-    { key: "connections", label: "Connections", value: `${last.connections}`, color: "#34D399" },
-    { key: "qps", label: "Throughput", value: `${last.qps} QPS`, color: "#A78BFA" },
+    { key: "query", label: "Query Time", value: `${last.query} ms`, color: "oklch(0.7137 0.1434 254.62)" },
+    { key: "connections", label: "Connections", value: `${last.connections}`, color: "oklch(0.7729 0.1535 163.22)" },
+    { key: "qps", label: "Throughput", value: `${last.qps} QPS`, color: "oklch(0.709 0.1592 293.54)" },
   ];
 
   return (
@@ -401,9 +401,9 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
   const radius = 43;
   const circumference = 2 * Math.PI * radius;
   const segments: Array<{ name: "Healthy" | "Warning" | "Offline"; count: number; color: string }> = [
-    { name: "Healthy", count: counts.Healthy, color: "#34D399" },
-    { name: "Warning", count: counts.Warning, color: "#FBBF24" },
-    { name: "Offline", count: counts.Offline, color: "#F87171" },
+    { name: "Healthy", count: counts.Healthy, color: "oklch(0.7729 0.1535 163.22)" },
+    { name: "Warning", count: counts.Warning, color: "oklch(0.8369 0.1644 84.43)" },
+    { name: "Offline", count: counts.Offline, color: "oklch(0.7106 0.1661 22.22)" },
   ];
   let offset = 0;
   const arcs = segments.map((segment) => {
@@ -497,16 +497,16 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
 function StorageUsage({ storage }: { storage: typeof databaseMonitoringData.storage }) {
   const total = storage.usedGb + storage.freeGb;
   const usage = total ? storage.usedGb / total * 100 : 0;
-  const fill = usage >= 85 ? "#ef4444" : usage >= 70 ? "#f59e0b" : "#3182f6";
+  const fill = usage >= 85 ? "oklch(0.6368 0.2078 25.33)" : usage >= 70 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.6201 0.1906 258.2)";
   const fullDays = storage.dailyGrowthGb > 0 ? Math.floor(storage.freeGb / storage.dailyGrowthGb) : 0;
   const growthData = storage.growthHistory.map((value, index) => ({ day: `Day ${index + 1}`, value }));
   const topDatabases = databaseMonitoringData.topDatabasesBySize;
   const largestDatabase = Math.max(...topDatabases.map((item) => item.sizeGb));
   return <div className="flex min-h-0 flex-1 flex-col gap-2">
     <div className="flex items-center justify-center gap-4 sm:justify-start"><Donut value={usage} color={fill} label="Used" size={110} /><div className="min-w-0 flex-1 text-[0.8125rem]">
-      {[{ label: "Used", value: storage.usedGb, color: fill }, { label: "Free", value: storage.freeGb, color: "#34d399" }, { label: "Total", value: total, color: "#94a3b8" }].map((item) => <div key={item.label} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 border-b border-border/60 py-2 last:border-0"><span className="flex min-w-0 items-center gap-2 whitespace-nowrap text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ background: item.color }} />{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b><span className="text-muted-foreground">GB</span></div>)}
+      {[{ label: "Used", value: storage.usedGb, color: fill }, { label: "Free", value: storage.freeGb, color: "oklch(0.7729 0.1535 163.22)" }, { label: "Total", value: total, color: "oklch(0.7107 0.0351 256.79)" }].map((item) => <div key={item.label} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 border-b border-border/60 py-2 last:border-0"><span className="flex min-w-0 items-center gap-2 whitespace-nowrap text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ background: item.color }} />{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b><span className="text-muted-foreground">GB</span></div>)}
     </div></div>
-    <div className="grid grid-cols-[minmax(0,1fr)_minmax(7.5rem,40%)] items-center gap-3 border-t border-border pt-2"><div><div className="flex items-center justify-between gap-2 text-[0.75rem]"><span className="text-muted-foreground">Growth (7d)</span><b className="whitespace-nowrap text-foreground">+{storage.dailyGrowthGb.toFixed(1)} GB/day</b></div><p className="mt-1 text-[0.75rem] text-muted-foreground">Estimated full in <b className="text-foreground">~{fullDays} days</b></p></div><div className="h-[3.375rem] min-w-0" aria-label="Seven day storage growth"><ResponsiveContainer width="100%" height="100%"><AreaChart data={growthData}><Tooltip content={<ChartTooltip />} /><Area dataKey="value" name="Storage used (GB)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.16} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
+    <div className="grid grid-cols-[minmax(0,1fr)_minmax(7.5rem,40%)] items-center gap-3 border-t border-border pt-2"><div><div className="flex items-center justify-between gap-2 text-[0.75rem]"><span className="text-muted-foreground">Growth (7d)</span><b className="whitespace-nowrap text-foreground">+{storage.dailyGrowthGb.toFixed(1)} GB/day</b></div><p className="mt-1 text-[0.75rem] text-muted-foreground">Estimated full in <b className="text-foreground">~{fullDays} days</b></p></div><div className="h-[3.375rem] min-w-0" aria-label="Seven day storage growth"><ResponsiveContainer width="100%" height="100%"><AreaChart data={growthData}><Tooltip content={<ChartTooltip />} /><Area dataKey="value" name="Storage used (GB)" type="monotone" stroke="oklch(0.7137 0.1434 254.62)" fill="oklch(0.7137 0.1434 254.62)" fillOpacity={0.16} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
     <div id="database-size" className="flex min-h-0 flex-1 flex-col border-t border-border pt-2" aria-label="Top databases by storage size">
       <div className="mb-1 flex items-center justify-between text-[0.75rem]"><span className="font-semibold text-muted-foreground">Top Databases by Size</span><a href="#database-size" className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></a></div>
       <div className="flex min-h-0 flex-1 flex-col justify-between">{topDatabases.map((item) => <div key={item.name} className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(3.75rem,1.2fr)_3.5rem] items-center gap-2 text-[0.75rem] leading-5"><span className="truncate text-foreground" title={item.name}>{item.name}</span><span className="h-1.5 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${item.sizeGb / largestDatabase * 100}%` }} /></span><b className="whitespace-nowrap text-right tabular-nums text-foreground">{item.sizeGb} GB</b></div>)}</div>
@@ -522,7 +522,7 @@ function ConnectionsOverview({ data }: { data: typeof databaseMonitoringData.con
     <div className="flex items-end justify-between gap-3"><div><b className="font-display text-[1.625rem] font-bold leading-none tabular-nums text-foreground">{total}</b><span className="ml-2 text-[0.8125rem] text-muted-foreground">/ {data.max} max connections</span></div><b className="text-[0.8125rem] tabular-nums text-foreground">{percent.toFixed(0)}%</b></div>
     <div className="h-2 overflow-hidden rounded-full bg-muted" aria-label={`${percent.toFixed(0)} percent of maximum connections`}><div className="h-full rounded-full bg-blue-500 transition-[width]" style={{ width: `${Math.min(percent, 100)}%` }} /></div>
     <div className="flex items-center gap-4 text-[0.75rem] text-muted-foreground"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-blue-500" />Active <b className="text-foreground">{data.active}</b></span><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-slate-400" />Idle <b className="text-foreground">{data.idle}</b></span></div>
-    <div className="min-h-[8.125rem] min-w-0 flex-1" aria-label="Connection count history"><ResponsiveContainer width="100%" height="100%"><AreaChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, data.max]} ticks={[0, 150, 300, 450, 600]} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><ReferenceLine y={data.max} stroke="#ef4444" strokeDasharray="4 4" label={{ value: `Max ${data.max}`, position: "insideTopRight", fill: "#ef4444", fontSize: 12 }} /><Tooltip content={<ChartTooltip />} /><Area dataKey="active" name="Active" type="monotone" stroke="#3182f6" fill="#3182f6" fillOpacity={0.16} strokeWidth={2} dot={false} /><Area dataKey="idle" name="Idle" type="monotone" stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.12} strokeWidth={1.5} dot={false} /></AreaChart></ResponsiveContainer></div>
+    <div className="min-h-[8.125rem] min-w-0 flex-1" aria-label="Connection count history"><ResponsiveContainer width="100%" height="100%"><AreaChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, data.max]} ticks={[0, 150, 300, 450, 600]} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><ReferenceLine y={data.max} stroke="oklch(0.6368 0.2078 25.33)" strokeDasharray="4 4" label={{ value: `Max ${data.max}`, position: "insideTopRight", fill: "oklch(0.6368 0.2078 25.33)", fontSize: 12 }} /><Tooltip content={<ChartTooltip />} /><Area dataKey="active" name="Active" type="monotone" stroke="oklch(0.6201 0.1906 258.2)" fill="oklch(0.6201 0.1906 258.2)" fillOpacity={0.16} strokeWidth={2} dot={false} /><Area dataKey="idle" name="Idle" type="monotone" stroke="oklch(0.7107 0.0351 256.79)" fill="oklch(0.7107 0.0351 256.79)" fillOpacity={0.12} strokeWidth={1.5} dot={false} /></AreaChart></ResponsiveContainer></div>
   </div>;
 }
 
@@ -536,7 +536,7 @@ function QueryPerformance({ data }: { data: typeof databaseMonitoringData.query 
   return <div className="flex flex-1 flex-col gap-3">
     <div className="flex flex-wrap items-end justify-between gap-2"><div><b className="font-display text-[1.5rem] font-bold tabular-nums text-foreground">{data.averageMs} ms</b><p className="text-[0.75rem] text-muted-foreground">Average query time <span className={`font-semibold ${data.averageTrendPercent <= 0 ? "text-emerald-600" : "text-rose-600"}`}>{data.averageTrendPercent <= 0 ? "↓" : "↑"} {Math.abs(data.averageTrendPercent).toFixed(1)}%</span></p></div><div className="flex gap-2 text-[0.75rem]">{[{ label: "QPS", value: data.qps }, { label: "P95", value: `${data.p95Ms} ms` }, { label: "P99", value: `${data.p99Ms} ms` }].map((item) => <div key={item.label} className="rounded-md bg-muted/60 px-2.5 py-1.5"><span className="mr-1.5 text-muted-foreground">{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b></div>)}</div></div>
     <div className="space-y-1.5" aria-label="Query speed distribution"><div className="flex h-3 overflow-hidden rounded-full bg-muted">{breakdown.map((item) => <span key={item.name} title={`${item.name}: ${item.count} (${item.percent.toFixed(1)}%)`} style={{ width: `${item.percent}%`, backgroundColor: item.color }} />)}</div><div className="grid grid-cols-3 gap-2 text-[0.75rem]">{breakdown.map((item) => <div key={item.name} className="flex min-w-0 items-center gap-1.5"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} /><span className="text-muted-foreground">{item.name}</span><b className="ml-auto tabular-nums text-foreground">{item.count} · {item.percent.toFixed(1)}%</b></div>)}</div></div>
-    <div className="min-h-[6.875rem] min-w-0 flex-1 border-t border-border pt-2" aria-label="Average response time over the last 24 hours"><div className="mb-1 text-[0.75rem] text-muted-foreground">Average response time · peak {peak} ms</div><div className="h-[calc(100%-1.375rem)] min-h-[5.125rem]"><ResponsiveContainer width="100%" height="100%"><AreaChart data={history} margin={{ top: 10, right: 14, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" ticks={queryTimeTicks} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, queryTicks[2]]} ticks={queryTicks} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><Tooltip content={<ChartTooltip />} /><ReferenceDot x={peakPoint.time} y={peak} r={4} fill="#f59e0b" stroke="white" strokeWidth={2} label={{ value: `Peak ${peak} ms`, position: "top", fill: "#b45309", fontSize: 12 }} /><Area dataKey="latency" name="Response time (ms)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.13} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
+    <div className="min-h-[6.875rem] min-w-0 flex-1 border-t border-border pt-2" aria-label="Average response time over the last 24 hours"><div className="mb-1 text-[0.75rem] text-muted-foreground">Average response time · peak {peak} ms</div><div className="h-[calc(100%-1.375rem)] min-h-[5.125rem]"><ResponsiveContainer width="100%" height="100%"><AreaChart data={history} margin={{ top: 10, right: 14, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" ticks={queryTimeTicks} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, queryTicks[2]]} ticks={queryTicks} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><Tooltip content={<ChartTooltip />} /><ReferenceDot x={peakPoint.time} y={peak} r={4} fill="oklch(0.7686 0.1647 70.08)" stroke="white" strokeWidth={2} label={{ value: `Peak ${peak} ms`, position: "top", fill: "oklch(0.5553 0.1455 49)", fontSize: 12 }} /><Area dataKey="latency" name="Response time (ms)" type="monotone" stroke="oklch(0.7137 0.1434 254.62)" fill="oklch(0.7137 0.1434 254.62)" fillOpacity={0.13} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
   </div>;
 }
 

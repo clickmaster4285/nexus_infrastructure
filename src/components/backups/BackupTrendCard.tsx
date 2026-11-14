@@ -24,9 +24,9 @@ function RunsTooltip({ active, payload, label }: TooltipProps) {
   const total = success + failed + skipped;
   const pct = total > 0 ? Math.round((success / total) * 100) : 100;
   const rows = [
-    { label: "Success", value: success, dot: "#34D399" },
-    { label: "Failed", value: failed, dot: "#F87171" },
-    { label: "Skipped", value: skipped, dot: "#94A3B8" },
+    { label: "Success", value: success, dot: "oklch(0.7729 0.1535 163.22)" },
+    { label: "Failed", value: failed, dot: "oklch(0.7106 0.1661 22.22)" },
+    { label: "Skipped", value: skipped, dot: "oklch(0.7107 0.0351 256.79)" },
   ];
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 text-xs shadow-lg">
@@ -47,9 +47,9 @@ function RunsTooltip({ active, payload, label }: TooltipProps) {
 }
 
 const LEGEND = [
-  { label: "Success", key: "success", dot: "#34D399" },
-  { label: "Failed", key: "failed", dot: "#F87171" },
-  { label: "Skipped", key: "skipped", dot: "#94A3B8" },
+  { label: "Success", key: "success", dot: "oklch(0.7729 0.1535 163.22)" },
+  { label: "Failed", key: "failed", dot: "oklch(0.7106 0.1661 22.22)" },
+  { label: "Skipped", key: "skipped", dot: "oklch(0.7107 0.0351 256.79)" },
 ] as const;
 
 type SeriesKey = (typeof LEGEND)[number]["key"];
@@ -129,12 +129,12 @@ export function BackupTrendCard({ runs, onBarClick, onExport }: { runs: BackupRu
           <ResponsiveContainer width="100%" height="100%" minHeight={200}>
             <ComposedChart data={data} margin={{ top: 8, right: 0, left: 0, bottom: 0 }} barCategoryGap={10}>
               <defs>
-                <linearGradient id="btSuccess" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#34D399" /><stop offset="100%" stopColor="#10B981" /></linearGradient>
-                <linearGradient id="btFailed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#F87171" /><stop offset="100%" stopColor="#EF4444" /></linearGradient>
-                <linearGradient id="btSkipped" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94A3B8" /><stop offset="100%" stopColor="#64748B" /></linearGradient>
-                <linearGradient id="btRateFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2563EB" stopOpacity={0.28} /><stop offset="100%" stopColor="#2563EB" stopOpacity={0.02} /></linearGradient>
+                <linearGradient id="btSuccess" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.7729 0.1535 163.22)" /><stop offset="100%" stopColor="oklch(0.6959 0.1491 162.48)" /></linearGradient>
+                <linearGradient id="btFailed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.7106 0.1661 22.22)" /><stop offset="100%" stopColor="oklch(0.6368 0.2078 25.33)" /></linearGradient>
+                <linearGradient id="btSkipped" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.7107 0.0351 256.79)" /><stop offset="100%" stopColor="oklch(0.5544 0.0407 257.42)" /></linearGradient>
+                <linearGradient id="btRateFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.5461 0.2152 262.88)" stopOpacity={0.28} /><stop offset="100%" stopColor="oklch(0.5461 0.2152 262.88)" stopOpacity={0.02} /></linearGradient>
               </defs>
-              <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="3 3" />
+              <CartesianGrid vertical={false} stroke="oklch(0.9276 0.0058 264.53)" strokeDasharray="3 3" />
               <XAxis
                 dataKey="label"
                 tickLine={false}
@@ -161,23 +161,23 @@ export function BackupTrendCard({ runs, onBarClick, onExport }: { runs: BackupRu
                 tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                 tickFormatter={(value: number) => `${value}%`}
               />
-              <Tooltip cursor={{ fill: "rgba(15,23,42,0.05)" }} content={<RunsTooltip />} />
-              <ReferenceLine yAxisId="rate" y={95} stroke="#94A3B8" strokeDasharray="4 4" strokeWidth={1.25}
+              <Tooltip cursor={{ fill: "oklch(0.2077 0.0398 265.75 / 0.05)" }} content={<RunsTooltip />} />
+              <ReferenceLine yAxisId="rate" y={95} stroke="oklch(0.7107 0.0351 256.79)" strokeDasharray="4 4" strokeWidth={1.25}
                 label={{ value: "Target 95%", position: "insideTopRight", fontSize: 10, fill: "var(--muted-foreground)" }} />
               {!hidden.has("success") && (
-                <Bar yAxisId="vol" dataKey="success" name="Success" stackId="status" fill="url(#btSuccess)" stroke="#ffffff" strokeWidth={1} maxBarSize={26} isAnimationActive={false}
+                <Bar yAxisId="vol" dataKey="success" name="Success" stackId="status" fill="url(#btSuccess)" stroke="oklch(1 0 89.88)" strokeWidth={1} maxBarSize={26} isAnimationActive={false}
                   onClick={handleBarClick} cursor="pointer" />
               )}
               {!hidden.has("failed") && (
-                <Bar yAxisId="vol" dataKey="failed" name="Failed" stackId="status" fill="url(#btFailed)" stroke="#ffffff" strokeWidth={1} maxBarSize={26} isAnimationActive={false}
+                <Bar yAxisId="vol" dataKey="failed" name="Failed" stackId="status" fill="url(#btFailed)" stroke="oklch(1 0 89.88)" strokeWidth={1} maxBarSize={26} isAnimationActive={false}
                   onClick={handleBarClick} cursor="pointer" />
               )}
               {!hidden.has("skipped") && (
-                <Bar yAxisId="vol" dataKey="skipped" name="Skipped" stackId="status" fill="url(#btSkipped)" stroke="#ffffff" strokeWidth={1} radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false}
+                <Bar yAxisId="vol" dataKey="skipped" name="Skipped" stackId="status" fill="url(#btSkipped)" stroke="oklch(1 0 89.88)" strokeWidth={1} radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false}
                   onClick={handleBarClick} cursor="pointer" />
               )}
               <Area yAxisId="rate" type="monotone" dataKey="rate" name="Success rate" stroke="none" fill="url(#btRateFill)" isAnimationActive={false} />
-              <Line yAxisId="rate" type="monotone" dataKey="rate" name="Success rate" stroke="#2563EB" strokeWidth={2.5} dot={{ r: 3.5, strokeWidth: 1.5, fill: "#fff" }} activeDot={{ r: 5 }} connectNulls isAnimationActive={false} />
+              <Line yAxisId="rate" type="monotone" dataKey="rate" name="Success rate" stroke="oklch(0.5461 0.2152 262.88)" strokeWidth={2.5} dot={{ r: 3.5, strokeWidth: 1.5, fill: "oklch(1 0 89.88)" }} activeDot={{ r: 5 }} connectNulls isAnimationActive={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>

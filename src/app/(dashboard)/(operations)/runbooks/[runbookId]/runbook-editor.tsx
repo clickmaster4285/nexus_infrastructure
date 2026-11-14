@@ -453,7 +453,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                     const checked = linkedRuleIds.includes(rule.id);
                     return (
                       <label key={rule.id} className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1.5 text-xs transition-colors hover:bg-accent">
-                        <input type="checkbox" checked={checked} onChange={() => setLinkedRuleIds((current) => (checked ? current.filter((id) => id !== rule.id) : [...current, rule.id]))} className="h-4 w-4 shrink-0 accent-[#2563EB]" />
+                        <input type="checkbox" checked={checked} onChange={() => setLinkedRuleIds((current) => (checked ? current.filter((id) => id !== rule.id) : [...current, rule.id]))} className="h-4 w-4 shrink-0 accent-[oklch(0.5461_0.2152_262.88)]" />
                         <span className="w-16 shrink-0 font-mono text-[0.6875rem] tabular-nums text-muted-foreground">{rule.id}</span>
                         <span className="min-w-0 truncate text-foreground/90" title={rule.name}>{rule.name}</span>
                       </label>
@@ -472,7 +472,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                     const checked = services.includes(host);
                     return (
                       <label key={host} className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1.5 font-mono text-[0.6875rem] transition-colors hover:bg-accent">
-                        <input type="checkbox" checked={checked} onChange={() => setServices((current) => (checked ? current.filter((name) => name !== host) : [...current, host]))} className="h-4 w-4 shrink-0 accent-[#2563EB]" />
+                        <input type="checkbox" checked={checked} onChange={() => setServices((current) => (checked ? current.filter((name) => name !== host) : [...current, host]))} className="h-4 w-4 shrink-0 accent-[oklch(0.5461_0.2152_262.88)]" />
                         <span className="min-w-0 truncate text-foreground/90">{host}</span>
                       </label>
                     );

@@ -38,7 +38,7 @@ export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefre
       <div className="flex items-center gap-3 text-[0.8125rem] text-muted-foreground">
         {actions}
         {demo && (
-          <Badge variant="secondary" className="border-transparent bg-[#e2efff] px-2.5 py-1 text-[0.75rem] font-semibold tracking-wide text-[#1476d4] dark:bg-[#17385c] dark:text-[#82c1ff]">
+          <Badge variant="secondary" className="border-transparent bg-[oklch(0.9472_0.0257_253.57)] px-2.5 py-1 text-[0.75rem] font-semibold tracking-wide text-[oklch(0.5651_0.1667_253.22)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7922_0.1099_248.98)]">
             DEMO DATA
           </Badge>
         )}

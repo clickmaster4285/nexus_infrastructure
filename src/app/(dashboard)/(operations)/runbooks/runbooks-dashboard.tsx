@@ -41,10 +41,10 @@ const SEVERITY_OPTIONS: readonly ("all" | RunbookSeverity)[] = ["all", "Critical
 const SERVICE_OPTIONS = ["all", "api-server-01", "api-server-02", "app-server-02", "cache-01", "db-01", "db-02", "edge-01", "storage-01", "worker-01", "web-app-01"];
 const SEVERITY_RANK: Record<RunbookSeverity, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 const SEVERITY_STRIPE: Record<RunbookSeverity, string> = {
-  Critical: "shadow-[inset_3px_0_0_0_#DC2626]",
-  High: "shadow-[inset_3px_0_0_0_#EA580C]",
-  Medium: "shadow-[inset_3px_0_0_0_#D97706]",
-  Low: "shadow-[inset_3px_0_0_0_#3B82F6]",
+  Critical: "shadow-[inset_3px_0_0_0_oklch(0.5771_0.2152_27.33)]",
+  High: "shadow-[inset_3px_0_0_0_oklch(0.6461_0.1943_41.12)]",
+  Medium: "shadow-[inset_3px_0_0_0_oklch(0.6658_0.1574_58.32)]",
+  Low: "shadow-[inset_3px_0_0_0_oklch(0.6231_0.188_259.81)]",
 };
 
 interface SavedView { name: string; query: string; status: string; category: string; severity: string; service: string; owner: string; favoritesOnly: boolean }
@@ -678,7 +678,7 @@ export function RunbooksDashboard() {
             <table className="w-full min-w-[83.75rem] table-fixed text-left text-[0.8125rem]">
               <thead>
                 <tr className="border-b border-border text-[0.75rem] font-semibold text-muted-foreground">
-                  <th className="w-9 py-2 pl-2 pr-1"><input type="checkbox" aria-label="Select all visible runbooks" className="h-4 w-4 accent-[#2563EB]" checked={pageRows.length > 0 && selectedIds.length === pageRows.length} onChange={(event) => toggleSelectAll(event.target.checked)} /></th>
+                  <th className="w-9 py-2 pl-2 pr-1"><input type="checkbox" aria-label="Select all visible runbooks" className="h-4 w-4 accent-[oklch(0.5461_0.2152_262.88)]" checked={pageRows.length > 0 && selectedIds.length === pageRows.length} onChange={(event) => toggleSelectAll(event.target.checked)} /></th>
                   <th className="w-[14%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("title")}>Title {sortIcon("title")}</button></th>
                   <th className="w-[8%] py-2 pr-2">Category</th>
                   <th className="w-[7%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("severity")}>Severity {sortIcon("severity")}</button></th>
@@ -702,7 +702,7 @@ export function RunbooksDashboard() {
                   const isFavorite = favorites.includes(runbook.id);
                   return (
                     <tr key={runbook.id} className={cn("group border-b border-border/60 transition-colors hover:bg-slate-50 dark:hover:bg-muted/40", SEVERITY_STRIPE[runbook.severity], density === "compact" ? "h-12" : "h-14")}>
-                      <td className="py-1.5 pl-2 pr-1 align-middle"><input type="checkbox" aria-label={`Select ${runbook.id}`} className="h-4 w-4 accent-[#2563EB]" checked={selectedIds.includes(runbook.id)} onChange={(event) => setSelectedIds((current) => event.target.checked ? [...current, runbook.id] : current.filter((id) => id !== runbook.id))} onClick={(event) => event.stopPropagation()} /></td>
+                      <td className="py-1.5 pl-2 pr-1 align-middle"><input type="checkbox" aria-label={`Select ${runbook.id}`} className="h-4 w-4 accent-[oklch(0.5461_0.2152_262.88)]" checked={selectedIds.includes(runbook.id)} onChange={(event) => setSelectedIds((current) => event.target.checked ? [...current, runbook.id] : current.filter((id) => id !== runbook.id))} onClick={(event) => event.stopPropagation()} /></td>
                       <td className="py-1.5 pr-2 align-middle">
                         <div className="flex min-w-0 items-center gap-1.5">
                           <button type="button" aria-label={isFavorite ? `Unfavorite ${runbook.id}` : `Favorite ${runbook.id}`} aria-pressed={isFavorite} onClick={() => toggleFavorite(runbook.id)} className="shrink-0 rounded p-0.5 text-muted-foreground transition-colors hover:text-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">

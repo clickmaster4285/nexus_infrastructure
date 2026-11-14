@@ -124,11 +124,11 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
           <div className="mt-1 h-[5rem] w-full" role="img" aria-label="Projected AWS S3 usage over 30 days against capacity">
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <AreaChart data={FORECAST_DAYS} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
-                <CartesianGrid vertical={false} stroke="#E5E7EB" />
+                <CartesianGrid vertical={false} stroke="oklch(0.9276 0.0058 264.53)" />
                 <XAxis dataKey="day" hide />
                 <YAxis domain={[20, 25]} hide />
-                <Area type="monotone" dataKey="used" stroke="#3B82F6" strokeWidth={1.6} fill="#3B82F6" fillOpacity={0.15} isAnimationActive={false} />
-                <Area type="monotone" dataKey="capacity" stroke="#94A3B8" strokeWidth={1} strokeDasharray="4 3" fill="none" isAnimationActive={false} />
+                <Area type="monotone" dataKey="used" stroke="oklch(0.6231 0.188 259.81)" strokeWidth={1.6} fill="oklch(0.6231 0.188 259.81)" fillOpacity={0.15} isAnimationActive={false} />
+                <Area type="monotone" dataKey="capacity" stroke="oklch(0.7107 0.0351 256.79)" strokeWidth={1} strokeDasharray="4 3" fill="none" isAnimationActive={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

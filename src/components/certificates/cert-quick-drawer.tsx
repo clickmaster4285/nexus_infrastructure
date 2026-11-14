@@ -49,7 +49,7 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
 
   return createPortal(
     <div className="fixed inset-0 z-[40]" role="dialog" aria-modal="true" aria-label={`Certificate ${title}`}>
-      <button type="button" aria-label="Close drawer" className="absolute inset-0 bg-[#0c1b2c]/55 backdrop-blur-[0.125rem]" onClick={onClose} />
+      <button type="button" aria-label="Close drawer" className="absolute inset-0 bg-[oklch(0.2184_0.0395_252.73)]/55 backdrop-blur-[0.125rem]" onClick={onClose} />
       <div ref={panelRef} tabIndex={-1} className="absolute inset-y-0 right-0 flex w-[min(32.5rem,100vw)] flex-col border-l border-border bg-card shadow-2xl outline-none">
         <div className="flex items-center justify-between gap-2 border-b border-border px-5 py-3.5">
           <span className="min-w-0">

@@ -68,7 +68,7 @@ export function RunLogViewer({ open, onOpenChange, title, subtitle, badge, meta,
             </button>
           </div>
         </DialogHeader>
-        <div className="max-h-[26.25rem] overflow-auto bg-[#0B1220] p-0">
+        <div className="max-h-[26.25rem] overflow-auto bg-[oklch(0.1831_0.0309_263.38)] p-0">
           <pre className="min-w-max px-0 py-3 font-mono text-[0.6875rem] leading-[1.7] text-slate-200">
             {lines.map((line, index) => (
               <div key={index} className="flex hover:bg-white/5">

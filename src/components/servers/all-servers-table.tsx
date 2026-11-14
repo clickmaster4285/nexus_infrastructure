@@ -74,7 +74,7 @@ export function AllServersTable({
   return (
     <>
       {/* Scrollable table */}
-      <div className="w-full overflow-x-auto [overscroll-behavior-x:contain] [scrollbar-width:thin] [scrollbar-color:#b8c7d9_transparent]">
+      <div className="w-full overflow-x-auto [overscroll-behavior-x:contain] [scrollbar-width:thin] [scrollbar-color:oklch(0.8239_0.0302_252.98)_transparent]">
         <table className="w-full min-w-[72.5rem] table-fixed border-separate border-spacing-0">
           <colgroup>
             {columns.map((column) => (
@@ -87,7 +87,7 @@ export function AllServersTable({
                 <th
                   key={column.key}
                   scope="col"
-                  className="sticky top-0 z-[1] border-b border-border bg-[#f7f9fc] px-2.5 py-3 text-left text-[0.6875rem] font-semibold leading-tight text-[#405b79] dark:bg-[#1b2a3e] dark:text-[#c6d2e1]"
+                  className="sticky top-0 z-[1] border-b border-border bg-[oklch(0.9814_0.0045_258.32)] px-2.5 py-3 text-left text-[0.6875rem] font-semibold leading-tight text-[oklch(0.4626_0.0589_251.71)] dark:bg-[oklch(0.2817_0.0424_255.89)] dark:text-[oklch(0.8592_0.0246_253.97)]"
                 >
                   {column.label}
                 </th>
@@ -107,13 +107,13 @@ export function AllServersTable({
                     router.push(detailsPath);
                   }}
                   onKeyDown={(event) => handleRowKeyDown(event, server)}
-                  className="cursor-pointer transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#5ba4ed] dark:hover:bg-[#1c3047]"
+                  className="cursor-pointer transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[oklch(0.7027_0.1304_250.18)] dark:hover:bg-[oklch(0.3039_0.0493_252.82)]"
                 >
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle">
                     <Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="flex flex-col items-start gap-0.5 text-left">
-                      <b className="text-[0.75rem] font-semibold leading-tight text-[#204f82] hover:text-blue-600 hover:underline dark:text-[#82b9f1]">{server.name}</b>
-                      <small className="text-[0.625rem] leading-tight text-[#637b96] dark:text-muted-foreground">{server.host}</small>
-                      <small className="text-[0.625rem] leading-tight text-[#8292a6] dark:text-[#8a9cb4]">{server.ip}</small>
+                      <b className="text-[0.75rem] font-semibold leading-tight text-[oklch(0.4222_0.0993_252.83)] hover:text-blue-600 hover:underline dark:text-[oklch(0.769_0.0993_249.66)]">{server.name}</b>
+                      <small className="text-[0.625rem] leading-tight text-[oklch(0.5742_0.0504_251.68)] dark:text-muted-foreground">{server.host}</small>
+                      <small className="text-[0.625rem] leading-tight text-[oklch(0.6541_0.0351_254.08)] dark:text-[oklch(0.6869_0.041_255.66)]">{server.ip}</small>
                     </Link>
                   </td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle">
@@ -124,11 +124,11 @@ export function AllServersTable({
                   </td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle">
                     <Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="flex flex-col gap-1">
-                      <b className="flex items-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-medium text-[#526984] dark:text-[#c6d2e1]">
+                      <b className="flex items-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-medium text-[oklch(0.5131_0.0511_252.79)] dark:text-[oklch(0.8592_0.0246_253.97)]">
                         <ProviderLogo provider={server.provider} />
                         {server.provider}
                       </b>
-                      <small className="flex items-center gap-1.5 whitespace-nowrap text-[0.625rem] text-[#8493a6] dark:text-muted-foreground">
+                      <small className="flex items-center gap-1.5 whitespace-nowrap text-[0.625rem] text-[oklch(0.6577_0.0332_254.39)] dark:text-muted-foreground">
                         <LocationFlag location={server.location} />
                         {server.location.split(",")[0]}
                       </small>
@@ -138,10 +138,10 @@ export function AllServersTable({
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><UsageCell value={server.memory} tone="green" readable /></Link></td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><UsageCell value={server.disk} tone="amber" readable /></Link></td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><NetworkCell server={server} readable /></Link></td>
-                  <td className="whitespace-nowrap border-b border-border/60 px-[0.4375rem] py-2 align-middle text-[0.6875rem] text-[#5b718c] dark:text-[#b7c4d5]"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{server.uptime}</Link></td>
+                  <td className="whitespace-nowrap border-b border-border/60 px-[0.4375rem] py-2 align-middle text-[0.6875rem] text-[oklch(0.5414_0.0499_253.81)] dark:text-[oklch(0.8156_0.0279_255.11)]"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{server.uptime}</Link></td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block"><AgentCell agent={server.agent} heartbeat={server.heartbeat} readable /></Link></td>
                   <td className="border-b border-border/60 px-[0.4375rem] py-2 align-middle"><Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-1 text-[0.5rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-[0.3125rem] w-[0.3125rem] rounded-full bg-current" />In Maintenance</span> : <StatusPill status={server.health} readable />}</Link></td>
-                  <td className={cn("border-b border-border/60 px-[0.4375rem] py-2 text-center align-middle text-[0.6875rem] font-semibold text-[#617790] dark:text-[#b7c4d5]", server.alerts > 0 && "font-bold text-destructive")}>
+                  <td className={cn("border-b border-border/60 px-[0.4375rem] py-2 text-center align-middle text-[0.6875rem] font-semibold text-[oklch(0.5611_0.0468_251.9)] dark:text-[oklch(0.8156_0.0279_255.11)]", server.alerts > 0 && "font-bold text-destructive")}>
                     <Link href={detailsPath} onClick={(event) => event.stopPropagation()} className="block">{server.alerts}</Link>
                   </td>
                   <td className="relative border-b border-border/60 px-[0.4375rem] py-2 text-center align-middle">
@@ -176,23 +176,23 @@ export function AllServersTable({
         {servers.length === 0 && (
           <div className="flex min-h-[11.25rem] flex-col items-center justify-center gap-2 py-10 text-muted-foreground">
             <ServerIcon size={20} aria-hidden="true" />
-            <b className="text-[0.8125rem] font-semibold text-[#435a75] dark:text-[#d1dceb]">No servers match these filters</b>
+            <b className="text-[0.8125rem] font-semibold text-[oklch(0.4602_0.0524_252.89)] dark:text-[oklch(0.8907_0.0238_256.11)]">No servers match these filters</b>
             <span className="text-[0.75rem]">Change the search or filter selections.</span>
           </div>
         )}
       </div>
 
-      {totalFiltered > pageSize && <div className="flex min-h-[3rem] flex-wrap items-center justify-end gap-1 px-3 py-2 text-[0.6875rem] text-[#6e8198] dark:text-muted-foreground">
+      {totalFiltered > pageSize && <div className="flex min-h-[3rem] flex-wrap items-center justify-end gap-1 px-3 py-2 text-[0.6875rem] text-[oklch(0.5964_0.0417_253.37)] dark:text-muted-foreground">
           <span className="mr-1 hidden items-center gap-1.5 whitespace-nowrap sm:flex">
             Rows per page
-            <span className="inline-grid h-[1.75rem] min-w-9 place-items-center rounded border border-input bg-card px-1.5 text-[0.6875rem] text-[#536881]">{pageSize}</span>
+            <span className="inline-grid h-[1.75rem] min-w-9 place-items-center rounded border border-input bg-card px-1.5 text-[0.6875rem] text-[oklch(0.5101_0.0473_253.09)]">{pageSize}</span>
           </span>
           <span className="mr-1 whitespace-nowrap">{start}-{end} of {totalFiltered}</span>
-          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronFirst size={13} /></button>
-          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLeft size={13} /></button>
+          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronFirst size={13} /></button>
+          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLeft size={13} /></button>
           <span aria-current="page" className="grid h-[1.5rem] w-[1.5rem] place-items-center rounded border border-primary bg-primary text-[0.5625rem] font-bold text-primary-foreground">{page}</span>
-          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronRight size={13} /></button>
-          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[#637891] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLast size={13} /></button>
+          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronRight size={13} /></button>
+          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLast size={13} /></button>
       </div>}
     </>
   );

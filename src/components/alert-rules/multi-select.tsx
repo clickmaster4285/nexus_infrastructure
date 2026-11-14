@@ -96,7 +96,7 @@ export function MultiSelect({ label, options, selected, onChange, className, wid
                   type="checkbox"
                   checked={checked}
                   onChange={() => toggle(option.value)}
-                  className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]"
+                  className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                 />
                 {option.dot && <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: option.dot }} />}
                 <span className="min-w-0 flex-1 truncate">{option.label}</span>

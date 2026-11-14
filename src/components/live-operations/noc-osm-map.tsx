@@ -30,15 +30,15 @@ const STATUS_ORDER: NocMapStatus[] = ["online", "warning", "critical"];
 const OSM_TILES = {
   light: {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    background: "#aad3df",
-    ocean: "#aad3df",
+    background: "oklch(0.8414 0.0462 217.5)",
+    ocean: "oklch(0.8414 0.0462 217.5)",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
   },
   dark: {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    background: "#101826",
-    ocean: "#101826",
+    background: "oklch(0.2086 0.0305 261.23)",
+    ocean: "oklch(0.2086 0.0305 261.23)",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
   },
@@ -63,7 +63,7 @@ const CLUSTER_RADIUS_PX = 52;
 /** Zoom level from which the site code labels are shown under each marker. */
 const LABEL_ZOOM = 3;
 
-const BUILDING_GLYPH = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>';
+const BUILDING_GLYPH = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(1 0 89.88)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>';
 
 export interface NocMapCluster {
   id: string;
@@ -162,7 +162,7 @@ function StatusPill({ status }: { status: NocMapStatus }) {
 }
 
 function Meter({ label, value }: { label: string; value: number }) {
-  const color = value >= 90 ? "#ef4444" : value >= 75 ? "#f59e0b" : "#22c55e";
+  const color = value >= 90 ? "oklch(0.6368 0.2078 25.33)" : value >= 75 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.7227 0.192 149.58)";
   return (
     <div className="flex items-center gap-1.5">
       <span className="w-12 shrink-0 text-[0.75rem] text-muted-foreground">{label}</span>
@@ -210,7 +210,7 @@ function SitePopup({ site, onFocus }: { site: NocMapSite; onFocus: (site: NocMap
             className="block h-full rounded-full"
             style={{
               width: `${Math.max(2, Math.min(100, site.health))}%`,
-              backgroundColor: site.health >= 99 ? "#22c55e" : site.health >= 98 ? "#f59e0b" : "#ef4444",
+              backgroundColor: site.health >= 99 ? "oklch(0.7227 0.192 149.58)" : site.health >= 98 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.6368 0.2078 25.33)",
             }}
           />
         </span>

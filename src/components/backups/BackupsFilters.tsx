@@ -19,12 +19,12 @@ const RANGE_OPTIONS = ["Today", "7D", "30D", "Custom"] as const;
 const SAVED_VIEWS_KEY = "backupsSavedViews";
 
 const STATUS_OPTIONS: Array<{ value: BackupStatusKey; label: string; dot: string }> = [
-  { value: "success", label: "Success", dot: "#16A34A" },
-  { value: "failed", label: "Failed", dot: "#DC2626" },
-  { value: "running", label: "Running", dot: "#3B82F6" },
-  { value: "skipped", label: "Skipped (maintenance)", dot: "#94A3B8" },
-  { value: "paused", label: "Paused", dot: "#94A3B8" },
-  { value: "none", label: "No backup", dot: "#94A3B8" },
+  { value: "success", label: "Success", dot: "oklch(0.6271 0.1699 149.21)" },
+  { value: "failed", label: "Failed", dot: "oklch(0.5771 0.2152 27.33)" },
+  { value: "running", label: "Running", dot: "oklch(0.6231 0.188 259.81)" },
+  { value: "skipped", label: "Skipped (maintenance)", dot: "oklch(0.7107 0.0351 256.79)" },
+  { value: "paused", label: "Paused", dot: "oklch(0.7107 0.0351 256.79)" },
+  { value: "none", label: "No backup", dot: "oklch(0.7107 0.0351 256.79)" },
 ];
 
 const TYPE_OPTIONS = (Object.keys(BACKUP_TYPE_LABELS) as BackupType[]).map((value) => ({ value, label: BACKUP_TYPE_LABELS[value] }));

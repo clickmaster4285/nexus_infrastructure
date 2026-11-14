@@ -191,7 +191,7 @@ export function TasksTable({
                   aria-label="Select all tasks on this page"
                   checked={allVisibleSelected}
                   onChange={toggleAllVisible}
-                  className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                  className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                 />
               </th>
               <th scope="col" aria-sort={sortKey === "name" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("name", "Task")}</th>
@@ -258,7 +258,7 @@ export function TasksTable({
                       aria-label={`Select ${task.id}`}
                       checked={selected}
                       onChange={() => toggleOne(task.id)}
-                      className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
+                      className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
                     />
                   </td>
 

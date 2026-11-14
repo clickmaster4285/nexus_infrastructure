@@ -39,13 +39,13 @@ const STATUS_BADGE: Record<AlertStatus, { label: string; className: string }> = 
   resolved: { label: "Resolved", className: "bg-green-600/10 text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400" },
 };
 
-const LINE_COLOR: Record<AlertSeverity, string> = { critical: "#DC2626", warning: "#D97706", info: "#3B82F6" };
+const LINE_COLOR: Record<AlertSeverity, string> = { critical: "oklch(0.5771 0.2152 27.33)", warning: "oklch(0.6658 0.1574 58.32)", info: "oklch(0.6231 0.188 259.81)" };
 
 const TIMELINE_DOT: Record<string, string> = {
   triggered: "bg-red-600",
   notified: "bg-blue-500",
   acknowledged: "bg-amber-600",
-  assigned: "bg-[#874fe0]",
+  assigned: "bg-[oklch(0.5675_0.2098_296.93)]",
   silenced: "bg-slate-400",
   resolved: "bg-green-600",
   note: "bg-slate-400",
@@ -183,7 +183,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
                 <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <ReferenceLine
                   y={alert.threshold}
-                  stroke="#64748b"
+                  stroke="oklch(0.5544 0.0407 257.42)"
                   strokeDasharray="5 4"
                   label={{ value: `Threshold ${alert.threshold}${alert.unit}`, position: "insideTopRight", fill: "var(--muted-foreground)", fontSize: 10 }}
                 />

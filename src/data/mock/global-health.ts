@@ -7,7 +7,7 @@ const incidentsSnapshot = incidentStoreSnapshot();
 export type HealthStatus = "healthy" | "warning" | "critical";
 export const SLA_TARGET = 99;
 export const statusForHealth = (value: number): HealthStatus => value >= SLA_TARGET ? "healthy" : value >= 98 ? "warning" : "critical";
-export const statusColors: Record<HealthStatus, string> = { healthy: "#34D399", warning: "#FBBF24", critical: "#F87171" };
+export const statusColors: Record<HealthStatus, string> = { healthy: "oklch(0.7729 0.1535 163.22)", warning: "oklch(0.8369 0.1644 84.43)", critical: "oklch(0.7106 0.1661 22.22)" };
 
 export const componentHealth = [
   { name: "Servers", value: 99.1, icon: "server", belowMinutes: 0, lastIncident: "No incidents in the last 24 hours" },

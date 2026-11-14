@@ -30,7 +30,7 @@ import {
 
 echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, BrushComponent, CanvasRenderer]);
 
-const CHART_COLORS: Record<LogLevel, string> = { ERROR: "#F87171", WARNING: "#FBBF24", INFO: "#60A5FA", DEBUG: "#94A3B8" };
+const CHART_COLORS: Record<LogLevel, string> = { ERROR: "oklch(0.7106 0.1661 22.22)", WARNING: "oklch(0.8369 0.1644 84.43)", INFO: "oklch(0.7137 0.1434 254.62)", DEBUG: "oklch(0.7107 0.0351 256.79)" };
 const LEVEL_ORDER: LogLevel[] = ["ERROR", "WARNING", "INFO", "DEBUG"];
 const LEVEL_RANK: Record<LogLevel, number> = { ERROR: 3, WARNING: 2, INFO: 1, DEBUG: 0 };
 const LEVEL_BADGE: Record<LogLevel, string> = {
@@ -227,7 +227,7 @@ function TrendChart({ data, hidden, brush, onBrush }: TrendChartProps) {
       brush: {
         toolbox: ["lineX"],
         xAxisIndex: 0,
-        brushStyle: { color: "rgba(20, 121, 232, 0.15)", borderColor: "#1479e8", borderWidth: 1 },
+        brushStyle: { color: "oklch(0.5855 0.1885 255.72 / 0.15)", borderColor: "oklch(0.5855 0.1885 255.72)", borderWidth: 1 },
         outOfBrush: { colorAlpha: 0.25 },
         throttleType: "debounce",
         throttleDelay: 120,
@@ -346,12 +346,12 @@ function LevelDonut() {
 /* Main dashboard                                                        */
 /* ------------------------------------------------------------------ */
 const STAT_CARDS = [
-  { label: "Total Logs", value: "48.7M", icon: ScrollText, tone: "bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]", delta: 142, pct: "6.1%", dir: "up" as const },
-  { label: "Parsed Logs", value: "48.1M", icon: BadgeCheck, tone: "bg-[#dff7eb] text-[#13a564] dark:bg-[#123a2a] dark:text-[#4fd69a]", delta: 126, pct: "5.8%", dir: "up" as const },
-  { label: "Errors", value: "124.5K", icon: CircleAlert, tone: "bg-[#ffeaec] text-[#e83f4d] dark:bg-[#492a35] dark:text-[#ff8b98]", delta: 7500, pct: "6.4%", dir: "down" as const },
-  { label: "Warnings", value: "268.7K", icon: TriangleAlert, tone: "bg-[#fff1d7] text-[#dc941c] dark:bg-[#493a29] dark:text-[#ffc16e]", delta: 16100, pct: "6.4%", dir: "down" as const },
-  { label: "Log Rate", value: "564/s", icon: Activity, tone: "bg-[#f1eaff] text-[#874fe0] dark:bg-[#35264d] dark:text-[#bd98ff]", delta: 26, pct: "4.8%", dir: "up" as const },
-  { label: "Parse Failures", value: "0.6M", icon: ShieldAlert, tone: "bg-[#ffe9e3] text-[#e0622d] dark:bg-[#40302a] dark:text-[#ffb08a]", delta: -14400, pct: "2.4%", dir: "down" as const },
+  { label: "Total Logs", value: "48.7M", icon: ScrollText, tone: "bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]", delta: 142, pct: "6.1%", dir: "up" as const },
+  { label: "Parsed Logs", value: "48.1M", icon: BadgeCheck, tone: "bg-[oklch(0.9553_0.0297_164.3)] text-[oklch(0.6367_0.1492_156.39)] dark:bg-[oklch(0.3149_0.0537_163.8)] dark:text-[oklch(0.7869_0.1465_160.69)]", delta: 126, pct: "5.8%", dir: "up" as const },
+  { label: "Errors", value: "124.5K", icon: CircleAlert, tone: "bg-[oklch(0.9544_0.023_10.96)] text-[oklch(0.6219_0.2045_21.23)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]", delta: 7500, pct: "6.4%", dir: "down" as const },
+  { label: "Warnings", value: "268.7K", icon: TriangleAlert, tone: "bg-[oklch(0.9624_0.0373_83.03)] text-[oklch(0.7213_0.1471_72.82)] dark:bg-[oklch(0.3598_0.0347_69.88)] dark:text-[oklch(0.8508_0.123_72.9)]", delta: 16100, pct: "6.4%", dir: "down" as const },
+  { label: "Log Rate", value: "564/s", icon: Activity, tone: "bg-[oklch(0.9487_0.0289_301)] text-[oklch(0.5675_0.2098_296.93)] dark:bg-[oklch(0.306_0.07_300.04)] dark:text-[oklch(0.7536_0.1483_299.39)]", delta: 26, pct: "4.8%", dir: "up" as const },
+  { label: "Parse Failures", value: "0.6M", icon: ShieldAlert, tone: "bg-[oklch(0.9501_0.0255_35.71)] text-[oklch(0.6455_0.1705_41.28)] dark:bg-[oklch(0.3254_0.0258_41.52)] dark:text-[oklch(0.8243_0.1061_46.49)]", delta: -14400, pct: "2.4%", dir: "down" as const },
 ];
 
 export function LogsExplorerDashboard() {

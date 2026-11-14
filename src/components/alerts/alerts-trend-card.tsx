@@ -11,7 +11,7 @@ interface AlertsTrendCardProps {
   total24h: number;
 }
 
-/** 24h stacked bars (Critical red, Warning amber, Info blue) on #E5E7EB gridlines. */
+/** 24h stacked bars (Critical red, Warning amber, Info blue) on oklch(0.9276 0.0058 264.53) gridlines. */
 export function AlertsTrendCard({ trend, total24h }: AlertsTrendCardProps) {
   const peak = trend.reduce((best, bucket) => (bucket.total > best.total ? bucket : best), trend[0]);
   return (
@@ -33,18 +33,18 @@ export function AlertsTrendCard({ trend, total24h }: AlertsTrendCardProps) {
               cursor={{ fill: "var(--accent)", opacity: 0.5 }}
               contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }}
             />
-            <Bar dataKey="critical" name="Critical" stackId="alerts" fill="#DC2626" radius={[0, 0, 0, 0]} maxBarSize={26} />
-            <Bar dataKey="warning" name="Warning" stackId="alerts" fill="#D97706" maxBarSize={26} />
-            <Bar dataKey="info" name="Info" stackId="alerts" fill="#3B82F6" radius={[3, 3, 0, 0]} maxBarSize={26} />
+            <Bar dataKey="critical" name="Critical" stackId="alerts" fill="oklch(0.5771 0.2152 27.33)" radius={[0, 0, 0, 0]} maxBarSize={26} />
+            <Bar dataKey="warning" name="Warning" stackId="alerts" fill="oklch(0.6658 0.1574 58.32)" maxBarSize={26} />
+            <Bar dataKey="info" name="Info" stackId="alerts" fill="oklch(0.6231 0.188 259.81)" radius={[3, 3, 0, 0]} maxBarSize={26} />
           </BarChart>
         </ResponsiveContainer>
       </div>
       <div className="mt-auto border-t border-border pt-2">
         <Legend
           items={[
-            { name: "Critical", color: "#DC2626" },
-            { name: "Warning", color: "#D97706" },
-            { name: "Info", color: "#3B82F6" },
+            { name: "Critical", color: "oklch(0.5771 0.2152 27.33)" },
+            { name: "Warning", color: "oklch(0.6658 0.1574 58.32)" },
+            { name: "Info", color: "oklch(0.6231 0.188 259.81)" },
           ]}
         />
         <p className="mt-1.5 text-center text-[0.75rem] text-muted-foreground">

@@ -69,9 +69,9 @@ function ComplianceSparkline({ values, target }: SparklineProps) {
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className="block h-12 w-full" role="img" aria-label="Compliance sparkline - last 30 days">
-      <line x1={pad} y1={targetY} x2={width - pad} y2={targetY} stroke="#94A3B8" strokeWidth={0.7} strokeDasharray="2 2" />
-      {points.length > 0 && <path d={path} fill="none" stroke="#16A34A" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />}
-      {points.length > 0 && <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r={1.4} fill="#16A34A" />}
+      <line x1={pad} y1={targetY} x2={width - pad} y2={targetY} stroke="oklch(0.7107 0.0351 256.79)" strokeWidth={0.7} strokeDasharray="2 2" />
+      {points.length > 0 && <path d={path} fill="none" stroke="oklch(0.6271 0.1699 149.21)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />}
+      {points.length > 0 && <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r={1.4} fill="oklch(0.6271 0.1699 149.21)" />}
     </svg>
   );
 }

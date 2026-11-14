@@ -391,8 +391,8 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                       <XAxis dataKey="time" interval={9} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
                       <YAxis width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
                       <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
-                      <ReferenceLine y={thresholdValue} stroke="#64748b" strokeDasharray="5 4" />
-                      <Line dataKey="value" name="Observed" type="monotone" stroke="#1565e8" strokeWidth={1.8} dot={false} activeDot={{ r: 3 }} />
+                      <ReferenceLine y={thresholdValue} stroke="oklch(0.5544 0.0407 257.42)" strokeDasharray="5 4" />
+                      <Line dataKey="value" name="Observed" type="monotone" stroke="oklch(0.5443 0.2118 260.56)" strokeWidth={1.8} dot={false} activeDot={{ r: 3 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

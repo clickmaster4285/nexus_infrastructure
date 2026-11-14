@@ -58,15 +58,15 @@ const FlagComponents = Flags as unknown as Record<
 const regionCount = 4;
 
 const centerStates = [
-  { name: "Healthy", value: 3, color: "#20b77a" },
-  { name: "Degraded", value: 1, color: "#f59e0b" },
-  { name: "Offline", value: 1, color: "#ef4444" },
+  { name: "Healthy", value: 3, color: "oklch(0.6907 0.1499 159.66)" },
+  { name: "Degraded", value: 1, color: "oklch(0.7686 0.1647 70.08)" },
+  { name: "Offline", value: 1, color: "oklch(0.6368 0.2078 25.33)" },
 ];
 
 const locationStates = [
-  { name: "Healthy", value: healthMapLocations.filter((location) => location.status === "healthy").length, color: "#20b77a" },
-  { name: "Degraded", value: healthMapLocations.filter((location) => location.status === "warning").length, color: "#f59e0b" },
-  { name: "Offline", value: healthMapLocations.filter((location) => location.status === "critical").length, color: "#ef4444" },
+  { name: "Healthy", value: healthMapLocations.filter((location) => location.status === "healthy").length, color: "oklch(0.6907 0.1499 159.66)" },
+  { name: "Degraded", value: healthMapLocations.filter((location) => location.status === "warning").length, color: "oklch(0.7686 0.1647 70.08)" },
+  { name: "Offline", value: healthMapLocations.filter((location) => location.status === "critical").length, color: "oklch(0.6368 0.2078 25.33)" },
 ];
 
 const performanceTimes = ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"];
@@ -78,11 +78,11 @@ const performance = performanceTimes.map((time, index) => ({
 }));
 
 const topLocations = [
-  { name: "New York (USA)", countryCode: "US", uptime: 99.9, color: "#3b82f6" },
-  { name: "London (UK)", countryCode: "GB", uptime: 99.6, color: "#8b5cf6" },
-  { name: "Dubai (UAE)", countryCode: "AE", uptime: 99.2, color: "#f59e0b" },
-  { name: "Singapore (SG)", countryCode: "SG", uptime: 98.9, color: "#06b6d4" },
-  { name: "Sydney (AU)", countryCode: "AU", uptime: 98.4, color: "#f43f5e" },
+  { name: "New York (USA)", countryCode: "US", uptime: 99.9, color: "oklch(0.6231 0.188 259.81)" },
+  { name: "London (UK)", countryCode: "GB", uptime: 99.6, color: "oklch(0.6056 0.2189 292.72)" },
+  { name: "Dubai (UAE)", countryCode: "AE", uptime: 99.2, color: "oklch(0.7686 0.1647 70.08)" },
+  { name: "Singapore (SG)", countryCode: "SG", uptime: 98.9, color: "oklch(0.7148 0.1257 215.22)" },
+  { name: "Sydney (AU)", countryCode: "AU", uptime: 98.4, color: "oklch(0.645 0.2154 16.44)" },
 ];
 const averageLocationUptime = topLocations.reduce((sum, location) => sum + location.uptime, 0) / topLocations.length;
 const lowestUptimeLocation = topLocations.reduce((lowest, location) => location.uptime < lowest.uptime ? location : lowest);
@@ -146,7 +146,7 @@ function DataCenterPerformance({ range }: { range: string }) {
   return (
     <>
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-[0.6875rem] text-muted-foreground">
-        {[ ["DC-1 (NYC)", "#278cf0"], ["DC-2 (LON)", "#a855f7"], ["DC-3 (DUB)", "#20b77a"] ].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
+        {[ ["DC-1 (NYC)", "oklch(0.6353 0.1743 252.63)"], ["DC-2 (LON)", "oklch(0.6268 0.2325 303.9)"], ["DC-3 (DUB)", "oklch(0.6907 0.1499 159.66)"] ].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
       </div>
       <div className="h-[11.875rem] w-full pt-2">
         <ResponsiveContainer width="100%" height="100%">
@@ -155,9 +155,9 @@ function DataCenterPerformance({ range }: { range: string }) {
             <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
             <YAxis width={42} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
             <Tooltip labelFormatter={(label) => `${label} · ${range}`} contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
-            <Line dataKey="nyc" name="DC-1 (NYC)" type="monotone" stroke="#278cf0" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-            <Line dataKey="london" name="DC-2 (LON)" type="monotone" stroke="#a855f7" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-            <Line dataKey="dubai" name="DC-3 (DUB)" type="monotone" stroke="#20b77a" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+            <Line dataKey="nyc" name="DC-1 (NYC)" type="monotone" stroke="oklch(0.6353 0.1743 252.63)" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+            <Line dataKey="london" name="DC-2 (LON)" type="monotone" stroke="oklch(0.6268 0.2325 303.9)" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+            <Line dataKey="dubai" name="DC-3 (DUB)" type="monotone" stroke="oklch(0.6907 0.1499 159.66)" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -221,7 +221,7 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
-        <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
+        <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "oklch(0.6907 0.1499 159.66)"], ["Degraded", "oklch(0.7686 0.1647 70.08)"], ["Offline", "oklch(0.6368 0.2078 25.33)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
           <div id="global-data-centers" className="relative mt-2 min-h-[15.5rem] flex-1 overflow-hidden rounded-lg">
             <NocOsmMap sites={healthMapSites} center={[-33.9249, 18.4241]} initialZoom={13} />
             {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[0.6875rem] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}

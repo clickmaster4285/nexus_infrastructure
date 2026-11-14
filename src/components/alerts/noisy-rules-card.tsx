@@ -10,7 +10,7 @@ interface NoisyRulesCardProps {
   onRuleClick: (ruleName: string) => void;
 }
 
-const SEVERITY_BAR: Record<string, string> = { critical: "#DC2626", warning: "#D97706", info: "#3B82F6" };
+const SEVERITY_BAR: Record<string, string> = { critical: "oklch(0.5771 0.2152 27.33)", warning: "oklch(0.6658 0.1574 58.32)", info: "oklch(0.6231 0.188 259.81)" };
 
 /** Top 5 noisiest rules in the last 24h: name, thin bar, count. */
 export function NoisyRulesCard({ rules, onRuleClick }: NoisyRulesCardProps) {

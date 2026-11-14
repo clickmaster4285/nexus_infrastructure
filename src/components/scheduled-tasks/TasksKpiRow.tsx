@@ -66,12 +66,12 @@ export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) 
     },
     {
       key: "running", label: "Running Now", value: String(stats.runningNow), icon: Timer,
-      tone: "bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]",
+      tone: "bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]",
       hint: "in progress right now", goodDirection: "up", clickLabel: "Filter table to running tasks",
     },
     {
       key: "failed", label: "Failed (24h)", value: String(stats.failed24h), icon: XCircle,
-      tone: "bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]",
+      tone: "bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]",
       trend: trendNode(stats.failedDelta, failedHint),
       trendClassName: stats.failedDelta <= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400",
       goodDirection: "down", clickLabel: "Filter table to tasks whose last run failed",
@@ -82,7 +82,7 @@ export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) 
       trend: stats.successRateDelta == null ? <span className={MUTED_HINT}>vs prev 7d</span> : trendNode(stats.successRateDelta, "pts vs prev 7d"),
       trendClassName: (stats.successRateDelta ?? 0) >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400",
       goodDirection: "up",
-      aside: <Sparkline values={stats.successSparkline} color="#16A34A" label="Success rate, last 14 days" />,
+      aside: <Sparkline values={stats.successSparkline} color="oklch(0.6271 0.1699 149.21)" label="Success rate, last 14 days" />,
       clickLabel: "Show tasks that failed in the last 7 days",
     },
   ];
