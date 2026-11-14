@@ -334,13 +334,13 @@ function ChartActions({ range, setRange, aggregation, setAggregation, exportPng,
   toast: (message: string) => void;
 }) {
   return <div className="flex shrink-0 items-center gap-1">
-    <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">{["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setRange(item)} aria-pressed={range === item} className={`rounded px-1.5 py-1 text-[0.625rem] font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>
+    <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">{["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setRange(item)} aria-pressed={range === item} className={`rounded-lg px-1.5 py-1 text-[0.625rem] font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>
     <details className="relative"><summary aria-label="Chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={15} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg">
       <div className="px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Aggregation · {aggregation}</div>
-      {["Average", "Max", "Min"].map((option) => <button key={option} onClick={() => { setAggregation(option); toast(`${option} aggregation selected.`); }} className="w-full rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent">{option}</button>)}
+      {["Average", "Max", "Min"].map((option) => <button key={option} onClick={() => { setAggregation(option); toast(`${option} aggregation selected.`); }} className="w-full rounded-lg px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent">{option}</button>)}
       <div className="my-1 border-t border-border" />
-      <button onClick={exportPng} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export PNG</button>
-      <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export CSV</button>
+      <button onClick={exportPng} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export PNG</button>
+      <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export CSV</button>
     </div></details>
   </div>;
 }
@@ -451,7 +451,7 @@ function TableFooter({ page, pageCount, onPageChange }: {
         ))}
         {pageCount > 5 && <span aria-hidden="true">…</span>}
         {pageCount > 5 && (
-          <button type="button" onClick={() => onPageChange(pageCount)} className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground">
+          <button type="button" onClick={() => onPageChange(pageCount)} className="grid h-7 w-7 place-items-center rounded-lg transition-colors hover:bg-accent hover:text-foreground">
             {pageCount}
           </button>
         )}
@@ -624,8 +624,8 @@ export function DiskStorageDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Disk & Storage"]} showRefresh={false} variant="detail" />
       <PageHeading title="Disk & Storage" description="Monitor disk usage, storage performance, and I/O metrics across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 

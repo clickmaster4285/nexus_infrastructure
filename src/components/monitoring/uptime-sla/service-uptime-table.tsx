@@ -251,7 +251,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                 <Fragment key={service.id}>
                   <tr className={cn("border-b border-border/70 last:border-0 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60", status === "breached" && "border-l-4 border-l-rose-500", status === "at_risk" && "border-l-4 border-l-amber-400")}>
                     <td className="px-2 py-3 align-middle">
-                      <button type="button" onClick={() => toggleExpand(service.id)} aria-expanded={isExpanded} aria-label={`${isExpanded ? "Collapse" : "Expand"} ${service.name}`} className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-accent"><ChevronRight size={14} className={cn("transition-transform duration-150", isExpanded && "rotate-90")} aria-hidden="true" /></button>
+                      <button type="button" onClick={() => toggleExpand(service.id)} aria-expanded={isExpanded} aria-label={`${isExpanded ? "Collapse" : "Expand"} ${service.name}`} className="grid h-6 w-6 place-items-center rounded-lg text-muted-foreground hover:bg-accent"><ChevronRight size={14} className={cn("transition-transform duration-150", isExpanded && "rotate-90")} aria-hidden="true" /></button>
                     </td>
                     <td className="px-2 py-3 align-middle">
                       <div className="flex min-w-0 items-center gap-2">

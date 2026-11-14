@@ -525,17 +525,17 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
             <ChevronLeft size={15} aria-hidden />Back
           </button>
           <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="sm" onClick={requestClose} className="h-9 text-[0.8125rem]">Cancel</Button>
+            <Button variant="ghost" onClick={requestClose} >Cancel</Button>
             {isEdit ? (
-              <Button size="sm" onClick={() => submit("save")} className="h-9 gap-1.5 text-[0.8125rem]"><Check size={14} aria-hidden />Save changes</Button>
+              <Button onClick={() => submit("save")} ><Check size={14} aria-hidden />Save changes</Button>
             ) : (
               <>
-                <Button variant="outline" size="sm" onClick={() => submit("save")} className="h-9 text-[0.8125rem]">Save</Button>
-                <Button size="sm" onClick={() => submit("saveAndEnable")} className="h-9 gap-1.5 text-[0.8125rem]"><Check size={14} aria-hidden />Save &amp; Enable</Button>
+                <Button variant="outline" onClick={() => submit("save")} >Save</Button>
+                <Button onClick={() => submit("saveAndEnable")} ><Check size={14} aria-hidden />Save &amp; Enable</Button>
               </>
             )}
             {step < 4 && (
-              <Button variant="outline" size="sm" onClick={goNext} className="h-9 gap-1 text-[0.8125rem]">Continue<ChevronRight size={14} aria-hidden /></Button>
+              <Button variant="outline" onClick={goNext} >Continue<ChevronRight size={14} aria-hidden /></Button>
             )}
           </div>
         </div>
@@ -549,8 +549,8 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
             <DialogDescription>Your edits to this task will be lost. This cannot be undone.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" size="sm" onClick={() => setDiscardOpen(false)}>Keep editing</Button>
-            <Button variant="destructive" size="sm" onClick={() => { setDiscardOpen(false); onClose(); }}>Discard</Button>
+            <Button variant="outline" onClick={() => setDiscardOpen(false)}>Keep editing</Button>
+            <Button variant="destructive" onClick={() => { setDiscardOpen(false); onClose(); }}>Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

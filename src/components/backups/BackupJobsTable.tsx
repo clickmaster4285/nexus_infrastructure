@@ -320,7 +320,7 @@ export function BackupJobsTable({
                   <td className="px-2 py-1.5 align-middle" onClick={(event) => event.stopPropagation()}>
                     <div className="flex items-center justify-end gap-1">
                       {job && (
-                        <Button variant="outline" className="h-8 rounded-md px-2.5 text-xs font-semibold" onClick={() => onRunNow(job.id)} title="Run backup now">
+                        <Button variant="outline"  onClick={() => onRunNow(job.id)} title="Run backup now">
                           Run
                         </Button>
                       )}
@@ -330,7 +330,7 @@ export function BackupJobsTable({
                           align="end"
                           width={190}
                           trigger={
-                            <button type="button" aria-label={`Actions for ${job.name}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                            <button type="button" aria-label={`Actions for ${job.name}`} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                               <MoreVertical size={16} aria-hidden="true" />
                             </button>
                           }
@@ -345,7 +345,7 @@ export function BackupJobsTable({
                           ]}
                         />
                       ) : (
-                        <Button variant="outline" className="h-8 whitespace-nowrap rounded-md px-2.5 text-xs font-semibold" onClick={() => onEnableBackup(row.unprotected!.host)}>Enable</Button>
+                        <Button variant="outline" className="whitespace-nowrap" onClick={() => onEnableBackup(row.unprotected!.host)}>Enable</Button>
                       )}
                     </div>
                   </td>
@@ -361,7 +361,7 @@ export function BackupJobsTable({
                     </span>
                     <p className="font-display text-base font-bold text-foreground">No backups match your filters</p>
                     <p className="max-w-sm text-sm text-muted-foreground">Try a different search, or clear the active filters to see all backup jobs.</p>
-                    <Button variant="outline" className="mt-1 h-9 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
+                    <Button variant="outline" className="mt-1" onClick={onClearFilters}>Clear filters</Button>
                   </div>
                 </td>
               </tr>
@@ -401,7 +401,7 @@ export function BackupJobsTable({
               {job ? (
                 <ToggleSwitch size="sm" checked={job.enabled} onChange={(checked) => onToggleJob(job.id, checked)} label={`${job.enabled ? "Pause" : "Resume"} backup ${job.name}`} />
               ) : (
-                <Button variant="outline" className="h-8 shrink-0 rounded-lg px-2 text-xs" onClick={(event) => { event.stopPropagation(); onEnableBackup(row.unprotected!.host); }}>Enable</Button>
+                <Button variant="outline" className="shrink-0" onClick={(event) => { event.stopPropagation(); onEnableBackup(row.unprotected!.host); }}>Enable</Button>
               )}
             </div>
           );
@@ -409,7 +409,7 @@ export function BackupJobsTable({
         {pageItems.length === 0 && (
           <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
             <p className="text-sm font-semibold text-foreground">No backups match your filters</p>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
+            <Button variant="outline"  onClick={onClearFilters}>Clear filters</Button>
           </div>
         )}
       </div>

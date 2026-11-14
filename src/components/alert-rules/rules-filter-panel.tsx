@@ -142,7 +142,7 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
               </button>
             </span>
           ))}
-          <button type="button" onClick={onClearAll} className="ml-1 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+          <button type="button" onClick={onClearAll} className="ml-1 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
             Clear all
           </button>
         </div>

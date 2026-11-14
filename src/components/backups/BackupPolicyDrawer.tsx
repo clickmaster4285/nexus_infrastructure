@@ -469,16 +469,16 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
         </div>
 
         <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-border p-4">
-          <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={requestClose}>Cancel</Button>
+          <Button variant="outline"  onClick={requestClose}>Cancel</Button>
           {mode === "create" ? (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => create(false)} disabled={Boolean(cronError) || !name.trim()}>Create paused</Button>
-              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => create(true)} disabled={Boolean(cronError) || !name.trim()}>Create &amp; Enable</Button>
+              <Button variant="outline"  onClick={() => create(false)} disabled={Boolean(cronError) || !name.trim()}>Create paused</Button>
+              <Button  onClick={() => create(true)} disabled={Boolean(cronError) || !name.trim()}>Create &amp; Enable</Button>
             </>
           ) : (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => save(false)} disabled={Boolean(cronError)}>Save</Button>
-              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => save(true)} disabled={Boolean(cronError)}>Save &amp; Enable</Button>
+              <Button variant="outline"  onClick={() => save(false)} disabled={Boolean(cronError)}>Save</Button>
+              <Button  onClick={() => save(true)} disabled={Boolean(cronError)}>Save &amp; Enable</Button>
             </>
           )}
         </footer>
@@ -492,8 +492,8 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
             <DialogDescription>Your edits to this backup policy have not been saved. Closing now will lose them.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmDiscard(false)}>Keep editing</Button>
-            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={() => { setConfirmDiscard(false); onClose(); }}>Discard</Button>
+            <Button variant="outline"  onClick={() => setConfirmDiscard(false)}>Keep editing</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={() => { setConfirmDiscard(false); onClose(); }}>Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

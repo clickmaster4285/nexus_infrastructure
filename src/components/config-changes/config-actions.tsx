@@ -57,7 +57,7 @@ function ConfirmFooter({ confirmLabel, onConfirm, disabled, danger, onOpenChange
       <AdminFootnote danger={danger} />
       <div className="flex items-center gap-2">
         <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-        <Button onClick={onConfirm} disabled={blocked} title={adminOnly && !MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant={danger ? "destructive" : "default"} className={cn("h-10", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
+        <Button onClick={onConfirm} disabled={blocked} title={adminOnly && !MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant={danger ? "destructive" : "default"} className={cn("", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
       </div>
     </DialogFooter>
   );
@@ -273,7 +273,7 @@ export function RollbackDialog({ open, onOpenChange, change, snapshots, onDone }
               })}
             </ol>
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={Math.min(100, step * 20)} aria-valuemin={0} aria-valuemax={100} aria-label="Rollback progress"><div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${Math.min(100, step * 20)}%` }} /></div>
-            <Button className="h-10" disabled={step < ROLLBACK_STEPS.length} onClick={finish}>{step < ROLLBACK_STEPS.length ? "Restoring…" : "Done — close"}</Button>
+            <Button  disabled={step < ROLLBACK_STEPS.length} onClick={finish}>{step < ROLLBACK_STEPS.length ? "Restoring…" : "Done — close"}</Button>
           </div>
         )}
       </DialogContent>
@@ -332,7 +332,7 @@ export function RunDriftScanDialog({ open, onOpenChange, onDone, onScanned }: Ba
                 </SelectContent>
               </Select>
             </label>
-            <Button className="h-10" onClick={() => { setRunning(true); setStep(0); }}><ScanLine size={15} />Start scan</Button>
+            <Button  onClick={() => { setRunning(true); setStep(0); }}><ScanLine size={15} />Start scan</Button>
           </>
         ) : found.length === 0 ? (
           <div className="flex flex-col gap-3 py-1">
@@ -362,7 +362,7 @@ export function RunDriftScanDialog({ open, onOpenChange, onDone, onScanned }: Ba
                 </li>
               ))}
             </ul>
-            <Button className="h-10" onClick={close}>View changes</Button>
+            <Button  onClick={close}>View changes</Button>
           </div>
         )}
       </DialogContent>

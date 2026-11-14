@@ -29,13 +29,13 @@ interface PanelProps {
 export function Panel({ title, children, range, className, titleClassName, action, showOptions = true, optionsButtonClassName, headerClassName, size = "default" }: PanelProps) {
   return (
     <Card className={cn("flex min-w-0 flex-col p-2.5", className)}>
-      <div className={cn("flex shrink-0 items-center justify-between gap-2", headerClassName ?? (size === "lg" ? "mb-1 h-8" : "h-6"))}>
+      <div className={cn("flex h-10 shrink-0 items-center justify-between gap-2", headerClassName ?? (size === "lg" ? "mb-1" : undefined))}>
         <CardTitle className={cn("truncate", size === "lg" && "text-base font-semibold leading-[1.25]", titleClassName)}>{title}</CardTitle>
         <div className="flex shrink-0 items-center gap-0.5">
           {action}
           {range && (
             <Select defaultValue={range}>
-              <SelectTrigger className="h-[1.4375rem] w-[4rem] text-[0.5625rem]" aria-label={`${title} time range`}>
+              <SelectTrigger className="h-10 w-16 text-xs" aria-label={`${title} time range`}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -48,7 +48,7 @@ export function Panel({ title, children, range, className, titleClassName, actio
             </Select>
           )}
           {showOptions && (
-            <Button variant="ghost" size="icon-sm" className={cn("h-6 w-6 text-muted-foreground", optionsButtonClassName)} aria-label={`${title} options`}>
+            <Button variant="ghost" size="icon" className={cn("text-muted-foreground", optionsButtonClassName)} aria-label={`${title} options`}>
               <MoreVertical size={15} />
             </Button>
           )}

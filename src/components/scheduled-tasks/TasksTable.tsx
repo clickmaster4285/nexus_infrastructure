@@ -212,8 +212,8 @@ export function TasksTable({
                     <p className="font-display text-base font-bold text-foreground">No tasks match your filters</p>
                     <p className="max-w-sm text-sm text-muted-foreground">Try clearing the search or filters to see the full task list.</p>
                     <div className="mt-1 flex items-center gap-2">
-                      <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
-                      <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={onCreateTask}><Inbox size={14} aria-hidden="true" />Create Task</Button>
+                      <Button variant="outline"  onClick={onClearFilters}>Clear filters</Button>
+                      <Button  onClick={onCreateTask}><Inbox size={14} aria-hidden="true" />Create Task</Button>
                     </div>
                   </div>
                 </td>
@@ -326,7 +326,7 @@ export function TasksTable({
                               <Badge variant="secondary" className="shrink-0 text-[0.625rem]">{chip.kind}</Badge>
                             </div>
                           ))}
-                          <button type="button" onClick={() => setTargetPopoverId(null)} className="mt-1 flex h-7 w-full items-center justify-center rounded-md text-xs font-medium text-muted-foreground hover:bg-accent">Close</button>
+                          <button type="button" onClick={() => setTargetPopoverId(null)} className="mt-1 flex h-7 w-full items-center justify-center rounded-lg text-xs font-medium text-muted-foreground hover:bg-accent">Close</button>
                         </div>
                       )}
                     </div>

@@ -56,7 +56,7 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
             <span className="block font-mono text-[0.6875rem] font-semibold text-muted-foreground">{cert?.id ?? certId}</span>
             <span className="mt-0.5 block truncate text-sm font-bold text-foreground" title={title}>{title}</span>
           </span>
-          <button type="button" onClick={onClose} aria-label="Close drawer" className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={17} /></button>
+          <button type="button" onClick={onClose} aria-label="Close drawer" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={17} /></button>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto p-5">
@@ -95,7 +95,7 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
 
               <div className="mt-4 flex items-center gap-2 rounded-lg border border-border p-3">
                 <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
-                <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); } catch { /* noop */ } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
+                <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); } catch { /* noop */ } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
               </div>
 
               {events.length > 0 && (
@@ -113,8 +113,8 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
               )}
 
               <div className="mt-5 grid grid-cols-2 gap-2">
-                <Button size="sm" className="justify-start" onClick={() => onRenew(cert.id)}><RotateCcw size={13} />Renew</Button>
-                <Button variant="outline" size="sm" className="justify-start" onClick={() => onToggleAutoRenew(cert.id)}>{cert.autoRenew ? <ToggleLeft size={15} /> : <ToggleRight size={15} />}{cert.autoRenew ? "Disable" : "Enable"} auto-renew</Button>
+                <Button className="justify-start" onClick={() => onRenew(cert.id)}><RotateCcw size={13} />Renew</Button>
+                <Button variant="outline" className="justify-start" onClick={() => onToggleAutoRenew(cert.id)}>{cert.autoRenew ? <ToggleLeft size={15} /> : <ToggleRight size={15} />}{cert.autoRenew ? "Disable" : "Enable"} auto-renew</Button>
               </div>
               <Link href={`/certificates-and-expiration/${cert.id}`} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">Open full details <ChevronRight size={14} aria-hidden="true" /></Link>
             </>

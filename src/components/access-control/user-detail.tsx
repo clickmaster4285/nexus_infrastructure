@@ -96,10 +96,10 @@ export function UserDetail({ userId }: UserDetailProps) {
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><UserStatusBadge status={user.status} /><MfaBadge enabled={user.mfaEnabled} />{user.roleIds.map((roleId, index) => <span key={index} className="rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">{getRoleById(roleId)?.name ?? roleId}</span>)}</span>}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => setDrawerOpen(true)}><KeyRound size={15} />Edit roles</Button>
-            <Button variant="destructive" className="h-10 gap-1.5 text-sm" onClick={() => setConfirm({ title: "Suspend user", description: `${user.name} will lose access immediately. Existing sessions will be revoked.`, confirmLabel: "Suspend", danger: true, action: () => { suspend(); return `${user.name} suspended`; } })}><Ban size={15} />Suspend</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={reset}><KeyRound size={15} />Reset password</Button>
+            <Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
+            <Button variant="outline"  onClick={() => setDrawerOpen(true)}><KeyRound size={15} />Edit roles</Button>
+            <Button variant="destructive"  onClick={() => setConfirm({ title: "Suspend user", description: `${user.name} will lose access immediately. Existing sessions will be revoked.`, confirmLabel: "Suspend", danger: true, action: () => { suspend(); return `${user.name} suspended`; } })}><Ban size={15} />Suspend</Button>
+            <Button variant="outline"  onClick={reset}><KeyRound size={15} />Reset password</Button>
           </div>
         }
       />
@@ -162,7 +162,7 @@ export function UserDetail({ userId }: UserDetailProps) {
                       <p className="text-[0.8125rem] font-semibold text-foreground">{session.device}</p>
                       <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{session.ip} · {session.location} · started {mounted ? timeAgo(session.startedAt) : "…"}</p>
                     </div>
-                    <button type="button" onClick={() => { revokeSession(user.id, session.id); reload(); }} className="shrink-0 rounded-md border border-red-200 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Revoke</button>
+                    <button type="button" onClick={() => { revokeSession(user.id, session.id); reload(); }} className="shrink-0 rounded-lg border border-red-200 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Revoke</button>
                   </li>
                 ))}
               </ul>
@@ -181,8 +181,8 @@ export function UserDetail({ userId }: UserDetailProps) {
             </div>
             {!user.mfaEnabled && <p className="mt-3 flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300"><ShieldAlert size={12} aria-hidden="true" />Enable MFA to reduce account takeover risk</p>}
             <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-              <Button variant="outline" className="h-9 text-xs" onClick={() => { if (isSelf) { notify({ message: "Cannot require MFA on yourself" }); return; } requireMfa(user.id); reload(); notify({ message: "MFA required" }); }}><ShieldCheck size={13} />Require MFA</Button>
-              <Button variant="destructive" className="h-9 text-xs" onClick={() => setConfirm({ title: "Revoke all sessions", description: `All ${user.sessions.length} active sessions for ${user.name} will be invalidated.`, confirmLabel: "Revoke all", danger: true, action: () => { revokeAllSessions(user.id); return "All sessions revoked"; } })}><Ban size={13} />Revoke sessions</Button>
+              <Button variant="outline"  onClick={() => { if (isSelf) { notify({ message: "Cannot require MFA on yourself" }); return; } requireMfa(user.id); reload(); notify({ message: "MFA required" }); }}><ShieldCheck size={13} />Require MFA</Button>
+              <Button variant="destructive"  onClick={() => setConfirm({ title: "Revoke all sessions", description: `All ${user.sessions.length} active sessions for ${user.name} will be invalidated.`, confirmLabel: "Revoke all", danger: true, action: () => { revokeAllSessions(user.id); return "All sessions revoked"; } })}><Ban size={13} />Revoke sessions</Button>
             </div>
           </Card>
 
@@ -202,10 +202,10 @@ export function UserDetail({ userId }: UserDetailProps) {
           <Card className="flex flex-col rounded-xl p-5">
             <h2 className="text-sm font-semibold text-foreground">Actions</h2>
             <div className="mt-3 flex flex-col gap-2">
-              <Button size="sm" onClick={reset} className="justify-start"><KeyRound size={13} />Reset password</Button>
-              <Button size="sm" variant="outline" className="justify-start" onClick={() => { navigator.clipboard?.writeText(user.email); notify({ message: "Email copied" }); }}><Copy size={13} />Copy email</Button>
-              {user.status !== "suspended" ? <Button size="sm" variant="destructive" className="justify-start" onClick={() => setConfirm({ title: "Suspend user", description: `${user.name} will lose access immediately.`, confirmLabel: "Suspend", danger: true, action: () => { suspend(); return `${user.name} suspended`; } })}><Ban size={13} />Suspend user</Button> : <Button size="sm" variant="outline" className="justify-start" onClick={() => { notify({ message: `${user.name} reactivated` }); reload(); }}><CheckCircle2 size={13} />Reactivate user</Button>}
-              {!isSelf && <Button size="sm" variant="ghost" className="justify-start text-red-600 hover:bg-red-50" onClick={() => { notify({ message: "Delete flow opened (mock)" }); }}><Trash2 size={13} />Delete user</Button>}
+              <Button onClick={reset} className="justify-start"><KeyRound size={13} />Reset password</Button>
+              <Button variant="outline" className="justify-start" onClick={() => { navigator.clipboard?.writeText(user.email); notify({ message: "Email copied" }); }}><Copy size={13} />Copy email</Button>
+              {user.status !== "suspended" ? <Button variant="destructive" className="justify-start" onClick={() => setConfirm({ title: "Suspend user", description: `${user.name} will lose access immediately.`, confirmLabel: "Suspend", danger: true, action: () => { suspend(); return `${user.name} suspended`; } })}><Ban size={13} />Suspend user</Button> : <Button variant="outline" className="justify-start" onClick={() => { notify({ message: `${user.name} reactivated` }); reload(); }}><CheckCircle2 size={13} />Reactivate user</Button>}
+              {!isSelf && <Button variant="ghost" className="justify-start text-red-600 hover:bg-red-50" onClick={() => { notify({ message: "Delete flow opened (mock)" }); }}><Trash2 size={13} />Delete user</Button>}
             </div>
           </Card>
         </div>

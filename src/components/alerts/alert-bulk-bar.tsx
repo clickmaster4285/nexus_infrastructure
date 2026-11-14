@@ -39,24 +39,24 @@ export function AlertBulkBar({ count, onAcknowledge, onAssign, onSilence, onReso
         {count} selected
       </span>
       <span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
-      <Button size="sm" variant="outline" onClick={onAcknowledge} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+      <Button variant="outline" onClick={onAcknowledge} >
         <CheckCircle2 size={13} aria-hidden="true" />Acknowledge
       </Button>
       <AlertMenu
         label="Assign selected alerts"
         submenuAlign="left"
         width={180}
-        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]"><UserPlus size={13} aria-hidden="true" />Assign</Button>}
+        trigger={<Button variant="outline" ><UserPlus size={13} aria-hidden="true" />Assign</Button>}
         items={assignItems}
       />
       <AlertMenu
         label="Silence selected alerts"
         submenuAlign="left"
         width={150}
-        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]"><BellOff size={13} aria-hidden="true" />Silence</Button>}
+        trigger={<Button variant="outline" ><BellOff size={13} aria-hidden="true" />Silence</Button>}
         items={silenceItems}
       />
-      <Button size="sm" variant="outline" onClick={onResolve} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+      <Button variant="outline" onClick={onResolve} >
         <ShieldCheck size={13} aria-hidden="true" />Resolve
       </Button>
       <button

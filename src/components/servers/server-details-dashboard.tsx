@@ -315,9 +315,9 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
     <div className="flex min-w-0 flex-1 flex-col gap-3 pb-3">
       <PageMeta breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} variant="detail" lastUpdated={lastUpdated} actions={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[0.75rem] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[0.75rem] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} />
       <PageHeading title={server.name} description={`${server.host} · ${server.environment} server`} actionsAlign="top" variant="detail">
-        <Button asChild variant="outline" className="h-9 gap-2 px-3 text-[0.8125rem]"><Link href="/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
-        <Button variant="outline" onClick={refresh} className="h-9 gap-2 px-3 text-[0.8125rem]"><RotateCw size={15} />Refresh</Button>
-        <Button variant="outline" onClick={() => showNotice("Server report exported.")} className="h-9 gap-2 px-3 text-[0.8125rem]"><Download size={15} />Export</Button>
+        <Button asChild variant="outline" ><Link href="/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
+        <Button variant="outline" onClick={refresh} ><RotateCw size={15} />Refresh</Button>
+        <Button variant="outline" onClick={() => showNotice("Server report exported.")} ><Download size={15} />Export</Button>
       </PageHeading>
 
       <section aria-label="Server summary" className="grid min-w-0 grid-cols-1 items-stretch gap-3 lg:grid-cols-[minmax(14.375rem,1.25fr)_minmax(0,4fr)]">
@@ -347,8 +347,8 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
             </div>
           </div>
           <div className="mt-auto grid grid-cols-2 gap-2 border-t border-border pt-3">
-            <Button size="sm" onClick={pingServer} disabled={pinging} className="h-9 gap-1.5 text-[0.75rem]"><Activity size={14} />{pinging ? "Pinging…" : "Ping Server"}</Button>
-            <Button size="sm" variant="outline" onClick={() => showNotice("Console session requested.")} className="h-9 gap-1.5 text-[0.75rem]"><Terminal size={14} />Open Console</Button>
+            <Button onClick={pingServer} disabled={pinging} ><Activity size={14} />{pinging ? "Pinging…" : "Ping Server"}</Button>
+            <Button variant="outline" onClick={() => showNotice("Console session requested.")} ><Terminal size={14} />Open Console</Button>
           </div>
         </Card>
 
@@ -364,7 +364,7 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
 
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-card p-1.5">
           <nav aria-label="Server detail sections" className="flex min-w-0 flex-wrap gap-1">
-            {tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`rounded-md px-3 py-2 text-[0.75rem] font-medium transition-colors ${activeTab === tab ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}>{tab}</button>)}
+            {tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`rounded-lg px-3 py-2 text-[0.75rem] font-medium transition-colors ${activeTab === tab ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}>{tab}</button>)}
           </nav>
           <select aria-label="Performance time range" value={timeRange} onChange={(event) => setTimeRange(event.target.value)} className="h-9 shrink-0 rounded-md border border-input bg-card px-2.5 text-[0.75rem] text-foreground"><option>1h</option><option>6h</option><option>12h</option><option>24h</option></select>
         </div>
@@ -417,7 +417,7 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
         {activeTab === "Processes" && <Panel title="Top Processes" action={<span className="text-[0.6875rem] text-muted-foreground">Updated just now</span>}>
           <div className="overflow-x-auto"><table className="w-full min-w-[35rem] text-left text-[0.75rem]"><thead><tr className="border-b border-border text-[0.6875rem] text-muted-foreground">{["Process", "PID", "User", "CPU", "Memory", "Status"].map((heading) => <th key={heading} className="px-3 pb-3 font-medium">{heading}</th>)}</tr></thead><tbody>{processes.map((process) => <tr key={process.pid} className="h-11 border-b border-border/60 last:border-0"><td className="px-3 font-semibold text-foreground">{process.name}</td><td className="px-3 tabular-nums text-muted-foreground">{process.pid}</td><td className="px-3 text-muted-foreground">{process.user}</td><td className="px-3 font-medium text-foreground">{process.cpu}</td><td className="px-3 text-foreground">{process.memory}</td><td className="px-3"><span className="rounded-full bg-emerald-100 px-2 py-1 text-[0.625rem] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Running</span></td></tr>)}</tbody></table></div>
         </Panel>}
-        {activeTab === "Services" && <Panel title="Services" action={<Button size="sm" onClick={() => showNotice("Service management opened.")} className="h-8 text-[0.6875rem]">Manage Services</Button>}>
+        {activeTab === "Services" && <Panel title="Services" action={<Button onClick={() => showNotice("Service management opened.")} >Manage Services</Button>}>
           <div className="overflow-x-auto"><table className="w-full min-w-[31.25rem] text-left text-[0.75rem]"><thead><tr className="border-b border-border text-[0.6875rem] text-muted-foreground">{["Service", "Status", "Uptime", "CPU", "Memory", "Actions"].map((heading) => <th key={heading} className="px-3 pb-3 font-medium">{heading}</th>)}</tr></thead><tbody>{services.map((service, index) => <tr key={service.name} className="h-11 border-b border-border/60 last:border-0"><td className="px-3 font-semibold text-foreground"><span className="inline-flex items-center gap-2.5"><ServiceIcon name={service.name} />{service.name}</span></td><td className="px-3"><span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300"><i className="h-2 w-2 rounded-full bg-emerald-500" />Running</span></td><td className="px-3 text-muted-foreground">{index === 0 ? "42d 6h" : "142d 6h"}</td><td className="px-3 text-foreground">{service.cpu}</td><td className="px-3 text-foreground">{service.memory}</td><td className="px-3"><button type="button" onClick={() => showNotice(`Restart requested for ${service.name}.`)} className="text-[0.6875rem] font-semibold text-primary">Restart</button></td></tr>)}</tbody></table></div>
         </Panel>}
         {activeTab === "Logs" && <Panel title="Live Server Logs" action={<button type="button" onClick={() => showNotice("Log stream refreshed.")} className="text-[0.6875rem] font-semibold text-primary">Refresh logs</button>}>
@@ -473,7 +473,7 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
               </div> : eventsError ? <div role="alert" className="flex min-h-44 flex-col items-center justify-center gap-2 text-center">
                 <AlertCircle size={18} className="text-destructive" aria-hidden="true" />
                 <p className="text-[0.8125rem] text-muted-foreground">Could not load events for this server.</p>
-                <button type="button" onClick={() => void loadEvents()} className="min-h-8 rounded px-2 text-[0.75rem] font-semibold text-primary hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Retry</button>
+                <button type="button" onClick={() => void loadEvents()} className="min-h-8 rounded-lg px-2 text-[0.75rem] font-semibold text-primary hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Retry</button>
               </div> : visibleEvents.length === 0 ? <div className="flex min-h-44 items-center justify-center text-[0.8125rem] text-muted-foreground">No events for this server</div> : <ul className="divide-y divide-border/60" aria-label={`${visibleEvents.length} filtered server events`}>
                 {visibleEvents.map((event) => {
                   const severity = eventSeverityStyle[event.severity];
@@ -533,8 +533,8 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
             <DialogDescription className="text-[0.8125rem]">Yeh server kuch minutes ke liye unavailable ho sakta hai.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <button type="button" disabled={Boolean(actionLoading)} onClick={() => setConfirmRestart(false)} className="min-h-9 rounded-md border border-border px-3 text-[0.8125rem] font-medium hover:bg-accent disabled:opacity-50">Cancel</button>
-            <button type="button" disabled={Boolean(actionLoading) || actionDisabled("restart-server")} onClick={() => void executeAction("restart-server")} className="inline-flex min-h-9 items-center gap-2 rounded-md bg-rose-600 px-3 text-[0.8125rem] font-semibold text-white hover:bg-rose-700 disabled:opacity-50">{actionLoading === "restart-server" && <LoaderCircle size={14} className="animate-spin" aria-hidden="true" />}Restart</button>
+            <button type="button" disabled={Boolean(actionLoading)} onClick={() => setConfirmRestart(false)} className="min-h-9 rounded-lg border border-border px-3 text-[0.8125rem] font-medium hover:bg-accent disabled:opacity-50">Cancel</button>
+            <button type="button" disabled={Boolean(actionLoading) || actionDisabled("restart-server")} onClick={() => void executeAction("restart-server")} className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-rose-600 px-3 text-[0.8125rem] font-semibold text-white hover:bg-rose-700 disabled:opacity-50">{actionLoading === "restart-server" && <LoaderCircle size={14} className="animate-spin" aria-hidden="true" />}Restart</button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -136,11 +136,11 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
             {copied ? <Check size={11} aria-hidden className="text-green-600" /> : <Copy size={11} aria-hidden />}
           </button>
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <Button size="sm" onClick={() => onRunNow(task)} className="h-8 gap-1.5 text-[0.75rem]"><Zap size={13} aria-hidden />Run now</Button>
-            <Button size="sm" variant="outline" onClick={() => onToggle(task)} className="h-8 gap-1.5 text-[0.75rem]">
+            <Button onClick={() => onRunNow(task)} ><Zap size={13} aria-hidden />Run now</Button>
+            <Button variant="outline" onClick={() => onToggle(task)} >
               {task.enabled ? <><Pause size={13} aria-hidden />Pause</> : <><Play size={13} aria-hidden />Resume</>}
             </Button>
-            <Button size="sm" variant="outline" onClick={() => onEdit(task)} className="h-8 gap-1.5 text-[0.75rem]"><Pencil size={13} aria-hidden />Edit</Button>
+            <Button variant="outline" onClick={() => onEdit(task)} ><Pencil size={13} aria-hidden />Edit</Button>
             {task.type === "backup" && TASK_ID_TO_BACKUP_JOB[task.id] && (
               <Link
                 href={`/backups-and-recovery?backup=${TASK_ID_TO_BACKUP_JOB[task.id]}`}
@@ -224,11 +224,11 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                         <td className="px-2 py-1.5 text-right">
                           <span className="inline-flex items-center gap-0.5">
                             {run.status === "failed" && (
-                              <button type="button" onClick={() => onRetry(task.id)} aria-label="Retry this run" title="Retry" className="grid h-7 w-7 place-items-center rounded text-amber-600 transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-amber-500/10">
+                              <button type="button" onClick={() => onRetry(task.id)} aria-label="Retry this run" title="Retry" className="grid h-7 w-7 place-items-center rounded-lg text-amber-600 transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-amber-500/10">
                                 <RotateCcw size={12} aria-hidden />
                               </button>
                             )}
-                            <button type="button" onClick={() => setLogRun(run)} aria-label="View log" title="View log" className="grid h-7 w-7 place-items-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                            <button type="button" onClick={() => setLogRun(run)} aria-label="View log" title="View log" className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                               <FileText size={12} aria-hidden />
                             </button>
                           </span>

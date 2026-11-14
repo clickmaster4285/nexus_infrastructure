@@ -47,7 +47,7 @@ function ConfirmFooter({ confirmLabel, onConfirm, disabled, danger, onOpenChange
       <AdminNote danger={danger} />
       <div className="flex items-center gap-2">
         <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-        <Button onClick={onConfirm} disabled={blocked} title={adminOnly && !MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant={danger ? "destructive" : "default"} className={cn("h-10", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
+        <Button onClick={onConfirm} disabled={blocked} title={adminOnly && !MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant={danger ? "destructive" : "default"} className={cn("", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
       </div>
     </DialogFooter>
   );
@@ -96,7 +96,7 @@ export function ScanCertificatesModal({ open, onOpenChange, onDone }: BaseDialog
                 </SelectContent>
               </Select>
             </label>
-            <Button className="h-10" onClick={() => setRunning(true)}><ScanLine size={15} />Start scan</Button>
+            <Button  onClick={() => setRunning(true)}><ScanLine size={15} />Start scan</Button>
           </>
         ) : (
           <div className="flex flex-col gap-3 py-1">

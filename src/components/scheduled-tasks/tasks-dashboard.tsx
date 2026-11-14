@@ -278,7 +278,7 @@ export function TasksDashboard() {
               label="Export scheduled tasks"
               width={200}
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm" aria-label="Export scheduled tasks">
+                <Button variant="outline"  aria-label="Export scheduled tasks">
                   <FileDown size={15} aria-hidden />Export
                   <ChevronDown size={13} aria-hidden />
                 </Button>
@@ -289,10 +289,10 @@ export function TasksDashboard() {
                 { key: "trend", label: "Export trend CSV", onSelect: exportTrendCsv },
               ]}
             />
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm" onClick={() => showToast("Import is a mockup action.")}>
+            <Button variant="outline"  onClick={() => showToast("Import is a mockup action.")}>
               <FileUp size={15} aria-hidden />Import
             </Button>
-            <Button className="h-10 gap-1.5 rounded-lg px-3.5 text-sm" onClick={openCreateEditor}>
+            <Button  onClick={openCreateEditor}>
               <Plus size={15} aria-hidden />Create Task
             </Button>
           </div>
@@ -317,7 +317,7 @@ export function TasksDashboard() {
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Scheduled tasks could not be loaded</p>
             <p className="text-sm text-muted-foreground">The task service failed to respond. Retry to reload it.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} aria-hidden />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} aria-hidden />Retry</Button>
           </div>
         </section>
       )}
@@ -407,8 +407,8 @@ export function TasksDashboard() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" size="sm" onClick={() => setDeleteTargets(null)}>Cancel</Button>
-            <Button variant="destructive" size="sm" onClick={confirmDelete}>Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteTargets(null)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmDelete}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

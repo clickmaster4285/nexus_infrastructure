@@ -27,7 +27,7 @@ export function ComingSoon({ title, description, breadcrumbs }: ComingSoonProps)
         <p className="max-w-md text-[0.6875rem] leading-relaxed text-muted-foreground">
           {description} This section is under construction — the route is wired up and ready for implementation.
         </p>
-        <Button asChild variant="outline" size="sm" className="mt-1">
+        <Button asChild variant="outline" className="mt-1">
           <Link href="/executive-overview">
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Executive Overview

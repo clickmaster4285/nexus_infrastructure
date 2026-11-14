@@ -238,7 +238,7 @@ export function AlertRulesDashboard() {
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Alert rules could not be loaded</p>
             <p className="text-sm text-muted-foreground">The rules service failed for this request. Retry to reload it.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -254,20 +254,20 @@ export function AlertRulesDashboard() {
         onRefresh={reload}
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" onClick={() => notify("Import is not wired in this demo. Upload a CSV/JSON export of rules.")} className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+            <Button variant="outline" onClick={() => notify("Import is not wired in this demo. Upload a CSV/JSON export of rules.")} >
               <Upload size={15} aria-hidden="true" />Import
             </Button>
             <AlertMenu
               label="Export rules"
               submenuAlign="left"
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+                <Button variant="outline" >
                   <FileDown size={15} aria-hidden="true" />Export
                 </Button>
               }
               items={exportItems}
             />
-            <Button onClick={() => setEditorState({ mode: "create" })} className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+            <Button onClick={() => setEditorState({ mode: "create" })} >
               <Plus size={15} aria-hidden="true" />Create Rule
             </Button>
           </div>
@@ -342,10 +342,10 @@ export function AlertRulesDashboard() {
                   <p className="font-display text-[0.9375rem] font-bold text-foreground">No rules match your filters</p>
                   <p className="text-[0.8125rem] text-muted-foreground">Try widening the filters or clearing them.</p>
                   <div className="mt-1 flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setFilters(DEFAULT_RULE_FILTERS)} className="h-9 rounded-lg px-3 text-[0.8125rem]">
+                    <Button variant="outline" onClick={() => setFilters(DEFAULT_RULE_FILTERS)} >
                       Clear filters
                     </Button>
-                    <Button size="sm" onClick={() => setEditorState({ mode: "create" })} className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
+                    <Button onClick={() => setEditorState({ mode: "create" })} >
                       <Plus size={14} aria-hidden="true" />Create Rule
                     </Button>
                   </div>
@@ -386,8 +386,8 @@ export function AlertRulesDashboard() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteTargets([])} className="h-9 rounded-lg px-4 text-[0.8125rem]">Cancel</Button>
-            <Button variant="destructive" onClick={confirmDelete} className="h-9 rounded-lg px-4 text-[0.8125rem]">Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteTargets([])} >Cancel</Button>
+            <Button variant="destructive" onClick={confirmDelete} >Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -62,7 +62,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
           <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Job not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No backup job with id <span className="font-mono">{jobId}</span> exists, or it was deleted.</p>
-          <Button variant="outline" className="mt-4 h-10 rounded-lg px-4 text-sm" onClick={() => router.push("/backups-and-recovery")}>Back to Backups &amp; Recovery</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/backups-and-recovery")}>Back to Backups &amp; Recovery</Button>
         </div>
       </div>
     );
@@ -94,9 +94,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <Link2 size={13} aria-hidden="true" />{job.taskId}
               </Link>
             )}
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setRestoreOpen(true)}><ArchiveRestore size={14} aria-hidden="true" />Restore</Button>
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setPolicyOpen(true)}><Pencil size={14} aria-hidden="true" />Edit</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem] font-semibold" onClick={() => router.push(`/backups-and-recovery?tab=jobs&q=${job.id}`)}>
+            <Button variant="outline"  onClick={() => setRestoreOpen(true)}><ArchiveRestore size={14} aria-hidden="true" />Restore</Button>
+            <Button variant="outline"  onClick={() => setPolicyOpen(true)}><Pencil size={14} aria-hidden="true" />Edit</Button>
+            <Button  onClick={() => router.push(`/backups-and-recovery?tab=jobs&q=${job.id}`)}>
               <PlayCircle size={14} aria-hidden="true" />Run now
             </Button>
           </div>
@@ -106,8 +106,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>Job {jobIndex + 1} of {allJobs.length}</span>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-xs" disabled={!prevJob} onClick={() => prevJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(prevJob.id)}`)} aria-label="Previous job"><ChevronLeft size={14} aria-hidden="true" />Prev</Button>
-          <Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-xs" disabled={!nextJob} onClick={() => nextJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(nextJob.id)}`)} aria-label="Next job">Next<ChevronRight size={14} aria-hidden="true" /></Button>
+          <Button variant="ghost"  disabled={!prevJob} onClick={() => prevJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(prevJob.id)}`)} aria-label="Previous job"><ChevronLeft size={14} aria-hidden="true" />Prev</Button>
+          <Button variant="ghost"  disabled={!nextJob} onClick={() => nextJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(nextJob.id)}`)} aria-label="Next job">Next<ChevronRight size={14} aria-hidden="true" /></Button>
         </div>
       </div>
 

@@ -64,7 +64,7 @@ export function RoleDetail({ roleId }: RoleDetailProps) {
         lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "…"}
         onRefresh={() => { reload(); reloadUsers(); }}
         statusBadge={<span className="flex items-center gap-1.5"><RoleBadge type={role.type} /><RiskBadge level={role.riskLevel} /></span>}
-        actions={<div className="flex flex-wrap items-center gap-2"><Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>{role.type === "system" ? <Button disabled className="h-10 gap-1.5 text-sm" title="System roles cannot be edited">Edit role</Button> : <Button className="h-10 gap-1.5 text-sm" onClick={() => notify({ message: "Role editor opened" })}>Edit role</Button>}</div>}
+        actions={<div className="flex flex-wrap items-center gap-2"><Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>{role.type === "system" ? <Button disabled  title="System roles cannot be edited">Edit role</Button> : <Button  onClick={() => notify({ message: "Role editor opened" })}>Edit role</Button>}</div>}
       />
 
       <div className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-4">

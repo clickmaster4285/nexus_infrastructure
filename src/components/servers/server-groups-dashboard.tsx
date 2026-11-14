@@ -549,8 +549,8 @@ export function ServerGroupsDashboard() {
         lastUpdated={lastUpdated}
         onRefresh={refresh}
         actions={<div className="flex flex-wrap items-center gap-2">
-          <Button onClick={() => setCreateOpen(true)} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Create Group</Button>
-          <Button variant="outline" onClick={exportReport} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Download size={16} />Export</Button>
+          <Button onClick={() => setCreateOpen(true)} ><Plus size={16} />Create Group</Button>
+          <Button variant="outline" onClick={exportReport} ><Download size={16} />Export</Button>
         </div>}
       />
 
@@ -659,7 +659,7 @@ export function ServerGroupsDashboard() {
           <div className="mt-auto flex shrink-0 items-center justify-between border-t border-border pt-3 text-[0.75rem] text-muted-foreground">
             <span>Showing {Math.min(visibleGroupCount, filteredGroups.length)} of {filteredGroups.length} groups</span>
             {filteredGroups.length > visibleGroupCount && (
-              <Button variant="ghost" onClick={() => setVisibleGroupCount((count) => count + 12)} className="h-8 px-2 text-[0.75rem] font-semibold text-primary">
+              <Button variant="ghost" onClick={() => setVisibleGroupCount((count) => count + 12)} className="text-primary">
                 Load more
               </Button>
             )}
@@ -730,7 +730,7 @@ export function ServerGroupsDashboard() {
 
           <SectionCard title="Health Trend" icon={Activity} action={
             <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5" aria-label="Health trend range">
-              {healthRanges.map((range) => <button key={range} type="button" onClick={() => setTrendRange(range)} aria-pressed={trendRange === range} className={cn("rounded-md px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", trendRange === range ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>{range}</button>)}
+              {healthRanges.map((range) => <button key={range} type="button" onClick={() => setTrendRange(range)} aria-pressed={trendRange === range} className={cn("rounded-lg px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", trendRange === range ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>{range}</button>)}
             </div>
           }>
             <div className="flex h-full min-h-[18.75rem] flex-col gap-2">
@@ -743,7 +743,7 @@ export function ServerGroupsDashboard() {
                 <span className={cn("rounded-full px-2 py-1 font-semibold", trendDelta >= 0 ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300")}>{trendDelta >= 0 ? "▲" : "▼"} {Math.abs(trendDelta).toFixed(1)}%</span>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.6875rem]">
-                {healthOverview.map((item) => <button key={item.name} type="button" onClick={() => toggleHealthSeries(item.name)} aria-pressed={visibleHealthSeries[item.name]} className={cn("inline-flex items-center gap-1.5 rounded px-1 py-0.5 transition-opacity", !visibleHealthSeries[item.name] && "opacity-40")}><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}</button>)}
+                {healthOverview.map((item) => <button key={item.name} type="button" onClick={() => toggleHealthSeries(item.name)} aria-pressed={visibleHealthSeries[item.name]} className={cn("inline-flex items-center gap-1.5 rounded-lg px-1 py-0.5 transition-opacity", !visibleHealthSeries[item.name] && "opacity-40")}><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}</button>)}
               </div>
               <div className="min-h-[13.75rem] w-full flex-1">
                 <ResponsiveContainer width="100%" height="100%">
@@ -771,9 +771,9 @@ export function ServerGroupsDashboard() {
           <SectionCard title="Group Performance" icon={Cpu} className="p-4" action={
             <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
               <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">
-                {performanceMetrics.map((metric) => <button key={metric} type="button" onClick={() => setPerformanceMetric(metric)} aria-pressed={performanceMetric === metric} className={cn("rounded-md px-1.5 py-1 text-[0.625rem] whitespace-nowrap", performanceMetric === metric ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{metric === "Memory Usage" ? "Memory" : metric === "Network Usage" ? "Network" : metric === "CPU Usage" ? "CPU" : "Disk"}</button>)}
+                {performanceMetrics.map((metric) => <button key={metric} type="button" onClick={() => setPerformanceMetric(metric)} aria-pressed={performanceMetric === metric} className={cn("rounded-lg px-1.5 py-1 text-[0.625rem] whitespace-nowrap", performanceMetric === metric ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{metric === "Memory Usage" ? "Memory" : metric === "Network Usage" ? "Network" : metric === "CPU Usage" ? "CPU" : "Disk"}</button>)}
               </div>
-              <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">{(["24h", "7d"] as const).map((range) => <button key={range} type="button" onClick={() => setPerformanceRange(range)} aria-pressed={performanceRange === range} className={cn("rounded-md px-1.5 py-1 text-[0.625rem]", performanceRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{range}</button>)}</div>
+              <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">{(["24h", "7d"] as const).map((range) => <button key={range} type="button" onClick={() => setPerformanceRange(range)} aria-pressed={performanceRange === range} className={cn("rounded-lg px-1.5 py-1 text-[0.625rem]", performanceRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{range}</button>)}</div>
             </div>
           }>
             <div className="flex h-full min-h-[19.375rem] flex-col gap-2">
@@ -790,7 +790,7 @@ export function ServerGroupsDashboard() {
                 </ResponsiveContainer>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[0.625rem] sm:text-[0.6875rem]">
-                {performanceSeries.map((series) => <button key={series.key} type="button" onClick={() => { setVisiblePerformanceSeries((current) => ({ ...current, [series.key]: !current[series.key] })); setSelectedId(series.groupId); }} aria-pressed={visiblePerformanceSeries[series.key]} className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded px-1 py-0.5 text-muted-foreground", !visiblePerformanceSeries[series.key] && "opacity-40")}><i className="h-2 w-2 rounded-full" style={{ background: series.color }} />{series.name} <b className="text-foreground">{performanceLatest?.[series.key] ?? 0}%</b></button>)}
+                {performanceSeries.map((series) => <button key={series.key} type="button" onClick={() => { setVisiblePerformanceSeries((current) => ({ ...current, [series.key]: !current[series.key] })); setSelectedId(series.groupId); }} aria-pressed={visiblePerformanceSeries[series.key]} className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-lg px-1 py-0.5 text-muted-foreground", !visiblePerformanceSeries[series.key] && "opacity-40")}><i className="h-2 w-2 rounded-full" style={{ background: series.color }} />{series.name} <b className="text-foreground">{performanceLatest?.[series.key] ?? 0}%</b></button>)}
               </div>
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.625rem] text-muted-foreground sm:text-[0.6875rem]">
                 <span>Avg <b className="text-foreground">{performanceAverage.toFixed(1)}%</b></span>
@@ -845,7 +845,7 @@ export function ServerGroupsDashboard() {
         <div role="status" className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[0.8125rem] text-foreground shadow-lg">
           <Check size={16} className="text-emerald-600" />
           {notice}
-          <button type="button" title="Dismiss" aria-label="Dismiss notification" onClick={() => setNotice("")} className="ml-2 rounded p-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <button type="button" title="Dismiss" aria-label="Dismiss notification" onClick={() => setNotice("")} className="ml-2 rounded-lg p-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X size={15} />
           </button>
         </div>

@@ -75,12 +75,12 @@ export default function EventDetailPage() {
   if (!event) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Monitoring", "Event Explorer", "Not found"]} title="Event not found" subtitle="No event matches that identifier." icon={<CircleAlert size={19} />} actions={<Button variant="outline" onClick={() => router.back()} className="h-10 rounded-lg px-3 text-sm"><ChevronLeft size={15} />Back</Button>} />
+        <PageHeader breadcrumbs={["Monitoring", "Event Explorer", "Not found"]} title="Event not found" subtitle="No event matches that identifier." icon={<CircleAlert size={19} />} actions={<Button variant="outline" onClick={() => router.back()} ><ChevronLeft size={15} />Back</Button>} />
         <section className="grid place-items-center rounded-xl border border-border bg-card p-10 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="text-sm font-semibold text-foreground">We could not find <code className="font-mono">{params.eventId}</code></p>
             <p className="text-[0.8125rem] text-muted-foreground">The event may have been purged from the retention window, or the link may be incorrect.</p>
-            <Button asChild className="mt-1 h-9 rounded-lg px-4 text-sm">
+            <Button asChild className="mt-1">
               <Link href="/events-explorer"><ChevronLeft size={15} />Event Explorer</Link>
             </Button>
           </div>
@@ -111,11 +111,11 @@ export default function EventDetailPage() {
         }
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" onClick={() => router.back()} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><ChevronLeft size={15} />Back</Button>
-            {currentStatus !== "Acknowledged" && currentStatus !== "Resolved" && <Button variant="outline" onClick={() => { setStatus("Acknowledged"); notify("Event acknowledged."); }} className="h-10 gap-1.5 rounded-lg px-3 text-sm">Acknowledge</Button>}
-            {currentStatus !== "Resolved" && <Button variant="outline" onClick={() => { setStatus("Resolved"); notify("Event marked resolved."); }} className="h-10 gap-1.5 rounded-lg px-3 text-sm">Resolve</Button>}
-            <Button variant="outline" onClick={() => notify("Assignment flow is a mock action.")} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><Wrench size={15} />Assign</Button>
-            <Button onClick={() => notify("Alert rule created from this event (mock).")} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><ShieldAlert size={15} />Create Alert Rule</Button>
+            <Button variant="outline" onClick={() => router.back()} ><ChevronLeft size={15} />Back</Button>
+            {currentStatus !== "Acknowledged" && currentStatus !== "Resolved" && <Button variant="outline" onClick={() => { setStatus("Acknowledged"); notify("Event acknowledged."); }} >Acknowledge</Button>}
+            {currentStatus !== "Resolved" && <Button variant="outline" onClick={() => { setStatus("Resolved"); notify("Event marked resolved."); }} >Resolve</Button>}
+            <Button variant="outline" onClick={() => notify("Assignment flow is a mock action.")} ><Wrench size={15} />Assign</Button>
+            <Button onClick={() => notify("Alert rule created from this event (mock).")} ><ShieldAlert size={15} />Create Alert Rule</Button>
           </div>
         }
       />

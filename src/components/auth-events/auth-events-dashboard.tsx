@@ -554,13 +554,13 @@ export function AuthEventsDashboard() {
           <div className="flex items-center gap-2">
             <AlertMenu
               label="Export authentication events"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 text-sm"><FileDown size={15} />Export</Button>}
+              trigger={<Button variant="outline" ><FileDown size={15} />Export</Button>}
               items={[
                 { key: "csv", label: "CSV (filtered)", onSelect: () => handleExport("csv") },
                 { key: "json", label: "JSON (filtered)", onSelect: () => handleExport("json") },
               ]}
             />
-            <Button className="h-10 gap-1.5 text-sm" onClick={() => router.push("/alert-rules")}><BellPlus size={15} />Create Alert Rule</Button>
+            <Button  onClick={() => router.push("/alert-rules")}><BellPlus size={15} />Create Alert Rule</Button>
           </div>
         }
       />
@@ -575,7 +575,7 @@ export function AuthEventsDashboard() {
             <span className="hidden sm:inline" aria-hidden="true">�</span>
             <span>{summary.lockedAccounts} locked accounts</span>
           </span>
-          <button type="button" onClick={() => detectionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+          <button type="button" onClick={() => detectionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
             View detections <ChevronRight size={14} className="inline" aria-hidden="true" />
           </button>
         </div>
@@ -664,7 +664,7 @@ export function AuthEventsDashboard() {
               <div className="flex items-center gap-2">
                 <div className="flex rounded-lg border border-border bg-muted/40 p-0.5" role="group" aria-label="Detection status filter">
                   {(["open", "all"] as const).map((value) => (
-                    <button key={value} type="button" aria-pressed={detectionFilter === value} onClick={() => setDetectionFilter(value)} className={cn("rounded-md px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", detectionFilter === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
+                    <button key={value} type="button" aria-pressed={detectionFilter === value} onClick={() => setDetectionFilter(value)} className={cn("rounded-lg px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", detectionFilter === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
                       {value}
                     </button>
                   ))}
@@ -681,7 +681,7 @@ export function AuthEventsDashboard() {
                   const isIp = !detection.subject.includes("@");
                   return (
                     <li key={detection.id} className="group relative">
-                      <button type="button" onClick={() => setDetectionDialog(detection)} className="flex w-full flex-col gap-1 rounded-md px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open detection ${detection.id}`}>
+                      <button type="button" onClick={() => setDetectionDialog(detection)} className="flex w-full flex-col gap-1 rounded-lg px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open detection ${detection.id}`}>
                         <span className="flex w-full items-center gap-2">
                           <DetectionTypeIcon type={detection.type} />
                           <span className="min-w-0 flex-1 truncate font-mono text-[0.8125rem] font-semibold text-foreground">{detection.subject}</span>
@@ -695,9 +695,9 @@ export function AuthEventsDashboard() {
                       </button>
                       <div className="absolute inset-y-0 right-0 hidden items-center gap-1 rounded-l-md border-l border-border bg-card/95 pl-2 pr-1 backdrop-blur-sm group-hover:flex focus-within:flex" aria-label="Quick actions">
                         {isIp
-                          ? <button type="button" title="Block IP" aria-label={`Block ${detection.subject}`} className="inline-flex h-7 items-center gap-1.5 rounded-md border border-red-200 px-2 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10" onClick={() => setBlockIps([detection.subject])}><Ban size={12} aria-hidden="true" />Block</button>
-                          : <button type="button" title="Lock user" aria-label={`Lock ${detection.subject}`} className="inline-flex h-7 items-center gap-1.5 rounded-md border border-amber-200 px-2 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-amber-500/30 dark:text-amber-300 dark:hover:bg-amber-500/10" onClick={() => setLockTarget({ user: detection.subject, locked: isAuthAccountLocked(detection.subject) })}><Lock size={12} aria-hidden="true" />Lock</button>}
-                        <button type="button" title="Mark as Investigating" aria-label={`Investigate ${detection.id}`} className="inline-flex h-7 items-center gap-1.5 rounded-md border border-blue-200 px-2 text-xs font-semibold text-blue-800 transition-colors hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-blue-500/30 dark:text-blue-300 dark:hover:bg-blue-500/10" onClick={() => { setAuthDetectionStatus(detection.id, "Investigating"); setDetections((current) => current.map((item) => item.id === detection.id ? { ...item, status: "Investigating" } : item)); notify({ message: `${detection.id} assigned to IAM team` }); }}><Search size={12} aria-hidden="true" />Investigate</button>
+                          ? <button type="button" title="Block IP" aria-label={`Block ${detection.subject}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-red-200 px-2 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10" onClick={() => setBlockIps([detection.subject])}><Ban size={12} aria-hidden="true" />Block</button>
+                          : <button type="button" title="Lock user" aria-label={`Lock ${detection.subject}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-amber-200 px-2 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-amber-500/30 dark:text-amber-300 dark:hover:bg-amber-500/10" onClick={() => setLockTarget({ user: detection.subject, locked: isAuthAccountLocked(detection.subject) })}><Lock size={12} aria-hidden="true" />Lock</button>}
+                        <button type="button" title="Mark as Investigating" aria-label={`Investigate ${detection.id}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-blue-200 px-2 text-xs font-semibold text-blue-800 transition-colors hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-blue-500/30 dark:text-blue-300 dark:hover:bg-blue-500/10" onClick={() => { setAuthDetectionStatus(detection.id, "Investigating"); setDetections((current) => current.map((item) => item.id === detection.id ? { ...item, status: "Investigating" } : item)); notify({ message: `${detection.id} assigned to IAM team` }); }}><Search size={12} aria-hidden="true" />Investigate</button>
                       </div>
                     </li>
                   );
@@ -724,7 +724,7 @@ export function AuthEventsDashboard() {
             <ul className="grid w-full grid-cols-3 gap-2 text-sm">
               {AUTH_METHOD_COUNTS.map((entry) => (
                 <li key={entry.method}>
-                  <button type="button" onClick={() => applyFilters({ method: entry.method })} className="flex w-full flex-col items-start gap-0.5 rounded-md p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${entry.method}`}>
+                  <button type="button" onClick={() => applyFilters({ method: entry.method })} className="flex w-full flex-col items-start gap-0.5 rounded-lg p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${entry.method}`}>
                     <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: METHOD_SERIES.find((series) => series.name === entry.method)?.color }} aria-hidden="true" />{entry.method}</span>
                     <span className="flex w-full items-baseline justify-between gap-2"><b className="tabular-nums text-foreground">{entry.count.toLocaleString()}</b><span className="text-xs tabular-nums text-muted-foreground">{((entry.count / summary.total) * 100).toFixed(1)}%</span></span>
                   </button>
@@ -748,7 +748,7 @@ export function AuthEventsDashboard() {
               const pct = Math.round((entry.count / AUTH_FAILURE_REASONS.reduce((acc, item) => acc + item.count, 0)) * 100);
               return (
                 <li key={entry.reason}>
-                  <button type="button" onClick={() => applyFilters({ reason: entry.reason })} className="group flex w-full items-center gap-2 rounded-md px-1 py-0.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by failure reason ${entry.reason}`}>
+                  <button type="button" onClick={() => applyFilters({ reason: entry.reason })} className="group flex w-full items-center gap-2 rounded-lg px-1 py-0.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by failure reason ${entry.reason}`}>
                     <span className="w-40 shrink-0 truncate text-xs text-muted-foreground group-hover:text-foreground">{entry.reason}</span>
                     <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
                       <div className="h-full rounded-full bg-rose-400 transition-all" style={{ width: `${pct}%` }} />
@@ -769,7 +769,7 @@ export function AuthEventsDashboard() {
           <ul className="flex flex-1 flex-col divide-y divide-border">
             {AUTH_LOCATIONS.map((location) => (
               <li key={location.countryCode}>
-                <button type="button" onClick={() => applyFilters({ country: location.country })} className="flex w-full items-center gap-2 py-[0.4375rem] text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1" aria-label={`Filter by country ${location.country}`}>
+                <button type="button" onClick={() => applyFilters({ country: location.country })} className="flex w-full items-center gap-2 py-[0.4375rem] text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-1" aria-label={`Filter by country ${location.country}`}>
                   <CountryFlag code={location.countryCode} name={location.country} />
                   <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium text-foreground">
                     {location.country}
@@ -797,14 +797,14 @@ export function AuthEventsDashboard() {
               const lockedUser = account.locked || isAuthAccountLocked(account.user);
               return (
                 <li key={account.user} className="group flex items-center gap-2 py-2">
-                  <button type="button" onClick={() => updateParams({ q: account.user, page: null })} className="flex min-w-0 flex-1 items-center gap-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md p-1 hover:bg-muted/50" aria-label={`Filter events for ${account.user}`}>
+                  <button type="button" onClick={() => updateParams({ q: account.user, page: null })} className="flex min-w-0 flex-1 items-center gap-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg p-1 hover:bg-muted/50" aria-label={`Filter events for ${account.user}`}>
                     <InitialsAvatar name={account.user.split("@")[0]} size={26} />
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-1.5"><span className="truncate text-[0.8125rem] font-medium text-foreground">{account.user}</span>{lockedUser && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"><Lock size={10} />Locked</span>}</span>
                       <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-rose-400" style={{ width: `${Math.round((account.failedAttempts / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{account.failedAttempts} failed � {timeAgo(new Date(Date.now() - account.lastAttemptMinutesAgo * 60_000).toISOString())}</span></span>
                     </span>
                   </button>
-                  <button type="button" onClick={() => setLockTarget({ user: account.user, locked: Boolean(lockedUser) })} aria-label={lockedUser ? `Unlock ${account.user}` : `Lock ${account.user}`} title={lockedUser ? "Unlock account" : "Lock account"} className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100">
+                  <button type="button" onClick={() => setLockTarget({ user: account.user, locked: Boolean(lockedUser) })} aria-label={lockedUser ? `Unlock ${account.user}` : `Lock ${account.user}`} title={lockedUser ? "Unlock account" : "Lock account"} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100">
                     {lockedUser ? <LockOpen size={14} /> : <Lock size={14} />}
                   </button>
                 </li>
@@ -835,7 +835,7 @@ export function AuthEventsDashboard() {
                   <i className={cn("h-1.5 w-1.5 rounded-full", source.status === "Blocked" ? "bg-red-500" : source.status === "Watch" ? "bg-amber-500" : "bg-slate-400")} aria-hidden="true" />
                   {source.status}
                 </span>
-                {source.status !== "Blocked" && <button type="button" onClick={() => setBlockIps([source.ip])} className="shrink-0 rounded-md border border-red-200 px-2 py-1 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">Block</button>}
+                {source.status !== "Blocked" && <button type="button" onClick={() => setBlockIps([source.ip])} className="shrink-0 rounded-lg border border-red-200 px-2 py-1 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">Block</button>}
               </li>
             ))}
           </ul>
@@ -889,7 +889,7 @@ export function AuthEventsDashboard() {
           <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
             <div className="flex items-center gap-1" role="group" aria-label="Filter by result">
               {(["all", "Success", "Failed", "Blocked", "Challenged"] as const).map((value) => (
-                <button key={value} type="button" onClick={() => applyFilters({ result: value })} aria-pressed={resultFilter === value} className={cn("h-8 rounded-md border px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", resultFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
+                <button key={value} type="button" onClick={() => applyFilters({ result: value })} aria-pressed={resultFilter === value} className={cn("h-8 rounded-lg border px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", resultFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
                   {value === "all" ? "All results" : value}
                 </button>
               ))}
@@ -906,12 +906,12 @@ export function AuthEventsDashboard() {
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
             </div>
             {(activeFilterCount > 0) && (
-              <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="h-9 gap-1 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center"><X size={12} />Reset ({activeFilterCount})</button>
+              <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="h-9 gap-1 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center"><X size={12} />Reset ({activeFilterCount})</button>
             )}
             <AlertMenu
               label="Saved Views"
               align="end"
-              trigger={<Button variant="outline" className="h-9 gap-1.5 text-sm"><ListFilter size={14} />Saved Views</Button>}
+              trigger={<Button variant="outline" ><ListFilter size={14} />Saved Views</Button>}
               items={[
                 ...savedViewsBuiltin.map((view) => ({ key: `builtin-${view.name}`, label: view.name, onSelect: () => applySavedView(view.patch) })),
                 ...(savedViews.length > 0 ? [{ key: "divider-user", label: "", divider: true } as const] : []),
@@ -921,7 +921,7 @@ export function AuthEventsDashboard() {
                 ...(savedViews.length > 0 ? [{ key: "clear", label: "Remove all saved views", danger: true, onSelect: () => { persistSavedViews([]); setSavedViews([]); } }] : []),
               ]}
             />
-            <button type="button" role="switch" aria-checked={liveTail} onClick={() => { setLiveTail((value) => !value); if (liveTail) { setPendingNew(0); liveBuffer.current = []; } }} className={cn("inline-flex h-9 items-center gap-2 rounded-md border px-2.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", liveTail ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300" : "border-border text-muted-foreground hover:bg-accent")}>
+            <button type="button" role="switch" aria-checked={liveTail} onClick={() => { setLiveTail((value) => !value); if (liveTail) { setPendingNew(0); liveBuffer.current = []; } }} className={cn("inline-flex h-9 items-center gap-2 rounded-lg border px-2.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", liveTail ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300" : "border-border text-muted-foreground hover:bg-accent")}>
               <span className={cn("h-2 w-2 rounded-full", liveTail ? "animate-pulse bg-emerald-500" : "bg-slate-400")} aria-hidden="true" />
               Live tail
             </button>
@@ -950,11 +950,11 @@ export function AuthEventsDashboard() {
             <div className="flex flex-wrap items-center gap-3 border-b border-border bg-primary/5 px-4 py-2 text-sm">
               <b className="tabular-nums text-foreground">{selectionCount} selected</b>
               <div className="flex items-center gap-1">
-                <button type="button" onClick={bulkMarkReviewed} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Mark reviewed</button>
-                <button type="button" onClick={bulkBlockIps} className="h-8 rounded-md px-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10">Block IPs</button>
-                <button type="button" onClick={bulkExport} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Export</button>
+                <button type="button" onClick={bulkMarkReviewed} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Mark reviewed</button>
+                <button type="button" onClick={bulkBlockIps} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10">Block IPs</button>
+                <button type="button" onClick={bulkExport} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Export</button>
               </div>
-              <button type="button" onClick={() => setSelected(new Set())} className="ml-auto text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded px-2 py-1">Clear selection</button>
+              <button type="button" onClick={() => setSelected(new Set())} className="ml-auto text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-2 py-1">Clear selection</button>
             </div>
           )}
 
@@ -964,15 +964,15 @@ export function AuthEventsDashboard() {
               <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="w-10 px-3 py-2.5"><input type="checkbox" aria-label="Select all events on this page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("time")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Time {sort.key === "time" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("time")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Time {sort.key === "time" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="px-2 py-2.5 font-semibold">User</th>
                   <th className="px-2 py-2.5 font-semibold">Event</th>
                   <th className="hidden px-2 py-2.5 font-semibold md:table-cell">Method</th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("result")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Result {sort.key === "result" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("result")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Result {sort.key === "result" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="px-2 py-2.5 font-semibold">Source</th>
                   <th className="hidden px-2 py-2.5 font-semibold lg:table-cell">Target</th>
                   <th className="hidden px-2 py-2.5 font-semibold xl:table-cell">Device</th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[1.125rem]" : "left-0.5")} /></button></span></th>
                 </tr>
               </thead>
@@ -1022,12 +1022,12 @@ export function AuthEventsDashboard() {
                       <td className="px-2 py-2 align-middle"><div className="flex flex-col gap-1"><RiskScoreBar score={risk} /><FlagChips flags={event.riskFlags} max={2} /></div></td>
                       <td className="px-2 py-2 align-middle text-right">
                         <div className="flex items-center justify-end gap-1" onClick={(clickEvent) => clickEvent.stopPropagation()} onKeyDown={(keyEvent) => keyEvent.stopPropagation()}>
-                          <button type="button" title="Block IP" aria-label={`Block ${event.ip}`} onClick={() => setBlockIps([event.ip])} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100"><Ban size={13} /></button>
-                          <button type="button" title={accountLocked ? "Unlock user" : "Lock user"} aria-label={accountLocked ? `Unlock ${event.user}` : `Lock ${event.user}`} onClick={() => setLockTarget({ user: event.user, locked: accountLocked })} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100">{accountLocked ? <LockOpen size={13} /> : <Lock size={13} />}</button>
+                          <button type="button" title="Block IP" aria-label={`Block ${event.ip}`} onClick={() => setBlockIps([event.ip])} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100"><Ban size={13} /></button>
+                          <button type="button" title={accountLocked ? "Unlock user" : "Lock user"} aria-label={accountLocked ? `Unlock ${event.user}` : `Lock ${event.user}`} onClick={() => setLockTarget({ user: event.user, locked: accountLocked })} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100">{accountLocked ? <LockOpen size={13} /> : <Lock size={13} />}</button>
                           <AlertMenu
                             label={`Event ${event.id} actions`}
                             align="end"
-                            trigger={<button type="button" className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Event ${event.id} actions`}><MoreVertical size={14} /></button>}
+                            trigger={<button type="button" className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Event ${event.id} actions`}><MoreVertical size={14} /></button>}
                             items={[
                               { key: "review", label: "Mark reviewed", onSelect: () => markAuthReviewed([event.id], "Reviewed") },
                               { key: "fp", label: "False positive", onSelect: () => setFalsePositiveIds([event.id]) },
@@ -1052,7 +1052,7 @@ export function AuthEventsDashboard() {
                       <SearchX className="mx-auto text-muted-foreground" size={26} />
                       <p className="mt-2 text-sm font-semibold text-foreground">No events match these filters</p>
                       <p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p>
-                      <Button variant="outline" size="sm" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Reset filters</Button>
+                      <Button variant="outline" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Reset filters</Button>
                     </td>
                   </tr>
                 )}

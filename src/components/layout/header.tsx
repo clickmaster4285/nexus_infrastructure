@@ -78,7 +78,7 @@ function ProfileMenu() {
             <b className="block text-[0.8125rem] text-foreground">{user?.name ?? "Admin"}</b>
             <span className="block truncate text-[0.75rem] text-muted-foreground">{user?.email ?? "admin@gmail.com"}</span>
           </div>
-          <button type="button" role="menuitem" onClick={handleLogout} className="mt-1 flex h-9 w-full items-center gap-2 rounded-md px-3 text-[0.8125rem] font-medium text-rose-600 transition-colors hover:bg-rose-50 focus-visible:bg-rose-50 focus-visible:outline-none dark:text-rose-400 dark:hover:bg-rose-950/40 dark:focus-visible:bg-rose-950/40">
+          <button type="button" role="menuitem" onClick={handleLogout} className="mt-1 flex h-9 w-full items-center gap-2 rounded-lg px-3 text-[0.8125rem] font-medium text-rose-600 transition-colors hover:bg-rose-50 focus-visible:bg-rose-50 focus-visible:outline-none dark:text-rose-400 dark:hover:bg-rose-950/40 dark:focus-visible:bg-rose-950/40">
             <LogOut size={15} className="shrink-0" aria-hidden="true" />
             Logout
           </button>

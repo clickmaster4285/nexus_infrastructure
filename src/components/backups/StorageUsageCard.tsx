@@ -59,7 +59,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
           align="end"
           width={200}
           trigger={
-            <button type="button" aria-label="Storage actions" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <button type="button" aria-label="Storage actions" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <MoreVertical size={16} aria-hidden="true" />
             </button>
           }
@@ -157,7 +157,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
       ) : (
         <div className="flex items-center justify-between gap-2">
           <p className="text-[0.6875rem] text-muted-foreground">Expired points &gt; 90d are safe to prune.</p>
-          <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-xs font-semibold" onClick={() => setConfirmClean(true)}>
+          <Button variant="outline"  onClick={() => setConfirmClean(true)}>
             <Eraser size={13} aria-hidden="true" />Clean up
           </Button>
         </div>
@@ -176,8 +176,8 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
             <DialogDescription>Restore points older than 90 days (verified successful) will be pruned from Local NAS and AWS S3. Active backup sets are not affected. You can undo this for 30 days.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmClean(false)}>Keep points</Button>
-            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => { setReclaimedTb(1.8); setConfirmClean(false); }}>Reclaim 1.8 TB</Button>
+            <Button variant="outline"  onClick={() => setConfirmClean(false)}>Keep points</Button>
+            <Button  onClick={() => { setReclaimedTb(1.8); setConfirmClean(false); }}>Reclaim 1.8 TB</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -10,7 +10,7 @@ export default function NotFound() {
         <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
           The page you are looking for doesn&apos;t exist or may have been moved.
         </p>
-        <Button asChild size="sm" className="mt-1">
+        <Button asChild className="mt-1">
           <Link href="/executive-overview">Back to Executive Overview</Link>
         </Button>
       </div>

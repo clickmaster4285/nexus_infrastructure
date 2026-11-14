@@ -46,7 +46,7 @@ function ConfirmFooter({ confirmLabel, onConfirm, disabled, danger, onOpenChange
       <AdminNote />
       <div className="flex items-center gap-2">
         <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-        <Button onClick={onConfirm} disabled={blocked} title={!MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant="destructive" className={cn("h-10", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
+        <Button onClick={onConfirm} disabled={blocked} title={!MOCK_ADMIN_PERMISSION ? ADMIN_PERMISSION_HINT : undefined} variant="destructive" className={cn("", danger && "bg-red-600 text-white hover:bg-red-700")}>{confirmLabel}</Button>
       </div>
     </DialogFooter>
   );
@@ -228,7 +228,7 @@ export function TokenSecretDialog({ open, onOpenChange, token, onDone }: { open:
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 font-mono text-sm dark:border-amber-500/30 dark:bg-amber-500/10">
           <code className="block break-all leading-6 text-foreground">{token}</code>
         </div>
-        <div className="flex items-center gap-2"><button type="button" onClick={() => void copy()} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-input bg-card px-3 text-sm font-semibold text-foreground hover:bg-accent"><Copy size={14} />{copied ? "Copied" : "Copy token"}</button></div>
+        <div className="flex items-center gap-2"><button type="button" onClick={() => void copy()} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-card px-3 text-sm font-semibold text-foreground hover:bg-accent"><Copy size={14} />{copied ? "Copied" : "Copy token"}</button></div>
         <ConfirmFooter onOpenChange={onOpenChange} confirmLabel="Done" onConfirm={() => { onOpenChange(false); onDone({ message: "Token secret saved" }); }} />
       </DialogContent>
     </Dialog>

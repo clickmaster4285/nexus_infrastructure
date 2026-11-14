@@ -333,7 +333,7 @@ export function ServerDetailsOverview({
         </div>
       </SectionCard></SpanCard>
 
-      <SpanCard><SectionCard title="Top Processes" icon={Cpu} loading={loading} action={<button type="button" onClick={() => onTabChange("processes")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
+      <SpanCard><SectionCard title="Top Processes" icon={Cpu} loading={loading} action={<button type="button" onClick={() => onTabChange("processes")} className="rounded-lg text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
         <div className="overflow-x-auto max-[39.9375rem]:-mx-2 max-[39.9375rem]:px-2">
           <table className="server-details-table w-full border-collapse text-left">
             <colgroup><col className="w-[14%]" /><col className="w-[26%]" /><col className="w-[15%]" /><col className="w-[23%]" /><col className="w-[22%]" /></colgroup>
@@ -343,7 +343,7 @@ export function ServerDetailsOverview({
         </div>
       </SectionCard></SpanCard>
 
-      <SpanCard><SectionCard title="Recent Events" icon={Bell} loading={loading} action={<button type="button" onClick={() => onTabChange("events")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
+      <SpanCard><SectionCard title="Recent Events" icon={Bell} loading={loading} action={<button type="button" onClick={() => onTabChange("events")} className="rounded-lg text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
         <div className="mb-3 flex flex-wrap gap-2" role="group" aria-label="Filter recent events">
           {["All", "Info", "Warning", "Success"].map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={`rounded-full border px-3 py-1 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${eventFilter === filter ? "border-primary bg-primary/10 font-semibold text-primary" : "border-border text-muted-foreground hover:bg-accent"}`}>{filter}</button>)}
         </div>
@@ -367,8 +367,8 @@ export function ServerDetailsOverview({
             <span className="min-w-0 flex-1 text-[0.8125rem] font-medium text-foreground">{alert.title}</span>
             <span className="text-[0.8125rem] text-muted-foreground">{alert.age}</span>
             <div className="flex gap-2">
-              <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert acknowledged"); }} className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Acknowledge</button>
-              <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert resolved"); }} className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Resolve</button>
+              <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert acknowledged"); }} className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Acknowledge</button>
+              <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert resolved"); }} className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Resolve</button>
             </div>
           </div>)}
         </div>}
@@ -445,7 +445,7 @@ export function ServerDetailsOverview({
             <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${service.status === "Running" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"}`}>{service.status}</span>
             <span className="text-[0.8125rem] text-muted-foreground">{service.uptime}</span>
             <span className="w-20 text-right text-[0.8125rem] text-muted-foreground">{service.memory}</span>
-            <button type="button" title={`Restart ${service.name}`} aria-label={`Restart ${service.name}`} onClick={() => setServiceToRestart(service.name)} className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><RotateCw size={16} /></button>
+            <button type="button" title={`Restart ${service.name}`} aria-label={`Restart ${service.name}`} onClick={() => setServiceToRestart(service.name)} className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><RotateCw size={16} /></button>
           </div>)}
         </div>
       </SectionCard></SpanCard>
@@ -466,16 +466,16 @@ export function ServerDetailsOverview({
             <div className="mt-2 text-[0.8125rem] text-foreground">Today, 02:15 <span className="text-muted-foreground">· 18.4 GB</span></div>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-[0.8125rem]"><div><dt className="text-muted-foreground">Next scheduled</dt><dd className="mt-1 font-medium text-foreground">Tomorrow, 02:00</dd></div><div><dt className="text-muted-foreground">Retention</dt><dd className="mt-1 font-medium text-foreground">30 daily copies</dd></div></dl>
-          <button type="button" disabled={backupRunning} onClick={() => { setBackupRunning(true); onAction("Backup started"); window.setTimeout(() => setBackupRunning(false), 1800); }} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-70"><RotateCw size={16} className={backupRunning ? "animate-spin" : ""} />{backupRunning ? "Backup running..." : "Run backup now"}</button>
+          <button type="button" disabled={backupRunning} onClick={() => { setBackupRunning(true); onAction("Backup started"); window.setTimeout(() => setBackupRunning(false), 1800); }} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-70"><RotateCw size={16} className={backupRunning ? "animate-spin" : ""} />{backupRunning ? "Backup running..." : "Run backup now"}</button>
         </div>
       </SectionCard></SpanCard>
     </DashboardRow>
 
     <DashboardRow>
       <SpanCard wide><SectionCard title="Live Log Tail" icon={Terminal} loading={loading} action={<div className="flex items-center gap-2">
-        <button type="button" onClick={() => setLogPaused((paused) => !paused)} title={logPaused ? "Resume log stream" : "Pause log stream"} aria-label={logPaused ? "Resume log stream" : "Pause log stream"} className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{logPaused ? <Play size={16} /> : <Pause size={16} />}</button>
-        <button type="button" onClick={() => setLogs([])} title="Clear logs" aria-label="Clear logs" className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="text-xs">Clear</span></button>
-        <button type="button" onClick={() => onTabChange("logs")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open Logs</button>
+        <button type="button" onClick={() => setLogPaused((paused) => !paused)} title={logPaused ? "Resume log stream" : "Pause log stream"} aria-label={logPaused ? "Resume log stream" : "Pause log stream"} className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{logPaused ? <Play size={16} /> : <Pause size={16} />}</button>
+        <button type="button" onClick={() => setLogs([])} title="Clear logs" aria-label="Clear logs" className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="text-xs">Clear</span></button>
+        <button type="button" onClick={() => onTabChange("logs")} className="rounded-lg text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open Logs</button>
       </div>}>
         <div className="flex h-full min-h-72 flex-col rounded-lg bg-[oklch(0.2169_0.0349_259.51)] p-4 font-mono text-xs text-slate-200">
           <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3 text-slate-400"><span>web-01 / var / log / syslog</span><span className="flex items-center gap-2">{logPaused ? <Pause size={13} /> : <span className="h-2 w-2 rounded-full bg-emerald-400" />}{logPaused ? "Paused" : "Live"}</span></div>
@@ -516,8 +516,8 @@ export function ServerDetailsOverview({
           <DialogDescription>This will restart the selected demo service on web-01. The service may be briefly unavailable.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <button type="button" onClick={() => setServiceToRestart(null)} className="rounded-md border border-border px-4 py-2 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Cancel</button>
-          <button type="button" onClick={updateService} className="rounded-md bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restart service</button>
+          <button type="button" onClick={() => setServiceToRestart(null)} className="rounded-lg border border-border px-4 py-2 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Cancel</button>
+          <button type="button" onClick={updateService} className="rounded-lg bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restart service</button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

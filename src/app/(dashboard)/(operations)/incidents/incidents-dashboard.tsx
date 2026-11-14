@@ -689,7 +689,7 @@ export function IncidentsDashboard() {
         <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
         <p className="font-display text-base font-bold text-foreground">Incidents could not be loaded</p>
         <p className="text-sm text-muted-foreground">The incident service failed to respond. Retry to reload the queue.</p>
-        <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+        <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
       </div>
     </section>
   );
@@ -721,7 +721,7 @@ export function IncidentsDashboard() {
             <AlertMenu
               label="Export incidents"
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+                <Button variant="outline" >
                   <FileDown size={15} aria-hidden="true" />Export<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                 </Button>
               }
@@ -790,7 +790,7 @@ export function IncidentsDashboard() {
                   <SegmentedControl value={trendRange} options={["7D", "30D", "90D"]} onChange={(value) => setTrendRange(value as TrendRange)} buttonClassName="px-3 text-sm" />
                   <AlertMenu
                     label="Incident trend options"
-                    trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Incident trend options"><MoreVertical size={15} /></Button>}
+                    trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Incident trend options"><MoreVertical size={15} /></Button>}
                     items={[
                       { key: "copy", label: "Copy chart data (CSV)", onSelect: () => { const csv = ["bucket,SEV1,SEV2,SEV3,SEV4", ...trend.map((bucket) => `${bucket.label},${bucket.SEV1},${bucket.SEV2},${bucket.SEV3},${bucket.SEV4}`)].join("\r\n"); downloadBlob(csv, "text/csv;charset=utf-8", `incident-trend-${trendRange.toLowerCase()}.csv`); showToast("Trend data copied as CSV."); } },
                       { key: "refresh", label: "Refresh", onSelect: reload },
@@ -846,7 +846,7 @@ export function IncidentsDashboard() {
               actions={
                 <AlertMenu
                   label="Severity breakdown options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Severity breakdown options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Severity breakdown options"><MoreVertical size={15} /></Button>}
                   items={[
                     { key: "open", label: "View open incidents", onSelect: () => setFilter("status", "Open") },
                     { key: "sev12", label: "View SEV1-2 only", onSelect: () => setFilters((current) => ({ ...current, severity: ["SEV1", "SEV2"], status: "Open" })) },
@@ -902,7 +902,7 @@ export function IncidentsDashboard() {
               actions={
                 <AlertMenu
                   label="Affected services options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Affected services options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Affected services options"><MoreVertical size={15} /></Button>}
                   items={[
                     { key: "clear", label: "Clear service filter", disabled: filters.service === "all", onSelect: () => setFilter("service", "all") },
                     { key: "all", label: "Show all incidents", onSelect: resetFilters },
@@ -962,7 +962,7 @@ export function IncidentsDashboard() {
                 />
                 <AlertMenu
                   label="Table options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-8 w-8 text-muted-foreground" aria-label="Table options"><MoreVertical size={16} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Table options"><MoreVertical size={16} /></Button>}
                   items={[{ key: "export", label: "Export filtered (CSV)", onSelect: () => exportRows("csv", sorted, "filtered incidents") }]}
                 />
               </div>
@@ -1076,7 +1076,7 @@ export function IncidentsDashboard() {
                 label="Saved views"
                 align="end"
                 trigger={
-                  <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-sm">
+                  <Button variant="outline" >
                     <Bookmark size={14} aria-hidden="true" />Saved views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                   </Button>
                 }
@@ -1097,11 +1097,11 @@ export function IncidentsDashboard() {
               <div role="region" aria-label="Bulk actions" className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-[0.8125rem] text-foreground">
                 <b className="tabular-nums">{selectedIds.length} selected</b>
                 <span aria-hidden="true" className="text-muted-foreground">·</span>
-                <AlertMenu label="Bulk assign" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[0.8125rem]">Assign<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkAssignItems} />
-                <AlertMenu label="Bulk change status" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[0.8125rem]">Change status<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkStatusItems} />
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => bulkRun(resolve, "{n} incident(s) resolved.")}><CheckCircle2 size={13} aria-hidden="true" />Resolve</Button>
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => bulkAcknowledge()}><CheckCheck size={13} aria-hidden="true" />Acknowledge</Button>
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => exportRows("csv", sorted.filter((incident) => selectedIds.includes(incident.id)), "selected incidents")}><FileDown size={13} aria-hidden="true" />Export</Button>
+                <AlertMenu label="Bulk assign" trigger={<Button variant="ghost" >Assign<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkAssignItems} />
+                <AlertMenu label="Bulk change status" trigger={<Button variant="ghost" >Change status<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkStatusItems} />
+                <Button variant="ghost"  onClick={() => bulkRun(resolve, "{n} incident(s) resolved.")}><CheckCircle2 size={13} aria-hidden="true" />Resolve</Button>
+                <Button variant="ghost"  onClick={() => bulkAcknowledge()}><CheckCheck size={13} aria-hidden="true" />Acknowledge</Button>
+                <Button variant="ghost"  onClick={() => exportRows("csv", sorted.filter((incident) => selectedIds.includes(incident.id)), "selected incidents")}><FileDown size={13} aria-hidden="true" />Export</Button>
                 <button type="button" onClick={() => setSelectedIds([])} className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 text-[0.8125rem] text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={13} aria-hidden="true" />Clear</button>
               </div>
             )}
@@ -1112,7 +1112,7 @@ export function IncidentsDashboard() {
                 <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                 <p className="font-display text-[0.9375rem] font-bold text-foreground">No incidents match your filters</p>
                 <p className="text-[0.8125rem] text-muted-foreground">Try widening the time range or clearing the filters.</p>
-                <Button variant="outline" size="sm" onClick={resetFilters} className="mt-1 h-9 rounded-lg px-3 text-[0.8125rem]">Reset filters</Button>
+                <Button variant="outline" onClick={resetFilters} className="mt-1">Reset filters</Button>
               </div>
             ) : (
               <>
@@ -1126,21 +1126,21 @@ export function IncidentsDashboard() {
                         <th scope="col" className="pb-2.5 pr-3 font-medium">ID</th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium">Title</th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium" aria-sort={sortKey === "severity" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
-                          <button type="button" onClick={() => sortBy("severity")} className="inline-flex items-center gap-1 rounded font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Severity{sortKey === "severity" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
+                          <button type="button" onClick={() => sortBy("severity")} className="inline-flex items-center gap-1 rounded-lg font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Severity{sortKey === "severity" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
                         </th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium" aria-sort={sortKey === "status" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
-                          <button type="button" onClick={() => sortBy("status")} className="inline-flex items-center gap-1 rounded font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Status{sortKey === "status" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
+                          <button type="button" onClick={() => sortBy("status")} className="inline-flex items-center gap-1 rounded-lg font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Status{sortKey === "status" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
                         </th>
                         <th scope="col" className="hidden pb-2.5 pr-3 font-medium lg:table-cell">Affected</th>
                         <th scope="col" className="hidden pb-2.5 pr-3 font-medium sm:table-cell">Commander</th>
                         <th scope="col" className="pb-2.5 pr-3 font-medium" aria-sort={sortKey === "started" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
                           <div className="flex items-center gap-2">
-                            <button type="button" onClick={() => sortBy("started")} className="inline-flex items-center gap-1 rounded font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Started{sortKey === "started" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
+                            <button type="button" onClick={() => sortBy("started")} className="inline-flex items-center gap-1 rounded-lg font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Started{sortKey === "started" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
                             <SegmentedControl value={timeMode === "utc" ? "UTC" : "Local"} options={["UTC", "Local"]} onChange={(value) => setTimeMode(value === "UTC" ? "utc" : "local")} buttonClassName="h-7 px-2 text-[0.75rem]" />
                           </div>
                         </th>
                         <th scope="col" className="hidden pb-2.5 pr-3 font-medium md:table-cell" aria-sort={sortKey === "duration" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
-                          <button type="button" onClick={() => sortBy("duration")} className="inline-flex items-center gap-1 rounded font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Duration{sortKey === "duration" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
+                          <button type="button" onClick={() => sortBy("duration")} className="inline-flex items-center gap-1 rounded-lg font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Duration{sortKey === "duration" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
                         </th>
                         <th scope="col" className="w-24 pb-2.5 text-right font-medium"><span className="sr-only">Actions</span></th>
                       </tr>
@@ -1184,7 +1184,7 @@ export function IncidentsDashboard() {
                             <td className="hidden pr-3 lg:table-cell" onClick={(event) => event.stopPropagation()}>
                               <div className="flex max-w-[11.25rem] flex-wrap items-center gap-1">
                                 {incident.affectedServices.slice(0, 2).map((service) => (
-                                  <button key={service} type="button" onClick={() => setFilter("service", service)} title={`Filter by ${service}`} className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</button>
+                                  <button key={service} type="button" onClick={() => setFilter("service", service)} title={`Filter by ${service}`} className="rounded-lg border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</button>
                                 ))}
                                 {incident.affectedServices.length > 2 && (
                                   <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground" title={incident.affectedServices.slice(2).join(", ")}>+{incident.affectedServices.length - 2}</span>
@@ -1220,7 +1220,7 @@ export function IncidentsDashboard() {
                                 )}
                                 <AlertMenu
                                   label={`Actions for ${incident.id}`}
-                                  trigger={<Button variant="ghost" size="icon-sm" className="h-8 w-8 text-muted-foreground" aria-label={`Actions for ${incident.id}`}><MoreVertical size={16} /></Button>}
+                                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label={`Actions for ${incident.id}`}><MoreVertical size={16} /></Button>}
                                   items={kebabFor(incident)}
                                 />
                               </div>
@@ -1243,7 +1243,7 @@ export function IncidentsDashboard() {
                       <SelectTrigger className="h-8 w-[4.625rem] text-[0.8125rem]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
                       <SelectContent>{PAGE_SIZE_OPTIONS.map((size) => <SelectItem key={size} value={String(size)} className="text-[0.8125rem]">{size}</SelectItem>)}</SelectContent>
                     </Select>
-                    <Button variant="outline" size="icon" className="h-8 w-8" disabled={clampedPage <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))} aria-label="Previous page"><ChevronLeft size={15} /></Button>
+                    <Button variant="outline" size="icon"  disabled={clampedPage <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))} aria-label="Previous page"><ChevronLeft size={15} /></Button>
                     {pageNumbers.map((item, index) =>
                       typeof item === "number" ? (
                         <button
@@ -1263,7 +1263,7 @@ export function IncidentsDashboard() {
                         <span key={`ellipsis-${index}`} aria-hidden="true" className="grid h-8 w-8 place-items-center text-muted-foreground">…</span>
                       ),
                     )}
-                    <Button variant="outline" size="icon" className="h-8 w-8" disabled={clampedPage >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} aria-label="Next page"><ChevronRight size={15} /></Button>
+                    <Button variant="outline" size="icon"  disabled={clampedPage >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} aria-label="Next page"><ChevronRight size={15} /></Button>
                   </div>
                 </div>
               </>
@@ -1278,7 +1278,7 @@ export function IncidentsDashboard() {
               actions={
                 <AlertMenu
                   label="On-call options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="On-call options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="On-call options"><MoreVertical size={15} /></Button>}
                   items={[
                     { key: "copy", label: "Copy handoff summary", onSelect: () => { const text = `On-call handoff — Primary: ${ON_CALL.primary.name} (${ON_CALL.primary.role}, since ${ON_CALL.primary.since}); Secondary: ${ON_CALL.secondary.name}. Next shift: ${ON_CALL.primary.nextShift}.`; if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(() => showToast("Handoff summary copied."), () => showToast(text)); else showToast(text); } },
                     { key: "page2", label: "Page secondary on-call", onSelect: () => showToast("Secondary paged — Priya Nair (Backend).") },
@@ -1304,7 +1304,7 @@ export function IncidentsDashboard() {
                   </div>
                 ))}
               </div>
-              <Button onClick={() => showToast("On-call paged — Marcus Lee (Platform · Primary).")} className="mt-3 h-9 w-full gap-1.5 rounded-lg bg-red-600 text-sm text-white hover:bg-red-700">
+              <Button onClick={() => showToast("On-call paged — Marcus Lee (Platform · Primary).")} className="mt-3 w-full bg-red-600 text-white hover:bg-red-700">
                 <Phone size={15} aria-hidden="true" />Page on-call
               </Button>
             </ChartCard>
@@ -1314,7 +1314,7 @@ export function IncidentsDashboard() {
               actions={
                 <AlertMenu
                   label="Postmortem options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Postmortem options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Postmortem options"><MoreVertical size={15} /></Button>}
                   items={[
                     { key: "resolved", label: "View resolved incidents", onSelect: () => setFilter("status", "Resolved") },
                     { key: "runbooks", label: "Open runbooks", onSelect: () => router.push("/runbooks") },
@@ -1365,7 +1365,7 @@ export function IncidentsDashboard() {
               actions={
                 <AlertMenu
                   label="Activity options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Activity options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Activity options"><MoreVertical size={15} /></Button>}
                   items={[{ key: "audit", label: "Open audit logs", onSelect: () => router.push("/audit-logs") }]}
                 />
               }
@@ -1403,7 +1403,7 @@ export function IncidentsDashboard() {
         <div role="status" className="fixed bottom-4 right-4 z-[1300] flex max-w-md items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-lg">
           <span className="min-w-0">{toast.message}</span>
           {toast.undo && (
-            <button type="button" onClick={() => { restore(toast.undo ?? []); setToast(null); }} className="shrink-0 rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Undo</button>
+            <button type="button" onClick={() => { restore(toast.undo ?? []); setToast(null); }} className="shrink-0 rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Undo</button>
           )}
           <button type="button" onClick={() => setToast(null)} aria-label="Dismiss notification" className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"><X size={14} aria-hidden="true" /></button>
         </div>
@@ -1441,8 +1441,8 @@ export function IncidentsDashboard() {
             />
           </label>
           <DialogFooter>
-            <DialogClose asChild><Button variant="outline" className="h-9">Cancel</Button></DialogClose>
-            <Button onClick={submitUpdate} disabled={!updateDraft.trim()} className="h-9 bg-primary text-primary-foreground hover:bg-primary/90">Post</Button>
+            <DialogClose asChild><Button variant="outline" >Cancel</Button></DialogClose>
+            <Button onClick={submitUpdate} disabled={!updateDraft.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90">Post</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

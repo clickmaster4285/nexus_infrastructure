@@ -1,5 +1,4 @@
 import { PageHeader } from "@/components/layout/page-header";
-import Link from "next/link";
 import { AvailabilityPanel, HealthTrendPanel, NetworkTrafficPanel, StoragePanel, UsagePanel } from "@/components/shared/chart-panels";
 import { DonutPanel } from "@/components/shared/donut-panel";
 import { MetricCard } from "@/components/shared/metric-card";
@@ -14,14 +13,14 @@ import {
   memoryServers,
   stats,
 } from "@/data/mock/dashboard";
-import { ArrowRight, MapPin, Wrench } from "lucide-react";
+import { ArrowRight, Wrench } from "lucide-react";
 import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
 const PANEL = "min-w-0 p-4";
 
 export function ExecutiveOverview() {
   return (
-    <div className="flex min-w-0 flex-col gap-0">
+    <div className="flex min-w-0 flex-col gap-4">
       <PageHeader
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
@@ -36,33 +35,19 @@ export function ExecutiveOverview() {
         </div>
       ); })()}
 
-      <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-2 sm:grid-cols-3 sm:gap-2.5 xl:grid-cols-7">
+      <section aria-label="Key metrics" className="grid min-w-0 grid-cols-2 items-stretch gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-6">
         {stats.map((item) => (
-          <MetricCard key={item.label} item={item} className="h-[5.375rem]" labelClassName="text-[0.625rem] whitespace-nowrap" valueClassName="text-[1.5625rem]" trendClassName="text-[0.625rem]" />
+          <MetricCard key={item.label} item={item} className="h-[7rem] items-center gap-2.5 p-4" labelClassName="text-[0.75rem] leading-[1.125rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />
         ))}
-        <Link
-          href="/server-sites"
-          aria-label="View all server sites"
-          className="group col-span-2 flex h-full min-h-[6.5rem] min-w-0 items-center justify-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-3 xl:col-span-2"
-        >
-          <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[oklch(0.9472_0.0257_253.57)] text-[oklch(0.5651_0.1667_253.22)] transition-transform group-hover:scale-105 dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7922_0.1099_248.98)]">
-            <MapPin size={20} />
-          </span>
-          <span className="min-w-0">
-            <span className="block text-[0.6875rem] font-medium leading-snug text-muted-foreground">Server Sites</span>
-            <span className="font-display mt-0.5 flex items-center gap-2 whitespace-nowrap text-[1.5625rem] font-bold leading-tight tracking-tight text-foreground">View all sites <ArrowRight size={17} aria-hidden="true" className="shrink-0 transition-transform group-hover:translate-x-0.5" /></span>
-            <span className="mt-0.5 block text-[0.625rem] leading-tight text-muted-foreground">Topology, health &amp; capacity</span>
-          </span>
-        </Link>
       </section>
 
-      <section aria-label="Trends" className="grid min-w-0 grid-cols-1 items-stretch gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+      <section aria-label="Trends" className="grid min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
         <HealthTrendPanel className={cn("h-[16.875rem]", PANEL)} />
         <UsagePanel className={cn("h-[16.875rem]", PANEL)} />
         <StoragePanel className={cn("h-[16.875rem]", PANEL)} />
       </section>
 
-      <section aria-label="Status breakdown" className="grid min-w-0 grid-cols-1 items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Status breakdown" className="grid min-w-0 grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <NetworkTrafficPanel className={cn("h-[14rem]", PANEL)} />
         <AvailabilityPanel className={cn("h-[14rem]", PANEL)} />
         <DonutPanel title="Alerts by Severity" data={alertSeverity} total={23} className={cn("h-[14rem]", PANEL)} />

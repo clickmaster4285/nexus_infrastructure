@@ -136,11 +136,11 @@ function StepEditor({ step, index, total, onChange, onMove, onDuplicate, onDelet
         </select>
         <input value={step.title} onChange={(event) => onChange(step.id, { title: event.target.value })} placeholder="Step title" aria-label={`Step ${index + 1} title`} className="h-9 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs font-semibold text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
         <div className="flex shrink-0 items-center gap-0.5">
-          <button type="button" aria-label="Move step up" disabled={index === 0} onClick={() => onMove(step.id, -1)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowUp size={14} aria-hidden /></button>
-          <button type="button" aria-label="Move step down" disabled={index === total - 1} onClick={() => onMove(step.id, 1)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowDown size={14} aria-hidden /></button>
-          <button type="button" aria-label="Duplicate step" onClick={() => onDuplicate(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={14} aria-hidden /></button>
-          <button type="button" aria-label="Delete step" onClick={() => onDelete(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
-          <button type="button" aria-label={collapsed ? "Expand step" : "Collapse step"} aria-expanded={!collapsed} onClick={() => onToggleCollapse(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{collapsed ? <ChevronDown size={14} aria-hidden /> : <ChevronUp size={14} aria-hidden />}</button>
+          <button type="button" aria-label="Move step up" disabled={index === 0} onClick={() => onMove(step.id, -1)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowUp size={14} aria-hidden /></button>
+          <button type="button" aria-label="Move step down" disabled={index === total - 1} onClick={() => onMove(step.id, 1)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowDown size={14} aria-hidden /></button>
+          <button type="button" aria-label="Duplicate step" onClick={() => onDuplicate(step.id)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={14} aria-hidden /></button>
+          <button type="button" aria-label="Delete step" onClick={() => onDelete(step.id)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
+          <button type="button" aria-label={collapsed ? "Expand step" : "Collapse step"} aria-expanded={!collapsed} onClick={() => onToggleCollapse(step.id)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{collapsed ? <ChevronDown size={14} aria-hidden /> : <ChevronUp size={14} aria-hidden />}</button>
         </div>
       </div>
       {!collapsed && (
@@ -355,7 +355,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists, so there is nothing to edit.</p>
-          <Button variant="outline" className="mt-4 h-10 rounded-lg px-4 text-sm" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -365,7 +365,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
     <section aria-label={titleText} className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-foreground">{titleText} <span className="ml-1 text-xs font-semibold tabular-nums text-muted-foreground">{list.length}</span></h2>
-        <Button variant="outline" className="h-8 gap-1 rounded-lg px-2.5 text-xs" onClick={addStep(listKey)}><Plus size={13} aria-hidden />{listKey === "steps" ? "Add step" : "Add"}</Button>
+        <Button variant="outline"  onClick={addStep(listKey)}><Plus size={13} aria-hidden />{listKey === "steps" ? "Add step" : "Add"}</Button>
       </div>
       {list.length === 0 && <p className="mt-1 text-xs text-muted-foreground">{emptyLabel}</p>}
       <ol className="mt-2 space-y-2">
@@ -386,9 +386,9 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
         icon={<BookOpen size={20} aria-hidden />}
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={onCancelClick}>Cancel</Button>
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-4 text-sm" onClick={onSaveDraft}><FilePlus2 size={15} aria-hidden />Save draft</Button>
-            <Button className="h-10 gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90" onClick={onPublishClick}><Rocket size={15} aria-hidden />Publish{mode === "edit" ? ` v${publishVersion}` : ""}</Button>
+            <Button variant="outline"  onClick={onCancelClick}>Cancel</Button>
+            <Button variant="outline"  onClick={onSaveDraft}><FilePlus2 size={15} aria-hidden />Save draft</Button>
+            <Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90" onClick={onPublishClick}><Rocket size={15} aria-hidden />Publish{mode === "edit" ? ` v${publishVersion}` : ""}</Button>
           </div>
         }
       />
@@ -461,7 +461,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                   })}
                   {filteredRules.length === 0 && <p className="px-1.5 py-2 text-[0.6875rem] text-muted-foreground">No rules match “{ruleSearch}”.</p>}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-1">{linkedRuleIds.map((ruleId) => <button key={ruleId} type="button" onClick={() => setLinkedRuleIds((current) => current.filter((id) => id !== ruleId))} aria-label={`Unlink ${ruleId}`} className="inline-flex h-6 items-center gap-1 rounded bg-primary/10 px-1.5 text-[0.6875rem] font-semibold tabular-nums text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<X size={10} aria-hidden /></button>)}</div>
+                <div className="mt-1 flex flex-wrap gap-1">{linkedRuleIds.map((ruleId) => <button key={ruleId} type="button" onClick={() => setLinkedRuleIds((current) => current.filter((id) => id !== ruleId))} aria-label={`Unlink ${ruleId}`} className="inline-flex h-6 items-center gap-1 rounded-lg bg-primary/10 px-1.5 text-[0.6875rem] font-semibold tabular-nums text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<X size={10} aria-hidden /></button>)}</div>
               </div>
               {/* Services multi-select */}
               <div className="min-w-0">
@@ -478,7 +478,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                     );
                   })}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-1">{services.map((service) => <button key={service} type="button" onClick={() => setServices((current) => current.filter((name) => name !== service))} aria-label={`Remove ${service}`} className="inline-flex h-6 items-center gap-1 rounded bg-muted px-1.5 font-mono text-[0.6875rem] text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}<X size={10} aria-hidden /></button>)}</div>
+                <div className="mt-1 flex flex-wrap gap-1">{services.map((service) => <button key={service} type="button" onClick={() => setServices((current) => current.filter((name) => name !== service))} aria-label={`Remove ${service}`} className="inline-flex h-6 items-center gap-1 rounded-lg bg-muted px-1.5 font-mono text-[0.6875rem] text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}<X size={10} aria-hidden /></button>)}</div>
               </div>
             </div>
             {criticalError && <p role="alert" className="mt-2 flex items-center gap-1 text-[0.6875rem] font-semibold text-red-600"><CircleAlert size={11} aria-hidden />{criticalError}</p>}
@@ -488,14 +488,14 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           <section aria-label="3. Prerequisites" className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[0.6875rem] tabular-nums">3</span>Prerequisites</h2>
-              <Button variant="outline" className="h-8 gap-1 rounded-lg px-2.5 text-xs" onClick={() => setPrerequisites((current) => [...current, ""])}><ListPlus size={13} aria-hidden />Add</Button>
+              <Button variant="outline"  onClick={() => setPrerequisites((current) => [...current, ""])}><ListPlus size={13} aria-hidden />Add</Button>
             </div>
             <ul className="mt-2 space-y-1.5">
               {prerequisites.map((item, index) => (
                 <li key={index} className="flex items-center gap-2">
                   <CircleCheck size={14} aria-hidden className="shrink-0 text-muted-foreground" />
                   <input value={item} onChange={(event) => setPrerequisites((current) => current.map((entry, entryIndex) => (entryIndex === index ? event.target.value : entry)))} placeholder={`Prerequisite ${index + 1}, e.g. SSH access to the host`} aria-label={`Prerequisite ${index + 1}`} className="h-9 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                  <button type="button" aria-label={`Remove prerequisite ${index + 1}`} onClick={() => setPrerequisites((current) => (current.length > 1 ? current.filter((_, entryIndex) => entryIndex !== index) : [""]))} className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
+                  <button type="button" aria-label={`Remove prerequisite ${index + 1}`} onClick={() => setPrerequisites((current) => (current.length > 1 ? current.filter((_, entryIndex) => entryIndex !== index) : [""]))} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
                 </li>
               ))}
             </ul>
@@ -576,8 +576,8 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
             <DialogDescription className="text-[0.75rem]">“{title.trim() || "Untitled runbook"}” will become visible to every linked alert and appear as the remediation for {linkedRuleIds.length} rule{linkedRuleIds.length === 1 ? "" : "s"}.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setPublishDialog(false)}>Keep editing</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={confirmPublish}><Rocket size={13} aria-hidden />Publish v{publishVersion}</Button>
+            <Button variant="outline"  onClick={() => setPublishDialog(false)}>Keep editing</Button>
+            <Button  onClick={confirmPublish}><Rocket size={13} aria-hidden />Publish v{publishVersion}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -590,8 +590,8 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
             <DialogDescription className="text-[0.75rem]">Your edits to {existing?.id ?? "this new runbook"} will be lost. This cannot be undone.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setCancelDialog(false)}>Keep editing</Button>
-            <Button className="h-9 gap-1.5 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={() => { setCancelDialog(false); router.push(existing ? `/runbooks/${existing.id}` : "/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
+            <Button variant="outline"  onClick={() => setCancelDialog(false)}>Keep editing</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={() => { setCancelDialog(false); router.push(existing ? `/runbooks/${existing.id}` : "/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

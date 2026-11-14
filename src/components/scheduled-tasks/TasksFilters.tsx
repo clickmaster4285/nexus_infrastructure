@@ -153,14 +153,14 @@ export function TasksFilters({
 
         <div className="ml-auto flex items-center gap-2">
           <div ref={viewsRef} className="relative">
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setViewsOpen((value) => !value)} aria-haspopup="true" aria-expanded={viewsOpen}>
+            <Button variant="outline"  onClick={() => setViewsOpen((value) => !value)} aria-haspopup="true" aria-expanded={viewsOpen}>
               <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
             </Button>
             {viewsOpen && (
               <div role="menu" aria-label="Saved views" className="motion-menu-in absolute right-0 top-10 z-40 w-64 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
                 <p className="px-2 pb-1 pt-1.5 text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Presets</p>
                 {PRESET_VIEWS.map((view) => (
-                  <button key={view.name} type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="flex h-8 w-full items-center rounded-md px-2 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-accent">
+                  <button key={view.name} type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="flex h-8 w-full items-center rounded-lg px-2 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-accent">
                     {view.name}
                   </button>
                 ))}
@@ -173,7 +173,7 @@ export function TasksFilters({
                         <button type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="h-full min-w-0 flex-1 truncate px-2 text-left text-[0.8125rem] text-foreground focus-visible:outline-none">
                           {view.name}
                         </button>
-                        <button type="button" onClick={() => onDeleteView(view.name)} aria-label={`Delete view ${view.name}`} className="mr-1 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-red-600 focus-visible:opacity-100 focus-visible:outline-none group-hover:opacity-100">
+                        <button type="button" onClick={() => onDeleteView(view.name)} aria-label={`Delete view ${view.name}`} className="mr-1 rounded-lg p-1 text-muted-foreground opacity-0 transition-opacity hover:text-red-600 focus-visible:opacity-100 focus-visible:outline-none group-hover:opacity-100">
                           <Trash2 size={13} aria-hidden="true" />
                         </button>
                       </div>
@@ -199,7 +199,7 @@ export function TasksFilters({
                     aria-label="Save current view as"
                     className="h-8 min-w-0 flex-1 rounded-md border border-input bg-card px-2 text-[0.75rem] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
-                  <button type="submit" disabled={!saveName.trim()} aria-label="Save view" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-40">
+                  <button type="submit" disabled={!saveName.trim()} aria-label="Save view" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-40">
                     <Save size={14} aria-hidden="true" />
                   </button>
                 </form>
@@ -253,7 +253,7 @@ export function TasksFilters({
               <span className="truncate">{chip.label}</span><X size={11} aria-hidden="true" />
             </button>
           ))}
-          <button type="button" onClick={onReset} className="rounded text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear all</button>
+          <button type="button" onClick={onReset} className="rounded-lg text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear all</button>
         </div>
       )}
     </div>

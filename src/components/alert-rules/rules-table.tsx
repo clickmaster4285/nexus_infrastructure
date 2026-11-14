@@ -204,7 +204,7 @@ export function RulesTable(props: RulesTableProps) {
 
   const header = (key: SortKey, label: string, className?: string) => (
     <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
-      <button type="button" onClick={() => toggleSort(key)} className="group inline-flex items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <button type="button" onClick={() => toggleSort(key)} className="group inline-flex items-center gap-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         {label}
         {sortIndicator(key)}
       </button>

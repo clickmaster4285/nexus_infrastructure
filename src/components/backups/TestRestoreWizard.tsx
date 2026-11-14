@@ -298,17 +298,17 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
         </div>
 
         <DialogFooter className="flex-row items-center justify-between border-t border-border px-5 py-3">
-          <Button variant="ghost" className="h-9 gap-1 rounded-lg px-3 text-[0.8125rem]" onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3) : s))} disabled={step === 1 || restoring}>
+          <Button variant="ghost"  onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3) : s))} disabled={step === 1 || restoring}>
             <ChevronLeft size={14} aria-hidden="true" />Back
           </Button>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => onOpenChange(false)} disabled={restoring}>Cancel</Button>
+            <Button variant="outline"  onClick={() => onOpenChange(false)} disabled={restoring}>Cancel</Button>
             {step < 4 ? (
-              <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 2 | 3 | 4) : s))} disabled={!canContinue}>
+              <Button  onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 2 | 3 | 4) : s))} disabled={!canContinue}>
                 Continue<ChevronRight size={14} aria-hidden="true" />
               </Button>
             ) : (
-              <Button className="h-9 gap-1.5 rounded-lg bg-primary px-4 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50" onClick={start} disabled={!canContinue || restoring}>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50" onClick={start} disabled={!canContinue || restoring}>
                 <ArchiveRestore size={14} aria-hidden="true" />{restoring ? `Starting ${progress}%` : "Start restore"}
               </Button>
             )}

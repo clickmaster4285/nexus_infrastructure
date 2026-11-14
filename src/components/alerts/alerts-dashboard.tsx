@@ -171,7 +171,7 @@ export function AlertsDashboard() {
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Alerts could not be loaded</p>
             <p className="text-sm text-muted-foreground">The alert service failed for the requested window. Retry to reload it.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -191,7 +191,6 @@ export function AlertsDashboard() {
               variant="outline"
               disabled={selectedIds.length === 0}
               onClick={() => runBulk((ids) => silence(ids, 4), selectedIds, `Silenced ${selectedIds.length} ${selectedIds.length === 1 ? "alert" : "alerts"} for 4h.`)}
-              className="h-10 gap-1.5 rounded-lg px-3 text-sm"
             >
               <BellOff size={15} aria-hidden="true" />Silence
             </Button>
@@ -199,7 +198,7 @@ export function AlertsDashboard() {
               label="Export alerts"
               submenuAlign="left"
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+                <Button variant="outline" >
                   <FileDown size={15} aria-hidden="true" />Export
                 </Button>
               }
@@ -305,12 +304,7 @@ export function AlertsDashboard() {
                   </span>
                   <p className="font-display text-[0.9375rem] font-bold text-foreground">No alerts match your filters</p>
                   <p className="text-[0.8125rem] text-muted-foreground">Try widening the time range or clearing filters.</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setFilters(DEFAULT_ALERTS_FILTERS)}
-                    className="mt-1 h-9 rounded-lg px-3 text-[0.8125rem]"
-                  >
+                  <Button variant="outline" onClick={() => setFilters(DEFAULT_ALERTS_FILTERS)} className="mt-1">
                     Clear filters
                   </Button>
                 </div>

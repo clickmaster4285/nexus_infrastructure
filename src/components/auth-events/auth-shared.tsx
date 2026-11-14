@@ -143,7 +143,7 @@ export function AuthCardMenu({ label, onExport, items }: { label: string; onExpo
       label={`${label} actions`}
       align="end"
       trigger={(
-        <button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${label} actions`}>
+        <button type="button" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${label} actions`}>
           <MoreVertical size={16} />
         </button>
       )}

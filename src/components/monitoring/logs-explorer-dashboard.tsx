@@ -733,15 +733,15 @@ export function LogsExplorerDashboard() {
         onRefresh={reload}
         actions={
           <div className="flex shrink-0 items-center gap-2">
-            <Button variant="outline" onClick={saveCurrentSearch} className="h-10 gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm"><Save size={15} />Save Search</Button>
+            <Button variant="outline" onClick={saveCurrentSearch} className="whitespace-nowrap"><Save size={15} />Save Search</Button>
             <details className="relative">
               <summary aria-label="Export logs" className="inline-flex h-10 cursor-pointer list-none items-center gap-1.5 whitespace-nowrap rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent [&::-webkit-details-marker]:hidden"><Download size={15} />Export Logs<ChevronDown size={14} className="text-muted-foreground" /></summary>
               <div className="absolute right-0 z-30 mt-2 w-48 rounded-lg border border-border bg-popover p-1.5 shadow-lg">
-                <button type="button" onClick={() => exportFiltered("csv")} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm text-foreground hover:bg-accent"><FileText size={14} className="text-muted-foreground" />Export CSV</button>
-                <button type="button" onClick={() => exportFiltered("json")} className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm text-foreground hover:bg-accent"><FileJson size={14} className="text-muted-foreground" />Export JSON</button>
+                <button type="button" onClick={() => exportFiltered("csv")} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-foreground hover:bg-accent"><FileText size={14} className="text-muted-foreground" />Export CSV</button>
+                <button type="button" onClick={() => exportFiltered("json")} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-foreground hover:bg-accent"><FileJson size={14} className="text-muted-foreground" />Export JSON</button>
               </div>
             </details>
-            <Button onClick={startNewQuery} className="h-10 gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm"><Plus size={15} />New Query</Button>
+            <Button onClick={startNewQuery} className="whitespace-nowrap"><Plus size={15} />New Query</Button>
           </div>
         }
       />
@@ -759,7 +759,7 @@ export function LogsExplorerDashboard() {
             <CircleAlert size={28} className="text-rose-500" aria-hidden="true" />
             <h2 className="font-display text-base font-bold text-foreground">Logs could not be loaded</h2>
             <p className="max-w-md text-sm text-muted-foreground">The mock log stream failed before delivering any entries. Retry to fetch the latest logs.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       ) : (<>
@@ -778,7 +778,7 @@ export function LogsExplorerDashboard() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex h-8 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Trend range">
                 {TREND_RANGE_ORDER.map((key) => (
-                  <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
+                  <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
                 ))}
               </div>
               <span className="hidden text-xs text-muted-foreground xl:block">Drag to select a window · click a bar to isolate it</span>
@@ -920,8 +920,8 @@ export function LogsExplorerDashboard() {
             )}
 
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <Button variant="outline" onClick={() => setAdvancedOpen((value) => !value)} aria-expanded={advancedOpen} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><SlidersHorizontal size={14} />{advancedOpen ? "Hide Advanced" : "Advanced Filters"}<ChevronDown size={13} className={cn("transition-transform", advancedOpen && "rotate-180")} aria-hidden="true" /></Button>
-              <Button onClick={applyDraftAndRecent} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><Search size={15} />Search Logs</Button>
+              <Button variant="outline" onClick={() => setAdvancedOpen((value) => !value)} aria-expanded={advancedOpen} ><SlidersHorizontal size={14} />{advancedOpen ? "Hide Advanced" : "Advanced Filters"}<ChevronDown size={13} className={cn("transition-transform", advancedOpen && "rotate-180")} aria-hidden="true" /></Button>
+              <Button onClick={applyDraftAndRecent} ><Search size={15} />Search Logs</Button>
             </div>
 
             <div className="mt-auto border-t border-border pt-3">
@@ -967,12 +967,12 @@ export function LogsExplorerDashboard() {
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex h-8 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Timestamp format">
               {([{ key: "UTC", value: true }, { key: "Local", value: false }] as const).map((mode) => (
-                <button key={mode.key} type="button" aria-pressed={utcMode === mode.value} onClick={() => setUtcMode(mode.value)} className={cn("h-7 rounded-md px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utcMode === mode.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{mode.key}</button>
+                <button key={mode.key} type="button" aria-pressed={utcMode === mode.value} onClick={() => setUtcMode(mode.value)} className={cn("h-7 rounded-lg px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utcMode === mode.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{mode.key}</button>
               ))}
             </div>
             <div className="flex h-8 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Row density">
               {(["comfortable", "compact"] as const).map((option) => (
-                <button key={option} type="button" aria-pressed={density === option} onClick={() => setDensity(option)} className={cn("h-7 rounded-md px-2.5 text-xs font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", density === option ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{option}</button>
+                <button key={option} type="button" aria-pressed={density === option} onClick={() => setDensity(option)} className={cn("h-7 rounded-lg px-2.5 text-xs font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", density === option ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{option}</button>
               ))}
             </div>
             <button type="button" aria-pressed={wrapMessage} aria-label="Wrap message" title="Wrap message" onClick={() => setWrapMessage((value) => !value)} className={cn("grid h-8 w-8 place-items-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", wrapMessage ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}><WrapText size={14} aria-hidden="true" /></button>
@@ -1057,8 +1057,8 @@ export function LogsExplorerDashboard() {
                     )}
                     <td className={cn(rowPad, cellText)}>
                       <span className="flex items-center justify-end gap-1">
-                        <button type="button" onClick={() => copyText(JSON.stringify(log.raw, null, 2), "Log JSON")} aria-label="Copy raw JSON" title="Copy raw JSON" className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"><Copy size={13} aria-hidden="true" /></button>
-                        <button type="button" onClick={() => setExpandedId((current) => (current === log.id ? null : log.id))} aria-label={expanded ? "Collapse log" : "Expand log"} aria-expanded={expanded} title={expanded ? "Collapse" : "Expand"} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"><ChevronDown size={13} aria-hidden="true" className={cn("transition-transform", expanded && "rotate-180")} /></button>
+                        <button type="button" onClick={() => copyText(JSON.stringify(log.raw, null, 2), "Log JSON")} aria-label="Copy raw JSON" title="Copy raw JSON" className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"><Copy size={13} aria-hidden="true" /></button>
+                        <button type="button" onClick={() => setExpandedId((current) => (current === log.id ? null : log.id))} aria-label={expanded ? "Collapse log" : "Expand log"} aria-expanded={expanded} title={expanded ? "Collapse" : "Expand"} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"><ChevronDown size={13} aria-hidden="true" className={cn("transition-transform", expanded && "rotate-180")} /></button>
                       </span>
                     </td>
                   </tr>
@@ -1069,14 +1069,14 @@ export function LogsExplorerDashboard() {
                           <div className="min-w-0">
                             <div className="mb-1.5 flex items-center justify-between gap-2">
                               <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Raw JSON</span>
-                              <button type="button" onClick={() => copyText(JSON.stringify(log.raw, null, 2), "Log JSON")} className="inline-flex h-7 items-center gap-1 rounded-md border border-border bg-card px-2 text-xs text-muted-foreground transition-colors hover:text-foreground"><Copy size={11} aria-hidden="true" />Copy</button>
+                              <button type="button" onClick={() => copyText(JSON.stringify(log.raw, null, 2), "Log JSON")} className="inline-flex h-7 items-center gap-1 rounded-lg border border-border bg-card px-2 text-xs text-muted-foreground transition-colors hover:text-foreground"><Copy size={11} aria-hidden="true" />Copy</button>
                             </div>
                             <pre className="max-h-44 overflow-auto whitespace-pre-wrap break-all rounded-md border border-border bg-muted/40 p-2 font-mono text-xs leading-relaxed text-foreground">{JSON.stringify(log.raw, null, 2)}</pre>
                           </div>
                           <div className="min-w-0 space-y-2">
                             <dl className="grid grid-cols-[92px_minmax(0,1fr)] gap-y-1.5 text-xs">
                               <dt className="text-muted-foreground">Trace ID</dt>
-                              <dd className="flex min-w-0 items-center gap-1"><code className="truncate font-mono text-foreground" title={log.traceId}>{log.traceId}</code><button type="button" onClick={() => copyText(log.traceId, "Trace ID")} aria-label="Copy trace ID" className="grid h-6 w-6 shrink-0 place-items-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={11} aria-hidden="true" /></button></dd>
+                              <dd className="flex min-w-0 items-center gap-1"><code className="truncate font-mono text-foreground" title={log.traceId}>{log.traceId}</code><button type="button" onClick={() => copyText(log.traceId, "Trace ID")} aria-label="Copy trace ID" className="grid h-6 w-6 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={11} aria-hidden="true" /></button></dd>
                               <dt className="text-muted-foreground">Source</dt>
                               <dd className="text-foreground">{log.source}</dd>
                               <dt className="text-muted-foreground">Environment</dt>
@@ -1087,8 +1087,8 @@ export function LogsExplorerDashboard() {
                               <dd className="font-mono text-foreground">{fullTimestamp(log.epochMs, true)}</dd>
                             </dl>
                             <div className="flex flex-wrap gap-2 pt-1">
-                              <Button variant="outline" size="sm" onClick={() => applyQuery(log.traceId, "Showing logs for this trace.")} className="h-8 rounded-lg px-2.5 text-xs"><Rows3 size={12} />Show surrounding logs</Button>
-                              <Button size="sm" onClick={() => notify("Trace opened in APM (mock).")} className="h-8 rounded-lg px-2.5 text-xs">Open trace<ArrowRight size={12} /></Button>
+                              <Button variant="outline" onClick={() => applyQuery(log.traceId, "Showing logs for this trace.")} ><Rows3 size={12} />Show surrounding logs</Button>
+                              <Button onClick={() => notify("Trace opened in APM (mock).")} >Open trace<ArrowRight size={12} /></Button>
                             </div>
                           </div>
                         </div>
@@ -1104,7 +1104,7 @@ export function LogsExplorerDashboard() {
                       <SearchX size={26} className="text-muted-foreground" aria-hidden="true" />
                       <p className="text-sm font-semibold text-foreground">No logs match your filters</p>
                       <p className="text-xs text-muted-foreground">Try removing a filter or widening the time range.</p>
-                      <Button variant="outline" size="sm" onClick={clearAllFilters} className="mt-1 h-9 rounded-lg px-3 text-xs">Clear filters</Button>
+                      <Button variant="outline" onClick={clearAllFilters} className="mt-1">Clear filters</Button>
                     </div>
                   </td>
                 </tr>

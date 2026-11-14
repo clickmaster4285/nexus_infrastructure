@@ -118,7 +118,7 @@ function SelectedChips({ values, onRemove, mono = false }: { values: string[]; o
       {values.map((value) => (
         <span key={value} className={cn("inline-flex items-center gap-1 rounded-md border border-border bg-muted py-0.5 pl-1.5 pr-1 text-[0.75rem] text-foreground", mono && "font-mono")}>
           {value}
-          <button type="button" onClick={() => onRemove(value)} aria-label={`Remove ${value}`} className="rounded p-0.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <button type="button" onClick={() => onRemove(value)} aria-label={`Remove ${value}`} className="rounded-lg p-0.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X size={11} aria-hidden="true" />
           </button>
         </span>
@@ -413,7 +413,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><AlertTriangle size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Couldn’t load the form data</p>
             <p className="text-sm text-muted-foreground">Retry to reach the maintenance service again.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -500,7 +500,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <Link href={editing ? `/maintenance-windows/${editing.id}` : "/maintenance-windows"} className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Cancel</Link>
-            <Button onClick={() => handleSubmit()} disabled={submitting} className="h-10 gap-1.5 rounded-lg px-4 text-sm font-semibold">
+            <Button onClick={() => handleSubmit()} disabled={submitting} >
               {submitting ? <><RotateCcw size={15} className="animate-spin" aria-hidden="true" />Saving…</> : <><CalendarClock size={15} aria-hidden="true" />{submitLabel}</>}
             </Button>
           </div>
@@ -773,7 +773,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 <div className="flex items-center gap-2 text-[0.75rem]">
                   <span className="tabular-nums text-muted-foreground">{excludedFromRules} of {matchedRules.length} rules selected</span>
                   {matchedRules.length > 0 && (
-                    <button type="button" className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => setMutedRuleIds((current) => current.length === matchedRules.length ? [] : matchedRules.map((rule) => rule.id))}>
+                    <button type="button" className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg" onClick={() => setMutedRuleIds((current) => current.length === matchedRules.length ? [] : matchedRules.map((rule) => rule.id))}>
                       {excludedFromRules === matchedRules.length ? "Clear all" : "Select all"}
                     </button>
                   )}
@@ -1016,8 +1016,8 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setConfirmSubmit(null)}>Back</Button>
-            <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={() => { setConfirmSubmit(null); persist(); }}>Start now and mute {excludedFromRules}</Button>
+            <Button variant="outline"  onClick={() => setConfirmSubmit(null)}>Back</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={() => { setConfirmSubmit(null); persist(); }}>Start now and mute {excludedFromRules}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -1032,8 +1032,8 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setConfirmSubmit(null)}>Fix scope first</Button>
-            <Button className="h-10 rounded-lg px-4 text-sm font-semibold" onClick={() => { setConfirmSubmit(null); persist(); }}>Schedule anyway</Button>
+            <Button variant="outline"  onClick={() => setConfirmSubmit(null)}>Fix scope first</Button>
+            <Button  onClick={() => { setConfirmSubmit(null); persist(); }}>Schedule anyway</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

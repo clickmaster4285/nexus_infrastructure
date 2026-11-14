@@ -141,10 +141,10 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button size="sm" onClick={() => onEdit(rule)} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+            <Button onClick={() => onEdit(rule)} >
               <PenLine size={13} aria-hidden="true" />Edit
             </Button>
-            <Button size="sm" variant="outline" onClick={() => onToggle(rule)} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+            <Button variant="outline" onClick={() => onToggle(rule)} >
               {rule.status === "Enabled" ? <ShieldOff size={13} aria-hidden="true" /> : <CheckCircle2 size={13} aria-hidden="true" />}
               {rule.status === "Enabled" ? "Disable" : "Enable"}
             </Button>

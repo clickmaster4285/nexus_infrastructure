@@ -71,7 +71,7 @@ export function RestorePointsTable({ points, onRestore, density }: RestorePoints
                 </td>
                 <td className="px-3 py-1.5 align-middle"><VerifiedBadge verified={point.verified} /></td>
                 <td className="px-3 py-1.5 text-right align-middle">
-                  <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]" onClick={() => onRestore(point.id)}>
+                  <Button variant="outline"  onClick={() => onRestore(point.id)}>
                     <Archive size={12} aria-hidden="true" />Restore
                   </Button>
                 </td>
@@ -96,7 +96,7 @@ export function RestorePointsTable({ points, onRestore, density }: RestorePoints
               <p className="mt-0.5 truncate text-[0.8125rem] font-semibold text-foreground">{point.jobName}</p>
               <p className="mt-0.5 text-xs tabular-nums text-muted-foreground">{point.host} &middot; {timeAgo(point.epochMs)} &middot; {formatBytes(point.sizeBytes)}{point.durationMs ? ` &middot; ${formatDuration(point.durationMs)}` : ""}</p>
             </div>
-            <Button variant="outline" className="h-8 shrink-0 rounded-lg px-2.5 text-[0.75rem]" onClick={() => onRestore(point.id)}>Restore</Button>
+            <Button variant="outline" className="shrink-0" onClick={() => onRestore(point.id)}>Restore</Button>
           </div>
         ))}
         {pageItems.length === 0 && <p className="px-4 py-8 text-center text-sm text-muted-foreground">No restore points match your filters.</p>}

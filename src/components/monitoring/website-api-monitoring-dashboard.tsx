@@ -1047,13 +1047,11 @@ function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
                 <SeverityDot severity={incident.severity} />
               </div>
               <div className="flex items-center gap-1.5 pt-0.5">
-                <Button size="sm" onClick={() => onView(incident)} className="h-[1.875rem] gap-1 px-2.5 text-[0.75rem]">View</Button>
+                <Button onClick={() => onView(incident)} >View</Button>
                 <Button
-                  size="sm"
                   variant="outline"
                   disabled={isAcknowledged}
                   onClick={() => onAcknowledge(incident.id)}
-                  className="h-[1.875rem] gap-1 px-2.5 text-[0.75rem]"
                 >
                   {isAcknowledged ? "Acknowledged" : "Acknowledge"}
                 </Button>
@@ -1237,11 +1235,11 @@ export function WebsiteApiMonitoringDashboard() {
           <MoreVertical size={15} />
         </summary>
         <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
-          <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button>
-          <button onClick={() => notify("Chart image export is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button>
-          <button onClick={() => notify("Fullscreen is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button>
+          <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button>
+          <button onClick={() => notify("Chart image export is a demo action.")} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button>
+          <button onClick={() => notify("Fullscreen is a demo action.")} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button>
           <div className="my-1 border-t border-border" />
-          <button onClick={() => { setStatus("error"); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><TriangleAlert size={14} />Simulate error</button>
+          <button onClick={() => { setStatus("error"); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><TriangleAlert size={14} />Simulate error</button>
         </div>
       </details>
     </div>
@@ -1268,8 +1266,8 @@ export function WebsiteApiMonitoringDashboard() {
         onRefresh={refresh}
         actions={
           <div className="flex shrink-0 items-center gap-2">
-            <Button onClick={() => notify("Add Monitor is a mockup action.")} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Add Monitor</Button>
-            <Button variant="outline" onClick={exportCsv} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Download size={16} />Export Report</Button>
+            <Button onClick={() => notify("Add Monitor is a mockup action.")} ><Plus size={16} />Add Monitor</Button>
+            <Button variant="outline" onClick={exportCsv} ><Download size={16} />Export Report</Button>
           </div>
         }
       />
@@ -1280,7 +1278,7 @@ export function WebsiteApiMonitoringDashboard() {
             <b className="font-semibold">{openIncidents.length} active incident{openIncidents.length === 1 ? "" : "s"}:</b>{" "}
             {incidentSummary}
           </p>
-          <Button size="sm" onClick={() => { setStatusFilter("All"); setKindFilter("All"); setSearch(""); setPage(1); notify("Showing all incidents."); }} className="h-8 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-3 text-[0.75rem]">
+          <Button onClick={() => { setStatusFilter("All"); setKindFilter("All"); setSearch(""); setPage(1); notify("Showing all incidents."); }} className="shrink-0 whitespace-nowrap">
             View details
           </Button>
         </div>
@@ -1306,7 +1304,7 @@ export function WebsiteApiMonitoringDashboard() {
           </span>
           <p className="text-[1rem] font-semibold text-foreground">Could not load monitoring data</p>
           <p className="max-w-sm text-[0.75rem] text-muted-foreground">Something went wrong while fetching the latest monitor results. Please try again.</p>
-          <Button onClick={refresh} className="h-9 gap-1.5 px-3 text-[0.75rem]"><RefreshCw size={15} />Retry</Button>
+          <Button onClick={refresh} ><RefreshCw size={15} />Retry</Button>
         </div>
       ) : (
         <>
@@ -1325,7 +1323,7 @@ export function WebsiteApiMonitoringDashboard() {
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Globe size={20} /></span>
                   <p className="text-[0.875rem] font-semibold text-foreground">No data for this range</p>
                   <p className="text-[0.75rem] text-muted-foreground">Pick a shorter range to see the collected samples.</p>
-                  <Button variant="outline" size="sm" onClick={() => setRange("24H")} className="mt-1 h-8 gap-1.5 px-2.5 text-[0.75rem]">Show last 24H</Button>
+                  <Button variant="outline" onClick={() => setRange("24H")} className="mt-1">Show last 24H</Button>
                 </div>
               )}
             </Panel>
@@ -1400,7 +1398,7 @@ export function WebsiteApiMonitoringDashboard() {
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Search size={20} /></span>
                   <p className="text-[0.875rem] font-semibold text-foreground">No monitors match your filters</p>
                   <p className="text-[0.75rem] text-muted-foreground">Try a different search term or reset the filters.</p>
-                  <Button variant="outline" size="sm" onClick={clearFilters} className="mt-1 h-8 gap-1.5 px-2.5 text-[0.75rem]"><XCircle size={13} />Clear filters</Button>
+                  <Button variant="outline" onClick={clearFilters} className="mt-1"><XCircle size={13} />Clear filters</Button>
                 </div>
               ) : (
                 <>
@@ -1469,9 +1467,9 @@ export function WebsiteApiMonitoringDashboard() {
                                     <MoreVertical size={15} />
                                   </summary>
                                   <div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg">
-                                    <button onClick={() => notify(`Check queued for ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Play size={13} />Run check now</button>
-                                    <button onClick={() => notify(`${monitor.endpoint} paused.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pause size={13} />Pause</button>
-                                    <button onClick={() => notify(`Editing ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pencil size={13} />Edit</button>
+                                    <button onClick={() => notify(`Check queued for ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Play size={13} />Run check now</button>
+                                    <button onClick={() => notify(`${monitor.endpoint} paused.`)} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pause size={13} />Pause</button>
+                                    <button onClick={() => notify(`Editing ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pencil size={13} />Edit</button>
                                   </div>
                                 </details>
                               </td>

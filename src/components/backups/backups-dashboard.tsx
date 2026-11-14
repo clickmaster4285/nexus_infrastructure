@@ -480,7 +480,7 @@ export function BackupsDashboard() {
         onRefresh={() => { reload(); setLastRefreshedAt(Date.now()); }}
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm" onClick={() => openTestRestore(null, null)}>
+            <Button variant="outline"  onClick={() => openTestRestore(null, null)}>
               <ArchiveRestore size={15} aria-hidden="true" />Test Restore
             </Button>
             <AlertMenu
@@ -488,7 +488,7 @@ export function BackupsDashboard() {
               align="end"
               width={160}
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+                <Button variant="outline" >
                   <FileDown size={15} aria-hidden="true" />Export<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                 </Button>
               }
@@ -499,7 +499,7 @@ export function BackupsDashboard() {
               align="end"
               width={220}
               trigger={
-                <Button className="h-10 gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90">
+                <Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90">
                   <ArchiveRestore size={15} aria-hidden="true" />Run Backup<ChevronDown size={13} aria-hidden="true" className="text-primary-foreground/80" />
                 </Button>
               }
@@ -515,7 +515,7 @@ export function BackupsDashboard() {
             <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><HardDriveDownload size={20} aria-hidden="true" /></span>
             <h2 className="font-display text-base font-bold text-foreground">Couldn&rsquo;t load backups</h2>
             <p className="text-sm text-muted-foreground">The backup store did not respond. Check the pipeline and try again.</p>
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-4 text-sm" onClick={reload}>
+            <Button variant="outline"  onClick={reload}>
               <RotateCcw size={15} aria-hidden="true" />Retry
             </Button>
           </div>
@@ -670,8 +670,8 @@ export function BackupsDashboard() {
             </label>
           </div>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setRunDialogOpen(false)}>Cancel</Button>
-            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => {
+            <Button variant="outline"  onClick={() => setRunDialogOpen(false)}>Cancel</Button>
+            <Button  onClick={() => {
               if (runDialogJobId) {
                 handleRunNow(runDialogJobId);
                 setRunDialogOpen(false);
@@ -726,8 +726,8 @@ export function BackupsDashboard() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setDeleteIds(null)}>Keep jobs</Button>
-            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={confirmDelete}>Delete</Button>
+            <Button variant="outline"  onClick={() => setDeleteIds(null)}>Keep jobs</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={confirmDelete}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

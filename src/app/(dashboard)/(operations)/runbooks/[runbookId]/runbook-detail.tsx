@@ -94,7 +94,7 @@ function SectionSteps({ title, steps, anchorPrefix, collapsed, onToggleAll, onTo
     <section aria-label={title} className="rounded-xl border border-border bg-card p-4">
       <div className="mb-2 flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-foreground">{title} <span className="ml-1 text-xs font-semibold tabular-nums text-muted-foreground">{steps.length} steps</span></h2>
-        <button type="button" onClick={() => onToggleAll(!collapsed)} className="inline-flex items-center gap-1 rounded text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <button type="button" onClick={() => onToggleAll(!collapsed)} className="inline-flex items-center gap-1 rounded-lg text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           {collapsed ? <ChevronsUpDown size={13} aria-hidden /> : <ChevronsDownUp size={13} aria-hidden />}{collapsed ? "Expand all" : "Collapse all"}
         </button>
       </div>
@@ -140,7 +140,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists, or it was archived out of the mock store.</p>
-          <Button variant="outline" className="mt-4 h-10 rounded-lg px-4 text-sm" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -171,12 +171,12 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><RunbookStatusBadge status={runbook.status} /><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-xs font-semibold text-muted-foreground">{runbook.category}</span></span>}
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" asChild className="h-10 gap-1.5 rounded-lg px-3 text-sm"><Link href="/runbooks"><ChevronLeft size={15} aria-hidden />Back to Runbooks</Link></Button>
+            <Button variant="outline" asChild ><Link href="/runbooks"><ChevronLeft size={15} aria-hidden />Back to Runbooks</Link></Button>
             <AlertMenu
               label="Runbook actions"
               align="end"
               width={210}
-              trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm"><MoreVertical size={15} aria-hidden />Actions</Button>}
+              trigger={<Button variant="outline" ><MoreVertical size={15} aria-hidden />Actions</Button>}
               items={[
                 { key: "duplicate", label: "Duplicate", onSelect: () => { const copy = duplicateRunbook(runbook.id); showToast(copy ? `Duplicated as ${copy.id}.` : "Duplicate failed."); } },
                 { key: "review", label: "Mark reviewed", onSelect: () => { markRunbookReviewed(runbook.id); forceRender((value) => value + 1); showToast(`${runbook.id} marked as reviewed.`); } },
@@ -184,8 +184,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                 { key: "copy", label: "Copy link", onSelect: copyLink },
               ]}
             />
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm" asChild><Link href={`/runbooks/${runbook.id}?mode=edit`}><Pencil size={15} aria-hidden />Edit</Link></Button>
-            <Button className="h-10 gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90" asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={15} aria-hidden />Run Runbook</Link></Button>
+            <Button variant="outline"  asChild><Link href={`/runbooks/${runbook.id}?mode=edit`}><Pencil size={15} aria-hidden />Edit</Link></Button>
+            <Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90" asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={15} aria-hidden />Run Runbook</Link></Button>
           </div>
         }
       />
@@ -194,8 +194,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>Runbook {index + 1} of {allRunbooks.length}</span>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-xs" disabled={!prevRunbook} onClick={() => prevRunbook && router.push(`/runbooks/${prevRunbook.id}`)} aria-label="Previous runbook"><ChevronLeft size={14} aria-hidden />Prev</Button>
-          <Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-xs" disabled={!nextRunbook} onClick={() => nextRunbook && router.push(`/runbooks/${nextRunbook.id}`)} aria-label="Next runbook">Next<ChevronRight size={14} aria-hidden /></Button>
+          <Button variant="ghost"  disabled={!prevRunbook} onClick={() => prevRunbook && router.push(`/runbooks/${prevRunbook.id}`)} aria-label="Previous runbook"><ChevronLeft size={14} aria-hidden />Prev</Button>
+          <Button variant="ghost"  disabled={!nextRunbook} onClick={() => nextRunbook && router.push(`/runbooks/${nextRunbook.id}`)} aria-label="Next runbook">Next<ChevronRight size={14} aria-hidden /></Button>
         </div>
       </div>
 
@@ -235,7 +235,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
           <section aria-label="Version history" className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between gap-2">
               <h2 className="flex items-center gap-1.5 text-sm font-bold text-foreground"><History size={14} aria-hidden />Version history</h2>
-              <button type="button" onClick={() => setCollapsed((current) => ({ ...current, history: !current.history }))} className="inline-flex items-center gap-1 rounded text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronDownIcon size={13} aria-hidden className={cn("transition-transform", collapsed.history && "-rotate-90")} />{collapsed.history ? "Show" : "Hide"}</button>
+              <button type="button" onClick={() => setCollapsed((current) => ({ ...current, history: !current.history }))} className="inline-flex items-center gap-1 rounded-lg text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronDownIcon size={13} aria-hidden className={cn("transition-transform", collapsed.history && "-rotate-90")} />{collapsed.history ? "Show" : "Hide"}</button>
             </div>
             {!collapsed.history && (
               <ol className="mt-2 space-y-0 border-l border-border pl-4">
@@ -319,14 +319,14 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
             <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{runbook.helpfulCount} helpful · {runbook.notHelpfulCount} not helpful{helpfulPct != null ? ` · ${helpfulPct}% positive` : ""}</p>
             {feedback === null ? (
               <div className="mt-2 flex gap-2">
-                <Button variant="outline" className="h-9 flex-1 gap-1.5 rounded-lg text-[0.8125rem]" onClick={() => { recordHelpful(runbook.id, true); setFeedback("yes"); forceRender((value) => value + 1); showToast("Thanks — feedback recorded."); }}><ThumbsUp size={14} aria-hidden />Yes</Button>
-                <Button variant="outline" className="h-9 flex-1 gap-1.5 rounded-lg text-[0.8125rem]" onClick={() => { recordHelpful(runbook.id, false); setFeedback("no"); forceRender((value) => value + 1); showToast("Feedback noted. Tell us what was missing."); }}><ThumbsDown size={14} aria-hidden />No</Button>
+                <Button variant="outline" className="flex-1" onClick={() => { recordHelpful(runbook.id, true); setFeedback("yes"); forceRender((value) => value + 1); showToast("Thanks — feedback recorded."); }}><ThumbsUp size={14} aria-hidden />Yes</Button>
+                <Button variant="outline" className="flex-1" onClick={() => { recordHelpful(runbook.id, false); setFeedback("no"); forceRender((value) => value + 1); showToast("Feedback noted. Tell us what was missing."); }}><ThumbsDown size={14} aria-hidden />No</Button>
               </div>
             ) : (
               <div className="mt-2">
                 <label htmlFor="feedback-note" className="text-[0.6875rem] font-semibold text-muted-foreground">What could be better?</label>
                 <textarea id="feedback-note" value={feedbackNote} onChange={(event) => setFeedbackNote(event.target.value)} rows={2} placeholder="Missing prerequisite, wrong command, unclear step..." className="mt-1 w-full rounded-lg border border-border bg-card p-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                <Button variant="outline" className="mt-1.5 h-8 rounded-lg px-3 text-xs" onClick={() => { setFeedbackNote(""); setFeedback(null); showToast("Thanks — feedback sent to the runbook owner."); }}>Send</Button>
+                <Button variant="outline" className="mt-1.5" onClick={() => { setFeedbackNote(""); setFeedback(null); showToast("Thanks — feedback sent to the runbook owner."); }}>Send</Button>
               </div>
             )}
           </section>
@@ -360,7 +360,7 @@ function MoreVerticalMenu({ onToast }: { onToast: (message: string) => void }) {
       label="Linked options"
       align="end"
       width={190}
-      trigger={<button type="button" aria-label="Linked options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>}
+      trigger={<button type="button" aria-label="Linked options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>}
       items={[{ key: "refresh", label: "Refresh linked data", onSelect: () => onToast("Linked data refreshed.") }]}
     />
   );

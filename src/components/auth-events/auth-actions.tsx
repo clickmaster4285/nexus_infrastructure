@@ -362,9 +362,9 @@ export function DetectionDialog({ detection, open, onOpenChange, onBlockIp, onLo
           <p className="text-xs text-muted-foreground">Respond inline or open an event for full context.</p>
           <div className="flex flex-wrap items-center gap-2">
             {isIp
-              ? <Button variant="outline" className="h-9" onClick={() => onBlockIp(detection.subject)}>Block IP</Button>
-              : <Button variant="outline" className="h-9" onClick={() => onLockUser(detection.subject)}>Lock user</Button>}
-            {detection.status === "Open" && <Button className="h-9" onClick={() => onInvestigate(detection.id)}>Investigate</Button>}
+              ? <Button variant="outline"  onClick={() => onBlockIp(detection.subject)}>Block IP</Button>
+              : <Button variant="outline"  onClick={() => onLockUser(detection.subject)}>Lock user</Button>}
+            {detection.status === "Open" && <Button  onClick={() => onInvestigate(detection.id)}>Investigate</Button>}
           </div>
         </DialogFooter>
       </DialogContent>
@@ -384,8 +384,8 @@ export function AuthToast({ toast, onUndo, onDismiss }: { toast: AuthToastState 
     <div role="status" className="fixed bottom-4 right-4 z-[1300] flex max-w-md items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-lg">
       <span className="min-w-0">{toast.message}</span>
       {toast.href && <a href={toast.href} className="shrink-0 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">View →</a>}
-      {toast.undo && <button type="button" className="shrink-0 rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { toast.undo?.(); onUndo?.(toast); onDismiss(); }}>Undo</button>}
-      <button type="button" onClick={onDismiss} aria-label="Dismiss notification" className="shrink-0 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"><X size={14} aria-hidden="true" /></button>
+      {toast.undo && <button type="button" className="shrink-0 rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { toast.undo?.(); onUndo?.(toast); onDismiss(); }}>Undo</button>}
+      <button type="button" onClick={onDismiss} aria-label="Dismiss notification" className="shrink-0 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"><X size={14} aria-hidden="true" /></button>
     </div>
   );
 }

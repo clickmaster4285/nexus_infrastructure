@@ -415,9 +415,9 @@ export function MetricsExplorerDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Metrics Explorer"]} showRefresh={false} variant="detail" />
       <PageHeading title="Metrics Explorer" description="Explore, visualize, and analyze metrics from across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast("View saved.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Save size={15} />Save View</Button>
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Create Metric is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Create Metric</Button>
+          <Button variant="outline" onClick={() => toast("View saved.")} className="whitespace-nowrap"><Save size={15} />Save View</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Create Metric is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Create Metric</Button>
         </div>
       </PageHeading>
 
@@ -436,15 +436,15 @@ export function MetricsExplorerDashboard() {
         <Select value={tag} onValueChange={setTag}><SelectTrigger aria-label="Tag" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["All", "Environment", "Team", "Region"].map((item) => <SelectItem key={item} value={item}>Tag: {item}</SelectItem>)}</SelectContent></Select>
         <Select value={aggregation} onValueChange={setAggregation}><SelectTrigger aria-label="Aggregation" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["Auto", "Average", "Sum", "Min", "Max", "Count"].map((item) => <SelectItem key={item} value={item}>Agg: {item}</SelectItem>)}</SelectContent></Select>
         <Select value={interval} onValueChange={setInterval}><SelectTrigger aria-label="Interval" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["Auto (1m)", "10 seconds", "1 minute", "5 minutes", "15 minutes", "1 hour"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
-        <Button variant="outline" size="sm" onClick={clearFilters} className="h-9 whitespace-nowrap px-2 text-[0.75rem]"><X size={11} />Clear</Button>
-        <Button size="sm" onClick={applyFilters} className="h-9 px-3 text-[0.75rem]">Apply</Button>
+        <Button variant="outline" onClick={clearFilters} className="whitespace-nowrap"><X size={11} />Clear</Button>
+        <Button onClick={applyFilters} >Apply</Button>
       </section>
 
       <section aria-label="Metric visualization" className="grid items-stretch gap-3 lg:grid-cols-[1.85fr_1fr]">
         <Panel title="Metric Explorer" className="min-h-[43.75rem] min-w-0 p-4" showOptions={false} action={<div className="flex flex-wrap items-center justify-end gap-1">
-          <div className="flex items-center rounded-md border border-border p-0.5">{(["Line", "Area", "Stacked"] as const).map((chartMode) => <button key={chartMode} onClick={() => setMode(chartMode)} aria-pressed={mode === chartMode} className={cn("rounded px-2 py-1 text-[0.6875rem] font-semibold transition-colors", mode === chartMode ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{chartMode}</button>)}</div>
-          <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5" aria-label="Chart time range">{["1h", "6h", "24h", "7d", "30d"].map((range) => <button key={range} onClick={() => setQuickRange(range)} aria-pressed={chartRange === range} className={cn("rounded px-1.5 py-1 text-[0.625rem] font-semibold", chartRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{range}</button>)}</div>
-          <details className="relative"><summary aria-label="Metric chart actions" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg"><button onClick={exportChartPng} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button><button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button><button onClick={() => chartPanelRef.current?.requestFullscreen?.()} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button></div></details>
+          <div className="flex items-center rounded-md border border-border p-0.5">{(["Line", "Area", "Stacked"] as const).map((chartMode) => <button key={chartMode} onClick={() => setMode(chartMode)} aria-pressed={mode === chartMode} className={cn("rounded-lg px-2 py-1 text-[0.6875rem] font-semibold transition-colors", mode === chartMode ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{chartMode}</button>)}</div>
+          <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5" aria-label="Chart time range">{["1h", "6h", "24h", "7d", "30d"].map((range) => <button key={range} onClick={() => setQuickRange(range)} aria-pressed={chartRange === range} className={cn("rounded-lg px-1.5 py-1 text-[0.625rem] font-semibold", chartRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{range}</button>)}</div>
+          <details className="relative"><summary aria-label="Metric chart actions" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg"><button onClick={exportChartPng} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button><button onClick={exportCsv} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button><button onClick={() => chartPanelRef.current?.requestFullscreen?.()} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button></div></details>
         </div>}>
           <div ref={chartPanelRef} className="flex min-h-0 flex-1 flex-col gap-0 bg-card">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
@@ -512,8 +512,8 @@ export function MetricsExplorerDashboard() {
                     <SelectContent>{ROWS_PER_PAGE_OPTIONS.map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
                   </Select>
                 </label>
-                {Array.from({ length: Math.min(5, Math.max(1, Math.ceil(visibleMetrics.length / rowsPerPage))) }, (_, index) => index + 1).map((value) => <button key={value} onClick={() => setPage(value)} className={cn("rounded px-1.5 py-1", page === value ? "bg-primary text-primary-foreground" : "hover:bg-accent")}>{value}</button>)}
-                <span>…</span><button onClick={() => setPage(Math.max(1, Math.ceil(visibleMetrics.length / rowsPerPage)))} className="rounded px-1.5 py-1 hover:bg-accent">492</button>
+                {Array.from({ length: Math.min(5, Math.max(1, Math.ceil(visibleMetrics.length / rowsPerPage))) }, (_, index) => index + 1).map((value) => <button key={value} onClick={() => setPage(value)} className={cn("rounded-lg px-1.5 py-1", page === value ? "bg-primary text-primary-foreground" : "hover:bg-accent")}>{value}</button>)}
+                <span>…</span><button onClick={() => setPage(Math.max(1, Math.ceil(visibleMetrics.length / rowsPerPage)))} className="rounded-lg px-1.5 py-1 hover:bg-accent">492</button>
               </div>
             </div>
           </div>

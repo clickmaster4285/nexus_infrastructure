@@ -77,10 +77,10 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
             </Select>
           </label>
           <DialogFooter className="mt-1">
-            <Button type="button" variant="outline" size="sm" className="h-[2rem] text-[0.625rem]" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline"  onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" size="sm" className="h-[2rem] text-[0.625rem]">
+            <Button type="submit" >
               Add Server
             </Button>
           </DialogFooter>

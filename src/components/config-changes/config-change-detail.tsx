@@ -182,12 +182,12 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
         statusBadge={<span className="flex items-center gap-1.5"><ConfigRiskBadge risk={change.risk} /><ApprovalBadge status={change.approvalStatus} /><ConfigStatusBadge status={change.status} className="hidden sm:inline-flex" /></span>}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10" onClick={() => setApproveTarget(change)}><Check size={15} />Approve</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10" onClick={() => setRejectTarget(change)}><AlertTriangle size={15} />Reject</Button>
+            <Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
+            <Button variant="outline" className="text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10" onClick={() => setApproveTarget(change)}><Check size={15} />Approve</Button>
+            <Button variant="outline" className="text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10" onClick={() => setRejectTarget(change)}><AlertTriangle size={15} />Reject</Button>
             <AlertMenu
               label="More actions"
-              trigger={<Button variant="outline" className="h-10 w-10 px-0" aria-label="More actions"><MoreVertical size={16} /></Button>}
+              trigger={<Button variant="outline"  aria-label="More actions"><MoreVertical size={16} /></Button>}
               items={[
                 { key: "expected", label: "Mark expected", onSelect: () => setMarkExpectedTarget(change) },
                 { key: "baseline", label: "Accept as baseline", onSelect: () => setAcceptBaselineTarget(change) },
@@ -231,12 +231,12 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               <div className="flex items-center gap-2">
                 <div className="flex rounded-lg border border-border bg-muted/40 p-0.5" role="group" aria-label="Diff mode">
                   {(["diff", "baseline"] as const).map((mode) => (
-                    <button key={mode} type="button" aria-pressed={diffMode === mode} onClick={() => setDiffMode(mode)} className={cn("rounded-md px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", diffMode === mode ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
+                    <button key={mode} type="button" aria-pressed={diffMode === mode} onClick={() => setDiffMode(mode)} className={cn("rounded-lg px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", diffMode === mode ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
                       {mode === "diff" ? "Before ? after" : "Baseline vs current"}
                     </button>
                   ))}
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => void copyDiff()} className="h-8 gap-1.5 text-xs">{copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}{copied ? "Copied" : "Copy diff"}</Button>
+                <Button variant="ghost" onClick={() => void copyDiff()} >{copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}{copied ? "Copied" : "Copy diff"}</Button>
               </div>
             }
           >
@@ -310,7 +310,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
             </ol>
             <form className="mt-3 flex items-center gap-2" onSubmit={(event) => { event.preventDefault(); addNote(); }}>
               <input value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Add a note·" aria-label="Add a note to the timeline" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-              <Button type="submit" variant="outline" size="sm" className="h-9" disabled={noteDraft.trim().length === 0}>Add note</Button>
+              <Button type="submit" variant="outline"  disabled={noteDraft.trim().length === 0}>Add note</Button>
             </form>
           </ChartCard>
         </div>
@@ -329,8 +329,8 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Baseline drift</dt><dd className={change.driftFromBaseline ? "font-semibold text-orange-700 dark:text-orange-300" : "text-muted-foreground"}>{change.driftFromBaseline ? "off baseline" : "match"}</dd></div>
             </dl>
             <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-              <Button variant="outline" className="h-9 flex-1 gap-1.5 text-xs" onClick={() => setRejectTarget(change)}><AlertTriangle size={13} />Reject</Button>
-              <Button className="h-9 flex-1 gap-1.5 text-xs" onClick={() => setApproveTarget(change)}><Check size={13} />Approve</Button>
+              <Button variant="outline" className="flex-1" onClick={() => setRejectTarget(change)}><AlertTriangle size={13} />Reject</Button>
+              <Button className="flex-1" onClick={() => setApproveTarget(change)}><Check size={13} />Approve</Button>
             </div>
           </Card>
 
@@ -362,8 +362,8 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
                     <p className="font-mono text-xs font-semibold text-foreground">{snapshot.id} <span className="text-muted-foreground">· v{snapshot.version}</span></p>
                     <p className="text-[0.6875rem] text-muted-foreground">{mounted ? timeAgo(snapshot.takenAt) : "…"} · {snapshot.files} files</p>
                   </div>
-                  <button type="button" onClick={() => setDiffMode("baseline")} className="shrink-0 rounded-md border border-border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Compare</button>
-                  <button type="button" onClick={() => setRollbackState({ change, snapshotId: snapshot.id })} className="shrink-0 rounded-md border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">Rollback</button>
+                  <button type="button" onClick={() => setDiffMode("baseline")} className="shrink-0 rounded-lg border border-border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Compare</button>
+                  <button type="button" onClick={() => setRollbackState({ change, snapshotId: snapshot.id })} className="shrink-0 rounded-lg border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">Rollback</button>
                 </li>
               ))}
             </ul>
@@ -375,7 +375,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
             <ul className="mt-2 flex flex-col divide-y divide-border text-[0.8125rem]">
               <li className="flex items-center justify-between gap-2 py-2">
                 <span className="flex min-w-0 items-center gap-2"><AlertTriangle size={14} className="shrink-0 text-red-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Incident</span>{change.linkedIncidentId ? <Link href={`/incidents/${change.linkedIncidentId}`} className="block truncate font-mono font-semibold text-primary hover:underline">{change.linkedIncidentId}</Link> : <span className="text-muted-foreground">none correlated</span>}</span></span>
-                <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForChange)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Create ?</button>
+                <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForChange)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Create ?</button>
               </li>
               <li className="flex items-center gap-2 py-2"><ScanSearch size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span>{change.linkedAlertId ? <Link href="/alert-rules" className="font-mono text-primary hover:underline">{change.linkedAlertId}</Link> : <span className="text-muted-foreground">no rule fired</span>}</span></li>
               <li className="flex items-center gap-2 py-2"><Clock3 size={14} className="shrink-0 text-teal-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Maintenance window</span>{change.maintenanceWindowId ? <Link href={`/maintenance-windows/${change.maintenanceWindowId}`} className="font-mono text-primary hover:underline">{change.maintenanceWindowId}</Link> : <span className="text-muted-foreground">outside window</span>}</span></li>
@@ -389,11 +389,11 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
       {/* Prev / Next */}
       <div className="flex items-center justify-between gap-3">
         {newer
-          ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/configuration-changes/${newer.id}`)}><ChevronLeft size={15} />Newer - {newer.id}</Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/configuration-changes/${newer.id}`)}><ChevronLeft size={15} />Newer - {newer.id}</Button>
           : <span />}
         <span className="text-xs text-muted-foreground">{index >= 0 ? `${index + 1} of ${ordered.length}` : ""}</span>
         {older
-          ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/configuration-changes/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/configuration-changes/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button>
           : <span />}
       </div>
 

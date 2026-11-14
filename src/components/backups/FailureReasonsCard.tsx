@@ -32,7 +32,7 @@ export function FailureReasonsCard({ runs, onViewFailed, onExport }: { runs: Bac
             align="end"
             width={210}
             trigger={
-              <button type="button" aria-label="Failure reasons actions" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <button type="button" aria-label="Failure reasons actions" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <MoreVertical size={16} aria-hidden="true" />
               </button>
             }

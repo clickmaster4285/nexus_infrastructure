@@ -185,8 +185,8 @@ export function ContainersDockerDashboard() {
       <PageMeta breadcrumbs={["Infrastructure", "Containers & Docker"]} variant="detail" />
       <PageHeading title="Containers & Docker" description="Monitor and manage your containers, images, volumes, and Docker environments in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={refresh} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[0.75rem]"><RefreshCw size={12} />Refresh</Button>
-          <Button size="sm" onClick={exportCsv} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[0.75rem]"><Download size={12} />Export CSV</Button>
+          <Button variant="outline" onClick={refresh} className="whitespace-nowrap"><RefreshCw size={12} />Refresh</Button>
+          <Button onClick={exportCsv} className="whitespace-nowrap"><Download size={12} />Export CSV</Button>
         </div>
       </PageHeading>
 
@@ -242,7 +242,7 @@ export function ContainersDockerDashboard() {
                     <td className="whitespace-nowrap px-1.5 py-2 text-foreground">{item.network}</td>
                     <td className="whitespace-nowrap px-1.5 py-2 text-foreground">{item.uptime}</td>
                     <td className="px-1.5 py-2 text-foreground">{item.restarts}</td>
-                    <td className="px-1.5 py-2"><button aria-label={`Actions for ${item.name}`} onClick={() => toast(`Actions for ${item.name} are not available in this demo.`)} className="rounded px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
+                    <td className="px-1.5 py-2"><button aria-label={`Actions for ${item.name}`} onClick={() => toast(`Actions for ${item.name} are not available in this demo.`)} className="rounded-lg px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
                   </tr>
                 ))}
               </tbody>

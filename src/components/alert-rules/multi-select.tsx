@@ -83,7 +83,7 @@ export function MultiSelect({ label, options, selected, onChange, className, wid
           <div className="flex items-center justify-between gap-2 px-2 py-1">
             <span className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
             {active > 0 && (
-              <button type="button" onClick={() => onChange([])} className="inline-flex items-center gap-0.5 rounded text-[0.6875rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <button type="button" onClick={() => onChange([])} className="inline-flex items-center gap-0.5 rounded-lg text-[0.6875rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <X size={11} aria-hidden="true" />Clear
               </button>
             )}

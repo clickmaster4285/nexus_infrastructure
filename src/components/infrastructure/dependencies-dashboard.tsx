@@ -237,9 +237,9 @@ export function DependenciesDashboard() {
       <PageMeta breadcrumbs={["Infrastructure", "Dependencies"]} variant="detail" />
       <PageHeading title="Dependencies" description="Monitor your infrastructure dependencies and service relationships in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><RefreshCw size={15} />Refresh</Button>
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Dependency is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Dependency</Button>
+          <Button variant="outline" onClick={refresh} className="whitespace-nowrap"><RefreshCw size={15} />Refresh</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Add Dependency is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Dependency</Button>
         </div>
       </PageHeading>
 
@@ -293,7 +293,7 @@ export function DependenciesDashboard() {
                     <td className="overflow-hidden px-2 py-2.5"><span className={`inline-flex items-center gap-1.5 whitespace-nowrap font-semibold ${statusColor[item.status]}`}><i className={`h-2 w-2 shrink-0 rounded-full ${item.status === "Healthy" ? "bg-emerald-500" : item.status === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} />{item.status}</span></td>
                     <td className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.response}</td>
                     <td className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.uptime}</td>
-                    <td className="overflow-hidden px-2 py-2.5"><button aria-label={`Actions for ${item.name}`} onClick={() => toast(`Actions for ${item.name} are a mockup action.`)} className="rounded px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
+                    <td className="overflow-hidden px-2 py-2.5"><button aria-label={`Actions for ${item.name}`} onClick={() => toast(`Actions for ${item.name} are a mockup action.`)} className="rounded-lg px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -302,17 +302,17 @@ export function DependenciesDashboard() {
           <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[0.75rem] text-muted-foreground">
             <span>Showing {rangeStart}-{rangeEnd} of {totalDependencyCount} dependencies</span>
             <div aria-label="Dependency pagination" className="flex items-center gap-1">
-              <button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={currentPage === 1} className="inline-flex h-8 items-center gap-1 rounded-md border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
+              <button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={currentPage === 1} className="inline-flex h-8 items-center gap-1 rounded-lg border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
                 <ChevronLeft size={15} aria-hidden="true" />
                 <span>Previous</span>
               </button>
               {visiblePages.map((page, index) => (
                 <span key={page} className="inline-flex items-center gap-1">
                   {index > 0 && page - visiblePages[index - 1] > 1 && <span className="px-1 text-muted-foreground" aria-hidden="true">…</span>}
-                  <button type="button" aria-label={`Go to page ${page}`} aria-current={page === currentPage ? "page" : undefined} onClick={() => setCurrentPage(page)} className={`h-8 min-w-8 rounded-md px-2 font-medium transition-colors ${page === currentPage ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent"}`}>{page}</button>
+                  <button type="button" aria-label={`Go to page ${page}`} aria-current={page === currentPage ? "page" : undefined} onClick={() => setCurrentPage(page)} className={`h-8 min-w-8 rounded-lg px-2 font-medium transition-colors ${page === currentPage ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent"}`}>{page}</button>
                 </span>
               ))}
-              <button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))} disabled={currentPage === totalPages} className="inline-flex h-8 items-center gap-1 rounded-md border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
+              <button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))} disabled={currentPage === totalPages} className="inline-flex h-8 items-center gap-1 rounded-lg border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
                 <span>Next</span>
                 <ChevronRight size={15} aria-hidden="true" />
               </button>

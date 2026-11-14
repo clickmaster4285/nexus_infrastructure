@@ -80,7 +80,7 @@ export function RunLogViewer({ open, onOpenChange, title, subtitle, badge, meta,
         </div>
         <div className="flex items-center justify-between border-t border-border px-5 py-2.5">
           <span className="text-[0.625rem] uppercase tracking-wide text-muted-foreground">{lines.length} lines</span>
-          <button type="button" onClick={() => onOpenChange(false)} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <button type="button" onClick={() => onOpenChange(false)} className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border px-3 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X size={13} aria-hidden="true" />Close
           </button>
         </div>

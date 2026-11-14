@@ -227,12 +227,12 @@ export function AccessControlDashboard() {
           <div className="flex flex-wrap items-center gap-2">
             <AlertMenu
               label="Export access control"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 text-sm"><FileDown size={15} />Export</Button>}
+              trigger={<Button variant="outline" ><FileDown size={15} />Export</Button>}
               items={[{ key: "csv", label: "CSV (filtered)", onSelect: () => { downloadAccessCsv(filteredUsers); notify({ message: `${filteredUsers.length} users exported` }); } }]}
             />
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => setCreateTokenOpen(true)}><KeyRound size={15} />Create API Token</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => setCreateRoleOpen(true)}><Layers size={15} />Create Role</Button>
-            <Button className="h-10 gap-1.5 text-sm" onClick={() => setInviteOpen(true)}><UserRound size={15} />Invite User</Button>
+            <Button variant="outline"  onClick={() => setCreateTokenOpen(true)}><KeyRound size={15} />Create API Token</Button>
+            <Button variant="outline"  onClick={() => setCreateRoleOpen(true)}><Layers size={15} />Create Role</Button>
+            <Button  onClick={() => setInviteOpen(true)}><UserRound size={15} />Invite User</Button>
           </div>
         }
       />
@@ -244,7 +244,7 @@ export function AccessControlDashboard() {
             <span className="hidden sm:inline" aria-hidden="true">·</span>
             <span>{overPrivTokens} over-privileged token{overPrivTokens === 1 ? "" : "s"}</span>
           </span>
-          <button type="button" onClick={() => { applyFilters({ mfa: "off", admins: "1" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Review risks <ChevronRight size={14} className="inline" aria-hidden="true" /></button>
+          <button type="button" onClick={() => { applyFilters({ mfa: "off", admins: "1" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Review risks <ChevronRight size={14} className="inline" aria-hidden="true" /></button>
         </div>
       ) : (
         <div role="status" className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
@@ -354,7 +354,7 @@ export function AccessControlDashboard() {
               const daysLeft = token.expiresAt ? Math.ceil((Date.parse(token.expiresAt) - Date.now()) / 86_400_000) : null;
               return (
                 <li key={token.id}>
-                  <button type="button" onClick={() => { updateParams({ tab: "tokens" }); }} className="flex w-full items-center gap-2 rounded-md px-1 py-1.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${token.name} expires in ${daysLeft ?? ""} days`}>
+                  <button type="button" onClick={() => { updateParams({ tab: "tokens" }); }} className="flex w-full items-center gap-2 rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${token.name} expires in ${daysLeft ?? ""} days`}>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[0.8125rem] font-semibold text-foreground">{token.name}</span>
                       <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{token.ownerName} · {token.environment}</span>
@@ -419,9 +419,9 @@ export function AccessControlDashboard() {
           {tab === "tokens" && (
             <FilterSelect value="all" onChange={() => {}} label="Owner" options={[]} allLabel="All owners" />
           )}
-          <div className="flex items-center gap-1" role="group" aria-label="Range">{(["7D", "30D", "90D"] as const).map((value) => <button key={value} type="button" onClick={() => updateParams({ range: value })} className={cn("h-8 rounded-md border px-2 text-xs font-semibold", searchParams.get("range") === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>{value}</button>)}</div>
-          <button type="button" onClick={() => setSaveViewOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ListFilter size={13} />Saved views</button>
-          <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FilterX size={13} />Reset</button>
+          <div className="flex items-center gap-1" role="group" aria-label="Range">{(["7D", "30D", "90D"] as const).map((value) => <button key={value} type="button" onClick={() => updateParams({ range: value })} className={cn("h-8 rounded-lg border px-2 text-xs font-semibold", searchParams.get("range") === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>{value}</button>)}</div>
+          <button type="button" onClick={() => setSaveViewOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ListFilter size={13} />Saved views</button>
+          <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FilterX size={13} />Reset</button>
           <button type="button" onClick={() => updateParams({ compact: compact ? null : "1" })} aria-pressed={compact} className={cn("h-9 rounded-lg border px-2.5 text-xs font-semibold", compact ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}>Compact</button>
         </div>
         {savedViews.length > 0 && (
@@ -467,7 +467,7 @@ export function AccessControlDashboard() {
                         <td className="px-2 py-2 align-middle"><span className="block text-xs font-medium text-foreground">{mounted && user.lastLoginAt ? timeAgo(user.lastLoginAt) : "never"}</span>{user.lastLoginIp && <span className="block text-[0.6875rem] text-muted-foreground">{user.lastLoginIp}</span>}</td>
                         <td className="px-2 py-2 align-middle"><div className="flex flex-wrap items-center gap-1">{user.groupIds.slice(0, 2).map((group) => <span key={group} className="max-w-[5.625rem] truncate rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[0.625rem] text-muted-foreground">{group}</span>)}{user.groupIds.length > 2 && <span className="text-[0.6875rem] font-semibold text-muted-foreground">+{user.groupIds.length - 2}</span>}</div></td>
                         <td className="px-2 py-2 align-middle text-right" onClick={(event) => event.stopPropagation()}>
-                          <AlertMenu label={`Actions for ${user.name}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`Actions for ${user.name}`}><MoreVertical size={15} /></button>} items={[
+                          <AlertMenu label={`Actions for ${user.name}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`Actions for ${user.name}`}><MoreVertical size={15} /></button>} items={[
                             { key: "view", label: "View profile", onSelect: () => openDrawer(user.id) },
                             { key: "edit", label: "Edit roles", onSelect: () => notify({ message: "Role editor opened (mock)" }) },
                             { key: "reset", label: "Reset password", onSelect: () => notify({ message: `Password reset link sent to ${user.email}` }) },
@@ -480,7 +480,7 @@ export function AccessControlDashboard() {
                     );
                   })}
                   {pageRows.length === 0 && (
-                    <tr><td colSpan={8} className="px-4 py-12 text-center"><SearchX className="mx-auto text-muted-foreground" size={26} /><p className="mt-2 text-sm font-semibold text-foreground">No users match your filters</p><p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p><Button variant="outline" size="sm" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Clear filters</Button></td></tr>
+                    <tr><td colSpan={8} className="px-4 py-12 text-center"><SearchX className="mx-auto text-muted-foreground" size={26} /><p className="mt-2 text-sm font-semibold text-foreground">No users match your filters</p><p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p><Button variant="outline" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Clear filters</Button></td></tr>
                   )}
                 </tbody>
               </table>
@@ -534,7 +534,7 @@ function FilterSelect({ value, onChange, label, options, optionLabels, allLabel 
 }
 
 function CardKebab({ label }: { label: string }) {
-  return <AlertMenu label={`${label} actions`} trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`${label} actions`}><MoreVertical size={15} /></button>} items={[{ key: "table", label: "View as table", onSelect: () => undefined }, { key: "export", label: "Export CSV", onSelect: () => undefined }]} />;
+  return <AlertMenu label={`${label} actions`} trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`${label} actions`}><MoreVertical size={15} /></button>} items={[{ key: "table", label: "View as table", onSelect: () => undefined }, { key: "export", label: "Export CSV", onSelect: () => undefined }]} />;
 }
 
 function RolesPanel({ roles, onCreate, onAssign }: { roles: import("@/mocks/accessControl").Role[]; onCreate: () => void; onAssign: (roleId: string) => void }) {
@@ -557,7 +557,7 @@ function TokensPanel({ tokens, onCreate }: { tokens: import("@/mocks/accessContr
   return (
     <section className="space-y-3">
       <Card className="flex flex-col rounded-xl p-0">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5"><p className="text-sm font-semibold text-foreground">API Tokens</p><Button size="sm" onClick={onCreate}><KeyRound size={13} />Create token</Button></div>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5"><p className="text-sm font-semibold text-foreground">API Tokens</p><Button onClick={onCreate}><KeyRound size={13} />Create token</Button></div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[55rem] text-left text-[0.8125rem]">
             <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-3 py-2 font-semibold">Token</th><th className="px-3 py-2 font-semibold">Owner</th><th className="px-3 py-2 font-semibold">Scopes</th><th className="px-3 py-2 font-semibold">Last used</th><th className="px-3 py-2 font-semibold">Expires</th><th className="px-3 py-2 font-semibold">Status</th></tr></thead>

@@ -58,7 +58,7 @@ function TierCard({ policy, jobs, views, onEdit }: { policy: Policy; jobs: Backu
           <Shield size={13} aria-hidden="true" className="shrink-0" />
           <span className="truncate">{policy.id === "POL-critical" ? "Used by databases and cold storage" : "Used by web, app, cache, edge and tooling"}</span>
         </p>
-        <Button variant="outline" className="h-8 rounded-lg px-3 text-xs font-semibold" onClick={() => onEdit(tierJobs[0]?.id ?? null)}>
+        <Button variant="outline"  onClick={() => onEdit(tierJobs[0]?.id ?? null)}>
           <ShieldCheck size={13} aria-hidden="true" className="mr-1" />Edit
         </Button>
       </div>

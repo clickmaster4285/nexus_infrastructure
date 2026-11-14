@@ -281,9 +281,9 @@ export function CloudAccountsDashboard() {
     <div className="space-y-2.5 pb-3">
       <PageMeta breadcrumbs={["Infrastructure", "Cloud Accounts & Providers"]} variant="detail" />
       <PageHeading title="Cloud Accounts & Providers" description="Monitor and manage your cloud accounts, usage, and provider health in real-time." actionsAlign="top" variant="detail">
-        <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 px-3 text-[0.75rem]"><RefreshCw size={15} />Refresh</Button>
-        <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-        <Button size="sm" onClick={() => toast("Add Account is a mockup action.")} className="h-9 gap-1.5 px-3 text-[0.75rem]"><Plus size={15} />Add Account</Button>
+        <Button variant="outline" onClick={refresh} ><RefreshCw size={15} />Refresh</Button>
+        <Button variant="outline" onClick={exportCsv} ><Download size={15} />Export CSV</Button>
+        <Button onClick={() => toast("Add Account is a mockup action.")} ><Plus size={15} />Add Account</Button>
       </PageHeading>
 
       <section aria-label="Cloud account metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
@@ -342,7 +342,7 @@ export function CloudAccountsDashboard() {
                     <td className="px-1 py-[0.4375rem]"><span className={`inline-flex items-center gap-1 whitespace-nowrap font-semibold ${healthStyles[account.health]}`}><i className={`h-1.5 w-1.5 rounded-full ${account.health === "Healthy" ? "bg-emerald-500" : account.health === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} />{account.health}</span></td>
                     <td className="whitespace-nowrap px-1 py-[0.4375rem] text-foreground">{account.cost}</td>
                     <td className="px-1 py-[0.4375rem] text-foreground">{account.resources}</td>
-                    <td className="px-1 py-[0.4375rem]"><button aria-label={`Actions for ${account.name}`} onClick={() => toast(`Actions for ${account.name} are a mockup action.`)} className="rounded px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
+                    <td className="px-1 py-[0.4375rem]"><button aria-label={`Actions for ${account.name}`} onClick={() => toast(`Actions for ${account.name} are a mockup action.`)} className="rounded-lg px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
                   </tr>
                 ))}
               </tbody>

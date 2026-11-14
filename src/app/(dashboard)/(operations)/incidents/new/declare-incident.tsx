@@ -337,7 +337,7 @@ export function DeclareIncident() {
         disabled={!isValid || submitting}
         aria-describedby={!isValid ? "declare-missing" : undefined}
         className={cn(
-          "h-10 gap-1.5 rounded-lg px-5 text-sm font-semibold text-white",
+          "text-white",
           severity === "SEV1" || severity === "SEV2" ? "bg-red-600 hover:bg-red-700" : "bg-primary hover:bg-primary/90",
           className,
         )}
@@ -364,8 +364,8 @@ export function DeclareIncident() {
         iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]"
         actions={
           <>
-            <Button variant="ghost" onClick={cancel} className="h-10 gap-1.5 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>
-            <Button type="button" variant="outline" onClick={cancel} className="h-10 rounded-lg px-4 text-sm">Cancel</Button>
+            <Button variant="ghost" onClick={cancel} className="text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>
+            <Button type="button" variant="outline" onClick={cancel} >Cancel</Button>
             {declareButton()}
           </>
         }
@@ -452,9 +452,9 @@ export function DeclareIncident() {
                 </div>
               )}
               <div className="flex items-center justify-end gap-1.5">
-                <button type="button" onClick={() => setServices([...INCIDENT_SERVICES])} className="rounded-md px-2 py-1 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Select all</button>
+                <button type="button" onClick={() => setServices([...INCIDENT_SERVICES])} className="rounded-lg px-2 py-1 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Select all</button>
                 <span aria-hidden="true" className="text-xs text-muted-foreground">·</span>
-                <button type="button" onClick={() => setServices([])} className="rounded-md px-2 py-1 text-xs font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent hover:text-foreground">Clear</button>
+                <button type="button" onClick={() => setServices([])} className="rounded-lg px-2 py-1 text-xs font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent hover:text-foreground">Clear</button>
               </div>
               <div ref={servicesGroupRef} tabIndex={-1} role="group" aria-label="Toggle affected services" aria-describedby={submitted && services.length === 0 ? servicesErrorId : undefined} className="flex flex-wrap gap-1.5 rounded-lg focus:outline-none">
                 {filteredServices.map((service) => {
@@ -510,7 +510,7 @@ export function DeclareIncident() {
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between gap-2">
                   <label htmlFor="commander-select" className="text-sm font-medium text-foreground">Commander{needsCommander && <span aria-hidden="true" className="text-red-600"> *</span>}</label>
-                  <button type="button" onClick={() => setCommander(CURRENT_USER_NAME)} className="rounded-md px-1.5 py-0.5 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Assign to me</button>
+                  <button type="button" onClick={() => setCommander(CURRENT_USER_NAME)} className="rounded-lg px-1.5 py-0.5 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Assign to me</button>
                 </div>
                 <Select value={commander} onValueChange={setCommander}>
                   <SelectTrigger ref={commanderTriggerRef} id="commander-select" className="h-10 w-full text-sm" aria-label="Incident commander" aria-invalid={submitted && needsCommander && !commander} aria-describedby={submitted && needsCommander && !commander ? commanderErrorId : undefined}><SelectValue placeholder={needsCommander ? "Select commander (required)" : "Select commander"} /></SelectTrigger>
@@ -592,7 +592,7 @@ export function DeclareIncident() {
                 {tags.map((tag) => (
                   <span key={tag} className="inline-flex h-7 items-center gap-1 rounded-md bg-primary/10 pl-2 pr-1 text-xs font-medium text-primary">
                     {tag}
-                    <button type="button" onClick={() => removeTag(tag)} aria-label={`Remove tag ${tag}`} className="rounded-sm p-0.5 text-primary/80 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={12} aria-hidden="true" /></button>
+                    <button type="button" onClick={() => removeTag(tag)} aria-label={`Remove tag ${tag}`} className="rounded-lg p-0.5 text-primary/80 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={12} aria-hidden="true" /></button>
                   </span>
                 ))}
                 <input
@@ -649,7 +649,7 @@ export function DeclareIncident() {
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-4">
             <p className="text-xs text-muted-foreground">Declaring pages the selected channels and opens the timeline.</p>
             <div className="flex items-center gap-2">
-              <Button type="button" variant="outline" onClick={cancel} className="h-10 rounded-lg px-4 text-sm">Cancel</Button>
+              <Button type="button" variant="outline" onClick={cancel} >Cancel</Button>
               {declareButton(undefined, submitting ? "Declaring…" : "Declare Incident")}
             </div>
           </div>
@@ -738,7 +738,7 @@ export function DeclareIncident() {
           {/* Actions */}
           <div className="flex flex-col gap-2">
             {declareButton("h-11 w-full justify-center")}
-            <Button type="button" variant="outline" onClick={cancel} className="h-10 w-full rounded-lg text-sm">Cancel</Button>
+            <Button type="button" variant="outline" onClick={cancel} className="w-full">Cancel</Button>
             <p className="text-center text-xs text-muted-foreground">Declaring pages the selected channels and opens the timeline.</p>
           </div>
         </aside>
@@ -747,7 +747,7 @@ export function DeclareIncident() {
       {/* Sticky bottom bar on small screens */}
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:left-[14.5rem] xl:hidden">
         <div className="flex items-center gap-2 px-4 py-2.5">
-          <Button type="button" variant="outline" onClick={cancel} className="h-11 rounded-lg px-4 text-sm">Cancel</Button>
+          <Button type="button" variant="outline" onClick={cancel} >Cancel</Button>
           {declareButton("h-11 flex-1 justify-center")}
         </div>
       </div>
@@ -762,8 +762,8 @@ export function DeclareIncident() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setConfirmOpen(false)} className="h-10 rounded-lg px-4 text-sm">Cancel</Button>
-            <Button type="button" onClick={() => { setConfirmOpen(false); performDeclare(); }} disabled={submitting} className="h-10 gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700">
+            <Button type="button" variant="outline" onClick={() => setConfirmOpen(false)} >Cancel</Button>
+            <Button type="button" onClick={() => { setConfirmOpen(false); performDeclare(); }} disabled={submitting} className="bg-red-600 text-white hover:bg-red-700">
               {submitting ? <Loader2 size={15} aria-hidden="true" className="animate-spin" /> : <Siren size={15} aria-hidden="true" />}Declare Incident
             </Button>
           </DialogFooter>

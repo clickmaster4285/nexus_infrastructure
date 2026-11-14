@@ -1411,7 +1411,7 @@ export function EventsExplorerDashboard() {
               <div className="absolute right-0 z-30 mt-2 w-60 rounded-lg border border-border bg-popover p-1.5 shadow-lg">
                 <p className="px-2 py-1 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Views</p>
                 {savedViewList.map((view) => (
-                  <button key={view.id} type="button" onClick={() => applyView(view)} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[0.8125rem] font-medium text-foreground hover:bg-accent">
+                  <button key={view.id} type="button" onClick={() => applyView(view)} className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[0.8125rem] font-medium text-foreground hover:bg-accent">
                     <span className="min-w-0 flex-1 truncate">{view.name}</span>
                     {!view.builtin && (
                       <span role="button" aria-label={`Delete ${view.name}`} onClick={(event) => { event.stopPropagation(); event.preventDefault(); removeView(view.id); }} className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-muted-foreground hover:bg-muted"><X size={11} aria-hidden="true" /></span>
@@ -1419,12 +1419,12 @@ export function EventsExplorerDashboard() {
                   </button>
                 ))}
                 <div className="mt-1 border-t border-border pt-1">
-                  <button type="button" onClick={saveCurrentView} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[0.8125rem] font-medium text-primary hover:bg-accent"><Plus size={13} aria-hidden="true" />Save current view</button>
+                  <button type="button" onClick={saveCurrentView} className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[0.8125rem] font-medium text-primary hover:bg-accent"><Plus size={13} aria-hidden="true" />Save current view</button>
                 </div>
               </div>
             </details>
-            <Button variant="outline" onClick={() => exportFiltered("csv")} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><Download size={15} />Export</Button>
-            <Button className="h-10 gap-1.5 rounded-lg px-3 text-sm"><Plus size={15} />Create Alert Rule</Button>
+            <Button variant="outline" onClick={() => exportFiltered("csv")} ><Download size={15} />Export</Button>
+            <Button ><Plus size={15} />Create Alert Rule</Button>
           </div>
         }
       />
@@ -1435,7 +1435,7 @@ export function EventsExplorerDashboard() {
             <CircleAlert size={28} className="text-rose-500" aria-hidden="true" />
             <h2 className="font-display text-base font-bold text-foreground">Events could not be loaded</h2>
             <p className="text-sm text-muted-foreground">The event stream failed to load for your filters. Retry to fetch it again.</p>
-            <Button onClick={() => { setStatus("loading"); window.setTimeout(() => setStatus("ready"), 400); }} className="h-10 rounded-lg px-4 text-sm">Retry</Button>
+            <Button onClick={() => { setStatus("loading"); window.setTimeout(() => setStatus("ready"), 400); }} >Retry</Button>
           </div>
         </section>
       ) : (<>
@@ -1456,7 +1456,7 @@ export function EventsExplorerDashboard() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex h-8 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Trend range">
                 {TREND_RANGE_ORDER.map((key) => (
-                  <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
+                  <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
                 ))}
               </div>
               <span className="hidden text-[0.75rem] text-muted-foreground xl:block">Drag to select a window · click a bar to isolate it</span>
@@ -1649,7 +1649,7 @@ export function EventsExplorerDashboard() {
             <Input ref={searchRef} value={draft.query} onChange={(event) => setDraft((prev) => ({ ...prev, query: event.target.value }))} onKeyDown={(event) => { if (event.key === "Enter") commit({ ...draft }, "Filters applied."); }} placeholder="Search events, hosts, sources..." aria-label="Search events. Press slash to focus." className="h-9 rounded-lg pr-12 text-sm" />
             <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground" aria-hidden="true">/</kbd>
           </span>
-          <Button variant="outline" onClick={() => setAdvancedOpen((value) => !value)} aria-expanded={advancedOpen} className="h-9 gap-1.5 rounded-lg px-3 text-sm"><ListChecks size={14} />Advanced Filters<ChevronDown size={13} className={cn("transition-transform", advancedOpen && "rotate-180")} aria-hidden="true" /></Button>
+          <Button variant="outline" onClick={() => setAdvancedOpen((value) => !value)} aria-expanded={advancedOpen} ><ListChecks size={14} />Advanced Filters<ChevronDown size={13} className={cn("transition-transform", advancedOpen && "rotate-180")} aria-hidden="true" /></Button>
           <button type="button" onClick={() => commit({ ...draft }, "Filters applied.")} className="h-9 rounded-lg px-3 text-sm font-medium text-primary hover:underline">Apply</button>
         </div>
         {advancedOpen && (
@@ -1683,7 +1683,7 @@ export function EventsExplorerDashboard() {
               </Select>
             </label>
             <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-4">
-              <Button size="sm" onClick={() => commit({ ...draft }, "Filters applied.")} className="h-9 gap-1.5 rounded-lg px-4 text-sm">Apply</Button>
+              <Button onClick={() => commit({ ...draft }, "Filters applied.")} >Apply</Button>
               <button type="button" onClick={clearAllFilters} className="text-sm font-medium text-primary hover:underline">Reset</button>
             </div>
           </div>
@@ -1699,7 +1699,7 @@ export function EventsExplorerDashboard() {
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex h-8 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Time zone">
               {([{ key: "Local", value: false }, { key: "UTC", value: true }] as const).map((mode) => (
-                <button key={mode.key} type="button" aria-pressed={utcMode === mode.value} onClick={() => setUtcMode(mode.value)} className={cn("h-7 rounded-md px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utcMode === mode.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{mode.key}</button>
+                <button key={mode.key} type="button" aria-pressed={utcMode === mode.value} onClick={() => setUtcMode(mode.value)} className={cn("h-7 rounded-lg px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utcMode === mode.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{mode.key}</button>
               ))}
             </div>
             <span className="text-[0.75rem] text-muted-foreground">({utcMode ? "UTC" : "local time"})</span>
@@ -1708,8 +1708,8 @@ export function EventsExplorerDashboard() {
           <details className="relative">
             <summary aria-label="Export" title="Export" className="inline-flex h-8 cursor-pointer list-none items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-accent [&::-webkit-details-marker]:hidden"><Download size={12} aria-hidden="true" />Export<ChevronDown size={12} className="text-muted-foreground" aria-hidden="true" /></summary>
             <div className="absolute right-0 z-30 mt-2 w-44 rounded-lg border border-border bg-popover p-1.5 shadow-lg">
-              <button type="button" onClick={() => exportFiltered("csv")} className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm text-foreground hover:bg-accent"><FileText size={13} className="text-muted-foreground" aria-hidden="true" />Export CSV</button>
-              <button type="button" onClick={() => exportFiltered("json")} className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm text-foreground hover:bg-accent"><FileJson size={13} className="text-muted-foreground" aria-hidden="true" />Export JSON</button>
+              <button type="button" onClick={() => exportFiltered("csv")} className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-foreground hover:bg-accent"><FileText size={13} className="text-muted-foreground" aria-hidden="true" />Export CSV</button>
+              <button type="button" onClick={() => exportFiltered("json")} className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-foreground hover:bg-accent"><FileJson size={13} className="text-muted-foreground" aria-hidden="true" />Export JSON</button>
             </div>
           </details>
         </div>
@@ -1769,7 +1769,7 @@ export function EventsExplorerDashboard() {
                     <td className="whitespace-nowrap px-2 py-1.5 text-muted-foreground">{event.category}</td>
                     <td className="whitespace-nowrap px-2 py-1.5"><span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold", STATUS_META[eventStatus].className)}><StatusIcon size={11} aria-hidden="true" />{eventStatus}</span></td>
                     <td className="whitespace-nowrap px-2 py-1.5 tabular-nums text-foreground">
-                      <button type="button" onClick={(click) => { click.stopPropagation(); setExpandedId((current) => (current === event.id ? null : event.id)); }} aria-expanded={expanded} aria-label={expanded ? "Collapse occurrences" : `${event.count} occurrences, expand`} className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-semibold text-primary hover:bg-primary/10">×{event.count}<ChevronDown size={11} className={cn("transition-transform", expanded && "rotate-180")} aria-hidden="true" /></button>
+                      <button type="button" onClick={(click) => { click.stopPropagation(); setExpandedId((current) => (current === event.id ? null : event.id)); }} aria-expanded={expanded} aria-label={expanded ? "Collapse occurrences" : `${event.count} occurrences, expand`} className="inline-flex items-center gap-1 rounded-lg px-1.5 py-0.5 text-xs font-semibold text-primary hover:bg-primary/10">×{event.count}<ChevronDown size={11} className={cn("transition-transform", expanded && "rotate-180")} aria-hidden="true" /></button>
                     </td>
                     <td className="whitespace-nowrap px-2 py-1.5" onClick={(click) => click.stopPropagation()}>
                       <span className="flex items-center gap-1">
@@ -1809,7 +1809,7 @@ export function EventsExplorerDashboard() {
                       <SearchX size={26} className="text-muted-foreground" aria-hidden="true" />
                       <p className="text-sm font-semibold text-foreground">No events match your filters</p>
                       <p className="text-[0.75rem] text-muted-foreground">Try removing a filter or widening the time range.</p>
-                      <Button variant="outline" size="sm" onClick={clearAllFilters} className="h-9 rounded-lg px-3 text-xs">Clear filters</Button>
+                      <Button variant="outline" onClick={clearAllFilters} >Clear filters</Button>
                     </div>
                   </td>
                 </tr>

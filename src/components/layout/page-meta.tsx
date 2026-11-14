@@ -44,7 +44,7 @@ export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefre
         )}
         <span className="hidden sm:inline">Last updated: {lastUpdated}</span>
         {showRefresh && (
-          <Button variant="ghost" size="icon-sm" aria-label="Refresh timestamp" title="Refresh timestamp" onClick={onRefresh} className="h-7 w-7 text-muted-foreground">
+          <Button variant="ghost" size="icon" aria-label="Refresh timestamp" title="Refresh timestamp" onClick={onRefresh} className="text-muted-foreground">
             <RefreshCw size={13} />
           </Button>
         )}

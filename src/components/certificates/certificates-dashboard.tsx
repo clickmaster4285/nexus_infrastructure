@@ -353,14 +353,14 @@ export function CertificatesDashboard() {
           <div className="flex items-center gap-2">
             <AlertMenu
               label="Export certificates"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 text-sm"><FileDown size={15} />Export</Button>}
+              trigger={<Button variant="outline" ><FileDown size={15} />Export</Button>}
               items={[
                 { key: "csv", label: "CSV (filtered)", onSelect: () => { exportCsv(filteredCerts); notify({ message: `${filteredCerts.length} rows exported as CSV` }); } },
                 { key: "pdf", label: "PDF summary", onSelect: () => notify({ message: "PDF summary queued (mock)" }) },
               ]}
             />
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => setAddOpen(true)}><Plus size={15} />Add Certificate</Button>
-            <Button className="h-10 gap-1.5 text-sm" onClick={() => setScanOpen(true)}><ScanLine size={15} />Scan Certificates</Button>
+            <Button variant="outline"  onClick={() => setAddOpen(true)}><Plus size={15} />Add Certificate</Button>
+            <Button  onClick={() => setScanOpen(true)}><ScanLine size={15} />Scan Certificates</Button>
           </div>
         }
       />
@@ -372,7 +372,7 @@ export function CertificatesDashboard() {
             <span className="hidden sm:inline" aria-hidden="true">·</span>
             <span>{summary.expiring7} expire within 7 days</span>
           </span>
-          <button type="button" onClick={() => { applyFilters({ tab: "expired" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">View expired <ChevronRight size={14} className="inline" aria-hidden="true" /></button>
+          <button type="button" onClick={() => { applyFilters({ tab: "expired" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">View expired <ChevronRight size={14} className="inline" aria-hidden="true" /></button>
         </div>
       ) : (
         <div role="status" className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
@@ -564,7 +564,7 @@ export function CertificatesDashboard() {
               const days = daysUntilExpiry(cert.expiresAt);
               return (
                 <li key={cert.id}>
-                  <button type="button" onClick={() => openDrawer(cert.id)} className="flex w-full items-center gap-2 rounded-md px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${cert.commonName} expires in ${days} days`}>
+                  <button type="button" onClick={() => openDrawer(cert.id)} className="flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${cert.commonName} expires in ${days} days`}>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-mono text-[0.8125rem] font-semibold text-foreground">{cert.commonName}</span>
                       <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.hostIds[0]} · {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
@@ -618,10 +618,10 @@ export function CertificatesDashboard() {
             Weak only
           </label>
           <div className="flex items-center gap-1" role="group" aria-label="Expiring in">
-            {(["7D", "30D", "90D"] as const).map((value) => <button key={value} type="button" aria-pressed={range === value} onClick={() => updateParams({ range: value })} className={cn("h-8 rounded-md border px-2 text-xs font-semibold", range === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>{value}</button>)}
+            {(["7D", "30D", "90D"] as const).map((value) => <button key={value} type="button" aria-pressed={range === value} onClick={() => updateParams({ range: value })} className={cn("h-8 rounded-lg border px-2 text-xs font-semibold", range === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>{value}</button>)}
           </div>
-          <button type="button" onClick={() => setSaveViewOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ListFilter size={13} />Saved views</button>
-          {activeFilterCount > 0 && <button type="button" onClick={clearAllFilters} className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FilterX size={13} />Clear all ({activeFilterCount})</button>}
+          <button type="button" onClick={() => setSaveViewOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ListFilter size={13} />Saved views</button>
+          {activeFilterCount > 0 && <button type="button" onClick={clearAllFilters} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FilterX size={13} />Clear all ({activeFilterCount})</button>}
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           {statusFilter !== "all" && <ChipButton label={`Status: ${statusFilter}`} onClear={() => applyFilters({ status: null })} />}
@@ -691,7 +691,7 @@ export function CertificatesDashboard() {
                       <td className="px-2 py-2 align-middle"><span className="flex items-center gap-1.5">{cert.autoRenew ? <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400"><CheckCircle2 size={12} aria-hidden="true" />Auto</span> : <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={12} aria-hidden="true" />Manual</span>}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.ownerId}</span></td>
                       <td className="px-2 py-2 align-middle"><HealthBar score={health} /></td>
                       <td className="px-2 py-2 align-middle text-right" onClick={(event) => event.stopPropagation()}>
-                        <AlertMenu label={`Actions for ${cert.id}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Actions for ${cert.id}`}><MoreVertical size={15} /></button>} items={[
+                        <AlertMenu label={`Actions for ${cert.id}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Actions for ${cert.id}`}><MoreVertical size={15} /></button>} items={[
                           { key: "view", label: "View details", onSelect: () => openDrawer(cert.id) },
                           { key: "renew", label: "Renew now", onSelect: () => setRenewFor(cert.id) },
                           { key: "toggle", label: cert.autoRenew ? "Disable auto-renew" : "Enable auto-renew", onSelect: () => setAutoRenewFor(cert.id) },
@@ -706,7 +706,7 @@ export function CertificatesDashboard() {
                   );
                 })}
                 {pageRows.length === 0 && (
-                  <tr><td colSpan={9} className="px-4 py-12 text-center"><SearchX className="mx-auto text-muted-foreground" size={26} /><p className="mt-2 text-sm font-semibold text-foreground">No certificates match your filters</p><p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p><Button variant="outline" size="sm" className="mt-3" onClick={clearAllFilters}><RotateCcw size={13} />Clear filters</Button></td></tr>
+                  <tr><td colSpan={9} className="px-4 py-12 text-center"><SearchX className="mx-auto text-muted-foreground" size={26} /><p className="mt-2 text-sm font-semibold text-foreground">No certificates match your filters</p><p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p><Button variant="outline" className="mt-3" onClick={clearAllFilters}><RotateCcw size={13} />Clear filters</Button></td></tr>
                 )}
               </tbody>
             </table>
@@ -716,10 +716,10 @@ export function CertificatesDashboard() {
             <div className="flex flex-wrap items-center gap-3 border-t border-border bg-primary/5 px-4 py-2 text-sm">
               <b className="tabular-nums text-foreground">{selected.size} selected</b>
               <div className="flex flex-wrap items-center gap-1">
-                <button type="button" onClick={() => setRenewFor("__bulk__")} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Renew</button>
-                <button type="button" onClick={() => setAssignFor("__bulk__")} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Assign owner</button>
-                <button type="button" onClick={() => setAutoRenewFor("__bulk__")} className="h-8 rounded-md px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent">Enable auto-renew</button>
-                <button type="button" onClick={() => { exportCsv(certs.filter((cert) => selected.has(cert.id))); notify({ message: `${selected.size} rows exported as CSV` }); setSelected(new Set()); }} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Export</button>
+                <button type="button" onClick={() => setRenewFor("__bulk__")} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Renew</button>
+                <button type="button" onClick={() => setAssignFor("__bulk__")} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Assign owner</button>
+                <button type="button" onClick={() => setAutoRenewFor("__bulk__")} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent">Enable auto-renew</button>
+                <button type="button" onClick={() => { exportCsv(certs.filter((cert) => selected.has(cert.id))); notify({ message: `${selected.size} rows exported as CSV` }); setSelected(new Set()); }} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10">Export</button>
               </div>
               <button type="button" onClick={() => setSelected(new Set())} className="ml-auto text-xs font-medium text-muted-foreground hover:text-foreground">Clear selection</button>
             </div>
@@ -775,7 +775,7 @@ function CardKebab({ label, onExport }: { label: string; onExport?: () => void }
   return (
     <AlertMenu
       label={`${label} actions`}
-      trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${label} actions`}><MoreVertical size={15} /></button>}
+      trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${label} actions`}><MoreVertical size={15} /></button>}
       items={[{ key: "export", label: "Export CSV", onSelect: onExport ?? (() => undefined) }, { key: "table", label: "View as table", onSelect: onExport ?? (() => undefined) }]}
     />
   );

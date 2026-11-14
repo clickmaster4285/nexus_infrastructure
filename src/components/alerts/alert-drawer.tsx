@@ -139,7 +139,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button size="sm" variant="outline" onClick={() => onAcknowledge(alert.id)} disabled={alert.status !== "firing"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+            <Button variant="outline" onClick={() => onAcknowledge(alert.id)} disabled={alert.status !== "firing"} >
               <CheckCircle2 size={13} aria-hidden="true" />Acknowledge
             </Button>
             <Select value={alert.assignee ?? "none"} onValueChange={(value) => onAssign(alert.id, value === "none" ? null : value)}>
@@ -151,7 +151,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
                 ))}
               </SelectContent>
             </Select>
-            <Button size="sm" onClick={() => onResolve(alert.id)} disabled={alert.status === "resolved"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+            <Button onClick={() => onResolve(alert.id)} disabled={alert.status === "resolved"} >
               Resolve
             </Button>
           </div>
@@ -252,7 +252,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
               aria-label="Add note"
               className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-[0.8125rem] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
-            <Button type="submit" size="sm" disabled={!note.trim()} className="h-9 rounded-lg px-3 text-[0.75rem]">Add</Button>
+            <Button type="submit" disabled={!note.trim()} >Add</Button>
           </form>
         </div>
       </aside>

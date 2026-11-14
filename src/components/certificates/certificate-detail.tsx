@@ -96,12 +96,12 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><CertStatusBadge status={certStatus} /><IssuerTypeBadge type={cert.issuerType} /><DaysLeftBadge daysLeft={daysLeft} revoked={cert.revoked} /></span>}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
-            <Button className="h-10 gap-1.5 text-sm" onClick={() => setRenewOpen(true)}><RotateCcw size={15} />Renew now</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => downloadPem(cert)}><FileDown size={15} />Download</Button>
+            <Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
+            <Button  onClick={() => setRenewOpen(true)}><RotateCcw size={15} />Renew now</Button>
+            <Button variant="outline"  onClick={() => downloadPem(cert)}><FileDown size={15} />Download</Button>
             <AlertMenu
               label="More certificate actions"
-              trigger={<Button variant="outline" className="h-10 w-10 px-0" aria-label="More actions"><MoreVertical size={16} /></Button>}
+              trigger={<Button variant="outline"  aria-label="More actions"><MoreVertical size={16} /></Button>}
               items={[
                 { key: "assign", label: "Assign owner", onSelect: () => setAssignOpen(true) },
                 { key: "toggle", label: cert.autoRenew ? "Disable auto-renew" : "Enable auto-renew", onSelect: () => setAutoRenewOpen(true) },
@@ -143,7 +143,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
             </dl>
             <div className="mt-4 flex items-center gap-2 rounded-lg border border-border bg-muted/40 p-3">
               <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
-              <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); notify({ message: "Fingerprint copied" }); } catch { notify({ message: "Clipboard unavailable" }); } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
+              <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); notify({ message: "Fingerprint copied" }); } catch { notify({ message: "Clipboard unavailable" }); } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
             </div>
           </Card>
 
@@ -191,7 +191,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
                       <td className="px-2 py-2 text-muted-foreground">{host.service}</td>
                       <td className="px-2 py-2 tabular-nums text-muted-foreground">{host.port}</td>
                       <td className="px-2 py-2 whitespace-nowrap text-muted-foreground">{mounted ? timeAgo(host.lastChecked) : "…"}</td>
-                      <td className="px-2 py-2 text-right"><Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => { markCertificateVerified(cert.id); notify({ message: `${host.hostId} — handshake verified, chain OK` }); }}>Verify</Button></td>
+                      <td className="px-2 py-2 text-right"><Button variant="outline"  onClick={() => { markCertificateVerified(cert.id); notify({ message: `${host.hostId} — handshake verified, chain OK` }); }}>Verify</Button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -217,7 +217,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
           <Card className="flex flex-col rounded-xl p-5">
             <div className="flex items-center justify-between gap-2">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><Clock3 size={15} aria-hidden="true" />Expiry alerts</h2>
-              <button type="button" onClick={() => notify({ message: "Policy editor opened (mock)" })} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Edit policy</button>
+              <button type="button" onClick={() => notify({ message: "Policy editor opened (mock)" })} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Edit policy</button>
             </div>
             <p className="mt-2 text-[0.6875rem] text-muted-foreground">Thresholds (days before expiry) · channels</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -240,16 +240,16 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
             </ol>
             <form onSubmit={(event) => { event.preventDefault(); addComment(); }} className="mt-3 flex items-center gap-2 border-t border-border pt-3">
               <input value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Add a note…" aria-label="Add a note" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-              <Button type="submit" variant="outline" size="sm" className="h-9 gap-1.5" aria-label="Post note" disabled={comment.trim().length === 0}><Send size={13} /></Button>
+              <Button type="submit" variant="outline"  aria-label="Post note" disabled={comment.trim().length === 0}><Send size={13} /></Button>
             </form>
           </Card>
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-3">
-        {newer ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/certificates-and-expiration/${newer.id}`)}><ChevronLeft size={15} />Newer · {newer.id}</Button> : <span />}
+        {newer ? <Button variant="outline"  onClick={() => router.push(`/certificates-and-expiration/${newer.id}`)}><ChevronLeft size={15} />Newer · {newer.id}</Button> : <span />}
         <span className="text-xs text-muted-foreground">{index >= 0 ? `${index + 1} of ${ordered.length}` : ""}</span>
-        {older ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/certificates-and-expiration/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button> : <span />}
+        {older ? <Button variant="outline"  onClick={() => router.push(`/certificates-and-expiration/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button> : <span />}
       </div>
 
       <RenewCertificateDialog open={renewOpen} onOpenChange={setRenewOpen} certId={cert.id} onDone={(result) => { notify(result); reload(); }} />

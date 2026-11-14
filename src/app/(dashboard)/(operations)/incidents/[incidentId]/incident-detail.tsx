@@ -55,7 +55,7 @@ function downloadBlob(content: string, type: string, filename: string) {
 }
 
 const kebabButton = (label: string) => (
-  <Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label={label}><MoreVertical size={15} /></Button>
+  <Button variant="ghost" size="icon" className="text-muted-foreground" aria-label={label}><MoreVertical size={15} /></Button>
 );
 
 export function IncidentDetail({ incidentId }: { incidentId: string }) {
@@ -180,7 +180,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Incident could not be loaded</p>
             <p className="text-sm text-muted-foreground">The incident service failed to respond. Retry to reload.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -235,20 +235,20 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         lastUpdated={timeAgo(now)}
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button variant="ghost" onClick={goBack} className="h-10 gap-1.5 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>
-            <Button variant="outline" onClick={handleAcknowledge} disabled={!open || incident.acknowledgedAt != null} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><CheckCheck size={15} aria-hidden="true" />{incident.acknowledgedAt ? "Acknowledged" : "Acknowledge"}</Button>
+            <Button variant="ghost" onClick={goBack} className="text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>
+            <Button variant="outline" onClick={handleAcknowledge} disabled={!open || incident.acknowledgedAt != null} ><CheckCheck size={15} aria-hidden="true" />{incident.acknowledgedAt ? "Acknowledged" : "Acknowledge"}</Button>
             <AlertMenu
               label="Assign incident"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm"><InitialsAvatar name={incident.assignee ?? incident.commander} size={18} />Assign</Button>}
+              trigger={<Button variant="outline" ><InitialsAvatar name={incident.assignee ?? incident.commander} size={18} />Assign</Button>}
               items={assignItems}
             />
-            <Button variant="outline" onClick={handleEscalate} disabled={!open} className="h-10 gap-1.5 rounded-lg border-orange-200 px-3 text-sm text-orange-700 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-300"><ChevronsUp size={15} aria-hidden="true" />Escalate</Button>
+            <Button variant="outline" onClick={handleEscalate} disabled={!open} className="border-orange-200 text-orange-700 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-300"><ChevronsUp size={15} aria-hidden="true" />Escalate</Button>
             <AlertMenu
               label="Change status"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">Change status</Button>}
+              trigger={<Button variant="outline" >Change status</Button>}
               items={statusItems}
             />
-            <Button onClick={handleResolve} disabled={!open} className="h-10 gap-1.5 rounded-lg bg-green-600 px-4 text-sm font-semibold text-white hover:bg-[oklch(0.5553_0.1498_149.26)]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
+            <Button onClick={handleResolve} disabled={!open} className="bg-green-600 text-white hover:bg-[oklch(0.5553_0.1498_149.26)]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
           </div>
         }
       />
@@ -360,7 +360,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                     <SelectItem value="status" className="text-sm">Status change</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button type="submit" disabled={!updateDraft.trim()} className="h-9 rounded-lg bg-primary px-4 text-sm text-primary-foreground hover:bg-primary/90">Post</Button>
+                <Button type="submit" disabled={!updateDraft.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90">Post</Button>
               </div>
             </form>
 
@@ -444,7 +444,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               <div className="flex flex-col items-center gap-2 py-4 text-center">
                 <p className="text-sm font-medium text-foreground">No postmortem started yet</p>
                 <p className="max-w-sm text-[0.8125rem] text-muted-foreground">Capture what happened, the root cause and the action items while it is fresh.</p>
-                <Button onClick={() => { startPostmortem(incident.id); showToast("Postmortem draft created."); }} className="mt-1 h-9 rounded-lg bg-primary px-4 text-sm text-primary-foreground hover:bg-primary/90">Start postmortem</Button>
+                <Button onClick={() => { startPostmortem(incident.id); showToast("Postmortem draft created."); }} className="mt-1 bg-primary text-primary-foreground hover:bg-primary/90">Start postmortem</Button>
               </div>
             ) : (
               <div className="space-y-4">
@@ -605,7 +605,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 </li>
               ))}
             </ul>
-            <Button variant="outline" onClick={() => showToast(`On-call paged — ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`)} className="mt-3 h-9 w-full gap-1.5 rounded-lg text-sm"><Phone size={14} aria-hidden="true" />Page on-call</Button>
+            <Button variant="outline" onClick={() => showToast(`On-call paged — ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`)} className="mt-3 w-full"><Phone size={14} aria-hidden="true" />Page on-call</Button>
           </ChartCard>
 
           {/* Affected services health */}

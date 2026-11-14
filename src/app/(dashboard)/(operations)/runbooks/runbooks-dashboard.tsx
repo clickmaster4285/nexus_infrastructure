@@ -387,7 +387,7 @@ export function RunbooksDashboard() {
             <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><ShieldAlert size={20} aria-hidden /></span>
             <h2 className="font-display text-base font-bold text-foreground">Couldn&rsquo;t load runbooks</h2>
             <p className="text-sm text-muted-foreground">The runbook store did not respond. Check the pipeline and try again.</p>
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-4 text-sm" onClick={reload}><RotateCcw size={15} aria-hidden />Retry</Button>
+            <Button variant="outline"  onClick={reload}><RotateCcw size={15} aria-hidden />Retry</Button>
           </div>
         </section>
       </div>
@@ -416,14 +416,14 @@ export function RunbooksDashboard() {
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
             <input ref={importInputRef} type="file" accept="application/json,.json" className="sr-only" onChange={handleImportFile} aria-hidden="true" tabIndex={-1} />
-            <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm" onClick={() => importInputRef.current?.click()}>
+            <Button variant="outline"  onClick={() => importInputRef.current?.click()}>
               <FileUp size={15} aria-hidden />Import
             </Button>
             <AlertMenu
               label="Export runbooks"
               align="end"
               width={170}
-              trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm"><FileDown size={15} aria-hidden />Export</Button>}
+              trigger={<Button variant="outline" ><FileDown size={15} aria-hidden />Export</Button>}
               items={[
                 { key: "csv", label: "Export CSV", onSelect: () => exportRows(filtered, "csv") },
                 { key: "json", label: "Export JSON", onSelect: () => exportRows(filtered, "json") },
@@ -433,7 +433,7 @@ export function RunbooksDashboard() {
               label="New runbook"
               align="end"
               width={230}
-              trigger={<Button className="h-10 gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90"><FilePlus2 size={15} aria-hidden />New Runbook<ChevronDown size={13} aria-hidden className="text-primary-foreground/80" /></Button>}
+              trigger={<Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90"><FilePlus2 size={15} aria-hidden />New Runbook<ChevronDown size={13} aria-hidden className="text-primary-foreground/80" /></Button>}
               items={[
                 { key: "blank", label: "Blank runbook", onSelect: () => router.push("/runbooks/new") },
                 { key: "template-restart", label: "From template: Service restart", onSelect: () => router.push("/runbooks/new?template=service-restart") },
@@ -458,7 +458,7 @@ export function RunbooksDashboard() {
             <ShieldAlert size={16} aria-hidden className="shrink-0" />
             {stats.uncoveredRuleIds.length} alert rules have no runbook · {stats.needsReview} runbook{stats.needsReview === 1 ? "" : "s"} need{stats.needsReview === 1 ? "s" : ""} review
           </span>
-          <button type="button" onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 rounded text-[0.8125rem] font-semibold underline underline-offset-2 transition-colors hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-amber-200">
+          <button type="button" onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 rounded-lg text-[0.8125rem] font-semibold underline underline-offset-2 transition-colors hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-amber-200">
             View gaps
           </button>
         </section>
@@ -477,7 +477,7 @@ export function RunbooksDashboard() {
       {/* Insights row 1 - equal height */}
       <section aria-label="Coverage, usage and reviews" className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
         {/* Alert Coverage donut */}
-        <ChartCard title="Alert Coverage" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Coverage options" align="end" width={190} trigger={<button type="button" aria-label="Coverage options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export coverage report (CSV)", onSelect: () => exportRows(runbooks.filter((runbook) => runbook.linkedAlertRuleIds.length > 0), "csv") }]} />}>
+        <ChartCard title="Alert Coverage" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Coverage options" align="end" width={190} trigger={<button type="button" aria-label="Coverage options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export coverage report (CSV)", onSelect: () => exportRows(runbooks.filter((runbook) => runbook.linkedAlertRuleIds.length > 0), "csv") }]} />}>
           <div id="alert-coverage" className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center gap-3 pt-1">
               <div className="relative h-[8.125rem] w-[8.125rem] shrink-0">
@@ -520,7 +520,7 @@ export function RunbooksDashboard() {
                 </li>
                 <li className="flex items-center justify-between gap-2">
                   <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><ShieldAlert size={12} aria-hidden className="text-amber-600 dark:text-amber-400" />Overdue for review</span>
-                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded text-[0.6875rem] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} · filter <ArrowRight size={11} aria-hidden className="inline-block align-[-0.0625rem]" /></button>
+                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded-lg text-[0.6875rem] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} · filter <ArrowRight size={11} aria-hidden className="inline-block align-[-0.0625rem]" /></button>
                 </li>
               </ul>
             </div>
@@ -533,7 +533,7 @@ export function RunbooksDashboard() {
         </ChartCard>
 
         {/* Most Used 30d */}
-        <ChartCard title="Most Used (30d)" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Usage options" align="end" width={170} trigger={<button type="button" aria-label="Usage options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export usage (CSV)", onSelect: () => exportRows(mostUsed, "csv") }]} />}>
+        <ChartCard title="Most Used (30d)" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Usage options" align="end" width={170} trigger={<button type="button" aria-label="Usage options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export usage (CSV)", onSelect: () => exportRows(mostUsed, "csv") }]} />}>
           <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
             {mostUsed.map((runbook) => {
               const used = stats.usage30d.get(runbook.id) ?? 0;
@@ -559,7 +559,7 @@ export function RunbooksDashboard() {
         </ChartCard>
 
         {/* Needs Review */}
-        <ChartCard title="Needs Review" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Review options" align="end" width={170} trigger={<button type="button" aria-label="Review options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export review queue (CSV)", onSelect: () => exportRows(needsReviewList, "csv") }]} />}>
+        <ChartCard title="Needs Review" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Review options" align="end" width={170} trigger={<button type="button" aria-label="Review options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export review queue (CSV)", onSelect: () => exportRows(needsReviewList, "csv") }]} />}>
           <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
             {needsReviewList.map((runbook) => {
               const days = Math.floor((Date.now() - new Date(runbook.lastReviewedAt).getTime()) / 86_400_000);
@@ -570,7 +570,7 @@ export function RunbooksDashboard() {
                     <Link href={`/runbooks/${runbook.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{runbook.title}</Link>
                     <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">Last reviewed {days}d ago · {runbook.owner}</span>
                   </span>
-                  <Button variant="outline" className="h-8 shrink-0 gap-1 rounded-lg px-2 text-xs" onClick={() => { markReviewed(runbook.id); showToast(`${runbook.id} marked as reviewed.`); }} aria-label={`Mark ${runbook.id} as reviewed`}>
+                  <Button variant="outline" className="shrink-0" onClick={() => { markReviewed(runbook.id); showToast(`${runbook.id} marked as reviewed.`); }} aria-label={`Mark ${runbook.id} as reviewed`}>
                     <CheckCircle2 size={13} aria-hidden />Review
                   </Button>
                 </li>
@@ -606,12 +606,12 @@ export function RunbooksDashboard() {
             <Input ref={searchRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runbooks, steps, commands..." aria-label="Search runbooks" className="h-9 rounded-lg pl-8 pr-8 text-sm" />
             <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] text-muted-foreground">/</kbd>
           </div>
-          <button type="button" onClick={resetFilters} className="rounded text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Reset</button>
+          <button type="button" onClick={resetFilters} className="rounded-lg text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Reset</button>
           <AlertMenu
             label="Saved views"
             align="end"
             width={220}
-            trigger={<Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-sm"><Star size={14} aria-hidden />Saved Views<ChevronDown size={12} aria-hidden className="text-muted-foreground" /></Button>}
+            trigger={<Button variant="outline" ><Star size={14} aria-hidden />Saved Views<ChevronDown size={12} aria-hidden className="text-muted-foreground" /></Button>}
             items={[
               ...PRESET_VIEWS.map((viewPreset) => ({ key: `preset-${viewPreset.name}`, label: viewPreset.name, onSelect: () => applyView(viewPreset) })),
               ...savedViews.map((viewPreset) => ({ key: `saved-${viewPreset.name}`, label: viewPreset.name, onSelect: () => applyView(viewPreset) })),
@@ -619,7 +619,7 @@ export function RunbooksDashboard() {
               { key: "clear", label: "Clear saved views", danger: true, onSelect: () => { setSavedViews([]); showToast("Saved views cleared."); } },
             ]}
           />
-          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground" aria-label={density === "default" ? "Switch to compact rows" : "Switch to comfortable rows"} onClick={() => setDensity((current) => (current === "default" ? "compact" : "default"))}>
+          <Button variant="ghost" size="icon" className="text-muted-foreground" aria-label={density === "default" ? "Switch to compact rows" : "Switch to comfortable rows"} onClick={() => setDensity((current) => (current === "default" ? "compact" : "default"))}>
             <ListFilter size={16} aria-hidden />
           </Button>
         </div>
@@ -665,10 +665,10 @@ export function RunbooksDashboard() {
         {selectedIds.length > 0 && (
           <div role="status" className="mt-2 flex h-11 flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 px-3 text-sm">
             <b className="tabular-nums text-foreground">{selectedIds.length} selected</b>
-            <button type="button" className="rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { selectedIds.forEach((id) => markReviewed(id)); showToast(`Marked ${selectedIds.length} as reviewed.`); setSelectedIds([]); }}>Mark reviewed</button>
-            <button type="button" className="rounded font-semibold text-red-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => setConfirmArchive([...selectedIds])}>Archive</button>
-            <button type="button" className="rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => exportRows(selectedIds.map((id) => runbookById.get(id)).filter((runbook): runbook is Runbook => Boolean(runbook)), "csv")}>Export</button>
-            <button type="button" className="ml-auto rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection" onClick={() => setSelectedIds([])}><X size={16} aria-hidden /></button>
+            <button type="button" className="rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { selectedIds.forEach((id) => markReviewed(id)); showToast(`Marked ${selectedIds.length} as reviewed.`); setSelectedIds([]); }}>Mark reviewed</button>
+            <button type="button" className="rounded-lg font-semibold text-red-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => setConfirmArchive([...selectedIds])}>Archive</button>
+            <button type="button" className="rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => exportRows(selectedIds.map((id) => runbookById.get(id)).filter((runbook): runbook is Runbook => Boolean(runbook)), "csv")}>Export</button>
+            <button type="button" className="ml-auto rounded-lg text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection" onClick={() => setSelectedIds([])}><X size={16} aria-hidden /></button>
           </div>
         )}
 
@@ -679,15 +679,15 @@ export function RunbooksDashboard() {
               <thead>
                 <tr className="border-b border-border text-[0.75rem] font-semibold text-muted-foreground">
                   <th className="w-9 py-2 pl-2 pr-1"><input type="checkbox" aria-label="Select all visible runbooks" className="h-4 w-4 accent-[oklch(0.5461_0.2152_262.88)]" checked={pageRows.length > 0 && selectedIds.length === pageRows.length} onChange={(event) => toggleSelectAll(event.target.checked)} /></th>
-                  <th className="w-[14%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("title")}>Title {sortIcon("title")}</button></th>
+                  <th className="w-[14%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg" onClick={() => toggleSort("title")}>Title {sortIcon("title")}</button></th>
                   <th className="w-[8%] py-2 pr-2">Category</th>
-                  <th className="w-[7%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("severity")}>Severity {sortIcon("severity")}</button></th>
+                  <th className="w-[7%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg" onClick={() => toggleSort("severity")}>Severity {sortIcon("severity")}</button></th>
                   <th className="w-[10%] py-2 pr-2">Linked alerts</th>
                   <th className="hidden w-[15%] py-2 pr-2 lg:table-cell">Services</th>
                   <th className="w-[10%] py-2 pr-2">Status</th>
                   <th className="hidden w-[8%] py-2 pr-2 xl:table-cell">Owner</th>
-                  <th className="w-[7%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("reviewed")}>Reviewed {sortIcon("reviewed")}</button></th>
-                  <th className="w-[5%] py-2 pr-2 text-right"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("used")}>Used {sortIcon("used")}</button></th>
+                  <th className="w-[7%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg" onClick={() => toggleSort("reviewed")}>Reviewed {sortIcon("reviewed")}</button></th>
+                  <th className="w-[5%] py-2 pr-2 text-right"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg" onClick={() => toggleSort("used")}>Used {sortIcon("used")}</button></th>
                   <th className="w-[5%] py-2 pr-2 text-right">Helpful</th>
                   <th className="w-[11%] py-2 pr-1 text-right">Actions</th>
                 </tr>
@@ -705,7 +705,7 @@ export function RunbooksDashboard() {
                       <td className="py-1.5 pl-2 pr-1 align-middle"><input type="checkbox" aria-label={`Select ${runbook.id}`} className="h-4 w-4 accent-[oklch(0.5461_0.2152_262.88)]" checked={selectedIds.includes(runbook.id)} onChange={(event) => setSelectedIds((current) => event.target.checked ? [...current, runbook.id] : current.filter((id) => id !== runbook.id))} onClick={(event) => event.stopPropagation()} /></td>
                       <td className="py-1.5 pr-2 align-middle">
                         <div className="flex min-w-0 items-center gap-1.5">
-                          <button type="button" aria-label={isFavorite ? `Unfavorite ${runbook.id}` : `Favorite ${runbook.id}`} aria-pressed={isFavorite} onClick={() => toggleFavorite(runbook.id)} className="shrink-0 rounded p-0.5 text-muted-foreground transition-colors hover:text-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                          <button type="button" aria-label={isFavorite ? `Unfavorite ${runbook.id}` : `Favorite ${runbook.id}`} aria-pressed={isFavorite} onClick={() => toggleFavorite(runbook.id)} className="shrink-0 rounded-lg p-0.5 text-muted-foreground transition-colors hover:text-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                             <Star size={14} aria-hidden className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
                           </button>
                           <Link href={`/runbooks/${runbook.id}`} className="min-w-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -746,7 +746,7 @@ export function RunbooksDashboard() {
                             label={`Actions for ${runbook.id}`}
                             align="end"
                             width={200}
-                            trigger={<button type="button" aria-label={`More actions for ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={15} aria-hidden /></button>}
+                            trigger={<button type="button" aria-label={`More actions for ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={15} aria-hidden /></button>}
                             items={[
                               { key: "edit", label: "Edit", onSelect: () => router.push(`/runbooks/${runbook.id}?mode=edit`) },
                               { key: "duplicate", label: "Duplicate", onSelect: () => { const copy = duplicate(runbook.id); showToast(copy ? `Duplicated as ${copy.id}.` : "Duplicate failed."); } },
@@ -765,7 +765,7 @@ export function RunbooksDashboard() {
                   <tr><td colSpan={12} className="py-10 text-center">
                     <p className="text-sm font-semibold text-foreground">No runbooks match your filters</p>
                     <p className="mt-1 text-xs text-muted-foreground">Try widening the search or clearing filters.</p>
-                    <Button variant="outline" className="mt-3 h-9 rounded-lg px-4 text-sm" onClick={resetFilters}>Reset filters</Button>
+                    <Button variant="outline" className="mt-3" onClick={resetFilters}>Reset filters</Button>
                   </td></tr>
                 )}
               </tbody>
@@ -789,8 +789,8 @@ export function RunbooksDashboard() {
                   <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2">
                     <span className="text-[0.6875rem] tabular-nums text-muted-foreground">{used} runs · {runbook.estimatedMinutes}m est</span>
                     <span className="flex items-center gap-1.5">
-                      <Button variant="outline" className="h-8 gap-1 rounded-lg px-2.5 text-xs" asChild><Link href={`/runbooks/${runbook.id}`}>Open</Link></Button>
-                      <Button className="h-8 gap-1 rounded-lg px-2.5 text-xs" asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={12} aria-hidden />Run</Link></Button>
+                      <Button variant="outline"  asChild><Link href={`/runbooks/${runbook.id}`}>Open</Link></Button>
+                      <Button  asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={12} aria-hidden />Run</Link></Button>
                     </span>
                   </div>
                 </article>
@@ -800,7 +800,7 @@ export function RunbooksDashboard() {
               <div className="col-span-full py-10 text-center">
                 <p className="text-sm font-semibold text-foreground">No runbooks match your filters</p>
                 <p className="mt-1 text-xs text-muted-foreground">Try widening the search or clearing filters.</p>
-                <Button variant="outline" className="mt-3 h-9 rounded-lg px-4 text-sm" onClick={resetFilters}>Reset filters</Button>
+                <Button variant="outline" className="mt-3" onClick={resetFilters}>Reset filters</Button>
               </div>
             )}
           </div>
@@ -815,7 +815,7 @@ export function RunbooksDashboard() {
       {/* Insights row 2 - equal height */}
       <section ref={coverageRef} aria-label="Executions and alert coverage gaps" className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2 scroll-mt-4">
         {/* Recent executions */}
-        <ChartCard title="Recent Executions" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Executions options" align="end" width={180} trigger={<button type="button" aria-label="Executions options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export executions (CSV)", onSelect: () => exportRows(recentExecutions.map((execution) => runbookById.get(execution.runbookId)).filter((runbook): runbook is Runbook => Boolean(runbook)), "csv") }]} />}>
+        <ChartCard title="Recent Executions" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Executions options" align="end" width={180} trigger={<button type="button" aria-label="Executions options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export executions (CSV)", onSelect: () => exportRows(recentExecutions.map((execution) => runbookById.get(execution.runbookId)).filter((runbook): runbook is Runbook => Boolean(runbook)), "csv") }]} />}>
           <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
             {recentExecutions.map((execution) => {
               const runbook = runbookById.get(execution.runbookId);
@@ -843,7 +843,7 @@ export function RunbooksDashboard() {
         </ChartCard>
 
         {/* Alert rules without runbook */}
-        <ChartCard title="Alert Rules without Runbook" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={            <AlertMenu label="Gaps options" align="end" width={180} trigger={<button type="button" aria-label="Gaps options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export gap list (CSV)", onSelect: exportGapRows }]} />}>
+        <ChartCard title="Alert Rules without Runbook" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={            <AlertMenu label="Gaps options" align="end" width={180} trigger={<button type="button" aria-label="Gaps options" className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export gap list (CSV)", onSelect: exportGapRows }]} />}>
           <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
             {uncoveredRules.slice(0, 7).map((rule) => (
               <li key={rule.id} className="flex items-center gap-2 py-2">
@@ -851,7 +851,7 @@ export function RunbooksDashboard() {
                   <span className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary">{rule.name}</span>
                   <span className="mt-0.5 flex items-center gap-2 text-[0.6875rem] text-muted-foreground"><RunbookSeverityBadge severity={rule.severity === "Critical" ? "Critical" : rule.severity === "Warning" ? "Medium" : "Low"} /><span className="tabular-nums">{rule.fired24h} fires 24h</span></span>
                 </Link>
-                <Button variant="outline" className="h-8 shrink-0 gap-1 rounded-lg px-2 text-xs" asChild><Link href={`/runbooks/new?rule=${rule.id}`}><FilePlus2 size={12} aria-hidden />Create runbook</Link></Button>
+                <Button variant="outline" className="shrink-0" asChild><Link href={`/runbooks/new?rule=${rule.id}`}><FilePlus2 size={12} aria-hidden />Create runbook</Link></Button>
               </li>
             ))}
             {uncoveredRules.length === 0 && <li className="py-6 text-center text-xs text-muted-foreground">Every alert rule has at least one runbook.</li>}
@@ -903,8 +903,8 @@ export function RunbooksDashboard() {
             <DialogDescription className="text-[0.75rem]">Archived runbooks stay in the library under the Archived status and remain readable for audit. Linked alerts will no longer offer them as remediation.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmArchive(null)}>Keep runbooks</Button>
-            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={confirmArchiveNow}>Archive</Button>
+            <Button variant="outline"  onClick={() => setConfirmArchive(null)}>Keep runbooks</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={confirmArchiveNow}>Archive</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -913,7 +913,7 @@ export function RunbooksDashboard() {
       {toast && (
         <div role="status" aria-live="polite" className="fixed bottom-4 right-4 z-[1200] flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm shadow-lg">
           <span>{toast.message}</span>
-          {toast.undo && <button type="button" className="rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { toast.undo?.(); setToast(null); }}>Undo</button>}
+          {toast.undo && <button type="button" className="rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { toast.undo?.(); setToast(null); }}>Undo</button>}
         </div>
       )}
     </div>

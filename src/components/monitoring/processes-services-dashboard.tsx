@@ -332,11 +332,11 @@ function ProcessTrendCard({
   };
   const action = <div className="flex shrink-0 items-center gap-1">
     <div role="group" aria-label={`${title} time range`} className="flex items-center rounded-md border border-border p-0.5">
-      {["1H", "6H", "12H", "24H"].map((range) => <button key={range} onClick={() => onPeriodChange(range)} className={`rounded px-1.5 py-1 text-[0.625rem] font-semibold ${period === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{range}</button>)}
+      {["1H", "6H", "12H", "24H"].map((range) => <button key={range} onClick={() => onPeriodChange(range)} className={`rounded-lg px-1.5 py-1 text-[0.625rem] font-semibold ${period === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{range}</button>)}
     </div>
     <div className="relative">
-      <button type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={`${title} actions`} aria-expanded={menuOpen} className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} /></button>
-      {menuOpen && <div className="absolute right-0 top-8 z-30 w-36 rounded-md border border-border bg-popover p-1 text-[0.75rem] text-foreground shadow-lg">{[["png", "Export PNG"], ["csv", "Export CSV"], ["fullscreen", "Fullscreen"]].map(([key, label]) => <button key={key} type="button" onClick={() => menuAction(key as "png" | "csv" | "fullscreen")} className="block w-full rounded px-2 py-1.5 text-left hover:bg-accent">{label}</button>)}</div>}
+      <button type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={`${title} actions`} aria-expanded={menuOpen} className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} /></button>
+      {menuOpen && <div className="absolute right-0 top-8 z-30 w-36 rounded-md border border-border bg-popover p-1 text-[0.75rem] text-foreground shadow-lg">{[["png", "Export PNG"], ["csv", "Export CSV"], ["fullscreen", "Fullscreen"]].map(([key, label]) => <button key={key} type="button" onClick={() => menuAction(key as "png" | "csv" | "fullscreen")} className="block w-full rounded-lg px-2 py-1.5 text-left hover:bg-accent">{label}</button>)}</div>}
     </div>
   </div>;
   return <Panel title={title} className="flex min-h-[23.125rem] min-w-0 flex-col p-3" action={action} showOptions={false}>
@@ -416,7 +416,7 @@ function SegmentedTabs<T extends string>({ label, value, options, onChange }: { 
       if (nextOption) onChange(nextOption);
       const tablist = event.currentTarget.parentElement;
       requestAnimationFrame(() => tablist?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[nextIndex]?.focus());
-    }} className={`whitespace-nowrap rounded px-2 py-1 text-[0.75rem] font-semibold transition-colors ${value === option ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>{option}</button>)}
+    }} className={`whitespace-nowrap rounded-lg px-2 py-1 text-[0.75rem] font-semibold transition-colors ${value === option ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>{option}</button>)}
   </div>;
 }
 
@@ -465,7 +465,7 @@ function ProcessUsageTable({ rows, usageKey, secondaryKey, totalLabel }: {
         <span className="whitespace-nowrap text-right font-normal tabular-nums text-slate-500 dark:text-slate-400">{item[secondaryKey]}</span><span className="truncate font-normal text-slate-500 dark:text-slate-400" title={item.server}>{item.server}</span>
       </div>;
     })}</div>
-    <div className="mt-auto flex items-center justify-between border-t border-border/70 pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing 1-{Math.min(rows.length, 7)} of {PROCESS_COUNTS.total.toLocaleString()} {totalLabel}</span><span className="flex items-center gap-1"><button aria-label="Previous page" className="rounded px-1.5 py-0.5 hover:bg-accent">‹</button><span className="rounded bg-primary px-2 py-0.5 text-primary-foreground">1</span><button aria-label="Next page" className="rounded px-1.5 py-0.5 hover:bg-accent">›</button></span></div>
+    <div className="mt-auto flex items-center justify-between border-t border-border/70 pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing 1-{Math.min(rows.length, 7)} of {PROCESS_COUNTS.total.toLocaleString()} {totalLabel}</span><span className="flex items-center gap-1"><button aria-label="Previous page" className="rounded-lg px-1.5 py-0.5 hover:bg-accent">‹</button><span className="rounded bg-primary px-2 py-0.5 text-primary-foreground">1</span><button aria-label="Next page" className="rounded-lg px-1.5 py-0.5 hover:bg-accent">›</button></span></div>
   </div>;
 }
 
@@ -496,8 +496,8 @@ export function ProcessesServicesDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Processes & Services"]} showRefresh={false} variant="detail" />
       <PageHeading title="Processes & Services" description="Monitor all running processes and services across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 

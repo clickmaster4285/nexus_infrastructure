@@ -317,7 +317,7 @@ function TablePagination({ page, pageCount, onPageChange }: {
         ))}
         {pageCount > 5 && <span aria-hidden="true">…</span>}
         {pageCount > 5 && (
-          <button type="button" onClick={() => onPageChange(pageCount)} className="grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-foreground">
+          <button type="button" onClick={() => onPageChange(pageCount)} className="grid h-7 w-7 place-items-center rounded-lg transition-colors hover:bg-accent hover:text-foreground">
             {pageCount}
           </button>
         )}
@@ -458,7 +458,7 @@ export function CpuMemoryDashboard() {
       <select aria-label="Aggregation" value={value} onChange={(event) => setValue(event.target.value)} className="h-8 rounded border border-border bg-card px-2 text-[0.75rem] text-foreground">
         {["Average", "Maximum", "Minimum"].map((item) => <option key={item}>{item}</option>)}
       </select>
-      {["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded px-1.5 py-1 text-[0.6875rem] font-semibold ${period === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
+      {["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded-lg px-1.5 py-1 text-[0.6875rem] font-semibold ${period === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
     </div>
   );
 
@@ -467,8 +467,8 @@ export function CpuMemoryDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "CPU & Memory"]} showRefresh={false} variant="detail" />
       <PageHeading title="CPU & Memory" description="Monitor and analyze CPU and memory utilization across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 

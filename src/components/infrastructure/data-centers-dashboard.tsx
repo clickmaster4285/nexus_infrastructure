@@ -211,8 +211,8 @@ export function DataCentersDashboard() {
         title="Data Centers & Locations"
         subtitle="Monitor data center health, location availability and infrastructure performance."
         actions={<>
-          <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Add Data Center</Button>
-          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Globe2 size={16} />View Map</Button>
+          <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} ><Plus size={16} />Add Data Center</Button>
+          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} ><Globe2 size={16} />View Map</Button>
         </>}
       />
 
@@ -221,7 +221,7 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
-        <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "oklch(0.6907 0.1499 159.66)"], ["Degraded", "oklch(0.7686 0.1647 70.08)"], ["Offline", "oklch(0.6368 0.2078 25.33)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
+        <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded-lg px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "oklch(0.6907 0.1499 159.66)"], ["Degraded", "oklch(0.7686 0.1647 70.08)"], ["Offline", "oklch(0.6368 0.2078 25.33)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
           <div id="global-data-centers" className="relative mt-2 min-h-[15.5rem] flex-1 overflow-hidden rounded-lg">
             <NocOsmMap sites={healthMapSites} center={[-33.9249, 18.4241]} initialZoom={13} />
             {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[0.6875rem] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
@@ -265,7 +265,7 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Performance and location availability" className="grid items-stretch gap-3 xl:grid-cols-[1.1fr_0.9fr_1.1fr]">
-        <Panel title="Data Center Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-[0.6875rem] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
+        <Panel title="Data Center Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded-lg px-1.5 py-1 text-[0.6875rem] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
           <DataCenterPerformance range={range} />
         </Panel>
 
@@ -287,16 +287,16 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Data center details and recent events" className="grid items-stretch gap-3 xl:grid-cols-[1.15fr_1fr]">
-        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="inline-flex items-center gap-1 rounded text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
+        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="inline-flex items-center gap-1 rounded-lg text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
             <table className="w-full min-w-[35rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Name", "Location", "Status", "Uptime", "Actions"].map((heading) => <th key={heading} className={`whitespace-nowrap px-2 pb-2 font-semibold ${heading === "Actions" ? "text-center" : ""}`}>{heading}</th>)}</tr></thead>
-              <tbody>{centers.map((center) => <tr key={center.name} className="h-[2.75rem] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 font-semibold text-foreground">{center.name}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{center.location}</td><td className="px-2"><StatusBadge status={center.status} /></td><td className="px-2 tabular-nums text-foreground">{center.uptime.toFixed(1)}%</td><td className="w-16 px-2 text-center align-middle"><button type="button" aria-label={`More actions for ${center.name}`} onClick={() => showNotice(`${center.name} actions are a mockup for now.`)} className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-md border-0 bg-transparent text-muted-foreground shadow-none transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><MoreVertical size={18} /></button></td></tr>)}</tbody>
+              <tbody>{centers.map((center) => <tr key={center.name} className="h-[2.75rem] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 font-semibold text-foreground">{center.name}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{center.location}</td><td className="px-2"><StatusBadge status={center.status} /></td><td className="px-2 tabular-nums text-foreground">{center.uptime.toFixed(1)}%</td><td className="w-16 px-2 text-center align-middle"><button type="button" aria-label={`More actions for ${center.name}`} onClick={() => showNotice(`${center.name} actions are a mockup for now.`)} className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-lg border-0 bg-transparent text-muted-foreground shadow-none transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><MoreVertical size={18} /></button></td></tr>)}</tbody>
             </table>
           </div>
         </Panel>
 
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="inline-flex items-center gap-1 rounded text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="inline-flex items-center gap-1 rounded-lg text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
             <table className="w-full min-w-[38.125rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Time", "Type", "Message", "Location", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-semibold">{heading}</th>)}</tr></thead>

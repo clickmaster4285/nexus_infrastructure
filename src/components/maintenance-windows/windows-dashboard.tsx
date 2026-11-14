@@ -858,7 +858,7 @@ export function WindowsDashboard() {
         <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
         <p className="font-display text-base font-bold text-foreground">Maintenance windows could not be loaded</p>
         <p className="text-sm text-muted-foreground">The maintenance service failed to respond. Retry to reload the schedule.</p>
-        <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+        <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
       </div>
     </section>
   );
@@ -1011,7 +1011,7 @@ export function WindowsDashboard() {
             <AlertMenu
               label="Export windows"
               trigger={
-                <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">
+                <Button variant="outline" >
                   <FileDown size={15} aria-hidden="true" />Export<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                 </Button>
               }
@@ -1111,7 +1111,7 @@ export function WindowsDashboard() {
                   label="Saved views"
                   align="end"
                   trigger={
-                    <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
+                    <Button variant="outline" >
                       <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                     </Button>
                   }
@@ -1151,7 +1151,7 @@ export function WindowsDashboard() {
                     {chip.label}<X size={11} aria-hidden="true" />
                   </button>
                 ))}
-                <button type="button" onClick={resetFilters} className="text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Clear all</button>
+                <button type="button" onClick={resetFilters} className="text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Clear all</button>
               </div>
             )}
           </div>
@@ -1161,16 +1161,16 @@ export function WindowsDashboard() {
             <div role="status" className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2 text-sm">
               <span className="font-semibold text-foreground">{selectedIds.length} selected</span>
               <div className="flex flex-wrap items-center gap-2">
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => handleCancelRequest(selectedIds)}>
+                <Button variant="outline"  onClick={() => handleCancelRequest(selectedIds)}>
                   <Ban size={13} aria-hidden="true" />Cancel
                 </Button>
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => exportRows("csv", windows.filter((window) => selectedIds.includes(window.id)), "selected")}>
+                <Button variant="outline"  onClick={() => exportRows("csv", windows.filter((window) => selectedIds.includes(window.id)), "selected")}>
                   <FileDown size={13} aria-hidden="true" />Export
                 </Button>
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={bulkNotify}>
+                <Button variant="outline"  onClick={bulkNotify}>
                   <Bell size={13} aria-hidden="true" />Notify
                 </Button>
-                <button type="button" onClick={() => setSelectedIds([])} className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={15} /></button>
+                <button type="button" onClick={() => setSelectedIds([])} className="rounded-lg p-1 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={15} /></button>
               </div>
             </div>
           )}
@@ -1319,7 +1319,7 @@ export function WindowsDashboard() {
                             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                             <p className="font-display text-base font-bold text-foreground">No maintenance windows match your filters</p>
                             <p className="max-w-sm text-sm text-muted-foreground">Try clearing the search or filters to see the full schedule.</p>
-                            <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={resetFilters}><X size={14} />Clear filters</Button>
+                            <Button variant="outline" className="mt-1" onClick={resetFilters}><X size={14} />Clear filters</Button>
                           </div>
                         </td>
                       </tr>
@@ -1365,7 +1365,7 @@ export function WindowsDashboard() {
                             <AlertMenu
                               label={`Actions for ${window.id}`}
                               align="end"
-                              trigger={<button type="button" aria-label={`Actions for ${window.id}`} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={15} /></button>}
+                              trigger={<button type="button" aria-label={`Actions for ${window.id}`} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground hover:bg-accent"><MoreVertical size={15} /></button>}
                               items={kebabFor(window)}
                             />
                           </span>
@@ -1388,7 +1388,7 @@ export function WindowsDashboard() {
                   <div className="flex min-h-[13.75rem] flex-col items-center justify-center gap-2 p-6 text-center">
                     <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                     <p className="font-display text-base font-bold text-foreground">No maintenance windows match your filters</p>
-                    <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={resetFilters}><X size={14} />Clear filters</Button>
+                    <Button variant="outline" className="mt-1" onClick={resetFilters}><X size={14} />Clear filters</Button>
                   </div>
                 )}
               </div>
@@ -1455,10 +1455,10 @@ export function WindowsDashboard() {
             <section aria-label="Maintenance calendar" className="rounded-xl border border-border bg-card p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Button variant="outline" size="icon-sm" className="h-8 w-8" onClick={() => moveCalendar(-1)} aria-label={calendarMode === "week" ? "Previous week" : "Previous month"}><ChevronLeft size={15} /></Button>
+                  <Button variant="outline" size="icon"  onClick={() => moveCalendar(-1)} aria-label={calendarMode === "week" ? "Previous week" : "Previous month"}><ChevronLeft size={15} /></Button>
                   <h2 className="min-w-[9.375rem] text-center font-display text-base font-bold text-foreground">{calendarLabel}</h2>
-                  <Button variant="outline" size="icon-sm" className="h-8 w-8" onClick={() => moveCalendar(1)} aria-label={calendarMode === "week" ? "Next week" : "Next month"}><ChevronRight size={15} /></Button>
-                  <Button variant="outline" className="h-8 px-3 text-[0.8125rem]" onClick={() => setCalendarCursor(new Date())}>Today</Button>
+                  <Button variant="outline" size="icon"  onClick={() => moveCalendar(1)} aria-label={calendarMode === "week" ? "Next week" : "Next month"}><ChevronRight size={15} /></Button>
+                  <Button variant="outline"  onClick={() => setCalendarCursor(new Date())}>Today</Button>
                 </div>
                 <SegmentedControl value={calendarMode === "month" ? "Month" : "Week"} options={["Month", "Week"] as const} onChange={(value) => setCalendarMode(value === "Week" ? "week" : "month")} buttonClassName="h-8 px-3 text-[0.8125rem]" />
               </div>
@@ -1627,7 +1627,7 @@ export function WindowsDashboard() {
               actions={
                 <AlertMenu
                   label="Upcoming windows options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Upcoming windows options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Upcoming windows options"><MoreVertical size={15} /></Button>}
                   items={[{ key: "view-all", label: "View all scheduled", onSelect: () => { setFilters((current) => ({ ...current, status: "Scheduled", range: "7D" })); setPage(1); setView("list"); } }]}
                 />
               }
@@ -1661,7 +1661,7 @@ export function WindowsDashboard() {
               actions={
                 <AlertMenu
                   label="Suppressed alerts options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Suppressed alerts options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Suppressed alerts options"><MoreVertical size={15} /></Button>}
                   items={[{ key: "csv", label: "Copy chart data (CSV)", onSelect: () => { const csv = ["day,suppressed", ...suppressed7d.map((bucket) => `${bucket.label},${bucket.alerts}`)].join("\r\n"); downloadBlob(csv, "text/csv;charset=utf-8", "suppressed-7d.csv"); showToast("Suppressed alerts data copied as CSV."); } }]}
                 />
               }
@@ -1769,7 +1769,7 @@ export function WindowsDashboard() {
               actions={
                 <AlertMenu
                   label="Group breakdown options"
-                  trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Group breakdown options"><MoreVertical size={15} /></Button>}
+                  trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Group breakdown options"><MoreVertical size={15} /></Button>}
                   items={groupStats.slice(0, 3).map((row) => ({ key: row.group, label: `Filter: ${row.name}`, onSelect: () => { setFilter("groups", [row.group]); setView("list"); } }))}
                 />
               }
@@ -1857,8 +1857,8 @@ export function WindowsDashboard() {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setCancelTargets(null)}>Keep windows</Button>
-                <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={confirmCancel}>Cancel maintenance</Button>
+                <Button variant="outline"  onClick={() => setCancelTargets(null)}>Keep windows</Button>
+                <Button className="bg-red-600 text-white hover:bg-red-700" onClick={confirmCancel}>Cancel maintenance</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -1871,8 +1871,8 @@ export function WindowsDashboard() {
                 <DialogDescription>The window will be marked Completed, alerts will be unmuted and actual end time recorded as now.</DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setEndTarget(null)}>Keep running</Button>
-                <Button className="h-10 rounded-lg px-4 text-sm font-semibold" onClick={confirmEndNow}>End now</Button>
+                <Button variant="outline"  onClick={() => setEndTarget(null)}>Keep running</Button>
+                <Button  onClick={confirmEndNow}>End now</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -1902,7 +1902,7 @@ export function WindowsDashboard() {
                   Undo
                 </button>
               )}
-              <button type="button" onClick={() => setToast(null)} aria-label="Dismiss" className="rounded p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={14} /></button>
+              <button type="button" onClick={() => setToast(null)} aria-label="Dismiss" className="rounded-lg p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={14} /></button>
             </div>
           )}
         </>
@@ -2126,9 +2126,9 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
         <footer className="flex flex-wrap items-center gap-2 border-t border-border p-4">
           {live && (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onExtend(window.id, 30)}>+30m</Button>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onExtend(window.id, 60)}>+1h</Button>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onEndNow(window.id)}>End now</Button>
+              <Button variant="outline"  onClick={() => onExtend(window.id, 30)}>+30m</Button>
+              <Button variant="outline"  onClick={() => onExtend(window.id, 60)}>+1h</Button>
+              <Button variant="outline"  onClick={() => onEndNow(window.id)}>End now</Button>
             </>
           )}
           <Link href={`/maintenance-windows/${window.id}`} className="inline-flex h-9 items-center rounded-lg border border-input bg-card px-3 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open full page</Link>

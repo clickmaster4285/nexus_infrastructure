@@ -857,18 +857,18 @@ export function NetworkMonitoringDashboard() {
     <div className="flex items-center gap-1">
       <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">
         {(["1H", "6H", "12H", "24H"] as RangeKey[]).map((item) => (
-          <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={cn("rounded px-1.5 py-1 text-[0.6875rem] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{item}</button>
+          <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={cn("rounded-lg px-1.5 py-1 text-[0.6875rem] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{item}</button>
         ))}
       </div>
       <details className="relative" open={menuOpen} onToggle={(event) => setMenuOpen((event.currentTarget as HTMLDetailsElement).open)}>
         <summary aria-label="Chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary>
         <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
           {(["Average", "Max", "Min"] as Aggregation[]).map((item) => (
-            <button key={item} type="button" onClick={() => { setAggregation(item); setMenuOpen(false); }} className={cn("block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent", aggregation === item && "font-semibold text-primary")}>{item}</button>
+            <button key={item} type="button" onClick={() => { setAggregation(item); setMenuOpen(false); }} className={cn("block w-full rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent", aggregation === item && "font-semibold text-primary")}>{item}</button>
           ))}
           <div className="my-1 border-t border-border" />
-          <button type="button" onClick={() => { exportCsv(); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export CSV</button>
-          <button type="button" onClick={() => { toast("Chart image export is a demo action."); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export PNG</button>
+          <button type="button" onClick={() => { exportCsv(); setMenuOpen(false); }} className="block w-full rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export CSV</button>
+          <button type="button" onClick={() => { toast("Chart image export is a demo action."); setMenuOpen(false); }} className="block w-full rounded-lg px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export PNG</button>
         </div>
       </details>
     </div>
@@ -885,8 +885,8 @@ export function NetworkMonitoringDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Network Monitoring"]} showRefresh={false} variant="detail" />
       <PageHeading title="Network Monitoring" description="Real-time overview of your network performance, traffic, and connectivity." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
+          <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 

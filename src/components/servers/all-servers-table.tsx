@@ -147,8 +147,8 @@ export function AllServersTable({
                   <td className="relative border-b border-border/60 px-[0.4375rem] py-2 text-center align-middle">
                     <Button
                       variant="ghost"
-                      size="icon-sm"
-                      className="h-7 w-7 text-muted-foreground"
+                      size="icon"
+                      className="text-muted-foreground"
                       aria-label={`Actions for ${server.name}`}
                       aria-expanded={openActionsId === server.id}
                       onClick={(event) => {
@@ -188,11 +188,11 @@ export function AllServersTable({
             <span className="inline-grid h-[1.75rem] min-w-9 place-items-center rounded border border-input bg-card px-1.5 text-[0.6875rem] text-[oklch(0.5101_0.0473_253.09)]">{pageSize}</span>
           </span>
           <span className="mr-1 whitespace-nowrap">{start}-{end} of {totalFiltered}</span>
-          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronFirst size={13} /></button>
-          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLeft size={13} /></button>
+          <button type="button" aria-label="First page" disabled={page <= 1} onClick={() => onPageChange(1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded-lg border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronFirst size={13} /></button>
+          <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPageChange(page - 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded-lg border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLeft size={13} /></button>
           <span aria-current="page" className="grid h-[1.5rem] w-[1.5rem] place-items-center rounded border border-primary bg-primary text-[0.5625rem] font-bold text-primary-foreground">{page}</span>
-          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronRight size={13} /></button>
-          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLast size={13} /></button>
+          <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded-lg border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronRight size={13} /></button>
+          <button type="button" aria-label="Last page" disabled={page >= pageCount} onClick={() => onPageChange(pageCount)} className="grid h-[1.5rem] w-[1.5rem] cursor-pointer place-items-center rounded-lg border border-input bg-card text-[oklch(0.5653_0.0461_253.02)] transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-40"><ChevronLast size={13} /></button>
       </div>}
     </>
   );

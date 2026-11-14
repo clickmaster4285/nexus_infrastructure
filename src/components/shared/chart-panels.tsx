@@ -161,7 +161,7 @@ export function AvailabilityPanel({ className }: { className?: string }) {
         {serverAvailability.map((server) => (
           <div key={server.name} className="grid min-h-[1.5625rem] grid-cols-[minmax(6.25rem,1fr)_2.625rem_minmax(5.625rem,1.2fr)] items-center gap-2 text-xs text-[oklch(0.5082_0.0495_256.03)] dark:text-[oklch(0.7879_0.0377_252.13)]">
             <span className="truncate">{server.name}</span>
-            <span className="whitespace-nowrap text-right">{server.count}</span>
+            <span className="whitespace-nowrap text-right tabular-nums">{server.count}</span>
             <div className="flex h-2.5 overflow-hidden rounded-sm bg-muted" aria-hidden="true">
               {server.segments.map((value, index) => (
                 <span key={index} style={{ width: `${value}%`, background: segmentColors[index] }} />
@@ -170,12 +170,16 @@ export function AvailabilityPanel({ className }: { className?: string }) {
           </div>
         ))}
       </div>
-      <div className="mt-2 flex justify-between text-[0.5625rem] text-muted-foreground" aria-hidden="true">
-        <span>00:00</span>
-        <span>06:00</span>
-        <span>12:00</span>
-        <span>18:00</span>
-        <span>24:00</span>
+      <div className="mt-2 grid grid-cols-[minmax(6.25rem,1fr)_2.625rem_minmax(5.625rem,1.2fr)] gap-2 text-[0.5625rem] text-muted-foreground" aria-hidden="true">
+        <span />
+        <span />
+        <span className="flex justify-between">
+          <span>00:00</span>
+          <span>06:00</span>
+          <span>12:00</span>
+          <span>18:00</span>
+          <span>24:00</span>
+        </span>
       </div>
     </Panel>
   );

@@ -489,13 +489,13 @@ export function ConfigChangesDashboard() {
           <div className="flex items-center gap-2">
             <AlertMenu
               label="Export configuration changes"
-              trigger={<Button variant="outline" className="h-10 gap-1.5 text-sm"><FileCog size={15} />Export</Button>}
+              trigger={<Button variant="outline" ><FileCog size={15} />Export</Button>}
               items={[
                 { key: "csv", label: "CSV (filtered)", onSelect: () => handleExport("csv") },
                 { key: "json", label: "JSON (filtered)", onSelect: () => handleExport("json") },
               ]}
             />
-            <Button className="h-10 gap-1.5 text-sm" onClick={() => setScanOpen(true)}><ScanLine size={15} />Run Drift Scan</Button>
+            <Button  onClick={() => setScanOpen(true)}><ScanLine size={15} />Run Drift Scan</Button>
           </div>
         }
       />
@@ -509,7 +509,7 @@ export function ConfigChangesDashboard() {
             <span className="hidden sm:inline" aria-hidden="true">·</span>
             <span>{summary.driftedAssets} assets drifted from baseline</span>
           </span>
-          <button type="button" onClick={() => { applyFilters({ tab: "unapproved" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+          <button type="button" onClick={() => { applyFilters({ tab: "unapproved" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
             Review unapproved <ChevronRight size={14} className="inline" aria-hidden="true" />
           </button>
         </div>
@@ -611,7 +611,7 @@ export function ConfigChangesDashboard() {
             <div className="flex items-center gap-2">
               <div className="flex rounded-lg border border-border bg-muted/40 p-0.5" role="group" aria-label="Review filter">
                 {(["unapproved", "highrisk"] as const).map((value) => (
-                  <button key={value} type="button" aria-pressed={reviewFilter === value} onClick={() => setReviewFilter(value)} className={cn("rounded-md px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", reviewFilter === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
+                  <button key={value} type="button" aria-pressed={reviewFilter === value} onClick={() => setReviewFilter(value)} className={cn("rounded-lg px-2.5 py-1 text-xs font-semibold capitalize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", reviewFilter === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}>
                     {value === "unapproved" ? "Unapproved" : "High risk"}
                   </button>
                 ))}
@@ -627,7 +627,7 @@ export function ConfigChangesDashboard() {
               .slice(0, 6)
               .map((change) => (
                 <li key={change.id} className="group relative flex-1">
-                  <button type="button" onClick={() => openEvent(change.id)} className="flex h-full w-full items-center gap-2 rounded-md px-2 py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open change ${change.id}`}>
+                  <button type="button" onClick={() => openEvent(change.id)} className="flex h-full w-full items-center gap-2 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open change ${change.id}`}>
                     <ConfigRiskBadge risk={change.risk} className="w-[4.5rem] shrink-0 justify-center" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-mono text-[0.75rem] font-semibold text-foreground" title={change.path}>{change.path}</span>
@@ -637,8 +637,8 @@ export function ConfigChangesDashboard() {
                     <ApprovalBadge status={change.approvalStatus} className="shrink-0" />
                   </button>
                   <div className="absolute right-1 top-1/2 hidden -translate-y-1/2 items-center gap-1 rounded-md border border-border bg-card p-1 shadow group-hover:flex focus-within:flex">
-                    <button type="button" title="Approve" aria-label={`Approve ${change.id}`} className="grid h-7 w-7 place-items-center rounded-md text-emerald-600 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-emerald-500/10" onClick={() => setApproveTarget(change)}><Check size={13} /></button>
-                    <button type="button" title="Reject" aria-label={`Reject ${change.id}`} className="grid h-7 w-7 place-items-center rounded-md text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-rose-500/10" onClick={() => setRejectTarget(change)}><X size={13} /></button>
+                    <button type="button" title="Approve" aria-label={`Approve ${change.id}`} className="grid h-7 w-7 place-items-center rounded-lg text-emerald-600 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-emerald-500/10" onClick={() => setApproveTarget(change)}><Check size={13} /></button>
+                    <button type="button" title="Reject" aria-label={`Reject ${change.id}`} className="grid h-7 w-7 place-items-center rounded-lg text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-rose-500/10" onClick={() => setRejectTarget(change)}><X size={13} /></button>
                   </div>
                 </li>
               ))}
@@ -665,7 +665,7 @@ export function ConfigChangesDashboard() {
             <ul className="grid w-full grid-cols-3 gap-x-4 gap-y-3 text-sm">
               {CONFIG_CATEGORY_MIX.slice(0, 6).map(([category, count]) => (
                 <li key={category}>
-                  <button type="button" onClick={() => applyFilters({ category })} className="flex w-full flex-col items-start gap-0.5 rounded-md p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${category}`}>
+                  <button type="button" onClick={() => applyFilters({ category })} className="flex w-full flex-col items-start gap-0.5 rounded-lg p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${category}`}>
                     <span className="flex min-w-0 items-center gap-1.5 text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category] }} aria-hidden="true" /><span className="truncate">{category}</span></span>
                     <span className="flex w-full items-baseline justify-between gap-2"><b className="tabular-nums text-foreground">{count}</b><span className="text-[0.6875rem] tabular-nums text-muted-foreground">{Math.round((count / summary.total24h) * 100)}%</span></span>
                   </button>
@@ -683,7 +683,7 @@ export function ConfigChangesDashboard() {
               const pct = Math.min(100, Math.round((group.drifted / Math.max(1, total)) * 100));
               return (
                 <li key={group.group}>
-                  <button type="button" onClick={() => applyFilters({ group: group.group })} className="flex w-full items-center gap-2 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1" aria-label={`Filter by group ${group.group}`}>
+                  <button type="button" onClick={() => applyFilters({ group: group.group })} className="flex w-full items-center gap-2 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg px-1" aria-label={`Filter by group ${group.group}`}>
                     <span className="w-32 shrink-0 truncate text-[0.8125rem] font-medium text-foreground">{group.group}</span>
                     <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-orange-400" style={{ width: `${Math.max(12, pct)}%` }} /></div>
                     <span className="w-12 shrink-0 text-right text-xs tabular-nums text-muted-foreground"><b className="text-foreground">{group.drifted}</b> drifted</span>
@@ -721,7 +721,7 @@ export function ConfigChangesDashboard() {
           </ol>
           <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
             <p className="text-xs text-muted-foreground">Benchmark: <b className="text-foreground">{CONFIG_COMPLIANCE.benchmark}</b></p>
-            <button type="button" onClick={() => setScanOpen(true)} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded inline-flex items-center gap-1"><ScanLine size={12} />Run scan</button>
+            <button type="button" onClick={() => setScanOpen(true)} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg inline-flex items-center gap-1"><ScanLine size={12} />Run scan</button>
           </div>
         </ChartCard>
       </section>
@@ -761,7 +761,7 @@ export function ConfigChangesDashboard() {
               const pct = Math.round((count / summary.total24h) * 100);
               return (
                 <li key={source}>
-                  <button type="button" onClick={() => applyFilters({ source })} className="flex w-full items-center gap-2 rounded-md px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by source ${source}`}>
+                  <button type="button" onClick={() => applyFilters({ source })} className="flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by source ${source}`}>
                     <ConfigSourceBadge source={source} className="w-36 shrink-0 justify-center" />
                     <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-sky-400" style={{ width: `${Math.max(10, pct)}%` }} /></div>
                     <b className="w-9 shrink-0 text-right text-xs tabular-nums text-foreground">{count}</b>
@@ -782,7 +782,7 @@ export function ConfigChangesDashboard() {
             {CONFIG_INCIDENT_LINKS.map((link) => (
               <li key={link.changeId} className="flex flex-1 flex-col justify-center py-2">
                 <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => openEvent(link.changeId)} className="min-w-0 flex-1 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <button type="button" onClick={() => openEvent(link.changeId)} className="min-w-0 flex-1 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     <span className="block truncate font-mono text-[0.8125rem] font-semibold text-primary hover:underline">{link.changeId}</span>
                     <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><span aria-hidden="true" className="text-[0.9375rem] leading-none text-muted-foreground">→</span><Link href={`/incidents/${link.incidentId}`} onClick={(event) => event.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{link.incidentId}</Link><span className="shrink-0">· {link.minutesAfter} min later</span></span>
                   </button>
@@ -825,14 +825,14 @@ export function ConfigChangesDashboard() {
           <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
             <div className="flex items-center gap-1" role="group" aria-label="Filter by risk">
               {(["all", "low", "medium", "high", "critical"] as const).map((value) => (
-                <button key={value} type="button" onClick={() => applyFilters({ risk: value })} aria-pressed={riskFilter === value} className={cn("h-8 rounded-md border px-2.5 text-xs font-semibold capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", riskFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
+                <button key={value} type="button" onClick={() => applyFilters({ risk: value })} aria-pressed={riskFilter === value} className={cn("h-8 rounded-lg border px-2.5 text-xs font-semibold capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", riskFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
                   {value === "all" ? "All risk" : value}
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-1" role="group" aria-label="Filter by approval">
               {(["all", "Approved", "Unapproved", "Pending", "Expected"] as const).map((value) => (
-                <button key={value} type="button" onClick={() => applyFilters({ approval: value })} aria-pressed={approvalFilter === value} className={cn("h-8 rounded-md border px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", approvalFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
+                <button key={value} type="button" onClick={() => applyFilters({ approval: value })} aria-pressed={approvalFilter === value} className={cn("h-8 rounded-lg border px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", approvalFilter === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent")}>
                   {value === "all" ? "All approvals" : value}
                 </button>
               ))}
@@ -850,12 +850,12 @@ export function ConfigChangesDashboard() {
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
             </div>
             {activeFilterCount > 0 && (
-              <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="inline-flex h-9 items-center gap-1 rounded-md border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={12} />Reset ({activeFilterCount})</button>
+              <button type="button" onClick={() => router.replace(pathname, { scroll: false })} className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={12} />Reset ({activeFilterCount})</button>
             )}
             <AlertMenu
               label="Saved Views"
               align="end"
-              trigger={<Button variant="outline" className="h-9 gap-1.5 text-sm"><ListFilter size={14} />Saved Views</Button>}
+              trigger={<Button variant="outline" ><ListFilter size={14} />Saved Views</Button>}
               items={[
                 ...savedViewsBuiltin.map((view) => ({ key: `builtin-${view.name}`, label: view.name, onSelect: () => applySavedView(view.patch) })),
                 ...(savedViews.length > 0 ? [{ key: "divider-user", label: "", divider: true } as const] : []),
@@ -877,12 +877,12 @@ export function ConfigChangesDashboard() {
             <div className="flex flex-wrap items-center gap-3 border-b border-border bg-primary/5 px-4 py-2 text-sm">
               <b className="tabular-nums text-foreground">{selectionCount} selected</b>
               <div className="flex flex-wrap items-center gap-1">
-                <button type="button" onClick={bulkApprove} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Approve</button>
-                <button type="button" onClick={bulkReject} className="h-8 rounded-md px-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-rose-500/10">Reject</button>
-                <button type="button" onClick={bulkMarkExpected} className="h-8 rounded-md px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Mark expected</button>
-                <button type="button" onClick={bulkExport} className="h-8 rounded-md px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Export</button>
+                <button type="button" onClick={bulkApprove} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Approve</button>
+                <button type="button" onClick={bulkReject} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-rose-500/10">Reject</button>
+                <button type="button" onClick={bulkMarkExpected} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Mark expected</button>
+                <button type="button" onClick={bulkExport} className="h-8 rounded-lg px-2.5 text-xs font-semibold text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Export</button>
               </div>
-              <button type="button" onClick={() => setSelected(new Set())} className="ml-auto rounded px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear selection</button>
+              <button type="button" onClick={() => setSelected(new Set())} className="ml-auto rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear selection</button>
             </div>
           )}
 
@@ -892,13 +892,13 @@ export function ConfigChangesDashboard() {
               <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="w-10 px-3 py-2.5"><input type="checkbox" aria-label="Select all changes on this page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("detectedAt")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Detected {sort.key === "detectedAt" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("detectedAt")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Detected {sort.key === "detectedAt" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="px-2 py-2.5 font-semibold">Asset</th>
                   <th className="px-2 py-2.5 font-semibold">Change</th>
                   <th className="hidden px-2 py-2.5 font-semibold md:table-cell">Source</th>
                   <th className="hidden px-2 py-2.5 font-semibold md:table-cell">Changed by</th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("approvalStatus")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Approval {sort.key === "approvalStatus" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
-                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("approvalStatus")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Approval {sort.key === "approvalStatus" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
+                  <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="hidden px-2 py-2.5 font-semibold sm:table-cell">Drift</th>
                   <th className="hidden px-2 py-2.5 font-semibold lg:table-cell">Status</th>
                   <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[1.125rem]" : "left-0.5")} /></button></span></th>
@@ -947,12 +947,12 @@ export function ConfigChangesDashboard() {
                       <td className="hidden px-2 py-2 align-middle lg:table-cell"><ConfigStatusBadge status={change.status} /></td>
                       <td className="px-2 py-2 align-middle text-right">
                         <div className="flex items-center justify-end gap-1" onClick={(clickEvent) => clickEvent.stopPropagation()} onKeyDown={(keyEvent) => keyEvent.stopPropagation()}>
-                          <button type="button" title="Approve" aria-label={`Approve ${change.id}`} onClick={() => setApproveTarget(change)} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-emerald-50 hover:text-emerald-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100 dark:hover:bg-emerald-500/10"><Check size={13} /></button>
-                          <button type="button" title="Reject" aria-label={`Reject ${change.id}`} onClick={() => setRejectTarget(change)} className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100 dark:hover:bg-rose-500/10"><X size={13} /></button>
+                          <button type="button" title="Approve" aria-label={`Approve ${change.id}`} onClick={() => setApproveTarget(change)} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-emerald-50 hover:text-emerald-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100 dark:hover:bg-emerald-500/10"><Check size={13} /></button>
+                          <button type="button" title="Reject" aria-label={`Reject ${change.id}`} onClick={() => setRejectTarget(change)} className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100 dark:hover:bg-rose-500/10"><X size={13} /></button>
                           <AlertMenu
                             label={`Change ${change.id} actions`}
                             align="end"
-                            trigger={<button type="button" className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Change ${change.id} actions`}><MoreVertical size={14} /></button>}
+                            trigger={<button type="button" className="grid h-7 w-7 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Change ${change.id} actions`}><MoreVertical size={14} /></button>}
                             items={[
                               { key: "view", label: "View details", onSelect: () => openEvent(change.id) },
                               { key: "d1", label: "", divider: true },
@@ -977,7 +977,7 @@ export function ConfigChangesDashboard() {
                       <SearchX className="mx-auto text-muted-foreground" size={26} />
                       <p className="mt-2 text-sm font-semibold text-foreground">No changes match these filters</p>
                       <p className="mt-1 text-xs text-muted-foreground">Try removing a filter or clearing the search.</p>
-                      <Button variant="outline" size="sm" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Reset filters</Button>
+                      <Button variant="outline" className="mt-3" onClick={() => router.replace(pathname, { scroll: false })}><RotateCcw size={13} />Reset filters</Button>
                     </td>
                   </tr>
                 )}

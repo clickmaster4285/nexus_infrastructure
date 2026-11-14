@@ -32,19 +32,19 @@ export function RuleBulkBar({ count, onEnable, onDisable, onMute, onDelete, onCl
     >
       <span className="text-[0.8125rem] font-semibold text-foreground">{count} selected</span>
       <span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
-      <Button size="sm" variant="outline" onClick={onEnable} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+      <Button variant="outline" onClick={onEnable} >
         <CheckCircle2 size={13} aria-hidden="true" />Enable
       </Button>
-      <Button size="sm" variant="outline" onClick={onDisable} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
+      <Button variant="outline" onClick={onDisable} >
         <ShieldOff size={13} aria-hidden="true" />Disable
       </Button>
       <AlertMenu
         label="Mute selected rules"
         width={150}
-        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]"><BellOff size={13} aria-hidden="true" />Mute</Button>}
+        trigger={<Button variant="outline" ><BellOff size={13} aria-hidden="true" />Mute</Button>}
         items={muteItems}
       />
-      <Button size="sm" variant="outline" onClick={onDelete} className="h-8 gap-1.5 rounded-lg border-red-200 px-2.5 text-[0.75rem] text-red-600 hover:bg-red-50 dark:border-red-900/60 dark:text-red-400 dark:hover:bg-red-950/40">
+      <Button variant="outline" onClick={onDelete} className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900/60 dark:text-red-400 dark:hover:bg-red-950/40">
         <Trash2 size={13} aria-hidden="true" />Delete
       </Button>
       <button

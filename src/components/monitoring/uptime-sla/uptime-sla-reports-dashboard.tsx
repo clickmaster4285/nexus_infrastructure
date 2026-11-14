@@ -105,7 +105,7 @@ export function UptimeSlaReportsDashboard() {
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">SLA data could not be loaded</p>
             <p className="text-sm text-muted-foreground">The report service failed for the requested window. Retry to reload it.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -123,10 +123,10 @@ export function UptimeSlaReportsDashboard() {
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <div className="flex shrink-0 items-center gap-2">
-              <Button variant="outline" onClick={() => exportFile("pdf")} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><FileText size={15} />PDF</Button>
-              <Button variant="outline" onClick={() => exportFile("csv")} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><FileSpreadsheet size={15} />CSV</Button>
+              <Button variant="outline" onClick={() => exportFile("pdf")} ><FileText size={15} />PDF</Button>
+              <Button variant="outline" onClick={() => exportFile("csv")} ><FileSpreadsheet size={15} />CSV</Button>
             </div>
-            <Button onClick={() => setScheduleOpen(true)} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><CalendarDays size={15} />Schedule report</Button>
+            <Button onClick={() => setScheduleOpen(true)} ><CalendarDays size={15} />Schedule report</Button>
           </div>
         }
       />
@@ -135,7 +135,7 @@ export function UptimeSlaReportsDashboard() {
       <section aria-label="Report filters" className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3">
         <div className="flex h-9 items-center rounded-lg border border-border p-0.5" role="group" aria-label="Time range">
           {RANGE_OPTIONS.map((option) => (
-            <button key={option} type="button" aria-pressed={range === option} onClick={() => setRange(option)} className={cn("h-8 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", range === option ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{option.toUpperCase()}</button>
+            <button key={option} type="button" aria-pressed={range === option} onClick={() => setRange(option)} className={cn("h-8 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", range === option ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{option.toUpperCase()}</button>
           ))}
         </div>
         <Select value="all" onValueChange={() => notify("All services shown.")}>
@@ -229,8 +229,8 @@ export function UptimeSlaReportsDashboard() {
               </label>
             </div>
             <div className="mt-5 flex justify-end gap-2">
-              <Button variant="outline" size="sm" onClick={() => setScheduleOpen(false)} className="h-9 rounded-lg px-3 text-sm">Cancel</Button>
-              <Button size="sm" onClick={() => { setScheduleOpen(false); notify(`Report scheduled: ${scheduleFreq}, ${scheduleFormat.toUpperCase()} → ${scheduleRecipients}`); }} className="h-9 gap-1.5 rounded-lg px-3 text-sm"><CheckCircle2 size={14} />Schedule</Button>
+              <Button variant="outline" onClick={() => setScheduleOpen(false)} >Cancel</Button>
+              <Button onClick={() => { setScheduleOpen(false); notify(`Report scheduled: ${scheduleFreq}, ${scheduleFormat.toUpperCase()} → ${scheduleRecipients}`); }} ><CheckCircle2 size={14} />Schedule</Button>
             </div>
           </div>
         </div>

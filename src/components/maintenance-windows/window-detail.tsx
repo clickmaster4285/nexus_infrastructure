@@ -216,7 +216,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window could not be loaded</p>
             <p className="text-sm text-muted-foreground">Retry to reload the schedule.</p>
-            <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
+            <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
         </section>
       </div>
@@ -283,11 +283,11 @@ export function WindowDetail({ windowId }: { windowId: string }) {
         lastUpdated={timeAgo(now)}
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button variant="ghost" onClick={goBack} className="h-10 gap-1.5 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Maintenance Windows</Button>
+            <Button variant="ghost" onClick={goBack} className="text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Maintenance Windows</Button>
             <Link href={`/maintenance-windows/${window_.id}/edit`} aria-disabled={!live && !scheduled} tabIndex={!live && !scheduled ? -1 : undefined} className={cn("inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", !live && !scheduled && "pointer-events-none opacity-40")}>Edit</Link>
             <AlertMenu
               label="Extend window"
-              trigger={<Button variant="outline" disabled={!live && !scheduled} className="h-10 gap-1.5 rounded-lg px-3 text-sm"><ChevronDown size={14} aria-hidden="true" className="order-2" />Extend</Button>}
+              trigger={<Button variant="outline" disabled={!live && !scheduled} ><ChevronDown size={14} aria-hidden="true" className="order-2" />Extend</Button>}
               items={[
                 { key: "+30", label: "+30 minutes", onSelect: () => { extendWindow(window_.id, 30); showToast(`${window_.id} extended by 30m.`); } },
                 { key: "+60", label: "+1 hour", onSelect: () => { extendWindow(window_.id, 60); showToast(`${window_.id} extended by 1h.`); } },
@@ -298,16 +298,16 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 } },
               ]}
             />
-            <Button variant="outline" onClick={() => setEndOpen(true)} disabled={!live} className="h-10 gap-1.5 rounded-lg px-3 text-sm">End now</Button>
+            <Button variant="outline" onClick={() => setEndOpen(true)} disabled={!live} >End now</Button>
             {pendingApproval && (
               <>
-                <Button variant="outline" onClick={() => { approveWindows([window_.id]); showToast(`${window_.id} approved.`); }} className="h-10 gap-1.5 rounded-lg border-emerald-200 px-3 text-sm text-emerald-700 hover:bg-emerald-50 dark:border-emerald-500/30 dark:text-emerald-300"><ShieldCheck size={15} aria-hidden="true" />Approve</Button>
-                <Button variant="outline" onClick={() => { rejectWindows([window_.id]); showToast(`${window_.id} rejected.`); }} className="h-10 gap-1.5 rounded-lg border-red-200 px-3 text-sm text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-300"><ShieldX size={15} aria-hidden="true" />Reject</Button>
+                <Button variant="outline" onClick={() => { approveWindows([window_.id]); showToast(`${window_.id} approved.`); }} className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-500/30 dark:text-emerald-300"><ShieldCheck size={15} aria-hidden="true" />Approve</Button>
+                <Button variant="outline" onClick={() => { rejectWindows([window_.id]); showToast(`${window_.id} rejected.`); }} className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-300"><ShieldX size={15} aria-hidden="true" />Reject</Button>
               </>
             )}
             <AlertMenu
               label="More actions"
-              trigger={<Button variant="outline" size="icon-sm" className="h-10 w-10" aria-label="More actions"><MoreVertical size={16} /></Button>}
+              trigger={<Button variant="outline" size="icon"  aria-label="More actions"><MoreVertical size={16} /></Button>}
               items={kebabItems}
             />
           </div>
@@ -324,7 +324,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             actions={
               <AlertMenu
                 label="Overview options"
-                trigger={<Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Overview options"><MoreVertical size={15} /></Button>}
+                trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Overview options"><MoreVertical size={15} /></Button>}
                 items={[
                   { key: "copy-summary", label: "Copy summary", onSelect: () => copy("Summary", `${window_.id} [${window_.status}] ${window_.title}\n${formatDateTime(startMs)} → ${formatDateTime(endMs)} (${window_.timeZone})\nOwner: ${window_.owner} · Ticket: ${window_.changeTicket ?? "—"}`) },
                   { key: "copy-ticket", label: "Copy ticket id", onSelect: () => copy("Ticket", window_.changeTicket ?? "") },
@@ -363,7 +363,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 <dd className="mt-1 flex items-center gap-1.5 text-sm">
                   <span className="font-mono text-foreground">{window_.changeTicket ?? "—"}</span>
                   {window_.changeTicket && (
-                    <button type="button" onClick={() => copy("Ticket", window_.changeTicket ?? "")} aria-label="Copy change ticket id" className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={12} aria-hidden="true" /></button>
+                    <button type="button" onClick={() => copy("Ticket", window_.changeTicket ?? "")} aria-label="Copy change ticket id" className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={12} aria-hidden="true" /></button>
                   )}
                 </dd>
               </div>
@@ -460,7 +460,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 className="w-full resize-y rounded-md border border-input bg-card px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
               />
               <div className="flex justify-end">
-                <Button type="submit" disabled={!noteDraft.trim()} className="h-9 rounded-lg px-4 text-sm">Post</Button>
+                <Button type="submit" disabled={!noteDraft.trim()} >Post</Button>
               </div>
             </form>
             <ol className="relative ml-2 border-l-2 border-border pl-6">
@@ -642,8 +642,8 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <DialogDescription>The window will be marked Completed, alerts will be unmuted and the actual end time recorded as now.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setEndOpen(false)}>Keep running</Button>
-            <Button className="h-10 rounded-lg px-4 text-sm font-semibold" onClick={confirmEndNow}>End now</Button>
+            <Button variant="outline"  onClick={() => setEndOpen(false)}>Keep running</Button>
+            <Button  onClick={confirmEndNow}>End now</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -656,8 +656,8 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <DialogDescription>The window will be cancelled and its muted alerts restored immediately.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setCancelOpen(false)}>Keep window</Button>
-            <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={confirmCancel}>Cancel window</Button>
+            <Button variant="outline"  onClick={() => setCancelOpen(false)}>Keep window</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={confirmCancel}>Cancel window</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -667,7 +667,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
         <div role="status" aria-live="polite" className="fixed bottom-4 left-1/2 z-[1500] flex -translate-x-1/2 items-center gap-3 rounded-xl border border-border bg-popover px-4 py-2.5 text-sm text-popover-foreground shadow-lg">
           <Check size={15} aria-hidden="true" className="text-emerald-600" />
           <span>{toast}</span>
-          <button type="button" onClick={() => setToast(null)} aria-label="Dismiss" className="rounded p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={14} /></button>
+          <button type="button" onClick={() => setToast(null)} aria-label="Dismiss" className="rounded-lg p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={14} /></button>
         </div>
       )}
     </div>

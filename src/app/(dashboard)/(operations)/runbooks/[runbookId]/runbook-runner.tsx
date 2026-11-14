@@ -132,7 +132,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists.</p>
-          <Button variant="outline" className="mt-4 h-10 rounded-lg px-4 text-sm" onClick={() => router.push("/runbooks")}><ChevronLeft size={15} aria-hidden />Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}><ChevronLeft size={15} aria-hidden />Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -260,7 +260,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
               ))}
             </div>
           </fieldset>
-          <Button className="mt-4 h-10 w-full rounded-lg text-sm font-semibold" onClick={recordAndReturn}><CheckCircle2 size={16} aria-hidden />Save execution &amp; finish</Button>
+          <Button className="mt-4 w-full" onClick={recordAndReturn}><CheckCircle2 size={16} aria-hidden />Save execution &amp; finish</Button>
         </div>
         {toast && <div role="status" aria-live="polite" className="rounded-lg border border-border bg-card px-3 py-2 text-sm shadow">{toast.message}</div>}
       </div>
@@ -273,7 +273,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
       {/* Top bar: breadcrumb-ish + progress + timer + exit */}
       <div className="rounded-xl border border-border bg-card p-3">
         <div className="flex flex-wrap items-center gap-3">
-          <button type="button" onClick={exitClicked} className="inline-flex items-center gap-1 rounded text-sm font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronLeft size={15} aria-hidden />Exit</button>
+          <button type="button" onClick={exitClicked} className="inline-flex items-center gap-1 rounded-lg text-sm font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronLeft size={15} aria-hidden />Exit</button>
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground"><span className="truncate font-semibold text-foreground">{runbook.title}</span><span className="shrink-0 tabular-nums">Step {Math.min(currentIndex + 1, steps.length)} of {steps.length} · {formatDurationMs(elapsedMs)}</span></div>
             <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100} aria-label="Run progress"><div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${progressPct}%` }} /></div>
@@ -291,8 +291,8 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
       {savedProgress && (
         <div role="status" className="flex flex-wrap items-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
           <ShieldAlert size={15} aria-hidden />You have an unfinished run from {timeAgo(savedProgress.startedAt)} (step {savedProgress.currentIndex + 1} of {steps.length}).
-          <button type="button" className="rounded font-semibold underline underline-offset-2 hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={resume}>Resume</button>
-          <button type="button" className="rounded font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={discardResume}>Discard</button>
+          <button type="button" className="rounded-lg font-semibold underline underline-offset-2 hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={resume}>Resume</button>
+          <button type="button" className="rounded-lg font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={discardResume}>Discard</button>
         </div>
       )}
 
@@ -351,7 +351,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                 {currentStep.command && (
                   <div className="relative mt-2">
                     <pre className="overflow-x-auto rounded-lg border border-border bg-slate-900 p-3 font-mono text-[0.75rem] leading-relaxed text-slate-100"><code>{currentStep.command}</code></pre>
-                    <button type="button" aria-label="Copy command" className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-md border border-border/60 bg-card/80 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { try { void navigator.clipboard?.writeText(currentStep.command!).then(() => showToast("Command copied."), () => showToast("Copy failed.")); } catch { showToast("Clipboard unavailable."); } }}><Clipboard size={13} aria-hidden /></button>
+                    <button type="button" aria-label="Copy command" className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-lg border border-border/60 bg-card/80 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { try { void navigator.clipboard?.writeText(currentStep.command!).then(() => showToast("Command copied."), () => showToast("Copy failed.")); } catch { showToast("Clipboard unavailable."); } }}><Clipboard size={13} aria-hidden /></button>
                     {currentStep.expectedOutput && <p className="mt-1.5 text-[0.6875rem] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{currentStep.expectedOutput}</p>}
                   </div>
                 )}
@@ -377,8 +377,8 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                   <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-2.5">
                     <label htmlFor="skip-reason" className="text-xs font-semibold text-muted-foreground">Reason to skip (required)</label>
                     <input id="skip-reason" value={skipReason} onChange={(event) => setSkipReason(event.target.value)} autoFocus className="h-8 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="e.g. not applicable in this environment" />
-                    <Button variant="outline" className="h-8 rounded-lg px-3 text-xs" onClick={() => setSkipPromptFor(null)}>Cancel</Button>
-                    <Button className="h-8 rounded-lg px-3 text-xs" disabled={!skipReason.trim()} onClick={() => skipStep(currentStep.id)}>Skip step</Button>
+                    <Button variant="outline"  onClick={() => setSkipPromptFor(null)}>Cancel</Button>
+                    <Button  disabled={!skipReason.trim()} onClick={() => skipStep(currentStep.id)}>Skip step</Button>
                   </div>
                 )}
 
@@ -387,20 +387,20 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                   <label htmlFor="run-note" className="text-xs font-semibold text-muted-foreground">Add note</label>
                   <div className="mt-1 flex gap-2">
                     <input id="run-note" value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") addNote(); }} className="h-9 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Observation for the run log..." />
-                    <Button variant="outline" className="h-9 shrink-0 gap-1 rounded-lg px-3 text-xs" onClick={addNote}><NotebookPen size={13} aria-hidden />Add</Button>
+                    <Button variant="outline" className="shrink-0" onClick={addNote}><NotebookPen size={13} aria-hidden />Add</Button>
                   </div>
                   {notes.length > 0 && <ul className="mt-2 space-y-1 text-[0.6875rem] text-muted-foreground">{notes.slice(-3).map((note, index) => <li key={`${note.at}-${index}`} className="truncate"><span className="font-semibold text-foreground/70">[{note.stepId}]</span> {note.text}</li>)}</ul>}
                 </div>
 
                 {/* Action bar */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                  <Button variant="ghost" className="h-9 rounded-lg px-3 text-[0.8125rem] text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skip…</Button>
+                  <Button variant="ghost" className="text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skip…</Button>
                   <button type="button" className="inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => showToast("Issue reported to the runbook owner (mock).")}>Report issue</button>
                   <div className="ml-auto flex items-center gap-2">
                     {currentIndex < steps.length - 1 ? (
-                      <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => completeStep(currentStep.id)}>Mark complete<CheckCircle2 size={15} aria-hidden /></Button>
+                      <Button  disabled={isWarningStep && !acknowledgedCurrent} onClick={() => completeStep(currentStep.id)}>Mark complete<CheckCircle2 size={15} aria-hidden /></Button>
                     ) : (
-                      <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => { completeStep(currentStep.id); finishRun(); }}>Finish<Flag size={15} aria-hidden /></Button>
+                      <Button  disabled={isWarningStep && !acknowledgedCurrent} onClick={() => { completeStep(currentStep.id); finishRun(); }}>Finish<Flag size={15} aria-hidden /></Button>
                     )}
                   </div>
                 </div>
@@ -410,7 +410,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                 <ShieldCheck className="mx-auto h-10 w-10 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 <h2 className="mt-2 font-display text-base font-extrabold text-foreground">All steps processed</h2>
                 <p className="mt-0.5 text-sm text-muted-foreground">{doneStepIds.length} of {steps.length} steps done{Object.keys(skipped).length > 0 ? ` · ${Object.keys(skipped).length} skipped` : ""}.</p>
-                <Button className="mt-3 h-10 gap-1.5 rounded-lg px-5 text-sm font-semibold" onClick={finishRun}><Flag size={15} aria-hidden />Finish &amp; summary</Button>
+                <Button className="mt-3" onClick={finishRun}><Flag size={15} aria-hidden />Finish &amp; summary</Button>
               </section>
             )}
           </div>
@@ -425,8 +425,8 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
             <DialogDescription className="text-[0.75rem]">Your progress on {runbook.id} will be saved on this device. You can resume later from this page.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setExitDialog(false)}>Keep running</Button>
-            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={saveAndExit}>Save &amp; exit</Button>
+            <Button variant="outline"  onClick={() => setExitDialog(false)}>Keep running</Button>
+            <Button  onClick={saveAndExit}>Save &amp; exit</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -444,12 +444,12 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
           <DialogFooter className="gap-2">
             {!automateRunning && automateOutput.length === 0 && (
               <>
-                <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => { setAutomateStep(null); setAutomateOutput([]); }}>Cancel</Button>
-                <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={confirmAutomatedRun}><Play size={14} aria-hidden />Run now</Button>
+                <Button variant="outline"  onClick={() => { setAutomateStep(null); setAutomateOutput([]); }}>Cancel</Button>
+                <Button  onClick={confirmAutomatedRun}><Play size={14} aria-hidden />Run now</Button>
               </>
             )}
             {automateOutput.length > 0 && !automateRunning && (
-              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => { if (automateStep) completeStep(automateStep.id); setAutomateStep(null); setAutomateOutput([]); }}>Done</Button>
+              <Button  onClick={() => { if (automateStep) completeStep(automateStep.id); setAutomateStep(null); setAutomateOutput([]); }}>Done</Button>
             )}
           </DialogFooter>
         </DialogContent>

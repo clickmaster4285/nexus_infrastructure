@@ -233,12 +233,12 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
         statusBadge={<span className="flex items-center gap-1.5"><ResultBadge result={event.result} /><span className={cn("inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-xs font-semibold", flagTone.text)} title="Risk score"><AlertTriangle size={11} aria-hidden="true" />Risk {event.riskScore}</span></span>}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10" onClick={() => setBlockIps([event.ip])}><Ban size={15} />Block IP</Button>
-            <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => setLockTarget({ user: event.user, locked })}>{locked ? <LockOpen size={15} /> : <Lock size={15} />}{locked ? "Unlock" : "Lock"}</Button>
+            <Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>
+            <Button variant="outline" className="text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10" onClick={() => setBlockIps([event.ip])}><Ban size={15} />Block IP</Button>
+            <Button variant="outline"  onClick={() => setLockTarget({ user: event.user, locked })}>{locked ? <LockOpen size={15} /> : <Lock size={15} />}{locked ? "Unlock" : "Lock"}</Button>
             <AlertMenu
               label="More actions"
-              trigger={<Button variant="outline" className="h-10 w-10 px-0" aria-label="More actions"><MoreVertical size={16} /></Button>}
+              trigger={<Button variant="outline"  aria-label="More actions"><MoreVertical size={16} /></Button>}
               items={[
                 { key: "reset", label: "Force password reset", onSelect: () => setForceResetTarget(event.user) },
                 { key: "revoke", label: "Revoke sessions", danger: true, onSelect: () => setRevokeTarget(event.user) },
@@ -322,7 +322,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               {userEvents.map((item) => (
                 <li key={item.id} className="relative pb-2.5 last:pb-0">
                   <span aria-hidden="true" className={cn("absolute -left-[1.3125rem] top-1 h-2.5 w-2.5 rounded-full ring-2 ring-card", item.result === "Success" ? "bg-emerald-400" : item.result === "Failed" ? "bg-rose-400" : item.result === "Blocked" ? "bg-red-600" : "bg-amber-400")} />
-                  <button type="button" onClick={() => router.push(`/authentication-events/${item.id}`)} className="flex w-full flex-wrap items-center gap-x-3 gap-y-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                  <button type="button" onClick={() => router.push(`/authentication-events/${item.id}`)} className="flex w-full flex-wrap items-center gap-x-3 gap-y-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
                     <b className="font-mono text-xs text-primary">{item.id}</b>
                     <span className="text-xs text-foreground">{item.method}</span>
                     <span className="text-xs text-muted-foreground">{item.target}</span>
@@ -373,7 +373,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
                 <p className="break-all font-mono text-base font-bold text-foreground">{event.ip}</p>
                 <p className="text-xs text-muted-foreground">{event.city}, {event.country} � {asn?.asn} � {asn?.org}</p>
               </div>
-              <button type="button" onClick={() => { void copyLink(); }} aria-label="Copy event link" className="ml-auto grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}</button>
+              <button type="button" onClick={() => { void copyLink(); }} aria-label="Copy event link" className="ml-auto grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}</button>
             </div>
             <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
               <div className="rounded-lg bg-muted/50 p-2"><dt className="text-xs text-muted-foreground">Attempts (24h)</dt><dd className="mt-0.5 text-lg font-bold tabular-nums text-foreground">{sourceSuspect ? sourceSuspect.attempts : 3 + ([...event.ip].reduce((acc, char) => acc + char.charCodeAt(0), 0) % 38)}</dd></div>
@@ -382,7 +382,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
             {sourceSuspect?.anonymizer && <p className="mt-2 flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-1.5 text-xs font-semibold text-violet-800 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300"><AlertTriangle size={12} aria-hidden="true" />Known anonymizer / exit node</p>}
             <div className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
               <span className="text-xs text-muted-foreground">Reputation: <b className={cn(sourceSuspect ? "text-red-600 dark:text-red-400" : "text-emerald-700 dark:text-emerald-400")}>{sourceSuspect ? "Hostile" : "Neutral"}</b></span>
-              <Button variant={ipBlocked ? "outline" : "destructive"} className={cn("h-9 text-xs", !ipBlocked && "bg-red-600 text-white hover:bg-red-700")} onClick={() => setBlockIps([event.ip])}>{ipBlocked ? "Unblock IP" : "Block IP"}</Button>
+              <Button variant={ipBlocked ? "outline" : "destructive"} className={cn("", !ipBlocked && "bg-red-600 text-white hover:bg-red-700")} onClick={() => setBlockIps([event.ip])}>{ipBlocked ? "Unblock IP" : "Block IP"}</Button>
             </div>
           </Card>
 
@@ -404,8 +404,8 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               <div className="rounded-lg bg-muted/50 p-2"><dt className="text-xs text-muted-foreground">Password changed</dt><dd className="mt-0.5 font-semibold tabular-nums text-foreground">{12 + ([...event.user].reduce((acc, char) => acc + char.charCodeAt(0), 0) % 150)}d ago</dd></div>
             </dl>
             <div className="mt-3 flex items-center justify-end gap-2 border-t border-border pt-3">
-              <Button variant="outline" className="h-9 text-xs" onClick={() => setForceResetTarget(event.user)}>Force reset</Button>
-              <Button variant="outline" className="h-9 text-xs" onClick={() => setLockTarget({ user: event.user, locked })}>{locked ? "Unlock" : "Lock"}</Button>
+              <Button variant="outline"  onClick={() => setForceResetTarget(event.user)}>Force reset</Button>
+              <Button variant="outline"  onClick={() => setLockTarget({ user: event.user, locked })}>{locked ? "Unlock" : "Lock"}</Button>
             </div>
           </Card>
 
@@ -418,15 +418,15 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               </li>
               <li className="flex items-center justify-between gap-2 py-2">
                 <span className="flex min-w-0 items-center gap-2"><AlertTriangle size={14} className="shrink-0 text-red-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Incident</span><span className="text-muted-foreground">Not declared</span></span></span>
-                <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForEvent)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Create ?</button>
+                <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForEvent)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Create ?</button>
               </li>
               <li className="flex items-center justify-between gap-2 py-2">
                 <span className="flex min-w-0 items-center gap-2"><KeyRound size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span><Link href="/alert-rules" className="text-primary hover:underline">RUL-1042 � Auth failure burst</Link></span></span>
               </li>
             </ul>
             <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border pt-3">
-              <Button className="h-9 flex-1 text-xs" onClick={() => setMarkReviewedOpen(true)}><CheckCircle2 size={14} />Mark reviewed</Button>
-              <Button variant="outline" className="h-9 flex-1 text-xs" onClick={() => setFalsePositiveOpen(true)}>False positive</Button>
+              <Button className="flex-1" onClick={() => setMarkReviewedOpen(true)}><CheckCircle2 size={14} />Mark reviewed</Button>
+              <Button variant="outline" className="flex-1" onClick={() => setFalsePositiveOpen(true)}>False positive</Button>
             </div>
           </Card>
         </div>
@@ -435,11 +435,11 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
       {/* Prev / Next */}
       <div className="flex items-center justify-between gap-3">
         {newerEvent
-          ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/authentication-events/${newerEvent.id}`)}><ChevronLeft size={15} />Newer � {newerEvent.id}</Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/authentication-events/${newerEvent.id}`)}><ChevronLeft size={15} />Newer � {newerEvent.id}</Button>
           : <span />}
         <span className="text-xs text-muted-foreground">{eventIndex >= 0 ? `${eventIndex + 1} of ${ordered.length}` : ""}</span>
         {olderEvent
-          ? <Button variant="outline" className="h-10 gap-1.5 text-sm" onClick={() => router.push(`/authentication-events/${olderEvent.id}`)}>{olderEvent.id} � Older<ChevronRight size={15} /></Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/authentication-events/${olderEvent.id}`)}>{olderEvent.id} � Older<ChevronRight size={15} /></Button>
           : <span />}
       </div>
 

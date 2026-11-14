@@ -187,7 +187,7 @@ export function BackupsFilters({
             align="end"
             width={200}
             trigger={
-              <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
+              <Button variant="outline" >
                 <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
               </Button>
             }

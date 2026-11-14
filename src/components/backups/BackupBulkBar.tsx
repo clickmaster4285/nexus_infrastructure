@@ -17,13 +17,13 @@ export function BackupBulkBar({ count, onRunNow, onPause, onDelete, onClear }: B
     <div role="status" className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/30 bg-primary/5 px-4 py-2 text-sm">
       <span className="font-semibold text-foreground">{count} selected</span>
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={onRunNow}>
+        <Button variant="outline"  onClick={onRunNow}>
           <Zap size={13} aria-hidden="true" />Run now
         </Button>
-        <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={onPause}>
+        <Button variant="outline"  onClick={onPause}>
           <PauseCircle size={13} aria-hidden="true" />Pause
         </Button>
-        <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem] text-red-600 hover:text-red-600" onClick={onDelete}>
+        <Button variant="outline" className="text-red-600 hover:text-red-600" onClick={onDelete}>
           <Trash2 size={13} aria-hidden="true" />Delete
         </Button>
         <button

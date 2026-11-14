@@ -474,21 +474,21 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
         {/* Footer */}
         <footer className="flex items-center gap-2 border-t border-border p-4">
           {step > 0 ? (
-            <Button variant="outline" onClick={() => setStep((current) => current - 1)} className="h-9 gap-1 rounded-lg px-3 text-[0.8125rem]">
+            <Button variant="outline" onClick={() => setStep((current) => current - 1)} >
               <ChevronLeft size={15} aria-hidden="true" />Back
             </Button>
           ) : (
-            <Button variant="ghost" onClick={attemptClose} className="h-9 rounded-lg px-3 text-[0.8125rem] text-muted-foreground">Cancel</Button>
+            <Button variant="ghost" onClick={attemptClose} className="text-muted-foreground">Cancel</Button>
           )}
           <div className="ml-auto flex items-center gap-2">
             {step < STEPS.length - 1 ? (
-              <Button onClick={goNext} className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem]">
+              <Button onClick={goNext} >
                 Next<ChevronRight size={15} aria-hidden="true" />
               </Button>
             ) : (
               <>
-                <Button variant="outline" onClick={() => submit(false)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Save</Button>
-                <Button onClick={() => submit(true)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Save & Enable</Button>
+                <Button variant="outline" onClick={() => submit(false)} >Save</Button>
+                <Button onClick={() => submit(true)} >Save & Enable</Button>
               </>
             )}
           </div>
@@ -503,8 +503,8 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
             <DialogDescription>This rule has edits that were not saved. Closing now will lose them.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDiscardOpen(false)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Keep editing</Button>
-            <Button variant="destructive" onClick={() => { setDiscardOpen(false); onClose(); }} className="h-9 rounded-lg px-4 text-[0.8125rem]">Discard</Button>
+            <Button variant="outline" onClick={() => setDiscardOpen(false)} >Keep editing</Button>
+            <Button variant="destructive" onClick={() => { setDiscardOpen(false); onClose(); }} >Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

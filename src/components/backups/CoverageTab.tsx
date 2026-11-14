@@ -99,7 +99,7 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
                   {asset.protected ? (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-emerald-400"><ShieldCheck size={13} aria-hidden="true" />Protected</span>
                   ) : (
-                    <Button variant="outline" className="h-8 rounded-lg border-red-200 px-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400" onClick={() => setProtectHost(asset.host)}>
+                    <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400" onClick={() => setProtectHost(asset.host)}>
                       <AlertTriangle size={12} aria-hidden="true" className="mr-1" />Protect now
                     </Button>
                   )}
@@ -182,8 +182,8 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
             </div>
           </div>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setProtectHost(null)}>Cancel</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={submitProtect}>
+            <Button variant="outline"  onClick={() => setProtectHost(null)}>Cancel</Button>
+            <Button  onClick={submitProtect}>
               <CheckCircle2 size={15} aria-hidden="true" />Enable backup
             </Button>
           </DialogFooter>
