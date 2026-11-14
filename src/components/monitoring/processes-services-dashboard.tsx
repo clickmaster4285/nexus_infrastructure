@@ -208,7 +208,7 @@ function EChartCanvas({
     chartRef.current?.setOption(options, { notMerge: true, lazyUpdate: true });
   }, [options]);
 
-  return <div ref={elementRef} className={`h-full min-h-[220px] min-w-0 w-full flex-1 ${className}`} style={{ flex: "1 1 0%" }} aria-label="Interactive process monitoring chart" />;
+  return <div ref={elementRef} className={`h-full min-h-[13.75rem] min-w-0 w-full flex-1 ${className}`} style={{ flex: "1 1 0%" }} aria-label="Interactive process monitoring chart" />;
 }
 
 function buildAreaOption({
@@ -267,7 +267,7 @@ function buildAreaOption({
       trigger: "axis", confine: true, appendToBody: true,
       backgroundColor: colors.popover,
       borderColor: gridColor, borderWidth: 1, borderRadius: 8, padding: [10, 12],
-      extraCssText: "box-shadow:0 8px 24px rgba(15,23,42,.14);min-width:148px;",
+      extraCssText: "box-shadow:0 0.5rem 1.5rem rgba(15,23,42,.14);min-width:9.25rem;",
       axisPointer: { type: "line", lineStyle: { color: "#94A3B8", type: "dashed", width: 1 } },
       position: (point, _params, _dom, _rect, size) => {
         const x = Number(point[0]); const y = Number(point[1]);
@@ -279,9 +279,9 @@ function buildAreaOption({
         const heading = rows[0]?.axisValue ?? "";
         const lines = rows.filter((row) => row.seriesName && row.value != null).map((row) => {
           const spec = series.find((item) => item.name === row.seriesName);
-          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:6px"><span style="white-space:nowrap"><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${row.color ?? spec?.color};margin-right:7px"></i>${row.seriesName}</span><b style="white-space:nowrap">${tooltipValue(Number(row.value), spec?.unit ?? "")}</b></div>`;
+          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:0.875rem;margin-top:0.375rem"><span style="white-space:nowrap"><i style="display:inline-block;width:0.4375rem;height:0.4375rem;border-radius:50%;background:${row.color ?? spec?.color};margin-right:0.4375rem"></i>${row.seriesName}</span><b style="white-space:nowrap">${tooltipValue(Number(row.value), spec?.unit ?? "")}</b></div>`;
         }).join("");
-        return `<div style="font-size:12px;color:${axisColor};font-weight:600">${heading}</div>${lines}`;
+        return `<div style="font-size:0.75rem;color:${axisColor};font-weight:600">${heading}</div>${lines}`;
       },
     },
     series: selectedSeries.map((item) => ({
@@ -332,36 +332,36 @@ function ProcessTrendCard({
   };
   const action = <div className="flex shrink-0 items-center gap-1">
     <div role="group" aria-label={`${title} time range`} className="flex items-center rounded-md border border-border p-0.5">
-      {["1H", "6H", "12H", "24H"].map((range) => <button key={range} onClick={() => onPeriodChange(range)} className={`rounded px-1.5 py-1 text-[10px] font-semibold ${period === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{range}</button>)}
+      {["1H", "6H", "12H", "24H"].map((range) => <button key={range} onClick={() => onPeriodChange(range)} className={`rounded px-1.5 py-1 text-[0.625rem] font-semibold ${period === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{range}</button>)}
     </div>
     <div className="relative">
       <button type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={`${title} actions`} aria-expanded={menuOpen} className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} /></button>
-      {menuOpen && <div className="absolute right-0 top-8 z-30 w-36 rounded-md border border-border bg-popover p-1 text-[12px] text-foreground shadow-lg">{[["png", "Export PNG"], ["csv", "Export CSV"], ["fullscreen", "Fullscreen"]].map(([key, label]) => <button key={key} type="button" onClick={() => menuAction(key as "png" | "csv" | "fullscreen")} className="block w-full rounded px-2 py-1.5 text-left hover:bg-accent">{label}</button>)}</div>}
+      {menuOpen && <div className="absolute right-0 top-8 z-30 w-36 rounded-md border border-border bg-popover p-1 text-[0.75rem] text-foreground shadow-lg">{[["png", "Export PNG"], ["csv", "Export CSV"], ["fullscreen", "Fullscreen"]].map(([key, label]) => <button key={key} type="button" onClick={() => menuAction(key as "png" | "csv" | "fullscreen")} className="block w-full rounded px-2 py-1.5 text-left hover:bg-accent">{label}</button>)}</div>}
     </div>
   </div>;
-  return <Panel title={title} className="flex min-h-[370px] min-w-0 flex-col p-3" action={action} showOptions={false}>
+  return <Panel title={title} className="flex min-h-[23.125rem] min-w-0 flex-col p-3" action={action} showOptions={false}>
     <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
       <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={`${title} series`}>
         {series.map((item) => {
           const active = enabledKeys.includes(item.key); const latest = Number(visibleData[visibleData.length - 1]?.[item.key] ?? 0);
-          return <button key={item.key} type="button" aria-pressed={active} onClick={() => setEnabledKeys((keys) => active ? keys.filter((key) => key !== item.key) : [...keys, item.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 rounded-full border px-2 text-[11px] ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: active ? item.color : "#94A3B8" }} />{item.name}<b className="font-semibold tabular-nums no-underline">{kind === "count" ? Math.round(latest).toLocaleString() : `${latest.toFixed(1)} ${item.unit}`}</b></button>;
+          return <button key={item.key} type="button" aria-pressed={active} onClick={() => setEnabledKeys((keys) => active ? keys.filter((key) => key !== item.key) : [...keys, item.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 rounded-full border px-2 text-[0.6875rem] ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: active ? item.color : "#94A3B8" }} />{item.name}<b className="font-semibold tabular-nums no-underline">{kind === "count" ? Math.round(latest).toLocaleString() : `${latest.toFixed(1)} ${item.unit}`}</b></button>;
         })}
       </div>
       <EChartCanvas options={options} group={connectedProcessCharts} onReady={(chart) => { chartRefs.current[id] = chart; }} />
-      <div className="flex flex-wrap items-center gap-x-3 border-t border-border/70 pt-1.5 text-[11px] text-muted-foreground"><span>{summaryName} Avg <b className="text-foreground">{kind === "count" ? Math.round(average).toLocaleString() : `${average.toFixed(1)}%`}</b></span><span>Peak <b className="text-foreground">{kind === "count" ? Math.round(peak).toLocaleString() : `${peak.toFixed(1)}%`}</b></span>{kind === "count" && <span>Total <b className="text-foreground">{PROCESS_COUNTS.total.toLocaleString()}</b> = {PROCESS_COUNTS.running.toLocaleString()} running + {PROCESS_COUNTS.stopped.toLocaleString()} stopped</span>}</div>
+      <div className="flex flex-wrap items-center gap-x-3 border-t border-border/70 pt-1.5 text-[0.6875rem] text-muted-foreground"><span>{summaryName} Avg <b className="text-foreground">{kind === "count" ? Math.round(average).toLocaleString() : `${average.toFixed(1)}%`}</b></span><span>Peak <b className="text-foreground">{kind === "count" ? Math.round(peak).toLocaleString() : `${peak.toFixed(1)}%`}</b></span>{kind === "count" && <span>Total <b className="text-foreground">{PROCESS_COUNTS.total.toLocaleString()}</b> = {PROCESS_COUNTS.running.toLocaleString()} running + {PROCESS_COUNTS.stopped.toLocaleString()} stopped</span>}</div>
     </div>
   </Panel>;
 }
 
 function Donut({ data, total, label = "Total", featured = false }: { data: { name: string; value: number; percent: string; color: string }[]; total: number; label?: string; featured?: boolean }) {
   const chartSize = featured ? 150 : 116;
-  return <div className={`flex ${featured ? "flex-col items-center gap-2" : "h-[130px] items-center gap-2.5"}`}>
+  return <div className={`flex ${featured ? "flex-col items-center gap-2" : "h-[8.125rem] items-center gap-2.5"}`}>
     <div className="relative shrink-0" style={{ width: chartSize, height: chartSize }}>
       <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={data.filter((item) => item.value > 0)} dataKey="value" innerRadius={featured ? "72%" : "60%"} outerRadius="94%" paddingAngle={featured ? 2 : 1} stroke="none">{data.filter((item) => item.value > 0).map((item) => <Cell key={item.name} fill={item.color} />)}</Pie></PieChart></ResponsiveContainer>
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className={`font-display font-extrabold leading-tight text-foreground ${featured ? "text-[24px]" : "text-[20px]"}`}>{total.toLocaleString()}</b><span className="whitespace-nowrap text-[12px] text-muted-foreground">{featured ? "Total" : label}</span></div>
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className={`font-display font-extrabold leading-tight text-foreground ${featured ? "text-[1.5rem]" : "text-[1.25rem]"}`}>{total.toLocaleString()}</b><span className="whitespace-nowrap text-[0.75rem] text-muted-foreground">{featured ? "Total" : label}</span></div>
     </div>
-    <div className={`min-w-0 ${featured ? "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] gap-x-3 gap-y-1.5 text-[11px]" : "flex-1 space-y-2.5"}`}>
-      {data.map((item) => <div key={item.name} className={featured ? "contents" : "grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 text-[12px]"}>
+    <div className={`min-w-0 ${featured ? "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] gap-x-3 gap-y-1.5 text-[0.6875rem]" : "flex-1 space-y-2.5"}`}>
+      {data.map((item) => <div key={item.name} className={featured ? "contents" : "grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 text-[0.75rem]"}>
         <span className={featured ? "inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap text-foreground" : "contents"}><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} /><span className="truncate">{item.name}</span></span>
         <b className="whitespace-nowrap text-right text-foreground">{item.value}</b><span className="whitespace-nowrap text-right text-muted-foreground">{item.percent}</span>
       </div>)}
@@ -383,7 +383,7 @@ function ServiceBreakdown({ data, total }: { data: { name: string; value: number
 
   const visibleData = data.filter((item) => item.value > 0);
   return <div ref={containerRef} className={`flex min-h-0 flex-1 items-center gap-4 pt-3 ${stacked ? "flex-col" : ""}`}>
-    <div className="relative h-[126px] w-[126px] shrink-0" aria-label={`${total.toLocaleString()} total`}>
+    <div className="relative h-[7.875rem] w-[7.875rem] shrink-0" aria-label={`${total.toLocaleString()} total`}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie data={visibleData} dataKey="value" innerRadius="72%" outerRadius="98%" paddingAngle={1.5} stroke="none">
@@ -392,15 +392,15 @@ function ServiceBreakdown({ data, total }: { data: { name: string; value: number
         </PieChart>
       </ResponsiveContainer>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <b className="font-display text-[22px] font-extrabold leading-tight tabular-nums text-foreground">{total.toLocaleString()}</b>
-        <span className="text-[12px] text-muted-foreground">Total</span>
+        <b className="font-display text-[1.375rem] font-extrabold leading-tight tabular-nums text-foreground">{total.toLocaleString()}</b>
+        <span className="text-[0.75rem] text-muted-foreground">Total</span>
       </div>
     </div>
     <div className={`min-w-0 flex-1 pr-4 ${stacked ? "w-full" : ""}`}>
-      {data.map((item) => <div key={item.name} className="grid h-7 grid-cols-[minmax(0,1fr)_auto_44px] items-center gap-x-3 whitespace-nowrap text-[12px]">
+      {data.map((item) => <div key={item.name} className="grid h-7 grid-cols-[minmax(0,1fr)_auto_2.75rem] items-center gap-x-3 whitespace-nowrap text-[0.75rem]">
         <span className={`flex min-w-0 items-center gap-2 ${item.value === 0 ? "text-muted-foreground" : "text-foreground"}`}><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color, opacity: item.value === 0 ? 0.45 : 1 }} /><span className="truncate">{item.name}</span></span>
         <b className={`min-w-8 text-right font-semibold tabular-nums ${item.value === 0 ? "text-muted-foreground" : "text-foreground"}`}>{item.value.toLocaleString()}</b>
-        <span className="min-w-[44px] text-right tabular-nums text-muted-foreground">{item.percent}</span>
+        <span className="min-w-[2.75rem] text-right tabular-nums text-muted-foreground">{item.percent}</span>
       </div>)}
     </div>
   </div>;
@@ -416,7 +416,7 @@ function SegmentedTabs<T extends string>({ label, value, options, onChange }: { 
       if (nextOption) onChange(nextOption);
       const tablist = event.currentTarget.parentElement;
       requestAnimationFrame(() => tablist?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[nextIndex]?.focus());
-    }} className={`whitespace-nowrap rounded px-2 py-1 text-[12px] font-semibold transition-colors ${value === option ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>{option}</button>)}
+    }} className={`whitespace-nowrap rounded px-2 py-1 text-[0.75rem] font-semibold transition-colors ${value === option ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>{option}</button>)}
   </div>;
 }
 
@@ -437,14 +437,14 @@ function UsageRows({ items, showLogos = true, footer }: { items: { name: string;
     <div className="flex flex-1 flex-col justify-between">
       {items.slice(0, 7).map((item, index) => {
         const amount = Number.parseFloat(item.value);
-        return <div key={item.name} className="grid h-9 grid-cols-[minmax(0,1fr)_minmax(36px,140px)_56px] items-center gap-2 text-[12px]">
-          <span className="flex min-w-0 items-center gap-2 truncate text-foreground" title={item.name}>{showLogos && <TechLogo name={item.name} className="h-7 w-7 rounded-md [&_svg]:h-[18px] [&_svg]:w-[18px]" />}<span className="truncate">{item.name}</span></span>
-          <div className="h-[6px] min-w-0 rounded-full bg-[#EEF2F7] dark:bg-slate-700"><div className="h-full max-w-[140px] rounded-full" style={{ width: `${Math.min(100, amount / max * 100)}%`, backgroundColor: item.color ?? tones[index % tones.length] }} /></div>
+        return <div key={item.name} className="grid h-9 grid-cols-[minmax(0,1fr)_minmax(2.25rem,8.75rem)_3.5rem] items-center gap-2 text-[0.75rem]">
+          <span className="flex min-w-0 items-center gap-2 truncate text-foreground" title={item.name}>{showLogos && <TechLogo name={item.name} className="h-7 w-7 rounded-md [&_svg]:h-[1.125rem] [&_svg]:w-[1.125rem]" />}<span className="truncate">{item.name}</span></span>
+          <div className="h-[0.375rem] min-w-0 rounded-full bg-[#EEF2F7] dark:bg-slate-700"><div className="h-full max-w-[8.75rem] rounded-full" style={{ width: `${Math.min(100, amount / max * 100)}%`, backgroundColor: item.color ?? tones[index % tones.length] }} /></div>
           <b className="whitespace-nowrap text-right font-bold tabular-nums text-foreground">{item.value}</b>
         </div>;
       })}
     </div>
-    {footer && <div className="mt-auto border-t border-border/70 pt-2 text-[11px] text-muted-foreground">{footer}</div>}
+    {footer && <div className="mt-auto border-t border-border/70 pt-2 text-[0.6875rem] text-muted-foreground">{footer}</div>}
   </div>;
 }
 
@@ -454,18 +454,18 @@ function ProcessUsageTable({ rows, usageKey, secondaryKey, totalLabel }: {
 }) {
   const amountOf = (value: string) => Number.parseFloat(value);
   const colorFor = (value: number) => value >= 85 ? "#F87171" : value >= 70 ? "#FBBF24" : "#60A5FA";
-  const columns = "grid-cols-[minmax(0,1.05fr)_minmax(130px,1.35fr)_minmax(66px,.55fr)_minmax(90px,.8fr)]";
+  const columns = "grid-cols-[minmax(0,1.05fr)_minmax(8.125rem,1.35fr)_minmax(4.125rem,.55fr)_minmax(5.625rem,.8fr)]";
   return <div className="flex min-h-0 flex-1 flex-col pt-1">
-    <div className={`grid ${columns} items-center gap-2 border-b border-border px-1 pb-1.5 text-[11px] font-semibold text-muted-foreground`}><span>Process</span><span>Usage</span><span className="text-right">Secondary</span><span>Server</span></div>
+    <div className={`grid ${columns} items-center gap-2 border-b border-border px-1 pb-1.5 text-[0.6875rem] font-semibold text-muted-foreground`}><span>Process</span><span>Usage</span><span className="text-right">Secondary</span><span>Server</span></div>
     <div className="flex-1">{rows.slice(0, 7).map((item) => {
       const amount = amountOf(item[usageKey]);
-      return <div key={`${item.name}-${item.server}`} className={`grid h-10 ${columns} items-center gap-2 border-b border-slate-100 px-1 text-[12px] transition-colors hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50`}>
-        <span className="flex min-w-0 items-center gap-1.5" title={`User: ${item.user} · PID: ${item.pid}`}><TechLogo name={item.name} className="h-6 w-6 rounded-[5px] [&_svg]:h-4 [&_svg]:w-4" /><span className="truncate font-medium text-slate-800 dark:text-slate-200">{item.name}</span></span>
-        <span className="flex min-w-0 items-center gap-2"><b className="w-10 shrink-0 text-right tabular-nums text-slate-800 dark:text-slate-200">{item[usageKey]}</b><span className="h-[5px] min-w-0 flex-1 rounded-full bg-slate-100 dark:bg-slate-700"><span className="block h-full rounded-full" style={{ width: `${Math.min(100, amount)}%`, backgroundColor: colorFor(amount) }} /></span></span>
+      return <div key={`${item.name}-${item.server}`} className={`grid h-10 ${columns} items-center gap-2 border-b border-slate-100 px-1 text-[0.75rem] transition-colors hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50`}>
+        <span className="flex min-w-0 items-center gap-1.5" title={`User: ${item.user} · PID: ${item.pid}`}><TechLogo name={item.name} className="h-6 w-6 rounded-[0.3125rem] [&_svg]:h-4 [&_svg]:w-4" /><span className="truncate font-medium text-slate-800 dark:text-slate-200">{item.name}</span></span>
+        <span className="flex min-w-0 items-center gap-2"><b className="w-10 shrink-0 text-right tabular-nums text-slate-800 dark:text-slate-200">{item[usageKey]}</b><span className="h-[0.3125rem] min-w-0 flex-1 rounded-full bg-slate-100 dark:bg-slate-700"><span className="block h-full rounded-full" style={{ width: `${Math.min(100, amount)}%`, backgroundColor: colorFor(amount) }} /></span></span>
         <span className="whitespace-nowrap text-right font-normal tabular-nums text-slate-500 dark:text-slate-400">{item[secondaryKey]}</span><span className="truncate font-normal text-slate-500 dark:text-slate-400" title={item.server}>{item.server}</span>
       </div>;
     })}</div>
-    <div className="mt-auto flex items-center justify-between border-t border-border/70 pt-2 text-[11px] text-muted-foreground"><span>Showing 1-{Math.min(rows.length, 7)} of {PROCESS_COUNTS.total.toLocaleString()} {totalLabel}</span><span className="flex items-center gap-1"><button aria-label="Previous page" className="rounded px-1.5 py-0.5 hover:bg-accent">‹</button><span className="rounded bg-primary px-2 py-0.5 text-primary-foreground">1</span><button aria-label="Next page" className="rounded px-1.5 py-0.5 hover:bg-accent">›</button></span></div>
+    <div className="mt-auto flex items-center justify-between border-t border-border/70 pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing 1-{Math.min(rows.length, 7)} of {PROCESS_COUNTS.total.toLocaleString()} {totalLabel}</span><span className="flex items-center gap-1"><button aria-label="Previous page" className="rounded px-1.5 py-0.5 hover:bg-accent">‹</button><span className="rounded bg-primary px-2 py-0.5 text-primary-foreground">1</span><button aria-label="Next page" className="rounded px-1.5 py-0.5 hover:bg-accent">›</button></span></div>
   </div>;
 }
 
@@ -496,13 +496,13 @@ export function ProcessesServicesDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Processes & Services"]} showRefresh={false} variant="detail" />
       <PageHeading title="Processes & Services" description="Monitor all running processes and services across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 
       <section aria-label="Process and service summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[100px]" labelClassName="text-[12px] leading-4" valueClassName="text-[24px] leading-7" trendClassName="text-[11px] leading-4" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.25rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}
       </section>
 
       <section aria-label="Process trends" className="grid items-stretch gap-2.5 xl:grid-cols-3">
@@ -512,44 +512,44 @@ export function ProcessesServicesDashboard() {
       </section>
 
       <section aria-label="Top processes and service health" className="grid items-stretch gap-2.5 xl:grid-cols-[1.08fr_1.08fr_0.9fr]">
-        <Panel title="Top Processes by CPU Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by CPU.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={cpuProcesses} usageKey="cpu" secondaryKey="memory" totalLabel="processes" /></Panel>
-        <Panel title="Top Processes by Memory Usage" className="flex min-h-[330px] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={memoryProcesses} usageKey="memory" secondaryKey="cpu" totalLabel="processes" /></Panel>
-        <Panel title="Service Health Overview" className="flex min-h-[330px] min-w-0 flex-col">
+        <Panel title="Top Processes by CPU Usage" className="flex min-h-[20.625rem] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by CPU.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={cpuProcesses} usageKey="cpu" secondaryKey="memory" totalLabel="processes" /></Panel>
+        <Panel title="Top Processes by Memory Usage" className="flex min-h-[20.625rem] min-w-0 flex-col" action={<button onClick={() => toast("Showing all processes by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><ProcessUsageTable rows={memoryProcesses} usageKey="memory" secondaryKey="cpu" totalLabel="processes" /></Panel>
+        <Panel title="Service Health Overview" className="flex min-h-[20.625rem] min-w-0 flex-col">
           <div className="flex flex-1 flex-col justify-center gap-2 pt-1"><Donut data={serviceStates} total={serviceTotals} featured />
-            <div className="mt-auto grid grid-cols-2 gap-2 border-t border-border/70 pt-2">{serviceHealthStats.map((stat) => <div key={stat.label} className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800"><div className="text-[11px] text-muted-foreground">{stat.label}</div><div className="mt-0.5 text-[16px] font-bold tabular-nums text-foreground">{stat.value}</div></div>)}</div>
+            <div className="mt-auto grid grid-cols-2 gap-2 border-t border-border/70 pt-2">{serviceHealthStats.map((stat) => <div key={stat.label} className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800"><div className="text-[0.6875rem] text-muted-foreground">{stat.label}</div><div className="mt-0.5 text-[1rem] font-bold tabular-nums text-foreground">{stat.value}</div></div>)}</div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Service overview" className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Panel title="Services Overview" className="flex min-h-[360px] min-w-0 flex-col p-4" action={<SegmentedTabs label="Services overview" value={servicesOverviewTab} options={["Status", "Startup Type"] as const} onChange={setServicesOverviewTab} />}>
-          <div className="flex min-h-[280px] flex-1 flex-col pt-1">
+        <Panel title="Services Overview" className="flex min-h-[22.5rem] min-w-0 flex-col p-4" action={<SegmentedTabs label="Services overview" value={servicesOverviewTab} options={["Status", "Startup Type"] as const} onChange={setServicesOverviewTab} />}>
+          <div className="flex min-h-[17.5rem] flex-1 flex-col pt-1">
             <FadeTabContent tab={servicesOverviewTab}>
               <ServiceBreakdown data={servicesOverviewTab === "Status" ? serviceStates : startupStates} total={servicesOverviewTab === "Status" ? serviceTotals : startupTotal} />
             </FadeTabContent>
-            <div className="mt-auto border-t border-border/70 pt-2 text-[11px] text-muted-foreground">{SERVICE_COUNTS.total.toLocaleString()} total services · {servicesOverviewTab === "Status" ? "status breakdown" : "startup type breakdown"}</div>
+            <div className="mt-auto border-t border-border/70 pt-2 text-[0.6875rem] text-muted-foreground">{SERVICE_COUNTS.total.toLocaleString()} total services · {servicesOverviewTab === "Status" ? "status breakdown" : "startup type breakdown"}</div>
           </div>
         </Panel>
-        <Panel title="Top Services" className="flex min-h-[360px] min-w-0 flex-col p-4" action={<SegmentedTabs label="Top services metric" value={topServicesTab} options={["CPU", "Memory"] as const} onChange={setTopServicesTab} />}>
+        <Panel title="Top Services" className="flex min-h-[22.5rem] min-w-0 flex-col p-4" action={<SegmentedTabs label="Top services metric" value={topServicesTab} options={["CPU", "Memory"] as const} onChange={setTopServicesTab} />}>
           <FadeTabContent tab={topServicesTab}>
             <UsageRows items={topServicesTab === "CPU" ? topCpuServices : topMemoryServices} footer={`Showing 1-${Math.min(7, (topServicesTab === "CPU" ? topCpuServices : topMemoryServices).length)} of ${SERVICE_COUNTS.total.toLocaleString()} services`} />
           </FadeTabContent>
         </Panel>
-        <Panel title="Services by Host" className="flex min-h-[360px] min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing services on all hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Services by Host" className="flex min-h-[22.5rem] min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing services on all hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <UsageRows showLogos={false} items={servicesByHost.map((item) => ({ name: item.name, value: String(item.value), color: item.color }))} footer={`Showing ${Math.min(7, servicesByHost.length)} of ${servicesByHost.length} hosts`} />
         </Panel>
       </section>
 
-      <Panel title="Recent Process & Service Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all process and service alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+      <Panel title="Recent Process & Service Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all process and service alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
         <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[960px] text-left text-[12px]">
+            <table className="w-full min-w-[60rem] text-left text-[0.75rem]">
             <thead><tr className="border-b border-border text-muted-foreground">{["Alert", "Type", "Server", "Process / Service", "Severity", "Message", "Time"].map((heading) => <th key={heading} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-            <tbody>{alerts.map((item) => <tr key={item.alert} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1.5 py-[6px] font-semibold text-foreground"><i className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${item.severity === "Critical" ? "bg-rose-500" : item.severity === "Warning" ? "bg-amber-500" : "bg-blue-500"}`} />{item.alert}</td><td className="px-1.5 py-[6px] text-foreground">{item.type}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground">{item.server}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={item.process} /></span>{item.process}</td><td className="px-1.5 py-[6px]"><span className={`rounded-full px-2 py-0.5 text-[11px] ${severityStyles[item.severity]}`}>{item.severity}</span></td><td className="px-1.5 py-[6px] text-foreground">{item.message}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-muted-foreground">{item.time}</td></tr>)}</tbody>
+            <tbody>{alerts.map((item) => <tr key={item.alert} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1.5 py-[0.375rem] font-semibold text-foreground"><i className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${item.severity === "Critical" ? "bg-rose-500" : item.severity === "Warning" ? "bg-amber-500" : "bg-blue-500"}`} />{item.alert}</td><td className="px-1.5 py-[0.375rem] text-foreground">{item.type}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-foreground">{item.server}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={item.process} /></span>{item.process}</td><td className="px-1.5 py-[0.375rem]"><span className={`rounded-full px-2 py-0.5 text-[0.6875rem] ${severityStyles[item.severity]}`}>{item.severity}</span></td><td className="px-1.5 py-[0.375rem] text-foreground">{item.message}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-muted-foreground">{item.time}</td></tr>)}</tbody>
           </table>
         </div>
       </Panel>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

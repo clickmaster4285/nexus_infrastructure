@@ -50,7 +50,7 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
           <DialogDescription>Add a demo server to the mock inventory.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label className="flex flex-col gap-1.5 text-[10px] font-medium text-[#536780] dark:text-[#a9bcd2]">
+          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[#536780] dark:text-[#a9bcd2]">
             Server name
             <Input
               autoFocus
@@ -58,13 +58,13 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="e.g. prod-api-02"
-              className="h-[34px] text-[11px]"
+              className="h-[2.125rem] text-[0.6875rem]"
             />
           </label>
-          <label className="flex flex-col gap-1.5 text-[10px] font-medium text-[#536780] dark:text-[#a9bcd2]">
+          <label className="flex flex-col gap-1.5 text-[0.625rem] font-medium text-[#536780] dark:text-[#a9bcd2]">
             Environment
             <Select value={environment} onValueChange={setEnvironment}>
-              <SelectTrigger className="h-[34px] text-[11px]" aria-label="Environment">
+              <SelectTrigger className="h-[2.125rem] text-[0.6875rem]" aria-label="Environment">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -77,10 +77,10 @@ export function AddServerDialog({ open, onOpenChange, onAdd }: AddServerDialogPr
             </Select>
           </label>
           <DialogFooter className="mt-1">
-            <Button type="button" variant="outline" size="sm" className="h-[32px] text-[10px]" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" size="sm" className="h-[2rem] text-[0.625rem]" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" size="sm" className="h-[32px] text-[10px]">
+            <Button type="submit" size="sm" className="h-[2rem] text-[0.625rem]">
               Add Server
             </Button>
           </DialogFooter>

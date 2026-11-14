@@ -150,12 +150,12 @@ export function BackupsFilters({
           <Chip active={filters.tab === "coverage"} onClick={() => onPatch({ tab: "coverage" as BackupsTab })}>Coverage<span className="ml-1 tabular-nums opacity-75">({nf.format(coverageTabCount)})</span></Chip>
           <Chip active={filters.tab === "policies"} onClick={() => onPatch({ tab: "policies" as BackupsTab })}>Policies<span className="ml-1 tabular-nums opacity-75">({nf.format(policiesTabCount)})</span></Chip>
         </div>
-        <span className="text-[12px] tabular-nums text-muted-foreground">{totalLabel}</span>
+        <span className="text-[0.75rem] tabular-nums text-muted-foreground">{totalLabel}</span>
       </div>
 
       {/* Row 2 - search + multi-selects + range + view actions */}
       <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2">
-        <div className="relative w-full sm:w-auto sm:min-w-[220px] sm:max-w-xs sm:flex-1">
+        <div className="relative w-full sm:w-auto sm:min-w-[13.75rem] sm:max-w-xs sm:flex-1">
           <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
             ref={searchRef}
@@ -165,7 +165,7 @@ export function BackupsFilters({
             aria-label="Search backups"
             className="h-9 pl-9 pr-10 text-sm"
           />
-          <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">/</kbd>
+          <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground">/</kbd>
         </div>
         <MultiSelect label="Asset type" options={ASSET_TYPE_OPTIONS} selected={filters.assetTypes} onChange={(v) => onPatch({ assetTypes: v })} width={132} />
         <MultiSelect label="Backup type" options={TYPE_OPTIONS} selected={filters.types} onChange={(v) => onPatch({ types: v as BackupType[] })} width={140} />
@@ -173,12 +173,12 @@ export function BackupsFilters({
         {showStatusFilters && (
           <MultiSelect label="Status" options={statusOptionsWithCounts} selected={filters.statuses} onChange={(v) => onPatch({ statuses: v as BackupStatusKey[] })} width={150} />
         )}
-        <SegmentedControl value={filters.ranWithin} options={RANGE_OPTIONS} onChange={(v) => onPatch({ ranWithin: v as BackupsRange })} buttonClassName="h-8 px-2.5 text-[13px]" />
+        <SegmentedControl value={filters.ranWithin} options={RANGE_OPTIONS} onChange={(v) => onPatch({ ranWithin: v as BackupsRange })} buttonClassName="h-8 px-2.5 text-[0.8125rem]" />
         {filters.ranWithin === "Custom" && (
           <span className="flex items-center gap-1.5">
-            <Input type="date" value={filters.customFrom} onChange={(event) => onPatch({ customFrom: event.target.value })} className="h-9 w-[150px] text-sm" aria-label="From date" />
+            <Input type="date" value={filters.customFrom} onChange={(event) => onPatch({ customFrom: event.target.value })} className="h-9 w-[9.375rem] text-sm" aria-label="From date" />
             <span className="text-muted-foreground">-</span>
-            <Input type="date" value={filters.customTo} onChange={(event) => onPatch({ customTo: event.target.value })} className="h-9 w-[150px] text-sm" aria-label="To date" />
+            <Input type="date" value={filters.customTo} onChange={(event) => onPatch({ customTo: event.target.value })} className="h-9 w-[9.375rem] text-sm" aria-label="To date" />
           </span>
         )}
         <div className="ml-auto flex items-center gap-2">
@@ -187,7 +187,7 @@ export function BackupsFilters({
             align="end"
             width={200}
             trigger={
-              <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[13px]">
+              <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
                 <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
               </Button>
             }
@@ -197,7 +197,7 @@ export function BackupsFilters({
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               title="Reset all filters"
             >
               <RotateCcw size={13} aria-hidden="true" />Reset<span className="tabular-nums">({activeFilterCount})</span>
@@ -207,7 +207,7 @@ export function BackupsFilters({
             type="button"
             onClick={onToggleDensity}
             aria-pressed={density === "compact"}
-            className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             title={density === "default" ? "Switch to compact rows" : "Switch to comfortable rows"}
           >
             <ChevronsRight size={13} aria-hidden="true" />Compact
@@ -218,14 +218,14 @@ export function BackupsFilters({
       {/* Row 3 - active filter chips */}
       {activeChips.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2" aria-label="Active filters">
-          <span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
+          <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
           {activeChips.map((chip) => (
             <button
               key={chip.key}
               type="button"
               onClick={chip.onRemove}
               aria-label={`Remove filter ${chip.label}`}
-              className="inline-flex h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[0.75rem] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {chip.label}<X size={11} aria-hidden="true" />
             </button>
@@ -233,7 +233,7 @@ export function BackupsFilters({
           <button
             type="button"
             onClick={onReset}
-            className="rounded text-[12px] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="rounded text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             Clear all
           </button>

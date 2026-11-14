@@ -44,12 +44,12 @@ export function RansomwareProtectionCard({ jobs, onExport }: { jobs: BackupJob[]
   ];
   const metCount = rows.filter((row) => row.state === "met").length;
   const score = Math.round((metCount / rows.length) * 100);
-  const tone = score >= 70 ? "text-[#16A34A] dark:text-emerald-400" : score >= 43 ? "text-[#D97706] dark:text-amber-400" : "text-[#DC2626] dark:text-red-400";
+  const tone = score >= 70 ? "text-green-600 dark:text-emerald-400" : score >= 43 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400";
 
   return (
     <ChartCard
       title="Ransomware Protection (3-2-1-1)"
-      className="h-fit min-h-[280px] self-start p-4"
+      className="h-fit min-h-[17.5rem] self-start p-4"
       actions={
         <AlertMenu
           label="Posture actions"
@@ -78,7 +78,7 @@ export function RansomwareProtectionCard({ jobs, onExport }: { jobs: BackupJob[]
                 {ok ? <CheckCircle2 size={13} /> : <AlertTriangle size={13} />}
               </span>
               <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-snug text-foreground">{row.label}</span>
+                <span className="block text-[0.8125rem] font-semibold leading-snug text-foreground">{row.label}</span>
                 <span className="mt-0.5 block truncate text-xs text-muted-foreground" title={row.detail}>{row.detail}</span>
               </span>
             </li>
@@ -91,7 +91,7 @@ export function RansomwareProtectionCard({ jobs, onExport }: { jobs: BackupJob[]
           <b className={cn("tabular-nums", tone)}>{score}% · {metCount}/{rows.length} met</b>
         </div>
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100} aria-label="Ransomware posture score">
-          <div className={cn("h-full rounded-full", score >= 70 ? "bg-[#16A34A]" : score >= 43 ? "bg-[#D97706]" : "bg-[#DC2626]")} style={{ width: `${score}%` }} />
+          <div className={cn("h-full rounded-full", score >= 70 ? "bg-green-600" : score >= 43 ? "bg-amber-600" : "bg-red-600")} style={{ width: `${score}%` }} />
         </div>
       </div>
     </ChartCard>

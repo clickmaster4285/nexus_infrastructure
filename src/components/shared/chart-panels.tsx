@@ -24,12 +24,12 @@ import {
 
 const tooltip = {
   contentStyle: {
-    border: "1px solid var(--border)",
+    border: "0.0625rem solid var(--border)",
     borderRadius: 8,
     fontSize: 12,
     background: "var(--popover)",
     color: "var(--popover-foreground)",
-    boxShadow: "0 4px 14px rgba(20,40,71,0.07)",
+    boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
   },
   labelStyle: { color: "var(--muted-foreground)", marginBottom: 4 },
 };
@@ -159,7 +159,7 @@ export function AvailabilityPanel({ className }: { className?: string }) {
     <Panel title="Server Availability" range="24h" className={className}>
       <div className="flex flex-1 flex-col gap-3 pt-2">
         {serverAvailability.map((server) => (
-          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(100px,1fr)_29px_1.2fr] items-center gap-2 text-[12px] text-[#536782] dark:text-[#a9bcd2]">
+          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(6.25rem,1fr)_29px_1.2fr] items-center gap-2 text-[0.75rem] text-[#536782] dark:text-[#a9bcd2]">
             <span className="truncate">{server.name}</span>
             <span className="whitespace-nowrap text-right">{server.count}</span>
             <div className="flex h-2.5 overflow-hidden rounded-sm bg-muted" aria-hidden="true">
@@ -170,7 +170,7 @@ export function AvailabilityPanel({ className }: { className?: string }) {
           </div>
         ))}
       </div>
-      <div className="mt-2 flex justify-between text-[9px] text-muted-foreground" aria-hidden="true">
+      <div className="mt-2 flex justify-between text-[0.5625rem] text-muted-foreground" aria-hidden="true">
         <span>00:00</span>
         <span>06:00</span>
         <span>12:00</span>

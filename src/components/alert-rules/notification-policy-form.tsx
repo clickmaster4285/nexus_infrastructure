@@ -28,14 +28,14 @@ interface NotificationPolicyFormProps {
 }
 
 const fieldClass =
-  "h-9 w-full rounded-lg border border-input bg-card px-2.5 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
+  "h-9 w-full rounded-lg border border-input bg-card px-2.5 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
 function Field({ label, htmlFor, error, children }: { label: string; htmlFor?: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-1">
-      <label htmlFor={htmlFor} className="text-[12px] font-medium text-muted-foreground">{label}</label>
+      <label htmlFor={htmlFor} className="text-[0.75rem] font-medium text-muted-foreground">{label}</label>
       {children}
-      {error && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{error}</p>}
+      {error && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 }
@@ -52,7 +52,7 @@ export function NotificationPolicyForm({ value, errors, onChange }: Notification
   return (
     <div className="grid gap-4">
       <div className="grid gap-1.5">
-        <span id="policy-channels-label" className="text-[12px] font-medium text-muted-foreground">Channels</span>
+        <span id="policy-channels-label" className="text-[0.75rem] font-medium text-muted-foreground">Channels</span>
         <div role="group" aria-labelledby="policy-channels-label" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {NOTIFICATION_CHANNELS.map((channel) => {
             const meta = CHANNEL_META[channel];
@@ -65,18 +65,18 @@ export function NotificationPolicyForm({ value, errors, onChange }: Notification
                 aria-checked={active}
                 onClick={() => toggleChannel(channel)}
                 className={cn(
-                  "flex h-[64px] flex-col items-center justify-center gap-0.5 rounded-lg border px-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "flex h-[4rem] flex-col items-center justify-center gap-0.5 rounded-lg border px-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   active ? "border-primary bg-primary/5 text-foreground" : "border-border text-muted-foreground hover:bg-accent",
                 )}
               >
                 <meta.icon size={17} aria-hidden="true" />
-                <span className="text-[12px] font-semibold leading-tight">{meta.label}</span>
-                <span className="text-[9px] leading-tight text-muted-foreground">{meta.hint}</span>
+                <span className="text-[0.75rem] font-semibold leading-tight">{meta.label}</span>
+                <span className="text-[0.5625rem] leading-tight text-muted-foreground">{meta.hint}</span>
               </button>
             );
           })}
         </div>
-        {errors?.channels && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{errors.channels}</p>}
+        {errors?.channels && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{errors.channels}</p>}
       </div>
 
       <Field label="Recipients (comma separated)" htmlFor="policy-recipients" error={errors?.recipients}>
@@ -109,8 +109,8 @@ export function NotificationPolicyForm({ value, errors, onChange }: Notification
 
       <div className="flex items-center justify-between gap-3 rounded-lg border border-border/80 px-3 py-2.5">
         <span className="min-w-0">
-          <span className="block text-[13px] font-medium text-foreground">Respect quiet hours</span>
-          <span className="block text-[11px] text-muted-foreground">Maintenance windows suppress non-critical notifications.</span>
+          <span className="block text-[0.8125rem] font-medium text-foreground">Respect quiet hours</span>
+          <span className="block text-[0.6875rem] text-muted-foreground">Maintenance windows suppress non-critical notifications.</span>
         </span>
         <ToggleSwitch size="sm" checked={value.respectQuietHours} onChange={(checked) => onChange({ ...value, respectQuietHours: checked })} label="Respect quiet hours" />
       </div>

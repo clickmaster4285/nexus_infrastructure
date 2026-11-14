@@ -318,9 +318,9 @@ function verticalGradient(color: string, from = 0.3, to = 0.05) {
 /** Builds the shared tooltip card markup. */
 function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; value: string; color: string }[]) {
   const body = rows
-    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px;line-height:18px"><span style="display:flex;align-items:center;gap:6px;color:${theme.mutedForeground}"><i style="width:8px;height:8px;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
+    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1.25rem;line-height:1.125rem"><span style="display:flex;align-items:center;gap:0.375rem;color:${theme.mutedForeground}"><i style="width:0.5rem;height:0.5rem;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
     .join("");
-  return `<div style="min-width:172px;border-radius:8px;border:1px solid ${theme.border};background:${theme.popover};box-shadow:0 8px 24px rgba(16,32,58,0.16);padding:8px 12px;font-size:12px;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:6px">${title}</div>${body}</div>`;
+  return `<div style="min-width:10.75rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem rgba(16,32,58,0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
 }
 
 /**
@@ -378,7 +378,7 @@ function SeriesChip({ name, color, value, unit, enabled, onToggle }: {
       aria-pressed={enabled}
       title={enabled ? `Hide ${name}` : `Show ${name}`}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium transition-colors",
         enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through",
       )}
     >
@@ -399,7 +399,7 @@ function SummaryChip({ label, value, tone = "blue" }: { label: string; value: st
     violet: "border-violet-100 bg-violet-50 text-violet-700 dark:border-violet-900/50 dark:bg-violet-950/30 dark:text-violet-300",
   };
   return (
-    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px]", toneClasses[tone])}>
+    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-[0.75rem]", toneClasses[tone])}>
       <span className="opacity-80">{label}</span>
       <b className="tabular-nums">{value}</b>
     </span>
@@ -411,10 +411,10 @@ type InterfaceStatus = "up" | "down" | "warning" | "disabled";
 
 /** Status -> icon, label, colours and tooltip. */
 const statusBadges: Record<InterfaceStatus, { icon: LucideIcon; label: string; className: string; tooltip: string }> = {
-  up: { icon: ArrowUp, label: "Up", className: "bg-[#ECFDF5] text-[#059669] dark:bg-[#059669]/15", tooltip: "Interface is up" },
-  down: { icon: ArrowDown, label: "Down", className: "bg-[#FEF2F2] text-[#DC2626] dark:bg-[#DC2626]/15", tooltip: "Interface is down" },
-  warning: { icon: AlertTriangle, label: "Warning", className: "bg-[#FFFBEB] text-[#D97706] dark:bg-[#D97706]/15", tooltip: "Interface is in a warning state" },
-  disabled: { icon: Minus, label: "Disabled", className: "bg-[#F1F5F9] text-[#64748B] dark:bg-[#64748B]/15", tooltip: "Interface is disabled" },
+  up: { icon: ArrowUp, label: "Up", className: "bg-emerald-50 text-emerald-600 dark:bg-emerald-600/15", tooltip: "Interface is up" },
+  down: { icon: ArrowDown, label: "Down", className: "bg-red-50 text-red-600 dark:bg-red-600/15", tooltip: "Interface is down" },
+  warning: { icon: AlertTriangle, label: "Warning", className: "bg-amber-50 text-amber-600 dark:bg-amber-600/15", tooltip: "Interface is in a warning state" },
+  disabled: { icon: Minus, label: "Disabled", className: "bg-slate-100 text-slate-500 dark:bg-slate-500/15", tooltip: "Interface is disabled" },
 };
 
 /** Shared status badge so every status chip looks identical. */
@@ -425,7 +425,7 @@ function StatusBadge({ status }: { status: InterfaceStatus }) {
     <span
       title={badge.tooltip}
       aria-label={badge.tooltip}
-      className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-medium", badge.className)}
+      className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-medium", badge.className)}
     >
       <Icon size={12} aria-hidden="true" />
       {badge.label}
@@ -436,8 +436,8 @@ function StatusBadge({ status }: { status: InterfaceStatus }) {
 function TrafficDonut({ data, total, unit }: { data: { name: string; value: number; label?: string; percent?: string; color: string }[]; total: string; unit?: string }) {
   const totalValue = data.reduce((sum, item) => sum + item.value, 0);
   return (
-    <div className="flex h-[158px] items-center gap-2.5">
-      <div className="relative h-[140px] w-[42%] shrink-0">
+    <div className="flex h-[9.875rem] items-center gap-2.5">
+      <div className="relative h-[8.75rem] w-[42%] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="60%" outerRadius="88%" paddingAngle={1} stroke="none">
@@ -446,12 +446,12 @@ function TrafficDonut({ data, total, unit }: { data: { name: string; value: numb
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className="font-display text-[18px] font-extrabold leading-tight text-foreground">{total}</b>
-          <span className="text-[12px] text-muted-foreground">{unit ?? "Total"}</span>
+          <b className="font-display text-[1.125rem] font-extrabold leading-tight text-foreground">{total}</b>
+          <span className="text-[0.75rem] text-muted-foreground">{unit ?? "Total"}</span>
         </div>
       </div>
       <div className="min-w-0 flex-1 overflow-x-auto">
-        <div className="grid grid-cols-[minmax(max-content,1fr)_auto_auto] items-center gap-x-2 gap-y-1.5 whitespace-nowrap text-[12px]">
+        <div className="grid grid-cols-[minmax(max-content,1fr)_auto_auto] items-center gap-x-2 gap-y-1.5 whitespace-nowrap text-[0.75rem]">
           {data.map((item) => (
             <Fragment key={item.name}>
               <span className="flex min-w-0 items-center gap-1.5 text-foreground">
@@ -470,11 +470,11 @@ function TrafficDonut({ data, total, unit }: { data: { name: string; value: numb
 
 function TalkerList({ title, items, onViewAll }: { title: string; items: { address: string; value: string; width: string; color: string }[]; onViewAll?: () => void }) {
   return (
-    <Panel title={title} className="min-w-0" action={onViewAll ? <button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button> : undefined}>
+    <Panel title={title} className="min-w-0" action={onViewAll ? <button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button> : undefined}>
       <div className="flex flex-1 items-center py-2">
         <div className="w-full space-y-3">
-          {items.map((item) => <div key={item.address} className="grid grid-cols-[minmax(0,1fr)_minmax(45px,1.3fr)_auto] items-center gap-2 text-[12px]"><span className="truncate text-foreground">{item.address}</span><div className="h-[7px] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}</b></div>)}
-          <div className="flex justify-between border-t border-border pt-2 text-[12px] font-semibold text-foreground"><span>Total</span><span>{items === talkersByTraffic ? "2.19 TB" : "41,626"}</span></div>
+          {items.map((item) => <div key={item.address} className="grid grid-cols-[minmax(0,1fr)_minmax(2.8125rem,1.3fr)_auto] items-center gap-2 text-[0.75rem]"><span className="truncate text-foreground">{item.address}</span><div className="h-[0.4375rem] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}</b></div>)}
+          <div className="flex justify-between border-t border-border pt-2 text-[0.75rem] font-semibold text-foreground"><span>Total</span><span>{items === talkersByTraffic ? "2.19 TB" : "41,626"}</span></div>
         </div>
       </div>
     </Panel>
@@ -857,18 +857,18 @@ export function NetworkMonitoringDashboard() {
     <div className="flex items-center gap-1">
       <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">
         {(["1H", "6H", "12H", "24H"] as RangeKey[]).map((item) => (
-          <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={cn("rounded px-1.5 py-1 text-[11px] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{item}</button>
+          <button key={item} type="button" onClick={() => setRange(item)} aria-pressed={range === item} className={cn("rounded px-1.5 py-1 text-[0.6875rem] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{item}</button>
         ))}
       </div>
       <details className="relative" open={menuOpen} onToggle={(event) => setMenuOpen((event.currentTarget as HTMLDetailsElement).open)}>
         <summary aria-label="Chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary>
         <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
           {(["Average", "Max", "Min"] as Aggregation[]).map((item) => (
-            <button key={item} type="button" onClick={() => { setAggregation(item); setMenuOpen(false); }} className={cn("block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent", aggregation === item && "font-semibold text-primary")}>{item}</button>
+            <button key={item} type="button" onClick={() => { setAggregation(item); setMenuOpen(false); }} className={cn("block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent", aggregation === item && "font-semibold text-primary")}>{item}</button>
           ))}
           <div className="my-1 border-t border-border" />
-          <button type="button" onClick={() => { exportCsv(); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent">Export CSV</button>
-          <button type="button" onClick={() => { toast("Chart image export is a demo action."); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent">Export PNG</button>
+          <button type="button" onClick={() => { exportCsv(); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export CSV</button>
+          <button type="button" onClick={() => { toast("Chart image export is a demo action."); setMenuOpen(false); }} className="block w-full rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent">Export PNG</button>
         </div>
       </details>
     </div>
@@ -885,13 +885,13 @@ export function NetworkMonitoringDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Network Monitoring"]} showRefresh={false} variant="detail" />
       <PageHeading title="Network Monitoring" description="Real-time overview of your network performance, traffic, and connectivity." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 
       <section aria-label="Network summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-7">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}
       </section>
 
       <section aria-label="Network traffic trends" className="grid items-stretch gap-2.5 xl:grid-cols-3">
@@ -901,7 +901,7 @@ export function NetworkMonitoringDashboard() {
               <SeriesChip name="Inbound Usage" color={COLORS.inbound} value={Number(inboundPct(latest).toFixed(1))} unit="%" enabled={visible("Inbound Usage")} onToggle={() => toggleSeries("Inbound Usage")} />
               <SeriesChip name="Outbound Usage" color={COLORS.outbound} value={Number(outboundPct(latest).toFixed(1))} unit="%" enabled={visible("Outbound Usage")} onToggle={() => toggleSeries("Outbound Usage")} />
             </div>
-            <div className="relative min-h-[220px] min-w-0 flex-1">
+            <div className="relative min-h-[13.75rem] min-w-0 flex-1">
               <EChart option={bandwidthOption} className="absolute inset-0" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -919,7 +919,7 @@ export function NetworkMonitoringDashboard() {
               <SeriesChip name="Traffic In" color={COLORS.inbound} value={latest?.trafficIn ?? 0} unit="Mbps" enabled={visible("Traffic In")} onToggle={() => toggleSeries("Traffic In")} />
               <SeriesChip name="Traffic Out" color={COLORS.outbound} value={latest?.trafficOut ?? 0} unit="Mbps" enabled={visible("Traffic Out")} onToggle={() => toggleSeries("Traffic Out")} />
             </div>
-            <div className="relative min-h-[220px] min-w-0 flex-1">
+            <div className="relative min-h-[13.75rem] min-w-0 flex-1">
               <EChart option={trafficOption} className="absolute inset-0" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -936,7 +936,7 @@ export function NetworkMonitoringDashboard() {
               <SeriesChip name="Packets In" color={COLORS.inbound} value={latest?.packetsIn ?? 0} unit="pps" enabled onToggle={() => toast("Packets In is always visible.")} />
               <SeriesChip name="Packets Out" color={COLORS.outbound} value={latest?.packetsOut ?? 0} unit="pps" enabled onToggle={() => toast("Packets Out is always visible.")} />
             </div>
-            <div className="relative min-h-[220px] min-w-0 flex-1">
+            <div className="relative min-h-[13.75rem] min-w-0 flex-1">
               <EChart option={packetsOption} className="absolute inset-0" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -949,19 +949,19 @@ export function NetworkMonitoringDashboard() {
       </section>
 
       <section aria-label="Network analysis" className="grid items-stretch gap-2.5 xl:grid-cols-2">
-        <Panel title="Interface Utilization Heatmap" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all interfaces.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
-          <div className="relative min-h-[220px] min-w-0 flex-1 pt-1">
+        <Panel title="Interface Utilization Heatmap" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all interfaces.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+          <div className="relative min-h-[13.75rem] min-w-0 flex-1 pt-1">
             <EChart option={heatmapOption} className="absolute inset-0" />
           </div>
         </Panel>
 
-        <Panel title="Latency & Packet Loss" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all latency samples.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Latency & Packet Loss" className="flex min-w-0 flex-col" action={<button onClick={() => toast("Showing all latency samples.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
             <div className="flex flex-wrap items-center gap-1.5">
               <SeriesChip name="Latency" color={COLORS.inbound} value={latencyAndLoss[latencyAndLoss.length - 1]?.latency ?? 0} unit="ms" enabled onToggle={() => toast("Latency is always visible.")} />
               <SeriesChip name="Packet Loss" color={COLORS.errors} value={latencyAndLoss[latencyAndLoss.length - 1]?.loss ?? 0} unit="%" enabled onToggle={() => toast("Packet loss is always visible.")} />
             </div>
-            <div className="relative min-h-[220px] min-w-0 flex-1">
+            <div className="relative min-h-[13.75rem] min-w-0 flex-1">
               <EChart option={latencyOption} className="absolute inset-0" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -973,39 +973,39 @@ export function NetworkMonitoringDashboard() {
       </section>
 
       <section aria-label="Interface details" className="grid gap-2.5 xl:grid-cols-[1.14fr_1.04fr_0.82fr]">
-        <Panel title="Top Interfaces by Bandwidth Usage" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by bandwidth.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Interfaces by Bandwidth Usage" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by bandwidth.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[440px] table-fixed text-left text-[12px]">
+            <table className="w-full min-w-[27.5rem] table-fixed text-left text-[0.75rem]">
               <colgroup><col style={{ width: "17%" }} /><col style={{ width: "27%" }} /><col style={{ width: "21%" }} /><col style={{ width: "23%" }} /><col style={{ width: "12%" }} /></colgroup>
               <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Bandwidth Usage", "In / Out (Mbps)", "Trend"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.inbound.toFixed(1)} / {item.outbound.toFixed(1)}</td><td className="px-1 py-[5px]"><svg viewBox="0 0 42 14" className="h-3 w-8" aria-label={`Trend for ${item.name}`}><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="#35b879" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
+              <tbody>{interfaces.slice(0, 5).map((item, index) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[0.3125rem] font-semibold text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.bandwidth.toFixed(1)}%</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.inbound.toFixed(1)} / {item.outbound.toFixed(1)}</td><td className="px-1 py-[0.3125rem]"><svg viewBox="0 0 42 14" className="h-3 w-8" aria-label={`Trend for ${item.name}`}><polyline points={`0,11 8,${7 + index % 4} 16,9 24,${4 + index % 5} 32,7 41,3`} fill="none" stroke="#35b879" strokeWidth="1.2" /></svg></td></tr>)}</tbody>
             </table>
           </div>
-          <div className="flex justify-between pt-1 text-[11px] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page: 5 · 1 · 2 · 3 · 4 · 5 · … · 26</span></div>
+          <div className="flex justify-between pt-1 text-[0.6875rem] text-muted-foreground"><span>Showing 1-5 of 128 interfaces</span><span>Rows per page: 5 · 1 · 2 · 3 · 4 · 5 · … · 26</span></div>
         </Panel>
 
-        <Panel title="Top Interfaces by Errors" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by errors.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Interfaces by Errors" className="min-w-0" action={<button onClick={() => toast("Showing all interfaces by errors.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[420px] table-fixed text-left text-[12px]">
+            <table className="w-full min-w-[26.25rem] table-fixed text-left text-[0.75rem]">
               <colgroup><col style={{ width: "19%" }} /><col style={{ width: "29%" }} /><col style={{ width: "20%" }} /><col style={{ width: "18%" }} /><col style={{ width: "14%" }} /></colgroup>
               <thead><tr className="border-b border-border text-muted-foreground">{["Interface", "Device", "Errors", "Discards", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{errorInterfaces.slice(0, 5).map((item) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[5px] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{(item.errorsIn + item.errorsOut).toLocaleString()}</td><td className="whitespace-nowrap px-1 py-[5px] tabular-nums text-foreground">{item.discards.toLocaleString()}</td><td className="px-1 py-[5px]"><StatusBadge status="up" /></td></tr>)}</tbody>
+              <tbody>{errorInterfaces.slice(0, 5).map((item) => <tr key={`${item.device}-${item.name}`} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1 py-[0.3125rem] text-foreground">{item.name}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{(item.errorsIn + item.errorsOut).toLocaleString()}</td><td className="whitespace-nowrap px-1 py-[0.3125rem] tabular-nums text-foreground">{item.discards.toLocaleString()}</td><td className="px-1 py-[0.3125rem]"><StatusBadge status="up" /></td></tr>)}</tbody>
             </table>
           </div>
-          <div className="pt-1 text-[11px] text-muted-foreground">Showing 1-5 of 128 interfaces</div>
+          <div className="pt-1 text-[0.6875rem] text-muted-foreground">Showing 1-5 of 128 interfaces</div>
         </Panel>
 
         <Panel title="Interface Summary" className="min-w-0">
-          <div className="flex h-[150px] items-center gap-2">
-            <div className="relative h-[130px] w-[45%] shrink-0">
+          <div className="flex h-[9.375rem] items-center gap-2">
+            <div className="relative h-[8.125rem] w-[45%] shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart><Pie data={interfaceStates} dataKey="value" innerRadius="62%" outerRadius="88%" paddingAngle={1} stroke="none">{interfaceStates.map((item) => <Cell key={item.name} fill={item.color} />)}</Pie></PieChart>
               </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[22px] font-extrabold text-foreground">128</b><span className="text-[12px] text-muted-foreground">Total</span></div>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.375rem] font-extrabold text-foreground">128</b><span className="text-[0.75rem] text-muted-foreground">Total</span></div>
             </div>
-            <div className="min-w-0 flex-1 space-y-2">{interfaceStates.map((item) => <div key={item.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 text-[12px]"><StatusBadge status={item.status as InterfaceStatus} /><b className="whitespace-nowrap text-right text-foreground">{item.value} ({item.percent})</b></div>)}</div>
+            <div className="min-w-0 flex-1 space-y-2">{interfaceStates.map((item) => <div key={item.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 text-[0.75rem]"><StatusBadge status={item.status as InterfaceStatus} /><b className="whitespace-nowrap text-right text-foreground">{item.value} ({item.percent})</b></div>)}</div>
           </div>
-          <div className="grid grid-cols-2 gap-2 border-t border-border pt-3 text-[12px]"><div><span className="text-muted-foreground">Avg Inbound Utilization</span><b className="mt-1 block text-[16px] text-foreground">42.6% <span className="text-[11px] text-success">↑ 6.3%</span></b></div><div><span className="text-muted-foreground">Avg Outbound Utilization</span><b className="mt-1 block text-[16px] text-foreground">38.2% <span className="text-[11px] text-success">↑ 5.2%</span></b></div></div>
+          <div className="grid grid-cols-2 gap-2 border-t border-border pt-3 text-[0.75rem]"><div><span className="text-muted-foreground">Avg Inbound Utilization</span><b className="mt-1 block text-[1rem] text-foreground">42.6% <span className="text-[0.6875rem] text-success">↑ 6.3%</span></b></div><div><span className="text-muted-foreground">Avg Outbound Utilization</span><b className="mt-1 block text-[1rem] text-foreground">38.2% <span className="text-[0.6875rem] text-success">↑ 5.2%</span></b></div></div>
         </Panel>
       </section>
 
@@ -1016,16 +1016,16 @@ export function NetworkMonitoringDashboard() {
         <Panel title="Top Protocols" className="min-w-0"><TrafficDonut data={protocols} total={`${TOTAL_TRAFFIC_TB.toFixed(2)} TB`} /></Panel>
       </section>
 
-      <Panel title="Recent Network Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all network alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+      <Panel title="Recent Network Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all network alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
         <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[960px] text-left text-[12px]">
+            <table className="w-full min-w-[60rem] text-left text-[0.75rem]">
             <thead><tr className="border-b border-border text-muted-foreground">{["Alert", "Device", "Interface", "Severity", "Message", "Time"].map((heading) => <th key={heading} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-            <tbody>{networkAlerts.map((item) => <tr key={item.alert} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1.5 py-[6px] font-semibold text-foreground"><i className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${item.severity === "Critical" ? "bg-rose-500" : item.severity === "Warning" ? "bg-amber-500" : "bg-blue-500"}`} />{item.alert}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-foreground">{item.iface}</td><td className="px-1.5 py-[6px]"><span className={`rounded-full px-2 py-0.5 text-[11px] ${item.severity === "Critical" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : item.severity === "Warning" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"}`}>{item.severity}</span></td><td className="px-1.5 py-[6px] text-foreground">{item.message}</td><td className="whitespace-nowrap px-1.5 py-[6px] text-muted-foreground">{item.time}</td></tr>)}</tbody>
+            <tbody>{networkAlerts.map((item) => <tr key={item.alert} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-1.5 py-[0.375rem] font-semibold text-foreground"><i className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${item.severity === "Critical" ? "bg-rose-500" : item.severity === "Warning" ? "bg-amber-500" : "bg-blue-500"}`} />{item.alert}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-foreground">{item.device}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-foreground">{item.iface}</td><td className="px-1.5 py-[0.375rem]"><span className={`rounded-full px-2 py-0.5 text-[0.6875rem] ${item.severity === "Critical" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : item.severity === "Warning" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"}`}>{item.severity}</span></td><td className="px-1.5 py-[0.375rem] text-foreground">{item.message}</td><td className="whitespace-nowrap px-1.5 py-[0.375rem] text-muted-foreground">{item.time}</td></tr>)}</tbody>
           </table>
         </div>
       </Panel>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

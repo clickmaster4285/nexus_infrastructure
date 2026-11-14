@@ -43,7 +43,7 @@ export function UpcomingRunsCard({ upcoming, onViewAll }: UpcomingRunsCardProps)
         <div className="grid flex-1 place-items-center py-6 text-center">
           <div>
             <CalendarClock size={22} aria-hidden="true" className="mx-auto mb-2 text-muted-foreground" />
-            <p className="text-[13px] font-semibold text-foreground">Nothing scheduled</p>
+            <p className="text-[0.8125rem] font-semibold text-foreground">Nothing scheduled</p>
             <p className="mt-0.5 text-xs text-muted-foreground">All tasks are paused or complete.</p>
           </div>
         </div>
@@ -58,11 +58,11 @@ export function UpcomingRunsCard({ upcoming, onViewAll }: UpcomingRunsCardProps)
                   <Icon size={14} aria-hidden="true" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold leading-tight text-foreground" title={run.name}>{run.name}</p>
+                  <p className="truncate text-[0.8125rem] font-semibold leading-tight text-foreground" title={run.name}>{run.name}</p>
                   <p className="mt-0.5 truncate text-xs leading-tight text-muted-foreground">{meta.label} · {run.targetLabel}</p>
                 </div>
                 <div className="shrink-0 text-right">
-                  <span className="inline-flex h-6 items-center whitespace-nowrap rounded-full bg-[#3B82F6]/10 px-2 text-xs font-semibold tabular-nums text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-300">
+                  <span className="inline-flex h-6 items-center whitespace-nowrap rounded-full bg-blue-500/10 px-2 text-xs font-semibold tabular-nums text-blue-500 dark:bg-blue-500/15 dark:text-blue-300">
                     {formatCountdown(run.atMs, now)}
                   </span>
                   <p className="mt-0.5 whitespace-nowrap text-xs tabular-nums text-muted-foreground">{exactTime(run.atMs)}</p>

@@ -79,9 +79,9 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
       <Tabs value={tab} onValueChange={(value) => onTabChange(value as RuleTabKey)}>
         <TabsList className="flex-wrap gap-x-4" aria-label="Filter rules by status">
           {TAB_ORDER.map((key) => (
-            <TabsTrigger key={key} value={key} className="gap-1.5 text-[13px]">
+            <TabsTrigger key={key} value={key} className="gap-1.5 text-[0.8125rem]">
               {TAB_LABELS[key]}
-              <span className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", tab === key ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
+              <span className={cn("rounded-full px-1.5 py-0.5 text-[0.625rem] font-bold tabular-nums", tab === key ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
                 {tabCounts[key]}
               </span>
             </TabsTrigger>
@@ -90,7 +90,7 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
       </Tabs>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <div className="relative w-full min-w-[180px] sm:w-auto sm:max-w-[360px] sm:flex-1 lg:min-w-[220px]">
+        <div className="relative w-full min-w-[11.25rem] sm:w-auto sm:max-w-[22.5rem] sm:flex-1 lg:min-w-[13.75rem]">
           <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
@@ -98,7 +98,7 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
             onChange={(event) => onQueryChange(event.target.value)}
             placeholder="Search rules, metrics, targets…"
             aria-label="Search rules"
-            className="h-9 w-full rounded-lg border border-input bg-card pl-8 pr-3 text-[13px] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-9 w-full rounded-lg border border-input bg-card pl-8 pr-3 text-[0.8125rem] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
         <MultiSelect label="Severity" options={SEVERITY_OPTIONS} selected={severity} onChange={(values) => onSeverityChange(values as RuleSeverity[])} />
@@ -121,7 +121,7 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
                 aria-pressed={density === mode}
                 onClick={() => onDensityChange(mode)}
                 className={cn(
-                  "h-8 rounded-md px-2.5 text-[12px] font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-8 rounded-md px-2.5 text-[0.75rem] font-medium capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   density === mode ? "bg-secondary text-foreground shadow-sm" : "text-muted-foreground hover:bg-accent",
                 )}
               >
@@ -135,14 +135,14 @@ export function RulesFilterPanel(props: RulesFilterPanelProps) {
       {chips.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-3" aria-label="Active filters">
           {chips.map((chip) => (
-            <span key={chip.key} className="inline-flex h-6 items-center gap-1 rounded-full border border-border bg-muted px-2 text-[12px] font-medium text-foreground">
+            <span key={chip.key} className="inline-flex h-6 items-center gap-1 rounded-full border border-border bg-muted px-2 text-[0.75rem] font-medium text-foreground">
               {chip.label}
               <button type="button" onClick={chip.onRemove} aria-label={`Remove filter ${chip.label}`} className="rounded-full p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <X size={11} aria-hidden="true" />
               </button>
             </span>
           ))}
-          <button type="button" onClick={onClearAll} className="ml-1 text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+          <button type="button" onClick={onClearAll} className="ml-1 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
             Clear all
           </button>
         </div>

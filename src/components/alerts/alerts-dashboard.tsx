@@ -167,7 +167,7 @@ export function AlertsDashboard() {
           title="Alerts"
           subtitle="Active alerts with routing, acknowledgement and escalation"
         />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Alerts could not be loaded</p>
             <p className="text-sm text-muted-foreground">The alert service failed for the requested window. Retry to reload it.</p>
@@ -218,13 +218,13 @@ export function AlertsDashboard() {
       {isLoading ? (
         <>
           <section aria-busy="true" aria-label="Loading alert KPIs" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-            {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[104px] animate-pulse rounded-xl bg-muted" />)}
+            {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[6.5rem] animate-pulse rounded-xl bg-muted" />)}
           </section>
           <section aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-3">
-            <div className="h-[330px] animate-pulse rounded-xl bg-muted xl:col-span-2" />
-            <div className="h-[330px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[20.625rem] animate-pulse rounded-xl bg-muted xl:col-span-2" />
+            <div className="h-[20.625rem] animate-pulse rounded-xl bg-muted" />
           </section>
-          <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+          <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
         </>
       ) : (
         <>
@@ -242,11 +242,11 @@ export function AlertsDashboard() {
           <Panel
             title="Alerts"
             className="flex min-w-0 flex-col rounded-xl p-5"
-            titleClassName="text-[16px] font-semibold"
+            titleClassName="text-[1rem] font-semibold"
             headerClassName="h-10"
             showOptions
             action={
-              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[12px] font-semibold text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-muted-foreground">
                 <SlidersHorizontal size={11} aria-hidden="true" />
                 {alerts.length} {alerts.length === 1 ? "alert" : "alerts"}
               </span>
@@ -255,9 +255,9 @@ export function AlertsDashboard() {
             <Tabs value={filters.status} onValueChange={(value) => setFilter("status", value as AlertStatus | "all")}>
               <TabsList className="flex-wrap gap-x-4" aria-label="Filter alerts by status">
                 {TAB_ORDER.map((tab) => (
-                  <TabsTrigger key={tab} value={tab} className="gap-1.5 text-[13px]">
+                  <TabsTrigger key={tab} value={tab} className="gap-1.5 text-[0.8125rem]">
                     {TAB_LABELS[tab]}
-                    <span className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums", filters.status === tab ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
+                    <span className={cn("rounded-full px-1.5 py-0.5 text-[0.625rem] font-bold tabular-nums", filters.status === tab ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
                       {stats.tabCounts[tab]}
                     </span>
                   </TabsTrigger>
@@ -303,13 +303,13 @@ export function AlertsDashboard() {
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground">
                     <BellOff size={20} />
                   </span>
-                  <p className="font-display text-[15px] font-bold text-foreground">No alerts match your filters</p>
-                  <p className="text-[13px] text-muted-foreground">Try widening the time range or clearing filters.</p>
+                  <p className="font-display text-[0.9375rem] font-bold text-foreground">No alerts match your filters</p>
+                  <p className="text-[0.8125rem] text-muted-foreground">Try widening the time range or clearing filters.</p>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setFilters(DEFAULT_ALERTS_FILTERS)}
-                    className="mt-1 h-9 rounded-lg px-3 text-[13px]"
+                    className="mt-1 h-9 rounded-lg px-3 text-[0.8125rem]"
                   >
                     Clear filters
                   </Button>

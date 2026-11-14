@@ -197,9 +197,9 @@ export function AccessControlDashboard() {
   if (!fullyLoaded && !everLoaded) {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[92px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[5.75rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-24 animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="h-[300px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted" />
       </div>
     );
   }
@@ -207,7 +207,7 @@ export function AccessControlDashboard() {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Access Control"]} title="Access Control" subtitle="Roles, permissions, and API tokens for your team" />
-        <Card className="grid min-h-[280px] place-items-center rounded-xl p-6"><div className="text-center"><CircleAlert className="mx-auto text-rose-500" size={28} /><h2 className="mt-2 text-base font-semibold">Access data could not be loaded</h2><p className="mt-1 text-sm text-muted-foreground">Retry to reload users, roles and tokens.</p><Button className="mt-4" onClick={() => { reloadUsers(); reloadRoles(); reloadTokens(); reloadAudit(); }}><RotateCcw size={15} />Retry</Button></div></Card>
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><CircleAlert className="mx-auto text-rose-500" size={28} /><h2 className="mt-2 text-base font-semibold">Access data could not be loaded</h2><p className="mt-1 text-sm text-muted-foreground">Retry to reload users, roles and tokens.</p><Button className="mt-4" onClick={() => { reloadUsers(); reloadRoles(); reloadTokens(); reloadAudit(); }}><RotateCcw size={15} />Retry</Button></div></Card>
       </div>
     );
   }
@@ -254,18 +254,18 @@ export function AccessControlDashboard() {
 
       {/* KPI row — non-clickable */}
       <section aria-label="Access control KPIs" className="grid grid-cols-2 items-stretch gap-3 lg:grid-cols-3 xl:grid-cols-6">
-        <StatCard icon={<Users size={18} />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" label="Total Users" value={String(stats.total)} detail="across org" className="min-h-[88px] p-3" />
-        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" label="Active Users" value={String(stats.active)} detail="active sessions" className="min-h-[88px] p-3" />
-        <StatCard icon={<ShieldCheck size={18} />} iconTone="bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300" label="MFA Coverage" value={`${stats.mfaCoveragePct}%`} detail={`${stats.mfaEnabled} of ${stats.total}`} className="min-h-[88px] p-3" />
-        <StatCard icon={<Layers size={18} />} iconTone="bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300" label="Roles" value={String(roles.length)} detail="system + custom" className="min-h-[88px] p-3" />
-        <StatCard icon={<KeyRound size={18} />} iconTone="bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" label="Active Tokens" value={String(activeTokens)} detail={`${expiringSoon} expire within 14d`} className="min-h-[88px] p-3" />
-        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300" label="Access Risks" value={String(accessRisks)} detail="admin MFA + over-priv" className="min-h-[88px] p-3" />
+        <StatCard icon={<Users size={18} />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" label="Total Users" value={String(stats.total)} detail="across org" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" label="Active Users" value={String(stats.active)} detail="active sessions" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<ShieldCheck size={18} />} iconTone="bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300" label="MFA Coverage" value={`${stats.mfaCoveragePct}%`} detail={`${stats.mfaEnabled} of ${stats.total}`} className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<Layers size={18} />} iconTone="bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300" label="Roles" value={String(roles.length)} detail="system + custom" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<KeyRound size={18} />} iconTone="bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" label="Active Tokens" value={String(activeTokens)} detail={`${expiringSoon} expire within 14d`} className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300" label="Access Risks" value={String(accessRisks)} detail="admin MFA + over-priv" className="min-h-[5.5rem] p-3" />
       </section>
 
       {/* Row A — sign-in activity + users by role */}
       <section className="grid items-stretch gap-4 xl:grid-cols-12">
         <ChartCard title="Sign-in Activity" className="xl:col-span-8" actions={<SegmentedControl value="30D" options={["7D", "30D", "90D"] as const} onChange={(value) => updateParams({ range: value })} />}>
-          <div className="h-[230px] min-h-[220px] w-full flex-1" role="img" aria-label="Successful vs failed sign-ins">
+          <div className="h-[14.375rem] min-h-[13.75rem] w-full flex-1" role="img" aria-label="Successful vs failed sign-ins">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={signInData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="4 4" />
@@ -281,7 +281,7 @@ export function AccessControlDashboard() {
 
         <ChartCard title="Users by Role" className="xl:col-span-4" actions={<CardKebab label="Users by role" />}>
           <div className="flex flex-1 items-center gap-4">
-            <div className="relative h-[130px] min-h-[130px] w-[130px] shrink-0" role="img" aria-label={`Role distribution`}>
+            <div className="relative h-[8.125rem] min-h-[8.125rem] w-[8.125rem] shrink-0" role="img" aria-label={`Role distribution`}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={userRoleShare.slice(0, 5).map((item) => ({ name: item.label, value: item.count }))} dataKey="value" innerRadius="62%" outerRadius="100%" paddingAngle={2}>
@@ -290,7 +290,7 @@ export function AccessControlDashboard() {
                   <Tooltip contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[18px] leading-none text-foreground tabular-nums">{users.length}</b><span className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">users</span></div>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.125rem] leading-none text-foreground tabular-nums">{users.length}</b><span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">users</span></div>
             </div>
             <ul className="min-w-0 flex-1 space-y-1.5 text-sm">
               {userRoleShare.slice(0, 5).map((entry, index) => (
@@ -336,10 +336,10 @@ export function AccessControlDashboard() {
                     <li key={user.id} className="flex items-center gap-2 py-1.5">
                       <InitialsAvatar name={user.name} size={22} />
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[12px] font-medium text-foreground">{user.name}</span>
-                        <span className="block truncate text-[10px] text-muted-foreground">{user.email}</span>
+                        <span className="block truncate text-[0.75rem] font-medium text-foreground">{user.name}</span>
+                        <span className="block truncate text-[0.625rem] text-muted-foreground">{user.email}</span>
                       </span>
-                      <span className="shrink-0 text-[11px] font-semibold text-amber-700 dark:text-amber-300">No MFA</span>
+                      <span className="shrink-0 text-[0.6875rem] font-semibold text-amber-700 dark:text-amber-300">No MFA</span>
                     </li>
                   ))}
                 </ul>
@@ -356,8 +356,8 @@ export function AccessControlDashboard() {
                 <li key={token.id}>
                   <button type="button" onClick={() => { updateParams({ tab: "tokens" }); }} className="flex w-full items-center gap-2 rounded-md px-1 py-1.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${token.name} expires in ${daysLeft ?? ""} days`}>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13px] font-semibold text-foreground">{token.name}</span>
-                      <span className="mt-0.5 block text-[11px] text-muted-foreground">{token.ownerName} · {token.environment}</span>
+                      <span className="block truncate text-[0.8125rem] font-semibold text-foreground">{token.name}</span>
+                      <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{token.ownerName} · {token.environment}</span>
                     </span>
                     <span className={cn("inline-flex shrink-0 items-center rounded-full px-2 py-1 text-xs font-semibold", (daysLeft ?? 999) <= 7 ? "bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" : (daysLeft ?? 999) <= 30 ? "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" : "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300")}>in {daysLeft}d</span>
                   </button>
@@ -377,9 +377,9 @@ export function AccessControlDashboard() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-xs text-muted-foreground">{entry.actor}</span>
-                  <span className="mt-0.5 block truncate text-[12px] font-medium text-foreground" title={entry.action}>{entry.action}</span>
+                  <span className="mt-0.5 block truncate text-[0.75rem] font-medium text-foreground" title={entry.action}>{entry.action}</span>
                 </span>
-                <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{timeAgo(entry.at)}</span>
+                <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{timeAgo(entry.at)}</span>
               </li>
             ))}
           </ul>
@@ -402,10 +402,10 @@ export function AccessControlDashboard() {
           <span className="ml-auto inline-flex h-9 items-center rounded-lg border border-border px-2.5 text-xs tabular-nums text-muted-foreground">{filteredUsers.length} shown</span>
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2">
-          <div className="relative w-full min-w-[200px] sm:w-auto sm:min-w-[240px] sm:max-w-xs sm:flex-1">
+          <div className="relative w-full min-w-[12.5rem] sm:w-auto sm:min-w-[15rem] sm:max-w-xs sm:flex-1">
             <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input value={query} onChange={(event) => applyFilters({ q: event.target.value || null })} placeholder="Search users, roles, tokens..." aria-label="Search access control" className="h-9 pl-9 pr-9 text-sm" />
-            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">/</kbd>
+            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground">/</kbd>
           </div>
           {tab === "users" && (
             <>
@@ -427,7 +427,7 @@ export function AccessControlDashboard() {
         {savedViews.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2 text-xs">
             <span className="font-semibold text-muted-foreground">Saved views:</span>
-            {savedViews.map((view) => <button key={view.name} type="button" onClick={() => applyFilters(view.patch)} className="rounded-full border border-border px-2.5 py-1 text-[11px] font-medium text-muted-foreground hover:bg-accent">{view.name}</button>)}
+            {savedViews.map((view) => <button key={view.name} type="button" onClick={() => applyFilters(view.patch)} className="rounded-full border border-border px-2.5 py-1 text-[0.6875rem] font-medium text-muted-foreground hover:bg-accent">{view.name}</button>)}
           </div>
         )}
       </div>
@@ -438,7 +438,7 @@ export function AccessControlDashboard() {
           <Card className="flex min-w-0 flex-col rounded-xl p-0">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5"><p className="text-sm font-semibold text-foreground">Users</p><p className="text-xs text-muted-foreground">Click a row to open the quick drawer</p></div>
             <div className="overflow-x-auto">
-              <table className="w-full table-fixed text-left text-[13px]">
+              <table className="w-full table-fixed text-left text-[0.8125rem]">
                 <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                   <tr>
                     <th className="w-12 px-2 py-2.5 text-center"><input type="checkbox" aria-label="Select page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
@@ -457,15 +457,15 @@ export function AccessControlDashboard() {
                     const roleNames = user.roleIds.map((id) => roleMap.get(id)?.name ?? id);
                     const isAdminMfaOff = user.roleIds.some((id) => id === "role-super-admin" || id === "role-admin") && !user.mfaEnabled;
                     return (
-                      <tr key={user.id} tabIndex={0} className={cn("group relative cursor-pointer border-b border-border/70 transition-colors hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:bg-[#F8FAFC] dark:hover:bg-muted/30", compact ? "h-12" : "h-14")} onClick={() => openDrawer(user.id)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openDrawer(user.id); } }}>
-                        {isAdminMfaOff && <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px] bg-amber-500" />}
+                      <tr key={user.id} tabIndex={0} className={cn("group relative cursor-pointer border-b border-border/70 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-50 dark:hover:bg-muted/30", compact ? "h-12" : "h-14")} onClick={() => openDrawer(user.id)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openDrawer(user.id); } }}>
+                        {isAdminMfaOff && <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[0.1875rem] bg-amber-500" />}
                         <td className="relative px-2 py-2 text-center align-middle"><input type="checkbox" aria-label={`Select ${user.name}`} className="h-4 w-4 accent-[var(--primary)]" checked={selected.has(user.id)} onClick={(event) => event.stopPropagation()} onChange={() => toggleSelect(user.id)} /></td>
-                        <td className="px-2 py-2 align-middle"><div className="flex items-center gap-2.5"><InitialsAvatar name={user.name} size={compact ? 24 : 30} /><span className="min-w-0"><span className="block truncate text-[13px] font-semibold text-foreground">{user.name}{isCurrent && <span className="ml-1.5 rounded bg-blue-100 px-1.5 py-0.5 align-middle text-[10px] font-bold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">You</span>}</span><span className="block truncate text-[11px] text-muted-foreground">{user.email}</span></span></div></td>
-                        <td className="px-2 py-2 align-middle"><div className="flex flex-wrap items-center gap-1">{roleNames.slice(0, 2).map((role, index) => <span key={index} className="rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">{role}</span>)}{roleNames.length > 2 && <span className="text-[11px] font-semibold text-muted-foreground">+{roleNames.length - 2}</span>}</div></td>
+                        <td className="px-2 py-2 align-middle"><div className="flex items-center gap-2.5"><InitialsAvatar name={user.name} size={compact ? 24 : 30} /><span className="min-w-0"><span className="block truncate text-[0.8125rem] font-semibold text-foreground">{user.name}{isCurrent && <span className="ml-1.5 rounded bg-blue-100 px-1.5 py-0.5 align-middle text-[0.625rem] font-bold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">You</span>}</span><span className="block truncate text-[0.6875rem] text-muted-foreground">{user.email}</span></span></div></td>
+                        <td className="px-2 py-2 align-middle"><div className="flex flex-wrap items-center gap-1">{roleNames.slice(0, 2).map((role, index) => <span key={index} className="rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">{role}</span>)}{roleNames.length > 2 && <span className="text-[0.6875rem] font-semibold text-muted-foreground">+{roleNames.length - 2}</span>}</div></td>
                         <td className="px-2 py-2 align-middle"><UserStatusBadge status={user.status} /></td>
                         <td className="px-2 py-2 align-middle"><MfaBadge enabled={user.mfaEnabled} /></td>
-                        <td className="px-2 py-2 align-middle"><span className="block text-xs font-medium text-foreground">{mounted && user.lastLoginAt ? timeAgo(user.lastLoginAt) : "never"}</span>{user.lastLoginIp && <span className="block text-[11px] text-muted-foreground">{user.lastLoginIp}</span>}</td>
-                        <td className="px-2 py-2 align-middle"><div className="flex flex-wrap items-center gap-1">{user.groupIds.slice(0, 2).map((group) => <span key={group} className="max-w-[90px] truncate rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[10px] text-muted-foreground">{group}</span>)}{user.groupIds.length > 2 && <span className="text-[11px] font-semibold text-muted-foreground">+{user.groupIds.length - 2}</span>}</div></td>
+                        <td className="px-2 py-2 align-middle"><span className="block text-xs font-medium text-foreground">{mounted && user.lastLoginAt ? timeAgo(user.lastLoginAt) : "never"}</span>{user.lastLoginIp && <span className="block text-[0.6875rem] text-muted-foreground">{user.lastLoginIp}</span>}</td>
+                        <td className="px-2 py-2 align-middle"><div className="flex flex-wrap items-center gap-1">{user.groupIds.slice(0, 2).map((group) => <span key={group} className="max-w-[5.625rem] truncate rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[0.625rem] text-muted-foreground">{group}</span>)}{user.groupIds.length > 2 && <span className="text-[0.6875rem] font-semibold text-muted-foreground">+{user.groupIds.length - 2}</span>}</div></td>
                         <td className="px-2 py-2 align-middle text-right" onClick={(event) => event.stopPropagation()}>
                           <AlertMenu label={`Actions for ${user.name}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`Actions for ${user.name}`}><MoreVertical size={15} /></button>} items={[
                             { key: "view", label: "View profile", onSelect: () => openDrawer(user.id) },
@@ -526,7 +526,7 @@ export function AccessControlDashboard() {
 
 function FilterSelect({ value, onChange, label, options, optionLabels, allLabel }: { value: string; onChange: (value: string) => void; label: string; options: string[]; optionLabels?: string[]; allLabel: string }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[160px] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
+    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[10rem] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
       <option value="all">{allLabel}</option>
       {options.map((option, index) => <option key={option} value={option}>{optionLabels?.[index] ?? option}</option>)}
     </select>
@@ -548,7 +548,7 @@ function RolesPanel({ roles, onCreate, onAssign }: { roles: import("@/mocks/acce
           <button type="button" onClick={() => onAssign(role.id)} className="mt-4 text-xs font-semibold text-primary hover:underline">Filter users by this role →</button>
         </Card>
       ))}
-      <Card className="flex min-h-[180px] flex-col items-center justify-center rounded-xl border-dashed p-4 text-center"><p className="text-sm text-muted-foreground">Create a custom role for a specific need</p><Button className="mt-4" onClick={onCreate}><Layers size={15} />Create Role</Button></Card>
+      <Card className="flex min-h-[11.25rem] flex-col items-center justify-center rounded-xl border-dashed p-4 text-center"><p className="text-sm text-muted-foreground">Create a custom role for a specific need</p><Button className="mt-4" onClick={onCreate}><Layers size={15} />Create Role</Button></Card>
     </section>
   );
 }
@@ -559,14 +559,14 @@ function TokensPanel({ tokens, onCreate }: { tokens: import("@/mocks/accessContr
       <Card className="flex flex-col rounded-xl p-0">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5"><p className="text-sm font-semibold text-foreground">API Tokens</p><Button size="sm" onClick={onCreate}><KeyRound size={13} />Create token</Button></div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[880px] text-left text-[13px]">
+          <table className="w-full min-w-[55rem] text-left text-[0.8125rem]">
             <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-3 py-2 font-semibold">Token</th><th className="px-3 py-2 font-semibold">Owner</th><th className="px-3 py-2 font-semibold">Scopes</th><th className="px-3 py-2 font-semibold">Last used</th><th className="px-3 py-2 font-semibold">Expires</th><th className="px-3 py-2 font-semibold">Status</th></tr></thead>
             <tbody>
               {tokens.slice(0, 8).map((token) => (
                 <tr key={token.id} className="border-b border-border/70 hover:bg-muted/30">
-                  <td className="px-3 py-2.5"><span className="block font-mono text-xs text-foreground">{token.prefix}••••</span><span className="block text-[11px] text-muted-foreground">{token.name} · {token.environment}</span></td>
+                  <td className="px-3 py-2.5"><span className="block font-mono text-xs text-foreground">{token.prefix}••••</span><span className="block text-[0.6875rem] text-muted-foreground">{token.name} · {token.environment}</span></td>
                   <td className="px-3 py-2.5 text-muted-foreground">{token.ownerName}</td>
-                  <td className="px-3 py-2.5"><div className="flex flex-wrap gap-1">{token.scopes.slice(0, 2).map((scope) => <span key={scope} className="rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[10px] text-muted-foreground">{scope}</span>)}{token.scopes.length > 2 && <span className="text-[10px] font-semibold text-muted-foreground">+{token.scopes.length - 2}</span>}</div></td>
+                  <td className="px-3 py-2.5"><div className="flex flex-wrap gap-1">{token.scopes.slice(0, 2).map((scope) => <span key={scope} className="rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[0.625rem] text-muted-foreground">{scope}</span>)}{token.scopes.length > 2 && <span className="text-[0.625rem] font-semibold text-muted-foreground">+{token.scopes.length - 2}</span>}</div></td>
                   <td className="px-3 py-2.5 whitespace-nowrap text-muted-foreground">{token.lastUsedAt ? timeAgo(token.lastUsedAt) : <span className="text-amber-600">Never</span>}</td>
                   <td className="px-3 py-2.5 whitespace-nowrap text-muted-foreground">{token.expiresAt ? new Date(token.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : <span className="text-muted-foreground">Never</span>}</td>
                   <td className="px-3 py-2.5"><TokenStatusBadge status={token.status} /></td>
@@ -585,9 +585,9 @@ function PermissionMatrixPanel({ roles }: { roles: import("@/mocks/accessControl
   const actions = ["view", "create", "edit", "delete", "execute", "approve"];
   return (
     <Card className="flex min-w-0 flex-col rounded-xl p-0">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3"><p className="text-sm font-semibold text-foreground">Permission Matrix</p><p className="text-[11px] text-muted-foreground">Read-only preview · edit in Role detail</p></div>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3"><p className="text-sm font-semibold text-foreground">Permission Matrix</p><p className="text-[0.6875rem] text-muted-foreground">Read-only preview · edit in Role detail</p></div>
       <div className="overflow-x-auto">
-        <table className="min-w-[880px] w-full table-fixed text-left text-[12px]">
+        <table className="min-w-[55rem] w-full table-fixed text-left text-[0.75rem]">
           <thead className="border-b border-border bg-muted/30 text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="w-44 px-3 py-2 font-semibold">Resource / Action</th>{roles.slice(0, 6).map((role) => <th key={role.id} className="px-2 py-2 text-center font-semibold" title={role.name}>{role.name.split(" ")[0]}</th>)}</tr></thead>
           <tbody>
             {resources.map((resource) => (
@@ -600,7 +600,7 @@ function PermissionMatrixPanel({ roles }: { roles: import("@/mocks/accessControl
                     <td key={role.id} className="px-2 py-2.5 text-center">
                       <div className="flex items-center justify-center gap-1">
                         {actions.map((action) => (
-                          <span key={action} className={cn("grid h-5 w-5 place-items-center rounded-sm text-[10px] font-bold", has(action) ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300" : "bg-muted text-muted-foreground")} title={action}>{has(action) ? "✓" : "·"}</span>
+                          <span key={action} className={cn("grid h-5 w-5 place-items-center rounded-sm text-[0.625rem] font-bold", has(action) ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300" : "bg-muted text-muted-foreground")} title={action}>{has(action) ? "✓" : "·"}</span>
                         ))}
                       </div>
                     </td>
@@ -620,7 +620,7 @@ function AccessAuditPanel({ audit }: { audit: import("@/mocks/accessControl").Ac
     <Card className="flex min-w-0 flex-col rounded-xl p-0">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5"><p className="text-sm font-semibold text-foreground">Access Audit</p><Link href="/audit-logs" className="text-xs font-semibold text-primary hover:underline">Full audit log →</Link></div>
       <div className="overflow-x-auto">
-        <table className="min-w-[720px] w-full text-left text-[13px]">
+        <table className="min-w-[45rem] w-full text-left text-[0.8125rem]">
           <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-3 py-2 font-semibold">Time</th><th className="px-3 py-2 font-semibold">Actor</th><th className="px-3 py-2 font-semibold">Action</th><th className="px-3 py-2 font-semibold">Target</th><th className="px-3 py-2 font-semibold">Result</th></tr></thead>
           <tbody>
             {audit.slice(0, 10).map((entry) => (
@@ -628,8 +628,8 @@ function AccessAuditPanel({ audit }: { audit: import("@/mocks/accessControl").Ac
                 <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground" title={fullTime(entry.at)}>{timeAgo(entry.at)}</td>
                 <td className="px-3 py-2.5 font-medium text-foreground">{entry.actor}</td>
                 <td className="px-3 py-2.5 text-muted-foreground">{entry.action}</td>
-                <td className="max-w-[260px] truncate px-3 py-2.5 font-mono text-[11px] text-muted-foreground" title={entry.target}>{entry.target}</td>
-                <td className="px-3 py-2.5"><span className={cn("inline-flex items-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold", entry.result === "Success" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700")}>{entry.result}</span></td>
+                <td className="max-w-[16.25rem] truncate px-3 py-2.5 font-mono text-[0.6875rem] text-muted-foreground" title={entry.target}>{entry.target}</td>
+                <td className="px-3 py-2.5"><span className={cn("inline-flex items-center rounded-md px-1.5 py-0.5 text-[0.6875rem] font-semibold", entry.result === "Success" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700")}>{entry.result}</span></td>
               </tr>
             ))}
           </tbody>

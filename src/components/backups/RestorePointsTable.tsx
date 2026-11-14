@@ -47,38 +47,38 @@ export function RestorePointsTable({ points, onRestore, density }: RestorePoints
           <thead className="sticky top-0 z-10">
             <tr className="border-b border-border bg-card">
               {["Point", "Asset", "Type", "Size", "Created", "Verified"].map((label) => (
-                <th key={label} scope="col" className="px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>
+                <th key={label} scope="col" className="px-3 py-2 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>
               ))}
-              <th scope="col" className="px-3 py-2 text-right text-[12px] font-semibold uppercase tracking-wide text-muted-foreground"><span className="sr-only">Restore</span></th>
+              <th scope="col" className="px-3 py-2 text-right text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground"><span className="sr-only">Restore</span></th>
             </tr>
           </thead>
           <tbody>
             {pageItems.map((point) => (
-              <tr key={point.id} className={cn("border-b border-border/60 align-middle transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40", rowHeight)}>
+              <tr key={point.id} className={cn("border-b border-border/60 align-middle transition-colors hover:bg-slate-50 dark:hover:bg-muted/40", rowHeight)}>
                 <td className="min-w-0 px-3 py-1.5 align-middle">
-                  <span className="block font-mono text-[12px] text-muted-foreground">{point.id}</span>
-                  <span className="mt-0.5 block truncate text-[13px] font-semibold text-foreground" title={point.jobName}>{point.jobName}</span>
+                  <span className="block font-mono text-[0.75rem] text-muted-foreground">{point.id}</span>
+                  <span className="mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground" title={point.jobName}>{point.jobName}</span>
                 </td>
                 <td className="min-w-0 px-3 py-1.5 align-middle">
-                  <span className="block font-mono text-[12px] text-foreground">{point.host}</span>
+                  <span className="block font-mono text-[0.75rem] text-foreground">{point.host}</span>
                   <span className="mt-0.5 block truncate text-xs text-muted-foreground">{point.assetType}</span>
                 </td>
                 <td className="px-3 py-1.5 align-middle"><BackupTypeBadge type={point.type} /></td>
-                <td className="px-3 py-1.5 align-middle text-[12px] tabular-nums text-foreground">{formatBytes(point.sizeBytes)}</td>
+                <td className="px-3 py-1.5 align-middle text-[0.75rem] tabular-nums text-foreground">{formatBytes(point.sizeBytes)}</td>
                 <td className="min-w-0 px-3 py-1.5 align-middle">
-                  <span className="block text-[12px] tabular-nums text-foreground">{timeAgo(point.epochMs)}</span>
+                  <span className="block text-[0.75rem] tabular-nums text-foreground">{timeAgo(point.epochMs)}</span>
                   <span className="mt-0.5 block text-xs tabular-nums text-muted-foreground">{EXACT.format(point.epochMs)}</span>
                 </td>
                 <td className="px-3 py-1.5 align-middle"><VerifiedBadge verified={point.verified} /></td>
                 <td className="px-3 py-1.5 text-right align-middle">
-                  <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]" onClick={() => onRestore(point.id)}>
+                  <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]" onClick={() => onRestore(point.id)}>
                     <Archive size={12} aria-hidden="true" />Restore
                   </Button>
                 </td>
               </tr>
             ))}
             {pageItems.length === 0 && (
-              <tr><td colSpan={7} className="px-4 py-10 text-center"><p className="text-sm font-semibold text-foreground">No restore points match your filters</p><p className="mt-1 text-[12px] text-muted-foreground">Points are created only by successful runs.</p></td></tr>
+              <tr><td colSpan={7} className="px-4 py-10 text-center"><p className="text-sm font-semibold text-foreground">No restore points match your filters</p><p className="mt-1 text-[0.75rem] text-muted-foreground">Points are created only by successful runs.</p></td></tr>
             )}
           </tbody>
         </table>
@@ -93,10 +93,10 @@ export function RestorePointsTable({ points, onRestore, density }: RestorePoints
                 <span className="font-mono text-xs text-muted-foreground">{point.id}</span>
                 <VerifiedBadge verified={point.verified} />
               </div>
-              <p className="mt-0.5 truncate text-[13px] font-semibold text-foreground">{point.jobName}</p>
+              <p className="mt-0.5 truncate text-[0.8125rem] font-semibold text-foreground">{point.jobName}</p>
               <p className="mt-0.5 text-xs tabular-nums text-muted-foreground">{point.host} &middot; {timeAgo(point.epochMs)} &middot; {formatBytes(point.sizeBytes)}{point.durationMs ? ` &middot; ${formatDuration(point.durationMs)}` : ""}</p>
             </div>
-            <Button variant="outline" className="h-8 shrink-0 rounded-lg px-2.5 text-[12px]" onClick={() => onRestore(point.id)}>Restore</Button>
+            <Button variant="outline" className="h-8 shrink-0 rounded-lg px-2.5 text-[0.75rem]" onClick={() => onRestore(point.id)}>Restore</Button>
           </div>
         ))}
         {pageItems.length === 0 && <p className="px-4 py-8 text-center text-sm text-muted-foreground">No restore points match your filters.</p>}

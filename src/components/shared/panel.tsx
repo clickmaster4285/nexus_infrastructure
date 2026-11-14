@@ -33,7 +33,7 @@ export function Panel({ title, children, range, className, titleClassName, actio
           {action}
           {range && (
             <Select defaultValue={range}>
-              <SelectTrigger className="h-[23px] w-[64px] text-[9px]" aria-label={`${title} time range`}>
+              <SelectTrigger className="h-[1.4375rem] w-[4rem] text-[0.5625rem]" aria-label={`${title} time range`}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -64,10 +64,10 @@ export interface LegendItem {
 
 export function Legend({ items }: { items: LegendItem[] }) {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-0.5 text-[9px] text-muted-foreground">
+    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-0.5 text-[0.5625rem] text-muted-foreground">
       {items.map((item) => (
         <span key={item.name} className="flex items-center gap-1.5 whitespace-nowrap">
-          <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full" style={{ background: item.color }} />
+          <span aria-hidden="true" className="h-[0.4375rem] w-[0.4375rem] rounded-full" style={{ background: item.color }} />
           {item.name}
         </span>
       ))}

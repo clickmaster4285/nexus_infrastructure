@@ -27,7 +27,7 @@ import type { NocMapSite, NocMapStatus } from "@/data/mock/noc-map";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[260px] animate-pulse place-items-center rounded-lg bg-slate-100 text-[12px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">Loading map…</div> },
+  { ssr: false, loading: () => <div className="grid h-full min-h-[16.25rem] animate-pulse place-items-center rounded-lg bg-slate-100 text-[0.75rem] text-slate-500 dark:bg-slate-800 dark:text-slate-400">Loading map…</div> },
 );
 
 /** Islamabad (NEXUS DC-2) — map opens here at street level, like Global Health. */
@@ -69,13 +69,13 @@ function Donut({ value, color, label, size = 110 }: { value: number; color: stri
       <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--muted)" strokeWidth="9" />
       <circle cx="50" cy="50" r={radius} fill="none" stroke={color} strokeWidth="9" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - clamped / 100)} />
     </svg>
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-center"><b className="font-display text-[20px] font-bold tabular-nums text-foreground">{clamped.toFixed(0)}%</b><span className="text-[12px] text-muted-foreground">{label}</span></div>
+    <div className="absolute inset-0 flex flex-col items-center justify-center text-center"><b className="font-display text-[1.25rem] font-bold tabular-nums text-foreground">{clamped.toFixed(0)}%</b><span className="text-[0.75rem] text-muted-foreground">{label}</span></div>
   </div>;
 }
 
 function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ name?: string; value?: number | string; color?: string }>; label?: string }) {
   if (!active || !payload?.length) return null;
-  return <div className="rounded-lg border border-border bg-popover px-3 py-2 text-[12px] text-popover-foreground shadow-lg"><p className="mb-1 font-semibold">{label}</p>{payload.map((item) => <div key={item.name} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}<b className="ml-auto tabular-nums">{item.value}</b></div>)}</div>;
+  return <div className="rounded-lg border border-border bg-popover px-3 py-2 text-[0.75rem] text-popover-foreground shadow-lg"><p className="mb-1 font-semibold">{label}</p>{payload.map((item) => <div key={item.name} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}<b className="ml-auto tabular-nums">{item.value}</b></div>)}</div>;
 }
 
 interface TooltipParam {
@@ -155,7 +155,7 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
       borderColor: "var(--border)",
       borderWidth: 1,
       textStyle: { color: "var(--popover-foreground)", fontSize: 12 },
-      extraCssText: "border-radius:8px;box-shadow:0 8px 24px rgb(15 23 42 / 0.18);padding:10px 12px;",
+      extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgb(15 23 42 / 0.18);padding:0.625rem 0.75rem;",
       axisPointer: {
         type: "cross" as const,
         lineStyle: { color: "var(--muted-foreground)", type: "dashed" as const },
@@ -170,8 +170,8 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
         formatter: (params: unknown) => {
           const list = (Array.isArray(params) ? params : [params]) as TooltipParam[];
           const title = list[0]?.axisValue ?? "";
-          const rows = list.map((item) => `<div style="display:flex;align-items:center;gap:8px;line-height:20px;min-width:150px"><span>${item.marker}</span><span>${item.seriesName}</span><b style="margin-left:auto;font-variant-numeric:tabular-nums">${item.value} ms</b></div>`).join("");
-          return `<div style="font-weight:600;margin-bottom:4px;font-variant-numeric:tabular-nums">${title}</div>${rows}`;
+          const rows = list.map((item) => `<div style="display:flex;align-items:center;gap:0.5rem;line-height:1.25rem;min-width:9.375rem"><span>${item.marker}</span><span>${item.seriesName}</span><b style="margin-left:auto;font-variant-numeric:tabular-nums">${item.value} ms</b></div>`).join("");
+          return `<div style="font-weight:600;margin-bottom:0.25rem;font-variant-numeric:tabular-nums">${title}</div>${rows}`;
         },
       },
       xAxis: {
@@ -240,9 +240,9 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           const title = list[0]?.axisValue ?? "";
           const rows = list.map((item) => {
             const unit = item.seriesName === "Connections" ? "" : " QPS";
-            return `<div style="display:flex;align-items:center;gap:8px;line-height:20px;min-width:150px"><span>${item.marker}</span><span>${item.seriesName}</span><b style="margin-left:auto;font-variant-numeric:tabular-nums">${item.value}${unit}</b></div>`;
+            return `<div style="display:flex;align-items:center;gap:0.5rem;line-height:1.25rem;min-width:9.375rem"><span>${item.marker}</span><span>${item.seriesName}</span><b style="margin-left:auto;font-variant-numeric:tabular-nums">${item.value}${unit}</b></div>`;
           }).join("");
-          return `<div style="font-weight:600;margin-bottom:4px;font-variant-numeric:tabular-nums">${title}</div>${rows}`;
+          return `<div style="font-weight:600;margin-bottom:0.25rem;font-variant-numeric:tabular-nums">${title}</div>${rows}`;
         },
       },
       xAxis: {
@@ -349,7 +349,7 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
               aria-pressed={active}
               onClick={() => toggleSeries(chip.key)}
               title={`${active ? "Hide" : "Show"} ${chip.label}`}
-              className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[12px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through opacity-70"}`}
+              className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[0.75rem] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${active ? "border-border bg-card text-foreground" : "border-transparent bg-muted text-muted-foreground line-through opacity-70"}`}
             >
               <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: chip.color }} />
               {chip.label}
@@ -360,12 +360,12 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
       </div>
 
       <div className="mt-2 min-w-0 flex-1">
-        <div className="flex items-center justify-between gap-2"><span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Latency (ms)</span><span className="text-[12px] text-muted-foreground">Slow query threshold 100 ms</span></div>
-        <div ref={host1} className="h-[112px] min-w-0" role="img" aria-label="Latency chart: average query time and P95 over time" />
+        <div className="flex items-center justify-between gap-2"><span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Latency (ms)</span><span className="text-[0.75rem] text-muted-foreground">Slow query threshold 100 ms</span></div>
+        <div ref={host1} className="h-[7rem] min-w-0" role="img" aria-label="Latency chart: average query time and P95 over time" />
       </div>
       <div className="mt-1 min-w-0 flex-1 border-t border-border pt-1">
-        <div className="flex items-center justify-between gap-2"><span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Load</span><span className="text-[12px] text-muted-foreground">Max 600 connections</span></div>
-        <div ref={host2} className="h-[122px] min-w-0" role="img" aria-label="Load chart: connections and throughput (QPS) over time" />
+        <div className="flex items-center justify-between gap-2"><span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Load</span><span className="text-[0.75rem] text-muted-foreground">Max 600 connections</span></div>
+        <div ref={host2} className="h-[7.625rem] min-w-0" role="img" aria-label="Load chart: connections and throughput (QPS) over time" />
       </div>
 
       <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Performance summary">
@@ -376,9 +376,9 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
           { label: "Avg QPS", value: `${avgQps}` },
         ].map((tile) => (
           <div key={tile.label} className="min-w-0 rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/60">
-            <span className="block truncate text-[12px] font-medium text-muted-foreground">{tile.label}</span>
-            <b className="mt-0.5 block truncate text-[15px] tabular-nums text-foreground">{tile.value}</b>
-            {tile.detail && <span className="block truncate text-[12px] text-muted-foreground">{tile.detail}</span>}
+            <span className="block truncate text-[0.75rem] font-medium text-muted-foreground">{tile.label}</span>
+            <b className="mt-0.5 block truncate text-[0.9375rem] tabular-nums text-foreground">{tile.value}</b>
+            {tile.detail && <span className="block truncate text-[0.75rem] text-muted-foreground">{tile.detail}</span>}
           </div>
         ))}
       </div>
@@ -387,7 +387,7 @@ const PerformanceChart = forwardRef<PerformanceChartApi, PerformanceChartProps>(
 });
 
 function ViewAllLink({ label = "View all", onClick }: { label?: string; onClick?: () => void }) {
-  return <button type="button" onClick={onClick} className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[13px] font-medium text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{label}<ArrowRight size={14} aria-hidden="true" /></button>;
+  return <button type="button" onClick={onClick} className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.8125rem] font-medium text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{label}<ArrowRight size={14} aria-hidden="true" /></button>;
 }
 
 function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { databases: DatabaseRecord[]; onSelectDatabase: (name: string) => void; selectedDatabase: string }) {
@@ -417,8 +417,8 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
 
   return (
     <div className="flex flex-1 flex-col gap-3">
-      <div className="flex min-h-[150px] flex-wrap items-center gap-4">
-        <div className="relative h-[130px] w-[130px] shrink-0">
+      <div className="flex min-h-[9.375rem] flex-wrap items-center gap-4">
+        <div className="relative h-[8.125rem] w-[8.125rem] shrink-0">
           <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" role="img" aria-label={`Database health ${percent.toFixed(1)}%`}>
             <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--muted)" strokeWidth="9" />
             {arcs.filter((arc) => arc.fraction > 0).map((arc) => (
@@ -426,18 +426,18 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
             ))}
           </svg>
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <b className="font-display text-[20px] font-bold leading-none tabular-nums text-foreground">{percent.toFixed(1)}%</b>
-            <span className="mt-1 text-[12px] font-medium text-muted-foreground">Healthy</span>
+            <b className="font-display text-[1.25rem] font-bold leading-none tabular-nums text-foreground">{percent.toFixed(1)}%</b>
+            <span className="mt-1 text-[0.75rem] font-medium text-muted-foreground">Healthy</span>
           </div>
         </div>
-        <div className="grid min-w-[150px] flex-1 grid-cols-3 gap-1 text-center">
+        <div className="grid min-w-[9.375rem] flex-1 grid-cols-3 gap-1 text-center">
           {segments.map((segment) => {
             const pct = total ? (segment.count / total) * 100 : 0;
             return (
               <div key={segment.name} className="flex min-w-0 flex-col items-center gap-0.5 rounded-lg border border-border/60 px-1 py-2">
-                <span className="flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground"><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: segment.color }} />{segment.name}</span>
-                <b className="text-[17px] tabular-nums text-foreground">{segment.count}</b>
-                <span className="text-[12px] tabular-nums text-muted-foreground">{pct.toFixed(1)}%</span>
+                <span className="flex items-center gap-1.5 text-[0.75rem] font-medium text-muted-foreground"><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: segment.color }} />{segment.name}</span>
+                <b className="text-[1.0625rem] tabular-nums text-foreground">{segment.count}</b>
+                <span className="text-[0.75rem] tabular-nums text-muted-foreground">{pct.toFixed(1)}%</span>
               </div>
             );
           })}
@@ -446,11 +446,11 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
 
       {attention.length > 0 ? (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-900/60 dark:bg-amber-950/40">
-          <span className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-amber-800 dark:text-amber-300"><AlertTriangle size={15} aria-hidden="true" className="shrink-0" />{attention.length} database{attention.length === 1 ? "" : "s"} {attention.length === 1 ? "needs" : "need"} attention</span>
-          <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[12px] text-amber-800 dark:text-amber-300"><span className="text-muted-foreground">{total} monitored</span><ViewAllLink onClick={() => onSelectDatabase(attention[0].name)} /></span>
+          <span className="flex min-w-0 items-center gap-2 text-[0.75rem] font-semibold text-amber-800 dark:text-amber-300"><AlertTriangle size={15} aria-hidden="true" className="shrink-0" />{attention.length} database{attention.length === 1 ? "" : "s"} {attention.length === 1 ? "needs" : "need"} attention</span>
+          <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[0.75rem] text-amber-800 dark:text-amber-300"><span className="text-muted-foreground">{total} monitored</span><ViewAllLink onClick={() => onSelectDatabase(attention[0].name)} /></span>
         </div>
       ) : (
-        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[12px] font-semibold text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"><Check size={15} aria-hidden="true" />All databases healthy<span className="ml-auto font-normal text-muted-foreground">{total} monitored</span></div>
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[0.75rem] font-semibold text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"><Check size={15} aria-hidden="true" />All databases healthy<span className="ml-auto font-normal text-muted-foreground">{total} monitored</span></div>
       )}
 
       {attention.length > 0 && (
@@ -468,8 +468,8 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
                   className={`flex h-9 w-full items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${selectedDatabase === db.name ? "bg-blue-50/70 dark:bg-blue-950/30" : ""}`}
                 >
                   <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-foreground">{db.name}<span className="font-normal text-muted-foreground"> · {detail}</span></span>
-                  <span className="shrink-0 text-[13px] font-semibold text-primary">→</span>
+                  <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium text-foreground">{db.name}<span className="font-normal text-muted-foreground"> · {detail}</span></span>
+                  <span className="shrink-0 text-[0.8125rem] font-semibold text-primary">→</span>
                 </button>
               </li>
             );
@@ -484,9 +484,9 @@ function DatabaseHealth({ databases, onSelectDatabase, selectedDatabase }: { dat
           { label: "Last Backup", value: uptime.lastBackup, sub: "success", icon: CheckCircle2 },
         ].map((tile) => (
           <div key={tile.label} className="flex min-w-0 flex-col gap-0.5 rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/60">
-            <span className="truncate text-[12px] font-medium text-muted-foreground">{tile.label}</span>
-            <span className="flex items-center gap-1.5 text-[15px] font-bold tabular-nums text-foreground"><tile.icon size={14} aria-hidden="true" className="shrink-0 text-emerald-600 dark:text-emerald-400" />{tile.value}</span>
-            <span className="truncate text-[12px] text-muted-foreground">{tile.sub}</span>
+            <span className="truncate text-[0.75rem] font-medium text-muted-foreground">{tile.label}</span>
+            <span className="flex items-center gap-1.5 text-[0.9375rem] font-bold tabular-nums text-foreground"><tile.icon size={14} aria-hidden="true" className="shrink-0 text-emerald-600 dark:text-emerald-400" />{tile.value}</span>
+            <span className="truncate text-[0.75rem] text-muted-foreground">{tile.sub}</span>
           </div>
         ))}
       </div>
@@ -503,13 +503,13 @@ function StorageUsage({ storage }: { storage: typeof databaseMonitoringData.stor
   const topDatabases = databaseMonitoringData.topDatabasesBySize;
   const largestDatabase = Math.max(...topDatabases.map((item) => item.sizeGb));
   return <div className="flex min-h-0 flex-1 flex-col gap-2">
-    <div className="flex items-center justify-center gap-4 sm:justify-start"><Donut value={usage} color={fill} label="Used" size={110} /><div className="min-w-0 flex-1 text-[13px]">
+    <div className="flex items-center justify-center gap-4 sm:justify-start"><Donut value={usage} color={fill} label="Used" size={110} /><div className="min-w-0 flex-1 text-[0.8125rem]">
       {[{ label: "Used", value: storage.usedGb, color: fill }, { label: "Free", value: storage.freeGb, color: "#34d399" }, { label: "Total", value: total, color: "#94a3b8" }].map((item) => <div key={item.label} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 border-b border-border/60 py-2 last:border-0"><span className="flex min-w-0 items-center gap-2 whitespace-nowrap text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ background: item.color }} />{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b><span className="text-muted-foreground">GB</span></div>)}
     </div></div>
-    <div className="grid grid-cols-[minmax(0,1fr)_minmax(120px,40%)] items-center gap-3 border-t border-border pt-2"><div><div className="flex items-center justify-between gap-2 text-[12px]"><span className="text-muted-foreground">Growth (7d)</span><b className="whitespace-nowrap text-foreground">+{storage.dailyGrowthGb.toFixed(1)} GB/day</b></div><p className="mt-1 text-[12px] text-muted-foreground">Estimated full in <b className="text-foreground">~{fullDays} days</b></p></div><div className="h-[54px] min-w-0" aria-label="Seven day storage growth"><ResponsiveContainer width="100%" height="100%"><AreaChart data={growthData}><Tooltip content={<ChartTooltip />} /><Area dataKey="value" name="Storage used (GB)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.16} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
+    <div className="grid grid-cols-[minmax(0,1fr)_minmax(7.5rem,40%)] items-center gap-3 border-t border-border pt-2"><div><div className="flex items-center justify-between gap-2 text-[0.75rem]"><span className="text-muted-foreground">Growth (7d)</span><b className="whitespace-nowrap text-foreground">+{storage.dailyGrowthGb.toFixed(1)} GB/day</b></div><p className="mt-1 text-[0.75rem] text-muted-foreground">Estimated full in <b className="text-foreground">~{fullDays} days</b></p></div><div className="h-[3.375rem] min-w-0" aria-label="Seven day storage growth"><ResponsiveContainer width="100%" height="100%"><AreaChart data={growthData}><Tooltip content={<ChartTooltip />} /><Area dataKey="value" name="Storage used (GB)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.16} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
     <div id="database-size" className="flex min-h-0 flex-1 flex-col border-t border-border pt-2" aria-label="Top databases by storage size">
-      <div className="mb-1 flex items-center justify-between text-[12px]"><span className="font-semibold text-muted-foreground">Top Databases by Size</span><a href="#database-size" className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></a></div>
-      <div className="flex min-h-0 flex-1 flex-col justify-between">{topDatabases.map((item) => <div key={item.name} className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(60px,1.2fr)_56px] items-center gap-2 text-[12px] leading-5"><span className="truncate text-foreground" title={item.name}>{item.name}</span><span className="h-1.5 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${item.sizeGb / largestDatabase * 100}%` }} /></span><b className="whitespace-nowrap text-right tabular-nums text-foreground">{item.sizeGb} GB</b></div>)}</div>
+      <div className="mb-1 flex items-center justify-between text-[0.75rem]"><span className="font-semibold text-muted-foreground">Top Databases by Size</span><a href="#database-size" className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></a></div>
+      <div className="flex min-h-0 flex-1 flex-col justify-between">{topDatabases.map((item) => <div key={item.name} className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(3.75rem,1.2fr)_3.5rem] items-center gap-2 text-[0.75rem] leading-5"><span className="truncate text-foreground" title={item.name}>{item.name}</span><span className="h-1.5 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${item.sizeGb / largestDatabase * 100}%` }} /></span><b className="whitespace-nowrap text-right tabular-nums text-foreground">{item.sizeGb} GB</b></div>)}</div>
     </div>
   </div>;
 }
@@ -519,10 +519,10 @@ function ConnectionsOverview({ data }: { data: typeof databaseMonitoringData.con
   const percent = total / data.max * 100;
   const chartData = history.map((point, index) => ({ time: point.time, active: data.history[index] ?? point.active, idle: point.idle }));
   return <div className="flex flex-1 flex-col gap-2">
-    <div className="flex items-end justify-between gap-3"><div><b className="font-display text-[26px] font-bold leading-none tabular-nums text-foreground">{total}</b><span className="ml-2 text-[13px] text-muted-foreground">/ {data.max} max connections</span></div><b className="text-[13px] tabular-nums text-foreground">{percent.toFixed(0)}%</b></div>
+    <div className="flex items-end justify-between gap-3"><div><b className="font-display text-[1.625rem] font-bold leading-none tabular-nums text-foreground">{total}</b><span className="ml-2 text-[0.8125rem] text-muted-foreground">/ {data.max} max connections</span></div><b className="text-[0.8125rem] tabular-nums text-foreground">{percent.toFixed(0)}%</b></div>
     <div className="h-2 overflow-hidden rounded-full bg-muted" aria-label={`${percent.toFixed(0)} percent of maximum connections`}><div className="h-full rounded-full bg-blue-500 transition-[width]" style={{ width: `${Math.min(percent, 100)}%` }} /></div>
-    <div className="flex items-center gap-4 text-[12px] text-muted-foreground"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-blue-500" />Active <b className="text-foreground">{data.active}</b></span><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-slate-400" />Idle <b className="text-foreground">{data.idle}</b></span></div>
-    <div className="min-h-[130px] min-w-0 flex-1" aria-label="Connection count history"><ResponsiveContainer width="100%" height="100%"><AreaChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, data.max]} ticks={[0, 150, 300, 450, 600]} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><ReferenceLine y={data.max} stroke="#ef4444" strokeDasharray="4 4" label={{ value: `Max ${data.max}`, position: "insideTopRight", fill: "#ef4444", fontSize: 12 }} /><Tooltip content={<ChartTooltip />} /><Area dataKey="active" name="Active" type="monotone" stroke="#3182f6" fill="#3182f6" fillOpacity={0.16} strokeWidth={2} dot={false} /><Area dataKey="idle" name="Idle" type="monotone" stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.12} strokeWidth={1.5} dot={false} /></AreaChart></ResponsiveContainer></div>
+    <div className="flex items-center gap-4 text-[0.75rem] text-muted-foreground"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-blue-500" />Active <b className="text-foreground">{data.active}</b></span><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-slate-400" />Idle <b className="text-foreground">{data.idle}</b></span></div>
+    <div className="min-h-[8.125rem] min-w-0 flex-1" aria-label="Connection count history"><ResponsiveContainer width="100%" height="100%"><AreaChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" interval={3} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, data.max]} ticks={[0, 150, 300, 450, 600]} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><ReferenceLine y={data.max} stroke="#ef4444" strokeDasharray="4 4" label={{ value: `Max ${data.max}`, position: "insideTopRight", fill: "#ef4444", fontSize: 12 }} /><Tooltip content={<ChartTooltip />} /><Area dataKey="active" name="Active" type="monotone" stroke="#3182f6" fill="#3182f6" fillOpacity={0.16} strokeWidth={2} dot={false} /><Area dataKey="idle" name="Idle" type="monotone" stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.12} strokeWidth={1.5} dot={false} /></AreaChart></ResponsiveContainer></div>
   </div>;
 }
 
@@ -534,9 +534,9 @@ function QueryPerformance({ data }: { data: typeof databaseMonitoringData.query 
   const queryTicks = [0, Math.round(peak / 20) * 10, Math.ceil(peak / 80) * 80];
   const queryTimeTicks = history.filter((_, index) => index % Math.ceil(history.length / 4) === 0).map((point) => point.time);
   return <div className="flex flex-1 flex-col gap-3">
-    <div className="flex flex-wrap items-end justify-between gap-2"><div><b className="font-display text-[24px] font-bold tabular-nums text-foreground">{data.averageMs} ms</b><p className="text-[12px] text-muted-foreground">Average query time <span className={`font-semibold ${data.averageTrendPercent <= 0 ? "text-emerald-600" : "text-rose-600"}`}>{data.averageTrendPercent <= 0 ? "↓" : "↑"} {Math.abs(data.averageTrendPercent).toFixed(1)}%</span></p></div><div className="flex gap-2 text-[12px]">{[{ label: "QPS", value: data.qps }, { label: "P95", value: `${data.p95Ms} ms` }, { label: "P99", value: `${data.p99Ms} ms` }].map((item) => <div key={item.label} className="rounded-md bg-muted/60 px-2.5 py-1.5"><span className="mr-1.5 text-muted-foreground">{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b></div>)}</div></div>
-    <div className="space-y-1.5" aria-label="Query speed distribution"><div className="flex h-3 overflow-hidden rounded-full bg-muted">{breakdown.map((item) => <span key={item.name} title={`${item.name}: ${item.count} (${item.percent.toFixed(1)}%)`} style={{ width: `${item.percent}%`, backgroundColor: item.color }} />)}</div><div className="grid grid-cols-3 gap-2 text-[12px]">{breakdown.map((item) => <div key={item.name} className="flex min-w-0 items-center gap-1.5"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} /><span className="text-muted-foreground">{item.name}</span><b className="ml-auto tabular-nums text-foreground">{item.count} · {item.percent.toFixed(1)}%</b></div>)}</div></div>
-    <div className="min-h-[110px] min-w-0 flex-1 border-t border-border pt-2" aria-label="Average response time over the last 24 hours"><div className="mb-1 text-[12px] text-muted-foreground">Average response time · peak {peak} ms</div><div className="h-[calc(100%-22px)] min-h-[82px]"><ResponsiveContainer width="100%" height="100%"><AreaChart data={history} margin={{ top: 10, right: 14, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" ticks={queryTimeTicks} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, queryTicks[2]]} ticks={queryTicks} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><Tooltip content={<ChartTooltip />} /><ReferenceDot x={peakPoint.time} y={peak} r={4} fill="#f59e0b" stroke="white" strokeWidth={2} label={{ value: `Peak ${peak} ms`, position: "top", fill: "#b45309", fontSize: 12 }} /><Area dataKey="latency" name="Response time (ms)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.13} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
+    <div className="flex flex-wrap items-end justify-between gap-2"><div><b className="font-display text-[1.5rem] font-bold tabular-nums text-foreground">{data.averageMs} ms</b><p className="text-[0.75rem] text-muted-foreground">Average query time <span className={`font-semibold ${data.averageTrendPercent <= 0 ? "text-emerald-600" : "text-rose-600"}`}>{data.averageTrendPercent <= 0 ? "↓" : "↑"} {Math.abs(data.averageTrendPercent).toFixed(1)}%</span></p></div><div className="flex gap-2 text-[0.75rem]">{[{ label: "QPS", value: data.qps }, { label: "P95", value: `${data.p95Ms} ms` }, { label: "P99", value: `${data.p99Ms} ms` }].map((item) => <div key={item.label} className="rounded-md bg-muted/60 px-2.5 py-1.5"><span className="mr-1.5 text-muted-foreground">{item.label}</span><b className="whitespace-nowrap tabular-nums text-foreground">{item.value}</b></div>)}</div></div>
+    <div className="space-y-1.5" aria-label="Query speed distribution"><div className="flex h-3 overflow-hidden rounded-full bg-muted">{breakdown.map((item) => <span key={item.name} title={`${item.name}: ${item.count} (${item.percent.toFixed(1)}%)`} style={{ width: `${item.percent}%`, backgroundColor: item.color }} />)}</div><div className="grid grid-cols-3 gap-2 text-[0.75rem]">{breakdown.map((item) => <div key={item.name} className="flex min-w-0 items-center gap-1.5"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} /><span className="text-muted-foreground">{item.name}</span><b className="ml-auto tabular-nums text-foreground">{item.count} · {item.percent.toFixed(1)}%</b></div>)}</div></div>
+    <div className="min-h-[6.875rem] min-w-0 flex-1 border-t border-border pt-2" aria-label="Average response time over the last 24 hours"><div className="mb-1 text-[0.75rem] text-muted-foreground">Average response time · peak {peak} ms</div><div className="h-[calc(100%-1.375rem)] min-h-[5.125rem]"><ResponsiveContainer width="100%" height="100%"><AreaChart data={history} margin={{ top: 10, right: 14, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" ticks={queryTimeTicks} interval={0} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><YAxis domain={[0, queryTicks[2]]} ticks={queryTicks} width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} /><Tooltip content={<ChartTooltip />} /><ReferenceDot x={peakPoint.time} y={peak} r={4} fill="#f59e0b" stroke="white" strokeWidth={2} label={{ value: `Peak ${peak} ms`, position: "top", fill: "#b45309", fontSize: 12 }} /><Area dataKey="latency" name="Response time (ms)" type="monotone" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.13} strokeWidth={2} dot={false} activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div></div>
   </div>;
 }
 
@@ -573,7 +573,7 @@ function LocationPanel({ databases, onSelect, selectedLocation }: { databases: D
   const selectedSiteId = locationSites.find((site) => site.city === selectedLocation)?.id ?? null;
   const healthTone = (health: number) => health >= 99 ? "text-emerald-600 dark:text-emerald-400" : health >= 98 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400";
   return <div className="flex flex-1 flex-col gap-3">
-    <div className="relative h-[320px] min-h-[320px] flex-1 overflow-hidden rounded-lg" aria-label="Database locations map">
+    <div className="relative h-[20rem] min-h-[20rem] flex-1 overflow-hidden rounded-lg" aria-label="Database locations map">
       <NocOsmMap
         sites={locationSites}
         center={[33.69, 73.06]}
@@ -582,9 +582,9 @@ function LocationPanel({ databases, onSelect, selectedLocation }: { databases: D
         onSelectSite={(site) => { if (locations.some((location) => location.name === site.city)) onSelect(site.city); }}
       />
     </div>
-    <div className="divide-y divide-border/70 border-t border-border" aria-label="Database locations, worst health first">{locations.slice(0, 5).map((location) => <button type="button" key={location.name} onClick={() => onSelect(location.name)} aria-pressed={selectedLocation === location.name} className={`grid h-8 w-full grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 px-1 text-left text-[13px] transition hover:bg-muted/50 ${selectedLocation === location.name ? "bg-blue-50/70 dark:bg-blue-950/30" : ""}`} title={location.items.map((db) => `${db.name} · ${db.engine} · ${db.status}`).join("\n")}><span className="flex min-w-0 items-center gap-2"><i className={`h-2 w-2 shrink-0 rounded-full ${location.status === "Healthy" ? "bg-emerald-500" : location.status === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} aria-label={location.status} /><span className="truncate font-medium text-foreground">{location.name}</span></span><span className={`flex items-center gap-1 whitespace-nowrap text-[12px] ${location.status === "Healthy" ? "text-emerald-700 dark:text-emerald-300" : location.status === "Warning" ? "text-amber-700 dark:text-amber-300" : "text-rose-700 dark:text-rose-300"}`}>{location.status === "Healthy" ? <Check size={13} /> : location.status === "Warning" ? <AlertTriangle size={13} /> : <X size={13} />}{location.status}</span><span className="whitespace-nowrap text-[12px] text-muted-foreground">{location.items.length} DB</span><b className={`whitespace-nowrap tabular-nums ${healthTone(location.health)}`}>{location.health.toFixed(1)}%</b></button>)}</div>
-    {databases.some((database) => database.status !== "Healthy") ? <div className="max-h-[62px] overflow-auto border-t border-border pt-1.5" aria-label="Databases needing attention"><p className="mb-0.5 text-[12px] font-semibold text-foreground">Needs attention</p>{databases.filter((database) => database.status !== "Healthy").slice(0, 2).map((database) => <button type="button" key={database.name} onClick={() => onSelect(database.location)} className={`flex h-6 w-full items-center justify-between gap-2 rounded-md px-1 text-left text-[12px] hover:bg-muted/50 ${selectedLocation === database.location ? "bg-amber-50 dark:bg-amber-950/30" : ""}`}><span className="min-w-0 truncate"><b className="text-foreground">{database.name}</b><span className="text-muted-foreground"> · {database.issue ?? database.status}</span></span><span className={`flex shrink-0 items-center gap-1 font-medium ${database.status === "Warning" ? "text-amber-700 dark:text-amber-300" : "text-rose-700 dark:text-rose-300"}`}>{database.status === "Warning" ? <AlertTriangle size={13} /> : <X size={13} />}{database.status}</span></button>)}</div> : <p className="border-t border-border pt-2 text-[12px] text-emerald-700 dark:text-emerald-300">All databases healthy</p>}
-    {locations.length === 0 && <div className="rounded-md bg-muted/50 p-4 text-[13px] text-muted-foreground">No database locations are available.</div>}
+    <div className="divide-y divide-border/70 border-t border-border" aria-label="Database locations, worst health first">{locations.slice(0, 5).map((location) => <button type="button" key={location.name} onClick={() => onSelect(location.name)} aria-pressed={selectedLocation === location.name} className={`grid h-8 w-full grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 px-1 text-left text-[0.8125rem] transition hover:bg-muted/50 ${selectedLocation === location.name ? "bg-blue-50/70 dark:bg-blue-950/30" : ""}`} title={location.items.map((db) => `${db.name} · ${db.engine} · ${db.status}`).join("\n")}><span className="flex min-w-0 items-center gap-2"><i className={`h-2 w-2 shrink-0 rounded-full ${location.status === "Healthy" ? "bg-emerald-500" : location.status === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} aria-label={location.status} /><span className="truncate font-medium text-foreground">{location.name}</span></span><span className={`flex items-center gap-1 whitespace-nowrap text-[0.75rem] ${location.status === "Healthy" ? "text-emerald-700 dark:text-emerald-300" : location.status === "Warning" ? "text-amber-700 dark:text-amber-300" : "text-rose-700 dark:text-rose-300"}`}>{location.status === "Healthy" ? <Check size={13} /> : location.status === "Warning" ? <AlertTriangle size={13} /> : <X size={13} />}{location.status}</span><span className="whitespace-nowrap text-[0.75rem] text-muted-foreground">{location.items.length} DB</span><b className={`whitespace-nowrap tabular-nums ${healthTone(location.health)}`}>{location.health.toFixed(1)}%</b></button>)}</div>
+    {databases.some((database) => database.status !== "Healthy") ? <div className="max-h-[3.875rem] overflow-auto border-t border-border pt-1.5" aria-label="Databases needing attention"><p className="mb-0.5 text-[0.75rem] font-semibold text-foreground">Needs attention</p>{databases.filter((database) => database.status !== "Healthy").slice(0, 2).map((database) => <button type="button" key={database.name} onClick={() => onSelect(database.location)} className={`flex h-6 w-full items-center justify-between gap-2 rounded-md px-1 text-left text-[0.75rem] hover:bg-muted/50 ${selectedLocation === database.location ? "bg-amber-50 dark:bg-amber-950/30" : ""}`}><span className="min-w-0 truncate"><b className="text-foreground">{database.name}</b><span className="text-muted-foreground"> · {database.issue ?? database.status}</span></span><span className={`flex shrink-0 items-center gap-1 font-medium ${database.status === "Warning" ? "text-amber-700 dark:text-amber-300" : "text-rose-700 dark:text-rose-300"}`}>{database.status === "Warning" ? <AlertTriangle size={13} /> : <X size={13} />}{database.status}</span></button>)}</div> : <p className="border-t border-border pt-2 text-[0.75rem] text-emerald-700 dark:text-emerald-300">All databases healthy</p>}
+    {locations.length === 0 && <div className="rounded-md bg-muted/50 p-4 text-[0.8125rem] text-muted-foreground">No database locations are available.</div>}
   </div>;
 }
 
@@ -648,16 +648,16 @@ export function DatabaseMonitoringDashboard() {
     <PageMeta breadcrumbs={["Monitoring", "Database Monitoring"]} lastUpdated={lastUpdated} onRefresh={refreshPage} />
     <PageHeading title="Database Monitoring" description="Monitor your databases performance, health and activity in real-time." actionsAlign="top">
       <div className="flex shrink-0 items-center gap-2">
-        <span className={`hidden items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-semibold sm:flex ${issueCount ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{issueCount ? <AlertTriangle size={14} /> : <Check size={14} />}{issueCount ? `${issueCount} Database${issueCount === 1 ? "" : "s"} Need Attention` : "All Databases Healthy"}</span><Button variant="outline" size="sm" onClick={exportReport} className="h-10 gap-2 whitespace-nowrap px-4 text-[13px]"><Download size={15} />Export Report</Button><Button size="sm" onClick={() => setAddDialogOpen(true)} className="h-10 gap-2 whitespace-nowrap px-4 text-[13px]"><Plus size={15} />Add Database</Button></div>
+        <span className={`hidden items-center gap-1.5 rounded-full px-3 py-2 text-[0.75rem] font-semibold sm:flex ${issueCount ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{issueCount ? <AlertTriangle size={14} /> : <Check size={14} />}{issueCount ? `${issueCount} Database${issueCount === 1 ? "" : "s"} Need Attention` : "All Databases Healthy"}</span><Button variant="outline" size="sm" onClick={exportReport} className="h-10 gap-2 whitespace-nowrap px-4 text-[0.8125rem]"><Download size={15} />Export Report</Button><Button size="sm" onClick={() => setAddDialogOpen(true)} className="h-10 gap-2 whitespace-nowrap px-4 text-[0.8125rem]"><Plus size={15} />Add Database</Button></div>
     </PageHeading>
-    <section aria-label="Database monitoring summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">{currentStats.map((item) => <MetricCard key={item.label} item={item} className="h-[108px] gap-3 p-4" labelClassName="text-[13px]" valueClassName="text-[24px]" trendClassName="text-[12px]" />)}</section>
+    <section aria-label="Database monitoring summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">{currentStats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.75rem] gap-3 p-4" labelClassName="text-[0.8125rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.75rem]" />)}</section>
 
     <section aria-label="Database performance and status" className="grid items-stretch gap-4 xl:grid-cols-[1.7fr_0.85fr_1.05fr]">
       <div ref={performanceCardRef} className="flex min-w-0">
         <Panel
           title="Database Performance Overview"
-          className="flex min-h-[380px] min-w-0 flex-1 flex-col rounded-xl p-4"
-          titleClassName="text-[16px] font-semibold"
+          className="flex min-h-[23.75rem] min-w-0 flex-1 flex-col rounded-xl p-4"
+          titleClassName="text-[1rem] font-semibold"
           headerClassName="h-10"
           action={(
             <div className="flex shrink-0 items-center gap-1.5">
@@ -687,16 +687,16 @@ export function DatabaseMonitoringDashboard() {
           {status === "loading" ? (
             <div className="flex min-h-0 flex-1 flex-col gap-3 pt-2" aria-busy="true" aria-label="Loading performance chart">
               <div className="h-7 w-48 animate-pulse rounded-full bg-muted" />
-              <div className="h-[112px] animate-pulse rounded-lg bg-muted" />
-              <div className="h-[122px] animate-pulse rounded-lg bg-muted" />
+              <div className="h-[7rem] animate-pulse rounded-lg bg-muted" />
+              <div className="h-[7.625rem] animate-pulse rounded-lg bg-muted" />
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{[0, 1, 2, 3].map((index) => <div key={index} className="h-14 animate-pulse rounded-lg bg-muted" />)}</div>
             </div>
           ) : databaseRows.length === 0 ? (
-            <div className="grid min-h-[340px] flex-1 place-items-center rounded-lg border border-dashed border-border p-6 text-center">
+            <div className="grid min-h-[21.25rem] flex-1 place-items-center rounded-lg border border-dashed border-border p-6 text-center">
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm font-semibold text-foreground">No databases configured</p>
-                <p className="max-w-xs text-[12px] text-muted-foreground">Add your first database to see latency, load and uptime trends here.</p>
-                <Button size="sm" onClick={() => setAddDialogOpen(true)} className="h-9 gap-1.5 rounded-lg px-3 text-[13px]"><Plus size={14} />Add Database</Button>
+                <p className="max-w-xs text-[0.75rem] text-muted-foreground">Add your first database to see latency, load and uptime trends here.</p>
+                <Button size="sm" onClick={() => setAddDialogOpen(true)} className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]"><Plus size={14} />Add Database</Button>
               </div>
             </div>
           ) : (
@@ -706,46 +706,46 @@ export function DatabaseMonitoringDashboard() {
       </div>
       <Panel
         title="Database Status"
-        className="flex min-h-[380px] min-w-0 flex-col rounded-xl p-4"
-        titleClassName="text-[16px] font-semibold"
+        className="flex min-h-[23.75rem] min-w-0 flex-col rounded-xl p-4"
+        titleClassName="text-[1rem] font-semibold"
         headerClassName="h-10"
       >
         {status === "loading" ? (
-          <div className="flex min-h-[280px] flex-1 flex-col items-center gap-4 pt-2" aria-busy="true" aria-label="Loading database status">
-            <div className="h-[130px] w-[130px] animate-pulse rounded-full bg-muted" />
+          <div className="flex min-h-[17.5rem] flex-1 flex-col items-center gap-4 pt-2" aria-busy="true" aria-label="Loading database status">
+            <div className="h-[8.125rem] w-[8.125rem] animate-pulse rounded-full bg-muted" />
             <div className="grid w-full grid-cols-3 gap-2">{[0, 1, 2].map((index) => <div key={index} className="h-16 animate-pulse rounded-lg bg-muted" />)}</div>
             <div className="h-10 w-full animate-pulse rounded-lg bg-muted" />
           </div>
         ) : databaseRows.length === 0 ? (
-          <div className="grid min-h-[280px] flex-1 place-items-center rounded-lg border border-dashed border-border p-6 text-center">
+          <div className="grid min-h-[17.5rem] flex-1 place-items-center rounded-lg border border-dashed border-border p-6 text-center">
             <div>
               <p className="text-sm font-semibold text-foreground">No databases configured</p>
-              <p className="mt-1 text-[12px] text-muted-foreground">Add a database to see health, warning and offline status here.</p>
+              <p className="mt-1 text-[0.75rem] text-muted-foreground">Add a database to see health, warning and offline status here.</p>
             </div>
           </div>
         ) : (
           <DatabaseHealth databases={databaseRows} onSelectDatabase={setSelectedDatabase} selectedDatabase={selectedDatabase} />
         )}
       </Panel>
-      <Panel title="Top Databases by Load" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10"><div className="min-h-[200px] flex-1 overflow-x-auto pt-1"><table className="w-full min-w-[360px] text-left text-[12px]"><thead><tr className="border-b border-border text-[12px] text-muted-foreground"><th className="whitespace-nowrap px-2 pb-2 font-medium">Database</th><th><button type="button" className="whitespace-nowrap px-2 pb-2 font-medium hover:text-foreground" onClick={() => setSortDirection((direction) => direction === "desc" ? "asc" : "desc")} aria-label={`Sort query time ${sortDirection === "desc" ? "ascending" : "descending"}`}>Query Time {sortDirection === "desc" ? "↓" : "↑"}</button></th><th className="whitespace-nowrap px-2 pb-2 font-medium">Throughput</th><th className="whitespace-nowrap px-2 pb-2 font-medium">Status</th></tr></thead><tbody>{sortedDatabases.slice(0, 6).map((database) => <tr key={database.name} className="h-10 border-b border-border/70 transition-colors hover:bg-muted/40 last:border-0"><td className="whitespace-nowrap px-2 py-2 font-medium text-foreground"><TechLogo name={database.engine} className="mr-2 inline-grid h-6 w-6 align-middle [&_svg]:h-4 [&_svg]:w-4" />{database.name}</td><td className="whitespace-nowrap px-2 py-2 tabular-nums text-foreground">{database.query}</td><td className="whitespace-nowrap px-2 py-2 tabular-nums text-foreground">{database.throughput}</td><td className="px-2 py-2"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-[12px] font-medium ${statusClass[database.status]}`}>{database.status}</span></td></tr>)}</tbody></table></div></Panel>
+      <Panel title="Top Databases by Load" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10"><div className="min-h-[12.5rem] flex-1 overflow-x-auto pt-1"><table className="w-full min-w-[22.5rem] text-left text-[0.75rem]"><thead><tr className="border-b border-border text-[0.75rem] text-muted-foreground"><th className="whitespace-nowrap px-2 pb-2 font-medium">Database</th><th><button type="button" className="whitespace-nowrap px-2 pb-2 font-medium hover:text-foreground" onClick={() => setSortDirection((direction) => direction === "desc" ? "asc" : "desc")} aria-label={`Sort query time ${sortDirection === "desc" ? "ascending" : "descending"}`}>Query Time {sortDirection === "desc" ? "↓" : "↑"}</button></th><th className="whitespace-nowrap px-2 pb-2 font-medium">Throughput</th><th className="whitespace-nowrap px-2 pb-2 font-medium">Status</th></tr></thead><tbody>{sortedDatabases.slice(0, 6).map((database) => <tr key={database.name} className="h-10 border-b border-border/70 transition-colors hover:bg-muted/40 last:border-0"><td className="whitespace-nowrap px-2 py-2 font-medium text-foreground"><TechLogo name={database.engine} className="mr-2 inline-grid h-6 w-6 align-middle [&_svg]:h-4 [&_svg]:w-4" />{database.name}</td><td className="whitespace-nowrap px-2 py-2 tabular-nums text-foreground">{database.query}</td><td className="whitespace-nowrap px-2 py-2 tabular-nums text-foreground">{database.throughput}</td><td className="px-2 py-2"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-[0.75rem] font-medium ${statusClass[database.status]}`}>{database.status}</span></td></tr>)}</tbody></table></div></Panel>
     </section>
 
     <section aria-label="Database storage, connections and query performance" className="grid items-stretch gap-4 xl:grid-cols-3">
-      <Panel title="Storage Usage" className="flex min-h-[340px] min-w-0 flex-col p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10"><StorageUsage storage={databaseMonitoringData.storage} /></Panel>
-      <Panel title="Connections Overview" className="flex min-h-[340px] min-w-0 flex-col p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10"><ConnectionsOverview data={databaseMonitoringData.connections} /></Panel>
-      <Panel title="Query Performance" className="flex min-h-[340px] min-w-0 flex-col p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10"><QueryPerformance data={databaseMonitoringData.query} /></Panel>
+      <Panel title="Storage Usage" className="flex min-h-[21.25rem] min-w-0 flex-col p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10"><StorageUsage storage={databaseMonitoringData.storage} /></Panel>
+      <Panel title="Connections Overview" className="flex min-h-[21.25rem] min-w-0 flex-col p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10"><ConnectionsOverview data={databaseMonitoringData.connections} /></Panel>
+      <Panel title="Query Performance" className="flex min-h-[21.25rem] min-w-0 flex-col p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10"><QueryPerformance data={databaseMonitoringData.query} /></Panel>
     </section>
 
     <section aria-label="Database events and locations" className="grid items-stretch gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-      <Panel title="Recent Database Events" className="flex min-h-[640px] min-w-0 flex-col p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10" action={<div className="flex items-center gap-1 rounded-md bg-muted p-0.5" role="tablist" aria-label="Database activity"><button type="button" role="tab" aria-selected={eventTab === "events"} onClick={() => setEventTab("events")} className={`rounded px-2 py-1 text-[12px] ${eventTab === "events" ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted-foreground"}`}>Events</button><button type="button" role="tab" aria-selected={eventTab === "slow"} onClick={() => setEventTab("slow")} className={`rounded px-2 py-1 text-[12px] ${eventTab === "slow" ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted-foreground"}`}>Slow Queries</button></div>}>
-        {eventTab === "events" ? <div className="flex min-h-0 flex-1 flex-col"><div id="database-events" className="flex-1 overflow-x-auto pt-1"><table className="w-full min-w-[540px] text-left text-[13px]"><thead><tr className="border-b border-border text-[12px] text-muted-foreground">{["Time", "Database", "Event", "Message", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-medium">{heading}</th>)}</tr></thead><tbody>{databaseMonitoringData.events.slice(0, 10).map((item) => <tr key={`${item.time}-${item.database}-${item.event}`} className="h-11 border-b border-border/70 transition-colors hover:bg-muted/40 last:border-0"><td className="whitespace-nowrap px-2 py-2 text-foreground">{item.time}</td><td className="whitespace-nowrap px-2 py-2"><span className="inline-flex items-center gap-2 font-medium text-foreground"><TechLogo name={item.engine} className="h-6 w-6 rounded-[5px] [&_svg]:h-4 [&_svg]:w-4" />{item.database}</span></td><td className="whitespace-nowrap px-2 py-2 text-foreground">{item.event}</td><td className="max-w-[180px] truncate px-2 py-2 text-muted-foreground" title={item.message}>{item.message}</td><td className="px-2 py-2"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-[12px] font-medium ${statusClass[item.status]}`}>{item.status}</span></td></tr>)}</tbody></table></div><div className="mt-auto flex items-center justify-between border-t border-border pt-3 text-[12px] text-muted-foreground"><span>Showing 1-{Math.min(10, databaseMonitoringData.events.length)} of {databaseMonitoringData.eventsTotal} events</span><a href="#database-events" className="font-semibold text-primary hover:underline">View all →</a></div></div> : <div className="flex min-h-0 flex-1 flex-col"><div className="flex-1 overflow-auto pt-1"><table className="w-full min-w-[520px] text-left text-[13px]"><thead><tr className="border-b border-border text-[12px] text-muted-foreground">{["Time", "Database", "Query", "Duration", "Calls"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-medium">{heading}</th>)}</tr></thead><tbody>{databaseMonitoringData.slowQueries.map((item) => <tr key={`${item.time}-${item.database}-${item.query}`} className="h-11 border-b border-border/70 hover:bg-muted/40"><td className="whitespace-nowrap px-2 text-foreground">{item.time}</td><td className="whitespace-nowrap px-2"><span className="inline-flex items-center gap-2 font-medium"><TechLogo name={item.engine} className="h-6 w-6 rounded-[5px] [&_svg]:h-4 [&_svg]:w-4" />{item.database}</span></td><td className="max-w-[190px] truncate px-2 text-foreground" title={item.query}>{item.query}</td><td className="whitespace-nowrap px-2 font-semibold tabular-nums text-amber-700">{item.duration}</td><td className="px-2 tabular-nums text-muted-foreground">{item.calls}</td></tr>)}</tbody></table></div><p className="mt-auto border-t border-border pt-3 text-[12px] text-muted-foreground">Showing {databaseMonitoringData.slowQueries.length} slow-query samples · sorted by duration</p></div>}
+      <Panel title="Recent Database Events" className="flex min-h-[40rem] min-w-0 flex-col p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" action={<div className="flex items-center gap-1 rounded-md bg-muted p-0.5" role="tablist" aria-label="Database activity"><button type="button" role="tab" aria-selected={eventTab === "events"} onClick={() => setEventTab("events")} className={`rounded px-2 py-1 text-[0.75rem] ${eventTab === "events" ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted-foreground"}`}>Events</button><button type="button" role="tab" aria-selected={eventTab === "slow"} onClick={() => setEventTab("slow")} className={`rounded px-2 py-1 text-[0.75rem] ${eventTab === "slow" ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted-foreground"}`}>Slow Queries</button></div>}>
+        {eventTab === "events" ? <div className="flex min-h-0 flex-1 flex-col"><div id="database-events" className="flex-1 overflow-x-auto pt-1"><table className="w-full min-w-[33.75rem] text-left text-[0.8125rem]"><thead><tr className="border-b border-border text-[0.75rem] text-muted-foreground">{["Time", "Database", "Event", "Message", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-medium">{heading}</th>)}</tr></thead><tbody>{databaseMonitoringData.events.slice(0, 10).map((item) => <tr key={`${item.time}-${item.database}-${item.event}`} className="h-11 border-b border-border/70 transition-colors hover:bg-muted/40 last:border-0"><td className="whitespace-nowrap px-2 py-2 text-foreground">{item.time}</td><td className="whitespace-nowrap px-2 py-2"><span className="inline-flex items-center gap-2 font-medium text-foreground"><TechLogo name={item.engine} className="h-6 w-6 rounded-[0.3125rem] [&_svg]:h-4 [&_svg]:w-4" />{item.database}</span></td><td className="whitespace-nowrap px-2 py-2 text-foreground">{item.event}</td><td className="max-w-[11.25rem] truncate px-2 py-2 text-muted-foreground" title={item.message}>{item.message}</td><td className="px-2 py-2"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-[0.75rem] font-medium ${statusClass[item.status]}`}>{item.status}</span></td></tr>)}</tbody></table></div><div className="mt-auto flex items-center justify-between border-t border-border pt-3 text-[0.75rem] text-muted-foreground"><span>Showing 1-{Math.min(10, databaseMonitoringData.events.length)} of {databaseMonitoringData.eventsTotal} events</span><a href="#database-events" className="font-semibold text-primary hover:underline">View all →</a></div></div> : <div className="flex min-h-0 flex-1 flex-col"><div className="flex-1 overflow-auto pt-1"><table className="w-full min-w-[32.5rem] text-left text-[0.8125rem]"><thead><tr className="border-b border-border text-[0.75rem] text-muted-foreground">{["Time", "Database", "Query", "Duration", "Calls"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-medium">{heading}</th>)}</tr></thead><tbody>{databaseMonitoringData.slowQueries.map((item) => <tr key={`${item.time}-${item.database}-${item.query}`} className="h-11 border-b border-border/70 hover:bg-muted/40"><td className="whitespace-nowrap px-2 text-foreground">{item.time}</td><td className="whitespace-nowrap px-2"><span className="inline-flex items-center gap-2 font-medium"><TechLogo name={item.engine} className="h-6 w-6 rounded-[0.3125rem] [&_svg]:h-4 [&_svg]:w-4" />{item.database}</span></td><td className="max-w-[11.875rem] truncate px-2 text-foreground" title={item.query}>{item.query}</td><td className="whitespace-nowrap px-2 font-semibold tabular-nums text-amber-700">{item.duration}</td><td className="px-2 tabular-nums text-muted-foreground">{item.calls}</td></tr>)}</tbody></table></div><p className="mt-auto border-t border-border pt-3 text-[0.75rem] text-muted-foreground">Showing {databaseMonitoringData.slowQueries.length} slow-query samples · sorted by duration</p></div>}
       </Panel>
-      <Panel title="Database Health by Location" className="flex min-h-[640px] min-w-0 flex-col p-4" titleClassName="text-[16px] font-semibold" headerClassName="h-10" action={<span className="whitespace-nowrap rounded-full bg-blue-50 px-2.5 py-1 text-[12px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">{databaseRows.length} DB · {locationMarkerCount} locations</span>}>
+      <Panel title="Database Health by Location" className="flex min-h-[40rem] min-w-0 flex-col p-4" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" action={<span className="whitespace-nowrap rounded-full bg-blue-50 px-2.5 py-1 text-[0.75rem] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">{databaseRows.length} DB · {locationMarkerCount} locations</span>}>
         <LocationPanel databases={databaseRows} onSelect={setSelectedLocation} selectedLocation={selectedLocation} />
       </Panel>
     </section>
 
-    {addDialogOpen && <div className="fixed inset-0 z-[1200] grid place-items-center bg-slate-950/35 p-4" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setAddDialogOpen(false); }}><section role="dialog" aria-modal="true" aria-labelledby="add-database-title" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl"><div className="mb-4 flex items-center justify-between"><div><h2 id="add-database-title" className="text-lg font-semibold text-foreground">Add database</h2><p className="mt-1 text-[13px] text-muted-foreground">Add a database to the demo monitoring list.</p></div><button type="button" onClick={() => setAddDialogOpen(false)} aria-label="Close dialog" className="rounded-md p-2 text-muted-foreground hover:bg-muted"><X size={18} /></button></div><form onSubmit={addDatabase} className="space-y-4"><label className="block text-[13px] font-medium text-foreground" htmlFor="database-name">Database name<input id="database-name" autoFocus value={newDatabaseName} onChange={(event) => setNewDatabaseName(event.target.value)} placeholder="e.g. billing_db" className="mt-2 h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary" required /></label><div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setAddDialogOpen(false)} className="h-10 px-4 text-[13px]">Cancel</Button><Button type="submit" className="h-10 gap-2 px-4 text-[13px]"><Plus size={15} />Add database</Button></div></form></section></div>}
-    {notice && <div role="status" className="fixed bottom-4 right-4 z-[1300] rounded-lg border border-border bg-card px-4 py-3 text-[13px] text-foreground shadow-lg">{notice}</div>}
+    {addDialogOpen && <div className="fixed inset-0 z-[1200] grid place-items-center bg-slate-950/35 p-4" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setAddDialogOpen(false); }}><section role="dialog" aria-modal="true" aria-labelledby="add-database-title" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl"><div className="mb-4 flex items-center justify-between"><div><h2 id="add-database-title" className="text-lg font-semibold text-foreground">Add database</h2><p className="mt-1 text-[0.8125rem] text-muted-foreground">Add a database to the demo monitoring list.</p></div><button type="button" onClick={() => setAddDialogOpen(false)} aria-label="Close dialog" className="rounded-md p-2 text-muted-foreground hover:bg-muted"><X size={18} /></button></div><form onSubmit={addDatabase} className="space-y-4"><label className="block text-[0.8125rem] font-medium text-foreground" htmlFor="database-name">Database name<input id="database-name" autoFocus value={newDatabaseName} onChange={(event) => setNewDatabaseName(event.target.value)} placeholder="e.g. billing_db" className="mt-2 h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary" required /></label><div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setAddDialogOpen(false)} className="h-10 px-4 text-[0.8125rem]">Cancel</Button><Button type="submit" className="h-10 gap-2 px-4 text-[0.8125rem]"><Plus size={15} />Add database</Button></div></form></section></div>}
+    {notice && <div role="status" className="fixed bottom-4 right-4 z-[1300] rounded-lg border border-border bg-card px-4 py-3 text-[0.8125rem] text-foreground shadow-lg">{notice}</div>}
   </div>;
 }

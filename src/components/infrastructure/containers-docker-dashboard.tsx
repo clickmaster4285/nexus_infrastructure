@@ -90,8 +90,8 @@ const resourceUsage = [
 
 function StateDonut({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={`flex items-center justify-center gap-3 ${compact ? "h-[112px]" : "h-[165px]"}`}>
-      <div className={`relative shrink-0 ${compact ? "h-[92px] w-[92px]" : "h-[134px] w-[134px]"}`}>
+    <div className={`flex items-center justify-center gap-3 ${compact ? "h-[7rem]" : "h-[10.3125rem]"}`}>
+      <div className={`relative shrink-0 ${compact ? "h-[5.75rem] w-[5.75rem]" : "h-[8.375rem] w-[8.375rem]"}`}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={containerStates.filter((state) => state.value > 0)} dataKey="value" nameKey="name" innerRadius="68%" outerRadius="91%" paddingAngle={1} stroke="none">
@@ -101,13 +101,13 @@ function StateDonut({ compact = false }: { compact?: boolean }) {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className={`font-display font-extrabold leading-tight text-foreground ${compact ? "text-[17px]" : "text-[22px]"}`}>36</b>
-          <span className="text-[11px] text-muted-foreground">Total</span>
+          <b className={`font-display font-extrabold leading-tight text-foreground ${compact ? "text-[1.0625rem]" : "text-[1.375rem]"}`}>36</b>
+          <span className="text-[0.6875rem] text-muted-foreground">Total</span>
         </div>
       </div>
       <div className="min-w-0 space-y-2.5">
         {containerStates.map((state) => (
-          <div key={state.name} className="flex items-center gap-1.5 whitespace-nowrap text-[11px]">
+          <div key={state.name} className="flex items-center gap-1.5 whitespace-nowrap text-[0.6875rem]">
             <i className="h-2 w-2 rounded-full" style={{ backgroundColor: state.color }} />
             <span className="text-foreground">{state.name}</span>
             <b className="ml-auto text-foreground">{state.value}</b>
@@ -121,18 +121,18 @@ function StateDonut({ compact = false }: { compact?: boolean }) {
 
 function UsageBars() {
   return (
-    <div className="space-y-[10px] pt-1">
+    <div className="space-y-[0.625rem] pt-1">
       {resourceUsage.map((resource) => (
         <div key={resource.name} className="min-w-0">
-          <div className="mb-0.5 flex items-center justify-between gap-2 text-[11px] leading-4">
+          <div className="mb-0.5 flex items-center justify-between gap-2 text-[0.6875rem] leading-4">
             <span className="font-semibold text-foreground">{resource.name}</span>
             <b className="shrink-0 tabular-nums text-foreground">{resource.total > 0 ? `${((resource.used / resource.total) * 100).toFixed(1)}%` : "0.0%"}</b>
           </div>
           <div className="flex min-w-0 items-center gap-2">
-            <div className="h-[6px] min-w-0 flex-1 rounded-full bg-muted">
+            <div className="h-[0.375rem] min-w-0 flex-1 rounded-full bg-muted">
               <div className="h-full rounded-full" style={{ width: `${resource.total > 0 ? Math.min(100, (resource.used / resource.total) * 100) : 0}%`, backgroundColor: resource.color }} />
             </div>
-            <span className="shrink-0 whitespace-nowrap text-right text-[11px] leading-4 text-muted-foreground">{resource.detail}</span>
+            <span className="shrink-0 whitespace-nowrap text-right text-[0.6875rem] leading-4 text-muted-foreground">{resource.detail}</span>
           </div>
         </div>
       ))}
@@ -144,9 +144,9 @@ function DistributionBars({ items }: { items: { name: string; count: number; per
   return (
     <div className="space-y-3 pt-2">
       {items.map((item) => (
-        <div key={item.name} className="grid grid-cols-[52px_minmax(0,1fr)_54px] items-center gap-2 text-[11px]">
+        <div key={item.name} className="grid grid-cols-[52px_minmax(0,1fr)_3.375rem] items-center gap-2 text-[0.6875rem]">
           <span className="truncate text-foreground">{item.name}</span>
-          <div className="h-[6px] rounded-full bg-muted">
+          <div className="h-[0.375rem] rounded-full bg-muted">
             <div className="h-full rounded-full" style={{ width: item.width, backgroundColor: item.color }} />
           </div>
           <span className="text-right font-semibold text-foreground">{item.count} ({item.percent})</span>
@@ -185,28 +185,28 @@ export function ContainersDockerDashboard() {
       <PageMeta breadcrumbs={["Infrastructure", "Containers & Docker"]} variant="detail" />
       <PageHeading title="Containers & Docker" description="Monitor and manage your containers, images, volumes, and Docker environments in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={refresh} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[12px]"><RefreshCw size={12} />Refresh</Button>
-          <Button size="sm" onClick={exportCsv} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[12px]"><Download size={12} />Export CSV</Button>
+          <Button variant="outline" size="sm" onClick={refresh} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[0.75rem]"><RefreshCw size={12} />Refresh</Button>
+          <Button size="sm" onClick={exportCsv} className="h-7 gap-1.5 whitespace-nowrap px-2.5 text-[0.75rem]"><Download size={12} />Export CSV</Button>
         </div>
       </PageHeading>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}
       </div>
 
-      <div className="grid gap-2.5 min-[1000px]:grid-cols-[1.16fr_1.7fr_0.95fr_1fr]">
+      <div className="grid gap-2.5 min-[62.5rem]:grid-cols-[1.16fr_1.7fr_0.95fr_1fr]">
         <Panel title="Container Status" className="min-w-0">
           <StateDonut />
         </Panel>
 
-        <Panel title="Container Health Over Time" className="min-w-0" action={<Select defaultValue="24h"><SelectTrigger className="h-8 w-[88px] text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{["1h", "6h", "24h", "7d"].map((range) => <SelectItem key={range} value={range}>{range}</SelectItem>)}</SelectContent></Select>}>
-          <div className="h-[200px] w-full pt-1">
+        <Panel title="Container Health Over Time" className="min-w-0" action={<Select defaultValue="24h"><SelectTrigger className="h-8 w-[5.5rem] text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["1h", "6h", "24h", "7d"].map((range) => <SelectItem key={range} value={range}>{range}</SelectItem>)}</SelectContent></Select>}>
+          <div className="h-[12.5rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={healthTrend} margin={{ top: 5, right: 3, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical />
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <Area dataKey="health" name="Healthy containers" type="monotone" stroke="#288af0" strokeWidth={2} fill="#288af0" fillOpacity={0.08} dot={{ r: 2 }} />
               </AreaChart>
             </ResponsiveContainer>
@@ -214,7 +214,7 @@ export function ContainersDockerDashboard() {
         </Panel>
 
         <Panel title="Docker Engine Info" className="min-w-0">
-          <div className="space-y-2 pt-2 text-[12px]">
+          <div className="space-y-2 pt-2 text-[0.75rem]">
             {[["Engine Version", "24.0.7"], ["API Version", "1.43"], ["OS Type", "linux"], ["Architecture", "x86_64"], ["Containers", "36"], ["Images", "52"], ["Server Uptime", "15d 8h 32m"]].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between gap-2"><span className="truncate text-muted-foreground">{label}</span><b className="shrink-0 text-foreground">{value}</b></div>
             ))}
@@ -226,19 +226,19 @@ export function ContainersDockerDashboard() {
         </Panel>
       </div>
 
-      <div className="grid gap-2.5 min-[1000px]:grid-cols-[2.4fr_0.92fr]">
-        <Panel title="Running Containers" className="min-w-0" action={<span className="text-[12px] text-muted-foreground">Updated {updatedAt}</span>}>
+      <div className="grid gap-2.5 min-[62.5rem]:grid-cols-[2.4fr_0.92fr]">
+        <Panel title="Running Containers" className="min-w-0" action={<span className="text-[0.75rem] text-muted-foreground">Updated {updatedAt}</span>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[760px] text-left text-[12px]">
+            <table className="w-full min-w-[47.5rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Name", "Image", "Status", "CPU %", "Memory", "Net I/O", "Uptime", "Restart Count", "Actions"].map((title) => <th key={title} className="whitespace-nowrap px-1.5 pb-1.5 font-semibold">{title}</th>)}</tr></thead>
               <tbody>
                 {runningContainers.map((item) => (
                   <tr key={item.name} className="border-b border-border/70 last:border-0">
                     <td className="whitespace-nowrap px-1.5 py-2 font-semibold text-primary">{item.name}</td>
                     <td className="whitespace-nowrap px-1.5 py-2 text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={item.image} /></span>{item.image}</td>
-                    <td className="px-1.5 py-2"><span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><i className="h-1 w-1 rounded-full bg-emerald-500" />Running</span></td>
-                    <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 text-foreground">{item.cpu}<span className="h-[5px] w-10 rounded-full bg-muted"><i className="block h-full rounded-full bg-blue-500" style={{ width: item.cpuWidth }} /></span></span></td>
-                    <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 whitespace-nowrap text-foreground">{item.memory}<span className="h-[5px] w-8 rounded-full bg-muted"><i className="block h-full rounded-full bg-emerald-500" style={{ width: item.memoryWidth }} /></span></span></td>
+                    <td className="px-1.5 py-2"><span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-1.5 py-0.5 text-[0.6875rem] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><i className="h-1 w-1 rounded-full bg-emerald-500" />Running</span></td>
+                    <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 text-foreground">{item.cpu}<span className="h-[0.3125rem] w-10 rounded-full bg-muted"><i className="block h-full rounded-full bg-blue-500" style={{ width: item.cpuWidth }} /></span></span></td>
+                    <td className="px-1.5 py-2"><span className="flex items-center gap-1.5 whitespace-nowrap text-foreground">{item.memory}<span className="h-[0.3125rem] w-8 rounded-full bg-muted"><i className="block h-full rounded-full bg-emerald-500" style={{ width: item.memoryWidth }} /></span></span></td>
                     <td className="whitespace-nowrap px-1.5 py-2 text-foreground">{item.network}</td>
                     <td className="whitespace-nowrap px-1.5 py-2 text-foreground">{item.uptime}</td>
                     <td className="px-1.5 py-2 text-foreground">{item.restarts}</td>
@@ -250,9 +250,9 @@ export function ContainersDockerDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Images" className="min-w-0" action={<button onClick={() => toast("Showing all 52 images.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
+        <Panel title="Top Images" className="min-w-0" action={<button onClick={() => toast("Showing all 52 images.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[240px] text-left text-[12px]">
+            <table className="w-full min-w-[15rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Image</th><th className="pb-1.5">Containers</th><th className="pb-1.5 text-right">Size</th></tr></thead>
             <tbody>{topImages.map((image) => <tr key={image.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-2 font-semibold text-foreground"><span className="mr-1.5 inline-flex align-middle"><TechLogo name={image.name} /></span>{image.name}</td><td className="py-2 text-foreground">{image.containers}</td><td className="py-2 text-right text-foreground">{image.size}</td></tr>)}</tbody>
             </table>
@@ -262,16 +262,16 @@ export function ContainersDockerDashboard() {
 
       <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-4">
         <Panel title="Containers by State" className="min-w-0"><StateDonut compact /></Panel>
-        <Panel title="Containers by Host" className="min-w-0" action={<button onClick={() => toast("Showing all Docker hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={hosts} /></Panel>
-        <Panel title="Top Networks" className="min-w-0" action={<button onClick={() => toast("Showing all Docker networks.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={networks} /></Panel>
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all container events.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
+        <Panel title="Containers by Host" className="min-w-0" action={<button onClick={() => toast("Showing all Docker hosts.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={hosts} /></Panel>
+        <Panel title="Top Networks" className="min-w-0" action={<button onClick={() => toast("Showing all Docker networks.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}><DistributionBars items={networks} /></Panel>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all container events.")} className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-semibold text-primary">View All <ArrowRight size={17} strokeWidth={2.75} aria-hidden="true" /></button>}>
           <div className="space-y-3 pt-2">
-            {events.map((event) => <div key={event.time} className="grid grid-cols-[8px_32px_minmax(0,1fr)_38px] items-center gap-1.5 text-[11px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="text-muted-foreground">{event.time}</span><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
+            {events.map((event) => <div key={event.time} className="grid grid-cols-[8px_32px_minmax(0,1fr)_2.375rem] items-center gap-1.5 text-[0.6875rem]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="text-muted-foreground">{event.time}</span><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
           </div>
         </Panel>
       </div>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[11px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.6875rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

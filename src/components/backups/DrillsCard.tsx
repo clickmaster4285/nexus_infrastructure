@@ -29,7 +29,7 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
   return (
     <ChartCard
       title="Recent Restore & DR Drills"
-      className="h-full min-h-[280px] p-4"
+      className="h-full min-h-[17.5rem] p-4"
       actions={
         <AlertMenu
           label="Drill actions"
@@ -55,7 +55,7 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
       >
         <CalendarClock size={15} aria-hidden="true" className="shrink-0 text-primary" />
         <span className="min-w-0">
-          <span className="block text-[13px] font-semibold text-foreground">Next drill: Full DR failover</span>
+          <span className="block text-[0.8125rem] font-semibold text-foreground">Next drill: Full DR failover</span>
           <span className="mt-0.5 block text-xs text-muted-foreground">
             {nextDrillDue.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · app-server-01 · in 11d
           </span>
@@ -71,11 +71,11 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
               <button
                 type="button"
                 onClick={() => setSelectedId(drill.id)}
-                className="flex w-full items-center gap-3 py-2 text-left transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary rounded"
+                className="flex w-full items-center gap-3 py-2 text-left transition-colors hover:bg-slate-50 dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary rounded"
                 aria-label={`View drill details for ${drill.name}`}
               >
                 <div className="min-w-0">
-                  <p className="truncate text-[13px] font-medium text-foreground" title={drill.name}>{drill.name}</p>
+                  <p className="truncate text-[0.8125rem] font-medium text-foreground" title={drill.name}>{drill.name}</p>
                   <p className="mt-0.5 text-xs tabular-nums text-muted-foreground">
                     {new Date(drill.epochMs).toLocaleDateString(undefined, { month: "short", day: "numeric" })} &middot; {drill.durationMin}m vs {drill.rtoTargetMin}m RTO &middot; {drill.tier}
                     {!withinRto && <span className="ml-1 font-semibold text-rose-600 dark:text-rose-400">(over by {drill.durationMin - drill.rtoTargetMin}m)</span>}
@@ -88,7 +88,7 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
           );
         })}
         {rows.length === 0 && (
-          <li className="py-6 text-center text-[12px] text-muted-foreground">No drills recorded yet. Schedule the first recovery test to build readiness confidence.</li>
+          <li className="py-6 text-center text-[0.75rem] text-muted-foreground">No drills recorded yet. Schedule the first recovery test to build readiness confidence.</li>
         )}
       </ul>
       <div className="grid grid-cols-3 gap-2 border-t border-border/70 pt-3">
@@ -98,9 +98,9 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
           { label: "Longest drill", value: slowest ? `${slowest.durationMin}m` : "—", sub: slowest?.name.split(" - ").pop() ?? "" },
         ].map((tile) => (
           <div key={tile.label} className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
-            <p className="mt-1 font-display text-[15px] font-bold leading-snug tabular-nums text-foreground">{tile.value}</p>
-            <p className="mt-0.5 truncate text-[10px] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
+            <p className="mt-1 font-display text-[0.9375rem] font-bold leading-snug tabular-nums text-foreground">{tile.value}</p>
+            <p className="mt-0.5 truncate text-[0.625rem] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
           </div>
         ))}
       </div>
@@ -109,7 +109,7 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
         <button
           type="button"
           onClick={onScheduleDrill}
-          className="inline-flex items-center gap-1.5 rounded text-[13px] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-1.5 rounded text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <CalendarClock size={13} aria-hidden="true" />
           Schedule drill
@@ -118,16 +118,16 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
 
       {/* Drill details */}
       <Dialog open={selected != null} onOpenChange={(open) => { if (!open) setSelectedId(null); }}>
-        <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
           <DialogHeader>
             <div className="flex items-center gap-2">
               <FlaskConical size={15} aria-hidden="true" className="text-primary" />
               <DialogTitle className="text-sm font-bold">{selected?.name}</DialogTitle>
             </div>
-            <DialogDescription className="text-[12px]">Recovery readiness rehearsal carried out by {selected?.executedBy}.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">Recovery readiness rehearsal carried out by {selected?.executedBy}.</DialogDescription>
           </DialogHeader>
           {selected && (
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg border border-border p-3 text-[12px]">
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg border border-border p-3 text-[0.75rem]">
               <dt className="text-muted-foreground">Drill ID</dt><dd className="text-right font-mono text-xs text-foreground">{selected.id}</dd>
               <dt className="text-muted-foreground">Date</dt><dd className="text-right text-foreground">{new Date(selected.epochMs).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</dd>
               <dt className="text-muted-foreground">Duration</dt><dd className="text-right tabular-nums text-foreground">{selected.durationMin}m (RTO {selected.rtoTargetMin}m)</dd>
@@ -138,8 +138,8 @@ export function DrillsCard({ drills, onScheduleDrill, onExport }: { drills: DrDr
             </dl>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setSelectedId(null)}>Close</Button>
-            <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => { setSelectedId(null); onScheduleDrill(); }}>Schedule again</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setSelectedId(null)}>Close</Button>
+            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => { setSelectedId(null); onScheduleDrill(); }}>Schedule again</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

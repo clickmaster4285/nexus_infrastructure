@@ -19,7 +19,7 @@ import { incidentStoreSnapshot } from "@/mocks/incidents";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] place-items-center rounded-md bg-card text-[12px] text-muted-foreground">Loading map…</div> },
+  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] place-items-center rounded-md bg-card text-[0.75rem] text-muted-foreground">Loading map…</div> },
 );
 
 const stats: MetricStat[] = [
@@ -120,23 +120,23 @@ function StatusDonut({
 }) {
   const large = size === "large";
   return (
-    <div className={`flex min-w-0 flex-1 items-center ${large ? "min-h-[168px] gap-3" : "min-h-[152px] gap-2"}`}>
-      <div className={`relative shrink-0 ${large ? "h-[156px] w-[52%] max-w-[190px]" : "h-[144px] w-[52%] max-w-[168px]"}`}>
+    <div className={`flex min-w-0 flex-1 items-center ${large ? "min-h-[10.5rem] gap-3" : "min-h-[9.5rem] gap-2"}`}>
+      <div className={`relative shrink-0 ${large ? "h-[9.75rem] w-[52%] max-w-[11.875rem]" : "h-[9rem] w-[52%] max-w-[10.5rem]"}`}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="64%" outerRadius="91%" paddingAngle={1} stroke="none">
               {data.map((item) => <Cell key={item.name} fill={item.color} />)}
             </Pie>
-            <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+            <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className={`font-display font-extrabold leading-tight text-foreground ${large ? "text-[24px]" : "text-[22px]"}`}>{centerValue}</b>
-          <span className="text-center text-[11px] text-muted-foreground">{centerLabel}</span>
+          <b className={`font-display font-extrabold leading-tight text-foreground ${large ? "text-[1.5rem]" : "text-[1.375rem]"}`}>{centerValue}</b>
+          <span className="text-center text-[0.6875rem] text-muted-foreground">{centerLabel}</span>
         </div>
       </div>
       <div className={`min-w-0 flex-1 ${large ? "space-y-3" : "space-y-2.5"}`}>
-        {data.map((item) => <div key={item.name} className="grid grid-cols-[9px_minmax(0,1fr)_auto] items-center gap-2 text-[12px]"><i className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} /><span className="truncate text-foreground">{item.name}</span><b className="tabular-nums text-foreground">{item.value}</b></div>)}
+        {data.map((item) => <div key={item.name} className="grid grid-cols-[9px_minmax(0,1fr)_auto] items-center gap-2 text-[0.75rem]"><i className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} /><span className="truncate text-foreground">{item.name}</span><b className="tabular-nums text-foreground">{item.value}</b></div>)}
       </div>
     </div>
   );
@@ -145,16 +145,16 @@ function StatusDonut({
 function DataCenterPerformance({ range }: { range: string }) {
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-[11px] text-muted-foreground">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-[0.6875rem] text-muted-foreground">
         {[ ["DC-1 (NYC)", "#278cf0"], ["DC-2 (LON)", "#a855f7"], ["DC-3 (DUB)", "#20b77a"] ].map(([label, color]) => <span key={label} className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
       </div>
-      <div className="h-[190px] w-full pt-2">
+      <div className="h-[11.875rem] w-full pt-2">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={performance} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="var(--border)" vertical={false} />
             <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
             <YAxis width={42} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <Tooltip labelFormatter={(label) => `${label} · ${range}`} contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+            <Tooltip labelFormatter={(label) => `${label} · ${range}`} contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
             <Line dataKey="nyc" name="DC-1 (NYC)" type="monotone" stroke="#278cf0" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
             <Line dataKey="london" name="DC-2 (LON)" type="monotone" stroke="#a855f7" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
             <Line dataKey="dubai" name="DC-3 (DUB)" type="monotone" stroke="#20b77a" strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 4 }} />
@@ -171,7 +171,7 @@ function StatusBadge({ status }: { status: SiteStatus }) {
     : status === "Degraded"
       ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
       : "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300";
-  return <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold ${style}`}><i className={`h-1.5 w-1.5 rounded-full ${status === "Healthy" ? "bg-emerald-500" : status === "Degraded" ? "bg-amber-500" : "bg-rose-500"}`} />{status}</span>;
+  return <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1 text-[0.6875rem] font-semibold ${style}`}><i className={`h-1.5 w-1.5 rounded-full ${status === "Healthy" ? "bg-emerald-500" : status === "Degraded" ? "bg-amber-500" : "bg-rose-500"}`} />{status}</span>;
 }
 
 function CountryFlag({ code, name }: { code: string; name: string }) {
@@ -182,7 +182,7 @@ function CountryFlag({ code, name }: { code: string; name: string }) {
       <span
         role="img"
         aria-label={`${name} flag unavailable`}
-        className="grid h-[18px] w-6 shrink-0 place-items-center rounded-[3px] bg-muted text-[9px] font-semibold text-muted-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+        className="grid h-[1.125rem] w-6 shrink-0 place-items-center rounded-[0.1875rem] bg-muted text-[0.5625rem] font-semibold text-muted-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
       >
         {code}
       </span>
@@ -193,7 +193,7 @@ function CountryFlag({ code, name }: { code: string; name: string }) {
     <Flag
       title={`${name} flag`}
       aria-label={`${name} flag`}
-      className="h-[18px] w-6 shrink-0 rounded-[3px] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+      className="h-[1.125rem] w-6 shrink-0 rounded-[0.1875rem] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
     />
   );
 }
@@ -211,8 +211,8 @@ export function DataCentersDashboard() {
         title="Data Centers & Locations"
         subtitle="Monitor data center health, location availability and infrastructure performance."
         actions={<>
-          <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Plus size={16} />Add Data Center</Button>
-          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Globe2 size={16} />View Map</Button>
+          <Button onClick={() => showNotice("Add Data Center form is a mockup for now.")} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Add Data Center</Button>
+          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Globe2 size={16} />View Map</Button>
         </>}
       />
 
@@ -221,27 +221,27 @@ export function DataCentersDashboard() {
       </section>
 
       <section aria-label="Global data center status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
-        <Panel title="Global Infrastructure Map" className="min-h-[290px] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[11px] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[11px] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
-          <div id="global-data-centers" className="relative mt-2 min-h-[248px] flex-1 overflow-hidden rounded-lg">
+        <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "#20b77a"], ["Degraded", "#f59e0b"], ["Offline", "#ef4444"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
+          <div id="global-data-centers" className="relative mt-2 min-h-[15.5rem] flex-1 overflow-hidden rounded-lg">
             <NocOsmMap sites={healthMapSites} center={[-33.9249, 18.4241]} initialZoom={13} />
-            {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[11px] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
+            {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[0.6875rem] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
           </div>
         </Panel>
 
         <Panel title="Data Centers Overview" className="min-w-0 p-4">
           <StatusDonut data={centerStates} centerValue="5" centerLabel="Total centers" />
           <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border pt-3">
-            {centerOverviewStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[10px] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[11px] text-foreground">{item.value}</b></div>)}
+            {centerOverviewStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[0.625rem] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[0.6875rem] text-foreground">{item.value}</b></div>)}
           </div>
         </Panel>
 
         <Panel title="Locations by Country" className="min-w-0 p-4">
-          <div className="flex min-h-[192px] flex-1 flex-col justify-between gap-2 pt-3">
+          <div className="flex min-h-[12rem] flex-1 flex-col justify-between gap-2 pt-3">
             <div className="flex flex-1 flex-col justify-between gap-2">
               {countryLocations.map((country) => (
                 <div
                   key={country.code}
-                  className="grid min-h-6 grid-cols-[24px_minmax(0,1fr)_8px_auto] items-center gap-3 text-[12px]"
+                  className="grid min-h-6 grid-cols-[24px_minmax(0,1fr)_8px_auto] items-center gap-3 text-[0.75rem]"
                 >
                   <CountryFlag code={country.code} name={country.name} />
                   <span className="truncate font-medium text-foreground">{country.name}</span>
@@ -259,54 +259,54 @@ export function DataCentersDashboard() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between gap-2 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>{countryLocations.length} countries · {regionCount} regions</span><button onClick={() => showNotice("Showing all mock locations by country.")} className="shrink-0 font-semibold text-primary">View all</button></div>
+            <div className="flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><span>{countryLocations.length} countries · {regionCount} regions</span><button onClick={() => showNotice("Showing all mock locations by country.")} className="shrink-0 font-semibold text-primary">View all</button></div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Performance and location availability" className="grid items-stretch gap-3 xl:grid-cols-[1.1fr_0.9fr_1.1fr]">
-        <Panel title="Data Center Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-[11px] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
+        <Panel title="Data Center Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded px-1.5 py-1 text-[0.6875rem] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
           <DataCenterPerformance range={range} />
         </Panel>
 
         <Panel title="Location Availability" className="min-w-0 p-4">
           <StatusDonut data={locationStates} centerValue="98.7%" centerLabel="Overall" size="large" />
           <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border pt-3">
-            {locationAvailabilityStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[10px] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[11px] text-foreground">{item.value}</b></div>)}
+            {locationAvailabilityStats.map((item) => <div key={item.label} className="min-w-0 rounded-lg bg-muted/60 px-1.5 py-2"><div className="min-h-6 whitespace-normal break-words text-[0.625rem] leading-3 text-muted-foreground">{item.label}</div><b className="mt-1 block whitespace-nowrap text-[0.6875rem] text-foreground">{item.value}</b></div>)}
           </div>
         </Panel>
 
         <Panel title="Top Locations by Uptime" className="min-w-0 p-4">
           <div className="flex flex-1 flex-col justify-between gap-3 pt-3">
             <div className="flex flex-1 flex-col justify-between gap-2.5">
-              {topLocations.map((location) => <div key={location.name} className="grid min-h-6 grid-cols-[24px_minmax(0,1.05fr)_minmax(60px,1.4fr)_44px] items-center gap-3 text-[12px]"><CountryFlag code={location.countryCode} name={location.name} /><span className="truncate font-medium text-foreground">{location.name}</span><div className="h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${location.uptime}%`, backgroundColor: location.color }} /></div><b className="text-right tabular-nums text-foreground">{location.uptime.toFixed(1)}%</b></div>)}
+              {topLocations.map((location) => <div key={location.name} className="grid min-h-6 grid-cols-[24px_minmax(0,1.05fr)_minmax(3.75rem,1.4fr)_2.75rem] items-center gap-3 text-[0.75rem]"><CountryFlag code={location.countryCode} name={location.name} /><span className="truncate font-medium text-foreground">{location.name}</span><div className="h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${location.uptime}%`, backgroundColor: location.color }} /></div><b className="text-right tabular-nums text-foreground">{location.uptime.toFixed(1)}%</b></div>)}
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>Average uptime: <b className="text-foreground">{averageLocationUptime.toFixed(1)}%</b></span><span>Lowest: <b className="text-foreground">{lowestUptimeLocation.name} {lowestUptimeLocation.uptime.toFixed(1)}%</b></span></div>
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><span>Average uptime: <b className="text-foreground">{averageLocationUptime.toFixed(1)}%</b></span><span>Lowest: <b className="text-foreground">{lowestUptimeLocation.name} {lowestUptimeLocation.uptime.toFixed(1)}%</b></span></div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Data center details and recent events" className="grid items-stretch gap-3 xl:grid-cols-[1.15fr_1fr]">
-        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="inline-flex items-center gap-1 rounded text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
+        <Panel title="Data Centers" className="min-w-0" action={<button onClick={() => showNotice("Showing all 5 mock data centers.")} className="inline-flex items-center gap-1 rounded text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
-            <table className="w-full min-w-[560px] text-left text-[12px]">
+            <table className="w-full min-w-[35rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Name", "Location", "Status", "Uptime", "Actions"].map((heading) => <th key={heading} className={`whitespace-nowrap px-2 pb-2 font-semibold ${heading === "Actions" ? "text-center" : ""}`}>{heading}</th>)}</tr></thead>
-              <tbody>{centers.map((center) => <tr key={center.name} className="h-[44px] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 font-semibold text-foreground">{center.name}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{center.location}</td><td className="px-2"><StatusBadge status={center.status} /></td><td className="px-2 tabular-nums text-foreground">{center.uptime.toFixed(1)}%</td><td className="w-16 px-2 text-center align-middle"><button type="button" aria-label={`More actions for ${center.name}`} onClick={() => showNotice(`${center.name} actions are a mockup for now.`)} className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-md border-0 bg-transparent text-muted-foreground shadow-none transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><MoreVertical size={18} /></button></td></tr>)}</tbody>
+              <tbody>{centers.map((center) => <tr key={center.name} className="h-[2.75rem] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 font-semibold text-foreground">{center.name}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{center.location}</td><td className="px-2"><StatusBadge status={center.status} /></td><td className="px-2 tabular-nums text-foreground">{center.uptime.toFixed(1)}%</td><td className="w-16 px-2 text-center align-middle"><button type="button" aria-label={`More actions for ${center.name}`} onClick={() => showNotice(`${center.name} actions are a mockup for now.`)} className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-md border-0 bg-transparent text-muted-foreground shadow-none transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><MoreVertical size={18} /></button></td></tr>)}</tbody>
             </table>
           </div>
         </Panel>
 
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="inline-flex items-center gap-1 rounded text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => showNotice("Showing the latest mock events.")} className="inline-flex items-center gap-1 rounded text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-2">
-            <table className="w-full min-w-[610px] text-left text-[12px]">
+            <table className="w-full min-w-[38.125rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Time", "Type", "Message", "Location", "Status"].map((heading) => <th key={heading} className="whitespace-nowrap px-2 pb-2 font-semibold">{heading}</th>)}</tr></thead>
-              <tbody>{recentEvents.map((event) => <tr key={event.time} className="h-[40px] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 text-muted-foreground">{event.time}</td><td className="px-2"><span className={`inline-flex items-center gap-1.5 font-semibold ${event.tone === "red" ? "text-rose-600" : event.tone === "amber" ? "text-amber-600" : "text-blue-600"}`}><i className={`h-2 w-2 rounded-full ${event.tone === "red" ? "bg-rose-500" : event.tone === "amber" ? "bg-amber-500" : "bg-blue-500"}`} />{event.type}</span></td><td className="whitespace-nowrap px-2 text-foreground">{event.message}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{event.location}</td><td className="px-2"><span className={`rounded-full px-2 py-1 text-[11px] font-medium ${event.status === "Resolved" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : event.status === "Open" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"}`}>{event.status}</span></td></tr>)}</tbody>
+              <tbody>{recentEvents.map((event) => <tr key={event.time} className="h-[2.5rem] border-b border-border/70 last:border-0"><td className="whitespace-nowrap px-2 text-muted-foreground">{event.time}</td><td className="px-2"><span className={`inline-flex items-center gap-1.5 font-semibold ${event.tone === "red" ? "text-rose-600" : event.tone === "amber" ? "text-amber-600" : "text-blue-600"}`}><i className={`h-2 w-2 rounded-full ${event.tone === "red" ? "bg-rose-500" : event.tone === "amber" ? "bg-amber-500" : "bg-blue-500"}`} />{event.type}</span></td><td className="whitespace-nowrap px-2 text-foreground">{event.message}</td><td className="whitespace-nowrap px-2 text-muted-foreground">{event.location}</td><td className="px-2"><span className={`rounded-full px-2 py-1 text-[0.6875rem] font-medium ${event.status === "Resolved" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : event.status === "Open" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300" : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"}`}>{event.status}</span></td></tr>)}</tbody>
             </table>
           </div>
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

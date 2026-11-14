@@ -149,7 +149,7 @@ export function AllServersDashboard() {
 
           <section aria-label="Fleet summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 xl:grid-cols-6">
             {metricCards.map((item) => (
-              <MetricCard key={item.label} item={item} className="h-[86px]" labelClassName="text-[11px]" trendClassName="text-[10px]" />
+              <MetricCard key={item.label} item={item} className="h-[5.375rem]" labelClassName="text-[0.6875rem]" trendClassName="text-[0.625rem]" />
             ))}
           </section>
 

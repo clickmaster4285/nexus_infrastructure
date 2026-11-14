@@ -45,14 +45,14 @@ interface ConditionBuilderProps {
 }
 
 const fieldClass =
-  "h-9 w-full rounded-lg border border-input bg-card px-2.5 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
+  "h-9 w-full rounded-lg border border-input bg-card px-2.5 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
 function Field({ label, htmlFor, error, children }: { label: string; htmlFor?: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-1">
-      <label htmlFor={htmlFor} className="text-[12px] font-medium text-muted-foreground">{label}</label>
+      <label htmlFor={htmlFor} className="text-[0.75rem] font-medium text-muted-foreground">{label}</label>
       {children}
-      {error && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{error}</p>}
+      {error && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 }
@@ -65,7 +65,7 @@ interface SingleConditionFieldsProps {
 
 function SingleConditionFields({ idPrefix, condition, onChange }: SingleConditionFieldsProps) {
   return (
-    <div className="grid grid-cols-[minmax(0,1.4fr)_64px_minmax(0,1fr)_64px] gap-2">
+    <div className="grid grid-cols-[minmax(0,1.4fr)_64px_minmax(0,1fr)_4rem] gap-2">
       <select
         aria-label="Metric"
         value={condition.metric}
@@ -143,7 +143,7 @@ export function ConditionBuilder({ type, condition, errors, onChange }: Conditio
                 aria-pressed={joinOp === op}
                 onClick={() => onChange({ ...condition, op })}
                 className={cn(
-                  "h-7 rounded-md px-3 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-7 rounded-md px-3 text-[0.75rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   joinOp === op ? "bg-secondary text-foreground shadow-sm" : "text-muted-foreground hover:bg-accent",
                 )}
               >
@@ -153,11 +153,11 @@ export function ConditionBuilder({ type, condition, errors, onChange }: Conditio
           </div>
           {children.map((child, index) => (
             <fieldset key={index} className="grid gap-1.5 rounded-lg border border-border/80 p-2.5">
-              <legend className="px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Condition {index === 0 ? "A" : "B"}</legend>
+              <legend className="px-1 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Condition {index === 0 ? "A" : "B"}</legend>
               <SingleConditionFields idPrefix={`condition-${index}`} condition={child} onChange={(next) => updateCompositeChild(index as 0 | 1, next)} />
             </fieldset>
           ))}
-          {errors?.secondCondition && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{errors.secondCondition}</p>}
+          {errors?.secondCondition && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{errors.secondCondition}</p>}
         </>
       ) : (
         <>
@@ -165,9 +165,9 @@ export function ConditionBuilder({ type, condition, errors, onChange }: Conditio
             <SingleConditionFields idPrefix="condition" condition={condition} onChange={onChange} />
           </Field>
           {type === "Anomaly" && (
-            <p className="text-[11px] leading-snug text-muted-foreground">Fires when the metric deviates more than the given amount (σ) from its rolling baseline.</p>
+            <p className="text-[0.6875rem] leading-snug text-muted-foreground">Fires when the metric deviates more than the given amount (σ) from its rolling baseline.</p>
           )}
-          {errors?.value && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{errors.value}</p>}
+          {errors?.value && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{errors.value}</p>}
         </>
       )}
 

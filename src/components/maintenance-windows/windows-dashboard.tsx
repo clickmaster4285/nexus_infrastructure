@@ -207,18 +207,18 @@ function downloadBlob(content: string, type: string, filename: string) {
 }
 
 const tooltipStyle = {
-  border: "1px solid var(--border)",
+  border: "0.0625rem solid var(--border)",
   borderRadius: 8,
   fontSize: 12,
   background: "var(--popover)",
   color: "var(--popover-foreground)",
-  boxShadow: "0 4px 14px rgba(20,40,71,0.07)",
+  boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
 } as const;
 
 function SuppressedTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value?: number }>; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div style={tooltipStyle} className="px-3 py-2 text-[12px]">
+    <div style={tooltipStyle} className="px-3 py-2 text-[0.75rem]">
       <p className="font-semibold">{label}</p>
       <p className="tabular-nums text-muted-foreground">{payload[0]?.value ?? 0} alerts suppressed</p>
     </div>
@@ -261,7 +261,7 @@ function ScopeCell({ window }: { window: MaintenanceWindow }) {
     };
   }, [open]);
 
-  if (chips.length === 0) return <span className="text-[12px] text-muted-foreground">No scope</span>;
+  if (chips.length === 0) return <span className="text-[0.75rem] text-muted-foreground">No scope</span>;
   const shown = chips.slice(0, 2);
   const extra = chips.length - shown.length;
   const detail = [
@@ -276,7 +276,7 @@ function ScopeCell({ window }: { window: MaintenanceWindow }) {
     <div ref={rootRef} className="relative min-w-0" onClick={(event) => event.stopPropagation()}>
       <span className="flex items-center gap-1 whitespace-nowrap">
         {shown.map((chip) => (
-          <span key={chip} className="max-w-[92px] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">{chip}</span>
+          <span key={chip} className="max-w-[5.75rem] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.75rem] text-foreground">{chip}</span>
         ))}
         {extra > 0 && (
           <button
@@ -284,21 +284,21 @@ function ScopeCell({ window }: { window: MaintenanceWindow }) {
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-label={`Show all ${chips.length} scope targets`}
-            className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             +{extra}
           </button>
         )}
       </span>
       {open && (
-        <div role="dialog" aria-label="Full scope" className="absolute left-0 top-8 z-30 w-72 rounded-xl border border-border bg-popover p-3 text-[12px] shadow-lg">
-          <p className="mb-1.5 text-[12px] font-bold uppercase tracking-wide text-muted-foreground">Scope &middot; {chips.length} target{chips.length === 1 ? "" : "s"}</p>
+        <div role="dialog" aria-label="Full scope" className="absolute left-0 top-8 z-30 w-72 rounded-xl border border-border bg-popover p-3 text-[0.75rem] shadow-lg">
+          <p className="mb-1.5 text-[0.75rem] font-bold uppercase tracking-wide text-muted-foreground">Scope &middot; {chips.length} target{chips.length === 1 ? "" : "s"}</p>
           <div className="max-h-56 space-y-2 overflow-y-auto">
             {detail.map((group) => group.values.length > 0 && (
               <div key={group.label}>
-                <p className="text-[12px] font-semibold text-muted-foreground">{group.label}</p>
+                <p className="text-[0.75rem] font-semibold text-muted-foreground">{group.label}</p>
                 <div className="mt-0.5 flex flex-wrap gap-1">
-                  {group.values.map((value) => <span key={value} className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">{value}</span>)}
+                  {group.values.map((value) => <span key={value} className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.75rem] text-foreground">{value}</span>)}
                 </div>
               </div>
             ))}
@@ -844,7 +844,7 @@ export function WindowsDashboard() {
         type="button"
         onClick={() => sortBy(key)}
         aria-label={`Sort by ${label}${active ? ` (${sortDir === "asc" ? "ascending" : "descending"})` : ""}`}
-        className={cn("inline-flex items-center gap-1 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active && "text-foreground", className)}
+        className={cn("inline-flex items-center gap-1 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active && "text-foreground", className)}
       >
         {label}
         {active && (sortDir === "asc" ? <ArrowUp size={11} aria-hidden="true" /> : <ArrowDown size={11} aria-hidden="true" />)}
@@ -853,9 +853,9 @@ export function WindowsDashboard() {
   };
 
   const errorState = (
-    <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+    <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
       <div className="flex max-w-md flex-col items-center gap-2">
-        <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><TriangleAlert size={20} /></span>
+        <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
         <p className="font-display text-base font-bold text-foreground">Maintenance windows could not be loaded</p>
         <p className="text-sm text-muted-foreground">The maintenance service failed to respond. Retry to reload the schedule.</p>
         <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
@@ -866,10 +866,10 @@ export function WindowsDashboard() {
   const skeletonState = (
     <>
       <section aria-busy="true" aria-label="Loading maintenance summary" className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
-        {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[88px] animate-pulse rounded-xl bg-muted" />)}
+        {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[5.5rem] animate-pulse rounded-xl bg-muted" />)}
       </section>
-      <div className="h-[44px] animate-pulse rounded-xl bg-muted" />
-      <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+      <div className="h-[2.75rem] animate-pulse rounded-xl bg-muted" />
+      <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
     </>
   );
 
@@ -1034,7 +1034,7 @@ export function WindowsDashboard() {
         <>
           {/* Active banner */}
           {activeWindows.length > 0 ? (
-            <div role="status" className="flex min-h-[40px] flex-wrap items-center justify-between gap-2 rounded-xl border border-violet-200/80 bg-violet-50 px-4 py-2 dark:border-violet-500/25 dark:bg-violet-500/10">
+            <div role="status" className="flex min-h-[2.5rem] flex-wrap items-center justify-between gap-2 rounded-xl border border-violet-200/80 bg-violet-50 px-4 py-2 dark:border-violet-500/25 dark:bg-violet-500/10">
               <p className="flex min-w-0 flex-wrap items-center gap-x-2 text-sm text-violet-900 dark:text-violet-200">
                 <Wrench size={14} aria-hidden="true" className="shrink-0" />
                 <span className="font-semibold">{activeWindows.length} maintenance window{activeWindows.length === 1 ? "" : "s"} active</span>
@@ -1046,13 +1046,13 @@ export function WindowsDashboard() {
               <button
                 type="button"
                 onClick={() => { setFilter("status", "In Progress"); setView("list"); tableRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-                className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-violet-200 bg-white px-3 text-[13px] font-semibold text-violet-800 shadow-sm transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-500/30 dark:bg-violet-500/15 dark:text-violet-200"
+                className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-violet-200 bg-white px-3 text-[0.8125rem] font-semibold text-violet-800 shadow-sm transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-500/30 dark:bg-violet-500/15 dark:text-violet-200"
               >
                 View active<ChevronRight size={13} aria-hidden="true" />
               </button>
             </div>
           ) : (
-            <div role="status" className="flex min-h-[40px] flex-wrap items-center gap-2 rounded-xl border border-border bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
+            <div role="status" className="flex min-h-[2.5rem] flex-wrap items-center gap-2 rounded-xl border border-border bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
               <CheckCheck size={14} aria-hidden="true" className="shrink-0" />
               <span className="font-medium text-foreground">No maintenance in progress</span>
               {nextWindow && (
@@ -1063,17 +1063,17 @@ export function WindowsDashboard() {
 
           {/* KPI row */}
           <section aria-label="Maintenance key performance indicators" className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
-            <StatCard icon={<Wrench size={18} aria-hidden="true" />} iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" label="Active" value={nfLocale(activeWindows.length)} trend={trendNode(1, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[88px] p-3", kpiActive === "active" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("active")} onClickLabel="Filter table to windows in progress" />
-            <StatCard icon={<CalendarClock size={18} aria-hidden="true" />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" label="Upcoming 7d" value={nfLocale(upcoming7d)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[88px] p-3", kpiActive === "upcoming" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("upcoming")} onClickLabel="Filter table to scheduled windows in the next 7 days" />
-            <StatCard icon={<CheckCheck size={18} aria-hidden="true" />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400" label="Completed 30d" value={nfLocale(completed30d)} trend={trendNode(6, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[88px] p-3", kpiActive === "completed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("completed")} onClickLabel="Filter table to completed windows" />
-            <StatCard icon={<BellOff size={18} aria-hidden="true" />} iconTone="bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" label="In Maintenance" value={nfLocale(serversInMaintenance.length)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[88px] p-3", kpiActive === "inMaintenance" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("inMaintenance")} onClickLabel="Filter table to windows in progress" />
-            <StatCard icon={<Bell size={18} aria-hidden="true" />} iconTone="bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]" label="Suppressed 24h" value={nfLocale(alertsSuppressed24h)} trend={trendNode(142, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[88px] p-3", kpiActive === "suppressed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("suppressed")} onClickLabel="Filter table to last 7 days" />
-            <StatCard icon={<ShieldCheck size={18} aria-hidden="true" />} iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" label="Pending Approval" value={nfLocale(pendingApproval)} trend={trendNode(1, "vs last week")} trendClassName="text-rose-600 dark:text-rose-400" goodDirection="down" className={cn("h-full min-h-[88px] p-3", kpiActive === "pending" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("pending")} onClickLabel="Filter table to windows pending approval" />
+            <StatCard icon={<Wrench size={18} aria-hidden="true" />} iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" label="Active" value={nfLocale(activeWindows.length)} trend={trendNode(1, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "active" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("active")} onClickLabel="Filter table to windows in progress" />
+            <StatCard icon={<CalendarClock size={18} aria-hidden="true" />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" label="Upcoming 7d" value={nfLocale(upcoming7d)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "upcoming" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("upcoming")} onClickLabel="Filter table to scheduled windows in the next 7 days" />
+            <StatCard icon={<CheckCheck size={18} aria-hidden="true" />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400" label="Completed 30d" value={nfLocale(completed30d)} trend={trendNode(6, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "completed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("completed")} onClickLabel="Filter table to completed windows" />
+            <StatCard icon={<BellOff size={18} aria-hidden="true" />} iconTone="bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" label="In Maintenance" value={nfLocale(serversInMaintenance.length)} trend={trendNode(2, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "inMaintenance" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("inMaintenance")} onClickLabel="Filter table to windows in progress" />
+            <StatCard icon={<Bell size={18} aria-hidden="true" />} iconTone="bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]" label="Suppressed 24h" value={nfLocale(alertsSuppressed24h)} trend={trendNode(142, "vs last week")} trendClassName="text-emerald-600 dark:text-emerald-400" goodDirection="up" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "suppressed" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("suppressed")} onClickLabel="Filter table to last 7 days" />
+            <StatCard icon={<ShieldCheck size={18} aria-hidden="true" />} iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" label="Pending Approval" value={nfLocale(pendingApproval)} trend={trendNode(1, "vs last week")} trendClassName="text-rose-600 dark:text-rose-400" goodDirection="down" className={cn("h-full min-h-[5.5rem] p-3", kpiActive === "pending" && "border-primary ring-1 ring-primary")} onClick={() => applyKpi("pending")} onClickLabel="Filter table to windows pending approval" />
           </section>
 
           {/* View toggle */}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <SegmentedControl value={view === "list" ? "List" : view === "calendar" ? "Calendar" : "Timeline"} options={["List", "Calendar", "Timeline"] as const} onChange={(value) => setView(value === "List" ? "list" : value === "Calendar" ? "calendar" : "timeline")} buttonClassName="h-8 px-3 text-[13px]" />
+            <SegmentedControl value={view === "list" ? "List" : view === "calendar" ? "Calendar" : "Timeline"} options={["List", "Calendar", "Timeline"] as const} onChange={(value) => setView(value === "List" ? "list" : value === "Calendar" ? "calendar" : "timeline")} buttonClassName="h-8 px-3 text-[0.8125rem]" />
           </div>
 
           {/* Filter card */}
@@ -1082,7 +1082,7 @@ export function WindowsDashboard() {
               {STATUS_FILTER_ORDER.map(statusChip)}
             </div>
             <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2">
-              <div className="relative w-full sm:w-auto sm:min-w-[220px] sm:max-w-xs sm:flex-1">
+              <div className="relative w-full sm:w-auto sm:min-w-[13.75rem] sm:max-w-xs sm:flex-1">
                 <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   ref={searchRef}
@@ -1092,18 +1092,18 @@ export function WindowsDashboard() {
                   aria-label="Search maintenance windows"
                   className="h-9 pl-9 pr-10 text-sm"
                 />
-                <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">/</kbd>
+                <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground">/</kbd>
               </div>
               <MultiSelect label="Type" options={TYPE_OPTIONS} selected={filters.types} onChange={(values) => setFilter("types", values)} width={120} />
               <MultiSelect label="Owner" options={OWNER_OPTIONS} selected={filters.owners} onChange={(values) => setFilter("owners", values)} width={140} />
               <MultiSelect label="Server group" options={GROUP_OPTIONS} selected={filters.groups} onChange={(values) => setFilter("groups", values)} width={160} />
               <MultiSelect label="Approval" options={APPROVAL_OPTIONS} selected={filters.approvals} onChange={(values) => setFilter("approvals", values)} width={130} />
-              <SegmentedControl value={filters.range} options={RANGE_OPTIONS} onChange={(value) => setFilter("range", value as RangeKey)} buttonClassName="h-8 px-2.5 text-[13px]" />
+              <SegmentedControl value={filters.range} options={RANGE_OPTIONS} onChange={(value) => setFilter("range", value as RangeKey)} buttonClassName="h-8 px-2.5 text-[0.8125rem]" />
               {filters.range === "Custom" && (
                 <span className="flex items-center gap-1.5">
-                  <Input type="date" value={filters.customFrom} onChange={(event) => setFilter("customFrom", event.target.value)} className="h-9 w-[150px] text-sm" aria-label="From date" />
+                  <Input type="date" value={filters.customFrom} onChange={(event) => setFilter("customFrom", event.target.value)} className="h-9 w-[9.375rem] text-sm" aria-label="From date" />
                   <span className="text-muted-foreground">-</span>
-                  <Input type="date" value={filters.customTo} onChange={(event) => setFilter("customTo", event.target.value)} className="h-9 w-[150px] text-sm" aria-label="To date" />
+                  <Input type="date" value={filters.customTo} onChange={(event) => setFilter("customTo", event.target.value)} className="h-9 w-[9.375rem] text-sm" aria-label="To date" />
                 </span>
               )}
               <div className="ml-auto flex items-center gap-2">
@@ -1111,7 +1111,7 @@ export function WindowsDashboard() {
                   label="Saved views"
                   align="end"
                   trigger={
-                    <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[13px]">
+                    <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
                       <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
                     </Button>
                   }
@@ -1121,7 +1121,7 @@ export function WindowsDashboard() {
                   <button
                     type="button"
                     onClick={resetFilters}
-                    className="rounded text-[13px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="rounded text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Clear all<span className="ml-1 tabular-nums text-muted-foreground">({activeFilterCount})</span>
                   </button>
@@ -1130,7 +1130,7 @@ export function WindowsDashboard() {
                   type="button"
                   onClick={() => setDensity((current) => (current === "default" ? "compact" : "default"))}
                   aria-pressed={density === "compact"}
-                  className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   title={density === "default" ? "Switch to compact rows" : "Switch to comfortable rows"}
                 >
                   <ChevronsRight size={13} aria-hidden="true" />Compact
@@ -1139,19 +1139,19 @@ export function WindowsDashboard() {
             </div>
             {activeChips.length > 0 && (
               <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2" aria-label="Active filters">
-                <span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
+                <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
                 {activeChips.map((chip) => (
                   <button
                     key={chip.key}
                     type="button"
                     onClick={chip.onRemove}
                     aria-label={`Remove filter ${chip.label}`}
-                    className="inline-flex h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="inline-flex h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[0.75rem] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {chip.label}<X size={11} aria-hidden="true" />
                   </button>
                 ))}
-                <button type="button" onClick={resetFilters} className="text-[12px] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Clear all</button>
+                <button type="button" onClick={resetFilters} className="text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Clear all</button>
               </div>
             )}
           </div>
@@ -1161,13 +1161,13 @@ export function WindowsDashboard() {
             <div role="status" className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2 text-sm">
               <span className="font-semibold text-foreground">{selectedIds.length} selected</span>
               <div className="flex flex-wrap items-center gap-2">
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[13px]" onClick={() => handleCancelRequest(selectedIds)}>
+                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => handleCancelRequest(selectedIds)}>
                   <Ban size={13} aria-hidden="true" />Cancel
                 </Button>
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[13px]" onClick={() => exportRows("csv", windows.filter((window) => selectedIds.includes(window.id)), "selected")}>
+                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => exportRows("csv", windows.filter((window) => selectedIds.includes(window.id)), "selected")}>
                   <FileDown size={13} aria-hidden="true" />Export
                 </Button>
-                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[13px]" onClick={bulkNotify}>
+                <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={bulkNotify}>
                   <Bell size={13} aria-hidden="true" />Notify
                 </Button>
                 <button type="button" onClick={() => setSelectedIds([])} className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={15} /></button>
@@ -1181,13 +1181,13 @@ export function WindowsDashboard() {
               <div className="hidden lg:block">
                 <table className="w-full table-fixed border-collapse text-left">
                   <colgroup>
-                    <col style={{ width: "40px" }} />
+                    <col style={{ width: "2.5rem" }} />
                     <col style={{ width: "30%" }} />
                     <col style={{ width: "14%" }} />
                     <col style={{ width: "20%" }} />
                     <col style={{ width: "16%" }} />
                     <col style={{ width: "14%" }} />
-                    <col style={{ width: "48px" }} />
+                    <col style={{ width: "3rem" }} />
                   </colgroup>
                   <thead className="sticky top-0 z-10">
                     <tr className="border-b border-border bg-card">
@@ -1204,7 +1204,7 @@ export function WindowsDashboard() {
                       <th scope="col" aria-sort={sortKey === "title" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("title", "Window")}</th>
                       <th scope="col" aria-sort={sortKey === "status" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("status", "Status")}</th>
                       <th scope="col" aria-sort={sortKey === "start" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("start", "Schedule")}</th>
-                      <th scope="col" className="px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Scope</th>
+                      <th scope="col" className="px-3 py-2 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Scope</th>
                       <th scope="col" aria-sort={sortKey === "owner" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-3 py-2">{sortHeader("owner", "Owner")}</th>
                       <th scope="col" className="px-2 py-2"><span className="sr-only">Actions</span></th>
                     </tr>
@@ -1225,7 +1225,7 @@ export function WindowsDashboard() {
                           key={window.id}
                           onClick={() => goToWindow(window.id)}
                           className={cn(
-                            "group cursor-pointer border-b border-border/60 align-middle transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40",
+                            "group cursor-pointer border-b border-border/60 align-middle transition-colors hover:bg-slate-50 dark:hover:bg-muted/40",
                             rowHeight,
                             WINDOW_STATUS_META[window.status].stripe,
                             conflicted && "bg-red-50/40 dark:bg-red-500/5",
@@ -1249,11 +1249,11 @@ export function WindowsDashboard() {
                               title={window.title}
                             >
                               <span className="flex items-center gap-1.5">
-                                <span className="font-mono text-[12px] text-muted-foreground">{window.id}</span>
+                                <span className="font-mono text-[0.75rem] text-muted-foreground">{window.id}</span>
                                 {conflicted && <CircleAlert size={13} aria-hidden="true" className="shrink-0 text-red-500" />}
                               </span>
-                              <span className="mt-0.5 block truncate text-[13px] font-semibold text-foreground group-hover:text-primary"><Highlight text={window.title} query={filters.query} /></span>
-                              <span className="mt-0.5 block truncate text-[12px] text-muted-foreground" title={window.impact}><Highlight text={window.impact} query={filters.query} /></span>
+                              <span className="mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground group-hover:text-primary"><Highlight text={window.title} query={filters.query} /></span>
+                              <span className="mt-0.5 block truncate text-[0.75rem] text-muted-foreground" title={window.impact}><Highlight text={window.impact} query={filters.query} /></span>
                             </Link>
                           </td>
                           <td className="px-3 py-1.5 align-middle">
@@ -1265,23 +1265,23 @@ export function WindowsDashboard() {
                                 </span>
                               )}
                             </span>
-                            <span className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground">
+                            <span className="mt-1 flex items-center gap-1 text-[0.75rem] text-muted-foreground">
                               {(() => { const Icon = TYPE_ICON[window.type]; return <Icon size={12} aria-hidden="true" />; })()}
                               {window.type}
                             </span>
                           </td>
                           <td className="min-w-0 px-3 py-1.5 align-middle">
-                            <span className="block truncate whitespace-nowrap text-[13px] font-medium tabular-nums text-foreground" title={formatDateRange(startMs, endMs)}>{formatDateRange(startMs, endMs)}</span>
-                            <span className="mt-0.5 block text-[12px] text-muted-foreground">
+                            <span className="block truncate whitespace-nowrap text-[0.8125rem] font-medium tabular-nums text-foreground" title={formatDateRange(startMs, endMs)}>{formatDateRange(startMs, endMs)}</span>
+                            <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">
                               {formatDuration(startMs, endMs)} &middot; {window.timeZone.replace("Asia/", "")}
                               {recurrence && <span className="ml-1.5 inline-flex items-center gap-0.5 text-teal-700 dark:text-teal-400" title={recurrence}><Repeat size={11} aria-hidden="true" />{recurrence.replace("Every ", "")}</span>}
                             </span>
                             {isLive && (
-                              <span className="mt-1 block max-w-[150px]">
+                              <span className="mt-1 block max-w-[9.375rem]">
                                 <span className="block h-1 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100} aria-label="Window progress">
                                   <span className="block h-full rounded-full bg-violet-500" style={{ width: `${Math.round(progress * 100)}%` }} />
                                 </span>
-                                <span className="mt-0.5 block text-[12px] font-medium tabular-nums text-violet-700 dark:text-violet-300">{formatCountdown(endMs, nowMs)} left</span>
+                                <span className="mt-0.5 block text-[0.75rem] font-medium tabular-nums text-violet-700 dark:text-violet-300">{formatCountdown(endMs, nowMs)} left</span>
                               </span>
                             )}
                           </td>
@@ -1289,7 +1289,7 @@ export function WindowsDashboard() {
                           <td className="hidden px-3 py-1.5 align-middle lg:table-cell">
                             <span className="flex items-center gap-2">
                               <InitialsAvatar name={window.owner} size={22} />
-                              <span className="min-w-0 truncate text-[13px] text-foreground">{window.owner}</span>
+                              <span className="min-w-0 truncate text-[0.8125rem] text-foreground">{window.owner}</span>
                             </span>
                             <span className="mt-1 block"><ApprovalBadge status={window.approvalStatus} /></span>
                           </td>
@@ -1315,11 +1315,11 @@ export function WindowsDashboard() {
                     {pageItems.length === 0 && (
                       <tr>
                         <td colSpan={7}>
-                          <div className="flex min-h-[220px] flex-col items-center justify-center gap-2 py-10 text-center">
+                          <div className="flex min-h-[13.75rem] flex-col items-center justify-center gap-2 py-10 text-center">
                             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                             <p className="font-display text-base font-bold text-foreground">No maintenance windows match your filters</p>
                             <p className="max-w-sm text-sm text-muted-foreground">Try clearing the search or filters to see the full schedule.</p>
-                            <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[13px]" onClick={resetFilters}><X size={14} />Clear filters</Button>
+                            <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={resetFilters}><X size={14} />Clear filters</Button>
                           </div>
                         </td>
                       </tr>
@@ -1345,7 +1345,7 @@ export function WindowsDashboard() {
                       onClick={() => goToWindow(window.id)}
                       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); goToWindow(window.id); } }}
                       className={cn(
-                        "flex cursor-pointer items-start gap-2 p-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring hover:bg-[#F8FAFC] dark:hover:bg-muted/40",
+                        "flex cursor-pointer items-start gap-2 p-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring hover:bg-slate-50 dark:hover:bg-muted/40",
                         WINDOW_STATUS_META[window.status].stripe,
                         selected && "bg-primary/[0.06] dark:bg-primary/10",
                       )}
@@ -1360,7 +1360,7 @@ export function WindowsDashboard() {
                       />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center justify-between gap-2">
-                          <span className="font-mono text-[12px] text-muted-foreground">{window.id}{conflicted && <CircleAlert size={11} aria-hidden="true" className="ml-1 inline text-red-500" />}</span>
+                          <span className="font-mono text-[0.75rem] text-muted-foreground">{window.id}{conflicted && <CircleAlert size={11} aria-hidden="true" className="ml-1 inline text-red-500" />}</span>
                           <span onClick={(event) => event.stopPropagation()}>
                             <AlertMenu
                               label={`Actions for ${window.id}`}
@@ -1370,14 +1370,14 @@ export function WindowsDashboard() {
                             />
                           </span>
                         </span>
-                        <span className="mt-0.5 block truncate text-[13px] font-semibold text-foreground" title={window.title}>{window.title}</span>
+                        <span className="mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground" title={window.title}>{window.title}</span>
                         <span className="mt-1 flex flex-wrap items-center gap-1.5">
                           <WindowStatusBadge status={window.status} live={isLive} endsIn={endsIn} />
                           {isLive && <BellOff size={13} aria-hidden="true" className="text-amber-600 dark:text-amber-400" />}
-                          <span className="text-[12px] text-muted-foreground">{formatDateRange(startMs, endMs)}</span>
+                          <span className="text-[0.75rem] text-muted-foreground">{formatDateRange(startMs, endMs)}</span>
                         </span>
                         <span className="mt-1 flex items-center justify-between gap-2">
-                          <span className="flex min-w-0 items-center gap-1.5"><InitialsAvatar name={window.owner} size={18} /><span className="truncate text-[12px] text-muted-foreground">{window.owner}</span></span>
+                          <span className="flex min-w-0 items-center gap-1.5"><InitialsAvatar name={window.owner} size={18} /><span className="truncate text-[0.75rem] text-muted-foreground">{window.owner}</span></span>
                           <ApprovalBadge status={window.approvalStatus} />
                         </span>
                       </span>
@@ -1385,22 +1385,22 @@ export function WindowsDashboard() {
                   );
                 })}
                 {pageItems.length === 0 && (
-                  <div className="flex min-h-[220px] flex-col items-center justify-center gap-2 p-6 text-center">
+                  <div className="flex min-h-[13.75rem] flex-col items-center justify-center gap-2 p-6 text-center">
                     <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                     <p className="font-display text-base font-bold text-foreground">No maintenance windows match your filters</p>
-                    <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[13px]" onClick={resetFilters}><X size={14} />Clear filters</Button>
+                    <Button variant="outline" className="mt-1 h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={resetFilters}><X size={14} />Clear filters</Button>
                   </div>
                 )}
               </div>
 
               {/* Pagination footer */}
-              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-2.5 text-[13px] text-muted-foreground">
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-2.5 text-[0.8125rem] text-muted-foreground">
                 <p className="tabular-nums">Showing <b className="text-foreground">{pageStart}-{pageEnd}</b> of <b className="text-foreground">{totalFiltered}</b> windows</p>
                 <div className="flex flex-wrap items-center gap-3">
                   <label className="flex items-center gap-1.5">
                     <span className="sr-only">Rows per page</span>
                     <Select value={String(pageSize)} onValueChange={(value) => { setPageSize(Number(value)); setPage(1); }}>
-                      <SelectTrigger className="h-8 w-[64px] text-[13px]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-8 w-[4rem] text-[0.8125rem]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         {PAGE_SIZE_OPTIONS.map((size) => <SelectItem key={size} value={String(size)}>{size}</SelectItem>)}
                       </SelectContent>
@@ -1428,7 +1428,7 @@ export function WindowsDashboard() {
                           aria-current={item === clampedPage ? "page" : undefined}
                           aria-label={`Page ${item}`}
                           className={cn(
-                            "grid h-8 w-8 place-items-center rounded-lg border text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            "grid h-8 w-8 place-items-center rounded-lg border text-[0.8125rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                             item === clampedPage ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground hover:bg-accent",
                           )}
                         >
@@ -1456,13 +1456,13 @@ export function WindowsDashboard() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Button variant="outline" size="icon-sm" className="h-8 w-8" onClick={() => moveCalendar(-1)} aria-label={calendarMode === "week" ? "Previous week" : "Previous month"}><ChevronLeft size={15} /></Button>
-                  <h2 className="min-w-[150px] text-center font-display text-base font-bold text-foreground">{calendarLabel}</h2>
+                  <h2 className="min-w-[9.375rem] text-center font-display text-base font-bold text-foreground">{calendarLabel}</h2>
                   <Button variant="outline" size="icon-sm" className="h-8 w-8" onClick={() => moveCalendar(1)} aria-label={calendarMode === "week" ? "Next week" : "Next month"}><ChevronRight size={15} /></Button>
-                  <Button variant="outline" className="h-8 px-3 text-[13px]" onClick={() => setCalendarCursor(new Date())}>Today</Button>
+                  <Button variant="outline" className="h-8 px-3 text-[0.8125rem]" onClick={() => setCalendarCursor(new Date())}>Today</Button>
                 </div>
-                <SegmentedControl value={calendarMode === "month" ? "Month" : "Week"} options={["Month", "Week"] as const} onChange={(value) => setCalendarMode(value === "Week" ? "week" : "month")} buttonClassName="h-8 px-3 text-[13px]" />
+                <SegmentedControl value={calendarMode === "month" ? "Month" : "Week"} options={["Month", "Week"] as const} onChange={(value) => setCalendarMode(value === "Week" ? "week" : "month")} buttonClassName="h-8 px-3 text-[0.8125rem]" />
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted-foreground" role="group" aria-label="Status legend">
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.75rem] text-muted-foreground" role="group" aria-label="Status legend">
                 {(Object.keys(WINDOW_STATUS_META) as MaintenanceWindowStatus[]).map((key) => (
                   <span key={key} className="inline-flex items-center gap-1.5"><i aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: WINDOW_STATUS_META[key].dot }} />{key}</span>
                 ))}
@@ -1471,7 +1471,7 @@ export function WindowsDashboard() {
               {/* Desktop / tablet grid */}
               <div className="mt-3 hidden gap-1 md:grid" style={{ gridTemplateColumns: "repeat(7, minmax(0, 1fr))" }} role="grid" aria-label="Maintenance windows calendar">
                 {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-                  <div key={day} role="columnheader" className="px-2 py-1 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">{day}</div>
+                  <div key={day} role="columnheader" className="px-2 py-1 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">{day}</div>
                 ))}
                 {calendarDays.map((date, index) => {
                   const key = dayKeyOf(date);
@@ -1487,9 +1487,9 @@ export function WindowsDashboard() {
                       aria-selected={isToday}
                       aria-label={`${date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}${dayWindows.length ? `, ${dayWindows.length} window${dayWindows.length === 1 ? "" : "s"}` : ""}`}
                       className={cn(
-                        "flex min-h-[104px] flex-col gap-1 rounded-lg border p-1.5",
+                        "flex min-h-[6.5rem] flex-col gap-1 rounded-lg border p-1.5",
                         isToday ? "border-primary/70 bg-primary/[0.06]" : inMonth ? "border-border" : "border-border/50 bg-muted/20",
-                        calendarMode === "week" && "min-h-[220px]",
+                        calendarMode === "week" && "min-h-[13.75rem]",
                       )}
                     >
                       <button
@@ -1500,7 +1500,7 @@ export function WindowsDashboard() {
                         aria-label={`Schedule a new window on ${date.toLocaleDateString(undefined, { month: "long", day: "numeric" })}`}
                         title="Schedule maintenance on this day"
                         className={cn(
-                          "grid h-7 w-7 place-items-center self-start rounded-full text-[13px] font-semibold tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          "grid h-7 w-7 place-items-center self-start rounded-full text-[0.8125rem] font-semibold tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                           isToday ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted",
                         )}
                       >
@@ -1512,13 +1512,13 @@ export function WindowsDashboard() {
                           type="button"
                           onClick={() => openDrawer(window.id)}
                           title={`${window.id} - ${window.title}`}
-                          className="flex items-center gap-1 rounded-md border-l-[3px] bg-muted/60 px-1.5 py-1 text-left text-[12px] font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="flex items-center gap-1 rounded-md border-l-[0.1875rem] bg-muted/60 px-1.5 py-1 text-left text-[0.75rem] font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           style={{ borderLeftColor: WINDOW_STATUS_META[window.status].dot }}
                         >
                           <span className="truncate">{window.title}</span>
                         </button>
                       ))}
-                      {extra > 0 && <span className="px-1.5 text-[12px] font-medium text-muted-foreground">+{extra} more</span>}
+                      {extra > 0 && <span className="px-1.5 text-[0.75rem] font-medium text-muted-foreground">+{extra} more</span>}
                     </div>
                   );
                 })}
@@ -1531,13 +1531,13 @@ export function WindowsDashboard() {
                   const dayWindows = windowsByDayKey.get(key) ?? [];
                   return (
                     <div key={key} className="py-2">
-                      <p className={cn("text-[12px] font-semibold uppercase tracking-wide text-muted-foreground", key === todayKey && "text-primary")}>{date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}{key === todayKey && " · Today"}</p>
+                      <p className={cn("text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground", key === todayKey && "text-primary")}>{date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}{key === todayKey && " · Today"}</p>
                       <ul className="mt-1 space-y-1">
                         {dayWindows.map((window) => (
                           <li key={window.id}>
-                            <button type="button" onClick={() => openDrawer(window.id)} className="flex w-full items-center gap-2 rounded-lg border-l-[3px] bg-muted/50 px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" style={{ borderLeftColor: WINDOW_STATUS_META[window.status].dot }}>
-                              <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-foreground">{window.title}</span>
-                              <span className="shrink-0 text-[12px] tabular-nums text-muted-foreground">{formatClockTime(Date.parse(window.start))}</span>
+                            <button type="button" onClick={() => openDrawer(window.id)} className="flex w-full items-center gap-2 rounded-lg border-l-[0.1875rem] bg-muted/50 px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" style={{ borderLeftColor: WINDOW_STATUS_META[window.status].dot }}>
+                              <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium text-foreground">{window.title}</span>
+                              <span className="shrink-0 text-[0.75rem] tabular-nums text-muted-foreground">{formatClockTime(Date.parse(window.start))}</span>
                             </button>
                           </li>
                         ))}
@@ -1557,23 +1557,23 @@ export function WindowsDashboard() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h2 className="font-display text-base font-bold text-foreground">Next 7 days</h2>
-                  <p className="text-[12px] text-muted-foreground">Windows grouped by primary server group &middot; conflicts outlined in red</p>
+                  <p className="text-[0.75rem] text-muted-foreground">Windows grouped by primary server group &middot; conflicts outlined in red</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted-foreground" role="group" aria-label="Status legend">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.75rem] text-muted-foreground" role="group" aria-label="Status legend">
                   {(Object.keys(WINDOW_STATUS_META) as MaintenanceWindowStatus[]).map((key) => (
                     <span key={key} className="inline-flex items-center gap-1.5"><i aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: WINDOW_STATUS_META[key].dot }} />{key}</span>
                   ))}
                 </div>
               </div>
               <div className="mt-3 overflow-x-auto">
-                <div className="min-w-[720px]">
+                <div className="min-w-[45rem]">
                   <div className="grid grid-cols-[180px_repeat(7,minmax(0,1fr))] gap-1 pb-1">
                     <div />
                     {Array.from({ length: 7 }, (_, index) => {
                       const day = new Date(timelineGroups.horizonStart + index * 24 * 60 * 60_000);
                       const isToday = day.toDateString() === new Date().toDateString();
                       return (
-                        <div key={index} className={cn("text-center text-[12px] font-semibold", isToday ? "text-primary" : "text-muted-foreground")}>
+                        <div key={index} className={cn("text-center text-[0.75rem] font-semibold", isToday ? "text-primary" : "text-muted-foreground")}>
                           {day.toLocaleDateString(undefined, { weekday: "short" })}<br /><span className="tabular-nums">{day.toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}</span>
                         </div>
                       );
@@ -1582,7 +1582,7 @@ export function WindowsDashboard() {
                   {timelineGroups.rows.map((row) => (
                     <div key={row.group} className="grid grid-cols-[180px_repeat(7,minmax(0,1fr))] gap-1 border-t border-border/60 py-1.5">
                       <div className="flex min-w-0 items-center pr-3">
-                        <span className="truncate text-[13px] font-medium text-foreground" title={row.name}>{row.name}</span>
+                        <span className="truncate text-[0.8125rem] font-medium text-foreground" title={row.name}>{row.name}</span>
                       </div>
                       <div className="relative col-span-7 h-9">
                         {row.windows.map((window) => {
@@ -1599,7 +1599,7 @@ export function WindowsDashboard() {
                               onClick={() => openDrawer(window.id)}
                               title={`${window.id} - ${window.title} (${window.status})`}
                               className={cn(
-                                "absolute top-0.5 flex h-8 items-center overflow-hidden rounded-md border border-black/10 px-1.5 text-[12px] font-semibold text-white transition-transform hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                "absolute top-0.5 flex h-8 items-center overflow-hidden rounded-md border border-black/10 px-1.5 text-[0.75rem] font-semibold text-white transition-transform hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                 conflicted && "ring-2 ring-red-500 ring-offset-1",
                               )}
                               style={{ left: `${left}%`, width: `${width}%`, background: WINDOW_STATUS_META[window.status].dot }}
@@ -1638,10 +1638,10 @@ export function WindowsDashboard() {
                     <button type="button" onClick={() => openDrawer(window.id)} className="flex w-full items-start gap-2 rounded-lg py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300"><CalendarClock size={14} aria-hidden="true" /></span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-semibold text-foreground" title={window.title}>{window.title}</span>
-                        <span className="mt-0.5 block text-[12px] text-muted-foreground">in {formatCountdown(Date.parse(window.start), nowMs)} &middot; {formatShortDate(Date.parse(window.start))} {formatClockTime(Date.parse(window.start))} ({window.timeZone.replace("Asia/", "")})</span>
+                        <span className="block truncate text-[0.8125rem] font-semibold text-foreground" title={window.title}>{window.title}</span>
+                        <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">in {formatCountdown(Date.parse(window.start), nowMs)} &middot; {formatShortDate(Date.parse(window.start))} {formatClockTime(Date.parse(window.start))} ({window.timeZone.replace("Asia/", "")})</span>
                         <span className="mt-1 flex flex-wrap items-center gap-1">
-                          {[...window.scope.servers, ...window.scope.groups].slice(0, 2).map((chip) => <span key={chip} className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[12px] text-muted-foreground">{chip}</span>)}
+                          {[...window.scope.servers, ...window.scope.groups].slice(0, 2).map((chip) => <span key={chip} className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[0.75rem] text-muted-foreground">{chip}</span>)}
                           <ApprovalBadge status={window.approvalStatus} />
                         </span>
                       </span>
@@ -1669,11 +1669,11 @@ export function WindowsDashboard() {
               <div className="flex items-baseline justify-between gap-2">
                 <div>
                   <p className="font-display text-2xl font-bold tabular-nums text-foreground">{nfLocale(suppressed7dTotal)}</p>
-                  <p className="text-[12px] text-muted-foreground">alerts silenced in the last 7 days</p>
+                  <p className="text-[0.75rem] text-muted-foreground">alerts silenced in the last 7 days</p>
                 </div>
-                <p className="text-right text-[12px] leading-snug text-muted-foreground"><b className="text-foreground">{criticalAllowedThrough}</b> window{criticalAllowedThrough === 1 ? "" : "s"} let SEV1<br />through (critical allowed)</p>
+                <p className="text-right text-[0.75rem] leading-snug text-muted-foreground"><b className="text-foreground">{criticalAllowedThrough}</b> window{criticalAllowedThrough === 1 ? "" : "s"} let SEV1<br />through (critical allowed)</p>
               </div>
-              <div className="h-[120px] w-full">
+              <div className="h-[7.5rem] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={suppressed7d} margin={{ top: 8, right: 4, left: -8, bottom: 0 }} barCategoryGap="28%">
                     <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -1688,20 +1688,20 @@ export function WindowsDashboard() {
               {/* Summary stats row */}
               <div className="mt-4 grid grid-cols-3 gap-2">
                 <div className="rounded-lg border border-border bg-muted/30 p-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Daily Avg</p>
+                  <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Daily Avg</p>
                   <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{nfLocale(suppressedDailyAvg)}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted/30 p-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Peak Day</p>
-                  <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{suppressedPeakDay.label}<span className="ml-1 text-[12px] font-semibold text-muted-foreground">({nfLocale(suppressedPeakDay.alerts)})</span></p>
+                  <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Peak Day</p>
+                  <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{suppressedPeakDay.label}<span className="ml-1 text-[0.75rem] font-semibold text-muted-foreground">({nfLocale(suppressedPeakDay.alerts)})</span></p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted/30 p-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">vs Prev 7d</p>
+                  <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">vs Prev 7d</p>
                   {suppressedVsPrev === null ? (
-                    <p className="mt-1 inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-semibold text-muted-foreground" title="No suppressed alerts recorded in the previous 7 days">+{nfLocale(suppressed7dTotal)} new</p>
+                    <p className="mt-1 inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-muted-foreground" title="No suppressed alerts recorded in the previous 7 days">+{nfLocale(suppressed7dTotal)} new</p>
                   ) : (
                     <p className={cn(
-                      "mt-1 inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[12px] font-semibold tabular-nums",
+                      "mt-1 inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[0.75rem] font-semibold tabular-nums",
                       suppressedVsPrev >= 0 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400" : "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400",
                     )}>
                       {suppressedVsPrev >= 0 ? <ArrowUp size={11} aria-hidden="true" /> : <ArrowDown size={11} aria-hidden="true" />}
@@ -1713,7 +1713,7 @@ export function WindowsDashboard() {
 
               {/* Suppressed by severity */}
               <div className="mt-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">By Severity</p>
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">By Severity</p>
                 {(() => {
                   const total = suppressedBySeverity.SEV2 + suppressedBySeverity.SEV3 + suppressedBySeverity.SEV4;
                   const pct = (value: number) => (total > 0 ? (value / total) * 100 : 0);
@@ -1724,7 +1724,7 @@ export function WindowsDashboard() {
                         <span style={{ width: `${pct(suppressedBySeverity.SEV3)}%`, background: "#D97706" }} />
                         <span style={{ width: `${pct(suppressedBySeverity.SEV4)}%`, background: "#3B82F6" }} />
                       </div>
-                      <p className="mt-1.5 text-[12px] tabular-nums text-muted-foreground">
+                      <p className="mt-1.5 text-[0.75rem] tabular-nums text-muted-foreground">
                         <span className="text-red-600 dark:text-red-400">SEV2 {nfLocale(suppressedBySeverity.SEV2)}</span>
                         <span aria-hidden="true"> · </span>
                         <span className="text-amber-700 dark:text-amber-400">SEV3 {nfLocale(suppressedBySeverity.SEV3)}</span>
@@ -1738,27 +1738,27 @@ export function WindowsDashboard() {
 
               {/* Top windows by suppressed alerts */}
               <div className="mt-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Top Windows by Suppressed Alerts</p>
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Top Windows by Suppressed Alerts</p>
                 <ul className="mt-1.5 space-y-1.5">
                   {topSuppressedWindows.map((row) => (
                     <li key={row.id}>
                       <button type="button" onClick={() => setDrawerId(row.id)} className="block w-full rounded-lg px-1 py-1 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Open ${row.id} ${row.title}`}>
                         <span className="flex items-center justify-between gap-2">
-                          <span className="min-w-0 truncate text-[12px] font-medium text-foreground" title={`${row.id} ${row.title}`}><span className="font-mono text-muted-foreground">{row.id}</span> {row.title}</span>
-                          <span className="shrink-0 text-[12px] font-semibold tabular-nums text-foreground">{nfLocale(row.suppressed)}</span>
+                          <span className="min-w-0 truncate text-[0.75rem] font-medium text-foreground" title={`${row.id} ${row.title}`}><span className="font-mono text-muted-foreground">{row.id}</span> {row.title}</span>
+                          <span className="shrink-0 text-[0.75rem] font-semibold tabular-nums text-foreground">{nfLocale(row.suppressed)}</span>
                         </span>
                         <span className="mt-0.5 block h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <span className="block h-full rounded-full bg-[#8B5CF6]" style={{ width: `${Math.round((row.contribution / maxTopSuppressed) * 100)}%` }} />
+                          <span className="block h-full rounded-full bg-violet-500" style={{ width: `${Math.round((row.contribution / maxTopSuppressed) * 100)}%` }} />
                         </span>
                       </button>
                     </li>
                   ))}
-                  {topSuppressedWindows.length === 0 && <li className="py-2 text-[12px] text-muted-foreground">No suppressed alerts in the last 7 days.</li>}
+                  {topSuppressedWindows.length === 0 && <li className="py-2 text-[0.75rem] text-muted-foreground">No suppressed alerts in the last 7 days.</li>}
                 </ul>
               </div>
 
               <div className="mt-auto flex items-center justify-between border-t border-border pt-2">
-                <span className="inline-flex items-center gap-1.5 text-[12px] text-muted-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#8B5CF6]" />Muted alerts (SEV2-4)</span>
+                <span className="inline-flex items-center gap-1.5 text-[0.75rem] text-muted-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-violet-500" />Muted alerts (SEV2-4)</span>
                 <ViewAllLink label="View all" onClick={() => { setFilters((current) => ({ ...current, range: "7D" })); setPage(1); setView("list"); }} />
               </div>
             </ChartCard>
@@ -1778,7 +1778,7 @@ export function WindowsDashboard() {
                 {groupStats.map((row) => (
                   <li key={row.group}>
                     <button type="button" onClick={() => { setFilter("groups", [row.group]); setView("list"); }} className="block w-full rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${row.name}`}>
-                      <span className="flex items-center justify-between gap-2 text-[13px]">
+                      <span className="flex items-center justify-between gap-2 text-[0.8125rem]">
                         <span className="min-w-0 truncate font-medium text-foreground" title={row.name}>{row.name}</span>
                         <span className="shrink-0 tabular-nums text-muted-foreground">{row.windows} win &middot; {row.hours}h</span>
                       </span>
@@ -1795,15 +1795,15 @@ export function WindowsDashboard() {
               <div className="mt-4 border-t border-border pt-4">
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Groups</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Groups</p>
                     <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{groupStats.length}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Windows</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Windows</p>
                     <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{nfLocale(groupTotals.windows)}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Hours</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Hours</p>
                     <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-tight text-foreground">{groupTotals.hours}h</p>
                   </div>
                 </div>
@@ -1811,8 +1811,8 @@ export function WindowsDashboard() {
 
               {/* Share of maintenance time */}
               <div className="mt-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Share of Maintenance Time</p>
-                <div className="mt-1.5 flex h-2 w-full gap-[2px] overflow-hidden rounded-full" role="img" aria-label={groupShares.map((row) => `${row.name}: ${Math.round(row.pct)}%`).join(", ")}>
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Share of Maintenance Time</p>
+                <div className="mt-1.5 flex h-2 w-full gap-[0.125rem] overflow-hidden rounded-full" role="img" aria-label={groupShares.map((row) => `${row.name}: ${Math.round(row.pct)}%`).join(", ")}>
                   {groupShares.map((row, index) => {
                     const color = GROUP_SHARE_COLORS[index % GROUP_SHARE_COLORS.length];
                     return (
@@ -1820,15 +1820,15 @@ export function WindowsDashboard() {
                         key={row.group}
                         style={{ width: `${row.pct}%`, background: color }}
                         title={`${row.name} — ${row.windows} windows, ${row.hours}h, ${Math.round(row.pct)}% of total hours`}
-                        className="h-full rounded-[2px]"
+                        className="h-full rounded-[0.125rem]"
                       />
                     );
                   })}
                 </div>
                 <ul className="mt-2 grid grid-cols-3 gap-x-2 gap-y-1">
                   {groupShares.map((row, index) => (
-                    <li key={row.group} className="flex min-w-0 items-center gap-1.5 text-[12px] text-muted-foreground" title={`${row.name} — ${Math.round(row.pct)}%`}>
-                      <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[2px]" style={{ background: GROUP_SHARE_COLORS[index % GROUP_SHARE_COLORS.length] }} />
+                    <li key={row.group} className="flex min-w-0 items-center gap-1.5 text-[0.75rem] text-muted-foreground" title={`${row.name} — ${Math.round(row.pct)}%`}>
+                      <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[0.125rem]" style={{ background: GROUP_SHARE_COLORS[index % GROUP_SHARE_COLORS.length] }} />
                       <span className="min-w-0 truncate">{row.name} <span className="tabular-nums">{Math.round(row.pct)}%</span></span>
                     </li>
                   ))}
@@ -1836,7 +1836,7 @@ export function WindowsDashboard() {
               </div>
 
               {/* Insight strip */}
-              <p className="mt-4 flex items-center gap-2 rounded-lg bg-violet-50 px-2.5 py-2 text-[12px] font-medium text-violet-900 dark:bg-violet-500/10 dark:text-violet-200">
+              <p className="mt-4 flex items-center gap-2 rounded-lg bg-violet-50 px-2.5 py-2 text-[0.75rem] font-medium text-violet-900 dark:bg-violet-500/10 dark:text-violet-200">
                 <Info size={14} aria-hidden="true" className="shrink-0" />
                 <span className="min-w-0">Most maintenance: <b>{topGroupByHours.name}</b> ({topGroupPct}% of total hours)</span>
               </p>
@@ -1858,7 +1858,7 @@ export function WindowsDashboard() {
               </DialogHeader>
               <DialogFooter>
                 <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setCancelTargets(null)}>Keep windows</Button>
-                <Button className="h-10 rounded-lg bg-[#DC2626] px-4 text-sm font-semibold text-white hover:bg-[#B91C1C]" onClick={confirmCancel}>Cancel maintenance</Button>
+                <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={confirmCancel}>Cancel maintenance</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -1985,13 +1985,13 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
         role="dialog"
         aria-modal="true"
         aria-labelledby="window-drawer-title"
-        className="fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[480px]"
+        className="fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[30rem]"
       >
         {/* Header */}
         <header className="flex flex-col gap-2 border-b border-border p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="font-mono text-[12px] text-muted-foreground">{window.id}</p>
+              <p className="font-mono text-[0.75rem] text-muted-foreground">{window.id}</p>
               <h2 id="window-drawer-title" className="mt-0.5 text-base font-bold leading-snug text-foreground">{window.title}</h2>
             </div>
             <button
@@ -2015,15 +2015,15 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
         <div className="min-h-0 flex-1 overflow-y-auto p-5">
           {/* Schedule */}
           <section aria-labelledby="drawer-schedule">
-            <h3 id="drawer-schedule" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Schedule</h3>
-            <dl className="mt-1.5 space-y-1.5 text-[13px]">
+            <h3 id="drawer-schedule" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Schedule</h3>
+            <dl className="mt-1.5 space-y-1.5 text-[0.8125rem]">
               <div className="flex items-baseline justify-between gap-3"><dt className="text-muted-foreground">Start</dt><dd className="tabular-nums text-foreground">{new Date(startMs).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</dd></div>
               <div className="flex items-baseline justify-between gap-3"><dt className="text-muted-foreground">End</dt><dd className="tabular-nums text-foreground">{new Date(endMs).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</dd></div>
               <div className="flex items-baseline justify-between gap-3"><dt className="text-muted-foreground">Duration</dt><dd className="tabular-nums text-foreground">{formatDuration(startMs, endMs)}</dd></div>
               <div className="flex items-baseline justify-between gap-3"><dt className="text-muted-foreground">Time zone</dt><dd className="text-foreground">{window.timeZone}</dd></div>
               {live && (
                 <div>
-                  <div className="mb-1 flex items-baseline justify-between gap-3 text-[12px]"><span className="text-muted-foreground">Progress</span><span className="tabular-nums text-violet-700 dark:text-violet-300">{formatCountdown(endMs, nowMs)} left</span></div>
+                  <div className="mb-1 flex items-baseline justify-between gap-3 text-[0.75rem]"><span className="text-muted-foreground">Progress</span><span className="tabular-nums text-violet-700 dark:text-violet-300">{formatCountdown(endMs, nowMs)} left</span></div>
                   <div role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100} aria-label="Window progress" className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
                     <div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.round(progress * 100)}%` }} />
                   </div>
@@ -2034,18 +2034,18 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
 
           {/* Scope */}
           <section aria-labelledby="drawer-scope" className="mt-5">
-            <h3 id="drawer-scope" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Scope</h3>
+            <h3 id="drawer-scope" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Scope</h3>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {scopeHostsList.map((host) => <span key={host} className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">{host}</span>)}
-              {window.scope.groups.map((group) => <span key={group} className="rounded-md border border-violet-200 bg-violet-50 px-1.5 py-0.5 font-mono text-[12px] text-violet-800 dark:border-violet-500/25 dark:bg-violet-500/10 dark:text-violet-300">{group}</span>)}
-              {scopeHostsList.length === 0 && window.scope.groups.length === 0 && <span className="text-[13px] text-muted-foreground">No targets in scope.</span>}
+              {scopeHostsList.map((host) => <span key={host} className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.75rem] text-foreground">{host}</span>)}
+              {window.scope.groups.map((group) => <span key={group} className="rounded-md border border-violet-200 bg-violet-50 px-1.5 py-0.5 font-mono text-[0.75rem] text-violet-800 dark:border-violet-500/25 dark:bg-violet-500/10 dark:text-violet-300">{group}</span>)}
+              {scopeHostsList.length === 0 && window.scope.groups.length === 0 && <span className="text-[0.8125rem] text-muted-foreground">No targets in scope.</span>}
             </div>
           </section>
 
           {/* Mute policy */}
           <section aria-labelledby="drawer-mute" className="mt-5">
-            <h3 id="drawer-mute" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Mute policy</h3>
-            <ul className="mt-1.5 space-y-1 text-[13px]">
+            <h3 id="drawer-mute" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Mute policy</h3>
+            <ul className="mt-1.5 space-y-1 text-[0.8125rem]">
               <li className="flex items-center gap-2"><BellOff size={13} aria-hidden="true" className="text-amber-600 dark:text-amber-400" />{window.alertBehavior.muteAlerts ? "Alerts muted for scope" : "Alerts stay live"}</li>
               <li className="flex items-center gap-2"><ShieldCheck size={13} aria-hidden="true" className={window.alertBehavior.allowCritical ? "text-red-500" : "text-muted-foreground"} />{window.alertBehavior.allowCritical ? "SEV1 / Critical alerts break through" : "All severities muted"}</li>
               <li className="flex items-center gap-2"><Check size={13} aria-hidden="true" className={window.alertBehavior.suppressIncidents ? "text-emerald-600" : "text-muted-foreground"} />{window.alertBehavior.suppressIncidents ? "Incident auto-creation suppressed" : "Incidents created normally"}</li>
@@ -2053,12 +2053,12 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
             </ul>
             {mutedRules.length > 0 && (
               <div className="mt-2">
-                <p className="text-[12px] font-semibold text-muted-foreground">Muted rules ({mutedRules.length})</p>
+                <p className="text-[0.75rem] font-semibold text-muted-foreground">Muted rules ({mutedRules.length})</p>
                 <ul className="mt-1 divide-y divide-border/60">
                   {mutedRules.slice(0, 6).map((rule) => (
                     <li key={rule.id} className="flex items-center justify-between gap-2 py-1.5">
-                      <span className="min-w-0 truncate text-[13px] text-foreground" title={rule.name}>{rule.name}</span>
-                      <Link href={`/alert-rules?rule=${rule.id}`} className="shrink-0 font-mono text-[12px] text-primary hover:underline">{rule.id}</Link>
+                      <span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={rule.name}>{rule.name}</span>
+                      <Link href={`/alert-rules?rule=${rule.id}`} className="shrink-0 font-mono text-[0.75rem] text-primary hover:underline">{rule.id}</Link>
                     </li>
                   ))}
                 </ul>
@@ -2068,17 +2068,17 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
 
           {/* Approval trail */}
           <section aria-labelledby="drawer-approval" className="mt-5">
-            <h3 id="drawer-approval" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Approval trail</h3>
-            <ol className="mt-1.5 space-y-1.5 text-[13px]">
+            <h3 id="drawer-approval" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Approval trail</h3>
+            <ol className="mt-1.5 space-y-1.5 text-[0.8125rem]">
               {approvalTrail.map((entry) => (
                 <li key={entry.id} className="flex items-baseline gap-2">
-                  <span className="shrink-0 font-mono text-[12px] tabular-nums text-muted-foreground">{new Date(entry.epochMs).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                  <span className="shrink-0 font-mono text-[0.75rem] tabular-nums text-muted-foreground">{new Date(entry.epochMs).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
                   <span className="min-w-0"><b>{entry.author}</b> <span className="text-muted-foreground">- {entry.text}</span></span>
                 </li>
               ))}
               {window.approver && (
                 <li className="flex items-baseline gap-2">
-                  <span className="shrink-0 font-mono text-[12px] text-muted-foreground">&mdash;</span>
+                  <span className="shrink-0 font-mono text-[0.75rem] text-muted-foreground">&mdash;</span>
                   <span className="min-w-0">Approver: <b>{window.approver}</b> <span className="text-muted-foreground">({window.approvalStatus})</span></span>
                 </li>
               )}
@@ -2087,14 +2087,14 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
 
           {/* Timeline */}
           <section aria-labelledby="drawer-timeline" className="mt-5">
-            <h3 id="drawer-timeline" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Timeline</h3>
+            <h3 id="drawer-timeline" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Timeline</h3>
             <ol className="mt-1.5 divide-y divide-border/60">
               {[...window.timeline].sort((a, b) => a.epochMs - b.epochMs).map((entry) => {
                 const meta = DRAWER_TIMELINE_META[entry.type] ?? DRAWER_TIMELINE_META.note;
                 return (
                   <li key={entry.id} className="flex items-start gap-2 py-1.5">
-                    <span className={cn("mt-0.5 shrink-0 rounded-full px-1.5 py-0.5 text-[12px] font-semibold", meta.tone)}>{meta.label}</span>
-                    <span className="min-w-0 text-[13px] leading-snug text-foreground"><b>{entry.author}</b> <span className="text-muted-foreground">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span><br />{entry.text}</span>
+                    <span className={cn("mt-0.5 shrink-0 rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold", meta.tone)}>{meta.label}</span>
+                    <span className="min-w-0 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author}</b> <span className="text-muted-foreground">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span><br />{entry.text}</span>
                   </li>
                 );
               })}
@@ -2103,17 +2103,17 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
 
           {/* Linked alerts */}
           <section aria-labelledby="drawer-linked" className="mt-5">
-            <h3 id="drawer-linked" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Linked alerts</h3>
+            <h3 id="drawer-linked" className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Linked alerts</h3>
             {hostAlerts.length === 0 ? (
-              <p className="mt-1.5 text-[13px] text-muted-foreground">No alerts reference this scope.</p>
+              <p className="mt-1.5 text-[0.8125rem] text-muted-foreground">No alerts reference this scope.</p>
             ) : (
               <ul className="mt-1.5 divide-y divide-border/60">
                 {hostAlerts.slice(0, 6).map((alert) => (
                   <li key={alert.id}>
                     <Link href={`/alerts?alert=${alert.id}`} className="flex items-center gap-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
-                      <span className="min-w-0 flex-1 truncate text-[13px] text-foreground" title={alert.name}>{alert.name}</span>
-                      <span className="shrink-0 font-mono text-[12px] text-muted-foreground">{alert.id}</span>
-                      {live && <span className="shrink-0 rounded bg-violet-50 px-1.5 py-0.5 text-[12px] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">Suppressed</span>}
+                      <span className="min-w-0 flex-1 truncate text-[0.8125rem] text-foreground" title={alert.name}>{alert.name}</span>
+                      <span className="shrink-0 font-mono text-[0.75rem] text-muted-foreground">{alert.id}</span>
+                      {live && <span className="shrink-0 rounded bg-violet-50 px-1.5 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">Suppressed</span>}
                     </Link>
                   </li>
                 ))}
@@ -2126,14 +2126,14 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
         <footer className="flex flex-wrap items-center gap-2 border-t border-border p-4">
           {live && (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[13px]" onClick={() => onExtend(window.id, 30)}>+30m</Button>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[13px]" onClick={() => onExtend(window.id, 60)}>+1h</Button>
-              <Button variant="outline" className="h-9 rounded-lg px-3 text-[13px]" onClick={() => onEndNow(window.id)}>End now</Button>
+              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onExtend(window.id, 30)}>+30m</Button>
+              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onExtend(window.id, 60)}>+1h</Button>
+              <Button variant="outline" className="h-9 rounded-lg px-3 text-[0.8125rem]" onClick={() => onEndNow(window.id)}>End now</Button>
             </>
           )}
-          <Link href={`/maintenance-windows/${window.id}`} className="inline-flex h-9 items-center rounded-lg border border-input bg-card px-3 text-[13px] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open full page</Link>
-          <Link href={`/maintenance-windows/${window.id}/edit`} className="inline-flex h-9 items-center rounded-lg bg-primary px-3 text-[13px] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Edit</Link>
-          <button type="button" onClick={() => onCancel(window.id)} className="ml-auto inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[13px] font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10">Cancel window</button>
+          <Link href={`/maintenance-windows/${window.id}`} className="inline-flex h-9 items-center rounded-lg border border-input bg-card px-3 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open full page</Link>
+          <Link href={`/maintenance-windows/${window.id}/edit`} className="inline-flex h-9 items-center rounded-lg bg-primary px-3 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Edit</Link>
+          <button type="button" onClick={() => onCancel(window.id)} className="ml-auto inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[0.8125rem] font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10">Cancel window</button>
         </footer>
       </aside>
     </>,

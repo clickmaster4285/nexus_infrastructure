@@ -54,7 +54,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
         : ["Service", "Latency", "Trend"];
 
   return (
-    <Panel title={title} className={cn("min-h-[182px] p-2.5", className)}>
+    <Panel title={title} className={cn("min-h-[11.375rem] p-2.5", className)}>
       <div className="min-w-0 flex-1 overflow-x-auto">
         <table className="w-full table-fixed border-collapse">
           <thead>
@@ -64,7 +64,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
                   key={header}
                   scope="col"
                   className={cn(
-                    "whitespace-nowrap border-y border-border px-2 py-1.5 text-center text-[9px] font-semibold text-[#536781] dark:text-[#9babc0]",
+                    "whitespace-nowrap border-y border-border px-2 py-1.5 text-center text-[0.5625rem] font-semibold text-[#536781] dark:text-muted-foreground",
                     index === 0 && "w-[38%]",
                   )}
                 >
@@ -77,11 +77,11 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "metric" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
-                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
+                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className={cn("px-2 py-1.5 text-center text-[13px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className={cn("px-2 py-1.5 text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
                   <td className="px-2 py-1.5 text-center">
@@ -92,12 +92,12 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "backup" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
-                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
+                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className="px-2 py-1.5 text-center text-[13px] text-[#50647e] dark:text-[#b7c4d5]">{row.free}</td>
-                  <td className={cn("px-2 py-1.5 text-center text-[13px] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className="px-2 py-1.5 text-center text-[0.8125rem] text-[#50647e] dark:text-[#b7c4d5]">{row.free}</td>
+                  <td className={cn("px-2 py-1.5 text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
                 </tr>
@@ -105,13 +105,13 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "latency" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[13px] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
-                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[6px] w-[6px] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
+                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[#1d2d44] dark:text-[#d7e2ef]">
+                    <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
                   <td
                     className={cn(
-                    "px-2 py-1.5 text-center text-[13px] font-semibold",
+                    "px-2 py-1.5 text-center text-[0.8125rem] font-semibold",
                       row.color === "green" || row.color === "teal"
                         ? "text-[#16a16a] dark:text-[#4fd69a]"
                         : row.color === "amber"
@@ -121,7 +121,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
                   >
                     {row.latency}
                   </td>
-                  <td className="truncate px-2 py-1.5 text-center text-[12px] text-muted-foreground">
+                  <td className="truncate px-2 py-1.5 text-center text-[0.75rem] text-muted-foreground">
                     <LatencyTrendIndicator trend={row.trend} />
                   </td>
                 </tr>
@@ -129,7 +129,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
           </tbody>
         </table>
       </div>
-      <Link href={link.href} className="executive-overview-trend mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[12px] font-semibold text-primary transition-colors hover:text-primary/80">
+      <Link href={link.href} className="executive-overview-trend mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[0.75rem] font-semibold text-primary transition-colors hover:text-primary/80">
         View all {link.label} <ArrowRight className={linkArrowColor(kind, title)} size={12} aria-hidden="true" />
       </Link>
     </Panel>

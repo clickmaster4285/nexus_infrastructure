@@ -47,12 +47,12 @@ export function ChipsPopover({ chips, max = 2, chipClassName, expandLabel = "Sho
   }, [open]);
 
   if (chips.length === 0) {
-    return <span className="text-[12px] text-muted-foreground">—</span>;
+    return <span className="text-[0.75rem] text-muted-foreground">—</span>;
   }
 
   const inline = chips.slice(0, max);
   const overflow = chips.slice(max);
-  const base = "max-w-[110px] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px]";
+  const base = "max-w-[6.875rem] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem]";
 
   return (
     <span ref={containerRef} className="relative inline-flex max-w-full items-center gap-1 whitespace-nowrap" onClick={(event) => event.stopPropagation()}>
@@ -68,26 +68,26 @@ export function ChipsPopover({ chips, max = 2, chipClassName, expandLabel = "Sho
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-label={expandLabel}
-            className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             +{overflow.length}
           </button>
           {open && (
-            <span role="dialog" aria-label="All items" className="motion-menu-in absolute left-0 top-7 z-30 w-56 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 text-left shadow-[0_8px_24px_rgba(16,24,40,0.12)] dark:border-border dark:bg-popover">
+            <span role="dialog" aria-label="All items" className="motion-menu-in absolute left-0 top-7 z-30 w-56 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 text-left shadow-[0_8px_24px_rgba(16,24,40,0.12)] dark:border-border dark:bg-popover">
               {chips.map((chip) => (
-                <span key={`popover:${chip.kind ?? ""}:${chip.label}`} className="flex items-center justify-between gap-2 rounded-md px-2 py-1 text-[12px]">
+                <span key={`popover:${chip.kind ?? ""}:${chip.label}`} className="flex items-center justify-between gap-2 rounded-md px-2 py-1 text-[0.75rem]">
                   <span className={cn("min-w-0 truncate", chip.kind === "host" ? "font-mono text-foreground" : "text-muted-foreground")} title={chip.label}>
                     {chip.label}
                   </span>
                   {chip.kind && (
-                    <Badge variant="secondary" className="shrink-0 text-[10px]">{chip.kind}</Badge>
+                    <Badge variant="secondary" className="shrink-0 text-[0.625rem]">{chip.kind}</Badge>
                   )}
                 </span>
               ))}
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="mt-1 flex h-7 w-full items-center justify-center rounded-md text-[12px] font-medium text-muted-foreground hover:bg-accent"
+                className="mt-1 flex h-7 w-full items-center justify-center rounded-md text-[0.75rem] font-medium text-muted-foreground hover:bg-accent"
               >
                 Close
               </button>

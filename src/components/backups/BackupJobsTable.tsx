@@ -145,7 +145,7 @@ export function BackupJobsTable({
       <div className="overflow-x-auto">
         <table className="w-full table-fixed border-collapse text-left">
           <colgroup>
-            <col style={{ width: "40px" }} />
+            <col style={{ width: "2.5rem" }} />
             <col style={{ width: "18%" }} />
             <col style={{ width: "16%" }} />
             <col style={{ width: "13%" }} />
@@ -201,7 +201,7 @@ export function BackupJobsTable({
                   tabIndex={job ? 0 : undefined}
                   aria-label={job ? `Open backup ${job.name}` : undefined}
                   className={cn(
-                    "group border-b border-border/60 align-middle transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary",
+                    "group border-b border-border/60 align-middle transition-colors hover:bg-slate-50 dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary",
                     rowHeight,
                     job && "cursor-pointer",
                     failed && "bg-red-50/40 dark:bg-red-500/5",
@@ -211,8 +211,8 @@ export function BackupJobsTable({
                 >
                   {/* Select + status stripe */}
                   <td className="relative px-3 py-1.5 align-middle" onClick={(event) => event.stopPropagation()}>
-                    {failed && <span aria-hidden="true" className="absolute left-0 top-1/2 h-[calc(100%-14px)] w-[3px] -translate-y-1/2 rounded-full bg-[#DC2626]" />}
-                    {running && <span aria-hidden="true" className="absolute left-0 top-1/2 h-[calc(100%-14px)] w-[3px] -translate-y-1/2 rounded-full bg-[#3B82F6]" />}
+                    {failed && <span aria-hidden="true" className="absolute left-0 top-1/2 h-[calc(100%-0.875rem)] w-[0.1875rem] -translate-y-1/2 rounded-full bg-red-600" />}
+                    {running && <span aria-hidden="true" className="absolute left-0 top-1/2 h-[calc(100%-0.875rem)] w-[0.1875rem] -translate-y-1/2 rounded-full bg-blue-500" />}
                     <input
                       type="checkbox"
                       checked={selected}
@@ -229,14 +229,14 @@ export function BackupJobsTable({
                       {job?.taskId && <span title={`Linked Scheduled Task ${job.taskId}`}><Link2 size={11} aria-hidden="true" className="text-muted-foreground" /></span>}
                       {job && <AssetTypeBadge label={job.assetType} className="ml-auto" />}
                     </div>
-                    <span className={cn("mt-0.5 block truncate text-[13px] font-semibold text-foreground", job && "group-hover:text-primary")} title={name}>{name}</span>
+                    <span className={cn("mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground", job && "group-hover:text-primary")} title={name}>{name}</span>
                     <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` · ${job.group}` : ""}` : `${row.unprotected!.host} · unprotected`}</span>
                     {running && (
-                      <span className="mt-1 flex max-w-[180px] items-center gap-1.5" aria-label={`Backup running, ${progress}% complete`}>
-                        <span className="h-[3px] flex-1 overflow-hidden rounded-full bg-muted">
-                          <span className="block h-full rounded-full bg-[#3B82F6] transition-[width] duration-500" style={{ width: `${progress}%` }} />
+                      <span className="mt-1 flex max-w-[11.25rem] items-center gap-1.5" aria-label={`Backup running, ${progress}% complete`}>
+                        <span className="h-[0.1875rem] flex-1 overflow-hidden rounded-full bg-muted">
+                          <span className="block h-full rounded-full bg-blue-500 transition-[width] duration-500" style={{ width: `${progress}%` }} />
                         </span>
-                        <span className="text-xs font-semibold tabular-nums text-[#3B82F6] dark:text-blue-400">Running {progress}%</span>
+                        <span className="text-xs font-semibold tabular-nums text-blue-500 dark:text-blue-400">Running {progress}%</span>
                       </span>
                     )}
                   </td>
@@ -284,7 +284,7 @@ export function BackupJobsTable({
                           <a
                             href={`/maintenance-windows/${encodeURIComponent(coveringWindow.id)}`}
                             onClick={(event) => event.stopPropagation()}
-                            className="inline-flex max-w-full items-center gap-1 truncate text-xs font-semibold text-[#D97706] hover:underline dark:text-amber-400"
+                            className="inline-flex max-w-full items-center gap-1 truncate text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
                             title={`Runs during maintenance window ${coveringWindow.id}`}
                           >
                             <AlertTriangle size={11} aria-hidden="true" className="shrink-0" />
@@ -309,7 +309,7 @@ export function BackupJobsTable({
                       !job.enabled ? (
                         <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Paused</span>
                       ) : (
-                        <span className={cn("inline-flex items-center gap-1 text-xs tabular-nums", row.rpoMet === false ? "font-semibold text-[#DC2626] dark:text-red-400" : "text-foreground")}>
+                        <span className={cn("inline-flex items-center gap-1 text-xs tabular-nums", row.rpoMet === false ? "font-semibold text-red-600 dark:text-red-400" : "text-foreground")}>
                           {row.rpoMet === false && <AlertTriangle size={11} aria-hidden="true" />}
                           {formatRpoCell(row.rpoLagMinutes, row.rpoTargetMinutes)}
                         </span>
@@ -355,13 +355,13 @@ export function BackupJobsTable({
             {pageItems.length === 0 && (
               <tr>
                 <td colSpan={11}>
-                  <div className="flex min-h-[220px] flex-col items-center justify-center gap-2 py-10 text-center">
+                  <div className="flex min-h-[13.75rem] flex-col items-center justify-center gap-2 py-10 text-center">
                     <span className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground">
                       <FilterX size={20} aria-hidden="true" />
                     </span>
                     <p className="font-display text-base font-bold text-foreground">No backups match your filters</p>
                     <p className="max-w-sm text-sm text-muted-foreground">Try a different search, or clear the active filters to see all backup jobs.</p>
-                    <Button variant="outline" className="mt-1 h-9 rounded-lg px-4 text-[13px]" onClick={onClearFilters}>Clear filters</Button>
+                    <Button variant="outline" className="mt-1 h-9 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
                   </div>
                 </td>
               </tr>
@@ -382,14 +382,14 @@ export function BackupJobsTable({
               tabIndex={job ? 0 : undefined}
               onClick={job ? () => openJob(job.id) : undefined}
               onKeyDown={job ? (event) => { if (event.key === "Enter") { event.preventDefault(); openJob(job.id); } } : undefined}
-              className={cn("flex items-start gap-2 p-3 transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40", job && "cursor-pointer")}
+              className={cn("flex items-start gap-2 p-3 transition-colors hover:bg-slate-50 dark:hover:bg-muted/40", job && "cursor-pointer")}
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-xs text-muted-foreground">{job?.id ?? "—"}</span>
                   {row.skippedMaintenance ? <SkippedMaintenanceBadge /> : <BackupStatusBadge status={job ? row.status : "none"} />}
                 </div>
-                <p className="mt-0.5 truncate text-[13px] font-semibold text-foreground">{name}</p>
+                <p className="mt-0.5 truncate text-[0.8125rem] font-semibold text-foreground">{name}</p>
                 <p className="mt-0.5 truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` · ${job.group}` : ""}` : `${row.unprotected!.host} · unprotected`}</p>
                 {job && (
                   <p className="mt-1 text-xs tabular-nums text-muted-foreground">
@@ -409,7 +409,7 @@ export function BackupJobsTable({
         {pageItems.length === 0 && (
           <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
             <p className="text-sm font-semibold text-foreground">No backups match your filters</p>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={onClearFilters}>Clear filters</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
           </div>
         )}
       </div>

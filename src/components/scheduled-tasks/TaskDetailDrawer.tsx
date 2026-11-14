@@ -34,13 +34,13 @@ interface TaskDetailDrawerProps {
 function SummaryRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-start justify-between gap-3 py-1.5">
-      <dt className="shrink-0 text-[12px] text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 text-right text-[12px] font-medium text-foreground">{children}</dd>
+      <dt className="shrink-0 text-[0.75rem] text-muted-foreground">{label}</dt>
+      <dd className="min-w-0 text-right text-[0.75rem] font-medium text-foreground">{children}</dd>
     </div>
   );
 }
 
-/** 520px right-hand drawer with summary, run history (last 10), duration trend and audit log. */
+/** 32.5rem right-hand drawer with summary, run history (last 10), duration trend and audit log. */
 export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, onRetry }: TaskDetailDrawerProps) {
   const drawerRef = useRef<HTMLDivElement | null>(null);
   const runs = useTaskRuns(task?.id ?? null);
@@ -102,7 +102,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-drawer-title"
-        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[520px]"
+        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[32.5rem]"
       >
         <div className="shrink-0 border-b border-border px-5 pb-4 pt-4">
           <div className="flex items-start justify-between gap-3">
@@ -130,21 +130,21 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
             type="button"
             onClick={copyLink}
             aria-label={`Copy link to task ${task.id}`}
-            className="mt-1 inline-flex items-center gap-1 rounded text-[11px] font-mono text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-1 inline-flex items-center gap-1 rounded text-[0.6875rem] font-mono text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {task.id}
-            {copied ? <Check size={11} aria-hidden className="text-[#16A34A]" /> : <Copy size={11} aria-hidden />}
+            {copied ? <Check size={11} aria-hidden className="text-green-600" /> : <Copy size={11} aria-hidden />}
           </button>
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <Button size="sm" onClick={() => onRunNow(task)} className="h-8 gap-1.5 text-[12px]"><Zap size={13} aria-hidden />Run now</Button>
-            <Button size="sm" variant="outline" onClick={() => onToggle(task)} className="h-8 gap-1.5 text-[12px]">
+            <Button size="sm" onClick={() => onRunNow(task)} className="h-8 gap-1.5 text-[0.75rem]"><Zap size={13} aria-hidden />Run now</Button>
+            <Button size="sm" variant="outline" onClick={() => onToggle(task)} className="h-8 gap-1.5 text-[0.75rem]">
               {task.enabled ? <><Pause size={13} aria-hidden />Pause</> : <><Play size={13} aria-hidden />Resume</>}
             </Button>
-            <Button size="sm" variant="outline" onClick={() => onEdit(task)} className="h-8 gap-1.5 text-[12px]"><Pencil size={13} aria-hidden />Edit</Button>
+            <Button size="sm" variant="outline" onClick={() => onEdit(task)} className="h-8 gap-1.5 text-[0.75rem]"><Pencil size={13} aria-hidden />Edit</Button>
             {task.type === "backup" && TASK_ID_TO_BACKUP_JOB[task.id] && (
               <Link
                 href={`/backups-and-recovery?backup=${TASK_ID_TO_BACKUP_JOB[task.id]}`}
-                className="inline-flex h-8 items-center gap-1.5 rounded px-1 text-[12px] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="inline-flex h-8 items-center gap-1.5 rounded px-1 text-[0.75rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <HardDriveDownload size={13} aria-hidden />View in Backups
               </Link>
@@ -155,17 +155,17 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {/* Summary */}
           <section aria-label="Task summary">
-            <h3 className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><CalendarClock size={11} aria-hidden />Summary</h3>
+            <h3 className="mb-1 flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground"><CalendarClock size={11} aria-hidden />Summary</h3>
             <dl className="divide-y divide-border/60">
               <SummaryRow label="Schedule">{formatScheduleLong(task.schedule)}</SummaryRow>
-              <SummaryRow label="Timezone"><span className="font-mono text-[11px]">{task.schedule.timeZone}</span></SummaryRow>
+              <SummaryRow label="Timezone"><span className="font-mono text-[0.6875rem]">{task.schedule.timeZone}</span></SummaryRow>
               <SummaryRow label="Target">
                 <span className="flex flex-wrap justify-end gap-1">
                   {task.target.hosts.map((host) => (
-                    <span key={host} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">{host}</span>
+                    <span key={host} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.625rem]">{host}</span>
                   ))}
                   {task.target.groups.map((group) => (
-                    <span key={group} className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px] text-muted-foreground">{group}</span>
+                    <span key={group} className="rounded border border-border bg-card px-1.5 py-0.5 text-[0.625rem] text-muted-foreground">{group}</span>
                   ))}
                   {task.target.hosts.length === 0 && task.target.groups.length === 0 && "Global scope"}
                 </span>
@@ -176,7 +176,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                   {task.owner}
                 </span>
               </SummaryRow>
-              <SummaryRow label="Action">{task.execution.mode === "builtin" ? builtinLabel : <span className="font-mono text-[10px]">{task.execution.command}</span>}</SummaryRow>
+              <SummaryRow label="Action">{task.execution.mode === "builtin" ? builtinLabel : <span className="font-mono text-[0.625rem]">{task.execution.command}</span>}</SummaryRow>
               <SummaryRow label="Retries">{task.execution.retries}</SummaryRow>
               <SummaryRow label="Timeout">{task.execution.timeoutMinutes}m</SummaryRow>
               <SummaryRow label="Concurrency">{task.execution.concurrency === "skip" ? "Skip if previous run active" : "Queue after previous run"}</SummaryRow>
@@ -189,17 +189,17 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
           {/* Run history */}
           <section aria-label="Run history" className="mt-4">
             <div className="mb-1 flex items-center justify-between">
-              <h3 className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><History size={11} aria-hidden />Run History</h3>
-              <span className="text-[10px] tabular-nums text-muted-foreground">last {lastTen.length} of {runs.length}</span>
+              <h3 className="flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground"><History size={11} aria-hidden />Run History</h3>
+              <span className="text-[0.625rem] tabular-nums text-muted-foreground">last {lastTen.length} of {runs.length}</span>
             </div>
             {lastTen.length === 0 ? (
-              <p className="rounded-lg border border-dashed border-border px-4 py-5 text-center text-[12px] text-muted-foreground">No runs yet{task.enabled ? " — runs on the next schedule." : "."}</p>
+              <p className="rounded-lg border border-dashed border-border px-4 py-5 text-center text-[0.75rem] text-muted-foreground">No runs yet{task.enabled ? " — runs on the next schedule." : "."}</p>
             ) : (
               <div className="overflow-hidden rounded-lg border border-border">
-                <table className="w-full table-fixed text-left text-[11px]">
+                <table className="w-full table-fixed text-left text-[0.6875rem]">
                   <colgroup><col style={{ width: "24%" }} /><col style={{ width: "28%" }} /><col style={{ width: "17%" }} /><col style={{ width: "13%" }} /><col style={{ width: "18%" }} /></colgroup>
                   <thead>
-                    <tr className="bg-muted/40 text-[9px] font-bold uppercase tracking-wide text-muted-foreground">
+                    <tr className="bg-muted/40 text-[0.5625rem] font-bold uppercase tracking-wide text-muted-foreground">
                       <th scope="col" className="px-2 py-1.5">Status</th>
                       <th scope="col" className="px-2 py-1.5">Started</th>
                       <th scope="col" className="px-2 py-1.5">Duration</th>
@@ -224,7 +224,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                         <td className="px-2 py-1.5 text-right">
                           <span className="inline-flex items-center gap-0.5">
                             {run.status === "failed" && (
-                              <button type="button" onClick={() => onRetry(task.id)} aria-label="Retry this run" title="Retry" className="grid h-7 w-7 place-items-center rounded text-[#D97706] transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-amber-500/10">
+                              <button type="button" onClick={() => onRetry(task.id)} aria-label="Retry this run" title="Retry" className="grid h-7 w-7 place-items-center rounded text-amber-600 transition-colors hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-amber-500/10">
                                 <RotateCcw size={12} aria-hidden />
                               </button>
                             )}
@@ -244,15 +244,15 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
           {/* Duration trend */}
           {durationSeries.length >= 3 && (
             <section aria-label="Duration trend" className="mt-4">
-              <h3 className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><Timer size={11} aria-hidden />Duration Trend</h3>
-              <div className="h-[110px] w-full rounded-lg border border-border p-1.5" role="img" aria-label="Duration of the last 20 runs in seconds">
+              <h3 className="mb-1 flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground"><Timer size={11} aria-hidden />Duration Trend</h3>
+              <div className="h-[6.875rem] w-full rounded-lg border border-border p-1.5" role="img" aria-label="Duration of the last 20 runs in seconds">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={durationSeries} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
                     <CartesianGrid vertical={false} stroke="var(--border)" />
                     <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} />
                     <YAxis width={30} tickLine={false} axisLine={false} tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} unit="s" />
                     <Tooltip
-                      contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", background: "var(--popover)", fontSize: 11 }}
+                      contentStyle={{ borderRadius: 8, border: "0.0625rem solid var(--border)", background: "var(--popover)", fontSize: 11 }}
                       labelStyle={{ color: "var(--foreground)", fontWeight: 700 }}
                       formatter={(value: number) => [`${value}s`, "Duration"]}
                     />
@@ -265,19 +265,19 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
 
           {/* Audit log */}
           <section aria-label="Audit log" className="mt-4 pb-1">
-            <h3 className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><ClipboardList size={11} aria-hidden />Audit Log</h3>
+            <h3 className="mb-1 flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground"><ClipboardList size={11} aria-hidden />Audit Log</h3>
             <ol className="space-y-0">
               {[...task.audit].sort((a, b) => b.epochMs - a.epochMs).slice(0, 8).map((entry, index, array) => (
                 <li key={entry.id} className="relative flex gap-2.5 pb-3 last:pb-0">
-                  {index < array.length - 1 && <span aria-hidden className="absolute left-[3px] top-3.5 h-full w-px bg-border" />}
+                  {index < array.length - 1 && <span aria-hidden className="absolute left-[0.1875rem] top-3.5 h-full w-px bg-border" />}
                   <span aria-hidden className="relative mt-1.5 h-2 w-2 shrink-0 rounded-full bg-slate-400 ring-2 ring-card" />
                   <div className="min-w-0">
-                    <p className="text-[12px] leading-snug text-foreground">
+                    <p className="text-[0.75rem] leading-snug text-foreground">
                       <span className="font-semibold">{entry.actor === CURRENT_USER_NAME ? "You" : entry.actor}</span>
                       <span className="text-muted-foreground"> · {entry.action}</span>
                     </p>
-                    <p className="truncate text-[11px] text-muted-foreground" title={entry.detail}>{entry.detail}</p>
-                    <p className="text-[10px] tabular-nums text-muted-foreground/80">{timeAgo(entry.epochMs)}</p>
+                    <p className="truncate text-[0.6875rem] text-muted-foreground" title={entry.detail}>{entry.detail}</p>
+                    <p className="text-[0.625rem] tabular-nums text-muted-foreground/80">{timeAgo(entry.epochMs)}</p>
                   </div>
                 </li>
               ))}
@@ -285,7 +285,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
           </section>
         </div>
 
-        <div className="flex shrink-0 items-center justify-between border-t border-border px-5 py-2.5 text-[10px] text-muted-foreground">
+        <div className="flex shrink-0 items-center justify-between border-t border-border px-5 py-2.5 text-[0.625rem] text-muted-foreground">
           <span className="inline-flex items-center gap-1"><Users size={11} aria-hidden />Created by {task.createdBy === CURRENT_USER_NAME ? "you" : task.createdBy} · {new Date(task.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span>
           <span className="font-mono">{task.id}</span>
         </div>

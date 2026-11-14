@@ -77,7 +77,7 @@ export function ScanCertificatesModal({ open, onOpenChange, onDone }: BaseDialog
   }, [running, step, scope, onDone, onOpenChange]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><ScanLine size={17} className="text-primary" aria-hidden="true" />Scan certificates</DialogTitle>
           <DialogDescription>Scans TLS endpoints in the selected scope. Simulated scan for the demo.</DialogDescription>
@@ -137,7 +137,7 @@ export function AddCertificateDialog({ open, onOpenChange, onDone }: BaseDialogP
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Add certificate</DialogTitle>
           <DialogDescription>Fetch the PEM from the endpoint or generate one. Mock entry; fields are validated inline.</DialogDescription>
@@ -191,7 +191,7 @@ export function RenewCertificateDialog({ open, onOpenChange, certId, method, onD
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><Wrench size={17} className="text-primary" aria-hidden="true" />Renew certificate</DialogTitle>
           <DialogDescription>Issues a fresh certificate for <b>{certId}</b> and deploys it to the listed hosts. Simulated renew for the demo.</DialogDescription>
@@ -232,7 +232,7 @@ export function RevokeCertificateDialog({ open, onOpenChange, certId, onDone }: 
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><AlertTriangle size={16} className="text-red-500" aria-hidden="true" />Revoke certificate</DialogTitle>
           <DialogDescription><b>{certId}</b> will be revoked immediately. Clients will stop trusting it until reissued. This cannot be undone.</DialogDescription>
@@ -261,7 +261,7 @@ export function AssignCertOwnerDialog({ open, onOpenChange, certId, onDone }: Ba
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Assign owner</DialogTitle>
           <DialogDescription>Assign remediation ownership for <b>{multi ? "the selected certificates" : certId}</b>.</DialogDescription>
@@ -292,7 +292,7 @@ export function ToggleAutoRenewDialog({ open, onOpenChange, certId, current, onD
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>{enabling ? "Enable" : "Disable"} auto-renew</DialogTitle>
           <DialogDescription><b>{certId}</b> — {enabling ? "Let ACME renew and redeploy before expiry without manual action." : "Future renewals must be run manually; the cert will expire without intervention."}</DialogDescription>

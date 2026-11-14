@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border px-1 pt-3 text-[12px] text-muted-foreground">
+    <footer className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border px-1 pt-3 text-[0.75rem] text-muted-foreground">
       <span>© 2026 Nexus Infrastructure Monitor</span>
       <span className="flex items-center gap-1.5">
         All systems operational

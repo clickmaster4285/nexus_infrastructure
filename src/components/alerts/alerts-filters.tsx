@@ -23,9 +23,9 @@ interface AlertsFiltersProps {
 const RANGE_TEXT: Record<AlertRangeKey, string> = { "1h": "Last 1 hour", "6h": "Last 6 hours", "24h": "Last 24 hours", "7d": "Last 7 days" };
 
 const SEVERITY_CHIPS: Array<{ key: AlertSeverity; label: string; className: string }> = [
-  { key: "critical", label: "Critical", className: "bg-[#DC2626]/10 text-[#DC2626] border-[#DC2626]/30 dark:bg-red-500/15 dark:text-red-400" },
-  { key: "warning", label: "Warning", className: "bg-[#D97706]/10 text-[#D97706] border-[#D97706]/30 dark:bg-amber-500/15 dark:text-amber-400" },
-  { key: "info", label: "Info", className: "bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/30 dark:bg-blue-500/15 dark:text-blue-400" },
+  { key: "critical", label: "Critical", className: "bg-red-600/10 text-red-600 border-red-600/30 dark:bg-red-500/15 dark:text-red-400" },
+  { key: "warning", label: "Warning", className: "bg-amber-600/10 text-amber-600 border-amber-600/30 dark:bg-amber-500/15 dark:text-amber-400" },
+  { key: "info", label: "Info", className: "bg-blue-500/10 text-blue-500 border-blue-500/30 dark:bg-blue-500/15 dark:text-blue-400" },
 ];
 
 const RANGE_ORDER: AlertRangeKey[] = ["1h", "6h", "24h", "7d"];
@@ -44,7 +44,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
 
   return (
     <section aria-label="Alert filters" className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3">
-      <div className="relative min-w-[180px] flex-1 sm:max-w-[260px]">
+      <div className="relative min-w-[11.25rem] flex-1 sm:max-w-[16.25rem]">
         <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           type="search"
@@ -66,7 +66,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
               aria-pressed={active}
               onClick={() => toggleSeverity(chip.key)}
               className={cn(
-                "h-9 rounded-lg border px-3 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "h-9 rounded-lg border px-3 text-[0.8125rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 active ? chip.className : "border-border text-muted-foreground hover:bg-accent",
               )}
             >
@@ -77,7 +77,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
       </div>
 
       <Select value={host} onValueChange={onHostChange}>
-        <SelectTrigger aria-label="Filter by host" className="h-9 min-w-[150px] rounded-lg text-sm">
+        <SelectTrigger aria-label="Filter by host" className="h-9 min-w-[9.375rem] rounded-lg text-sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -89,7 +89,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
       </Select>
 
       <Select value={range} onValueChange={(value) => onRangeChange(value as AlertRangeKey)}>
-        <SelectTrigger aria-label="Time range" className="h-9 min-w-[140px] rounded-lg text-sm">
+        <SelectTrigger aria-label="Time range" className="h-9 min-w-[8.75rem] rounded-lg text-sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -99,7 +99,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
         </SelectContent>
       </Select>
 
-      <span className="ml-auto hidden text-[12px] text-muted-foreground lg:inline" aria-live="polite">
+      <span className="ml-auto hidden text-[0.75rem] text-muted-foreground lg:inline" aria-live="polite">
         {resultCount} {resultCount === 1 ? "alert" : "alerts"}
       </span>
 
@@ -113,7 +113,7 @@ export function AlertsFilters(props: AlertsFiltersProps) {
         }}
         disabled={!hasActiveFilters(props)}
         className={cn(
-          "inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           hasActiveFilters(props) ? "text-muted-foreground hover:bg-accent hover:text-foreground" : "cursor-not-allowed opacity-40",
         )}
       >

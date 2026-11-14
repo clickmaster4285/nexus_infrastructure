@@ -40,23 +40,23 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     <>
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 flex w-[232px] flex-col overflow-y-auto border-r border-sidebar-border bg-gradient-to-b from-[#10233e] to-[#0d1e35] text-sidebar-foreground transition-transform duration-200 ease-in-out [scrollbar-width:thin] [scrollbar-color:#31465e_transparent]",
+          "fixed inset-y-0 left-0 z-30 flex w-[14.5rem] flex-col overflow-y-auto border-r border-sidebar-border bg-gradient-to-b from-[#10233e] to-[#0d1e35] text-sidebar-foreground transition-transform duration-200 ease-in-out [scrollbar-width:thin] [scrollbar-color:#31465e_transparent]",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           "lg:translate-x-0",
         )}
         aria-label="Main navigation"
       >
         {/* Brand */}
-        <div className="flex h-[54px] min-h-[54px] items-center gap-2 border-b border-sidebar-border px-4">
+        <div className="flex h-[3.375rem] min-h-[3.375rem] items-center gap-2 border-b border-sidebar-border px-4">
           <div
             aria-hidden="true"
-            className="font-display -skew-x-6 select-none text-[33px] font-extrabold italic leading-[34px] text-[#1aa1ef] [text-shadow:0_0_12px_#168ce744]"
+            className="font-display -skew-x-6 select-none text-[2.0625rem] font-extrabold italic leading-[2.125rem] text-[#1aa1ef] [text-shadow:0_0_12px_#168ce744]"
           >
             N
           </div>
           <div className="min-w-0">
-            <div className="font-display text-[14px] font-bold tracking-[3px] text-[#f0f5fa]">NEXUS</div>
-            <div className="mt-0.5 text-[8px] leading-none text-sidebar-muted">Infrastructure Monitor</div>
+            <div className="font-display text-[0.875rem] font-bold tracking-[0.1875rem] text-[#f0f5fa]">NEXUS</div>
+            <div className="mt-0.5 text-[0.5rem] leading-none text-sidebar-muted">Infrastructure Monitor</div>
           </div>
           <button
             type="button"
@@ -81,7 +81,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   aria-expanded={isExpanded}
                   aria-controls={submenuId}
                   onClick={() => setExpanded((current) => (current === group.title ? null : group.title))}
-                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-medium text-[#f0f5fa] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
+                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[0.8125rem] font-medium text-[#f0f5fa] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
                 >
                   <GroupIcon size={15} className="shrink-0 text-[#c9d5e4]" aria-hidden="true" />
                   <span className="min-w-0 flex-1 truncate">{group.title}</span>
@@ -111,7 +111,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                               aria-current={isActive ? "page" : undefined}
                               onClick={onClose}
                               className={cn(
-                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[26px] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30",
+                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[1.625rem] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30",
                                 isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                               )}
                             >
@@ -131,7 +131,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
         {/* Footer status */}
         <div className="border-t border-sidebar-border p-3.5">
-          <div className="flex items-center justify-center gap-2 text-[10px] text-sidebar-muted">
+          <div className="flex items-center justify-center gap-2 text-[0.625rem] text-sidebar-muted">
             <span>Powered by <span className="font-semibold text-[#d8e5f5]">Click Master</span></span>
             <span className="rounded bg-white/5 px-1.5 py-0.5 font-medium">V1.0</span>
           </div>

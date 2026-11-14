@@ -99,7 +99,7 @@ function worstStatus(statuses: NocMapStatus[]): NocMapStatus {
   );
 }
 
-/** 32px round marker with a building glyph, status colour and an optional server count badge. */
+/** 2rem round marker with a building glyph, status colour and an optional server count badge. */
 function buildSiteIcon(site: NocMapSite, selected: boolean): DivIcon {
   const color = NOC_MAP_STATUS_COLOR[site.status];
   const pulse = site.status === "warning" || site.status === "critical" ? " nexus-noc-site--pulse" : "";
@@ -132,7 +132,7 @@ function buildServerIcon(server: NocMapServer, index: number, total: number): Di
   });
 }
 
-/** 36px round cluster bubble coloured by the worst status it contains. */
+/** 2.25rem round cluster bubble coloured by the worst status it contains. */
 function buildClusterIcon(cluster: NocMapCluster): DivIcon {
   const color = NOC_MAP_STATUS_COLOR[cluster.status];
   const pulse = cluster.status === "warning" || cluster.status === "critical" ? " nexus-noc-cluster--pulse" : "";
@@ -152,7 +152,7 @@ function StatusPill({ status }: { status: NocMapStatus }) {
   const Icon = status === "online" ? null : status === "warning" ? AlertTriangle : CircleAlert;
   return (
     <span
-      className="inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[12px] font-semibold"
+      className="inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[0.75rem] font-semibold"
       style={{ color, borderColor: `${color}59`, backgroundColor: `${color}1f` }}
     >
       {Icon ? <Icon size={12} aria-hidden="true" /> : null}
@@ -165,11 +165,11 @@ function Meter({ label, value }: { label: string; value: number }) {
   const color = value >= 90 ? "#ef4444" : value >= 75 ? "#f59e0b" : "#22c55e";
   return (
     <div className="flex items-center gap-1.5">
-      <span className="w-12 shrink-0 text-[12px] text-muted-foreground">{label}</span>
+      <span className="w-12 shrink-0 text-[0.75rem] text-muted-foreground">{label}</span>
       <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
         <span className="block h-full rounded-full" style={{ width: `${Math.max(2, Math.min(100, value))}%`, backgroundColor: color }} />
       </span>
-      <b className="w-9 shrink-0 text-right text-[12px] tabular-nums text-foreground">{value}%</b>
+      <b className="w-9 shrink-0 text-right text-[0.75rem] tabular-nums text-foreground">{value}%</b>
     </div>
   );
 }
@@ -177,8 +177,8 @@ function Meter({ label, value }: { label: string; value: number }) {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <span className="block text-[12px] text-muted-foreground">{label}</span>
-      <b className="block truncate text-[12px] font-medium text-foreground" title={value}>{value}</b>
+      <span className="block text-[0.75rem] text-muted-foreground">{label}</span>
+      <b className="block truncate text-[0.75rem] font-medium text-foreground" title={value}>{value}</b>
     </div>
   );
 }
@@ -188,8 +188,8 @@ function SitePopup({ site, onFocus }: { site: NocMapSite; onFocus: (site: NocMap
     <div className="p-3">
       <div className="flex items-start justify-between gap-2 border-b border-border pb-2">
         <div className="min-w-0">
-          <b className="block truncate text-[13px] font-semibold text-foreground">{site.code} · {site.city}</b>
-          <span className="block truncate text-[12px] text-muted-foreground">{site.country} · {site.region}</span>
+          <b className="block truncate text-[0.8125rem] font-semibold text-foreground">{site.code} · {site.city}</b>
+          <span className="block truncate text-[0.75rem] text-muted-foreground">{site.country} · {site.region}</span>
         </div>
         <StatusPill status={site.status} />
       </div>
@@ -204,7 +204,7 @@ function SitePopup({ site, onFocus }: { site: NocMapSite; onFocus: (site: NocMap
       </div>
 
       <div className="flex items-center gap-2 border-b border-border py-2">
-        <span className="w-12 shrink-0 text-[12px] text-muted-foreground">Health</span>
+        <span className="w-12 shrink-0 text-[0.75rem] text-muted-foreground">Health</span>
         <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
           <span
             className="block h-full rounded-full"
@@ -214,13 +214,13 @@ function SitePopup({ site, onFocus }: { site: NocMapSite; onFocus: (site: NocMap
             }}
           />
         </span>
-        <b className="w-10 shrink-0 text-right text-[12px] tabular-nums text-foreground">{site.health}%</b>
+        <b className="w-10 shrink-0 text-right text-[0.75rem] tabular-nums text-foreground">{site.health}%</b>
       </div>
 
       <div className="pt-2">
         <div className="mb-1 flex items-center justify-between gap-2">
-          <b className="text-[12px] font-semibold text-foreground">Servers ({site.servers.length})</b>
-          <span className="text-[12px] text-muted-foreground">Click to focus site</span>
+          <b className="text-[0.75rem] font-semibold text-foreground">Servers ({site.servers.length})</b>
+          <span className="text-[0.75rem] text-muted-foreground">Click to focus site</span>
         </div>
         <ul className="flex flex-col gap-1">
           {site.servers.map((server) => {
@@ -232,12 +232,12 @@ function SitePopup({ site, onFocus }: { site: NocMapSite; onFocus: (site: NocMap
                   onClick={() => onFocus(site)}
                   className="flex w-full cursor-pointer items-center gap-2 rounded-md border border-border bg-muted/40 px-2 py-1 text-left transition-colors hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[2px]" style={{ backgroundColor: color }} />
+                  <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[0.125rem]" style={{ backgroundColor: color }} />
                   <span className="min-w-0 flex-1">
-                    <b className="block truncate text-[12px] font-medium text-foreground">{server.hostname}</b>
-                    <span className="block truncate text-[12px] text-muted-foreground">{server.role} · {server.ip}</span>
+                    <b className="block truncate text-[0.75rem] font-medium text-foreground">{server.hostname}</b>
+                    <span className="block truncate text-[0.75rem] text-muted-foreground">{server.role} · {server.ip}</span>
                   </span>
-                  <span className="shrink-0 text-right text-[12px] tabular-nums text-muted-foreground">{server.cpu}%</span>
+                  <span className="shrink-0 text-right text-[0.75rem] tabular-nums text-muted-foreground">{server.cpu}%</span>
                 </button>
               </li>
             );
@@ -253,8 +253,8 @@ function ServerPopup({ server, site }: { server: NocMapServer; site: NocMapSite 
     <div className="p-3">
       <div className="flex items-start justify-between gap-2 border-b border-border pb-2">
         <div className="min-w-0">
-          <b className="block truncate text-[13px] font-semibold text-foreground">{server.hostname}</b>
-          <span className="block truncate text-[12px] text-muted-foreground">{server.role}</span>
+          <b className="block truncate text-[0.8125rem] font-semibold text-foreground">{server.hostname}</b>
+          <span className="block truncate text-[0.75rem] text-muted-foreground">{server.role}</span>
         </div>
         <StatusPill status={server.status} />
       </div>
@@ -281,8 +281,8 @@ function ClusterPopup({ cluster, onSelect }: { cluster: NocMapCluster; onSelect:
     <div className="p-3">
       <div className="flex items-start justify-between gap-2 border-b border-border pb-2">
         <div className="min-w-0">
-          <b className="block truncate text-[13px] font-semibold text-foreground">{cluster.sites.length} locations</b>
-          <span className="block truncate text-[12px] text-muted-foreground">{cluster.servers.length} servers grouped</span>
+          <b className="block truncate text-[0.8125rem] font-semibold text-foreground">{cluster.sites.length} locations</b>
+          <span className="block truncate text-[0.75rem] text-muted-foreground">{cluster.servers.length} servers grouped</span>
         </div>
         <StatusPill status={cluster.status} />
       </div>
@@ -296,8 +296,8 @@ function ClusterPopup({ cluster, onSelect }: { cluster: NocMapCluster; onSelect:
             >
               <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: NOC_MAP_STATUS_COLOR[site.status] }} />
               <span className="min-w-0 flex-1">
-                <b className="block truncate text-[12px] font-medium text-foreground">{site.code} · {site.city}</b>
-                <span className="block truncate text-[12px] text-muted-foreground">{site.servers.length} servers · {site.health}%</span>
+                <b className="block truncate text-[0.75rem] font-medium text-foreground">{site.code} · {site.city}</b>
+                <span className="block truncate text-[0.75rem] text-muted-foreground">{site.servers.length} servers · {site.health}%</span>
               </span>
             </button>
           </li>
@@ -440,11 +440,11 @@ function buildClusters(sites: NocMapSite[], map: LeafletMap | null, zoom: number
 const FIT_PADDING: [number, number] = [40, 40];
 const COMPACT_WIDTH_PX = 360;
 
-/** Single-row legend pill. White background, radius 999px, bottom-left inside the map; rendered below the map when the map is narrower than 360px. */
+/** Single-row legend pill. White background, radius 62.4375rem, bottom-left inside the map; rendered below the map when the map is narrower than 22.5rem. */
 function MapLegend({ siteCounts, serverTotal, below }: { siteCounts: Record<NocMapStatus, number>; serverTotal: number; below?: boolean }) {
   const pill = (
     <ul
-      className="flex w-max max-w-full items-center gap-3 overflow-hidden whitespace-nowrap rounded-full border border-black/5 bg-white/95 px-2.5 py-1.5 text-[12px] font-medium text-slate-800 shadow-md backdrop-blur-sm dark:border-white/10 dark:bg-slate-800/95 dark:text-slate-100"
+      className="flex w-max max-w-full items-center gap-3 overflow-hidden whitespace-nowrap rounded-full border border-black/5 bg-white/95 px-2.5 py-1.5 text-[0.75rem] font-medium text-slate-800 shadow-md backdrop-blur-sm dark:border-white/10 dark:bg-slate-800/95 dark:text-slate-100"
       aria-label="Site status counts"
     >
       {STATUS_ORDER.map((status) => (
@@ -494,10 +494,10 @@ function MapControls({ onZoomIn, onZoomOut, onReset }: { onZoomIn: () => void; o
 function MapFallback({ sites, siteCounts, serverTotal }: { sites: NocMapSite[]; siteCounts: Record<NocMapStatus, number>; serverTotal: number }) {
   return (
     <div className="absolute inset-0 z-[520] overflow-y-auto bg-muted/90 p-4" role="status" aria-label="Map tiles unavailable; location list fallback">
-      <p className="mb-3 text-[12px] font-semibold text-foreground">Map tiles unavailable</p>
+      <p className="mb-3 text-[0.75rem] font-semibold text-foreground">Map tiles unavailable</p>
       <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
         {sites.map((site) => (
-          <li key={site.id} className="flex min-w-0 items-center justify-between gap-2 rounded-md bg-card px-2.5 py-1.5 text-[12px] shadow-sm">
+          <li key={site.id} className="flex min-w-0 items-center justify-between gap-2 rounded-md bg-card px-2.5 py-1.5 text-[0.75rem] shadow-sm">
             <span className="flex min-w-0 items-center gap-2 truncate">
               <i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: NOC_MAP_STATUS_COLOR[site.status] }} />
               {site.code} · {site.city}
@@ -506,7 +506,7 @@ function MapFallback({ sites, siteCounts, serverTotal }: { sites: NocMapSite[]; 
           </li>
         ))}
       </ul>
-      <p className="mt-3 text-[12px] text-muted-foreground">
+      <p className="mt-3 text-[0.75rem] text-muted-foreground">
         {siteCounts.online} Healthy · {siteCounts.warning} Degraded · {siteCounts.critical} Offline{serverTotal > 0 ? ` · ${serverTotal} servers` : ""}
       </p>
     </div>
@@ -671,7 +671,7 @@ export function NocOsmMap({
               eventHandlers={{ click: () => zoomIntoCluster(cluster) }}
             >
               <Tooltip direction="top" offset={[0, -17]} opacity={1}>
-                <div className="text-[12px] leading-snug">
+                <div className="text-[0.75rem] leading-snug">
                   <b>{cluster.sites.length} locations</b>
                   <br />
                   <span className="text-muted-foreground">{cluster.servers.length} servers · {NOC_MAP_STATUS_LABEL[cluster.status]}</span>
@@ -691,7 +691,7 @@ export function NocOsmMap({
                 eventHandlers={{ click: () => onSelectSite?.(site) }}
               >
                 <Tooltip direction="top" offset={[0, -15]} opacity={1}>
-                  <div className="text-[12px] leading-snug">
+                  <div className="text-[0.75rem] leading-snug">
                     <b>{site.code} · {site.city}</b>
                     <br />
                     <span className="text-muted-foreground">
@@ -720,7 +720,7 @@ export function NocOsmMap({
                     zIndexOffset={400}
                   >
                     <Tooltip direction="top" offset={[0, -6]} opacity={1}>
-                      <div className="text-[12px] leading-snug">
+                      <div className="text-[0.75rem] leading-snug">
                         <b>{server.hostname}</b>
                         <br />
                         <span className="text-muted-foreground">{server.role} · {NOC_MAP_STATUS_LABEL[server.status]}</span>
@@ -760,10 +760,10 @@ export function NocOsmMap({
         <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-4">
           <div className="flex min-w-0 items-center gap-3">
             <div className="min-w-0">
-              <b className="block truncate font-display text-[13px] font-bold text-foreground">Infrastructure Map</b>
-              <p className="truncate text-[12px] text-muted-foreground">Global data center and server locations</p>
+              <b className="block truncate font-display text-[0.8125rem] font-bold text-foreground">Infrastructure Map</b>
+              <p className="truncate text-[0.75rem] text-muted-foreground">Global data center and server locations</p>
             </div>
-            <span className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-0.5 text-[12px] font-medium text-foreground">
+            <span className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-0.5 text-[0.75rem] font-medium text-foreground">
               {sites.length} sites{serverTotal > 0 ? ` · ${serverTotal} servers` : ""}
             </span>
           </div>

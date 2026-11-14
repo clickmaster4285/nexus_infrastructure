@@ -28,9 +28,9 @@ function trendNode(delta: number, label: string) {
 }
 
 const ACTIVE_BORDER = "border-primary ring-1 ring-primary";
-const MUTED_HINT = "inline-block text-[12px] font-normal text-muted-foreground";
+const MUTED_HINT = "inline-block text-[0.75rem] font-normal text-muted-foreground";
 
-/** Six KPI cards, MW density: 88px, icon left, label / value / hint stacked. */
+/** Six KPI cards, MW density: 5.5rem, icon left, label / value / hint stacked. */
 export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) {
   const successRate = stats.successRate7d;
   const failedHint = `${stats.tabCounts.failed} task${stats.tabCounts.failed === 1 ? "" : "s"} · ${stats.failed24h} run${stats.failed24h === 1 ? "" : "s"}`;
@@ -71,7 +71,7 @@ export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) 
     },
     {
       key: "failed", label: "Failed (24h)", value: String(stats.failed24h), icon: XCircle,
-      tone: "bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]",
+      tone: "bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]",
       trend: trendNode(stats.failedDelta, failedHint),
       trendClassName: stats.failedDelta <= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400",
       goodDirection: "down", clickLabel: "Filter table to tasks whose last run failed",
@@ -103,7 +103,7 @@ export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) 
             goodDirection={card.goodDirection}
             valueAside={card.aside}
             detail={card.trend == null && card.hint ? <span className={MUTED_HINT}>{card.hint}</span> : undefined}
-            className={cn("h-full min-h-[88px] p-3", isActive && ACTIVE_BORDER)}
+            className={cn("h-full min-h-[5.5rem] p-3", isActive && ACTIVE_BORDER)}
             labelClassName="text-xs font-medium text-muted-foreground"
             valueClassName="text-2xl font-semibold"
             onClick={() => onKpiClick(card.key)}

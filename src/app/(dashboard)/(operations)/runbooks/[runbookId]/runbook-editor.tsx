@@ -128,9 +128,9 @@ function StepEditor({ step, index, total, onChange, onMove, onDuplicate, onDelet
   const meta = RUNBOOK_STEP_TYPE_META[step.type];
   const needsCommand = step.type === "Command" || step.type === "Automated";
   return (
-    <li className={cn("rounded-xl border p-3", commandError ? "border-[#DC2626]/60" : "border-border bg-card")}>
+    <li className={cn("rounded-xl border p-3", commandError ? "border-red-600/60" : "border-border bg-card")}>
       <div className="flex flex-wrap items-center gap-1.5">
-        <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[12px] font-bold tabular-nums text-muted-foreground">{index + 1}</span>
+        <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[0.75rem] font-bold tabular-nums text-muted-foreground">{index + 1}</span>
         <select aria-label={`Step ${index + 1} type`} value={step.type} onChange={(event) => onChange(step.id, { type: event.target.value as RunbookStepType })} className="h-9 rounded-lg border border-border bg-card px-2 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           {RUNBOOK_STEP_TYPES.map((option) => <option key={option} value={option}>{RUNBOOK_STEP_TYPE_META[option].label}</option>)}
         </select>
@@ -139,7 +139,7 @@ function StepEditor({ step, index, total, onChange, onMove, onDuplicate, onDelet
           <button type="button" aria-label="Move step up" disabled={index === 0} onClick={() => onMove(step.id, -1)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowUp size={14} aria-hidden /></button>
           <button type="button" aria-label="Move step down" disabled={index === total - 1} onClick={() => onMove(step.id, 1)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowDown size={14} aria-hidden /></button>
           <button type="button" aria-label="Duplicate step" onClick={() => onDuplicate(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={14} aria-hidden /></button>
-          <button type="button" aria-label="Delete step" onClick={() => onDelete(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-[#DC2626] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
+          <button type="button" aria-label="Delete step" onClick={() => onDelete(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
           <button type="button" aria-label={collapsed ? "Expand step" : "Collapse step"} aria-expanded={!collapsed} onClick={() => onToggleCollapse(step.id)} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{collapsed ? <ChevronDown size={14} aria-hidden /> : <ChevronUp size={14} aria-hidden />}</button>
         </div>
       </div>
@@ -148,11 +148,11 @@ function StepEditor({ step, index, total, onChange, onMove, onDuplicate, onDelet
           <textarea value={step.description} onChange={(event) => onChange(step.id, { description: event.target.value })} rows={2} placeholder="What the operator does, and why" aria-label={`Step ${index + 1} description`} className="w-full rounded-lg border border-border bg-card p-2 text-xs leading-snug text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
           {needsCommand && (
             <div>
-              <textarea value={step.command} onChange={(event) => onChange(step.id, { command: event.target.value })} rows={2} placeholder="command --flag value" aria-label={`Step ${index + 1} command`} className={cn("w-full rounded-lg border bg-[#0F172A] p-2 font-mono text-[12px] leading-relaxed text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", commandError ? "border-[#DC2626]" : "border-border")} />
-              {commandError && <p role="alert" className="mt-1 flex items-center gap-1 text-[11px] font-semibold text-[#DC2626]"><CircleAlert size={11} aria-hidden />{commandError}</p>}
+              <textarea value={step.command} onChange={(event) => onChange(step.id, { command: event.target.value })} rows={2} placeholder="command --flag value" aria-label={`Step ${index + 1} command`} className={cn("w-full rounded-lg border bg-slate-900 p-2 font-mono text-[0.75rem] leading-relaxed text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", commandError ? "border-red-600" : "border-border")} />
+              {commandError && <p role="alert" className="mt-1 flex items-center gap-1 text-[0.6875rem] font-semibold text-red-600"><CircleAlert size={11} aria-hidden />{commandError}</p>}
             </div>
           )}
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_110px]">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_6.875rem]">
             <input value={step.expectedOutput} onChange={(event) => onChange(step.id, { expectedOutput: event.target.value })} placeholder="Expected output (optional)" aria-label={`Step ${index + 1} expected output`} className="h-9 rounded-lg border border-border bg-card px-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
             <label className="flex h-9 items-center gap-1.5 rounded-lg border border-border px-2 text-xs text-muted-foreground">Est.
               <input type="number" min={1} max={240} value={step.estimatedMinutes} onChange={(event) => onChange(step.id, { estimatedMinutes: Math.max(1, Number(event.target.value) || 1) })} aria-label={`Step ${index + 1} estimated minutes`} className="h-7 w-14 rounded border border-border bg-card px-1.5 text-right text-xs tabular-nums text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />min
@@ -350,7 +350,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
 
   if (mode === "edit" && !existing) {
     return (
-      <div className="mx-auto grid min-h-[320px] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
+      <div className="mx-auto grid min-h-[20rem] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
         <div>
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
@@ -373,7 +373,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           <StepEditor key={step.id} step={step} index={index} total={list.length} onChange={updateStep(listKey)} onMove={moveStep(listKey)} onDuplicate={duplicateStep(listKey)} onDelete={deleteStep(listKey)} collapsed={Boolean(collapsed[step.id])} onToggleCollapse={(id) => setCollapsed((current) => ({ ...current, [id]: !current[id] }))} commandError={commandErrors[step.id] ?? null} />
         ))}
       </ol>
-      {listKey === "steps" && stepError && <p role="alert" className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-[#DC2626]"><CircleAlert size={11} aria-hidden />{stepError}</p>}
+      {listKey === "steps" && stepError && <p role="alert" className="mt-2 flex items-center gap-1 text-[0.6875rem] font-semibold text-red-600"><CircleAlert size={11} aria-hidden />{stepError}</p>}
     </section>
   );
 
@@ -398,14 +398,14 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
         <div className="min-w-0 space-y-4 xl:col-span-8">
           {/* 1. Basics */}
           <section aria-label="1. Basics" className="rounded-xl border border-border bg-card p-4">
-            <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[11px] tabular-nums">1</span>Basics</h2>
+            <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[0.6875rem] tabular-nums">1</span>Basics</h2>
             <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label htmlFor="rb-title" className="text-xs font-semibold text-muted-foreground">Title <span aria-hidden="true" className="text-[#DC2626]">*</span></label>
-                <input id="rb-title" value={title} maxLength={MAX_TITLE} onChange={(event) => setTitle(event.target.value)} aria-invalid={titleError ? true : undefined} aria-describedby={titleError ? "rb-title-error" : undefined} className={cn("mt-1 h-10 w-full rounded-lg border bg-card px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", titleError ? "border-[#DC2626]" : "border-border")} placeholder="e.g. Database connection lost" />
+                <label htmlFor="rb-title" className="text-xs font-semibold text-muted-foreground">Title <span aria-hidden="true" className="text-red-600">*</span></label>
+                <input id="rb-title" value={title} maxLength={MAX_TITLE} onChange={(event) => setTitle(event.target.value)} aria-invalid={titleError ? true : undefined} aria-describedby={titleError ? "rb-title-error" : undefined} className={cn("mt-1 h-10 w-full rounded-lg border bg-card px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", titleError ? "border-red-600" : "border-border")} placeholder="e.g. Database connection lost" />
                 <div className="mt-0.5 flex items-center justify-between gap-2">
-                  {titleError ? <p id="rb-title-error" role="alert" className="text-[11px] font-semibold text-[#DC2626]">{titleError}</p> : <span />}
-                  <span className="text-[11px] tabular-nums text-muted-foreground">{title.length}/{MAX_TITLE}</span>
+                  {titleError ? <p id="rb-title-error" role="alert" className="text-[0.6875rem] font-semibold text-red-600">{titleError}</p> : <span />}
+                  <span className="text-[0.6875rem] tabular-nums text-muted-foreground">{title.length}/{MAX_TITLE}</span>
                 </div>
               </div>
               <div className="sm:col-span-2">
@@ -441,8 +441,8 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
 
           {/* 2. Link */}
           <section aria-label="2. Link" className="rounded-xl border border-border bg-card p-4">
-            <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[11px] tabular-nums">2</span>Link</h2>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">{linkedRuleIds.length} alert rule{linkedRuleIds.length === 1 ? "" : "s"} linked · {services.length} service{services.length === 1 ? "" : "s"}</p>
+            <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[0.6875rem] tabular-nums">2</span>Link</h2>
+            <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{linkedRuleIds.length} alert rule{linkedRuleIds.length === 1 ? "" : "s"} linked · {services.length} service{services.length === 1 ? "" : "s"}</p>
             <div className="mt-2 grid grid-cols-1 gap-3 lg:grid-cols-2">
               {/* Alert rules multi-select */}
               <div className="min-w-0">
@@ -454,14 +454,14 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                     return (
                       <label key={rule.id} className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1.5 text-xs transition-colors hover:bg-accent">
                         <input type="checkbox" checked={checked} onChange={() => setLinkedRuleIds((current) => (checked ? current.filter((id) => id !== rule.id) : [...current, rule.id]))} className="h-4 w-4 shrink-0 accent-[#2563EB]" />
-                        <span className="w-16 shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground">{rule.id}</span>
+                        <span className="w-16 shrink-0 font-mono text-[0.6875rem] tabular-nums text-muted-foreground">{rule.id}</span>
                         <span className="min-w-0 truncate text-foreground/90" title={rule.name}>{rule.name}</span>
                       </label>
                     );
                   })}
-                  {filteredRules.length === 0 && <p className="px-1.5 py-2 text-[11px] text-muted-foreground">No rules match “{ruleSearch}”.</p>}
+                  {filteredRules.length === 0 && <p className="px-1.5 py-2 text-[0.6875rem] text-muted-foreground">No rules match “{ruleSearch}”.</p>}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-1">{linkedRuleIds.map((ruleId) => <button key={ruleId} type="button" onClick={() => setLinkedRuleIds((current) => current.filter((id) => id !== ruleId))} aria-label={`Unlink ${ruleId}`} className="inline-flex h-6 items-center gap-1 rounded bg-primary/10 px-1.5 text-[11px] font-semibold tabular-nums text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<X size={10} aria-hidden /></button>)}</div>
+                <div className="mt-1 flex flex-wrap gap-1">{linkedRuleIds.map((ruleId) => <button key={ruleId} type="button" onClick={() => setLinkedRuleIds((current) => current.filter((id) => id !== ruleId))} aria-label={`Unlink ${ruleId}`} className="inline-flex h-6 items-center gap-1 rounded bg-primary/10 px-1.5 text-[0.6875rem] font-semibold tabular-nums text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<X size={10} aria-hidden /></button>)}</div>
               </div>
               {/* Services multi-select */}
               <div className="min-w-0">
@@ -471,23 +471,23 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                   {filteredHosts.map((host) => {
                     const checked = services.includes(host);
                     return (
-                      <label key={host} className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1.5 font-mono text-[11px] transition-colors hover:bg-accent">
+                      <label key={host} className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1.5 font-mono text-[0.6875rem] transition-colors hover:bg-accent">
                         <input type="checkbox" checked={checked} onChange={() => setServices((current) => (checked ? current.filter((name) => name !== host) : [...current, host]))} className="h-4 w-4 shrink-0 accent-[#2563EB]" />
                         <span className="min-w-0 truncate text-foreground/90">{host}</span>
                       </label>
                     );
                   })}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-1">{services.map((service) => <button key={service} type="button" onClick={() => setServices((current) => current.filter((name) => name !== service))} aria-label={`Remove ${service}`} className="inline-flex h-6 items-center gap-1 rounded bg-muted px-1.5 font-mono text-[11px] text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}<X size={10} aria-hidden /></button>)}</div>
+                <div className="mt-1 flex flex-wrap gap-1">{services.map((service) => <button key={service} type="button" onClick={() => setServices((current) => current.filter((name) => name !== service))} aria-label={`Remove ${service}`} className="inline-flex h-6 items-center gap-1 rounded bg-muted px-1.5 font-mono text-[0.6875rem] text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}<X size={10} aria-hidden /></button>)}</div>
               </div>
             </div>
-            {criticalError && <p role="alert" className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-[#DC2626]"><CircleAlert size={11} aria-hidden />{criticalError}</p>}
+            {criticalError && <p role="alert" className="mt-2 flex items-center gap-1 text-[0.6875rem] font-semibold text-red-600"><CircleAlert size={11} aria-hidden />{criticalError}</p>}
           </section>
 
           {/* 3. Prerequisites */}
           <section aria-label="3. Prerequisites" className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between gap-2">
-              <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[11px] tabular-nums">3</span>Prerequisites</h2>
+              <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[0.6875rem] tabular-nums">3</span>Prerequisites</h2>
               <Button variant="outline" className="h-8 gap-1 rounded-lg px-2.5 text-xs" onClick={() => setPrerequisites((current) => [...current, ""])}><ListPlus size={13} aria-hidden />Add</Button>
             </div>
             <ul className="mt-2 space-y-1.5">
@@ -495,7 +495,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                 <li key={index} className="flex items-center gap-2">
                   <CircleCheck size={14} aria-hidden className="shrink-0 text-muted-foreground" />
                   <input value={item} onChange={(event) => setPrerequisites((current) => current.map((entry, entryIndex) => (entryIndex === index ? event.target.value : entry)))} placeholder={`Prerequisite ${index + 1}, e.g. SSH access to the host`} aria-label={`Prerequisite ${index + 1}`} className="h-9 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                  <button type="button" aria-label={`Remove prerequisite ${index + 1}`} onClick={() => setPrerequisites((current) => (current.length > 1 ? current.filter((_, entryIndex) => entryIndex !== index) : [""]))} className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-[#DC2626] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
+                  <button type="button" aria-label={`Remove prerequisite ${index + 1}`} onClick={() => setPrerequisites((current) => (current.length > 1 ? current.filter((_, entryIndex) => entryIndex !== index) : [""]))} className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10"><Trash2 size={14} aria-hidden /></button>
                 </li>
               ))}
             </ul>
@@ -515,18 +515,18 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           <section aria-label="Live preview" className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-sm font-bold text-foreground">Live preview</h2>
-              <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[11px] font-semibold text-muted-foreground">{mode === "edit" ? `v${existing?.version ?? 1} → v${publishVersion}` : "v1 preview"}</span>
+              <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{mode === "edit" ? `v${existing?.version ?? 1} → v${publishVersion}` : "v1 preview"}</span>
             </div>
             <div className="mt-2 rounded-lg border border-border bg-muted/30 p-3">
               <div className="flex flex-wrap items-center gap-1.5">
                 <RunbookStatusBadge status={mode === "edit" && existing?.status === "Published" ? "Published" : "Draft"} />
                 <RunbookSeverityBadge severity={severity} />
-                <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[11px] font-semibold text-muted-foreground">{category}</span>
+                <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{category}</span>
               </div>
               <h3 className="mt-1.5 text-sm font-extrabold leading-snug text-foreground">{title.trim() || "Untitled runbook"}</h3>
-              <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-muted-foreground">{summary.trim() || "No summary yet."}</p>
-              <p className="mt-2 text-[11px] tabular-nums text-muted-foreground">{steps.length} steps · {rollbackSteps.length} rollback · {verificationSteps.length} verification · ~{formatMinutes(totalMinutes)}</p>
-              <ol className="mt-1.5 space-y-0.5 text-[11px] text-muted-foreground">{steps.slice(0, 3).map((step, index) => <li key={step.id} className="truncate">{index + 1}. {step.title || "Untitled step"}</li>)}</ol>
+              <p className="mt-0.5 line-clamp-2 text-[0.6875rem] leading-snug text-muted-foreground">{summary.trim() || "No summary yet."}</p>
+              <p className="mt-2 text-[0.6875rem] tabular-nums text-muted-foreground">{steps.length} steps · {rollbackSteps.length} rollback · {verificationSteps.length} verification · ~{formatMinutes(totalMinutes)}</p>
+              <ol className="mt-1.5 space-y-0.5 text-[0.6875rem] text-muted-foreground">{steps.slice(0, 3).map((step, index) => <li key={step.id} className="truncate">{index + 1}. {step.title || "Untitled step"}</li>)}</ol>
             </div>
           </section>
 
@@ -548,7 +548,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           {mode === "new" && (
             <section aria-label="Templates" className="rounded-xl border border-border bg-card p-4">
               <h2 className="text-sm font-bold text-foreground">Templates</h2>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">Start from a proven skeleton; edit every field.</p>
+              <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">Start from a proven skeleton; edit every field.</p>
               <ul className="mt-2 space-y-1.5">
                 {Object.entries(TEMPLATES).map(([key, tpl]) => (
                   <li key={key}>
@@ -556,12 +556,12 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                   </li>
                 ))}
               </ul>
-              <div className="mt-2 flex items-center gap-1.5 border-t border-border pt-2 text-[11px] text-muted-foreground"><ShieldCheck size={12} aria-hidden />Templates never auto-link alert rules — link them in step 2.</div>
+              <div className="mt-2 flex items-center gap-1.5 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><ShieldCheck size={12} aria-hidden />Templates never auto-link alert rules — link them in step 2.</div>
             </section>
           )}
 
           {/* Meta */}
-          <section aria-label="Document meta" className="rounded-xl border border-border bg-card p-4 text-[11px] text-muted-foreground">
+          <section aria-label="Document meta" className="rounded-xl border border-border bg-card p-4 text-[0.6875rem] text-muted-foreground">
             <p className="flex items-center gap-1.5"><InitialsAvatar name={owner} size={16} />Owner {owner} · {team} team</p>
             <p className="mt-1">Estimated {formatMinutes(totalMinutes)} · reviewed every {reviewIntervalDays} days{existing ? ` · last reviewed ${new Date(existing.lastReviewedAt).toLocaleDateString()}` : ""}</p>
           </section>
@@ -570,28 +570,28 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
 
       {/* Publish confirm */}
       <Dialog open={publishDialog} onOpenChange={setPublishDialog}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))] rounded-xl p-5">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Publish v{publishVersion}?</DialogTitle>
-            <DialogDescription className="text-[12px]">“{title.trim() || "Untitled runbook"}” will become visible to every linked alert and appear as the remediation for {linkedRuleIds.length} rule{linkedRuleIds.length === 1 ? "" : "s"}.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">“{title.trim() || "Untitled runbook"}” will become visible to every linked alert and appear as the remediation for {linkedRuleIds.length} rule{linkedRuleIds.length === 1 ? "" : "s"}.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setPublishDialog(false)}>Keep editing</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[13px] font-semibold" onClick={confirmPublish}><Rocket size={13} aria-hidden />Publish v{publishVersion}</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setPublishDialog(false)}>Keep editing</Button>
+            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={confirmPublish}><Rocket size={13} aria-hidden />Publish v{publishVersion}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Discard confirm */}
       <Dialog open={cancelDialog} onOpenChange={setCancelDialog}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))] rounded-xl p-5">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Discard unsaved changes?</DialogTitle>
-            <DialogDescription className="text-[12px]">Your edits to {existing?.id ?? "this new runbook"} will be lost. This cannot be undone.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">Your edits to {existing?.id ?? "this new runbook"} will be lost. This cannot be undone.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setCancelDialog(false)}>Keep editing</Button>
-            <Button className="h-9 gap-1.5 rounded-lg bg-[#DC2626] px-4 text-[13px] font-semibold text-white hover:bg-[#B91C1C]" onClick={() => { setCancelDialog(false); router.push(existing ? `/runbooks/${existing.id}` : "/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setCancelDialog(false)}>Keep editing</Button>
+            <Button className="h-9 gap-1.5 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={() => { setCancelDialog(false); router.push(existing ? `/runbooks/${existing.id}` : "/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

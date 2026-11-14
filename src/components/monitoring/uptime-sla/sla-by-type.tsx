@@ -37,7 +37,7 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
       <ul className="flex flex-col gap-3 pt-1">
         {entries.map((entry) => {
           const status: "met" | "at_risk" | "breached" = entry.uptime >= target ? "met" : entry.uptime >= target - 0.02 ? "at_risk" : "breached";
-          const barColor = status === "met" ? "bg-[#3B82F6]" : status === "at_risk" ? "bg-[#D97706]" : "bg-[#DC2626]";
+          const barColor = status === "met" ? "bg-blue-500" : status === "at_risk" ? "bg-amber-600" : "bg-red-600";
           const badge = STATUS_META[status];
           const delta = Number((entry.uptime - target).toFixed(3));
           const deltaPrefix = delta >= 0 ? "+" : "";
@@ -50,18 +50,18 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
                 onClick={() => onSelectType?.(entry.type)}
                 aria-label={`${entry.type} uptime ${entry.uptime.toFixed(2)}%, ${status === "met" ? "met" : status} against SLA ${target}%. Click to filter Service Uptime table.`}
                 title={`${entry.type} · uptime ${entry.uptime.toFixed(2)}% · downtime ${entry.downtimeMinutes}m · ${entry.incidents} incident${entry.incidents === 1 ? "" : "s"} · ${entry.services} service${entry.services === 1 ? "" : "s"}`}
-                className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-slate-800/60 sm:flex-nowrap sm:py-1"
+                className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-slate-800/60 sm:flex-nowrap sm:py-1"
               >
-                <span className="min-w-[72px] text-[13px] font-medium text-foreground sm:w-[88px]">{entry.type}</span>
+                <span className="min-w-[4.5rem] text-[0.8125rem] font-medium text-foreground sm:w-[5.5rem]">{entry.type}</span>
                 <div className="relative order-5 h-2 w-full min-w-0 sm:order-none sm:w-auto sm:flex-1">
                   <div className="h-2 w-full overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700" aria-hidden="true">
                     <span className={cn("block h-full rounded-full", barColor)} style={{ width: `${toPct(entry.uptime)}%` }} />
                   </div>
-                  <span aria-hidden="true" className="absolute -top-0.5 h-3 w-[2px] -translate-x-1/2 bg-[#111827] dark:bg-slate-100" style={{ left: `${markerPct}%` }} />
+                  <span aria-hidden="true" className="absolute -top-0.5 h-3 w-[0.125rem] -translate-x-1/2 bg-gray-900 dark:bg-slate-100" style={{ left: `${markerPct}%` }} />
                 </div>
-                <b className="w-14 text-right text-[13px] tabular-nums text-foreground sm:w-16">{entry.uptime.toFixed(2)}%</b>
-                <span className={cn("w-14 text-right text-[11px] font-semibold tabular-nums sm:w-16", deltaTone)} title={`${deltaPrefix}${delta.toFixed(3)}% vs target ${target}%`}>{deltaPrefix}{delta.toFixed(2)}%</span>
-                <span className={cn("justify-self-end rounded-full px-1.5 py-0.5 text-[11px] font-semibold", badge.className)}>{badge.label}</span>
+                <b className="w-14 text-right text-[0.8125rem] tabular-nums text-foreground sm:w-16">{entry.uptime.toFixed(2)}%</b>
+                <span className={cn("w-14 text-right text-[0.6875rem] font-semibold tabular-nums sm:w-16", deltaTone)} title={`${deltaPrefix}${delta.toFixed(3)}% vs target ${target}%`}>{deltaPrefix}{delta.toFixed(2)}%</span>
+                <span className={cn("justify-self-end rounded-full px-1.5 py-0.5 text-[0.6875rem] font-semibold", badge.className)}>{badge.label}</span>
               </button>
             </li>
           );
@@ -76,14 +76,14 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
           { label: "Average", value: `${average.toFixed(2)}%` },
         ].map((stat) => (
           <div key={stat.label} className="flex min-w-0 flex-col items-center gap-0.5 px-2">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{stat.label}</span>
-            <b className="truncate text-[13px] tabular-nums text-foreground">{stat.value}</b>
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{stat.label}</span>
+            <b className="truncate text-[0.8125rem] tabular-nums text-foreground">{stat.value}</b>
           </div>
         ))}
       </div>
 
       {/* Footer pinned to bottom */}
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[12px] text-muted-foreground">
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
         <span>Based on last 30 days · {entries.length} service types</span>
         <Link href="/database-monitoring" className="inline-flex shrink-0 items-center gap-1 font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View details <ArrowRight size={12} aria-hidden="true" /></Link>
       </div>

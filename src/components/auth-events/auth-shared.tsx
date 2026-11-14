@@ -97,9 +97,9 @@ export function riskTone(score: number): { bar: string; text: string; stripe: st
   return { bar: "bg-emerald-400", text: "text-emerald-700 dark:text-emerald-400", stripe: "bg-emerald-400" };
 }
 
-/** 3px risk stripe for the left edge of a table row. */
+/** 0.1875rem risk stripe for the left edge of a table row. */
 export function RiskStripe({ score }: { score: number }) {
-  return <span aria-hidden="true" className={cn("absolute inset-y-0 left-0 w-[3px]", riskTone(score).stripe)} />;
+  return <span aria-hidden="true" className={cn("absolute inset-y-0 left-0 w-[0.1875rem]", riskTone(score).stripe)} />;
 }
 
 export function RiskScoreBar({ score, className }: { score: number; className?: string }) {

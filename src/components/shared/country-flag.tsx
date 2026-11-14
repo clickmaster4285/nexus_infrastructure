@@ -20,7 +20,7 @@ export function CountryFlag({ code, name, className }: CountryFlagProps) {
       <span
         role="img"
         aria-label={`${name} flag unavailable`}
-        className={cn("grid h-[18px] w-6 shrink-0 place-items-center rounded-[3px] bg-muted text-[9px] font-semibold text-muted-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.08)]", className)}
+        className={cn("grid h-[1.125rem] w-6 shrink-0 place-items-center rounded-[0.1875rem] bg-muted text-[0.5625rem] font-semibold text-muted-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.08)]", className)}
       >
         {normalized.slice(0, 2)}
       </span>
@@ -31,7 +31,7 @@ export function CountryFlag({ code, name, className }: CountryFlagProps) {
     <Flag
       title={`${name} flag`}
       aria-label={`${name} flag`}
-      className={cn("h-[18px] w-6 shrink-0 rounded-[3px] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]", className)}
+      className={cn("h-[1.125rem] w-6 shrink-0 rounded-[0.1875rem] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]", className)}
     />
   );
 }

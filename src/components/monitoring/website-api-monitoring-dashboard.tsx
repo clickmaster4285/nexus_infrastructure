@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((module) => module.NocOsmMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[220px] animate-pulse place-items-center rounded-lg bg-slate-100 text-[12px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">Loading map…</div> },
+  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] animate-pulse place-items-center rounded-lg bg-slate-100 text-[0.75rem] text-slate-500 dark:bg-slate-800 dark:text-slate-400">Loading map…</div> },
 );
 
 echarts.use([
@@ -573,9 +573,9 @@ function useChartTheme(): ChartTheme {
 
 function tooltipCard(theme: ChartTheme, title: string, rows: { name: string; value: string; color: string }[]) {
   const body = rows
-    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px;line-height:19px"><span style="display:flex;align-items:center;gap:6px;color:${theme.mutedForeground}"><i style="width:8px;height:8px;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
+    .map((row) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1.25rem;line-height:1.1875rem"><span style="display:flex;align-items:center;gap:0.375rem;color:${theme.mutedForeground}"><i style="width:0.5rem;height:0.5rem;border-radius:50%;background:${row.color};display:inline-block"></i>${row.name}</span><b style="font-variant-numeric:tabular-nums;color:${theme.foreground}">${row.value}</b></div>`)
     .join("");
-  return `<div style="min-width:176px;border-radius:8px;border:1px solid ${theme.border};background:${theme.popover};box-shadow:0 8px 24px rgba(16,32,58,0.16);padding:8px 12px;font-size:12px;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:6px">${title}</div>${body}</div>`;
+  return `<div style="min-width:11rem;border-radius:0.5rem;border:0.0625rem solid ${theme.border};background:${theme.popover};box-shadow:0 0.5rem 1.5rem rgba(16,32,58,0.16);padding:0.5rem 0.75rem;font-size:0.75rem;color:${theme.popoverForeground}"><div style="font-weight:600;margin-bottom:0.375rem">${title}</div>${body}</div>`;
 }
 
 /** ECharts wrapper - initialises only once the container has a real size. */
@@ -627,7 +627,7 @@ const statusStyles: Record<MonitorStatus, { icon: LucideIcon; className: string 
 function StatusBadge({ status }: { status: MonitorStatus }) {
   const { icon: Icon, className } = statusStyles[status];
   return (
-    <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", className)}>
+    <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", className)}>
       <Icon size={11} aria-hidden="true" />
       {status}
     </span>
@@ -643,7 +643,7 @@ const methodStyles: Record<MonitorMethod, string> = {
 
 function MethodBadge({ method }: { method: MonitorMethod }) {
   return (
-    <span className={cn("inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-semibold uppercase", methodStyles[method])}>
+    <span className={cn("inline-flex items-center rounded px-1.5 py-0.5 text-[0.75rem] font-semibold uppercase", methodStyles[method])}>
       {method}
     </span>
   );
@@ -671,7 +671,7 @@ function Sparkline({ values, down = false }: { values: number[]; down?: boolean 
   });
   const color = down ? PALETTE.red : PALETTE.green;
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-5 w-[60px]" role="img" aria-label="Recent trend">
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-5 w-[3.75rem]" role="img" aria-label="Recent trend">
       <polyline points={points.join(" ")} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   );
@@ -689,7 +689,7 @@ function HealthGauge({ label, value }: { label: string; value: number }) {
           <circle cx="40" cy="40" r={radius} fill="none" stroke="var(--muted)" strokeWidth="7" />
           <circle cx="40" cy="40" r={radius} fill="none" stroke={color} strokeWidth="7" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - value / 100)} />
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center font-display text-[13px] font-extrabold text-foreground">{value}%</div>
+        <div className="absolute inset-0 flex items-center justify-center font-display text-[0.8125rem] font-extrabold text-foreground">{value}%</div>
       </div>
       <span className="truncate text-sm font-medium text-foreground">{label}</span>
     </div>
@@ -715,9 +715,9 @@ function SummaryTile({ label, value, trend, change, good }: SummaryTileConfig) {
   const improving = change === good;
   return (
     <div className="rounded-lg bg-[#F8F9FB] px-3 py-2 dark:bg-[#1c2b40]">
-      <p className="text-[12px] text-muted-foreground">{label}</p>
-      <p className="font-display text-[16px] font-bold leading-tight text-foreground">{value}</p>
-      <p className={cn("mt-0.5 flex items-center gap-0.5 text-[12px]", improving ? "text-emerald-600" : "text-rose-600")}>
+      <p className="text-[0.75rem] text-muted-foreground">{label}</p>
+      <p className="font-display text-[1rem] font-bold leading-tight text-foreground">{value}</p>
+      <p className={cn("mt-0.5 flex items-center gap-0.5 text-[0.75rem]", improving ? "text-emerald-600" : "text-rose-600")}>
         {change === "up" ? <ArrowUp size={12} aria-hidden="true" /> : <ArrowDown size={12} aria-hidden="true" />}
         {trend}
       </p>
@@ -775,7 +775,7 @@ function ResponseDistributionChart({ theme }: { theme: ChartTheme }) {
   }), [theme]);
 
   return (
-    <div className="relative min-h-[220px] min-w-0 flex-1">
+    <div className="relative min-h-[13.75rem] min-w-0 flex-1">
       <EChart option={option} className="absolute inset-0" />
     </div>
   );
@@ -940,7 +940,7 @@ function PerformanceChart({ theme, hidden, onToggle }: {
               aria-pressed={enabled}
               title={enabled ? `Hide ${chip.name}` : `Show ${chip.name}`}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-medium transition-colors",
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.75rem] font-medium transition-colors",
                 enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through",
               )}
             >
@@ -951,7 +951,7 @@ function PerformanceChart({ theme, hidden, onToggle }: {
         })}
       </div>
 
-      <div className="relative min-h-[260px] min-w-0 flex-1">
+      <div className="relative min-h-[16.25rem] min-w-0 flex-1">
         <EChart option={option} className="absolute inset-0" />
       </div>
 
@@ -971,7 +971,7 @@ type IncidentFilter = "All" | IncidentStatus;
 function IncidentStatusBadge({ incident, acknowledged }: { incident: Incident; acknowledged: boolean }) {
   if (acknowledged) {
     return (
-      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-slate-100 px-2 py-0.5 text-[12px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-slate-100 px-2 py-0.5 text-[0.75rem] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
         <CheckCircle2 size={11} aria-hidden="true" />Acknowledged
       </span>
     );
@@ -981,7 +981,7 @@ function IncidentStatusBadge({ incident, acknowledged }: { incident: Incident; a
     ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
     : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300";
   return (
-    <span className={cn("inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", className)}>
+    <span className={cn("inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", className)}>
       <Icon size={11} aria-hidden="true" />
       {incident.status}
     </span>
@@ -992,7 +992,7 @@ function IncidentStatusBadge({ incident, acknowledged }: { incident: Incident; a
 function SeverityDot({ severity }: { severity: IncidentSeverity }) {
   const color = severity === "Critical" ? PALETTE.red : PALETTE.amber;
   return (
-    <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[12px] text-muted-foreground">
+    <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[0.75rem] text-muted-foreground">
       <i aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
       {severity}
     </span>
@@ -1018,7 +1018,7 @@ function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
               type="button"
               onClick={() => setFilter(item)}
               aria-pressed={filter === item}
-              className={cn("rounded px-2 py-1 text-[12px] font-semibold transition-colors", filter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+              className={cn("rounded px-2 py-1 text-[0.75rem] font-semibold transition-colors", filter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
             >
               {item}
             </button>
@@ -1033,27 +1033,27 @@ function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
           return (
             <div key={incident.id} className="flex shrink-0 flex-col gap-1.5 rounded-lg border border-border bg-card p-2.5">
               <div className="flex items-center justify-between gap-2">
-                <p className="truncate text-[12px] font-semibold text-foreground">{incident.endpoint}</p>
+                <p className="truncate text-[0.75rem] font-semibold text-foreground">{incident.endpoint}</p>
                 <IncidentStatusBadge incident={incident} acknowledged={isAcknowledged} />
               </div>
-              <p className="text-[12px] text-muted-foreground">
+              <p className="text-[0.75rem] text-muted-foreground">
                 {incident.status === "Down" ? "Down" : "Degraded"} since {formatSince(incident.startedAt)} &middot; {duration}
               </p>
               <div className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+                <span className="flex items-center gap-1.5 text-[0.75rem] text-muted-foreground">
                   <Globe size={11} aria-hidden="true" />
                   {incident.region}
                 </span>
                 <SeverityDot severity={incident.severity} />
               </div>
               <div className="flex items-center gap-1.5 pt-0.5">
-                <Button size="sm" onClick={() => onView(incident)} className="h-[30px] gap-1 px-2.5 text-[12px]">View</Button>
+                <Button size="sm" onClick={() => onView(incident)} className="h-[1.875rem] gap-1 px-2.5 text-[0.75rem]">View</Button>
                 <Button
                   size="sm"
                   variant="outline"
                   disabled={isAcknowledged}
                   onClick={() => onAcknowledge(incident.id)}
-                  className="h-[30px] gap-1 px-2.5 text-[12px]"
+                  className="h-[1.875rem] gap-1 px-2.5 text-[0.75rem]"
                 >
                   {isAcknowledged ? "Acknowledged" : "Acknowledge"}
                 </Button>
@@ -1062,17 +1062,17 @@ function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
           );
         })}
         {visible.length === 0 && (
-          <div className="flex min-h-16 flex-col items-center justify-center gap-1 text-[12px] text-muted-foreground">
+          <div className="flex min-h-16 flex-col items-center justify-center gap-1 text-[0.75rem] text-muted-foreground">
             <ShieldCheck size={16} aria-hidden="true" />
             No {filter === "All" ? "" : filter.toLowerCase()} incidents
           </div>
         )}
 
         <div className="mt-1 shrink-0 border-t border-border pt-2">
-          <p className="mb-1 text-[12px] font-semibold text-foreground">Recently Resolved</p>
+          <p className="mb-1 text-[0.75rem] font-semibold text-foreground">Recently Resolved</p>
           <div className="flex flex-col gap-0.5">
             {resolvedIncidents.map((item) => (
-              <div key={item.id} className="flex h-8 items-center justify-between gap-2 text-[12px] text-muted-foreground">
+              <div key={item.id} className="flex h-8 items-center justify-between gap-2 text-[0.75rem] text-muted-foreground">
                 <span className="flex min-w-0 items-center gap-1.5">
                   <CheckCircle2 size={12} className="shrink-0 text-emerald-600" aria-hidden="true" />
                   <span className="truncate">{item.endpoint}</span>
@@ -1084,7 +1084,7 @@ function ActiveIncidentsCard({ now, acknowledged, onAcknowledge, onView }: {
         </div>
       </div>
 
-      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border pt-2 text-[12px]">
+      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border pt-2 text-[0.75rem]">
         <span className="text-muted-foreground">MTTR <b className="text-foreground">{mttrMinutes}m</b></span>
         <span className="text-muted-foreground">Resolved today <b className="text-foreground">{resolvedIncidents.length}</b></span>
         <span className="text-muted-foreground">Open <b className="text-foreground">{openIncidents.length}</b></span>
@@ -1193,11 +1193,11 @@ export function WebsiteApiMonitoringDashboard() {
 
   const allHealthy = issueCount === 0;
   const statusBadge = allHealthy ? (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[0.75rem] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
       <ShieldCheck size={12} aria-hidden="true" />All Systems Operational
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-[12px] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-[0.75rem] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
       <XCircle size={12} aria-hidden="true" />{issueCount} Incident{issueCount === 1 ? "" : "s"} Active
     </span>
   );
@@ -1226,7 +1226,7 @@ export function WebsiteApiMonitoringDashboard() {
             type="button"
             onClick={() => { setRange(item); setPage(1); }}
             aria-pressed={range === item}
-            className={cn("rounded px-1.5 py-1 text-[12px] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+            className={cn("rounded px-1.5 py-1 text-[0.75rem] font-semibold transition-colors", range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
           >
             {item}
           </button>
@@ -1237,11 +1237,11 @@ export function WebsiteApiMonitoringDashboard() {
           <MoreVertical size={15} />
         </summary>
         <div className="absolute right-0 top-8 z-30 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg">
-          <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button>
-          <button onClick={() => notify("Chart image export is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button>
-          <button onClick={() => notify("Fullscreen is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button>
+          <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button>
+          <button onClick={() => notify("Chart image export is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button>
+          <button onClick={() => notify("Fullscreen is a demo action.")} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button>
           <div className="my-1 border-t border-border" />
-          <button onClick={() => { setStatus("error"); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><TriangleAlert size={14} />Simulate error</button>
+          <button onClick={() => { setStatus("error"); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><TriangleAlert size={14} />Simulate error</button>
         </div>
       </details>
     </div>
@@ -1268,19 +1268,19 @@ export function WebsiteApiMonitoringDashboard() {
         onRefresh={refresh}
         actions={
           <div className="flex shrink-0 items-center gap-2">
-            <Button onClick={() => notify("Add Monitor is a mockup action.")} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Plus size={16} />Add Monitor</Button>
-            <Button variant="outline" onClick={exportCsv} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Download size={16} />Export Report</Button>
+            <Button onClick={() => notify("Add Monitor is a mockup action.")} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Add Monitor</Button>
+            <Button variant="outline" onClick={exportCsv} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Download size={16} />Export Report</Button>
           </div>
         }
       />
 
       {openIncidents.length > 0 && (
-        <div role="alert" className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-rose-200 bg-rose-50 px-4 py-2 dark:border-rose-900/60 dark:bg-rose-950/40">
-          <p className="min-w-0 truncate text-[12px] font-medium text-rose-800 dark:text-rose-200">
+        <div role="alert" className="flex min-h-11 items-center justify-between gap-3 rounded-[0.625rem] border border-rose-200 bg-rose-50 px-4 py-2 dark:border-rose-900/60 dark:bg-rose-950/40">
+          <p className="min-w-0 truncate text-[0.75rem] font-medium text-rose-800 dark:text-rose-200">
             <b className="font-semibold">{openIncidents.length} active incident{openIncidents.length === 1 ? "" : "s"}:</b>{" "}
             {incidentSummary}
           </p>
-          <Button size="sm" onClick={() => { setStatusFilter("All"); setKindFilter("All"); setSearch(""); setPage(1); notify("Showing all incidents."); }} className="h-8 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-3 text-[12px]">
+          <Button size="sm" onClick={() => { setStatusFilter("All"); setKindFilter("All"); setSearch(""); setPage(1); notify("Showing all incidents."); }} className="h-8 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-3 text-[0.75rem]">
             View details
           </Button>
         </div>
@@ -1289,7 +1289,7 @@ export function WebsiteApiMonitoringDashboard() {
       {status === "loading" ? (
         <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
           {summaryCards.map((card) => (
-            <div key={card.label} className="flex h-[108px] items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-card">
+            <div key={card.label} className="flex h-[6.75rem] items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-card">
               <span className="h-11 w-11 shrink-0 animate-pulse rounded-full bg-muted" />
               <div className="flex-1 space-y-2">
                 <span className="block h-3 w-24 animate-pulse rounded bg-muted" />
@@ -1300,32 +1300,32 @@ export function WebsiteApiMonitoringDashboard() {
           ))}
         </div>
       ) : status === "error" ? (
-        <div className="flex min-h-[300px] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-6 text-center shadow-card">
+        <div className="flex min-h-[18.75rem] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-6 text-center shadow-card">
           <span aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-300">
             <TriangleAlert size={22} />
           </span>
-          <p className="text-[16px] font-semibold text-foreground">Could not load monitoring data</p>
-          <p className="max-w-sm text-[12px] text-muted-foreground">Something went wrong while fetching the latest monitor results. Please try again.</p>
-          <Button onClick={refresh} className="h-9 gap-1.5 px-3 text-[12px]"><RefreshCw size={15} />Retry</Button>
+          <p className="text-[1rem] font-semibold text-foreground">Could not load monitoring data</p>
+          <p className="max-w-sm text-[0.75rem] text-muted-foreground">Something went wrong while fetching the latest monitor results. Please try again.</p>
+          <Button onClick={refresh} className="h-9 gap-1.5 px-3 text-[0.75rem]"><RefreshCw size={15} />Retry</Button>
         </div>
       ) : (
         <>
           <section aria-label="Website and API monitoring summary" className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
             {summaryCards.map((item) => (
-              <MetricCard key={item.label} item={item} className="h-[108px] self-stretch" labelClassName="text-[14px]" valueClassName="text-[28px]" trendClassName={item.label === "Issues" ? "text-rose-600" : undefined} />
+              <MetricCard key={item.label} item={item} className="h-[6.75rem] self-stretch" labelClassName="text-[0.875rem]" valueClassName="text-[1.75rem]" trendClassName={item.label === "Issues" ? "text-rose-600" : undefined} />
             ))}
           </section>
 
           <section aria-label="Performance and active incidents" className="grid items-stretch gap-4 xl:grid-cols-[1.72fr_1fr]">
-            <Panel title="Performance Overview" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" showOptions={false} action={rangeControl}>
+            <Panel title="Performance Overview" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" showOptions={false} action={rangeControl}>
               {hasData ? (
                 <PerformanceChart theme={theme} hidden={hiddenSeries} onToggle={(key) => setHiddenSeries((current) => current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key])} />
               ) : (
-                <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-2 text-center">
+                <div className="flex min-h-[16.25rem] flex-1 flex-col items-center justify-center gap-2 text-center">
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Globe size={20} /></span>
-                  <p className="text-[14px] font-semibold text-foreground">No data for this range</p>
-                  <p className="text-[12px] text-muted-foreground">Pick a shorter range to see the collected samples.</p>
-                  <Button variant="outline" size="sm" onClick={() => setRange("24H")} className="mt-1 h-8 gap-1.5 px-2.5 text-[12px]">Show last 24H</Button>
+                  <p className="text-[0.875rem] font-semibold text-foreground">No data for this range</p>
+                  <p className="text-[0.75rem] text-muted-foreground">Pick a shorter range to see the collected samples.</p>
+                  <Button variant="outline" size="sm" onClick={() => setRange("24H")} className="mt-1 h-8 gap-1.5 px-2.5 text-[0.75rem]">Show last 24H</Button>
                 </div>
               )}
             </Panel>
@@ -1333,7 +1333,7 @@ export function WebsiteApiMonitoringDashboard() {
             <Panel
               title="Active Incidents"
               className="min-w-0"
-              action={<span className="rounded-full bg-rose-100 px-2 py-0.5 text-[12px] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">{openIncidents.length} open</span>}
+              action={<span className="rounded-full bg-rose-100 px-2 py-0.5 text-[0.75rem] font-semibold text-rose-700 dark:bg-rose-950 dark:text-rose-300">{openIncidents.length} open</span>}
             >
               <ActiveIncidentsCard
                 now={now}
@@ -1345,11 +1345,11 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Monitored endpoints" className="grid items-stretch gap-4">
-            <Panel title="API Endpoints Status" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitored endpoints.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+            <Panel title="API Endpoints Status" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<button onClick={() => notify("Showing all monitored endpoints.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex flex-wrap items-center gap-2 pb-2">
-                <div className="relative min-w-[200px] flex-1">
+                <div className="relative min-w-[12.5rem] flex-1">
                   <Search size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <Input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search endpoints..." aria-label="Search endpoints" className="h-8 pl-9 text-[12px]" />
+                  <Input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search endpoints..." aria-label="Search endpoints" className="h-8 pl-9 text-[0.75rem]" />
                 </div>
                 <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Endpoint type filter">
                   {(["All", "Website", "API"] as const).map((item) => (
@@ -1358,37 +1358,37 @@ export function WebsiteApiMonitoringDashboard() {
                       type="button"
                       onClick={() => { setKindFilter(item); setPage(1); }}
                       aria-pressed={kindFilter === item}
-                      className={cn("rounded px-2 py-1 text-[12px] font-semibold transition-colors", kindFilter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
+                      className={cn("rounded px-2 py-1 text-[0.75rem] font-semibold transition-colors", kindFilter === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}
                     >
                       {item === "API" ? "APIs" : item === "Website" ? "Websites" : "All"}
                     </button>
                   ))}
                 </div>
                 <Select value={statusFilter} onValueChange={(value) => { setStatusFilter(value as "All" | MonitorStatus); setPage(1); }}>
-                  <SelectTrigger aria-label="Filter by status" className="h-8 w-36 text-[12px]"><SelectValue /></SelectTrigger>
+                  <SelectTrigger aria-label="Filter by status" className="h-8 w-36 text-[0.75rem]"><SelectValue /></SelectTrigger>
                   <SelectContent>{(["All", "Healthy", "Degraded", "Down"] as const).map((item) => <SelectItem key={item} value={item}>{item === "All" ? "All statuses" : item}</SelectItem>)}</SelectContent>
                 </Select>
                 {hasFilters && (
                   <div className="flex flex-wrap items-center gap-1.5">
                     {search.trim() && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground">
                         &ldquo;{search.trim()}&rdquo;
                         <button type="button" onClick={() => { setSearch(""); setPage(1); }} aria-label="Clear search filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
                       </span>
                     )}
                     {kindFilter !== "All" && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground">
                         {kindFilter === "API" ? "APIs" : "Websites"}
                         <button type="button" onClick={() => { setKindFilter("All"); setPage(1); }} aria-label="Clear type filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
                       </span>
                     )}
                     {statusFilter !== "All" && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground">
                         {statusFilter}
                         <button type="button" onClick={() => { setStatusFilter("All"); setPage(1); }} aria-label="Clear status filter" className="rounded-full p-0.5 hover:bg-accent hover:text-foreground"><XCircle size={12} /></button>
                       </span>
                     )}
-                    <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[12px] font-medium text-foreground transition-colors hover:bg-accent">
+                    <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent">
                       <XCircle size={12} aria-hidden="true" />Clear filters
                     </button>
                   </div>
@@ -1396,16 +1396,16 @@ export function WebsiteApiMonitoringDashboard() {
               </div>
 
               {filteredMonitors.length === 0 ? (
-                <div className="flex min-h-[220px] flex-1 flex-col items-center justify-center gap-2 text-center">
+                <div className="flex min-h-[13.75rem] flex-1 flex-col items-center justify-center gap-2 text-center">
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Search size={20} /></span>
-                  <p className="text-[14px] font-semibold text-foreground">No monitors match your filters</p>
-                  <p className="text-[12px] text-muted-foreground">Try a different search term or reset the filters.</p>
-                  <Button variant="outline" size="sm" onClick={clearFilters} className="mt-1 h-8 gap-1.5 px-2.5 text-[12px]"><XCircle size={13} />Clear filters</Button>
+                  <p className="text-[0.875rem] font-semibold text-foreground">No monitors match your filters</p>
+                  <p className="text-[0.75rem] text-muted-foreground">Try a different search term or reset the filters.</p>
+                  <Button variant="outline" size="sm" onClick={clearFilters} className="mt-1 h-8 gap-1.5 px-2.5 text-[0.75rem]"><XCircle size={13} />Clear filters</Button>
                 </div>
               ) : (
                 <>
                   <div className="min-h-0 flex-1 overflow-x-auto">
-                    <table className="w-full min-w-[820px] table-fixed text-[12px]">
+                    <table className="w-full min-w-[51.25rem] table-fixed text-[0.75rem]">
                       <colgroup>
                         <col style={{ width: "20%" }} /><col style={{ width: "11%" }} /><col style={{ width: "9%" }} />
                         <col style={{ width: "12%" }} /><col style={{ width: "8%" }} /><col style={{ width: "11%" }} />
@@ -1424,7 +1424,7 @@ export function WebsiteApiMonitoringDashboard() {
                             { label: "Last Check", align: "left" },
                             { label: "Actions", align: "center" },
                           ].map((heading) => (
-                            <th key={heading.label} className={cn("whitespace-nowrap px-1.5 pb-1.5 text-[12px] font-medium", heading.align === "right" && "text-right", heading.align === "center" && "text-center")}>
+                            <th key={heading.label} className={cn("whitespace-nowrap px-1.5 pb-1.5 text-[0.75rem] font-medium", heading.align === "right" && "text-right", heading.align === "center" && "text-center")}>
                               {heading.label}
                             </th>
                           ))}
@@ -1441,7 +1441,7 @@ export function WebsiteApiMonitoringDashboard() {
                                 "h-11 border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50",
                                 monitor.status === "Down" && "bg-rose-50/60 dark:bg-rose-950/25",
                               )}
-                              style={monitor.status === "Down" ? { boxShadow: "inset 3px 0 0 0 #F87171" } : undefined}
+                              style={monitor.status === "Down" ? { boxShadow: "inset 0.1875rem 0 0 0 #F87171" } : undefined}
                             >
                               <td className="whitespace-nowrap px-1.5 text-left">
                                 <span className="flex items-center gap-1.5">
@@ -1461,7 +1461,7 @@ export function WebsiteApiMonitoringDashboard() {
                               <td className="px-1.5 text-center"><Sparkline values={monitor.values} down={monitor.status === "Down"} /></td>
                               <td className="whitespace-nowrap px-1.5 text-left text-muted-foreground">
                                 <span className="block">{monitor.lastCheck}</span>
-                                {incident && <span className="block text-[12px] text-rose-600">Down for {formatDuration(now - incident.startedAt)}</span>}
+                                {incident && <span className="block text-[0.75rem] text-rose-600">Down for {formatDuration(now - incident.startedAt)}</span>}
                               </td>
                               <td className="px-1.5 text-center">
                                 <details className="relative inline-block">
@@ -1469,9 +1469,9 @@ export function WebsiteApiMonitoringDashboard() {
                                     <MoreVertical size={15} />
                                   </summary>
                                   <div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg">
-                                    <button onClick={() => notify(`Check queued for ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Play size={13} />Run check now</button>
-                                    <button onClick={() => notify(`${monitor.endpoint} paused.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Pause size={13} />Pause</button>
-                                    <button onClick={() => notify(`Editing ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[12px] text-foreground hover:bg-accent"><Pencil size={13} />Edit</button>
+                                    <button onClick={() => notify(`Check queued for ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Play size={13} />Run check now</button>
+                                    <button onClick={() => notify(`${monitor.endpoint} paused.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pause size={13} />Pause</button>
+                                    <button onClick={() => notify(`Editing ${monitor.endpoint}.`)} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.75rem] text-foreground hover:bg-accent"><Pencil size={13} />Edit</button>
                                   </div>
                                 </details>
                               </td>
@@ -1482,7 +1482,7 @@ export function WebsiteApiMonitoringDashboard() {
                     </table>
                   </div>
 
-                  <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[12px] text-muted-foreground">
+                  <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
                     <span className="whitespace-nowrap">
                       {hasFilters
                         ? `Showing ${filteredMonitors.length} of ${filteredMonitors.length} result${filteredMonitors.length === 1 ? "" : "s"} (${totalMonitors} monitors total)`
@@ -1522,25 +1522,25 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Service health and availability" className="grid items-stretch gap-4 xl:grid-cols-[1.02fr_0.98fr_1.1fr]">
-            <Panel title="Service Health" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing health details for all services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+            <Panel title="Service Health" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<button onClick={() => notify("Showing health details for all services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col">
                 <div className="grid grid-cols-3 gap-y-5 pt-3">
                   {serviceHealth.map((service) => <HealthGauge key={service.label} label={service.label} value={service.value} />)}
                 </div>
                 <div className="mt-auto">
-                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-border pt-2 text-[12px] text-muted-foreground">
-                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#34D399]" />&ge; 99.5%</span>
-                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#FBBF24]" />99 - 99.5%</span>
-                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-[#F87171]" />&lt; 99%</span>
+                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />&ge; 99.5%</span>
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-amber-400" />99 - 99.5%</span>
+                    <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 rounded-full bg-red-400" />&lt; 99%</span>
                   </div>
-                  <p className="mt-1.5 text-center text-[12px] text-muted-foreground">
+                  <p className="mt-1.5 text-center text-[0.75rem] text-muted-foreground">
                     Healthy <b className="text-foreground">{healthyMonitors}</b> &middot; Issues <b className="text-rose-600">{issueCount}</b>
                   </p>
                 </div>
               </div>
             </Panel>
 
-            <Panel title="Top Monitored Services" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<span className="text-[12px] text-muted-foreground">Scale 95-100%</span>}>
+            <Panel title="Top Monitored Services" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<span className="text-[0.75rem] text-muted-foreground">Scale 95-100%</span>}>
               <div className="flex min-h-0 flex-1 flex-col justify-between gap-0.5 pt-1">
                 {topServices.map((service) => {
                   const color = availabilityTone(service.value);
@@ -1549,10 +1549,10 @@ export function WebsiteApiMonitoringDashboard() {
                     <div
                       key={service.name}
                       title={service.issue}
-                      className="grid h-[28px] grid-cols-[minmax(0,1fr)_minmax(60px,1.4fr)_56px] items-center gap-2 text-[12px]"
+                      className="grid h-[1.75rem] grid-cols-[minmax(0,1fr)_minmax(3.75rem,1.4fr)_3.5rem] items-center gap-2 text-[0.75rem]"
                     >
                       <span className="truncate font-medium text-foreground">{service.name}</span>
-                      <span className="h-[6px] min-w-0 rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${width}%`, backgroundColor: color }} /></span>
+                      <span className="h-[0.375rem] min-w-0 rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${width}%`, backgroundColor: color }} /></span>
                       <b className="whitespace-nowrap text-right tabular-nums text-foreground">{service.value.toFixed(2)}%</b>
                     </div>
                   );
@@ -1560,13 +1560,13 @@ export function WebsiteApiMonitoringDashboard() {
               </div>
             </Panel>
 
-            <Panel title="Global Availability" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<Globe size={14} className="text-primary" aria-hidden="true" />}>
+            <Panel title="Global Availability" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<Globe size={14} className="text-primary" aria-hidden="true" />}>
               <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
-                <div className="relative mt-3 h-[230px] min-h-[230px] flex-1 overflow-hidden rounded-lg">
+                <div className="relative mt-3 h-[14.375rem] min-h-[14.375rem] flex-1 overflow-hidden rounded-lg">
                   <NocOsmMap sites={availabilitySites} center={[33.69, 73.06]} initialZoom={13} />
                 </div>
 
-                <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[12px] text-muted-foreground">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[0.75rem] text-muted-foreground">
                   {regionStates.map((region) => (
                     <span key={region.name} className="flex items-center justify-between gap-2 whitespace-nowrap">
                       <span className="flex items-center gap-1.5 truncate">
@@ -1586,14 +1586,14 @@ export function WebsiteApiMonitoringDashboard() {
           </section>
 
           <section aria-label="Events, certificates and response analysis" className="grid items-stretch gap-4 xl:grid-cols-4">
-            <Panel title="Recent Events" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all monitoring events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+            <Panel title="Recent Events" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<button onClick={() => notify("Showing all monitoring events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                 {sortedEvents.map((event) => (
-                  <div key={event.key} className="grid h-10 grid-cols-[78px_minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 text-[12px] last:border-0">
+                  <div key={event.key} className="grid h-10 grid-cols-[78px_minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 text-[0.75rem] last:border-0">
                     <span className="whitespace-nowrap text-muted-foreground">{event.time}</span>
                     <span className="truncate font-medium text-foreground" title={event.message}>{event.message}</span>
                     <span className={cn(
-                      "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold",
+                      "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold",
                       event.status === "Open" ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
                         : event.status === "Resolved" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
                           : event.status === "Investigating" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
@@ -1604,12 +1604,12 @@ export function WebsiteApiMonitoringDashboard() {
                   </div>
                 ))}
               </div>
-              <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+              <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
                 Showing {sortedEvents.length} of {TOTAL_EVENTS} events
               </div>
             </Panel>
 
-            <Panel title="Response Time Distribution" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold">
+            <Panel title="Response Time Distribution" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold">
               <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
                 <div className="flex flex-wrap gap-1.5">
                   {[
@@ -1617,7 +1617,7 @@ export function WebsiteApiMonitoringDashboard() {
                     { label: "P95", value: `${responsePercentiles.p95} ms` },
                     { label: "P99", value: `${responsePercentiles.p99} ms` },
                   ].map((item) => (
-                    <span key={item.label} className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[12px] text-muted-foreground">
+                    <span key={item.label} className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[0.75rem] text-muted-foreground">
                       {item.label} <b className="tabular-nums text-foreground">{item.value}</b>
                     </span>
                   ))}
@@ -1626,7 +1626,7 @@ export function WebsiteApiMonitoringDashboard() {
               </div>
             </Panel>
 
-            <Panel title="SSL Certificates" className="min-w-0 p-4" titleClassName="text-[16px] font-semibold" action={<button onClick={() => notify("Showing all certificates.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+            <Panel title="SSL Certificates" className="min-w-0 p-4" titleClassName="text-[1rem] font-semibold" action={<button onClick={() => notify("Showing all certificates.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
               <div className="flex min-h-0 flex-1 flex-col pt-1">
                 {sortedSslCertificates.map((certificate) => {
                   const tone = certificate.daysLeft > 30
@@ -1638,18 +1638,18 @@ export function WebsiteApiMonitoringDashboard() {
                   return (
                     <div key={certificate.domain} className="flex items-center justify-between gap-2 border-b border-border/70 py-1.5 last:border-0">
                       <span className="min-w-0">
-                        <span className="block truncate text-[12px] font-medium text-foreground">{certificate.domain}</span>
-                        <span className="block text-[12px] text-muted-foreground">Expires {formatExpiry(certificate.daysLeft)}</span>
+                        <span className="block truncate text-[0.75rem] font-medium text-foreground">{certificate.domain}</span>
+                        <span className="block text-[0.75rem] text-muted-foreground">Expires {formatExpiry(certificate.daysLeft)}</span>
                       </span>
                       <span className="flex shrink-0 items-center gap-1">
                         <span className={cn(
-                          "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold",
+                          "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold",
                           certificate.autoRenew ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300" : "bg-muted text-muted-foreground",
                         )}>
                           {certificate.autoRenew ? <CheckCircle2 size={11} aria-hidden="true" /> : <XCircle size={11} aria-hidden="true" />}
                           Auto-renew {certificate.autoRenew ? "On" : "Off"}
                         </span>
-                        <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", tone)}>
+                        <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", tone)}>
                           <Icon size={11} aria-hidden="true" />{certificate.daysLeft}d
                         </span>
                       </span>
@@ -1657,7 +1657,7 @@ export function WebsiteApiMonitoringDashboard() {
                   );
                 })}
               </div>
-              <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+              <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
                 Next expiry in <b className="text-foreground">{Math.min(...sslCertificates.map((certificate) => certificate.daysLeft))} days</b>
               </div>
             </Panel>
@@ -1665,7 +1665,7 @@ export function WebsiteApiMonitoringDashboard() {
             <Panel
               title="Response Time Breakdown"
               className="flex h-full min-w-0 flex-col rounded-xl p-4"
-              titleClassName="text-[16px] font-semibold whitespace-nowrap overflow-visible"
+              titleClassName="text-[1rem] font-semibold whitespace-nowrap overflow-visible"
             >
               <div className="flex min-h-0 flex-1 flex-col pt-1">
                 <Select value={breakdownEndpoint} onValueChange={setBreakdownEndpoint}>
@@ -1673,14 +1673,14 @@ export function WebsiteApiMonitoringDashboard() {
                   <SelectContent>{breakdownEndpoints.map((item) => <SelectItem key={item} value={item}>{item === "all" ? "All endpoints" : item}</SelectItem>)}</SelectContent>
                 </Select>
 
-                <div className="mt-3 flex h-3 w-full gap-[2px] overflow-hidden rounded-full bg-muted" role="group" aria-label="Response time breakdown by phase">
+                <div className="mt-3 flex h-3 w-full gap-[0.125rem] overflow-hidden rounded-full bg-muted" role="group" aria-label="Response time breakdown by phase">
                   {activeBreakdown.map((part) => {
                     const share = Math.round((part.avg / activeBreakdownTotal) * 100);
                     return <span key={part.label} role="img" aria-label={`${part.label}: ${part.avg} ms, ${share}% of total`} title={`${part.label}: ${part.avg} ms (${share}%)`} style={{ width: `${(part.avg / activeBreakdownTotal) * 100}%`, backgroundColor: part.color }} />;
                   })}
                 </div>
                 <div className="mt-2 flex items-center justify-between gap-2">
-                  <p className="text-[12px] text-muted-foreground">Total <b className="text-[14px] tabular-nums text-foreground">{activeBreakdownTotal} ms</b></p>
+                  <p className="text-[0.75rem] text-muted-foreground">Total <b className="text-[0.875rem] tabular-nums text-foreground">{activeBreakdownTotal} ms</b></p>
                   <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 px-2 py-0.5 text-xs font-semibold tabular-nums text-foreground" title="P95 response time">P95 {activeBreakdownP95} ms</span>
                 </div>
 
@@ -1691,17 +1691,17 @@ export function WebsiteApiMonitoringDashboard() {
                     const improved = part.deltaMs <= 0;
                     return (
                       <li key={part.label} className="grid h-10 grid-cols-[84px_minmax(0,1fr)_auto_auto_auto] items-center gap-2">
-                        <span className="flex min-w-0 items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: part.color }} /><span className="truncate text-[13px] font-medium text-foreground">{part.label}</span></span>
-                        <span className="h-[6px] min-w-0 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${share}%`, backgroundColor: part.color }} /></span>
-                        <b className={cn("w-14 whitespace-nowrap text-right text-[13px] tabular-nums", withinTarget ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400")} title={withinTarget ? `Within target (${part.target} ms)` : `Above target (${part.target} ms)`}>{part.avg} ms</b>
-                        <span className="w-[74px] whitespace-nowrap text-right text-[12px] tabular-nums text-muted-foreground" title="P95 phase time">P95 {part.p95} ms</span>
-                        <span className={cn("flex w-[70px] items-center justify-end gap-0.5 whitespace-nowrap text-[12px] font-semibold tabular-nums", improved ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={improved ? "Faster than yesterday" : "Slower than yesterday"}>{improved ? <ArrowDownRight size={12} aria-hidden="true" /> : <ArrowUpRight size={12} aria-hidden="true" />}{Math.abs(part.deltaMs)} ms</span>
+                        <span className="flex min-w-0 items-center gap-1.5"><i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: part.color }} /><span className="truncate text-[0.8125rem] font-medium text-foreground">{part.label}</span></span>
+                        <span className="h-[0.375rem] min-w-0 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${share}%`, backgroundColor: part.color }} /></span>
+                        <b className={cn("w-14 whitespace-nowrap text-right text-[0.8125rem] tabular-nums", withinTarget ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400")} title={withinTarget ? `Within target (${part.target} ms)` : `Above target (${part.target} ms)`}>{part.avg} ms</b>
+                        <span className="w-[4.625rem] whitespace-nowrap text-right text-[0.75rem] tabular-nums text-muted-foreground" title="P95 phase time">P95 {part.p95} ms</span>
+                        <span className={cn("flex w-[4.375rem] items-center justify-end gap-0.5 whitespace-nowrap text-[0.75rem] font-semibold tabular-nums", improved ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={improved ? "Faster than yesterday" : "Slower than yesterday"}>{improved ? <ArrowDownRight size={12} aria-hidden="true" /> : <ArrowUpRight size={12} aria-hidden="true" />}{Math.abs(part.deltaMs)} ms</span>
                       </li>
                     );
                   })}
                 </ul>
 
-                <div className="mt-auto border-t border-border pt-2 text-[12px] leading-5 text-muted-foreground">
+                <div className="mt-auto border-t border-border pt-2 text-[0.75rem] leading-5 text-muted-foreground">
                   <p>Slowest: <b className="text-foreground">{slowestPhase.label} {slowestPhase.avg} ms</b> <span>(target {slowestPhase.target} ms)</span></p>
                   <p>Slowest endpoint: <b className="text-foreground">{slowestEndpoint.endpoint} &middot; {slowestEndpoint.phase} {slowestEndpoint.value} ms</b></p>
                 </div>
@@ -1711,7 +1711,7 @@ export function WebsiteApiMonitoringDashboard() {
         </>
       )}
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

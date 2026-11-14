@@ -93,11 +93,11 @@ function MetricChartTooltip({ active, payload, label, axis, activeKeys }: {
     return true;
   });
   if (!values.length) return null;
-  return <div className="min-w-[168px] rounded-lg border border-border bg-popover px-3 py-2 shadow-lg" style={{ borderRadius: 8 }}>
-    <p className="mb-1.5 text-[12px] font-semibold text-foreground">{label}</p>
+  return <div className="min-w-[10.5rem] rounded-lg border border-border bg-popover px-3 py-2 shadow-lg" style={{ borderRadius: 8 }}>
+    <p className="mb-1.5 text-[0.75rem] font-semibold text-foreground">{label}</p>
     <div className="space-y-1">{values.map((entry) => {
       const item = series.find((candidate) => candidate.key === entry.dataKey)!;
-      return <div key={item.key} className="flex items-center justify-between gap-5 whitespace-nowrap text-[12px]">
+      return <div key={item.key} className="flex items-center justify-between gap-5 whitespace-nowrap text-[0.75rem]">
         <span className="flex items-center gap-1.5 text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</span>
         <b className="tabular-nums text-foreground">{typeof entry.value === "number" ? entry.value.toFixed(1) : "—"} {item.unit}</b>
       </div>;
@@ -209,14 +209,14 @@ function Sparkline({ color, seed }: { color: string; seed: number }) {
     const value = 10 + ((index * 17 + seed * 13 + index * seed) % 25);
     return `${index * 10},${34 - value}`;
   }).join(" ");
-  return <svg viewBox="0 0 90 36" className="h-9 w-[72px] shrink-0" aria-label="Recent metric trend"><polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" /></svg>;
+  return <svg viewBox="0 0 90 36" className="h-9 w-[4.5rem] shrink-0" aria-label="Recent metric trend"><polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" /></svg>;
 }
 
 function MetricTypeDonut() {
   return (
     <div className="flex w-full max-w-full flex-1 flex-col">
       <div className="flex w-full flex-1 items-center justify-center gap-4">
-        <div className="relative h-[160px] w-[160px] shrink-0 min-[1600px]:h-[184px] min-[1600px]:w-[184px]">
+        <div className="relative h-[10rem] w-[10rem] shrink-0 min-[100rem]:h-[11.5rem] min-[100rem]:w-[11.5rem]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={typeBreakdown} dataKey="value" nameKey="name" innerRadius="62%" outerRadius="90%" paddingAngle={1} stroke="none">
@@ -226,14 +226,14 @@ function MetricTypeDonut() {
             </PieChart>
           </ResponsiveContainer>
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <b className="font-display text-[22px] font-extrabold leading-tight text-foreground">2,458</b>
-            <span className="text-[12px] text-muted-foreground">Total</span>
+            <b className="font-display text-[1.375rem] font-extrabold leading-tight text-foreground">2,458</b>
+            <span className="text-[0.75rem] text-muted-foreground">Total</span>
           </div>
         </div>
         <div className="min-w-0 flex-1 overflow-x-auto">
           <div className="space-y-2.5">
             {typeBreakdown.map((item) => (
-              <div key={item.name} className="grid grid-cols-[8px_minmax(0,max-content)_auto_auto] items-center gap-x-2 whitespace-nowrap text-[12px]">
+              <div key={item.name} className="grid grid-cols-[8px_minmax(0,max-content)_auto_auto] items-center gap-x-2 whitespace-nowrap text-[0.75rem]">
                 <i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
                 <span className="text-foreground">{item.name}</span>
                 <span className="tabular-nums text-foreground">{item.value.toLocaleString()}</span>
@@ -247,8 +247,8 @@ function MetricTypeDonut() {
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4">
         {typeMiniStats.map((stat) => (
           <div key={stat.label} className="rounded-lg bg-[#f8f9fb] px-2.5 py-2.5 text-center dark:bg-[#1c2b40]">
-            <div className="font-display text-[16px] font-bold leading-tight text-foreground">{stat.value}</div>
-            <div className="mt-0.5 whitespace-nowrap text-[11px] text-muted-foreground">{stat.label}</div>
+            <div className="font-display text-[1rem] font-bold leading-tight text-foreground">{stat.value}</div>
+            <div className="mt-0.5 whitespace-nowrap text-[0.6875rem] text-muted-foreground">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -415,48 +415,48 @@ export function MetricsExplorerDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Metrics Explorer"]} showRefresh={false} variant="detail" />
       <PageHeading title="Metrics Explorer" description="Explore, visualize, and analyze metrics from across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast("View saved.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Save size={15} />Save View</Button>
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Create Metric is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Create Metric</Button>
+          <Button variant="outline" size="sm" onClick={() => toast("View saved.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Save size={15} />Save View</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Create Metric is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Create Metric</Button>
         </div>
       </PageHeading>
 
       <section aria-label="Metric summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName={item.label === "Avg. Ingestion Rate" ? "text-[18px]" : "text-[24px]"} trendClassName="text-[11px]" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName={item.label === "Avg. Ingestion Rate" ? "text-[1.125rem]" : "text-[1.5rem]"} trendClassName="text-[0.6875rem]" />)}
       </section>
 
-      <section aria-label="Metric filters" className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-card p-2.5 shadow-card sm:grid-cols-3 lg:grid-cols-[minmax(130px,1.3fr)_repeat(6,minmax(90px,1fr))_auto_auto]">
+      <section aria-label="Metric filters" className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-card p-2.5 shadow-card sm:grid-cols-3 lg:grid-cols-[minmax(8.125rem,1.3fr)_repeat(6,minmax(5.625rem,1fr))_auto_auto]">
         <div className="relative min-w-0">
           <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input value={metricSearch} onChange={(event) => setMetricSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") applyFilters(); }} placeholder="Search metrics..." className="h-9 pl-8 text-[12px]" />
+          <Input value={metricSearch} onChange={(event) => setMetricSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") applyFilters(); }} placeholder="Search metrics..." className="h-9 pl-8 text-[0.75rem]" />
         </div>
-        <Select value={metricType} onValueChange={setMetricType}><SelectTrigger aria-label="Metric type" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{metricTypes.map((item) => <SelectItem key={item} value={item}>Type: {item}</SelectItem>)}</SelectContent></Select>
-        <Select value={resource} onValueChange={setResource}><SelectTrigger aria-label="Resource" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{resources.map((item) => <SelectItem key={item} value={item}>Resource: {item}</SelectItem>)}</SelectContent></Select>
-        <Select value={group} onValueChange={setGroup}><SelectTrigger aria-label="Group" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{["All", "Production", "Staging", "Development"].map((item) => <SelectItem key={item} value={item}>Group: {item}</SelectItem>)}</SelectContent></Select>
-        <Select value={tag} onValueChange={setTag}><SelectTrigger aria-label="Tag" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{["All", "Environment", "Team", "Region"].map((item) => <SelectItem key={item} value={item}>Tag: {item}</SelectItem>)}</SelectContent></Select>
-        <Select value={aggregation} onValueChange={setAggregation}><SelectTrigger aria-label="Aggregation" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{["Auto", "Average", "Sum", "Min", "Max", "Count"].map((item) => <SelectItem key={item} value={item}>Agg: {item}</SelectItem>)}</SelectContent></Select>
-        <Select value={interval} onValueChange={setInterval}><SelectTrigger aria-label="Interval" className="h-9 min-w-0 text-[12px]"><SelectValue /></SelectTrigger><SelectContent>{["Auto (1m)", "10 seconds", "1 minute", "5 minutes", "15 minutes", "1 hour"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
-        <Button variant="outline" size="sm" onClick={clearFilters} className="h-9 whitespace-nowrap px-2 text-[12px]"><X size={11} />Clear</Button>
-        <Button size="sm" onClick={applyFilters} className="h-9 px-3 text-[12px]">Apply</Button>
+        <Select value={metricType} onValueChange={setMetricType}><SelectTrigger aria-label="Metric type" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{metricTypes.map((item) => <SelectItem key={item} value={item}>Type: {item}</SelectItem>)}</SelectContent></Select>
+        <Select value={resource} onValueChange={setResource}><SelectTrigger aria-label="Resource" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{resources.map((item) => <SelectItem key={item} value={item}>Resource: {item}</SelectItem>)}</SelectContent></Select>
+        <Select value={group} onValueChange={setGroup}><SelectTrigger aria-label="Group" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["All", "Production", "Staging", "Development"].map((item) => <SelectItem key={item} value={item}>Group: {item}</SelectItem>)}</SelectContent></Select>
+        <Select value={tag} onValueChange={setTag}><SelectTrigger aria-label="Tag" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["All", "Environment", "Team", "Region"].map((item) => <SelectItem key={item} value={item}>Tag: {item}</SelectItem>)}</SelectContent></Select>
+        <Select value={aggregation} onValueChange={setAggregation}><SelectTrigger aria-label="Aggregation" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["Auto", "Average", "Sum", "Min", "Max", "Count"].map((item) => <SelectItem key={item} value={item}>Agg: {item}</SelectItem>)}</SelectContent></Select>
+        <Select value={interval} onValueChange={setInterval}><SelectTrigger aria-label="Interval" className="h-9 min-w-0 text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["Auto (1m)", "10 seconds", "1 minute", "5 minutes", "15 minutes", "1 hour"].map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select>
+        <Button variant="outline" size="sm" onClick={clearFilters} className="h-9 whitespace-nowrap px-2 text-[0.75rem]"><X size={11} />Clear</Button>
+        <Button size="sm" onClick={applyFilters} className="h-9 px-3 text-[0.75rem]">Apply</Button>
       </section>
 
       <section aria-label="Metric visualization" className="grid items-stretch gap-3 lg:grid-cols-[1.85fr_1fr]">
-        <Panel title="Metric Explorer" className="min-h-[700px] min-w-0 p-4" showOptions={false} action={<div className="flex flex-wrap items-center justify-end gap-1">
-          <div className="flex items-center rounded-md border border-border p-0.5">{(["Line", "Area", "Stacked"] as const).map((chartMode) => <button key={chartMode} onClick={() => setMode(chartMode)} aria-pressed={mode === chartMode} className={cn("rounded px-2 py-1 text-[11px] font-semibold transition-colors", mode === chartMode ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{chartMode}</button>)}</div>
-          <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5" aria-label="Chart time range">{["1h", "6h", "24h", "7d", "30d"].map((range) => <button key={range} onClick={() => setQuickRange(range)} aria-pressed={chartRange === range} className={cn("rounded px-1.5 py-1 text-[10px] font-semibold", chartRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{range}</button>)}</div>
-          <details className="relative"><summary aria-label="Metric chart actions" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg"><button onClick={exportChartPng} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button><button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button><button onClick={() => chartPanelRef.current?.requestFullscreen?.()} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[12px] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button></div></details>
+        <Panel title="Metric Explorer" className="min-h-[43.75rem] min-w-0 p-4" showOptions={false} action={<div className="flex flex-wrap items-center justify-end gap-1">
+          <div className="flex items-center rounded-md border border-border p-0.5">{(["Line", "Area", "Stacked"] as const).map((chartMode) => <button key={chartMode} onClick={() => setMode(chartMode)} aria-pressed={mode === chartMode} className={cn("rounded px-2 py-1 text-[0.6875rem] font-semibold transition-colors", mode === chartMode ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{chartMode}</button>)}</div>
+          <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5" aria-label="Chart time range">{["1h", "6h", "24h", "7d", "30d"].map((range) => <button key={range} onClick={() => setQuickRange(range)} aria-pressed={chartRange === range} className={cn("rounded px-1.5 py-1 text-[0.625rem] font-semibold", chartRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{range}</button>)}</div>
+          <details className="relative"><summary aria-label="Metric chart actions" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={16} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg"><button onClick={exportChartPng} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export PNG</button><button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Download size={14} />Export CSV</button><button onClick={() => chartPanelRef.current?.requestFullscreen?.()} className="flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-[0.75rem] text-foreground hover:bg-accent"><Expand size={14} />Fullscreen</button></div></details>
         </div>}>
           <div ref={chartPanelRef} className="flex min-h-0 flex-1 flex-col gap-0 bg-card">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {series.map((item) => {
                 const enabled = activeSeries.includes(item.key);
                 const latest = metricSeries.at(-1)?.[item.key as keyof (typeof metricSeries)[number]] as number;
-                return <button key={item.key} title={enabled ? `Hide ${item.name}` : "Click to show"} onClick={() => toggleSeries(item.key)} aria-pressed={enabled} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors", enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through")}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? item.color : "#94a3b8" }} />{item.name}<b className="tabular-nums">{latest} {item.unit}</b></button>;
+                return <button key={item.key} title={enabled ? `Hide ${item.name}` : "Click to show"} onClick={() => toggleSeries(item.key)} aria-pressed={enabled} className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", enabled ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through")}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? item.color : "#94a3b8" }} />{item.name}<b className="tabular-nums">{latest} {item.unit}</b></button>;
               })}
             </div>
-            <div ref={chartPlotRef} className="relative flex min-h-[340px] flex-1 touch-pan-y select-none flex-col gap-1" onPointerDown={beginChartSelection} onPointerMove={updateChartSelection} onPointerUp={finishChartSelection} onPointerCancel={finishChartSelection}>
-              <div className="flex min-h-[190px] flex-[1.6] flex-col">
-                <div className="px-1 text-[12px] font-medium text-muted-foreground">Utilization (%)</div>
+            <div ref={chartPlotRef} className="relative flex min-h-[21.25rem] flex-1 touch-pan-y select-none flex-col gap-1" onPointerDown={beginChartSelection} onPointerMove={updateChartSelection} onPointerUp={finishChartSelection} onPointerCancel={finishChartSelection}>
+              <div className="flex min-h-[11.875rem] flex-[1.6] flex-col">
+                <div className="px-1 text-[0.75rem] font-medium text-muted-foreground">Utilization (%)</div>
                 <div className="min-h-0 flex-1">
                   <ResponsiveContainer width="100%" height="100%">
                     {mode === "Line" ? <LineChart data={displayedChartData} syncId="metrics-time" syncMethod="value" margin={{ top: 12, right: 20, left: 0, bottom: 0 }}>
@@ -469,8 +469,8 @@ export function MetricsExplorerDashboard() {
                   </ResponsiveContainer>
                 </div>
               </div>
-              <div className="flex min-h-[130px] flex-[1] flex-col border-t border-border/70 pt-2">
-                <div className="px-1 text-[12px] font-medium text-muted-foreground">Throughput</div>
+              <div className="flex min-h-[8.125rem] flex-[1] flex-col border-t border-border/70 pt-2">
+                <div className="px-1 text-[0.75rem] font-medium text-muted-foreground">Throughput</div>
                 <div className="min-h-0 flex-1">
                   <ResponsiveContainer width="100%" height="100%">
                     {mode === "Line" ? <LineChart data={displayedChartData} syncId="metrics-time" syncMethod="value" margin={{ top: 8, right: 20, left: 0, bottom: 0 }}><CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} /><XAxis dataKey="time" ticks={["12:00", "16:00", "20:00", "00:00", "04:00", "08:00"].filter((time) => displayedChartData.some((point) => point.time === time))} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} padding={{ left: 4, right: 16 }} /><YAxis domain={[0, "auto"]} tickCount={3} tickFormatter={(value) => String(Math.round(value))} width={38} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<MetricChartTooltip axis="throughput" activeKeys={activeSeries} />} />{series.filter((item) => item.axis === "throughput" && activeSeries.includes(item.key)).map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} dot={false} activeDot={{ r: 3 }} />)}</LineChart> : <AreaChart data={displayedChartData} syncId="metrics-time" syncMethod="value" margin={{ top: 8, right: 20, left: 0, bottom: 0 }}><defs>{series.filter((item) => item.axis === "throughput").map((item) => <linearGradient key={item.key} id={`metric-fill-${item.key}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={item.color} stopOpacity={0.2} /><stop offset="100%" stopColor={item.color} stopOpacity={0} /></linearGradient>)}</defs><CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical={false} /><XAxis dataKey="time" ticks={["12:00", "16:00", "20:00", "00:00", "04:00", "08:00"].filter((time) => displayedChartData.some((point) => point.time === time))} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} padding={{ left: 4, right: 16 }} /><YAxis domain={[0, "auto"]} tickCount={3} tickFormatter={(value) => String(Math.round(value))} width={38} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<MetricChartTooltip axis="throughput" activeKeys={activeSeries} />} />{series.filter((item) => item.axis === "throughput" && activeSeries.includes(item.key)).map((item) => <Area key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={2} fill={`url(#metric-fill-${item.key})`} activeDot={{ r: 3 }} stackId={mode === "Stacked" ? "throughput" : undefined} />)}</AreaChart>}
@@ -482,33 +482,33 @@ export function MetricsExplorerDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Metrics by Value" className="h-full min-h-[700px] min-w-0 p-4" action={<button onClick={() => toast("Showing all metrics by value.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Metrics by Value" className="h-full min-h-[43.75rem] min-w-0 p-4" action={<button onClick={() => toast("Showing all metrics by value.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col overflow-x-auto pt-1">
-            <table className="w-full min-w-[360px] text-left text-[12px]">
+            <table className="w-full min-w-[22.5rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Metric</th><th className="pb-1.5">Resource</th><th className="pb-1.5 text-right">Value</th><th className="pb-1.5 text-right">Change</th></tr></thead>
               <tbody>{topMetricsByValue.map((metric) => <tr key={`${metric.name}-${metric.resource}`} className="h-12 border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-2 font-semibold text-foreground"><i className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: metric.color }} />{metric.name} {metric.unit === "%" ? "(%)" : `(${metric.unit})`}</td><td className="whitespace-nowrap py-2 text-foreground">{metric.resource}</td><td className="whitespace-nowrap py-2 text-right text-foreground">{metric.value} {metric.unit}</td><td className={cn("whitespace-nowrap py-2 text-right font-semibold", changeTone(metric))}>{metric.direction === "down" ? "↓" : "↑"} {metric.change}%</td></tr>)}</tbody>
             </table>
-            <div className="mt-auto flex items-center border-t border-border pt-3 text-[12px] text-muted-foreground"><span>{topMetricsByValue.length} metrics · {topMetricsByValue.filter((metric) => metric.critical).length} critical · {topMetricsByValue.filter((metric) => metric.improving || metric.trendTone === "good").length} improving</span></div>
+            <div className="mt-auto flex items-center border-t border-border pt-3 text-[0.75rem] text-muted-foreground"><span>{topMetricsByValue.length} metrics · {topMetricsByValue.filter((metric) => metric.critical).length} critical · {topMetricsByValue.filter((metric) => metric.improving || metric.trendTone === "good").length} improving</span></div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Metric details" className="grid items-stretch gap-2.5 lg:grid-cols-[1.65fr_1fr_1.05fr]">
-        <Panel title="Recent Metrics" className="min-w-0 p-4" headerClassName="h-10" action={<span className="text-[12px] text-muted-foreground">{visibleMetrics.length} shown</span>}>
+        <Panel title="Recent Metrics" className="min-w-0 p-4" headerClassName="h-10" action={<span className="text-[0.75rem] text-muted-foreground">{visibleMetrics.length} shown</span>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-y-auto">
-              <table className="w-full table-fixed text-left text-[12px]">
+              <table className="w-full table-fixed text-left text-[0.75rem]">
                 <colgroup><col style={{ width: "28%" }} /><col style={{ width: "15%" }} /><col style={{ width: "22%" }} /><col style={{ width: "17%" }} /><col style={{ width: "18%" }} /></colgroup>
                 <thead><tr className="border-b border-border text-muted-foreground">{["Metric Name", "Type", "Resource", "Last Value", "Trend"].map((heading) => <th key={heading} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
-                <tbody>{visibleMetrics.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((metric, index) => <tr key={`${metric.name}-${metric.resource}-${index}`} className="h-10 border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50"><td title={metric.name} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 font-semibold text-foreground"><i className="mr-1 inline-block h-2 w-2 shrink-0 rounded-full align-[-1px]" style={{ backgroundColor: metric.color }} />{metric.name}</td><td title={metric.type} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.type}</td><td title={metric.resource} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.resource}</td><td className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.value} {metric.unit}</td><td className="overflow-hidden px-1"><Sparkline color={metric.color} seed={index + page} /></td></tr>)}</tbody>
+                <tbody>{visibleMetrics.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((metric, index) => <tr key={`${metric.name}-${metric.resource}-${index}`} className="h-10 border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50"><td title={metric.name} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 font-semibold text-foreground"><i className="mr-1 inline-block h-2 w-2 shrink-0 rounded-full align-[-0.0625rem]" style={{ backgroundColor: metric.color }} />{metric.name}</td><td title={metric.type} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.type}</td><td title={metric.resource} className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.resource}</td><td className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-foreground">{metric.value} {metric.unit}</td><td className="overflow-hidden px-1"><Sparkline color={metric.color} seed={index + page} /></td></tr>)}</tbody>
               </table>
             </div>
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[12px] text-muted-foreground">
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[0.75rem] text-muted-foreground">
               <span>Showing {visibleMetrics.length ? (page - 1) * rowsPerPage + 1 : 0}-{Math.min(page * rowsPerPage, visibleMetrics.length)} of {appliedFilters.search || appliedFilters.type !== "All" || appliedFilters.resource !== "All" ? visibleMetrics.length : TOTAL_METRICS} metrics</span>
               <div className="flex items-center gap-1">
                 <label className="mr-1 flex items-center gap-1">Rows per page:
                   <Select value={String(rowsPerPage)} onValueChange={(value) => { setRowsPerPage(Number(value)); setPage(1); }}>
-                    <SelectTrigger aria-label="Rows per page" className="h-7 w-[64px] text-[12px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger aria-label="Rows per page" className="h-7 w-[4rem] text-[0.75rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>{ROWS_PER_PAGE_OPTIONS.map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
                   </Select>
                 </label>
@@ -521,15 +521,15 @@ export function MetricsExplorerDashboard() {
 
         <Panel title="Metrics by Type" className="min-w-0 p-4" headerClassName="h-10">
           <MetricTypeDonut />
-          <div className="mt-auto pt-3 text-[12px] text-muted-foreground">Updated 1m ago</div>
+          <div className="mt-auto pt-3 text-[0.75rem] text-muted-foreground">Updated 1m ago</div>
         </Panel>
 
-        <Panel title="Recent Metric Alerts" className="min-w-0 p-4" headerClassName="h-10" action={<button onClick={() => toast("Showing all metric alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Recent Metric Alerts" className="min-w-0 p-4" headerClassName="h-10" action={<button onClick={() => toast("Showing all metric alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 space-y-0 overflow-y-auto">
-              {recentAlerts.map((alert) => <div key={alert.text} title={alert.text} className="grid h-11 grid-cols-[8px_minmax(0,1fr)_56px] items-center gap-2 text-[12px]"><i className={cn("h-2 w-2 shrink-0 rounded-full", alert.severity === "critical" ? "bg-rose-500" : alert.severity === "warning" ? "bg-amber-500" : "bg-blue-500")} /><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{alert.ago}</span></div>)}
+              {recentAlerts.map((alert) => <div key={alert.text} title={alert.text} className="grid h-11 grid-cols-[8px_minmax(0,1fr)_3.5rem] items-center gap-2 text-[0.75rem]"><i className={cn("h-2 w-2 shrink-0 rounded-full", alert.severity === "critical" ? "bg-rose-500" : alert.severity === "warning" ? "bg-amber-500" : "bg-blue-500")} /><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{alert.ago}</span></div>)}
             </div>
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[12px] text-muted-foreground">
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[0.75rem] text-muted-foreground">
               <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 {alertSeverityLegend.map((item) => <span key={item.name} className="flex items-center gap-1.5"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</span>)}
               </span>
@@ -539,7 +539,7 @@ export function MetricsExplorerDashboard() {
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

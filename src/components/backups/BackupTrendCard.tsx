@@ -99,7 +99,7 @@ export function BackupTrendCard({ runs, onBarClick, onExport }: { runs: BackupRu
   return (
     <ChartCard
       title="Backup Trend"
-      className="h-full min-h-[280px] p-4"
+      className="h-full min-h-[17.5rem] p-4"
       actions={
         <div className="flex items-center gap-1.5">
           <SegmentedControl value={range} options={["7D", "30D", "90D"] as const} onChange={(value) => setRange(value as "7D" | "30D" | "90D")} buttonClassName="h-8 px-3 text-xs" />
@@ -125,7 +125,7 @@ export function BackupTrendCard({ runs, onBarClick, onExport }: { runs: BackupRu
             </Chip>
           ))}
         </div>
-        <div className="min-h-[220px] flex-1" role="img" aria-label="Combo chart: stacked bars of daily backup runs by status, with a success-rate line on the right axis">
+        <div className="min-h-[13.75rem] flex-1" role="img" aria-label="Combo chart: stacked bars of daily backup runs by status, with a success-rate line on the right axis">
           <ResponsiveContainer width="100%" height="100%" minHeight={200}>
             <ComposedChart data={data} margin={{ top: 8, right: 0, left: 0, bottom: 0 }} barCategoryGap={10}>
               <defs>

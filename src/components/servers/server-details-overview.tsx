@@ -109,7 +109,7 @@ function SectionCard({
   return (
     <Card className={`flex h-full min-w-0 flex-col p-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-lg ${className} ${gridClassName}`}>
       <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
-        <CardTitle className="flex items-center gap-2 text-[16px] font-semibold"><Icon size={17} className="shrink-0 text-primary" />{title}</CardTitle>
+        <CardTitle className="flex items-center gap-2 text-[1rem] font-semibold"><Icon size={17} className="shrink-0 text-primary" />{title}</CardTitle>
         {action}
       </div>
       <div className="min-h-0 flex-1">
@@ -129,17 +129,17 @@ function CardSkeleton() {
 }
 
 function CardError({ message }: { message: string }) {
-  return <div role="alert" className="flex min-h-24 items-center justify-center gap-2 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-[13px] text-destructive">
+  return <div role="alert" className="flex min-h-24 items-center justify-center gap-2 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-[0.8125rem] text-destructive">
     <AlertCircle size={16} />{message}
   </div>;
 }
 
 function EmptyState({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-24 flex-col items-center justify-center gap-2 text-center text-[13px] text-muted-foreground">{children}</div>;
+  return <div className="flex min-h-24 flex-col items-center justify-center gap-2 text-center text-[0.8125rem] text-muted-foreground">{children}</div>;
 }
 
 function DashboardRow({ children }: { children: React.ReactNode }) {
-  return <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[900px]:grid-cols-2 xl:grid-cols-12">{children}</section>;
+  return <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[56.25rem]:grid-cols-2 xl:grid-cols-12">{children}</section>;
 }
 
 function SpanCard({ children, wide = false }: { children: React.ReactNode; wide?: boolean }) {
@@ -172,9 +172,9 @@ function Gauge({ label, value, color }: { label: string; value: number; color: s
         <circle cx="48" cy="48" r={radius} fill="none" stroke="var(--muted)" strokeWidth="8" />
         <circle cx="48" cy="48" r={radius} fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference * (1 - value / 100)} />
       </svg>
-      <span className="absolute inset-0 grid place-items-center font-display text-[18px] font-bold text-foreground">{value}%</span>
+      <span className="absolute inset-0 grid place-items-center font-display text-[1.125rem] font-bold text-foreground">{value}%</span>
     </div>
-    <span className="text-[13px] font-medium text-muted-foreground">{label}</span>
+    <span className="text-[0.8125rem] font-medium text-muted-foreground">{label}</span>
   </div>;
 }
 
@@ -193,7 +193,7 @@ function UptimeBars() {
     return { date, status, color };
   });
   return <div className="flex h-12 items-stretch gap-px" aria-label="90 day uptime history">
-    {bars.map(({ date, status, color }, index) => <span key={index} title={`${date.toLocaleDateString()} - ${status}`} className={`min-w-0 flex-1 rounded-[1px] ${color}`} />)}
+    {bars.map(({ date, status, color }, index) => <span key={index} title={`${date.toLocaleDateString()} - ${status}`} className={`min-w-0 flex-1 rounded-[0.0625rem] ${color}`} />)}
   </div>;
 }
 
@@ -208,9 +208,9 @@ function HealthChecks() {
   return <div className="divide-y divide-border">
     {healthChecks.map((check) => <div key={check.name} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
       <StatusDot tone={check.tone} />
-      <span className="min-w-0 flex-1 text-[13px] font-medium text-foreground">{check.name}</span>
+      <span className="min-w-0 flex-1 text-[0.8125rem] font-medium text-foreground">{check.name}</span>
       <TinyTrend values={check.values} color={check.color} />
-      <span className="w-16 text-right text-[13px] tabular-nums text-muted-foreground">{check.detail}</span>
+      <span className="w-16 text-right text-[0.8125rem] tabular-nums text-muted-foreground">{check.detail}</span>
     </div>)}
   </div>;
 }
@@ -276,10 +276,10 @@ export function ServerDetailsOverview({
               <circle cx="72" cy="72" r="61" fill="none" stroke="var(--muted)" strokeWidth="10" />
               <circle cx="72" cy="72" r="61" fill="none" stroke="#28bf87" strokeWidth="10" strokeLinecap="round" strokeDasharray={2 * Math.PI * 61} strokeDashoffset={2 * Math.PI * 61 * 0.013} />
             </svg>
-            <div className="text-center"><strong className="font-display text-[25px] font-extrabold text-foreground">98.7%</strong><div className="text-[13px] font-medium text-muted-foreground">Overall Health</div><div className="mt-1 text-[13px] text-emerald-600">+0.2% today</div></div>
+            <div className="text-center"><strong className="font-display text-[1.5625rem] font-extrabold text-foreground">98.7%</strong><div className="text-[0.8125rem] font-medium text-muted-foreground">Overall Health</div><div className="mt-1 text-[0.8125rem] text-emerald-600">+0.2% today</div></div>
           </div>
           <dl className="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
-            {[["Hostname", "web-01"], ["IP Address", "192.168.1.25"], ["Operating System", "Ubuntu 22.04 LTS"], ["Location", "New York, USA"], ["Server Group", "Web Servers"], ["Data Center", "DC-1"]].map(([label, value]) => <div key={label} className="flex min-w-0 items-center justify-between gap-2 border-b border-border/70 py-2 last:border-0"><dt className="text-[13px] text-muted-foreground">{label}</dt><dd className="m-0 truncate text-right text-[13px] font-semibold text-foreground">{value}</dd></div>)}
+            {[["Hostname", "web-01"], ["IP Address", "192.168.1.25"], ["Operating System", "Ubuntu 22.04 LTS"], ["Location", "New York, USA"], ["Server Group", "Web Servers"], ["Data Center", "DC-1"]].map(([label, value]) => <div key={label} className="flex min-w-0 items-center justify-between gap-2 border-b border-border/70 py-2 last:border-0"><dt className="text-[0.8125rem] text-muted-foreground">{label}</dt><dd className="m-0 truncate text-right text-[0.8125rem] font-semibold text-foreground">{value}</dd></div>)}
           </dl>
         </div>
       </SectionCard></SpanCard>
@@ -295,14 +295,14 @@ export function ServerDetailsOverview({
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <Line dataKey="cpu" name="CPU" stroke="#288af0" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
                 <Line dataKey="memory" name="Memory" stroke="#27bd91" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
                 <Line dataKey="disk" name="Disk" stroke="#7163c8" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-[13px] text-muted-foreground">CPU averages <strong className="text-foreground">32%</strong> with steady memory at <strong className="text-foreground">46%</strong>.</p>
+          <p className="mt-2 text-[0.8125rem] text-muted-foreground">CPU averages <strong className="text-foreground">32%</strong> with steady memory at <strong className="text-foreground">46%</strong>.</p>
         </div>
       </SectionCard></SpanCard>
 
@@ -313,7 +313,7 @@ export function ServerDetailsOverview({
             ["Shutdown Server", Pause],
             ["View Logs", FileText],
             ["Open Console", Terminal],
-          ].map(([label, Icon]) => <button key={label as string} type="button" onClick={() => onAction(label as string)} title={label as string} className="flex h-11 items-center gap-3 rounded-lg border border-border px-4 text-left text-[13px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Icon size={17} className="text-primary" />{label as string}</button>)}
+          ].map(([label, Icon]) => <button key={label as string} type="button" onClick={() => onAction(label as string)} title={label as string} className="flex h-11 items-center gap-3 rounded-lg border border-border px-4 text-left text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Icon size={17} className="text-primary" />{label as string}</button>)}
         </div>
       </SectionCard></SpanCard>
     </DashboardRow>
@@ -321,20 +321,20 @@ export function ServerDetailsOverview({
     <DashboardRow>
       <SpanCard><SectionCard title="Resources Usage" icon={HardDrive} loading={loading}>
         <div className="flex h-full flex-col">
-          <div className="grid flex-1 grid-cols-2 items-center gap-4 min-[1280px]:grid-cols-2">
+          <div className="grid flex-1 grid-cols-2 items-center gap-4 min-[80rem]:grid-cols-2">
             <Gauge label="CPU" value={32 + liveTick % 3} color="#22bb83" />
             <Gauge label="Memory" value={46 + liveTick % 2} color="#27a9d4" />
             <Gauge label="Disk" value={diskUsage} color="#9a61df" />
             <Gauge label="Network" value={28 + liveTick % 4} color="#efa229" />
           </div>
           <div className="mt-5 grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
-            {[["Swap", "12%"], ["Inodes", "34%"], ["Processes", "187"]].map(([label, value]) => <div key={label}><div className="text-[13px] text-muted-foreground">{label}</div><div className="mt-1 text-[15px] font-semibold text-foreground">{value}</div></div>)}
+            {[["Swap", "12%"], ["Inodes", "34%"], ["Processes", "187"]].map(([label, value]) => <div key={label}><div className="text-[0.8125rem] text-muted-foreground">{label}</div><div className="mt-1 text-[0.9375rem] font-semibold text-foreground">{value}</div></div>)}
           </div>
         </div>
       </SectionCard></SpanCard>
 
-      <SpanCard><SectionCard title="Top Processes" icon={Cpu} loading={loading} action={<button type="button" onClick={() => onTabChange("processes")} className="rounded text-[13px] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
-        <div className="overflow-x-auto max-[639px]:-mx-2 max-[639px]:px-2">
+      <SpanCard><SectionCard title="Top Processes" icon={Cpu} loading={loading} action={<button type="button" onClick={() => onTabChange("processes")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
+        <div className="overflow-x-auto max-[39.9375rem]:-mx-2 max-[39.9375rem]:px-2">
           <table className="server-details-table w-full border-collapse text-left">
             <colgroup><col className="w-[14%]" /><col className="w-[26%]" /><col className="w-[15%]" /><col className="w-[23%]" /><col className="w-[22%]" /></colgroup>
             <thead className="sticky top-0 z-[1] bg-card text-muted-foreground"><tr className="border-b border-border"><th>PID</th><th>Process</th><th className="text-right">CPU</th><th className="text-right">Memory</th><th className="text-right">Status</th></tr></thead>
@@ -343,16 +343,16 @@ export function ServerDetailsOverview({
         </div>
       </SectionCard></SpanCard>
 
-      <SpanCard><SectionCard title="Recent Events" icon={Bell} loading={loading} action={<button type="button" onClick={() => onTabChange("events")} className="rounded text-[13px] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
+      <SpanCard><SectionCard title="Recent Events" icon={Bell} loading={loading} action={<button type="button" onClick={() => onTabChange("events")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All</button>}>
         <div className="mb-3 flex flex-wrap gap-2" role="group" aria-label="Filter recent events">
           {["All", "Info", "Warning", "Success"].map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={`rounded-full border px-3 py-1 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${eventFilter === filter ? "border-primary bg-primary/10 font-semibold text-primary" : "border-border text-muted-foreground hover:bg-accent"}`}>{filter}</button>)}
         </div>
         <div className="divide-y divide-border">
           {filteredEvents.map((event) => <div key={event.title} className="flex items-center gap-3 py-2.5 first:pt-0">
             <StatusDot tone={event.status === "Warning" ? "bg-amber-500" : event.status === "Success" ? "bg-emerald-500" : "bg-sky-500"} />
-            <span className="w-16 shrink-0 text-[13px] text-muted-foreground">{event.time}</span>
-            <span className="min-w-0 flex-1 truncate text-[13px] text-foreground">{event.title}</span>
-            <span className={`rounded-full px-2 py-1 text-[12px] font-semibold ${event.status === "Warning" ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : event.status === "Success" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300"}`}>{event.status}</span>
+            <span className="w-16 shrink-0 text-[0.8125rem] text-muted-foreground">{event.time}</span>
+            <span className="min-w-0 flex-1 truncate text-[0.8125rem] text-foreground">{event.title}</span>
+            <span className={`rounded-full px-2 py-1 text-[0.75rem] font-semibold ${event.status === "Warning" ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : event.status === "Success" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300"}`}>{event.status}</span>
           </div>)}
           {filteredEvents.length === 0 && <EmptyState>No events match this filter.</EmptyState>}
         </div>
@@ -364,8 +364,8 @@ export function ServerDetailsOverview({
         {alerts.length === 0 ? <EmptyState><CheckCircle2 size={22} className="text-emerald-600" />No active alerts</EmptyState> : <div className="divide-y divide-border">
           {alerts.map((alert) => <div key={alert.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0">
             <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${severityClass(alert.severity)}`}>{alert.severity}</span>
-            <span className="min-w-0 flex-1 text-[13px] font-medium text-foreground">{alert.title}</span>
-            <span className="text-[13px] text-muted-foreground">{alert.age}</span>
+            <span className="min-w-0 flex-1 text-[0.8125rem] font-medium text-foreground">{alert.title}</span>
+            <span className="text-[0.8125rem] text-muted-foreground">{alert.age}</span>
             <div className="flex gap-2">
               <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert acknowledged"); }} className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Acknowledge</button>
               <button type="button" onClick={() => { setAlerts((current) => current.filter((item) => item.id !== alert.id)); onAction("Alert resolved"); }} className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Resolve</button>
@@ -376,9 +376,9 @@ export function ServerDetailsOverview({
 
       <SpanCard><SectionCard title="Uptime History" icon={Clock3} loading={loading}>
         <div className="flex h-full flex-col">
-          <div className="mb-4 flex items-end justify-between gap-3"><strong className="server-details-metric-value font-display font-bold text-foreground">99.98% <span className="text-[14px] font-medium text-muted-foreground">uptime</span></strong><span className="text-[13px] text-muted-foreground">Last 90 days</span></div>
+          <div className="mb-4 flex items-end justify-between gap-3"><strong className="server-details-metric-value font-display font-bold text-foreground">99.98% <span className="text-[0.875rem] font-medium text-muted-foreground">uptime</span></strong><span className="text-[0.8125rem] text-muted-foreground">Last 90 days</span></div>
           <UptimeBars />
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-4 text-[13px]"><span className="text-muted-foreground">Last incident</span><strong className="font-medium text-foreground">Oct 14, 2026 · 4m</strong></div>
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-4 text-[0.8125rem]"><span className="text-muted-foreground">Last incident</span><strong className="font-medium text-foreground">Oct 14, 2026 · 4m</strong></div>
         </div>
       </SectionCard></SpanCard>
 
@@ -389,11 +389,11 @@ export function ServerDetailsOverview({
 
     <DashboardRow>
       <SpanCard><SectionCard title="Disk Partitions" icon={HardDrive} loading={loading}>
-        <div className="overflow-x-auto max-[639px]:-mx-2 max-[639px]:px-2">
+        <div className="overflow-x-auto max-[39.9375rem]:-mx-2 max-[39.9375rem]:px-2">
           <table className="server-details-table w-full border-collapse text-left">
             <colgroup><col className="w-[10%]" /><col className="w-[13%]" /><col className="w-[13%]" /><col className="w-[13%]" /><col className="w-[39%]" /><col className="w-[12%]" /></colgroup>
             <thead className="text-muted-foreground"><tr className="border-b border-border"><th>Mount</th><th className="text-right">Size</th><th className="text-right">Used</th><th className="text-right">Free</th><th>Usage</th><th className="text-right">IOPS</th></tr></thead>
-            <tbody>{diskPartitions.map((partition) => <tr key={partition.mount} className="border-b border-border/60 last:border-0"><td className="font-semibold text-foreground">{partition.mount}</td><td className="text-right tabular-nums text-muted-foreground">{partition.size}</td><td className="text-right tabular-nums text-muted-foreground">{partition.used}</td><td className="text-right tabular-nums text-muted-foreground">{partition.free}</td><td><div className="flex min-w-[120px] items-center gap-2"><ProgressBar value={partition.percent} /><span className="shrink-0 text-[13px] tabular-nums text-muted-foreground">{partition.percent}%</span></div></td><td className="text-right tabular-nums text-muted-foreground">{partition.iops}</td></tr>)}</tbody>
+            <tbody>{diskPartitions.map((partition) => <tr key={partition.mount} className="border-b border-border/60 last:border-0"><td className="font-semibold text-foreground">{partition.mount}</td><td className="text-right tabular-nums text-muted-foreground">{partition.size}</td><td className="text-right tabular-nums text-muted-foreground">{partition.used}</td><td className="text-right tabular-nums text-muted-foreground">{partition.free}</td><td><div className="flex min-w-[7.5rem] items-center gap-2"><ProgressBar value={partition.percent} /><span className="shrink-0 text-[0.8125rem] tabular-nums text-muted-foreground">{partition.percent}%</span></div></td><td className="text-right tabular-nums text-muted-foreground">{partition.iops}</td></tr>)}</tbody>
           </table>
         </div>
       </SectionCard></SpanCard>
@@ -401,7 +401,7 @@ export function ServerDetailsOverview({
       <SpanCard><SectionCard title="Network Interfaces" icon={Network} loading={loading}>
         <div className="flex h-full min-h-64 flex-col">
           <div className="mb-3 grid grid-cols-[1fr_auto_auto] gap-x-4 text-xs text-muted-foreground"><span>Interface</span><span>In / Out Mbps</span><span>Errors</span></div>
-          <div className="divide-y divide-border text-[13px]">
+          <div className="divide-y divide-border text-[0.8125rem]">
             <div className="grid grid-cols-[1fr_auto_auto] gap-x-4 py-2"><span className="font-semibold text-foreground">eth0 <span className="font-normal text-muted-foreground">· 142 / 68 Mbps</span></span><span className="text-muted-foreground">18.2k / 9.4k pkts</span><span className="text-emerald-600">0</span></div>
             <div className="grid grid-cols-[1fr_auto_auto] gap-x-4 py-2"><span className="font-semibold text-foreground">lo <span className="font-normal text-muted-foreground">· 4 / 4 Mbps</span></span><span className="text-muted-foreground">1.2k / 1.2k pkts</span><span className="text-emerald-600">0</span></div>
           </div>
@@ -411,7 +411,7 @@ export function ServerDetailsOverview({
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="time" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <Line dataKey="inbound" name="Inbound Mbps" stroke="#288af0" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
                 <Line dataKey="outbound" name="Outbound Mbps" stroke="#27bd91" strokeWidth={2} dot={false} isAnimationActive animationDuration={600} />
               </LineChart>
@@ -424,11 +424,11 @@ export function ServerDetailsOverview({
       <SpanCard><SectionCard title="Load and CPU Cores" icon={Cpu} loading={loading}>
         <div className="flex h-full flex-col gap-4">
           <div className="grid grid-cols-3 gap-2">
-            {[["1 min", "0.84"], ["5 min", "0.76"], ["15 min", "0.69"]].map(([label, value]) => <div key={label} className="rounded-md bg-muted/60 p-3 text-center"><div className="text-xs text-muted-foreground">{label}</div><div className="mt-1 text-[16px] font-semibold text-foreground">{value}</div></div>)}
+            {[["1 min", "0.84"], ["5 min", "0.76"], ["15 min", "0.69"]].map(([label, value]) => <div key={label} className="rounded-md bg-muted/60 p-3 text-center"><div className="text-xs text-muted-foreground">{label}</div><div className="mt-1 text-[1rem] font-semibold text-foreground">{value}</div></div>)}
           </div>
-          <div className="grid grid-cols-2 gap-3 text-[13px]"><div><div className="mb-2 flex justify-between"><span className="text-muted-foreground">Swap usage</span><span className="font-medium text-foreground">12%</span></div><ProgressBar value={12} /></div><div className="flex items-center justify-between"><span className="text-muted-foreground">CPU temperature</span><strong className="font-semibold text-foreground">54°C</strong></div></div>
+          <div className="grid grid-cols-2 gap-3 text-[0.8125rem]"><div><div className="mb-2 flex justify-between"><span className="text-muted-foreground">Swap usage</span><span className="font-medium text-foreground">12%</span></div><ProgressBar value={12} /></div><div className="flex items-center justify-between"><span className="text-muted-foreground">CPU temperature</span><strong className="font-semibold text-foreground">54°C</strong></div></div>
           <div className="mt-auto">
-            <div className="mb-2 text-[13px] font-medium text-foreground">Per-core utilization</div>
+            <div className="mb-2 text-[0.8125rem] font-medium text-foreground">Per-core utilization</div>
             <div className="grid grid-cols-4 gap-2" aria-label="CPU core utilization heatmap">
               {coreUsage.map((value, index) => <div key={index} title={`Core ${index} - ${value}%`} className="grid h-12 place-items-center rounded-md text-xs font-semibold text-slate-900" style={{ backgroundColor: `rgba(34, 185, 129, ${0.15 + value / 125})` }}>Core {index}<br />{value}%</div>)}
             </div>
@@ -441,10 +441,10 @@ export function ServerDetailsOverview({
       <SpanCard><SectionCard title="Services" icon={Server} loading={loading}>
         <div className="divide-y divide-border">
           {services.map((service) => <div key={service.name} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-            <span className="min-w-20 flex-1 text-[13px] font-semibold text-foreground">{service.name}</span>
+            <span className="min-w-20 flex-1 text-[0.8125rem] font-semibold text-foreground">{service.name}</span>
             <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${service.status === "Running" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"}`}>{service.status}</span>
-            <span className="text-[13px] text-muted-foreground">{service.uptime}</span>
-            <span className="w-20 text-right text-[13px] text-muted-foreground">{service.memory}</span>
+            <span className="text-[0.8125rem] text-muted-foreground">{service.uptime}</span>
+            <span className="w-20 text-right text-[0.8125rem] text-muted-foreground">{service.memory}</span>
             <button type="button" title={`Restart ${service.name}`} aria-label={`Restart ${service.name}`} onClick={() => setServiceToRestart(service.name)} className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><RotateCw size={16} /></button>
           </div>)}
         </div>
@@ -452,21 +452,21 @@ export function ServerDetailsOverview({
 
       <SpanCard><SectionCard title="Security and Compliance" icon={ShieldCheck} loading={loading} action={<span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Score 94</span>}>
         <div className="flex h-full flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3 text-[13px]"><div className="rounded-md bg-muted/60 p-3"><div className="text-muted-foreground">Pending updates</div><strong className="mt-1 block text-[16px] text-foreground">3</strong></div><div className="rounded-md bg-muted/60 p-3"><div className="text-muted-foreground">Last patch</div><strong className="mt-1 block text-[13px] text-foreground">Nov 02, 2026</strong></div></div>
-          <div><div className="mb-2 text-[13px] font-medium text-foreground">Open ports</div><div className="flex flex-wrap gap-2">{["22 SSH", "80 HTTP", "443 HTTPS"].map((port) => <span key={port} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">{port}</span>)}</div></div>
-          <div className="min-w-0"><div className="mb-2 text-[13px] font-medium text-foreground">Recent SSH logins</div><div className="overflow-x-auto max-[639px]:-mx-2 max-[639px]:px-2"><table className="server-details-table w-full border-collapse text-left"><colgroup><col className="w-[24%]" /><col className="w-[48%]" /><col className="w-[28%]" /></colgroup><thead><tr className="text-muted-foreground"><th>User</th><th>IP address</th><th className="text-right">Time</th></tr></thead><tbody>{[["deploy", "203.0.113.42", "14:26"], ["admin", "198.51.100.18", "13:10"], ["ops", "203.0.113.15", "11:42"]].map(([user, ip, time]) => <tr key={`${user}-${time}`}><td className="text-foreground">{user}</td><td className="tabular-nums text-muted-foreground">{ip}</td><td className="text-right tabular-nums text-muted-foreground">{time}</td></tr>)}</tbody></table></div></div>
-          <div className="mt-auto flex items-center justify-between border-t border-border pt-3 text-[13px]"><span className="flex items-center gap-2 text-foreground"><StatusDot />Firewall active</span><span className="font-semibold text-emerald-600">No critical findings</span></div>
+          <div className="grid grid-cols-2 gap-3 text-[0.8125rem]"><div className="rounded-md bg-muted/60 p-3"><div className="text-muted-foreground">Pending updates</div><strong className="mt-1 block text-[1rem] text-foreground">3</strong></div><div className="rounded-md bg-muted/60 p-3"><div className="text-muted-foreground">Last patch</div><strong className="mt-1 block text-[0.8125rem] text-foreground">Nov 02, 2026</strong></div></div>
+          <div><div className="mb-2 text-[0.8125rem] font-medium text-foreground">Open ports</div><div className="flex flex-wrap gap-2">{["22 SSH", "80 HTTP", "443 HTTPS"].map((port) => <span key={port} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">{port}</span>)}</div></div>
+          <div className="min-w-0"><div className="mb-2 text-[0.8125rem] font-medium text-foreground">Recent SSH logins</div><div className="overflow-x-auto max-[39.9375rem]:-mx-2 max-[39.9375rem]:px-2"><table className="server-details-table w-full border-collapse text-left"><colgroup><col className="w-[24%]" /><col className="w-[48%]" /><col className="w-[28%]" /></colgroup><thead><tr className="text-muted-foreground"><th>User</th><th>IP address</th><th className="text-right">Time</th></tr></thead><tbody>{[["deploy", "203.0.113.42", "14:26"], ["admin", "198.51.100.18", "13:10"], ["ops", "203.0.113.15", "11:42"]].map(([user, ip, time]) => <tr key={`${user}-${time}`}><td className="text-foreground">{user}</td><td className="tabular-nums text-muted-foreground">{ip}</td><td className="text-right tabular-nums text-muted-foreground">{time}</td></tr>)}</tbody></table></div></div>
+          <div className="mt-auto flex items-center justify-between border-t border-border pt-3 text-[0.8125rem]"><span className="flex items-center gap-2 text-foreground"><StatusDot />Firewall active</span><span className="font-semibold text-emerald-600">No critical findings</span></div>
         </div>
       </SectionCard></SpanCard>
 
       <SpanCard><SectionCard title="Backups" icon={Database} loading={loading}>
         <div className="flex h-full flex-col gap-4">
           <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900 dark:bg-emerald-950/40">
-            <div className="flex items-center gap-2 text-[13px] font-semibold text-emerald-700 dark:text-emerald-300"><CheckCircle2 size={16} />Last backup successful</div>
-            <div className="mt-2 text-[13px] text-foreground">Today, 02:15 <span className="text-muted-foreground">· 18.4 GB</span></div>
+            <div className="flex items-center gap-2 text-[0.8125rem] font-semibold text-emerald-700 dark:text-emerald-300"><CheckCircle2 size={16} />Last backup successful</div>
+            <div className="mt-2 text-[0.8125rem] text-foreground">Today, 02:15 <span className="text-muted-foreground">· 18.4 GB</span></div>
           </div>
-          <dl className="grid grid-cols-2 gap-3 text-[13px]"><div><dt className="text-muted-foreground">Next scheduled</dt><dd className="mt-1 font-medium text-foreground">Tomorrow, 02:00</dd></div><div><dt className="text-muted-foreground">Retention</dt><dd className="mt-1 font-medium text-foreground">30 daily copies</dd></div></dl>
-          <button type="button" disabled={backupRunning} onClick={() => { setBackupRunning(true); onAction("Backup started"); window.setTimeout(() => setBackupRunning(false), 1800); }} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-70"><RotateCw size={16} className={backupRunning ? "animate-spin" : ""} />{backupRunning ? "Backup running..." : "Run backup now"}</button>
+          <dl className="grid grid-cols-2 gap-3 text-[0.8125rem]"><div><dt className="text-muted-foreground">Next scheduled</dt><dd className="mt-1 font-medium text-foreground">Tomorrow, 02:00</dd></div><div><dt className="text-muted-foreground">Retention</dt><dd className="mt-1 font-medium text-foreground">30 daily copies</dd></div></dl>
+          <button type="button" disabled={backupRunning} onClick={() => { setBackupRunning(true); onAction("Backup started"); window.setTimeout(() => setBackupRunning(false), 1800); }} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-70"><RotateCw size={16} className={backupRunning ? "animate-spin" : ""} />{backupRunning ? "Backup running..." : "Run backup now"}</button>
         </div>
       </SectionCard></SpanCard>
     </DashboardRow>
@@ -475,7 +475,7 @@ export function ServerDetailsOverview({
       <SpanCard wide><SectionCard title="Live Log Tail" icon={Terminal} loading={loading} action={<div className="flex items-center gap-2">
         <button type="button" onClick={() => setLogPaused((paused) => !paused)} title={logPaused ? "Resume log stream" : "Pause log stream"} aria-label={logPaused ? "Resume log stream" : "Pause log stream"} className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{logPaused ? <Play size={16} /> : <Pause size={16} />}</button>
         <button type="button" onClick={() => setLogs([])} title="Clear logs" aria-label="Clear logs" className="grid h-9 w-9 place-items-center rounded-md border border-border text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="text-xs">Clear</span></button>
-        <button type="button" onClick={() => onTabChange("logs")} className="rounded text-[13px] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open Logs</button>
+        <button type="button" onClick={() => onTabChange("logs")} className="rounded text-[0.8125rem] font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open Logs</button>
       </div>}>
         <div className="flex h-full min-h-72 flex-col rounded-lg bg-[#101a2a] p-4 font-mono text-xs text-slate-200">
           <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3 text-slate-400"><span>web-01 / var / log / syslog</span><span className="flex items-center gap-2">{logPaused ? <Pause size={13} /> : <span className="h-2 w-2 rounded-full bg-emerald-400" />}{logPaused ? "Paused" : "Live"}</span></div>
@@ -491,12 +491,12 @@ export function ServerDetailsOverview({
 
       <SpanCard><SectionCard title="Specs and Related" icon={Info} loading={loading}>
         <div className="flex h-full flex-col">
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[13px]">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[0.8125rem]">
             {[["vCPU", "8 cores"], ["RAM", "32 GB"], ["Disk", "700 GB NVMe"], ["Kernel", "5.15.0-91"], ["Agent", "Nexus 2.8.4"], ["Owner", "Platform team"], ["On-call", "ops@nexus.io"]].map(([label, value]) => <div key={label} className="min-w-0"><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-0.5 truncate font-medium text-foreground">{value}</dd></div>)}
           </dl>
           <div className="mt-3 flex flex-wrap gap-2">{["production", "web-tier", "critical"].map((tag) => <span key={tag} className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{tag}</span>)}</div>
           <div className="mt-auto border-t border-border pt-3">
-            <div className="mb-3 text-[13px] font-medium text-foreground">Dependencies</div>
+            <div className="mb-3 text-[0.8125rem] font-medium text-foreground">Dependencies</div>
             <div className="flex items-center justify-between gap-2">
               <div className="rounded-md border border-border px-2 py-2 text-center"><Network size={16} className="mx-auto mb-1 text-primary" /><span className="text-xs text-foreground">Load balancer</span></div>
               <span className="h-px flex-1 bg-border" aria-hidden="true" />
@@ -516,8 +516,8 @@ export function ServerDetailsOverview({
           <DialogDescription>This will restart the selected demo service on web-01. The service may be briefly unavailable.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <button type="button" onClick={() => setServiceToRestart(null)} className="rounded-md border border-border px-4 py-2 text-[13px] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Cancel</button>
-          <button type="button" onClick={updateService} className="rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restart service</button>
+          <button type="button" onClick={() => setServiceToRestart(null)} className="rounded-md border border-border px-4 py-2 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Cancel</button>
+          <button type="button" onClick={updateService} className="rounded-md bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restart service</button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

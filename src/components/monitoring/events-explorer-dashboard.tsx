@@ -307,7 +307,7 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
         borderColor: theme.tooltipBorder,
         borderWidth: 1,
         textStyle: { color: theme.tooltipText, fontSize: 12 },
-        extraCssText: `border-radius:8px;box-shadow:${theme.tooltipShadow};padding:10px 12px;`,
+        extraCssText: `border-radius:0.5rem;box-shadow:${theme.tooltipShadow};padding:0.625rem 0.75rem;`,
         formatter: (params: unknown) => {
           const list = (Array.isArray(params) ? params : [params]) as Array<{ color: string; seriesName: string; value: number; dataIndex?: number }>;
           const index = typeof list[0]?.dataIndex === "number" ? list[0].dataIndex : 0;
@@ -315,9 +315,9 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
           if (!bucket) return "";
           const stamp = new Date(bucket.epochMs);
           const title = `${stamp.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} ${stamp.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
-          const lines = list.map((item) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;line-height:20px;min-width:170px"><span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${item.color}"></span><span style="color:${theme.tooltipMuted}">${item.seriesName}</span></span><b style="font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${item.value.toLocaleString("en-US")}</b></div>`).join("");
+          const lines = list.map((item) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;line-height:1.25rem;min-width:10.625rem"><span style="display:flex;align-items:center;gap:0.375rem"><span style="display:inline-block;width:0.5rem;height:0.5rem;border-radius:50%;background:${item.color}"></span><span style="color:${theme.tooltipMuted}">${item.seriesName}</span></span><b style="font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${item.value.toLocaleString("en-US")}</b></div>`).join("");
           const total = list.reduce((sum, item) => sum + item.value, 0);
-          return `<div style="font-weight:600;margin-bottom:4px;font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${title}</div>${lines}<div style="border-top:1px solid ${theme.tooltipBorder};margin-top:4px;padding-top:4px;display:flex;justify-content:space-between;gap:16px;line-height:20px;min-width:170px"><span style="color:${theme.tooltipMuted}">Total</span><b style="font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${total.toLocaleString("en-US")}</b></div>`;
+          return `<div style="font-weight:600;margin-bottom:0.25rem;font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${title}</div>${lines}<div style="border-top:0.0625rem solid ${theme.tooltipBorder};margin-top:0.25rem;padding-top:0.25rem;display:flex;justify-content:space-between;gap:1rem;line-height:1.25rem;min-width:10.625rem"><span style="color:${theme.tooltipMuted}">Total</span><b style="font-variant-numeric:tabular-nums;color:${theme.tooltipText}">${total.toLocaleString("en-US")}</b></div>`;
         },
       },
       brush: {
@@ -401,9 +401,9 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
 
   return (
     <div className="relative">
-      <div ref={hostRef} role="img" aria-label="Stacked bar chart of event volume by severity over time. Drag to select a window." className="h-[210px] w-full" />
+      <div ref={hostRef} role="img" aria-label="Stacked bar chart of event volume by severity over time. Drag to select a window." className="h-[13.125rem] w-full" />
       {selectionBox && (
-        <div className="pointer-events-none absolute top-[2px] z-[5] max-w-[95%] truncate whitespace-nowrap rounded-md border border-[#3B82F6]/50 bg-[#3B82F6]/10 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-[#1D4ED8] dark:text-[#93C5FD]" style={{ left: selectionBox.left, width: selectionBox.width }}>
+        <div className="pointer-events-none absolute top-[0.125rem] z-[5] max-w-[95%] truncate whitespace-nowrap rounded-md border border-blue-500/50 bg-blue-500/10 px-1.5 py-0.5 text-[0.6875rem] font-semibold tabular-nums text-blue-700 dark:text-blue-300" style={{ left: selectionBox.left, width: selectionBox.width }}>
           {selectionBox.label}
         </div>
       )}
@@ -457,11 +457,11 @@ function SeverityDonut({ includeDebug, onToggleSeverity, activeSeverities }: { i
 
   return (
     <div className="flex items-center gap-4 pt-1">
-      <div className="relative h-[150px] w-[150px] shrink-0">
+      <div className="relative h-[9.375rem] w-[9.375rem] shrink-0">
         <div ref={hostRef} className="absolute inset-0" role="img" aria-label={`Donut chart of event severities. ${visibleTotal.toLocaleString("en-US")} events in view.`} />
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className="font-display text-[19px] font-extrabold leading-none text-foreground tabular-nums">{visibleTotal.toLocaleString("en-US")}</b>
-          <span className="mt-1 text-[12px] font-medium text-muted-foreground">Total</span>
+          <b className="font-display text-[1.1875rem] font-extrabold leading-none text-foreground tabular-nums">{visibleTotal.toLocaleString("en-US")}</b>
+          <span className="mt-1 text-[0.75rem] font-medium text-muted-foreground">Total</span>
         </div>
       </div>
       <div className="grid min-w-0 flex-1 grid-cols-3 gap-2">
@@ -481,9 +481,9 @@ function SeverityDonut({ includeDebug, onToggleSeverity, activeSeverities }: { i
                 active ? "border-primary bg-primary/5" : "border-border/60 hover:bg-muted/50",
               )}
             >
-              <span className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: SEVERITY_COLORS[severity] }} />{severity}</span>
-              <b className="text-[15px] tabular-nums text-foreground">{count.toLocaleString("en-US")}</b>
-              <span className="text-[12px] tabular-nums text-muted-foreground">{pct.toFixed(1)}%</span>
+              <span className="flex items-center gap-1.5 text-[0.75rem] font-semibold text-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: SEVERITY_COLORS[severity] }} />{severity}</span>
+              <b className="text-[0.9375rem] tabular-nums text-foreground">{count.toLocaleString("en-US")}</b>
+              <span className="text-[0.75rem] tabular-nums text-muted-foreground">{pct.toFixed(1)}%</span>
             </button>
           );
         })}
@@ -515,26 +515,26 @@ function ActivityHeatmap() {
   const cellClass = ["bg-blue-100 dark:bg-blue-950/40", "bg-blue-200 dark:bg-blue-900/50", "bg-blue-400 dark:bg-blue-800/70", "bg-blue-600 dark:bg-blue-600/80", "bg-blue-800 dark:bg-blue-500"];
   return (
     <div className="flex flex-1 flex-col justify-center gap-1 pt-1" aria-label="Event activity heatmap by day and hour">
-      <div className="grid grid-cols-[40px_repeat(24,minmax(0,1fr))] gap-[3px]">
+      <div className="grid grid-cols-[40px_repeat(24,minmax(0,1fr))] gap-[0.1875rem]">
         <span aria-hidden="true" />
         {Array.from({ length: 24 }, (_, hour) => (
-          <span key={hour} className="text-center text-[12px] tabular-nums text-muted-foreground">{String(hour).padStart(2, "0")}</span>
+          <span key={hour} className="text-center text-[0.75rem] tabular-nums text-muted-foreground">{String(hour).padStart(2, "0")}</span>
         ))}
         {HEATMAP_DAYS.map((day, dayIndex) => (
           <Fragment key={day + dayIndex}>
-            <span className="flex items-center text-[12px] font-medium text-muted-foreground">{day}</span>
+            <span className="flex items-center text-[0.75rem] font-medium text-muted-foreground">{day}</span>
             {EVENT_HEATMAP[dayIndex].map((count, hour) => (
               <div
                 key={hour}
                 title={`${day} ${String(hour).padStart(2, "0")}:00 — ${count.toLocaleString("en-US")} events`}
                 aria-label={`${day} ${String(hour).padStart(2, "0")}:00, ${count.toLocaleString("en-US")} events`}
-                className={cn("h-[22px] rounded-[3px]", cellClass[bucket(count)])}
+                className={cn("h-[1.375rem] rounded-[0.1875rem]", cellClass[bucket(count)])}
               />
             ))}
           </Fragment>
         ))}
       </div>
-      <div className="mt-2 flex items-center justify-end gap-2 text-[12px] text-muted-foreground"><span>Less</span><span className="flex gap-1">{cellClass.map((cellClassName, index) => <span key={index} aria-hidden="true" className={cn("h-3 w-3 rounded-[2px]", cellClassName)} />)}</span><span>More</span></div>
+      <div className="mt-2 flex items-center justify-end gap-2 text-[0.75rem] text-muted-foreground"><span>Less</span><span className="flex gap-1">{cellClass.map((cellClassName, index) => <span key={index} aria-hidden="true" className={cn("h-3 w-3 rounded-[0.125rem]", cellClassName)} />)}</span><span>More</span></div>
     </div>
   );
 }
@@ -550,7 +550,7 @@ function Sparkline({ values, stroke, className }: { values: number[]; stroke: st
   const range = max - min || 1;
   const points = values.map((value, index) => `${((index * width) / Math.max(1, values.length - 1)).toFixed(2)},${(height - 2 - ((value - min) / range) * (height - 4)).toFixed(2)}`).join(" ");
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("h-[26px] w-16 shrink-0", className)} role="img" aria-label="Trend sparkline">
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("h-[1.625rem] w-16 shrink-0", className)} role="img" aria-label="Trend sparkline">
       <polyline points={points} fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
     </svg>
   );
@@ -576,7 +576,7 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
   return (
     <div className="flex flex-1 flex-col justify-start gap-2 pt-3">
       {headerLabel && (
-        <div className="hidden grid-cols-[140px_minmax(0,1fr)_56px_64px] items-center gap-x-3 border-b border-[#EEF0F4] pb-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-muted-foreground dark:border-border sm:grid" aria-hidden="true">
+        <div className="hidden grid-cols-[140px_minmax(0,1fr)_56px_4rem] items-center gap-x-3 border-b border-[#EEF0F4] pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.04em] text-muted-foreground dark:border-border sm:grid" aria-hidden="true">
           <span>{headerLabel}</span>
           <span>Volume</span>
           <span aria-hidden="true" />
@@ -593,13 +593,13 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
           const rowAria = `${row.name}: ${row.count.toLocaleString("en-US")} events (${share.toFixed(1)}%)${breakdown ? `, Critical ${breakdown.critical}, Warning ${breakdown.warning}` : ""}`;
           const content = (
             <>
-              <span className="order-1 flex min-w-0 items-center gap-1.5 text-[13px] font-medium leading-snug text-foreground sm:order-1">
+              <span className="order-1 flex min-w-0 items-center gap-1.5 text-[0.8125rem] font-medium leading-snug text-foreground sm:order-1">
                 {iconFor?.(row.name, index, hue.icon)}
                 <span>{row.name}</span>
               </span>
-              <b className="order-2 justify-self-end text-right text-[13px] tabular-nums text-foreground sm:order-3 sm:justify-self-auto sm:w-14">{formatCompact(row.count)}</b>
+              <b className="order-2 justify-self-end text-right text-[0.8125rem] tabular-nums text-foreground sm:order-3 sm:justify-self-auto sm:w-14">{formatCompact(row.count)}</b>
               {showTrend ? (
-                <span className={cn("order-3 flex items-center justify-end gap-0.5 whitespace-nowrap text-[12px] font-semibold tabular-nums sm:order-4", trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={`${trendUp ? "+" : ""}${trend ?? 0}% vs last week`}>
+                <span className={cn("order-3 flex items-center justify-end gap-0.5 whitespace-nowrap text-[0.75rem] font-semibold tabular-nums sm:order-4", trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={`${trendUp ? "+" : ""}${trend ?? 0}% vs last week`}>
                   {trendUp ? <ArrowUpRight size={12} aria-hidden="true" /> : <ArrowDownRight size={12} aria-hidden="true" />}{Math.abs(trend ?? 0)}%
                 </span>
               ) : <span className="order-3 sm:order-4" aria-hidden="true" />}
@@ -612,7 +612,7 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
             </>
           );
           const className = cn(
-            "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-lg px-2 py-2 text-left text-[13px] transition-colors hover:bg-[#F8FAFC] dark:hover:bg-slate-800/60 sm:h-11 sm:grid-cols-[140px_minmax(0,1fr)_56px_64px] sm:gap-y-0 sm:px-2 sm:py-0",
+            "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-lg px-2 py-2 text-left text-[0.8125rem] transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 sm:h-11 sm:grid-cols-[140px_minmax(0,1fr)_56px_4rem] sm:gap-y-0 sm:px-2 sm:py-0",
             onSelect && "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           );
           return (
@@ -640,7 +640,7 @@ function DistributionBar({ rows }: { rows: Array<{ name: string; count: number; 
   const shareOf = (row: (typeof rows)[number]) => row.pct ?? (total > 0 ? (row.count / total) * 100 : 0);
   return (
     <div>
-      <div className="flex h-2 w-full gap-[2px] overflow-hidden rounded-full" role="img" aria-label="Distribution across all rows">
+      <div className="flex h-2 w-full gap-[0.125rem] overflow-hidden rounded-full" role="img" aria-label="Distribution across all rows">
         {rows.map((row, index) => {
           const share = shareOf(row);
           return (
@@ -656,7 +656,7 @@ function DistributionBar({ rows }: { rows: Array<{ name: string; count: number; 
       </div>
       <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 sm:grid-cols-3">
         {rows.map((row, index) => (
-          <li key={row.name} className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-[12px] text-muted-foreground" title={`${row.name} · ${row.count.toLocaleString("en-US")} events · ${shareOf(row).toFixed(1)}%`}>
+          <li key={row.name} className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-[0.75rem] text-muted-foreground" title={`${row.name} · ${row.count.toLocaleString("en-US")} events · ${shareOf(row).toFixed(1)}%`}>
             <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: DISTRIBUTION_SHADES[index % DISTRIBUTION_SHADES.length] }} />
             <span className="truncate">{row.name}</span>
             <span className="tabular-nums">{shareOf(row).toFixed(1)}%</span>
@@ -691,14 +691,14 @@ function SeverityWeekTrend({ activeSeverities }: { activeSeverities: ReadonlySet
   return (
     <div className="border-t border-border/60 pt-2">
       <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Last 7 Days</span>
+        <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Last 7 Days</span>
         <ul className="flex flex-wrap items-center gap-2.5" aria-label="Week over week severity change">
           {EVENT_WEEKLY_DELTAS.map((delta) => {
             const up = delta.changePct >= 0;
             const good = delta.good === "down" ? !up : up;
             const Icon = up ? ArrowUpRight : ArrowDownRight;
             return (
-              <li key={delta.severity} className={cn("flex items-center gap-1 text-[12px] font-semibold tabular-nums", good ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={`${delta.severity}: ${up ? "+" : ""}${delta.changePct}% vs last week`}>
+              <li key={delta.severity} className={cn("flex items-center gap-1 text-[0.75rem] font-semibold tabular-nums", good ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400")} title={`${delta.severity}: ${up ? "+" : ""}${delta.changePct}% vs last week`}>
                 <Icon size={12} aria-hidden="true" />{Math.abs(delta.changePct)}% {delta.severity}
               </li>
             );
@@ -712,12 +712,12 @@ function SeverityWeekTrend({ activeSeverities }: { activeSeverities: ReadonlySet
           const tooltip = `${day.date} — Critical ${day.critical.toLocaleString("en-US")} · Warning ${day.warning.toLocaleString("en-US")} · Info ${day.info.toLocaleString("en-US")} · Debug ${day.debug.toLocaleString("en-US")}`;
           return (
             <div key={day.label} className="flex h-full min-w-0 flex-1 flex-col items-stretch gap-1">
-              <div className="flex h-full min-h-0 flex-col-reverse items-stretch justify-start gap-[2px]" title={tooltip} aria-label={tooltip}>
-                {showInfo && <span className="rounded-[2px] bg-[#3B82F6]" style={{ height: heightPct(day.info) }} />}
-                {showWarning && <span className="rounded-[2px] bg-[#D97706]" style={{ height: heightPct(day.warning) }} />}
-                {showCritical && <span className="rounded-[2px] bg-[#DC2626]" style={{ height: heightPct(day.critical) }} />}
+              <div className="flex h-full min-h-0 flex-col-reverse items-stretch justify-start gap-[0.125rem]" title={tooltip} aria-label={tooltip}>
+                {showInfo && <span className="rounded-[0.125rem] bg-blue-500" style={{ height: heightPct(day.info) }} />}
+                {showWarning && <span className="rounded-[0.125rem] bg-amber-600" style={{ height: heightPct(day.warning) }} />}
+                {showCritical && <span className="rounded-[0.125rem] bg-red-600" style={{ height: heightPct(day.critical) }} />}
               </div>
-              <span className="text-center text-[12px] font-medium text-muted-foreground">{day.label}</span>
+              <span className="text-center text-[0.75rem] font-medium text-muted-foreground">{day.label}</span>
             </div>
           );
         })}
@@ -744,7 +744,7 @@ function TopDatabaseSources({ activeSeverities, onSelect }: { activeSeverities: 
   const max = Math.max(...rows.map((row) => row.visible), 1);
   return (
     <div className="border-t border-border/60 pt-2">
-      <span className="mb-1 block text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Top Database Sources</span>
+      <span className="mb-1 block text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Top Database Sources</span>
       <ul className="flex flex-col gap-0.5">
         {rows.map((row, index) => {
           const hue = DB_SOURCE_HUES[index % DB_SOURCE_HUES.length];
@@ -755,11 +755,11 @@ function TopDatabaseSources({ activeSeverities, onSelect }: { activeSeverities: 
                 onClick={() => onSelect(row.name)}
                 title={`Filter events to ${row.name}`}
                 aria-label={`Filter events to ${row.name}, ${row.visible} events`}
-                className="grid h-7 w-full grid-cols-[minmax(0,1fr)_minmax(70px,1.4fr)_auto] items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="grid h-7 w-full grid-cols-[minmax(0,1fr)_minmax(4.375rem,1.4fr)_auto] items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <span className="flex min-w-0 items-center gap-1.5 truncate font-mono text-[12px] font-medium text-foreground"><Database size={11} className={cn("shrink-0", hue.icon)} aria-hidden="true" />{row.name}</span>
+                <span className="flex min-w-0 items-center gap-1.5 truncate font-mono text-[0.75rem] font-medium text-foreground"><Database size={11} className={cn("shrink-0", hue.icon)} aria-hidden="true" />{row.name}</span>
                 <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(row.visible / max) * 100}%`, background: hue.bar }} /></span>
-                <b className="w-9 text-right text-[12px] tabular-nums text-foreground">{row.visible}</b>
+                <b className="w-9 text-right text-[0.75rem] tabular-nums text-foreground">{row.visible}</b>
               </button>
             </li>
           );
@@ -776,7 +776,7 @@ function QuickInsightStrip() {
   hour12.setHours(hour, 0, 0, 0);
   const timeLabel = hour12.toLocaleTimeString("en-US", { hour: "numeric" });
   return (
-    <div className="flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-1.5 text-[12px] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
+    <div className="flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-1.5 text-[0.75rem] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
       <Info size={13} aria-hidden="true" className="shrink-0" />
       <span className="min-w-0">Peak hour: <b>{timeLabel}</b> · {EVENT_PEAK_HOUR.count.toLocaleString("en-US")} events</span>
     </div>
@@ -796,9 +796,9 @@ const RESOLUTION_BADGE: Record<string, string> = {
 function ResolutionStatus({ onOpenFilter }: { onOpenFilter: () => void }) {
   return (
     <div className="border-t border-border/60 pt-2">
-      <span className="mb-1 block text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Resolution Status</span>
+      <span className="mb-1 block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Resolution Status</span>
       <div
-        className="flex h-2 w-full gap-[2px] overflow-hidden rounded-full"
+        className="flex h-2 w-full gap-[0.125rem] overflow-hidden rounded-full"
         role="img"
         aria-label={`Resolution split: Resolved ${Math.round((EVENT_RESOLUTION_STATUS[0].count / EVENT_RESOLUTION_TOTAL) * 100)} percent, Acknowledged ${Math.round((EVENT_RESOLUTION_STATUS[1].count / EVENT_RESOLUTION_TOTAL) * 100)} percent, Open ${Math.round((EVENT_RESOLUTION_STATUS[2].count / EVENT_RESOLUTION_TOTAL) * 100)} percent`}
       >
@@ -829,14 +829,14 @@ function ResolutionStatus({ onOpenFilter }: { onOpenFilter: () => void }) {
                   onClick={onOpenFilter}
                   title="Filter table to open events only"
                   aria-label={`Open ${segment.count.toLocaleString("en-US")} events, filter table`}
-                  className="flex items-center gap-1.5 rounded-md px-1 py-0.5 text-[12px] font-medium text-rose-700 transition-colors hover:bg-rose-50 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-rose-300 dark:hover:bg-rose-950/40"
+                  className="flex items-center gap-1.5 rounded-md px-1 py-0.5 text-[0.75rem] font-medium text-rose-700 transition-colors hover:bg-rose-50 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-rose-300 dark:hover:bg-rose-950/40"
                 >
                   {item}
                 </button>
               </li>
             );
           }
-          return <li key={segment.label} className={cn("flex cursor-default items-center gap-1.5 px-1 py-0.5 text-[12px] font-medium", RESOLUTION_BADGE[segment.label])} title={`${segment.label}: ${segment.count.toLocaleString("en-US")} events (${pct.toFixed(1)}%)`}>{item}</li>;
+          return <li key={segment.label} className={cn("flex cursor-default items-center gap-1.5 px-1 py-0.5 text-[0.75rem] font-medium", RESOLUTION_BADGE[segment.label])} title={`${segment.label}: ${segment.count.toLocaleString("en-US")} events (${pct.toFixed(1)}%)`}>{item}</li>;
         })}
       </ul>
     </div>
@@ -1031,17 +1031,17 @@ function RowActionMenu({ eventId, open, onToggle, onClose, onAcknowledge, onAssi
           role="menu"
           aria-label={`Actions for ${eventId}`}
           onKeyDown={onMenuKeyDown}
-          className="motion-menu-in fixed z-[1400] w-[200px] rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
-          style={{ top: position.top, left: position.left, transformOrigin: position.openUp ? "bottom right" : "top right", ["--menu-slide" as string]: position.openUp ? "4px" : "-4px" }}
+          className="motion-menu-in fixed z-[1400] w-[12.5rem] rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
+          style={{ top: position.top, left: position.left, transformOrigin: position.openUp ? "bottom right" : "top right", ["--menu-slide" as string]: position.openUp ? "0.25rem" : "-0.25rem" }}
         >
           {items.map((item) => (
             <div key={item.key} role="presentation">
-              {item.dividerBefore && <div role="separator" className="mx-1 my-1 h-px border-t border-[#E5E7EB] dark:border-border" />}
+              {item.dividerBefore && <div role="separator" className="mx-1 my-1 h-px border-t border-gray-200 dark:border-border" />}
               <button
                 type="button"
                 role="menuitem"
                 onClick={(click) => { click.stopPropagation(); runItem(item); }}
-                className="flex h-9 w-full items-center gap-2.5 rounded-md px-3 text-left text-[13px] text-foreground transition-colors hover:bg-[#F3F4F6] focus-visible:bg-[#F3F4F6] focus-visible:outline-none dark:hover:bg-accent dark:focus-visible:bg-accent"
+                className="flex h-9 w-full items-center gap-2.5 rounded-md px-3 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-none dark:hover:bg-accent dark:focus-visible:bg-accent"
               >
                 <item.icon size={15} className="shrink-0 text-muted-foreground" aria-hidden="true" />
                 <span className="min-w-0 truncate">{item.label}</span>
@@ -1409,9 +1409,9 @@ export function EventsExplorerDashboard() {
             <details className="relative">
               <summary aria-label="Saved views" title="Saved views" className="inline-flex h-10 cursor-pointer list-none items-center gap-1.5 whitespace-nowrap rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent [&::-webkit-details-marker]:hidden"><Bookmark size={15} aria-hidden="true" />Saved Views<ChevronDown size={14} className="text-muted-foreground" aria-hidden="true" /></summary>
               <div className="absolute right-0 z-30 mt-2 w-60 rounded-lg border border-border bg-popover p-1.5 shadow-lg">
-                <p className="px-2 py-1 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Views</p>
+                <p className="px-2 py-1 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Views</p>
                 {savedViewList.map((view) => (
-                  <button key={view.id} type="button" onClick={() => applyView(view)} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-medium text-foreground hover:bg-accent">
+                  <button key={view.id} type="button" onClick={() => applyView(view)} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[0.8125rem] font-medium text-foreground hover:bg-accent">
                     <span className="min-w-0 flex-1 truncate">{view.name}</span>
                     {!view.builtin && (
                       <span role="button" aria-label={`Delete ${view.name}`} onClick={(event) => { event.stopPropagation(); event.preventDefault(); removeView(view.id); }} className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-muted-foreground hover:bg-muted"><X size={11} aria-hidden="true" /></span>
@@ -1419,7 +1419,7 @@ export function EventsExplorerDashboard() {
                   </button>
                 ))}
                 <div className="mt-1 border-t border-border pt-1">
-                  <button type="button" onClick={saveCurrentView} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-medium text-primary hover:bg-accent"><Plus size={13} aria-hidden="true" />Save current view</button>
+                  <button type="button" onClick={saveCurrentView} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[0.8125rem] font-medium text-primary hover:bg-accent"><Plus size={13} aria-hidden="true" />Save current view</button>
                 </div>
               </div>
             </details>
@@ -1430,7 +1430,7 @@ export function EventsExplorerDashboard() {
       />
 
       {status === "error" ? (
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-8 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-8 text-center">
           <div className="flex max-w-md flex-col items-center gap-3">
             <CircleAlert size={28} className="text-rose-500" aria-hidden="true" />
             <h2 className="font-display text-base font-bold text-foreground">Events could not be loaded</h2>
@@ -1449,7 +1449,7 @@ export function EventsExplorerDashboard() {
         <Panel
           title="Events Trend"
           className="flex h-full min-w-0 flex-col rounded-xl p-5"
-          titleClassName="text-[16px] font-semibold"
+          titleClassName="text-[1rem] font-semibold"
           action={brush ? <button type="button" onClick={resetZoom} className="inline-flex h-8 items-center gap-1 rounded-lg border border-border px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-accent">Reset zoom</button> : undefined}
         >
           <div className="flex flex-1 flex-col pt-1">
@@ -1459,7 +1459,7 @@ export function EventsExplorerDashboard() {
                   <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
                 ))}
               </div>
-              <span className="hidden text-[12px] text-muted-foreground xl:block">Drag to select a window · click a bar to isolate it</span>
+              <span className="hidden text-[0.75rem] text-muted-foreground xl:block">Drag to select a window · click a bar to isolate it</span>
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Toggle severity series">
               {(["Critical", "Warning", "Info", "Debug"] as EventSeverity[]).map((severity) => {
@@ -1475,11 +1475,11 @@ export function EventsExplorerDashboard() {
               })}
             </div>
             <div className="mt-2">
-              {status === "loading" ? <div className="h-[210px] w-full animate-pulse rounded-lg bg-muted" role="status" aria-label="Loading event trend" /> : <TrendChart data={EVENT_TRENDS[trendRange]} hidden={hiddenSeverities} brush={brush} onBrush={applyTrendBrush} highlightIndex={highlightIndex} />}
+              {status === "loading" ? <div className="h-[13.125rem] w-full animate-pulse rounded-lg bg-muted" role="status" aria-label="Loading event trend" /> : <TrendChart data={EVENT_TRENDS[trendRange]} hidden={hiddenSeverities} brush={brush} onBrush={applyTrendBrush} highlightIndex={highlightIndex} />}
             </div>
 
             {visibleTotal === 0 ? (
-              <p className="mt-6 text-center text-[13px] text-muted-foreground">No events in this range</p>
+              <p className="mt-6 text-center text-[0.8125rem] text-muted-foreground">No events in this range</p>
             ) : (<>
               <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Trend summary statistics">
                 {[
@@ -1487,27 +1487,27 @@ export function EventsExplorerDashboard() {
                   { label: "Peak Hour", value: trendSummary.peakTime, icon: Clock, spark: EVENT_TRENDS[trendRange].map((bucket) => bucket.critical), stroke: "#94A3B8" },
                   { label: "Error Rate", value: `${trendSummary.errorRate.toFixed(1)}%`, icon: ShieldAlert, spark: EVENT_TRENDS[trendRange].map((bucket) => (bucket.total > 0 ? (bucket.critical / bucket.total) * 100 : 0)), stroke: "#DC2626" },
                 ].map((tile) => (
-                  <div key={tile.label} className="flex h-[84px] min-w-0 flex-col justify-between rounded-lg border border-border bg-card p-2">
-                    <span className="flex items-center gap-1.5 truncate text-[12px] font-medium text-muted-foreground"><tile.icon size={12} aria-hidden="true" className="shrink-0" />{tile.label}</span>
+                  <div key={tile.label} className="flex h-[5.25rem] min-w-0 flex-col justify-between rounded-lg border border-border bg-card p-2">
+                    <span className="flex items-center gap-1.5 truncate text-[0.75rem] font-medium text-muted-foreground"><tile.icon size={12} aria-hidden="true" className="shrink-0" />{tile.label}</span>
                     <div className="flex items-end justify-between gap-1.5">
-                      <b className="text-[16px] tabular-nums text-foreground">{tile.value}</b>
+                      <b className="text-[1rem] tabular-nums text-foreground">{tile.value}</b>
                       <Sparkline values={tile.spark} stroke={tile.stroke} />
                     </div>
                   </div>
                 ))}
-                <div className="flex h-[84px] min-w-0 flex-col justify-between rounded-lg border border-border bg-card p-2">
-                  <span className="flex items-center gap-1.5 truncate text-[12px] font-medium text-muted-foreground"><ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-rose-500" />vs Previous 24H</span>
+                <div className="flex h-[5.25rem] min-w-0 flex-col justify-between rounded-lg border border-border bg-card p-2">
+                  <span className="flex items-center gap-1.5 truncate text-[0.75rem] font-medium text-muted-foreground"><ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-rose-500" />vs Previous 24H</span>
                   <div className="flex items-end justify-between gap-1.5">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-1.5 py-0.5 text-[12px] font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300"><ArrowUpRight size={11} aria-hidden="true" />6%</span>
-                    <span className="flex flex-col items-end"><Sparkline values={EVENT_TRENDS[trendRange].map((bucket) => bucket.total)} stroke="#94A3B8" /><span className="text-[12px] text-muted-foreground">vs yesterday</span></span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-1.5 py-0.5 text-[0.75rem] font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300"><ArrowUpRight size={11} aria-hidden="true" />6%</span>
+                    <span className="flex flex-col items-end"><Sparkline values={EVENT_TRENDS[trendRange].map((bucket) => bucket.total)} stroke="#94A3B8" /><span className="text-[0.75rem] text-muted-foreground">vs yesterday</span></span>
                   </div>
                 </div>
               </div>
 
               <div className="mt-2" aria-label="Notable spikes">
                 <div className="mb-1 flex items-center justify-between gap-2 border-b border-border pb-1">
-                  <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Notable Spikes</span>
-                  <span className="rounded-full border border-border bg-muted/60 px-2 py-0.5 text-[12px] font-medium text-muted-foreground">Top 3</span>
+                  <span className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Notable Spikes</span>
+                  <span className="rounded-full border border-border bg-muted/60 px-2 py-0.5 text-[0.75rem] font-medium text-muted-foreground">Top 3</span>
                 </div>
                 <ul className="flex flex-col divide-y divide-border">
                   {notableSpikes.map((spike, index) => {
@@ -1523,10 +1523,10 @@ export function EventsExplorerDashboard() {
                           onFocus={() => setHighlightIndex(spike.index)}
                           onBlur={() => setHighlightIndex(null)}
                           aria-label={`Zoom chart to ${spike.label}, ${spike.total} events, ${spike.dominant} dominant`}
-                          className="grid h-9 w-full grid-cols-[64px_72px_minmax(0,1fr)_auto_24px] items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="grid h-9 w-full grid-cols-[64px_72px_minmax(0,1fr)_auto_1.5rem] items-center gap-2 rounded-md px-1 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
-                          <span className="whitespace-nowrap text-[13px] font-medium tabular-nums text-foreground">{spike.label}</span>
-                          <span className="text-[13px] tabular-nums text-muted-foreground">{spike.total.toLocaleString("en-US")} ev</span>
+                          <span className="whitespace-nowrap text-[0.8125rem] font-medium tabular-nums text-foreground">{spike.label}</span>
+                          <span className="text-[0.8125rem] tabular-nums text-muted-foreground">{spike.total.toLocaleString("en-US")} ev</span>
                           <span className="h-1.5 min-w-0 overflow-hidden rounded-full bg-[#EEF0F4] dark:bg-slate-700"><span className="block h-full rounded-full transition-all duration-300" style={{ width: `${(spike.total / maxSpike) * 100}%`, background: hue.bar }} /></span>
                           <span className={cn("inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold", SEVERITY_BADGE[spike.dominant])}>{spike.dominant}</span>
                           <ArrowRight size={14} className="justify-self-end text-muted-foreground" aria-hidden="true" />
@@ -1537,7 +1537,7 @@ export function EventsExplorerDashboard() {
                 </ul>
               </div>
             </>)}
-            <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[12px] text-muted-foreground">
+            <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
               <span className="flex items-center gap-1.5"><RefreshCw size={12} aria-hidden="true" className="shrink-0" />Last updated: just now · Auto-refresh 30s</span>
               <button type="button" onClick={() => notify("Events refreshed.")} className="inline-flex shrink-0 items-center gap-1 font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><RefreshCw size={12} aria-hidden="true" />Refresh</button>
             </div>
@@ -1547,7 +1547,7 @@ export function EventsExplorerDashboard() {
         <Panel
           title="Events by Severity"
           className="flex h-full min-w-0 flex-col rounded-xl p-4"
-          titleClassName="text-[16px] font-semibold"
+          titleClassName="text-[1rem] font-semibold"
           action={<button type="button" aria-pressed={includeDebug} onClick={toggleDebugVisibility} className={cn("inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", includeDebug ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}>Include Debug</button>}
         >
           <div className="flex min-h-0 flex-1 flex-col gap-2 pt-1">
@@ -1556,17 +1556,17 @@ export function EventsExplorerDashboard() {
             <TopDatabaseSources activeSeverities={new Set(applied.severities)} onSelect={(name) => commit({ ...draft, query: name }, `Filtered to ${name}`)} />
             <QuickInsightStrip />
             <ResolutionStatus onOpenFilter={() => commit({ ...draft, statuses: ["Open"] }, "Filtered to open events")} />
-            <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Debug events hidden by default. Click a severity cell to filter the table.</div>
+            <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Debug events hidden by default. Click a severity cell to filter the table.</div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Event sources, hosts and recent events" className="grid items-stretch gap-4 xl:grid-cols-3">
-        <Panel title="Top Event Sources" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" action={<button type="button" onClick={() => notify("Full source breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
+        <Panel title="Top Event Sources" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" action={<button type="button" onClick={() => notify("Full source breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
           <BreakdownBarList rows={EVENT_SOURCES} trends={SOURCE_TRENDS} iconFor={(name, index, iconColor) => { const Icon = SOURCE_ICONS[name] ?? Bell; return <Icon size={13} className={cn("shrink-0", iconColor)} aria-hidden="true" />; }} onSelect={(name) => commit({ ...draft, source: name }, `Filtered to ${name}`)} headerLabel="SOURCE" severityBreakdown={EVENT_SOURCE_SEVERITY} />
           <div className="mt-auto border-t border-border pt-2">
             <DistributionBar rows={EVENT_SOURCES} />
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.75rem] text-muted-foreground">
               <span>Peak source: <b className="font-semibold text-foreground">{EVENT_SOURCES[0].name} ({EVENT_SOURCES[0].pct.toFixed(1)}%)</b></span>
               <span aria-hidden="true">·</span>
               <span>Total sources: <b className="tabular-nums font-semibold text-foreground">{EVENT_SOURCES.length}</b></span>
@@ -1575,11 +1575,11 @@ export function EventsExplorerDashboard() {
             </div>
           </div>
         </Panel>
-        <Panel title="Events by Host" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" action={<button type="button" onClick={() => notify("Full host breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
+        <Panel title="Events by Host" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" action={<button type="button" onClick={() => notify("Full host breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
           <BreakdownBarList rows={EVENT_HOSTS} trends={HOST_TRENDS} onSelect={(name) => commit({ ...draft, host: name }, `Filtered to ${name}`)} headerLabel="HOST" severityBreakdown={EVENT_HOST_SEVERITY} />
           <div className="mt-auto border-t border-border pt-2">
             <DistributionBar rows={EVENT_HOSTS} />
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.75rem] text-muted-foreground">
               <span>Busiest host: <b className="font-semibold text-foreground">{EVENT_HOSTS[0].name} ({EVENT_HOSTS[0].pct.toFixed(1)}%)</b></span>
               <span aria-hidden="true">·</span>
               <span>Total hosts: <b className="tabular-nums font-semibold text-foreground">{EVENT_HOSTS.length}</b></span>
@@ -1588,17 +1588,17 @@ export function EventsExplorerDashboard() {
             </div>
           </div>
         </Panel>
-        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold" action={<button type="button" onClick={() => commit({ ...DEFAULT_FILTERS })} className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
+        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<button type="button" onClick={() => commit({ ...DEFAULT_FILTERS })} className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
           <ul className="flex flex-1 flex-col justify-between gap-0.5 pt-1">
             {EVENT_RECORDS.slice(0, 8).map((event) => {
               const StatusIcon = STATUS_META[resolveStatus(event)].icon;
               return (
                 <li key={event.id}>
                   <Link href={`/events-explorer/${event.id}`} className="grid h-11 grid-cols-[56px_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                    <time className="whitespace-nowrap text-[12px] tabular-nums text-muted-foreground" dateTime={event.at}>{relativeTime(event.epochMs)}</time>
+                    <time className="whitespace-nowrap text-[0.75rem] tabular-nums text-muted-foreground" dateTime={event.at}>{relativeTime(event.epochMs)}</time>
                     <span className="flex min-w-0 items-center gap-2">
                       <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-semibold", SEVERITY_BADGE[event.severity])}><i aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", SEVERITY_DOT[event.severity])} />{event.severity}</span>
-                      <span className="min-w-0 truncate text-[13px] text-foreground" title={event.message}>{event.message}</span>
+                      <span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={event.message}>{event.message}</span>
                     </span>
                     <span className={cn("inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-0.5 text-xs font-semibold", STATUS_META[resolveStatus(event)].className)}><StatusIcon size={11} aria-hidden="true" />{resolveStatus(event)}</span>
                   </Link>
@@ -1606,7 +1606,7 @@ export function EventsExplorerDashboard() {
               );
             })}
           </ul>
-          <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Latest {Math.min(8, EVENT_RECORDS.length)} of {EVENT_TOTALS.total.toLocaleString("en-US")} events</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Latest {Math.min(8, EVENT_RECORDS.length)} of {EVENT_TOTALS.total.toLocaleString("en-US")} events</div>
         </Panel>
       </section>
 
@@ -1638,14 +1638,14 @@ export function EventsExplorerDashboard() {
           </div>
           <span aria-hidden="true" className="hidden h-6 w-px bg-border md:block" />
           <Select value={draft.source} onValueChange={(value) => { const next = { ...draft, source: value }; setDraft(next); commit(next); }}>
-            <SelectTrigger aria-label="Source" className="h-9 min-w-[140px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+            <SelectTrigger aria-label="Source" className="h-9 min-w-[8.75rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>{SOURCE_OPTIONS.map((source) => <SelectItem key={source} value={source}>{source}</SelectItem>)}</SelectContent>
           </Select>
           <Select value={draft.host} onValueChange={(value) => { const next = { ...draft, host: value }; setDraft(next); commit(next); }}>
-            <SelectTrigger aria-label="Host" className="h-9 min-w-[140px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+            <SelectTrigger aria-label="Host" className="h-9 min-w-[8.75rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>{HOST_OPTIONS.map((host) => <SelectItem key={host} value={host}>{host}</SelectItem>)}</SelectContent>
           </Select>
-          <span className="relative min-w-[220px] flex-1 sm:flex-none">
+          <span className="relative min-w-[13.75rem] flex-1 sm:flex-none">
             <Input ref={searchRef} value={draft.query} onChange={(event) => setDraft((prev) => ({ ...prev, query: event.target.value }))} onKeyDown={(event) => { if (event.key === "Enter") commit({ ...draft }, "Filters applied."); }} placeholder="Search events, hosts, sources..." aria-label="Search events. Press slash to focus." className="h-9 rounded-lg pr-12 text-sm" />
             <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground" aria-hidden="true">/</kbd>
           </span>
@@ -1693,7 +1693,7 @@ export function EventsExplorerDashboard() {
       <Panel
         title={`All Events (${status === "loading" ? "…" : (isDefaultFilters(applied) ? EVENT_TOTALS.total : sortedEvents.length).toLocaleString("en-US")})`}
         className="flex min-w-0 flex-col rounded-xl p-4"
-        titleClassName="text-[16px] font-semibold"
+        titleClassName="text-[1rem] font-semibold"
       >
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border py-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -1702,7 +1702,7 @@ export function EventsExplorerDashboard() {
                 <button key={mode.key} type="button" aria-pressed={utcMode === mode.value} onClick={() => setUtcMode(mode.value)} className={cn("h-7 rounded-md px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utcMode === mode.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{mode.key}</button>
               ))}
             </div>
-            <span className="text-[12px] text-muted-foreground">({utcMode ? "UTC" : "local time"})</span>
+            <span className="text-[0.75rem] text-muted-foreground">({utcMode ? "UTC" : "local time"})</span>
             <button type="button" aria-pressed={draft.showDebug} onClick={toggleDebugVisibility} className={cn("h-8 rounded-lg border px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", draft.showDebug ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}>Show debug</button>
           </div>
           <details className="relative">
@@ -1715,7 +1715,7 @@ export function EventsExplorerDashboard() {
         </div>
 
         {selected.size > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-primary/5 px-2 py-1.5 text-[13px] font-medium text-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-primary/5 px-2 py-1.5 text-[0.8125rem] font-medium text-foreground">
             <span><b className="tabular-nums">{selected.size}</b> selected</span>
             <span className="flex items-center gap-3">
               <button type="button" onClick={() => bulkUpdate("Acknowledged")} className="font-semibold text-primary hover:underline">Acknowledge</button>
@@ -1727,7 +1727,7 @@ export function EventsExplorerDashboard() {
         )}
 
         <div className="overflow-x-auto pt-1">
-          <table className="w-full min-w-[920px] text-left text-[13px]">
+          <table className="w-full min-w-[57.5rem] text-left text-[0.8125rem]">
             <thead>
               <tr className="border-b border-border bg-muted/40 text-xs text-muted-foreground">
                 <th className="w-8 px-2 py-2"><input type="checkbox" aria-label="Select events on this page" className="accent-primary" checked={pageEvents.length > 0 && pageEvents.every((event) => selected.has(event.id))} onChange={toggleSelectPage} /></th>
@@ -1763,7 +1763,7 @@ export function EventsExplorerDashboard() {
                     <td className="px-2 py-1.5"><input type="checkbox" aria-label={`Select event ${event.id}`} className="accent-primary" checked={selected.has(event.id)} onChange={() => toggleRow(event.id)} onClick={(click) => click.stopPropagation()} /></td>
                     <td className="whitespace-nowrap px-2 py-1.5 tabular-nums text-foreground" title={fullTimestamp(event.epochMs, utcMode)}><time dateTime={event.at}>{relativeTime(event.epochMs)}</time></td>
                     <td className="whitespace-nowrap px-2 py-1.5"><span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold", SEVERITY_BADGE[event.severity])}><SeverityIcon size={11} aria-hidden="true" />{event.severity}</span></td>
-                    <td className="max-w-[280px] whitespace-nowrap px-2 py-1.5 text-foreground" title={event.message}><span className="block truncate">{highlightQuery(event.message)}</span></td>
+                    <td className="max-w-[17.5rem] whitespace-nowrap px-2 py-1.5 text-foreground" title={event.message}><span className="block truncate">{highlightQuery(event.message)}</span></td>
                     <td className="whitespace-nowrap px-2 py-1.5 text-foreground">{event.source}</td>
                     <td className="whitespace-nowrap px-2 py-1.5 text-foreground">{event.host}</td>
                     <td className="whitespace-nowrap px-2 py-1.5 text-muted-foreground">{event.category}</td>
@@ -1791,10 +1791,10 @@ export function EventsExplorerDashboard() {
                   {expanded && (
                     <tr className="border-b border-border bg-muted/20">
                       <td colSpan={10} className="px-3 py-2">
-                        <p className="mb-1 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Occurrences ({event.occurrences.length} shown of {event.count})</p>
+                        <p className="mb-1 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Occurrences ({event.occurrences.length} shown of {event.count})</p>
                         <ul className="flex max-h-28 flex-wrap gap-1.5 overflow-auto">
                           {event.occurrences.map((occurrence, index) => (
-                            <li key={index} className="rounded-md border border-border bg-card px-2 py-0.5 text-[12px] tabular-nums text-muted-foreground" title={fullTimestamp(Date.parse(occurrence.at), utcMode)}>{new Date(occurrence.at).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</li>
+                            <li key={index} className="rounded-md border border-border bg-card px-2 py-0.5 text-[0.75rem] tabular-nums text-muted-foreground" title={fullTimestamp(Date.parse(occurrence.at), utcMode)}>{new Date(occurrence.at).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</li>
                           ))}
                         </ul>
                       </td>
@@ -1808,7 +1808,7 @@ export function EventsExplorerDashboard() {
                     <div className="flex flex-col items-center gap-2">
                       <SearchX size={26} className="text-muted-foreground" aria-hidden="true" />
                       <p className="text-sm font-semibold text-foreground">No events match your filters</p>
-                      <p className="text-[12px] text-muted-foreground">Try removing a filter or widening the time range.</p>
+                      <p className="text-[0.75rem] text-muted-foreground">Try removing a filter or widening the time range.</p>
                       <Button variant="outline" size="sm" onClick={clearAllFilters} className="h-9 rounded-lg px-3 text-xs">Clear filters</Button>
                     </div>
                   </td>
@@ -1819,11 +1819,11 @@ export function EventsExplorerDashboard() {
         </div>
 
         <div className="mt-auto flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[13px] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}–{rangeEnd}</b> of <b className="tabular-nums text-foreground">{displayTotal.toLocaleString("en-US")}</b> events</p>
+          <p className="text-[0.8125rem] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}–{rangeEnd}</b> of <b className="tabular-nums text-foreground">{displayTotal.toLocaleString("en-US")}</b> events</p>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[12px] text-muted-foreground">Rows per page</span>
+            <span className="text-[0.75rem] text-muted-foreground">Rows per page</span>
             <Select value={String(perPage)} onValueChange={(value) => { setPerPage(Number(value)); setPage(1); }}>
-              <SelectTrigger aria-label="Rows per page" className="h-8 w-[76px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label="Rows per page" className="h-8 w-[4.75rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>{[10, 25, 50].map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
             </Select>
             <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={safePage === 1} aria-label="Previous page" className="grid h-8 w-8 place-items-center rounded-lg border border-border text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronLeft size={14} aria-hidden="true" /></button>
@@ -1836,13 +1836,13 @@ export function EventsExplorerDashboard() {
       </Panel>
 
       <section aria-label="Event locations and activity" className="grid items-stretch gap-4 xl:grid-cols-2">
-        <Panel title="Events by Location" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold" action={<button type="button" onClick={() => notify("Full location breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
+        <Panel title="Events by Location" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<button type="button" onClick={() => notify("Full location breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
           <BreakdownBarList rows={EVENT_LOCATIONS} />
-          <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Top {EVENT_LOCATIONS.length} regions by event volume · last 7 days</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Top {EVENT_LOCATIONS.length} regions by event volume · last 7 days</div>
         </Panel>
-        <Panel title="Event Activity Heatmap" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold" action={<span className="text-[12px] text-muted-foreground">Last 7 days · hourly</span>}>
+        <Panel title="Event Activity Heatmap" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<span className="text-[0.75rem] text-muted-foreground">Last 7 days · hourly</span>}>
           <ActivityHeatmap />
-          <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Darker cells = more events · hover a cell for the exact count</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Darker cells = more events · hover a cell for the exact count</div>
         </Panel>
       </section>
       </>)}

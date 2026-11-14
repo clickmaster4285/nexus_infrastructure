@@ -148,7 +148,7 @@ function Sparkline({ values, stroke, className }: { values: number[]; stroke: st
   const range = max - min || 1;
   const points = values.map((value, index) => `${((index * width) / Math.max(1, values.length - 1)).toFixed(2)},${(height - 2 - ((value - min) / range) * (height - 4)).toFixed(2)}`).join(" ");
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("h-[26px] w-16 shrink-0", className)} role="img" aria-label="Trend sparkline">
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("h-[1.625rem] w-16 shrink-0", className)} role="img" aria-label="Trend sparkline">
       <polyline points={points} fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
     </svg>
   );
@@ -211,7 +211,7 @@ function TrendChart({ data, hidden, brush, onBrush }: TrendChartProps) {
         borderColor: "var(--border)",
         borderWidth: 1,
         textStyle: { color: "var(--popover-foreground)", fontSize: 12 },
-        extraCssText: "border-radius:8px;box-shadow:0 8px 24px rgb(15 23 42 / 0.18);padding:10px 12px;",
+        extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem rgb(15 23 42 / 0.18);padding:0.625rem 0.75rem;",
         formatter: (params: unknown) => {
           const list = Array.isArray(params) ? (params as Array<{ color: string | { colorStops?: Array<{ color: string }> }; seriesName: string; value: number }>) : [];
           const first = list[0] as { dataIndex?: number } | undefined;
@@ -220,8 +220,8 @@ function TrendChart({ data, hidden, brush, onBrush }: TrendChartProps) {
           if (!bucket) return "";
           const stamp = new Date(bucket.epochMs);
           const title = `${stamp.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} ${stamp.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
-          const lines = list.map((item) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;line-height:20px"><span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${typeof item.color === "string" ? item.color : "var(--primary)"}"></span>${item.seriesName}</span><b style="font-variant-numeric:tabular-nums">${formatFull(item.value)}</b></div>`).join("");
-          return `<div style="font-weight:600;margin-bottom:4px">${title}</div>${lines}`;
+          const lines = list.map((item) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;line-height:1.25rem"><span style="display:flex;align-items:center;gap:0.375rem"><span style="display:inline-block;width:0.5rem;height:0.5rem;border-radius:50%;background:${typeof item.color === "string" ? item.color : "var(--primary)"}"></span>${item.seriesName}</span><b style="font-variant-numeric:tabular-nums">${formatFull(item.value)}</b></div>`).join("");
+          return `<div style="font-weight:600;margin-bottom:0.25rem">${title}</div>${lines}`;
         },
       },
       brush: {
@@ -292,13 +292,13 @@ function TrendChart({ data, hidden, brush, onBrush }: TrendChartProps) {
       ref={hostRef}
       role="img"
       aria-label="Stacked bar chart of log volume by level over time. Drag to select a time window."
-      className="h-[210px] w-full"
+      className="h-[13.125rem] w-full"
     />
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Donut — level distribution, 130px, 72% cutout, center total.        */
+/* Donut — level distribution, 8.125rem, 72% cutout, center total.        */
 /* ------------------------------------------------------------------ */
 function LevelDonut() {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -332,11 +332,11 @@ function LevelDonut() {
   }, []);
 
   return (
-    <div className="relative h-[130px] w-[130px] shrink-0">
+    <div className="relative h-[8.125rem] w-[8.125rem] shrink-0">
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Donut chart of log levels" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <b className="font-display text-[15px] font-extrabold leading-none text-foreground tabular-nums">48.7M</b>
-        <span className="mt-1 text-[12px] font-medium text-muted-foreground">Total</span>
+        <b className="font-display text-[0.9375rem] font-extrabold leading-none text-foreground tabular-nums">48.7M</b>
+        <span className="mt-1 text-[0.75rem] font-medium text-muted-foreground">Total</span>
       </div>
     </div>
   );
@@ -711,7 +711,7 @@ export function LogsExplorerDashboard() {
 
   const colSpan = 3 + (visibleColumns.level ? 1 : 0) + (visibleColumns.service ? 1 : 0) + (visibleColumns.host ? 1 : 0) + (visibleColumns.context ? 1 : 0);
   const rowPad = density === "comfortable" ? "px-3 py-2" : "px-3 py-0.5";
-  const cellText = density === "comfortable" ? "text-[13px]" : "text-xs";
+  const cellText = density === "comfortable" ? "text-[0.8125rem]" : "text-xs";
   const allSavedSearches = [...MOCK_SAVED_SEARCHES, ...customSaved];
   const bucketLevelCount = (level: LogLevel, key: TrendRangeKey) => LOG_TRENDS[key].reduce((acc, bucket) => acc + bucket[level.toLowerCase() as "error" | "warning" | "info" | "debug"], 0);
   const startNewQuery = () => {
@@ -754,7 +754,7 @@ export function LogsExplorerDashboard() {
       </section>
 
       {isError ? (
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-8 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-8 text-center">
           <div className="flex flex-col items-center gap-3">
             <CircleAlert size={28} className="text-rose-500" aria-hidden="true" />
             <h2 className="font-display text-base font-bold text-foreground">Logs could not be loaded</h2>
@@ -769,7 +769,7 @@ export function LogsExplorerDashboard() {
         <Panel
           title="Logs Trend"
           className="flex h-full min-w-0 flex-col rounded-xl p-4"
-          titleClassName="text-[16px] font-semibold"
+          titleClassName="text-[1rem] font-semibold"
           action={brush ? (
             <button type="button" onClick={resetZoom} className="inline-flex h-8 items-center gap-1 rounded-lg border border-border px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"><RotateCcw size={12} aria-hidden="true" />Reset zoom</button>
           ) : undefined}
@@ -804,7 +804,7 @@ export function LogsExplorerDashboard() {
             </div>
             <div className="mt-2">
               {isLoading ? (
-                <div className="h-[210px] w-full animate-pulse rounded-lg bg-muted" role="status" aria-label="Loading log trend" />
+                <div className="h-[13.125rem] w-full animate-pulse rounded-lg bg-muted" role="status" aria-label="Loading log trend" />
               ) : (
                 <TrendChart data={trend} hidden={hiddenLevels} brush={brush} onBrush={onTrendBrush} />
               )}
@@ -822,7 +822,7 @@ export function LogsExplorerDashboard() {
         <Panel
           title="Filter Logs"
           className="flex h-full min-w-0 flex-col rounded-xl p-4"
-          titleClassName="text-[16px] font-semibold"
+          titleClassName="text-[1rem] font-semibold"
           action={<button type="button" onClick={clearAllFilters} className="text-sm font-medium text-primary hover:underline">Clear All</button>}
         >
           <div className="flex flex-1 flex-col gap-3 pt-1">
@@ -947,7 +947,7 @@ export function LogsExplorerDashboard() {
                   </div>
                   <ul className="flex flex-wrap gap-1.5">
                     {recentSearches.map((term) => (
-                      <li key={term}><button type="button" onClick={() => applyQuery(term, "Recent search applied.")} className="inline-flex h-7 max-w-[240px] items-center gap-1.5 rounded-full bg-muted px-2.5 text-xs text-foreground transition-colors hover:bg-accent"><Clock size={11} className="shrink-0 text-muted-foreground" aria-hidden="true" /><span className="truncate">{term}</span></button></li>
+                      <li key={term}><button type="button" onClick={() => applyQuery(term, "Recent search applied.")} className="inline-flex h-7 max-w-[15rem] items-center gap-1.5 rounded-full bg-muted px-2.5 text-xs text-foreground transition-colors hover:bg-accent"><Clock size={11} className="shrink-0 text-muted-foreground" aria-hidden="true" /><span className="truncate">{term}</span></button></li>
                     ))}
                   </ul>
                 </div>
@@ -961,7 +961,7 @@ export function LogsExplorerDashboard() {
       <Panel
         title={`Logs Results (${isLoading ? "…" : formatFull(isDefaultFilters(applied) ? LOG_TOTALS.total : sortedLogs.length)})`}
         className="flex min-w-0 flex-col rounded-xl p-4"
-        titleClassName="text-[16px] font-semibold"
+        titleClassName="text-[1rem] font-semibold"
       >
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border py-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -992,7 +992,7 @@ export function LogsExplorerDashboard() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-1.5 text-sm font-medium text-foreground"><span aria-hidden="true" className={cn("h-2 w-2 rounded-full", liveTail ? "animate-pulse bg-emerald-500" : "bg-slate-400")} />Live Tail</span>
             <button type="button" role="switch" aria-checked={liveTail} aria-label="Toggle live tail" title={liveTail ? "Pause live tail" : "Resume live tail"} onClick={() => { setLiveTail((value) => { if (value) notify("Live tail paused."); return !value; }); }} className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", liveTail ? "bg-blue-500" : "bg-slate-400")}>
-              <span aria-hidden="true" className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", liveTail ? "left-[18px]" : "left-0.5")} />
+              <span aria-hidden="true" className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", liveTail ? "left-[1.125rem]" : "left-0.5")} />
             </button>
             {pendingCount > 0 && (
               <button type="button" onClick={flushPending} className="h-8 rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground transition-colors hover:opacity-90">{pendingCount} new logs ↑</button>
@@ -1003,7 +1003,7 @@ export function LogsExplorerDashboard() {
         </div>
 
         <div className="overflow-x-auto pt-1" onMouseEnter={() => { hoverRef.current = true; setHoverPause(true); }} onMouseLeave={() => { hoverRef.current = false; setHoverPause(false); }}>
-          <table className="w-full min-w-[820px] text-left">
+          <table className="w-full min-w-[51.25rem] text-left">
             <thead>
               <tr className="border-b border-border bg-muted/40 text-xs text-muted-foreground">
                 <th aria-sort={sortKey === "timestamp" ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className="whitespace-nowrap px-3 py-2 text-left font-semibold">
@@ -1018,7 +1018,7 @@ export function LogsExplorerDashboard() {
                 {visibleColumns.host && <th className="px-3 py-2 text-left font-semibold">Host</th>}
                 <th className="px-3 py-2 text-left font-semibold">Message</th>
                 {visibleColumns.context && <th className="px-3 py-2 text-left font-semibold">Context</th>}
-                <th className="w-[72px] px-3 py-2 text-right font-semibold">Actions</th>
+                <th className="w-[4.5rem] px-3 py-2 text-right font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -1047,7 +1047,7 @@ export function LogsExplorerDashboard() {
                     )}
                     {visibleColumns.service && <td className={cn(rowPad, cellText)}><span className="whitespace-nowrap font-medium text-foreground transition-colors hover:text-primary">{log.service}</span></td>}
                     {visibleColumns.host && <td className={cn(rowPad, cellText)}><span className="whitespace-nowrap font-medium text-foreground transition-colors hover:text-primary">{log.host}</span></td>}
-                    <td className={cn(rowPad, cellText, "max-w-[420px]")}>
+                    <td className={cn(rowPad, cellText, "max-w-[26.25rem]")}>
                       <span className={cn("text-foreground", wrapMessage ? "whitespace-normal break-words" : "block truncate")} title={log.message}>{highlightQuery(log.message)}</span>
                     </td>
                     {visibleColumns.context && (
@@ -1114,11 +1114,11 @@ export function LogsExplorerDashboard() {
         </div>
 
         <div className="mt-auto flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[13px] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}–{rangeEnd}</b> of <b className="tabular-nums text-foreground">{formatFull(displayTotal)}</b> logs</p>
+          <p className="text-[0.8125rem] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}–{rangeEnd}</b> of <b className="tabular-nums text-foreground">{formatFull(displayTotal)}</b> logs</p>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs text-muted-foreground">Rows per page</span>
             <Select value={String(perPage)} onValueChange={(value) => { setPerPage(Number(value)); setPage(1); }}>
-              <SelectTrigger aria-label="Rows per page" className="h-9 w-[88px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label="Rows per page" className="h-9 w-[5.5rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>{[25, 50, 100].map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
             </Select>
             <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={safePage === 1} aria-label="Previous page" className="grid h-8 w-8 place-items-center rounded-lg border border-border text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"><ChevronLeft size={14} aria-hidden="true" /></button>
@@ -1132,13 +1132,13 @@ export function LogsExplorerDashboard() {
 
       {/* Insights row */}
       <section aria-label="Log insights" className="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Panel title="Top Services by Errors" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
+        <Panel title="Top Services by Errors" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
           <ul className="flex flex-1 flex-col justify-between gap-1.5 pt-1">
             {TOP_SERVICES_BY_ERRORS.map((row) => (
-              <li key={row.service} className="grid grid-cols-[minmax(0,1fr)_minmax(80px,1.5fr)_auto] items-center gap-2">
-                <span className="truncate text-[13px] font-medium text-foreground" title={row.service}>{row.service}</span>
-                <span className="h-2 min-w-0 overflow-hidden rounded-full bg-muted" role="presentation"><span className="block h-full rounded-full bg-[#F87171]" style={{ width: `${(row.count / Math.max(...TOP_SERVICES_BY_ERRORS.map((item) => item.count), 1)) * 100}%` }} /></span>
-                <b className="w-16 text-right text-[13px] tabular-nums text-foreground">{formatFull(row.count)}</b>
+              <li key={row.service} className="grid grid-cols-[minmax(0,1fr)_minmax(5rem,1.5fr)_auto] items-center gap-2">
+                <span className="truncate text-[0.8125rem] font-medium text-foreground" title={row.service}>{row.service}</span>
+                <span className="h-2 min-w-0 overflow-hidden rounded-full bg-muted" role="presentation"><span className="block h-full rounded-full bg-red-400" style={{ width: `${(row.count / Math.max(...TOP_SERVICES_BY_ERRORS.map((item) => item.count), 1)) * 100}%` }} /></span>
+                <b className="w-16 text-right text-[0.8125rem] tabular-nums text-foreground">{formatFull(row.count)}</b>
               </li>
             ))}
           </ul>
@@ -1148,7 +1148,7 @@ export function LogsExplorerDashboard() {
           </footer>
         </Panel>
 
-        <Panel title="Top Error Patterns" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
+        <Panel title="Top Error Patterns" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
           <ul className="flex flex-1 flex-col justify-between gap-1 pt-1">
             {TOP_ERROR_PATTERNS.map((row) => (
               <li key={row.pattern}>
@@ -1160,7 +1160,7 @@ export function LogsExplorerDashboard() {
                 >
                   <span className="min-w-0 truncate font-mono text-xs text-foreground">{row.pattern}</span>
                   <span className="flex items-center gap-2 whitespace-nowrap">
-                    <b className="text-[13px] tabular-nums text-foreground">{formatCompact(row.count)}</b>
+                    <b className="text-[0.8125rem] tabular-nums text-foreground">{formatCompact(row.count)}</b>
                     <span className={cn("inline-flex items-center gap-0.5 text-xs font-semibold tabular-nums", row.trendPct > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400")}>
                       {row.trendPct > 0 ? <ArrowUpRight size={12} aria-hidden="true" /> : <ArrowDownRight size={12} aria-hidden="true" />}{Math.abs(row.trendPct).toFixed(0)}%
                     </span>
@@ -1176,17 +1176,17 @@ export function LogsExplorerDashboard() {
           </footer>
         </Panel>
 
-        <Panel title="Level Distribution" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
+        <Panel title="Level Distribution" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
           <div className="flex flex-1 flex-wrap items-center gap-4 pt-1">
             <LevelDonut />
-            <div className="grid min-w-[200px] flex-1 grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid min-w-[12.5rem] flex-1 grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
               {LEVEL_ORDER.map((level) => {
                 const value = LEVEL_COUNTS[level];
                 const pct = (value / LOG_TOTALS.total) * 100;
                 return (
                   <div key={level} className="flex flex-col items-center gap-0.5 rounded-lg border border-border/60 px-2 py-2">
                     <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS[level] }} />{level}</span>
-                    <b className="text-[13px] tabular-nums text-foreground">{formatCompact(value)}</b>
+                    <b className="text-[0.8125rem] tabular-nums text-foreground">{formatCompact(value)}</b>
                     <span className="text-xs tabular-nums text-muted-foreground">{pct.toFixed(pct < 1 ? 2 : 1)}%</span>
                   </div>
                 );

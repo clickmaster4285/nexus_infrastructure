@@ -39,13 +39,13 @@ export function Pagination({ page, pageSize, totalItems, onPageChange, onPageSiz
   const endLabel = Math.min(clampedPage * pageSize, totalItems);
 
   return (
-    <div className={cn("flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-2.5 text-[13px] text-muted-foreground", className)}>
+    <div className={cn("flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-2.5 text-[0.8125rem] text-muted-foreground", className)}>
       <p className="tabular-nums">Showing <b className="text-foreground">{startLabel}-{endLabel}</b> of <b className="text-foreground">{totalItems}</b> {noun}</p>
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-1.5">
           <span className="sr-only">Rows per page</span>
           <Select value={String(pageSize)} onValueChange={(value) => { onPageSizeChange(Number(value)); onPageChange(1); }}>
-            <SelectTrigger className="h-8 w-[64px] text-[13px]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-8 w-[4rem] text-[0.8125rem]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
             <SelectContent>
               {pageSizeOptions.map((size) => <SelectItem key={size} value={String(size)}>{size}</SelectItem>)}
             </SelectContent>
@@ -73,7 +73,7 @@ export function Pagination({ page, pageSize, totalItems, onPageChange, onPageSiz
                 aria-current={item === clampedPage ? "page" : undefined}
                 aria-label={`Page ${item}`}
                 className={cn(
-                  "grid h-8 w-8 place-items-center rounded-lg border text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "grid h-8 w-8 place-items-center rounded-lg border text-[0.8125rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   item === clampedPage ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground hover:bg-accent",
                 )}
               >

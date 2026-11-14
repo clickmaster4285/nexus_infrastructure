@@ -120,7 +120,7 @@ export function ActivityTimelineCard({ jobs, runs, operations, drills, onExport 
                 <Icon size={15} />
               </span>
               <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-snug text-foreground">{event.title}</span>
+                <span className="block text-[0.8125rem] font-semibold leading-snug text-foreground">{event.title}</span>
                 <span className="mt-0.5 block truncate text-xs text-muted-foreground" title={event.detail}>{event.detail}</span>
               </span>
               <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">{timeAgo(event.epochMs)}</span>
@@ -130,7 +130,7 @@ export function ActivityTimelineCard({ jobs, runs, operations, drills, onExport 
         {events.length === 0 && (
           <li className="py-8 text-center">
             <p className="text-sm font-semibold text-foreground">No recent activity</p>
-            <p className="mt-1 text-[12px] text-muted-foreground">Backup, restore and recovery events will appear here as they happen.</p>
+            <p className="mt-1 text-[0.75rem] text-muted-foreground">Backup, restore and recovery events will appear here as they happen.</p>
           </li>
         )}
       </ul>

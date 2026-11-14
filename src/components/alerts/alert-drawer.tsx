@@ -27,40 +27,40 @@ interface AlertDrawerProps {
 }
 
 const SEVERITY_BADGE: Record<AlertSeverity, { label: string; className: string }> = {
-  critical: { label: "Critical", className: "bg-[#FEE2E2] text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  warning: { label: "Warning", className: "bg-[#FEF3C7] text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
-  info: { label: "Info", className: "bg-[#DBEAFE] text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-400" },
+  critical: { label: "Critical", className: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  warning: { label: "Warning", className: "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  info: { label: "Info", className: "bg-blue-100 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
 };
 
 const STATUS_BADGE: Record<AlertStatus, { label: string; className: string }> = {
-  firing: { label: "Firing", className: "bg-[#DC2626]/10 text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  acknowledged: { label: "Acknowledged", className: "bg-[#D97706]/10 text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
+  firing: { label: "Firing", className: "bg-red-600/10 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  acknowledged: { label: "Acknowledged", className: "bg-amber-600/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
   silenced: { label: "Silenced", className: "bg-slate-200/70 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300" },
-  resolved: { label: "Resolved", className: "bg-[#16A34A]/10 text-[#16A34A] dark:bg-emerald-500/15 dark:text-emerald-400" },
+  resolved: { label: "Resolved", className: "bg-green-600/10 text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400" },
 };
 
 const LINE_COLOR: Record<AlertSeverity, string> = { critical: "#DC2626", warning: "#D97706", info: "#3B82F6" };
 
 const TIMELINE_DOT: Record<string, string> = {
-  triggered: "bg-[#DC2626]",
-  notified: "bg-[#3B82F6]",
-  acknowledged: "bg-[#D97706]",
+  triggered: "bg-red-600",
+  notified: "bg-blue-500",
+  acknowledged: "bg-amber-600",
   assigned: "bg-[#874fe0]",
   silenced: "bg-slate-400",
-  resolved: "bg-[#16A34A]",
+  resolved: "bg-green-600",
   note: "bg-slate-400",
 };
 
 function SummaryRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-3 py-1.5">
-      <dt className="shrink-0 text-[12px] text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 truncate text-right text-[13px] font-medium text-foreground">{children}</dd>
+      <dt className="shrink-0 text-[0.75rem] text-muted-foreground">{label}</dt>
+      <dd className="min-w-0 truncate text-right text-[0.8125rem] font-medium text-foreground">{children}</dd>
     </div>
   );
 }
 
-/** Right-side alert detail drawer (480px, full-screen on mobile). */
+/** Right-side alert detail drawer (30rem, full-screen on mobile). */
 export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve, onAddNote, onCopyLink }: AlertDrawerProps) {
   const [note, setNote] = useState("");
   const drawerRef = useRef<HTMLDivElement | null>(null);
@@ -107,14 +107,14 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
         role="dialog"
         aria-modal="true"
         aria-labelledby="alert-drawer-title"
-        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[480px]"
+        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[30rem]"
       >
         {/* Header */}
         <header className="flex flex-col gap-3 border-b border-border p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[10px] font-semibold", severityMeta.className)}>{severityMeta.label}</Badge>
-              <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[10px] font-semibold", statusMeta.className)}>{statusMeta.label}</Badge>
+              <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", severityMeta.className)}>{severityMeta.label}</Badge>
+              <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", statusMeta.className)}>{statusMeta.label}</Badge>
             </div>
             <button
               type="button"
@@ -127,11 +127,11 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             </button>
           </div>
           <div className="min-w-0">
-            <h2 id="alert-drawer-title" className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">{alert.name}</h2>
+            <h2 id="alert-drawer-title" className="truncate font-display text-[1.0625rem] font-bold tracking-tight text-foreground">{alert.name}</h2>
             <button
               type="button"
               onClick={() => onCopyLink(alert)}
-              className="mt-0.5 inline-flex items-center gap-1 rounded text-[12px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-0.5 inline-flex items-center gap-1 rounded text-[0.75rem] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label={`Copy link to alert ${alert.id}`}
             >
               {alert.id}
@@ -139,11 +139,11 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button size="sm" variant="outline" onClick={() => onAcknowledge(alert.id)} disabled={alert.status !== "firing"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]">
+            <Button size="sm" variant="outline" onClick={() => onAcknowledge(alert.id)} disabled={alert.status !== "firing"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
               <CheckCircle2 size={13} aria-hidden="true" />Acknowledge
             </Button>
             <Select value={alert.assignee ?? "none"} onValueChange={(value) => onAssign(alert.id, value === "none" ? null : value)}>
-              <SelectTrigger aria-label="Assign alert" className="h-8 w-[150px] rounded-lg text-[12px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label="Assign alert" className="h-8 w-[9.375rem] rounded-lg text-[0.75rem]"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Unassigned</SelectItem>
                 {ALERT_ASSIGNEES.map((user) => (
@@ -151,7 +151,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
                 ))}
               </SelectContent>
             </Select>
-            <Button size="sm" onClick={() => onResolve(alert.id)} disabled={alert.status === "resolved"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]">
+            <Button size="sm" onClick={() => onResolve(alert.id)} disabled={alert.status === "resolved"} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
               Resolve
             </Button>
           </div>
@@ -159,9 +159,9 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
 
         {/* Body */}
         <div className="min-h-0 flex-1 overflow-y-auto p-5">
-          <p className="text-[13px] leading-relaxed text-foreground">{alert.message}</p>
+          <p className="text-[0.8125rem] leading-relaxed text-foreground">{alert.message}</p>
 
-          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Summary</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Summary</h3>
           <dl className="mt-1 divide-y divide-border/70">
             <SummaryRow label="Host">{alert.host}</SummaryRow>
             <SummaryRow label="Service">{alert.service}</SummaryRow>
@@ -173,14 +173,14 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             <SummaryRow label="Assignee">{alert.assignee ?? "Unassigned"}</SummaryRow>
           </dl>
 
-          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Metric snapshot · last 2h</h3>
-          <div className="mt-2 h-[150px] w-full" aria-label={`${alert.severity === "info" ? "Metric" : "Threshold metric"} history`}>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Metric snapshot · last 2h</h3>
+          <div className="mt-2 h-[9.375rem] w-full" aria-label={`${alert.severity === "info" ? "Metric" : "Threshold metric"} history`}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={alert.metric} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="time" interval={5} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={["auto", "auto"]} width={38} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <ReferenceLine
                   y={alert.threshold}
                   stroke="#64748b"
@@ -192,49 +192,49 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             </ResponsiveContainer>
           </div>
 
-          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Timeline</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Timeline</h3>
           <ol className="mt-2 space-y-0" aria-label="Alert timeline">
             {alert.timeline.map((item, index) => (
               <li key={item.id} className="relative flex gap-3 pb-4 last:pb-0">
-                {index < alert.timeline.length - 1 && <span aria-hidden="true" className="absolute left-[4.5px] top-3.5 h-full w-px bg-border" />}
+                {index < alert.timeline.length - 1 && <span aria-hidden="true" className="absolute left-[0.2813rem] top-3.5 h-full w-px bg-border" />}
                 <span aria-hidden="true" className={cn("relative mt-1 h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-card", TIMELINE_DOT[item.kind] ?? "bg-slate-400")} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-[13px] font-medium text-foreground">
+                  <p className="text-[0.8125rem] font-medium text-foreground">
                     {item.label}
                     {item.user && <span className="ml-1.5 font-normal text-muted-foreground">· {item.user}</span>}
                   </p>
-                  {item.detail && <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">{item.detail}</p>}
-                  <p className="mt-0.5 text-[11px] text-muted-foreground" title={formatDateTime(item.epochMs)}>{timeAgo(item.epochMs)}</p>
+                  {item.detail && <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">{item.detail}</p>}
+                  <p className="mt-0.5 text-[0.6875rem] text-muted-foreground" title={formatDateTime(item.epochMs)}>{timeAgo(item.epochMs)}</p>
                 </div>
               </li>
             ))}
           </ol>
 
-          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Related</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Related</h3>
           <div className="mt-2 flex flex-col gap-2">
             <Link
               href={`/events-explorer/${alert.eventId}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[13px] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[0.8125rem] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink size={14} aria-hidden="true" className="text-muted-foreground" />
               Related event · {alert.eventId}
             </Link>
             <Link
               href="/runbooks"
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[13px] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[0.8125rem] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <BookOpen size={14} aria-hidden="true" className="text-muted-foreground" />
               Runbook · {alert.runbook}
             </Link>
             {alert.silencedUntil && (
-              <p className="inline-flex items-center gap-2 text-[12px] text-muted-foreground">
+              <p className="inline-flex items-center gap-2 text-[0.75rem] text-muted-foreground">
                 <BellOff size={13} aria-hidden="true" />
                 Silenced until {formatDateTime(new Date(alert.silencedUntil).getTime())}
               </p>
             )}
           </div>
 
-          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Notes</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Notes</h3>
           <form
             className="mt-2 flex items-center gap-2"
             onSubmit={(event) => {
@@ -250,9 +250,9 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
               onChange={(event) => setNote(event.target.value)}
               placeholder="Add an investigation note…"
               aria-label="Add note"
-              className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-[13px] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-[0.8125rem] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
-            <Button type="submit" size="sm" disabled={!note.trim()} className="h-9 rounded-lg px-3 text-[12px]">Add</Button>
+            <Button type="submit" size="sm" disabled={!note.trim()} className="h-9 rounded-lg px-3 text-[0.75rem]">Add</Button>
           </form>
         </div>
       </aside>

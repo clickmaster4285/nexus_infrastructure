@@ -148,13 +148,13 @@ const healthStyles: Record<string, string> = {
 
 function CloudProviderIcon({ provider }: { provider: string }) {
   const letter = provider === "DigitalOcean" ? "D" : provider === "Azure" ? "A" : provider === "GCP" ? "G" : "a";
-  return <span aria-hidden="true" className="inline-grid h-3.5 w-3.5 place-items-center rounded-sm text-[12px] font-extrabold" style={{ color: providerColors[provider] ?? "currentColor" }}>{letter}</span>;
+  return <span aria-hidden="true" className="inline-grid h-3.5 w-3.5 place-items-center rounded-sm text-[0.75rem] font-extrabold" style={{ color: providerColors[provider] ?? "currentColor" }}>{letter}</span>;
 }
 
 function ProviderDonut() {
   return (
-    <div className="flex min-h-[165px] flex-col items-center justify-center gap-3 sm:flex-row sm:gap-5">
-      <div className="relative h-[148px] w-[148px] shrink-0 aspect-square">
+    <div className="flex min-h-[10.3125rem] flex-col items-center justify-center gap-3 sm:flex-row sm:gap-5">
+      <div className="relative h-[9.25rem] w-[9.25rem] shrink-0 aspect-square">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={providerData} dataKey="value" nameKey="name" innerRadius="72%" outerRadius="92%" paddingAngle={1} stroke="none">
@@ -164,13 +164,13 @@ function ProviderDonut() {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className="font-display text-[26px] font-extrabold leading-tight text-foreground">{providerData.reduce((total, provider) => total + provider.value, 0)}</b>
-          <span className="whitespace-nowrap text-[12px] text-muted-foreground">Total</span>
+          <b className="font-display text-[1.625rem] font-extrabold leading-tight text-foreground">{providerData.reduce((total, provider) => total + provider.value, 0)}</b>
+          <span className="whitespace-nowrap text-[0.75rem] text-muted-foreground">Total</span>
         </div>
       </div>
       <div className="min-w-0 w-full flex-1 space-y-2.5 sm:w-auto">
         {providerData.map((provider) => (
-          <div key={provider.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-2 text-[12px]">
+          <div key={provider.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-2 text-[0.75rem]">
             <i className="h-2 w-2 rounded-full" style={{ backgroundColor: provider.color }} />
             <span className="truncate font-semibold text-foreground">{provider.name}</span>
             <span className="whitespace-nowrap text-muted-foreground">{provider.value} ({Math.round(provider.value / 8 * 100)}%)</span>
@@ -183,15 +183,15 @@ function ProviderDonut() {
 
 function StatusDonut() {
   return (
-    <div className="flex min-h-[138px] items-center justify-center gap-3">
-      <div className="relative h-[124px] w-[124px] shrink-0">
+    <div className="flex min-h-[8.625rem] items-center justify-center gap-3">
+      <div className="relative h-[7.75rem] w-[7.75rem] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart><Pie data={accountStatusData.filter((item) => item.value > 0)} dataKey="value" innerRadius="62%" outerRadius="88%" paddingAngle={1} stroke="none">{accountStatusData.filter((item) => item.value > 0).map((item) => <Cell key={item.name} fill={item.color} />)}</Pie></PieChart>
         </ResponsiveContainer>
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[20px] font-extrabold leading-tight text-foreground">{accountTotal}</b><span className="text-[12px] text-muted-foreground">Total</span></div>
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.25rem] font-extrabold leading-tight text-foreground">{accountTotal}</b><span className="text-[0.75rem] text-muted-foreground">Total</span></div>
       </div>
       <div className="min-w-0 flex-1 space-y-2">
-        {accountStatusData.map((item) => <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 whitespace-nowrap text-[12px]"><i className="h-2 w-2 rounded-full" style={{ background: item.color }} /><span className="text-foreground">{item.name}</span><b className="text-foreground">{item.value} ({item.percent})</b></div>)}
+        {accountStatusData.map((item) => <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 whitespace-nowrap text-[0.75rem]"><i className="h-2 w-2 rounded-full" style={{ background: item.color }} /><span className="text-foreground">{item.name}</span><b className="text-foreground">{item.value} ({item.percent})</b></div>)}
       </div>
     </div>
   );
@@ -204,12 +204,12 @@ function AccountStatusCard() {
       <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
         {accountStatusSummary.map((item) => (
           <div key={item.label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-muted/60">
-            <div className="truncate text-[12px] text-muted-foreground">{item.label}</div>
-            <div className="mt-1 truncate text-[16px] font-bold leading-5 tabular-nums text-foreground">{item.value}</div>
+            <div className="truncate text-[0.75rem] text-muted-foreground">{item.label}</div>
+            <div className="mt-1 truncate text-[1rem] font-bold leading-5 tabular-nums text-foreground">{item.value}</div>
           </div>
         ))}
       </div>
-      <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[12px] text-muted-foreground">
+      <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[0.75rem] text-muted-foreground">
         <span className="truncate">Last sync: {accountSyncInfo.lastSync} · {accountSyncInfo.providerCount} providers</span>
         <button type="button" className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>
       </div>
@@ -222,9 +222,9 @@ function ProviderResourcesCard() {
     <div className="flex h-full flex-1 flex-col">
       <div className="flex flex-1 flex-col justify-evenly pt-1">
         {providerResourcesWithMetrics.map((provider) => (
-          <div key={provider.name} className="grid h-9 grid-cols-[84px_minmax(20px,1fr)_90px] items-center gap-2 text-[12px]">
+          <div key={provider.name} className="grid h-9 grid-cols-[84px_minmax(1.25rem,1fr)_5.625rem] items-center gap-2 text-[0.75rem]">
             <span className="whitespace-nowrap text-foreground">{provider.name}</span>
-            <div className="h-[7px] min-w-0 rounded-full bg-muted">
+            <div className="h-[0.4375rem] min-w-0 rounded-full bg-muted">
               <div className="h-full rounded-full" style={{ width: `${provider.width}%`, backgroundColor: provider.color }} />
             </div>
             <span className="whitespace-nowrap text-right">
@@ -234,19 +234,19 @@ function ProviderResourcesCard() {
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between border-t border-border py-2 text-[12px]">
+      <div className="flex items-center justify-between border-t border-border py-2 text-[0.75rem]">
         <span className="text-muted-foreground">Total resources</span>
         <b className="font-bold tabular-nums text-foreground">{totalProviderResources.toLocaleString()}</b>
       </div>
       <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
         {providerResourcesSummary.map((item) => (
           <div key={item.label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-muted/60">
-            <div className="truncate text-[12px] text-muted-foreground">{item.label}</div>
-            <div className="mt-1 truncate text-[16px] font-bold leading-5 text-foreground">{item.value}</div>
+            <div className="truncate text-[0.75rem] text-muted-foreground">{item.label}</div>
+            <div className="mt-1 truncate text-[1rem] font-bold leading-5 text-foreground">{item.value}</div>
           </div>
         ))}
       </div>
-      <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">
+      <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
         Updated {providerResourcesUpdatedAt}
       </div>
     </div>
@@ -281,44 +281,44 @@ export function CloudAccountsDashboard() {
     <div className="space-y-2.5 pb-3">
       <PageMeta breadcrumbs={["Infrastructure", "Cloud Accounts & Providers"]} variant="detail" />
       <PageHeading title="Cloud Accounts & Providers" description="Monitor and manage your cloud accounts, usage, and provider health in real-time." actionsAlign="top" variant="detail">
-        <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 px-3 text-[12px]"><RefreshCw size={15} />Refresh</Button>
-        <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-        <Button size="sm" onClick={() => toast("Add Account is a mockup action.")} className="h-9 gap-1.5 px-3 text-[12px]"><Plus size={15} />Add Account</Button>
+        <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 px-3 text-[0.75rem]"><RefreshCw size={15} />Refresh</Button>
+        <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+        <Button size="sm" onClick={() => toast("Add Account is a mockup action.")} className="h-9 gap-1.5 px-3 text-[0.75rem]"><Plus size={15} />Add Account</Button>
       </PageHeading>
 
       <section aria-label="Cloud account metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}
       </section>
 
       <section aria-label="Cloud account overview" className="grid gap-2.5 md:grid-cols-[1fr_1.24fr_0.96fr]">
         <Panel title="Cloud Accounts by Provider" className="min-w-0"><ProviderDonut /></Panel>
         <Panel title="Cloud Account Health Over Time" range="24h" className="min-w-0">
-          <div className="h-[160px] w-full pt-1">
+          <div className="h-[10rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={accountHealth} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={{ stroke: "var(--border)" }} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
                 <Area dataKey="healthy" name="Healthy" type="monotone" stroke="#288af0" strokeWidth={1.8} fill="#288af0" fillOpacity={0.09} dot={{ r: 1.5 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[12px] text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[0.75rem] text-muted-foreground">
             {[["Healthy", "#43b779"], ["Warning", "#f28a13"], ["Critical", "#ed3150"], ["Unknown", "#9aa9be"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
           </div>
         </Panel>
-        <Panel title="Cost Overview" action={<span className="rounded border border-border px-2 py-1 text-[11px] text-muted-foreground">Monthly⌄</span>} className="min-w-0">
-          <div className="pt-1 text-[11px] text-muted-foreground">Total Estimated Cost</div>
-          <div className="font-display text-[22px] font-extrabold leading-tight text-foreground">$12,450.60</div>
-          <div className="mt-0.5 flex items-center gap-1 text-[11px] text-success"><ArrowUp size={9} />8.4% <span className="text-muted-foreground">from last month</span></div>
-          <div className="h-[120px] w-full pt-1">
+        <Panel title="Cost Overview" action={<span className="rounded border border-border px-2 py-1 text-[0.6875rem] text-muted-foreground">Monthly⌄</span>} className="min-w-0">
+          <div className="pt-1 text-[0.6875rem] text-muted-foreground">Total Estimated Cost</div>
+          <div className="font-display text-[1.375rem] font-extrabold leading-tight text-foreground">$12,450.60</div>
+          <div className="mt-0.5 flex items-center gap-1 text-[0.6875rem] text-success"><ArrowUp size={9} />8.4% <span className="text-muted-foreground">from last month</span></div>
+          <div className="h-[7.5rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={costs} margin={{ top: 5, right: 2, left: -24, bottom: 0 }}>
                 <defs><linearGradient id="cloud-cost-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#288af0" stopOpacity={0.2} /><stop offset="100%" stopColor="#288af0" stopOpacity={0.01} /></linearGradient></defs>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="day" interval={2} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(value) => [`$${Number(value).toLocaleString()}`, "Cost"]} contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
+                <Tooltip formatter={(value) => [`$${Number(value).toLocaleString()}`, "Cost"]} contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
                 <Area dataKey="value" name="Cost" type="monotone" stroke="#288af0" strokeWidth={1.7} fill="url(#cloud-cost-fill)" dot={{ r: 1.5 }} />
               </AreaChart>
             </ResponsiveContainer>
@@ -327,53 +327,53 @@ export function CloudAccountsDashboard() {
       </section>
 
       <section aria-label="Cloud accounts and services" className="grid gap-2.5 md:grid-cols-[2.15fr_0.95fr]">
-        <Panel title="Cloud Accounts" className="min-w-0" action={<span className="text-[12px] text-muted-foreground">Updated {updatedAt}</span>}>
+        <Panel title="Cloud Accounts" className="min-w-0" action={<span className="text-[0.75rem] text-muted-foreground">Updated {updatedAt}</span>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[820px] text-left text-[12px]">
+            <table className="w-full min-w-[51.25rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground">{["Account Name", "Provider", "Account ID", "Region / Default Region", "Status", "Health", "Monthly Cost", "Resources", "Actions"].map((heading) => <th key={heading} className="whitespace-nowrap px-1 pb-1.5 font-semibold">{heading}</th>)}</tr></thead>
               <tbody>
                 {accounts.map((account) => (
                   <tr key={account.name} className="border-b border-border/70 last:border-0">
-                    <td className="whitespace-nowrap px-1 py-[7px] font-semibold text-foreground"><span className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${account.status === "Active" ? "bg-emerald-500" : "bg-amber-500"}`} />{account.name}</td>
-                    <td className="whitespace-nowrap px-1 py-[7px] text-foreground"><CloudProviderIcon provider={account.provider} /> <span className="ml-0.5">{account.provider}</span></td>
-                    <td className="whitespace-nowrap px-1 py-[7px] text-foreground">{account.id}</td>
-                    <td className="whitespace-nowrap px-1 py-[7px] text-foreground">{account.region}</td>
-                    <td className="px-1 py-[7px]"><span className={`rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${account.status === "Active" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"}`}>{account.status}</span></td>
-                    <td className="px-1 py-[7px]"><span className={`inline-flex items-center gap-1 whitespace-nowrap font-semibold ${healthStyles[account.health]}`}><i className={`h-1.5 w-1.5 rounded-full ${account.health === "Healthy" ? "bg-emerald-500" : account.health === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} />{account.health}</span></td>
-                    <td className="whitespace-nowrap px-1 py-[7px] text-foreground">{account.cost}</td>
-                    <td className="px-1 py-[7px] text-foreground">{account.resources}</td>
-                    <td className="px-1 py-[7px]"><button aria-label={`Actions for ${account.name}`} onClick={() => toast(`Actions for ${account.name} are a mockup action.`)} className="rounded px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
+                    <td className="whitespace-nowrap px-1 py-[0.4375rem] font-semibold text-foreground"><span className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${account.status === "Active" ? "bg-emerald-500" : "bg-amber-500"}`} />{account.name}</td>
+                    <td className="whitespace-nowrap px-1 py-[0.4375rem] text-foreground"><CloudProviderIcon provider={account.provider} /> <span className="ml-0.5">{account.provider}</span></td>
+                    <td className="whitespace-nowrap px-1 py-[0.4375rem] text-foreground">{account.id}</td>
+                    <td className="whitespace-nowrap px-1 py-[0.4375rem] text-foreground">{account.region}</td>
+                    <td className="px-1 py-[0.4375rem]"><span className={`rounded-full px-1.5 py-0.5 text-[0.6875rem] font-semibold ${account.status === "Active" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"}`}>{account.status}</span></td>
+                    <td className="px-1 py-[0.4375rem]"><span className={`inline-flex items-center gap-1 whitespace-nowrap font-semibold ${healthStyles[account.health]}`}><i className={`h-1.5 w-1.5 rounded-full ${account.health === "Healthy" ? "bg-emerald-500" : account.health === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} />{account.health}</span></td>
+                    <td className="whitespace-nowrap px-1 py-[0.4375rem] text-foreground">{account.cost}</td>
+                    <td className="px-1 py-[0.4375rem] text-foreground">{account.resources}</td>
+                    <td className="px-1 py-[0.4375rem]"><button aria-label={`Actions for ${account.name}`} onClick={() => toast(`Actions for ${account.name} are a mockup action.`)} className="rounded px-1 text-muted-foreground hover:bg-accent">⋮</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="pt-1 text-[12px] text-muted-foreground">Showing 1-8 of 8 accounts</div>
+          <div className="pt-1 text-[0.75rem] text-muted-foreground">Showing 1-8 of 8 accounts</div>
         </Panel>
-        <Panel title="Top Services by Cost" className="min-w-0" action={<button onClick={() => toast("Showing all cloud services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Services by Cost" className="min-w-0" action={<button onClick={() => toast("Showing all cloud services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="overflow-x-auto pt-1">
-            <table className="w-full min-w-[280px] text-left text-[12px]">
+            <table className="w-full min-w-[17.5rem] text-left text-[0.75rem]">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Service</th><th className="pb-1.5">Provider</th><th className="pb-1.5 text-right">Monthly Cost</th></tr></thead>
-              <tbody>{services.map((service) => <tr key={service.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-[7px] text-foreground"><span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: providerColors[service.provider] }} />{service.name}</td><td className="whitespace-nowrap py-[7px] text-foreground"><CloudProviderIcon provider={service.provider} /> <span className="ml-0.5">{service.provider}</span></td><td className="whitespace-nowrap py-[7px] text-right text-foreground">{service.cost}</td></tr>)}</tbody>
+              <tbody>{services.map((service) => <tr key={service.name} className="border-b border-border/70 last:border-0"><td className="whitespace-nowrap py-[0.4375rem] text-foreground"><span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: providerColors[service.provider] }} />{service.name}</td><td className="whitespace-nowrap py-[0.4375rem] text-foreground"><CloudProviderIcon provider={service.provider} /> <span className="ml-0.5">{service.provider}</span></td><td className="whitespace-nowrap py-[0.4375rem] text-right text-foreground">{service.cost}</td></tr>)}</tbody>
             </table>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Cloud account breakdown" className="grid items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-        <Panel title="Resources by Provider" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing provider resource details.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Resources by Provider" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing provider resource details.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <ProviderResourcesCard />
         </Panel>
         <Panel title="Accounts by Status" className="flex h-full min-w-0 flex-col p-4"><AccountStatusCard /></Panel>
-        <Panel title="Top Regions by Resource Count" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud regions.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
-          <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{regions.map((region) => <div key={region.name} className="grid grid-cols-[minmax(0,1fr)_minmax(45px,0.8fr)_30px] items-center gap-2 text-[12px]"><span className="truncate text-foreground" title={region.name}>{region.name}</span><div className="h-[5px] rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${Math.max(4, (region.count / maxRegionCount) * 100)}%`, backgroundColor: providerColors[region.provider] }} /></div><b className="text-right text-foreground">{region.count}</b></div>)}</div></div>
+        <Panel title="Top Regions by Resource Count" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud regions.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+          <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{regions.map((region) => <div key={region.name} className="grid grid-cols-[minmax(0,1fr)_minmax(2.8125rem,0.8fr)_1.875rem] items-center gap-2 text-[0.75rem]"><span className="truncate text-foreground" title={region.name}>{region.name}</span><div className="h-[0.3125rem] rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${Math.max(4, (region.count / maxRegionCount) * 100)}%`, backgroundColor: providerColors[region.provider] }} /></div><b className="text-right text-foreground">{region.count}</b></div>)}</div></div>
         </Panel>
-        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud account events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
-          <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_64px] items-center gap-2 text-[12px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground" title={event.text}>{event.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{event.ago}</span></div>)}</div></div>
+        <Panel title="Recent Events" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all cloud account events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+          <div className="flex min-h-0 flex-1 flex-col"><div className="min-h-0 flex-1 space-y-3 overflow-y-auto pt-2">{events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_4rem] items-center gap-2 text-[0.75rem]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground" title={event.text}>{event.text}</span><span className="whitespace-nowrap text-right text-muted-foreground">{event.ago}</span></div>)}</div></div>
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[11px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.6875rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

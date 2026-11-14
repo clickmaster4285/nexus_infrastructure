@@ -326,9 +326,9 @@ export function CertificatesDashboard() {
   if (loadStatus === "loading" && !everLoaded) {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[92px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[5.75rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-24 animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="h-[300px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted" />
       </div>
     );
   }
@@ -336,7 +336,7 @@ export function CertificatesDashboard() {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Certificates & Expiration"]} title="Certificates & Expiration" subtitle="TLS certificate inventory with expiration alerts" />
-        <Card className="grid min-h-[280px] place-items-center rounded-xl p-6"><div className="text-center"><CircleAlert className="mx-auto text-rose-500" size={28} /><h2 className="mt-2 text-base font-semibold">Certificates could not be loaded</h2><p className="mt-1 text-sm text-muted-foreground">Retry to reload certificate inventory.</p><Button className="mt-4" onClick={reload}><RotateCcw size={15} />Retry</Button></div></Card>
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><CircleAlert className="mx-auto text-rose-500" size={28} /><h2 className="mt-2 text-base font-semibold">Certificates could not be loaded</h2><p className="mt-1 text-sm text-muted-foreground">Retry to reload certificate inventory.</p><Button className="mt-4" onClick={reload}><RotateCcw size={15} />Retry</Button></div></Card>
       </div>
     );
   }
@@ -382,12 +382,12 @@ export function CertificatesDashboard() {
       )}
 
       <section aria-label="Certificate KPIs" className="grid grid-cols-2 items-stretch gap-3 lg:grid-cols-3 xl:grid-cols-6">
-        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" label="Total Certificates" value={String(summary.total)} detail="across fleet" className="min-h-[88px] p-3" />
-        <StatCard icon={<AlertTriangle size={18} />} iconTone="bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" label="Expired" value={String(summary.expired)} detail="action required" className="min-h-[88px] p-3" />
-        <StatCard icon={<Clock3 size={18} />} iconTone="bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" label="Expiring (30d)" value={String(summary.expiring30)} detail="within 30 days" className="min-h-[88px] p-3" />
-        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" label="Auto-Renew Coverage" value={`${summary.autoRenewCoveragePct}%`} detail="fleet-wide" className="min-h-[88px] p-3" />
-        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" label="Weak / Insecure" value={String(summary.weak)} detail="SHA-1 or key < 2048" className="min-h-[88px] p-3" />
-        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300" label="Avg Health Score" value={String(summary.avgHealthScore)} detail="0-100" className="min-h-[88px] p-3" />
+        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" label="Total Certificates" value={String(summary.total)} detail="across fleet" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<AlertTriangle size={18} />} iconTone="bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" label="Expired" value={String(summary.expired)} detail="action required" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<Clock3 size={18} />} iconTone="bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" label="Expiring (30d)" value={String(summary.expiring30)} detail="within 30 days" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" label="Auto-Renew Coverage" value={`${summary.autoRenewCoveragePct}%`} detail="fleet-wide" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<ShieldAlert size={18} />} iconTone="bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" label="Weak / Insecure" value={String(summary.weak)} detail="SHA-1 or key < 2048" className="min-h-[5.5rem] p-3" />
+        <StatCard icon={<CheckCircle2 size={18} />} iconTone="bg-violet-100 text-violet-800 dark:bg-violet-500/15 dark:text-violet-300" label="Avg Health Score" value={String(summary.avgHealthScore)} detail="0-100" className="min-h-[5.5rem] p-3" />
       </section>
 
       {/* Row A - timeline + status donut */}
@@ -395,13 +395,13 @@ export function CertificatesDashboard() {
         <ChartCard title="Expiration Timeline" className="xl:col-span-8" actions={<SegmentedControl value={range} options={["7D", "30D", "90D", "1Y"] as const} onChange={(value) => updateParams({ range: value })} />}>
           <div className="flex flex-1 flex-col justify-center gap-4">
             <div className="flex flex-wrap items-center gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px] bg-red-600" /><span className="text-muted-foreground">Expired</span></span>
-              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px] bg-orange-500" /><span className="text-muted-foreground">Critical</span></span>
-              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px] bg-amber-500" /><span className="text-muted-foreground">Expiring soon</span></span>
-              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px] bg-emerald-500" /><span className="text-muted-foreground">Healthy</span></span>
+              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-red-600" /><span className="text-muted-foreground">Expired</span></span>
+              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-orange-500" /><span className="text-muted-foreground">Critical</span></span>
+              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-amber-500" /><span className="text-muted-foreground">Expiring soon</span></span>
+              <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-emerald-500" /><span className="text-muted-foreground">Healthy</span></span>
               <span className="ml-auto tabular-nums text-muted-foreground"><b className="text-foreground">{expiringThisMonth}</b> expiring in 30 days · <b className="text-red-600 dark:text-red-400">{expiringCritical}</b> critical</span>
             </div>
-            <div className="h-[230px] min-h-[220px] w-full flex-1" role="img" aria-label="Certificates expiring stacked area chart">
+            <div className="h-[14.375rem] min-h-[13.75rem] w-full flex-1" role="img" aria-label="Certificates expiring stacked area chart">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={timelineData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                   <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="4 4" />
@@ -420,7 +420,7 @@ export function CertificatesDashboard() {
 
         <ChartCard title="Certificates by Status" className="xl:col-span-4" actions={<CardKebab label="Certificates by status" />}>
           <div className="flex flex-1 items-center gap-4">
-            <div className="relative h-[130px] min-h-[130px] w-[130px] shrink-0" role="img" aria-label={`Status breakdown: ${statusData.map((s) => `${s.name} ${s.value}`).join(", ")}`}>
+            <div className="relative h-[8.125rem] min-h-[8.125rem] w-[8.125rem] shrink-0" role="img" aria-label={`Status breakdown: ${statusData.map((s) => `${s.name} ${s.value}`).join(", ")}`}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={statusData} dataKey="value" innerRadius="62%" outerRadius="100%" startAngle={90} endAngle={-270} paddingAngle={2}>
@@ -429,7 +429,7 @@ export function CertificatesDashboard() {
                   <Tooltip contentStyle={{ background: "#0f172a", border: 0, borderRadius: 8, color: "#fff", fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[20px] leading-none text-foreground tabular-nums">{summary.total}</b><span className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">certs</span></div>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.25rem] leading-none text-foreground tabular-nums">{summary.total}</b><span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">certs</span></div>
             </div>
             <ul className="min-w-0 flex-1 space-y-1.5 text-sm">
               {statusData.map((entry) => {
@@ -544,7 +544,7 @@ export function CertificatesDashboard() {
                 {manualRenewals.map((cert) => {
                   const days = daysUntilExpiry(cert.expiresAt);
                   return (
-                    <li key={cert.id} className="flex items-center gap-2 text-[12px]">
+                    <li key={cert.id} className="flex items-center gap-2 text-[0.75rem]">
                       <span className="w-16 shrink-0 truncate font-mono text-muted-foreground">{cert.id}</span>
                       <span className="min-w-0 flex-1 truncate text-foreground">{cert.commonName}</span>
                       <span className={cn("shrink-0 tabular-nums font-semibold", days < 0 ? "text-red-600 dark:text-red-400" : days <= 7 ? "text-orange-700 dark:text-orange-400" : "text-amber-700 dark:text-amber-400")}>{days < 0 ? "overdue" : `in ${days}d`}</span>
@@ -566,8 +566,8 @@ export function CertificatesDashboard() {
                 <li key={cert.id}>
                   <button type="button" onClick={() => openDrawer(cert.id)} className="flex w-full items-center gap-2 rounded-md px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${cert.commonName} expires in ${days} days`}>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate font-mono text-[13px] font-semibold text-foreground">{cert.commonName}</span>
-                      <span className="mt-0.5 block text-[11px] text-muted-foreground">{cert.hostIds[0]} · {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                      <span className="block truncate font-mono text-[0.8125rem] font-semibold text-foreground">{cert.commonName}</span>
+                      <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.hostIds[0]} · {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
                     </span>
                     <span className={cn("inline-flex shrink-0 items-center rounded-full px-2 py-1 text-xs font-semibold", days <= 7 ? "bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" : days <= 30 ? "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" : "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300")}>in {days}d</span>
                   </button>
@@ -598,10 +598,10 @@ export function CertificatesDashboard() {
           <span className="ml-auto inline-flex h-9 items-center rounded-lg border border-border px-2.5 text-xs tabular-nums text-muted-foreground">{filteredCerts.length} shown</span>
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2">
-          <div className="relative w-full min-w-[200px] sm:w-auto sm:min-w-[240px] sm:max-w-xs sm:flex-1">
+          <div className="relative w-full min-w-[12.5rem] sm:w-auto sm:min-w-[15rem] sm:max-w-xs sm:flex-1">
             <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input value={query} onChange={(event) => applyFilters({ q: event.target.value || null })} placeholder="domain, host, issuer..." aria-label="Search certificates" className="h-9 pl-9 pr-9 text-sm" />
-            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">/</kbd>
+            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground">/</kbd>
           </div>
           <FilterSelect value={statusFilter} onChange={(value) => applyFilters({ status: value })} label="Status" options={["Expired", "Critical", "Expiring soon", "Healthy", "Revoked"]} allLabel="All statuses" />
           <FilterSelect value={issuerFilter} onChange={(value) => applyFilters({ issuer: value })} label="Issuer" options={["Let's Encrypt", "DigiCert", "Sectigo", "Internal CA", "Self-signed"]} allLabel="All issuers" />
@@ -633,13 +633,13 @@ export function CertificatesDashboard() {
           {autoRenewOff && <ChipButton label="Auto-renew off" onClear={() => applyFilters({ autorenew: null })} />}
           {weakOnly && <ChipButton label="Weak algorithms" onClear={() => applyFilters({ weak: null })} />}
           {query && <ChipButton label={`"${query}"`} onClear={() => applyFilters({ q: null })} />}
-          <button type="button" onClick={() => updateParams({ compact: compact ? null : "1" })} aria-pressed={compact} className={cn("h-7 rounded-full border px-2.5 text-[11px] font-semibold", compact ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}>Compact</button>
+          <button type="button" onClick={() => updateParams({ compact: compact ? null : "1" })} aria-pressed={compact} className={cn("h-7 rounded-full border px-2.5 text-[0.6875rem] font-semibold", compact ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-accent")}>Compact</button>
         </div>
         {savedViews.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2 text-xs">
             <span className="font-semibold text-muted-foreground">Saved views:</span>
-            {savedViews.map((view) => <button key={view.name} type="button" onClick={() => applySavedView(view.patch)} className="rounded-full border border-border px-2.5 py-1 text-[11px] font-medium text-muted-foreground hover:bg-accent">{view.name}</button>)}
-            <button type="button" onClick={() => { try { window.localStorage.removeItem("certs:saved-views:v1"); } catch { /* noop */ } setSavedViews([]); }} className="text-[11px] text-muted-foreground hover:text-foreground underline">Clear all</button>
+            {savedViews.map((view) => <button key={view.name} type="button" onClick={() => applySavedView(view.patch)} className="rounded-full border border-border px-2.5 py-1 text-[0.6875rem] font-medium text-muted-foreground hover:bg-accent">{view.name}</button>)}
+            <button type="button" onClick={() => { try { window.localStorage.removeItem("certs:saved-views:v1"); } catch { /* noop */ } setSavedViews([]); }} className="text-[0.6875rem] text-muted-foreground hover:text-foreground underline">Clear all</button>
           </div>
         )}
       </div>
@@ -652,7 +652,7 @@ export function CertificatesDashboard() {
             <p className="text-xs text-muted-foreground">Click a row to open the quick drawer</p>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full table-fixed text-left text-[13px]">
+            <table className="w-full table-fixed text-left text-[0.8125rem]">
               <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="w-12 px-2 py-2.5 text-center"><input type="checkbox" aria-label="Select page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
@@ -674,21 +674,21 @@ export function CertificatesDashboard() {
                   const weak = /sha1/i.test(cert.signatureAlgorithm) || cert.keySize < 2048;
                   const status = expiryStatus(cert.expiresAt, cert.revoked);
                   return (
-                    <tr key={cert.id} tabIndex={0} className={cn("group relative cursor-pointer border-b border-border/70 transition-colors hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:bg-[#F8FAFC] dark:hover:bg-muted/30", compact ? "h-12" : "h-14")} onClick={() => openDrawer(cert.id)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openDrawer(cert.id); } }}>
+                    <tr key={cert.id} tabIndex={0} className={cn("group relative cursor-pointer border-b border-border/70 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-50 dark:hover:bg-muted/30", compact ? "h-12" : "h-14")} onClick={() => openDrawer(cert.id)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openDrawer(cert.id); } }}>
                         <td className="relative px-2 py-2 align-middle text-center">
                         <ExpiryStripe expired={expired || status === "Critical"} />
                         <input type="checkbox" aria-label={`Select ${cert.id}`} className="h-4 w-4 accent-[var(--primary)]" checked={selected.has(cert.id)} onClick={(event) => event.stopPropagation()} onChange={() => toggleSelect(cert.id)} />
                       </td>
                       <td className="px-2 py-2 align-middle">
-                        <p className="font-mono text-[11px] font-semibold text-muted-foreground">{cert.id}</p>
-                        <p className="mt-0.5 truncate text-[13px] font-medium text-foreground" title={cert.commonName}>{cert.commonName}</p>
-                        <p className="mt-0.5 truncate text-[11px] text-muted-foreground" title={cert.sans.join(", ")}>+{cert.sans.length} SANs · {cert.sans.slice(0, 2).join(", ")}{cert.sans.length > 2 ? "·" : ""}</p>
+                        <p className="font-mono text-[0.6875rem] font-semibold text-muted-foreground">{cert.id}</p>
+                        <p className="mt-0.5 truncate text-[0.8125rem] font-medium text-foreground" title={cert.commonName}>{cert.commonName}</p>
+                        <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground" title={cert.sans.join(", ")}>+{cert.sans.length} SANs · {cert.sans.slice(0, 2).join(", ")}{cert.sans.length > 2 ? "·" : ""}</p>
                       </td>
-                      <td className="px-2 py-2 align-middle"><div className="flex flex-col items-start gap-1"><CertStatusBadge status={status} />{(weak || !cert.chainValid) && <span className="flex items-center gap-1 text-[10px] text-red-600 dark:text-red-400">{weak && <AlertTriangle size={10} aria-hidden="true" />}{weak ? "Weak" : "Chain invalid"}</span>}</div></td>
-                      <td className="px-2 py-2 align-middle"><DaysLeftBadge daysLeft={daysLeft} revoked={cert.revoked} /><span className="mt-0.5 block text-[11px] text-muted-foreground">{new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span></td>
-                      <td className="px-2 py-2 align-middle"><span className="block truncate text-[13px] text-foreground" title={cert.issuer}>{cert.issuer}</span><IssuerTypeBadge type={cert.issuerType} className="mt-0.5" /></td>
+                      <td className="px-2 py-2 align-middle"><div className="flex flex-col items-start gap-1"><CertStatusBadge status={status} />{(weak || !cert.chainValid) && <span className="flex items-center gap-1 text-[0.625rem] text-red-600 dark:text-red-400">{weak && <AlertTriangle size={10} aria-hidden="true" />}{weak ? "Weak" : "Chain invalid"}</span>}</div></td>
+                      <td className="px-2 py-2 align-middle"><DaysLeftBadge daysLeft={daysLeft} revoked={cert.revoked} /><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span></td>
+                      <td className="px-2 py-2 align-middle"><span className="block truncate text-[0.8125rem] text-foreground" title={cert.issuer}>{cert.issuer}</span><IssuerTypeBadge type={cert.issuerType} className="mt-0.5" /></td>
                       <td className="px-2 py-2 align-middle"><HostChips hosts={cert.hostIds} /></td>
-                      <td className="px-2 py-2 align-middle"><span className="flex items-center gap-1.5">{cert.autoRenew ? <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400"><CheckCircle2 size={12} aria-hidden="true" />Auto</span> : <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={12} aria-hidden="true" />Manual</span>}</span><span className="mt-0.5 block text-[11px] text-muted-foreground">{cert.ownerId}</span></td>
+                      <td className="px-2 py-2 align-middle"><span className="flex items-center gap-1.5">{cert.autoRenew ? <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400"><CheckCircle2 size={12} aria-hidden="true" />Auto</span> : <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={12} aria-hidden="true" />Manual</span>}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.ownerId}</span></td>
                       <td className="px-2 py-2 align-middle"><HealthBar score={health} /></td>
                       <td className="px-2 py-2 align-middle text-right" onClick={(event) => event.stopPropagation()}>
                         <AlertMenu label={`Actions for ${cert.id}`} align="end" trigger={<button type="button" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Actions for ${cert.id}`}><MoreVertical size={15} /></button>} items={[
@@ -756,7 +756,7 @@ export function CertificatesDashboard() {
 
 function FilterSelect({ value, onChange, label, options, allLabel }: { value: string; onChange: (value: string) => void; label: string; options: string[]; allLabel: string }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[160px] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
+    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[10rem] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
       <option value="all">{allLabel}</option>
       {options.map((option) => <option key={option} value={option}>{option}</option>)}
     </select>
@@ -765,7 +765,7 @@ function FilterSelect({ value, onChange, label, options, allLabel }: { value: st
 
 function ChipButton({ label, onClear }: { label: string; onClear: () => void }) {
   return (
-    <button type="button" onClick={onClear} className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-muted/60 px-2 text-[11px] font-medium text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+    <button type="button" onClick={onClear} className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-muted/60 px-2 text-[0.6875rem] font-medium text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       {label}<X size={11} aria-hidden="true" />
     </button>
   );
@@ -785,7 +785,7 @@ function SaveViewDialog({ open, name, setName, onCancel, onSave }: { open: boole
   if (!open) return null;
   return (
     <div role="dialog" aria-modal="true" aria-label="Save current view" className="fixed inset-0 z-[1200] grid place-items-center bg-black/40">
-      <div className="w-[min(420px,calc(100vw-2rem))] rounded-xl border border-border bg-card p-5 shadow-2xl">
+      <div className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl border border-border bg-card p-5 shadow-2xl">
         <h2 className="font-display text-base font-bold text-foreground">Save current view</h2>
         <p className="mt-1 text-xs text-muted-foreground">Stores the active filters as a named view in this browser.</p>
         <label className="mt-3 flex flex-col gap-1.5 text-sm font-medium">

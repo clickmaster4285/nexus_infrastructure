@@ -133,7 +133,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
 
   return (
     <Dialog open={open} onOpenChange={(next) => { if (restoring) return; onOpenChange(next); }}>
-      <DialogContent className="w-[min(560px,calc(100vw-2rem))] gap-0 overflow-hidden p-0">
+      <DialogContent className="w-[min(35rem,calc(100vw-2rem))] gap-0 overflow-hidden p-0">
         <DialogHeader className="border-b border-border px-5 pb-4 pt-5">
           <div className="flex items-center gap-2">
             <FlaskConical size={16} aria-hidden="true" className="text-primary" />
@@ -149,8 +149,8 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
               return (
                 <li key={label} className="flex items-center gap-1.5">
                   <span className={cn(
-                    "grid h-5 w-5 place-items-center rounded-full text-[10px] font-bold",
-                    state === "done" && "bg-[#16A34A] text-white",
+                    "grid h-5 w-5 place-items-center rounded-full text-[0.625rem] font-bold",
+                    state === "done" && "bg-green-600 text-white",
                     state === "active" && "bg-primary text-primary-foreground",
                     state === "todo" && "border border-border text-muted-foreground",
                   )}>
@@ -164,7 +164,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
           </ol>
         </DialogHeader>
 
-        <div className="max-h-[min(460px,60vh)] min-h-[220px] overflow-y-auto px-5 py-4">
+        <div className="max-h-[min(28.75rem,60vh)] min-h-[13.75rem] overflow-y-auto px-5 py-4">
           {step === 1 && (
             <div className="flex flex-col gap-3">
               <label className="block text-xs font-medium text-muted-foreground" htmlFor="wizard-asset">
@@ -219,7 +219,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
                   target === "sandbox" ? "border-primary ring-1 ring-primary" : "border-border hover:bg-accent",
                 )}
               >
-                <span className="flex items-center gap-2 text-[13px] font-semibold text-foreground">Sandbox instance <span className="rounded bg-emerald-50 px-1.5 text-[10px] font-semibold uppercase text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">recommended</span></span>
+                <span className="flex items-center gap-2 text-[0.8125rem] font-semibold text-foreground">Sandbox instance <span className="rounded bg-emerald-50 px-1.5 text-[0.625rem] font-semibold uppercase text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">recommended</span></span>
                 <span className="mt-0.5 block text-xs text-muted-foreground">Spins up a scratch VM from this restore point, verifies it, then disposes of it. Production traffic is untouched.</span>
               </button>
               <button
@@ -229,17 +229,17 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
                 onClick={() => setTarget("in-place")}
                 className={cn(
                   "rounded-lg border px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  target === "in-place" ? "border-[#DC2626] ring-1 ring-[#DC2626]" : "border-border hover:bg-accent",
+                  target === "in-place" ? "border-red-600 ring-1 ring-red-600" : "border-border hover:bg-accent",
                 )}
               >
-                <span className="flex items-center gap-2 text-[13px] font-semibold text-[#DC2626] dark:text-red-400"><ShieldAlert size={14} aria-hidden="true" />In-place restore</span>
+                <span className="flex items-center gap-2 text-[0.8125rem] font-semibold text-red-600 dark:text-red-400"><ShieldAlert size={14} aria-hidden="true" />In-place restore</span>
                 <span className="mt-0.5 block text-xs text-muted-foreground">Overwrites production data on <span className="font-mono">{selectedPoint.host}</span> with the selected point.</span>
               </button>
               {isInPlace && (
                 <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-500/30 dark:bg-red-500/10">
                   <p className="flex items-start gap-1.5 text-xs font-semibold text-red-900 dark:text-red-200"><AlertTriangle size={13} aria-hidden="true" className="mt-0.5 shrink-0" />In-place restore will overwrite current data on {selectedPoint.host}. Type the asset name to confirm.</p>
                   <Input
-                    className="mt-2 h-9 border-red-300 bg-white font-mono text-[13px] dark:border-red-500/40 dark:bg-red-950/40"
+                    className="mt-2 h-9 border-red-300 bg-white font-mono text-[0.8125rem] dark:border-red-500/40 dark:bg-red-950/40"
                     placeholder={selectedPoint.host}
                     value={confirmText}
                     onChange={(event) => setConfirmText(event.target.value)}
@@ -262,7 +262,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
                 <label key={option.id} className="flex cursor-pointer items-start gap-2 rounded-lg border border-border p-3 transition-colors hover:bg-accent">
                   <input type="checkbox" checked={option.checked} onChange={(event) => option.set(event.target.checked)} className="mt-0.5 h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]" />
                   <span>
-                    <span className="block text-[13px] font-semibold text-foreground">{option.label}</span>
+                    <span className="block text-[0.8125rem] font-semibold text-foreground">{option.label}</span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">{option.detail}</span>
                   </span>
                 </label>
@@ -289,7 +289,7 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
                 <div>
                   <p className="flex items-center justify-between text-xs font-medium text-muted-foreground"><span>Restoring into sandbox...</span><span className="tabular-nums">{progress}%</span></p>
                   <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="Restore progress">
-                    <div className="h-full rounded-full bg-[#3B82F6] transition-[width] duration-300" style={{ width: `${progress}%` }} />
+                    <div className="h-full rounded-full bg-blue-500 transition-[width] duration-300" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
               )}
@@ -298,17 +298,17 @@ export function TestRestoreWizard({ open, onOpenChange, initialPointId, defaultH
         </div>
 
         <DialogFooter className="flex-row items-center justify-between border-t border-border px-5 py-3">
-          <Button variant="ghost" className="h-9 gap-1 rounded-lg px-3 text-[13px]" onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3) : s))} disabled={step === 1 || restoring}>
+          <Button variant="ghost" className="h-9 gap-1 rounded-lg px-3 text-[0.8125rem]" onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3) : s))} disabled={step === 1 || restoring}>
             <ChevronLeft size={14} aria-hidden="true" />Back
           </Button>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => onOpenChange(false)} disabled={restoring}>Cancel</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => onOpenChange(false)} disabled={restoring}>Cancel</Button>
             {step < 4 ? (
-              <Button className="h-9 gap-1 rounded-lg px-4 text-[13px] font-semibold" onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 2 | 3 | 4) : s))} disabled={!canContinue}>
+              <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 2 | 3 | 4) : s))} disabled={!canContinue}>
                 Continue<ChevronRight size={14} aria-hidden="true" />
               </Button>
             ) : (
-              <Button className="h-9 gap-1.5 rounded-lg bg-primary px-4 text-[13px] font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50" onClick={start} disabled={!canContinue || restoring}>
+              <Button className="h-9 gap-1.5 rounded-lg bg-primary px-4 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50" onClick={start} disabled={!canContinue || restoring}>
                 <ArchiveRestore size={14} aria-hidden="true" />{restoring ? `Starting ${progress}%` : "Start restore"}
               </Button>
             )}

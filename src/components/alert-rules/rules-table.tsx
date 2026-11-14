@@ -45,21 +45,21 @@ const SEVERITY_RANK: Record<RuleSeverity, number> = { Critical: 0, Warning: 1, I
 const PAGE_SIZES = [10, 20, 50];
 
 const SEVERITY_BADGE: Record<RuleSeverity, { icon: typeof Zap; className: string }> = {
-  Critical: { icon: AlertTriangle, className: "bg-[#FEE2E2] text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  Warning: { icon: AlertTriangle, className: "bg-[#FEF3C7] text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
-  Info: { icon: Info, className: "bg-[#DBEAFE] text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-400" },
+  Critical: { icon: AlertTriangle, className: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  Warning: { icon: AlertTriangle, className: "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  Info: { icon: Info, className: "bg-blue-100 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
 };
 
 const TYPE_BADGE: Record<RuleType, string> = {
   Threshold: "bg-[#EEF2F7] text-[#33415C] dark:bg-slate-500/15 dark:text-slate-300",
-  Anomaly: "bg-[#F3E8FF] text-[#7C3AED] dark:bg-violet-500/15 dark:text-violet-300",
-  Composite: "bg-[#FEF3C7] text-[#B45309] dark:bg-amber-500/15 dark:text-amber-300",
+  Anomaly: "bg-purple-100 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
+  Composite: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
 };
 
 const STATUS_CHIP: Record<RuleStatus, { icon: typeof Zap; className: string }> = {
-  Enabled: { icon: CheckCircle2, className: "text-[#16A34A]" },
-  Muted: { icon: BellOff, className: "text-[#94A3B8]" },
-  Disabled: { icon: Ban, className: "text-[#94A3B8]" },
+  Enabled: { icon: CheckCircle2, className: "text-green-600" },
+  Muted: { icon: BellOff, className: "text-slate-400" },
+  Disabled: { icon: Ban, className: "text-slate-400" },
 };
 
 const CHANNEL_ICON: Record<NotificationChannel, { icon: typeof Mail; label: string }> = {
@@ -72,7 +72,7 @@ const CHANNEL_ICON: Record<NotificationChannel, { icon: typeof Mail; label: stri
 function SeverityBadge({ severity }: { severity: RuleSeverity }) {
   const meta = SEVERITY_BADGE[severity];
   return (
-    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[10px] font-semibold", meta.className)}>
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.className)}>
       <meta.icon size={11} aria-hidden="true" />
       {severity}
     </Badge>
@@ -81,7 +81,7 @@ function SeverityBadge({ severity }: { severity: RuleSeverity }) {
 
 function TypeBadge({ type }: { type: RuleType }) {
   return (
-    <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[10px] font-semibold", TYPE_BADGE[type])}>
+    <Badge variant="outline" className={cn("border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", TYPE_BADGE[type])}>
       {type}
     </Badge>
   );
@@ -90,12 +90,12 @@ function TypeBadge({ type }: { type: RuleType }) {
 function FireSparkline({ history, fired24h }: { history: number[]; fired24h: number }) {
   const max = Math.max(1, ...history);
   return (
-    <span className="flex items-end gap-[2px]" title={`${fired24h} fires in the last 24h (hourly)`} aria-label={`${fired24h} fires in the last 24 hours`}>
+    <span className="flex items-end gap-[0.125rem]" title={`${fired24h} fires in the last 24h (hourly)`} aria-label={`${fired24h} fires in the last 24 hours`}>
       {history.map((value, index) => (
         <span
           key={index}
           aria-hidden="true"
-          className={cn("w-[3px] rounded-[1px]", value > 0 ? "bg-[#D97706] dark:bg-amber-500" : "bg-slate-200 dark:bg-slate-700")}
+          className={cn("w-[0.1875rem] rounded-[0.0625rem]", value > 0 ? "bg-amber-600 dark:bg-amber-500" : "bg-slate-200 dark:bg-slate-700")}
           style={{ height: `${value > 0 ? Math.max(3, Math.round((value / max) * 18)) : 2}px` }}
         />
       ))}
@@ -203,7 +203,7 @@ export function RulesTable(props: RulesTableProps) {
       : <ArrowUpDown size={12} aria-hidden="true" className="opacity-0 transition-opacity group-hover:opacity-50" />;
 
   const header = (key: SortKey, label: string, className?: string) => (
-    <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
+    <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
       <button type="button" onClick={() => toggleSort(key)} className="group inline-flex items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         {label}
         {sortIndicator(key)}
@@ -228,12 +228,12 @@ export function RulesTable(props: RulesTableProps) {
                 className="h-4 w-4 cursor-pointer rounded border-input accent-[#1479e8]"
               />
             </th>
-            <th scope="col" className="w-[72px] px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Enabled</th>
-            {header("name", "Rule", "min-w-[200px]")}
+            <th scope="col" className="w-[4.5rem] px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Enabled</th>
+            {header("name", "Rule", "min-w-[12.5rem]")}
             {header("type", "Type", columns.type ? "hidden sm:table-cell" : "hidden")}
             {header("severity", "Severity", "hidden md:table-cell")}
-            <th scope="col" className="hidden px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground lg:table-cell">Target</th>
-            <th scope="col" className={cn("hidden px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground", columns.notifications && "xl:table-cell")}>Notify</th>
+            <th scope="col" className="hidden px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground lg:table-cell">Target</th>
+            <th scope="col" className={cn("hidden px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground", columns.notifications && "xl:table-cell")}>Notify</th>
             {header("lastFiredAt", "Last fired", "hidden md:table-cell")}
             {header("fired24h", "Fired 24h", columns.activity ? "hidden sm:table-cell" : "hidden")}
             <th scope="col" className="w-10 px-2 py-2"><span className="sr-only">Actions</span></th>
@@ -254,7 +254,7 @@ export function RulesTable(props: RulesTableProps) {
                 aria-selected={isSelected}
                 className={cn(
                   "relative cursor-pointer border-b border-border/70 outline-none transition-colors",
-                  "hover:bg-[#F8FAFC] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring dark:hover:bg-accent",
+                  "hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring dark:hover:bg-accent",
                   isSelected && "bg-primary/[0.06] dark:bg-primary/10",
                   rule.severity === "Critical" && rule.status === "Enabled" && "shadow-[inset_3px_0_0_#DC2626]",
                 )}
@@ -276,31 +276,31 @@ export function RulesTable(props: RulesTableProps) {
                       onChange={() => onToggle(rule)}
                       label={`${rule.status === "Enabled" ? "Disable" : "Enable"} rule ${rule.name}`}
                     />
-                    <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold", statusMeta.className)}>
+                    <span className={cn("inline-flex items-center gap-1 text-[0.625rem] font-semibold", statusMeta.className)}>
                       <StatusIcon size={10} aria-hidden="true" />
                       {rule.status}
                     </span>
-                    {mutedByWindow && <a href={`/maintenance-windows/${mutedByWindow}`} className="inline-flex items-center gap-1 text-[12px] font-semibold text-violet-600 hover:underline dark:text-violet-400" onClick={(event) => event.stopPropagation()}>by {mutedByWindow}</a>}
+                    {mutedByWindow && <a href={`/maintenance-windows/${mutedByWindow}`} className="inline-flex items-center gap-1 text-[0.75rem] font-semibold text-violet-600 hover:underline dark:text-violet-400" onClick={(event) => event.stopPropagation()}>by {mutedByWindow}</a>}
                   </div>
                 </td>
-                <td className="min-w-0 max-w-[320px] px-3 py-2.5 align-middle">
-                  <p className="truncate text-[13px] font-semibold text-foreground">{rule.name}</p>
-                  <p className="truncate text-[12px] text-muted-foreground" title={conditionText}>{conditionText}</p>
+                <td className="min-w-0 max-w-[20rem] px-3 py-2.5 align-middle">
+                  <p className="truncate text-[0.8125rem] font-semibold text-foreground">{rule.name}</p>
+                  <p className="truncate text-[0.75rem] text-muted-foreground" title={conditionText}>{conditionText}</p>
                 </td>
                 <td className={cn("hidden px-3 py-2.5 align-middle", columns.type && "sm:table-cell")}><TypeBadge type={rule.type} /></td>
                 <td className="hidden px-3 py-2.5 align-middle md:table-cell"><SeverityBadge severity={rule.severity} /></td>
                 <td className="hidden px-3 py-2.5 align-middle lg:table-cell">
-                  <p className="text-[13px] text-foreground">{rule.target}</p>
-                  <p className="text-[11px] text-muted-foreground">{rule.targetType}</p>
+                  <p className="text-[0.8125rem] text-foreground">{rule.target}</p>
+                  <p className="text-[0.6875rem] text-muted-foreground">{rule.targetType}</p>
                 </td>
                 <td className={cn("hidden px-3 py-2.5 align-middle", columns.notifications && "xl:table-cell")}><ChannelIcons channels={rule.notifications.channels} /></td>
-                <td className="hidden whitespace-nowrap px-3 py-2.5 align-middle text-[12px] text-foreground md:table-cell" title={rule.lastFiredAt ? new Date(rule.lastFiredAt).toLocaleString() : "Never fired"}>
+                <td className="hidden whitespace-nowrap px-3 py-2.5 align-middle text-[0.75rem] text-foreground md:table-cell" title={rule.lastFiredAt ? new Date(rule.lastFiredAt).toLocaleString() : "Never fired"}>
                   {formatLastFired(rule)}
                 </td>
                 <td className={cn("hidden whitespace-nowrap px-3 py-2.5 align-middle", columns.activity && "sm:table-cell")}>
                   <span className="flex items-center gap-2">
                     <FireSparkline history={rule.fireHistory} fired24h={rule.fired24h} />
-                    <span className="text-[12px] font-semibold tabular-nums text-foreground">{rule.fired24h}</span>
+                    <span className="text-[0.75rem] font-semibold tabular-nums text-foreground">{rule.fired24h}</span>
                   </span>
                 </td>
                 <td className="px-2 py-2.5 text-right align-middle" onClick={(event) => event.stopPropagation()}>
@@ -326,12 +326,12 @@ export function RulesTable(props: RulesTableProps) {
 
       {/* Pagination footer */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5">
-        <p className="text-[12px] text-muted-foreground" aria-live="polite">
+        <p className="text-[0.75rem] text-muted-foreground" aria-live="polite">
           Showing {start + 1}-{start + visible.length} of {rules.length}
         </p>
         <div className="flex items-center gap-2">
           <Select value={String(pageSize)} onValueChange={(value) => { setPageSize(Number(value)); setPage(1); }}>
-            <SelectTrigger aria-label="Rows per page" className="h-8 w-[110px] rounded-lg text-[12px]"><SelectValue /></SelectTrigger>
+            <SelectTrigger aria-label="Rows per page" className="h-8 w-[6.875rem] rounded-lg text-[0.75rem]"><SelectValue /></SelectTrigger>
             <SelectContent>
               {PAGE_SIZES.map((size) => (
                 <SelectItem key={size} value={String(size)}>{size} / page</SelectItem>
@@ -347,7 +347,7 @@ export function RulesTable(props: RulesTableProps) {
           >
             <ChevronLeft size={15} aria-hidden="true" />
           </button>
-          <span className="min-w-[64px] text-center text-[12px] font-medium text-foreground">Page {safePage} / {maxPage}</span>
+          <span className="min-w-[4rem] text-center text-[0.75rem] font-medium text-foreground">Page {safePage} / {maxPage}</span>
           <button
             type="button"
             onClick={() => setPage((current) => Math.min(maxPage, current + 1))}

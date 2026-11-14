@@ -161,7 +161,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
   if (status === "loading") {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[110px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[6.875rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8"><div className="h-64 animate-pulse rounded-xl bg-muted" /><div className="h-56 animate-pulse rounded-xl bg-muted" /><div className="h-64 animate-pulse rounded-xl bg-muted" /></div>
           <div className="space-y-4 xl:col-span-4"><div className="h-56 animate-pulse rounded-xl bg-muted" /><div className="h-56 animate-pulse rounded-xl bg-muted" /><div className="h-40 animate-pulse rounded-xl bg-muted" /></div>
@@ -174,7 +174,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Authentication Events", eventId]} title="Event could not be loaded" subtitle="Authentication Events" />
-        <Card className="grid min-h-[280px] place-items-center rounded-xl p-6">
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6">
           <div className="text-center">
             <CircleAlert className="mx-auto text-rose-500" size={28} />
             <h2 className="mt-2 text-base font-semibold">Failed to load {eventId}</h2>
@@ -190,7 +190,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Authentication Events", eventId]} title="Event not found" subtitle="This event does not exist in the 30-day retention window." />
-        <Card className="grid min-h-[280px] place-items-center rounded-xl p-6">
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6">
           <div className="text-center">
             <SearchX className="mx-auto text-muted-foreground" size={28} />
             <h2 className="mt-2 text-base font-semibold">No event matches "{eventId}"</h2>
@@ -264,13 +264,13 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
             </div>
             <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
               <DetailRow label="Time" value={<span>{fullTime(event.time)} <span className="text-muted-foreground">({timeAgo(event.time)})</span></span>} />
-              <DetailRow label="Event ID" value={<span className="font-mono text-[13px]">{event.id}</span>} />
+              <DetailRow label="Event ID" value={<span className="font-mono text-[0.8125rem]">{event.id}</span>} />
               <DetailRow label="User" value={<span className="flex items-center gap-2"><InitialsAvatar name={event.user.split("@")[0]} size={22} /><span className="font-medium text-foreground">{event.user}</span><span className="text-xs uppercase text-muted-foreground">{event.userType}</span></span>} />
               <DetailRow label="Method" value={event.method} />
               <DetailRow label="Event type" value={event.eventType} />
               <DetailRow label="Failure reason" value={event.failureReason ?? "-"} />
               <DetailRow label="Target" value={targetLink ? <Link href={targetLink} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline">{event.targetKind === "server" ? <Server size={13} aria-hidden="true" /> : <AppWindow size={13} aria-hidden="true" />}{event.target}</Link> : <span className="inline-flex items-center gap-1.5 text-foreground">{event.targetKind === "server" ? <Server size={13} aria-hidden="true" /> : <AppWindow size={13} aria-hidden="true" />}{event.target}</span>} />
-              <DetailRow label="Source" value={<span className="flex items-center gap-2"><CountryFlag code={event.countryCode} name={event.country} /><span className="font-mono text-[13px]">{event.ip}</span><span className="text-muted-foreground">� {event.city}</span></span>} />
+              <DetailRow label="Source" value={<span className="flex items-center gap-2"><CountryFlag code={event.countryCode} name={event.country} /><span className="font-mono text-[0.8125rem]">{event.ip}</span><span className="text-muted-foreground">� {event.city}</span></span>} />
               <DetailRow label="Device" value={<span className="flex items-center gap-2">{event.browser === "curl" || event.browser === "OpenSSH" ? <SquareTerminal size={14} aria-hidden="true" /> : <Laptop size={14} aria-hidden="true" />}{event.device}</span>} />
               <DetailRow label="MFA" value={event.mfaUsed ? <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400"><KeyRound size={13} aria-hidden="true" />Used</span> : <span className="inline-flex items-center gap-1 font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={13} aria-hidden="true" />Not used</span>} />
               <DetailRow label="Privileged" value={event.userType === "Admin" ? "Yes - administrator" : event.userType === "Service" ? "Service account" : "No"} />
@@ -295,7 +295,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
                         <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" aria-hidden="true"><Icon size={13} /></span>
                         <span className="min-w-0">
                           <span className="block text-xs font-semibold uppercase tracking-wide text-orange-800 dark:text-orange-300">{flag.replace(/_/g, " ")}</span>
-                          <span className="mt-0.5 block text-[13px] text-foreground">{riskReason(event, flag)}</span>
+                          <span className="mt-0.5 block text-[0.8125rem] text-foreground">{riskReason(event, flag)}</span>
                         </span>
                       </li>
                     );
@@ -309,19 +309,19 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-lg border border-border bg-muted/40 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Usual for this user</p>
-                <p className="mt-1.5 text-[13px] text-foreground"><b>Locations:</b> {userProfile.usualLocations.length ? userProfile.usualLocations.map(([name]) => name).join(", ") : "insufficient history"}</p>
-                <p className="mt-1 text-[13px] text-foreground"><b>Devices:</b> {userProfile.usualDevices.length ? userProfile.usualDevices.map(([name]) => name).join(", ") : "insufficient history"}</p>
+                <p className="mt-1.5 text-[0.8125rem] text-foreground"><b>Locations:</b> {userProfile.usualLocations.length ? userProfile.usualLocations.map(([name]) => name).join(", ") : "insufficient history"}</p>
+                <p className="mt-1 text-[0.8125rem] text-foreground"><b>Devices:</b> {userProfile.usualDevices.length ? userProfile.usualDevices.map(([name]) => name).join(", ") : "insufficient history"}</p>
               </div>
               <div className={cn("rounded-lg border p-3", event.riskFlags.includes("new_location") || event.riskFlags.includes("new_device") ? "border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10" : "border-border bg-muted/40")}>
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">This event</p>
-                <p className="mt-1.5 text-[13px] text-foreground"><b>Location:</b> {event.city}, {event.country}{event.riskFlags.includes("new_location") && <span className="ml-1.5 rounded bg-amber-200 px-1.5 py-0.5 text-xs font-semibold text-amber-900 dark:bg-amber-500/25 dark:text-amber-200">unusual</span>}</p>
-                <p className="mt-1 text-[13px] text-foreground"><b>Device:</b> {event.device}{event.riskFlags.includes("new_device") && <span className="ml-1.5 rounded bg-amber-200 px-1.5 py-0.5 text-xs font-semibold text-amber-900 dark:bg-amber-500/25 dark:text-amber-200">new</span>}</p>
+                <p className="mt-1.5 text-[0.8125rem] text-foreground"><b>Location:</b> {event.city}, {event.country}{event.riskFlags.includes("new_location") && <span className="ml-1.5 rounded bg-amber-200 px-1.5 py-0.5 text-xs font-semibold text-amber-900 dark:bg-amber-500/25 dark:text-amber-200">unusual</span>}</p>
+                <p className="mt-1 text-[0.8125rem] text-foreground"><b>Device:</b> {event.device}{event.riskFlags.includes("new_device") && <span className="ml-1.5 rounded bg-amber-200 px-1.5 py-0.5 text-xs font-semibold text-amber-900 dark:bg-amber-500/25 dark:text-amber-200">new</span>}</p>
               </div>
             </div>
             <ol className="mt-3 max-h-64 space-y-0 overflow-y-auto border-l-2 border-border pl-4">
               {userEvents.map((item) => (
                 <li key={item.id} className="relative pb-2.5 last:pb-0">
-                  <span aria-hidden="true" className={cn("absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full ring-2 ring-card", item.result === "Success" ? "bg-emerald-400" : item.result === "Failed" ? "bg-rose-400" : item.result === "Blocked" ? "bg-red-600" : "bg-amber-400")} />
+                  <span aria-hidden="true" className={cn("absolute -left-[1.3125rem] top-1 h-2.5 w-2.5 rounded-full ring-2 ring-card", item.result === "Success" ? "bg-emerald-400" : item.result === "Failed" ? "bg-rose-400" : item.result === "Blocked" ? "bg-red-600" : "bg-amber-400")} />
                   <button type="button" onClick={() => router.push(`/authentication-events/${item.id}`)} className="flex w-full flex-wrap items-center gap-x-3 gap-y-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                     <b className="font-mono text-xs text-primary">{item.id}</b>
                     <span className="text-xs text-foreground">{item.method}</span>
@@ -336,7 +336,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
 
           <ChartCard title="Related events" actions={<span className="text-xs text-muted-foreground">Same user or same IP � top 8 by risk</span>}>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[560px] text-left text-[13px]">
+              <table className="w-full min-w-[35rem] text-left text-[0.8125rem]">
                 <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                   <tr><th className="px-2 py-2 font-semibold">ID</th><th className="px-2 py-2 font-semibold">Result</th><th className="px-2 py-2 font-semibold">IP</th><th className="px-2 py-2 font-semibold">Target</th><th className="px-2 py-2 font-semibold">Risk</th><th className="px-2 py-2 font-semibold">When</th></tr>
                 </thead>
@@ -411,7 +411,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
 
           <Card className="flex flex-col rounded-xl p-4">
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><KeyRound size={15} aria-hidden="true" />Linked</h2>
-            <ul className="mt-2 flex flex-col divide-y divide-border text-[13px]">
+            <ul className="mt-2 flex flex-col divide-y divide-border text-[0.8125rem]">
               <li className="flex items-center justify-between gap-2 py-2">
                 <span className="flex min-w-0 items-center gap-2"><Bug size={14} className="shrink-0 text-orange-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Detection</span>{linkedDetection ? <Link href={`/authentication-events?tab=suspicious`} className="block truncate font-semibold text-primary hover:underline">{linkedDetection.id} � {AUTH_DETECTION_LABEL[linkedDetection.type]}</Link> : <span className="text-muted-foreground">None linked</span>}</span></span>
                 {linkedDetection && <SeverityBadge severity={linkedDetection.severity} />}
@@ -460,7 +460,7 @@ function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="min-w-0">
       <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 min-w-0 text-[13px] text-foreground">{value}</dd>
+      <dd className="mt-0.5 min-w-0 text-[0.8125rem] text-foreground">{value}</dd>
     </div>
   );
 }

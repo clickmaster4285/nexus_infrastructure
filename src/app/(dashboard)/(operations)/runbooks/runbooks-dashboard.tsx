@@ -382,9 +382,9 @@ export function RunbooksDashboard() {
     return (
       <div className="space-y-4">
          <PageHeader breadcrumbs={["Operations", "Runbooks"]} title="Runbooks" subtitle="Documented remediation procedures attached to alerts, incidents and services." />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><ShieldAlert size={20} aria-hidden /></span>
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><ShieldAlert size={20} aria-hidden /></span>
             <h2 className="font-display text-base font-bold text-foreground">Couldn&rsquo;t load runbooks</h2>
             <p className="text-sm text-muted-foreground">The runbook store did not respond. Check the pipeline and try again.</p>
             <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-4 text-sm" onClick={reload}><RotateCcw size={15} aria-hidden />Retry</Button>
@@ -398,9 +398,9 @@ export function RunbooksDashboard() {
     return (
       <div className="space-y-4" aria-busy="true">
         <div className="h-11 animate-pulse rounded-xl bg-muted" />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[104px] animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">{Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-[280px] animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[6.5rem] animate-pulse rounded-xl bg-muted" />)}</div>
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">{Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-[17.5rem] animate-pulse rounded-xl bg-muted" />)}</div>
+        <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
       </div>
     );
   }
@@ -458,7 +458,7 @@ export function RunbooksDashboard() {
             <ShieldAlert size={16} aria-hidden className="shrink-0" />
             {stats.uncoveredRuleIds.length} alert rules have no runbook · {stats.needsReview} runbook{stats.needsReview === 1 ? "" : "s"} need{stats.needsReview === 1 ? "s" : ""} review
           </span>
-          <button type="button" onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 rounded text-[13px] font-semibold underline underline-offset-2 transition-colors hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-amber-200">
+          <button type="button" onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 rounded text-[0.8125rem] font-semibold underline underline-offset-2 transition-colors hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-amber-200">
             View gaps
           </button>
         </section>
@@ -480,52 +480,52 @@ export function RunbooksDashboard() {
         <ChartCard title="Alert Coverage" className="flex h-full min-w-0 flex-col rounded-xl p-4" actions={<AlertMenu label="Coverage options" align="end" width={190} trigger={<button type="button" aria-label="Coverage options" className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={16} aria-hidden /></button>} items={[{ key: "export", label: "Export coverage report (CSV)", onSelect: () => exportRows(runbooks.filter((runbook) => runbook.linkedAlertRuleIds.length > 0), "csv") }]} />}>
           <div id="alert-coverage" className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center gap-3 pt-1">
-              <div className="relative h-[130px] w-[130px] shrink-0">
+              <div className="relative h-[8.125rem] w-[8.125rem] shrink-0">
                 <svg viewBox="0 0 42 42" className="h-full w-full -rotate-90" role="img" aria-label={`Alert coverage ${stats.coveragePct}%: ${stats.coverageCount} of ${stats.coverageTotal} rules linked`}>
                   <circle cx="21" cy="21" r="15.9155" fill="none" strokeWidth="6" className="stroke-slate-200 dark:stroke-slate-500/30" />
-                  <circle cx="21" cy="21" r="15.9155" fill="none" strokeWidth="6" strokeDasharray={`${stats.coveragePct} ${100 - stats.coveragePct}`} strokeLinecap="round" className="stroke-[#16A34A] transition-all duration-500 dark:stroke-emerald-400" />
+                  <circle cx="21" cy="21" r="15.9155" fill="none" strokeWidth="6" strokeDasharray={`${stats.coveragePct} ${100 - stats.coveragePct}`} strokeLinecap="round" className="stroke-green-600 transition-all duration-500 dark:stroke-emerald-400" />
                 </svg>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <b className="font-display text-[22px] font-extrabold leading-none tabular-nums text-foreground">{stats.coveragePct}%</b>
-                  <span className="mt-1 text-center text-[11px] font-medium leading-tight text-muted-foreground">of rules<br />covered</span>
+                  <b className="font-display text-[1.375rem] font-extrabold leading-none tabular-nums text-foreground">{stats.coveragePct}%</b>
+                  <span className="mt-1 text-center text-[0.6875rem] font-medium leading-tight text-muted-foreground">of rules<br />covered</span>
                 </div>
               </div>
               <ul className="grid min-w-0 flex-1 grid-cols-1 gap-2 text-xs">
-                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#16A34A]" />With runbook</span><b className="tabular-nums text-foreground">{stats.coverageCount} · {stats.coveragePct}%</b></li>
+                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-green-600" />With runbook</span><b className="tabular-nums text-foreground">{stats.coverageCount} · {stats.coveragePct}%</b></li>
                 <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600" />Without runbook</span><b className="tabular-nums text-foreground">{stats.coverageTotal - stats.coverageCount} · {100 - stats.coveragePct}%</b></li>
                 <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />Total rules</span><b className="tabular-nums text-foreground">{stats.coverageTotal}</b></li>
               </ul>
             </div>
             {/* Coverage by severity - fills the card body with data from the same source */}
             <div className="mt-4 border-t border-border/70 pt-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Coverage by severity</p>
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Coverage by severity</p>
               <ul className="mt-2 space-y-2">
                 {coverageBySeverity.map((bucket) => (
                   <li key={bucket.severity} className="flex items-center gap-2">
-                    <span className="flex w-[74px] shrink-0 items-center gap-1.5 text-xs font-semibold text-foreground/90"><span aria-hidden="true" className={cn("h-2 w-2 rounded-full", bucket.severity === "Critical" ? "bg-[#DC2626]" : bucket.severity === "Warning" ? "bg-[#D97706]" : "bg-[#3B82F6]")} />{bucket.severity}</span>
-                    <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted" role="img" aria-label={`${bucket.severity} rules: ${bucket.covered} of ${bucket.total} covered`}><span className="block h-full rounded-full bg-[#16A34A] dark:bg-emerald-400" style={{ width: `${bucket.pct}%` }} /></span>
-                    <b className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{bucket.covered}/{bucket.total}</b>
+                    <span className="flex w-[4.625rem] shrink-0 items-center gap-1.5 text-xs font-semibold text-foreground/90"><span aria-hidden="true" className={cn("h-2 w-2 rounded-full", bucket.severity === "Critical" ? "bg-red-600" : bucket.severity === "Warning" ? "bg-amber-600" : "bg-blue-500")} />{bucket.severity}</span>
+                    <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted" role="img" aria-label={`${bucket.severity} rules: ${bucket.covered} of ${bucket.total} covered`}><span className="block h-full rounded-full bg-green-600 dark:bg-emerald-400" style={{ width: `${bucket.pct}%` }} /></span>
+                    <b className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{bucket.covered}/{bucket.total}</b>
                   </li>
                 ))}
               </ul>
             </div>
             {/* Review freshness - same-source signal that the coverage above is current */}
             <div className="mt-3 border-t border-border/70 pt-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Review freshness</p>
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Review freshness</p>
               <ul className="mt-2 space-y-2">
                 <li className="flex items-center gap-2">
-                  <span className="flex w-[74px] shrink-0 items-center gap-1.5 text-xs font-semibold text-foreground/90"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />Fresh</span>
+                  <span className="flex w-[4.625rem] shrink-0 items-center gap-1.5 text-xs font-semibold text-foreground/90"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />Fresh</span>
                   <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted" role="img" aria-label={`${reviewFreshness.fresh} of ${reviewFreshness.total} runbooks reviewed within their interval`}><span className="block h-full rounded-full bg-primary" style={{ width: `${reviewFreshness.pct}%` }} /></span>
-                  <b className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{reviewFreshness.fresh}/{reviewFreshness.total}</b>
+                  <b className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{reviewFreshness.fresh}/{reviewFreshness.total}</b>
                 </li>
                 <li className="flex items-center justify-between gap-2">
                   <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><ShieldAlert size={12} aria-hidden className="text-amber-600 dark:text-amber-400" />Overdue for review</span>
-                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded text-[11px] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} · filter <ArrowRight size={11} aria-hidden className="inline-block align-[-1px]" /></button>
+                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded text-[0.6875rem] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} · filter <ArrowRight size={11} aria-hidden className="inline-block align-[-0.0625rem]" /></button>
                 </li>
               </ul>
             </div>
             <div className="mt-auto border-t border-border pt-3">
-              <Link href={`/runbooks/new?rule=${stats.uncoveredRuleIds[0] ?? ""}`} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+              <Link href={`/runbooks/new?rule=${stats.uncoveredRuleIds[0] ?? ""}`} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                 <FilePlus2 size={13} aria-hidden />Create runbook for {stats.uncoveredRuleIds[0] ?? "first uncovered rule"} and {stats.uncoveredRuleIds.length - 1} other{stats.uncoveredRuleIds.length - 1 === 1 ? "" : "s"}
               </Link>
             </div>
@@ -540,14 +540,14 @@ export function RunbooksDashboard() {
               const helpful = stats.helpfulPct(runbook);
               return (
                 <li key={runbook.id}>
-                  <Link href={`/runbooks/${runbook.id}`} className="group block rounded px-1 py-2 transition-colors hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
+                  <Link href={`/runbooks/${runbook.id}`} className="group block rounded px-1 py-2 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
                     <span className="flex items-center justify-between gap-3">
-                      <span className="min-w-0 truncate text-[13px] font-semibold text-foreground group-hover:text-primary">{runbook.title}</span>
+                      <span className="min-w-0 truncate text-[0.8125rem] font-semibold text-foreground group-hover:text-primary">{runbook.title}</span>
                       <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{used} run{used === 1 ? "" : "s"}</span>
                     </span>
                     <span className="mt-1.5 flex items-center gap-2">
                       <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-primary" style={{ width: `${(used / maxUsage) * 100}%` }} /></span>
-                      <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{helpful != null ? `${helpful}% helpful` : "No feedback"}</span>
+                      <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{helpful != null ? `${helpful}% helpful` : "No feedback"}</span>
                     </span>
                   </Link>
                 </li>
@@ -565,10 +565,10 @@ export function RunbooksDashboard() {
               const days = Math.floor((Date.now() - new Date(runbook.lastReviewedAt).getTime()) / 86_400_000);
               return (
                 <li key={runbook.id} className="flex items-center gap-2 py-2">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">{initials(runbook.owner)}</span>
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-amber-100 text-[0.6875rem] font-bold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">{initials(runbook.owner)}</span>
                   <span className="min-w-0 flex-1">
-                    <Link href={`/runbooks/${runbook.id}`} className="block truncate text-[13px] font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{runbook.title}</Link>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground">Last reviewed {days}d ago · {runbook.owner}</span>
+                    <Link href={`/runbooks/${runbook.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{runbook.title}</Link>
+                    <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">Last reviewed {days}d ago · {runbook.owner}</span>
                   </span>
                   <Button variant="outline" className="h-8 shrink-0 gap-1 rounded-lg px-2 text-xs" onClick={() => { markReviewed(runbook.id); showToast(`${runbook.id} marked as reviewed.`); }} aria-label={`Mark ${runbook.id} as reviewed`}>
                     <CheckCircle2 size={13} aria-hidden />Review
@@ -586,9 +586,9 @@ export function RunbooksDashboard() {
               { label: "Due ≤ 30d", value: String(reviewQueue.dueSoon), sub: "before next cycle" },
             ].map((tile) => (
               <div key={tile.label} className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
-                <p className="mt-1 font-display text-[15px] font-bold tabular-nums leading-snug text-foreground">{tile.value}</p>
-                <p className="mt-0.5 truncate text-[10px] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
+                <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
+                <p className="mt-1 font-display text-[0.9375rem] font-bold tabular-nums leading-snug text-foreground">{tile.value}</p>
+                <p className="mt-0.5 truncate text-[0.625rem] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
               </div>
             ))}
           </div>
@@ -601,12 +601,12 @@ export function RunbooksDashboard() {
         {/* Toolbar row */}
         <div className="flex flex-wrap items-center gap-2">
           <SegmentedControl value={view === "list" ? "List" : "Cards"} options={["List", "Cards"]} onChange={(value) => setView(value === "Cards" ? "cards" : "list")} buttonClassName="h-8 px-2.5 text-sm" />
-          <div className="relative min-w-0 flex-1 sm:min-w-[240px]">
+          <div className="relative min-w-0 flex-1 sm:min-w-[15rem]">
             <Search size={15} aria-hidden className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input ref={searchRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runbooks, steps, commands..." aria-label="Search runbooks" className="h-9 rounded-lg pl-8 pr-8 text-sm" />
-            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] text-muted-foreground">/</kbd>
+            <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] text-muted-foreground">/</kbd>
           </div>
-          <button type="button" onClick={resetFilters} className="rounded text-[13px] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Reset</button>
+          <button type="button" onClick={resetFilters} className="rounded text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Reset</button>
           <AlertMenu
             label="Saved views"
             align="end"
@@ -628,7 +628,7 @@ export function RunbooksDashboard() {
         <div className="mt-2 flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2">
           {STATUS_FILTERS.map((statusOption) => (
             <Chip key={statusOption} active={statusFilter === statusOption} onClick={() => setStatusFilter(statusOption)}>
-              {statusOption} <span className="tabular-nums text-[11px] opacity-80">{statusCounts[statusOption] ?? 0}</span>
+              {statusOption} <span className="tabular-nums text-[0.6875rem] opacity-80">{statusCounts[statusOption] ?? 0}</span>
             </Chip>
           ))}
           <button
@@ -643,19 +643,19 @@ export function RunbooksDashboard() {
           </button>
           <div className="ml-auto flex flex-wrap items-center gap-2">
             <Select value={category} onValueChange={(value) => setCategory(value as (typeof CATEGORY_OPTIONS)[number])}>
-              <SelectTrigger className="h-9 w-[128px] text-sm" aria-label="Filter by category"><SelectValue placeholder="Category" /></SelectTrigger>
+              <SelectTrigger className="h-9 w-[8rem] text-sm" aria-label="Filter by category"><SelectValue placeholder="Category" /></SelectTrigger>
               <SelectContent>{CATEGORY_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option === "all" ? "All categories" : option}</SelectItem>)}</SelectContent>
             </Select>
             <Select value={severity} onValueChange={(value) => setSeverity(value as (typeof SEVERITY_OPTIONS)[number])}>
-              <SelectTrigger className="h-9 w-[124px] text-sm" aria-label="Filter by severity"><SelectValue placeholder="Severity" /></SelectTrigger>
+              <SelectTrigger className="h-9 w-[7.75rem] text-sm" aria-label="Filter by severity"><SelectValue placeholder="Severity" /></SelectTrigger>
               <SelectContent>{SEVERITY_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option === "all" ? "All severities" : option}</SelectItem>)}</SelectContent>
             </Select>
             <Select value={service} onValueChange={setService}>
-              <SelectTrigger className="h-9 w-[144px] text-sm" aria-label="Filter by service"><SelectValue placeholder="Service" /></SelectTrigger>
+              <SelectTrigger className="h-9 w-[9rem] text-sm" aria-label="Filter by service"><SelectValue placeholder="Service" /></SelectTrigger>
               <SelectContent>{SERVICE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option === "all" ? "All services" : option}</SelectItem>)}</SelectContent>
             </Select>
             <Select value={owner} onValueChange={setOwner}>
-              <SelectTrigger className="h-9 w-[136px] text-sm" aria-label="Filter by owner"><SelectValue placeholder="Owner" /></SelectTrigger>
+              <SelectTrigger className="h-9 w-[8.5rem] text-sm" aria-label="Filter by owner"><SelectValue placeholder="Owner" /></SelectTrigger>
               <SelectContent>{ownerOptions.map((option) => <SelectItem key={option} value={option}>{option === "all" ? "All owners" : option}</SelectItem>)}</SelectContent>
             </Select>
           </div>
@@ -666,7 +666,7 @@ export function RunbooksDashboard() {
           <div role="status" className="mt-2 flex h-11 flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 px-3 text-sm">
             <b className="tabular-nums text-foreground">{selectedIds.length} selected</b>
             <button type="button" className="rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { selectedIds.forEach((id) => markReviewed(id)); showToast(`Marked ${selectedIds.length} as reviewed.`); setSelectedIds([]); }}>Mark reviewed</button>
-            <button type="button" className="rounded font-semibold text-[#DC2626] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => setConfirmArchive([...selectedIds])}>Archive</button>
+            <button type="button" className="rounded font-semibold text-red-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => setConfirmArchive([...selectedIds])}>Archive</button>
             <button type="button" className="rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => exportRows(selectedIds.map((id) => runbookById.get(id)).filter((runbook): runbook is Runbook => Boolean(runbook)), "csv")}>Export</button>
             <button type="button" className="ml-auto rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection" onClick={() => setSelectedIds([])}><X size={16} aria-hidden /></button>
           </div>
@@ -675,9 +675,9 @@ export function RunbooksDashboard() {
         {/* List view */}
         {view === "list" && (
           <div className="mt-2 overflow-x-auto">
-            <table className="w-full min-w-[1340px] table-fixed text-left text-[13px]">
+            <table className="w-full min-w-[83.75rem] table-fixed text-left text-[0.8125rem]">
               <thead>
-                <tr className="border-b border-border text-[12px] font-semibold text-muted-foreground">
+                <tr className="border-b border-border text-[0.75rem] font-semibold text-muted-foreground">
                   <th className="w-9 py-2 pl-2 pr-1"><input type="checkbox" aria-label="Select all visible runbooks" className="h-4 w-4 accent-[#2563EB]" checked={pageRows.length > 0 && selectedIds.length === pageRows.length} onChange={(event) => toggleSelectAll(event.target.checked)} /></th>
                   <th className="w-[14%] py-2 pr-2"><button type="button" className="inline-flex items-center gap-1 uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => toggleSort("title")}>Title {sortIcon("title")}</button></th>
                   <th className="w-[8%] py-2 pr-2">Category</th>
@@ -701,7 +701,7 @@ export function RunbooksDashboard() {
                   const linked = runbook.linkedAlertRuleIds;
                   const isFavorite = favorites.includes(runbook.id);
                   return (
-                    <tr key={runbook.id} className={cn("group border-b border-border/60 transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40", SEVERITY_STRIPE[runbook.severity], density === "compact" ? "h-12" : "h-14")}>
+                    <tr key={runbook.id} className={cn("group border-b border-border/60 transition-colors hover:bg-slate-50 dark:hover:bg-muted/40", SEVERITY_STRIPE[runbook.severity], density === "compact" ? "h-12" : "h-14")}>
                       <td className="py-1.5 pl-2 pr-1 align-middle"><input type="checkbox" aria-label={`Select ${runbook.id}`} className="h-4 w-4 accent-[#2563EB]" checked={selectedIds.includes(runbook.id)} onChange={(event) => setSelectedIds((current) => event.target.checked ? [...current, runbook.id] : current.filter((id) => id !== runbook.id))} onClick={(event) => event.stopPropagation()} /></td>
                       <td className="py-1.5 pr-2 align-middle">
                         <div className="flex min-w-0 items-center gap-1.5">
@@ -709,31 +709,31 @@ export function RunbooksDashboard() {
                             <Star size={14} aria-hidden className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
                           </button>
                           <Link href={`/runbooks/${runbook.id}`} className="min-w-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                            <span className="block truncate text-[13px] font-semibold text-foreground hover:text-primary">{highlight(runbook.title, query)}</span>
-                            <span className="mt-0.5 block truncate text-[12px] text-muted-foreground" title={runbook.summary}>{highlight(runbook.summary, query)}</span>
+                            <span className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary">{highlight(runbook.title, query)}</span>
+                            <span className="mt-0.5 block truncate text-[0.75rem] text-muted-foreground" title={runbook.summary}>{highlight(runbook.summary, query)}</span>
                           </Link>
                         </div>
                       </td>
-                      <td className="py-1.5 pr-2 align-middle"><span className="inline-flex h-6 items-center whitespace-nowrap rounded border border-border px-2 text-[11px] font-semibold text-muted-foreground">{runbook.category}</span></td>
+                      <td className="py-1.5 pr-2 align-middle"><span className="inline-flex h-6 items-center whitespace-nowrap rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{runbook.category}</span></td>
                       <td className="py-1.5 pr-2 align-middle"><RunbookSeverityBadge severity={runbook.severity} /></td>
                       <td className="py-1.5 pr-2 align-middle">
                         <span className="flex flex-wrap items-center gap-1">
-                          {linked.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[11px] font-semibold tabular-nums text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}</Link>)}
-                          {linked.length > 2 && <span className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[11px] font-semibold text-muted-foreground" title={linked.join(", ")}>+{linked.length - 2}</span>}
-                          {linked.length === 0 && <span className="text-[12px] text-muted-foreground">—</span>}
+                          {linked.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}</Link>)}
+                          {linked.length > 2 && <span className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold text-muted-foreground" title={linked.join(", ")}>+{linked.length - 2}</span>}
+                          {linked.length === 0 && <span className="text-[0.75rem] text-muted-foreground">—</span>}
                         </span>
                       </td>
                       <td className="hidden overflow-hidden py-1.5 pr-2 align-middle lg:table-cell" title={runbook.services.join(", ")}>
                         <span className="flex min-w-0 items-center gap-1 overflow-hidden">
                           {runbook.services.slice(0, 2).map((serviceName) => (
-                            <span key={serviceName} className="inline-flex h-6 max-w-[88px] shrink-0 items-center gap-1 rounded border border-border px-1.5 text-[11px] font-medium text-muted-foreground"><TechLogo name={serviceName} className="!h-4 !w-4 shrink-0 !rounded-sm [&_svg]:!h-2.5 [&_svg]:!w-2.5" /><span className="truncate">{serviceName}</span></span>
+                            <span key={serviceName} className="inline-flex h-6 max-w-[5.5rem] shrink-0 items-center gap-1 rounded border border-border px-1.5 text-[0.6875rem] font-medium text-muted-foreground"><TechLogo name={serviceName} className="!h-4 !w-4 shrink-0 !rounded-sm [&_svg]:!h-2.5 [&_svg]:!w-2.5" /><span className="truncate">{serviceName}</span></span>
                           ))}
-                          {runbook.services.length > 2 && <span className="text-[11px] font-semibold text-muted-foreground">+{runbook.services.length - 2}</span>}
+                          {runbook.services.length > 2 && <span className="text-[0.6875rem] font-semibold text-muted-foreground">+{runbook.services.length - 2}</span>}
                         </span>
                       </td>
                       <td className="py-1.5 pr-2 align-middle"><RunbookStatusBadge status={runbook.status} /></td>
-                      <td className="hidden py-1.5 pr-2 align-middle xl:table-cell"><span className="flex min-w-0 items-center gap-1.5"><InitialsAvatar name={runbook.owner} size={22} /><span className="truncate text-[12px] text-foreground/90">{runbook.owner}</span></span></td>
-                      <td className="py-1.5 pr-2 align-middle"><span className={cn("text-[12px] tabular-nums", stale ? "font-semibold text-[#DC2626] dark:text-red-400" : "text-muted-foreground")} title={formatDate(runbook.lastReviewedAt)}>{days}d ago</span></td>
+                      <td className="hidden py-1.5 pr-2 align-middle xl:table-cell"><span className="flex min-w-0 items-center gap-1.5"><InitialsAvatar name={runbook.owner} size={22} /><span className="truncate text-[0.75rem] text-foreground/90">{runbook.owner}</span></span></td>
+                      <td className="py-1.5 pr-2 align-middle"><span className={cn("text-[0.75rem] tabular-nums", stale ? "font-semibold text-red-600 dark:text-red-400" : "text-muted-foreground")} title={formatDate(runbook.lastReviewedAt)}>{days}d ago</span></td>
                       <td className="py-1.5 pr-2 text-right align-middle tabular-nums text-foreground/90">{used}</td>
                       <td className="py-1.5 pr-2 text-right align-middle tabular-nums text-foreground/90">{helpful != null ? `${helpful}%` : "—"}</td>
                       <td className="py-1.5 pr-1 align-middle">
@@ -785,9 +785,9 @@ export function RunbooksDashboard() {
                     <RunbookStatusBadge status={runbook.status} className="shrink-0" />
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs leading-snug text-muted-foreground" title={runbook.summary}>{runbook.summary}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-1.5"><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-[11px] font-semibold text-muted-foreground">{runbook.category}</span>{runbook.linkedAlertRuleIds.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[11px] font-semibold tabular-nums text-foreground/80 hover:bg-accent">{ruleId}</Link>)}</div>
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5"><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{runbook.category}</span>{runbook.linkedAlertRuleIds.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent">{ruleId}</Link>)}</div>
                   <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2">
-                    <span className="text-[11px] tabular-nums text-muted-foreground">{used} runs · {runbook.estimatedMinutes}m est</span>
+                    <span className="text-[0.6875rem] tabular-nums text-muted-foreground">{used} runs · {runbook.estimatedMinutes}m est</span>
                     <span className="flex items-center gap-1.5">
                       <Button variant="outline" className="h-8 gap-1 rounded-lg px-2.5 text-xs" asChild><Link href={`/runbooks/${runbook.id}`}>Open</Link></Button>
                       <Button className="h-8 gap-1 rounded-lg px-2.5 text-xs" asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={12} aria-hidden />Run</Link></Button>
@@ -823,17 +823,17 @@ export function RunbooksDashboard() {
               return (
                 <li key={execution.id} className="group relative">
                   <Link href={`/runbooks/${runbook.id}`} aria-label={`Open ${runbook.title}`} className="absolute inset-0 z-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                  <div className="pointer-events-none relative z-[1] flex items-center gap-2 rounded px-1 py-2 transition-colors group-hover:bg-[#F8FAFC] dark:group-hover:bg-muted/40">
+                  <div className="pointer-events-none relative z-[1] flex items-center gap-2 rounded px-1 py-2 transition-colors group-hover:bg-slate-50 dark:group-hover:bg-muted/40">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary/10 text-primary"><Play size={13} aria-hidden /></span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13px] font-semibold text-foreground">{runbook.title}</span>
-                      <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[11px] text-muted-foreground">
+                      <span className="block truncate text-[0.8125rem] font-semibold text-foreground">{runbook.title}</span>
+                      <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[0.6875rem] text-muted-foreground">
                         <span>{execution.by}</span>
-                        {execution.incidentId && <Link href={`/incidents/${execution.incidentId}`} className="pointer-events-auto relative z-[2] inline-flex items-center gap-0.5 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">INC <ArrowUpRight size={10} aria-hidden className="inline-block align-[-1px]" /></Link>}
+                        {execution.incidentId && <Link href={`/incidents/${execution.incidentId}`} className="pointer-events-auto relative z-[2] inline-flex items-center gap-0.5 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">INC <ArrowUpRight size={10} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>}
                         <span className="tabular-nums">{execution.durationMs != null ? formatDurationMs(execution.durationMs) : "in progress"}</span>
                       </span>
                     </span>
-                    <span className="flex shrink-0 flex-col items-end gap-1"><ExecutionResultBadge result={execution.result} /><span className="text-[11px] tabular-nums text-muted-foreground">{timeAgo(execution.epochMs)}</span></span>
+                    <span className="flex shrink-0 flex-col items-end gap-1"><ExecutionResultBadge result={execution.result} /><span className="text-[0.6875rem] tabular-nums text-muted-foreground">{timeAgo(execution.epochMs)}</span></span>
                   </div>
                 </li>
               );
@@ -848,8 +848,8 @@ export function RunbooksDashboard() {
             {uncoveredRules.slice(0, 7).map((rule) => (
               <li key={rule.id} className="flex items-center gap-2 py-2">
                 <Link href={`/alert-rules?rule=${rule.id}`} className="min-w-0 flex-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <span className="block truncate text-[13px] font-semibold text-foreground hover:text-primary">{rule.name}</span>
-                  <span className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground"><RunbookSeverityBadge severity={rule.severity === "Critical" ? "Critical" : rule.severity === "Warning" ? "Medium" : "Low"} /><span className="tabular-nums">{rule.fired24h} fires 24h</span></span>
+                  <span className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary">{rule.name}</span>
+                  <span className="mt-0.5 flex items-center gap-2 text-[0.6875rem] text-muted-foreground"><RunbookSeverityBadge severity={rule.severity === "Critical" ? "Critical" : rule.severity === "Warning" ? "Medium" : "Low"} /><span className="tabular-nums">{rule.fired24h} fires 24h</span></span>
                 </Link>
                 <Button variant="outline" className="h-8 shrink-0 gap-1 rounded-lg px-2 text-xs" asChild><Link href={`/runbooks/new?rule=${rule.id}`}><FilePlus2 size={12} aria-hidden />Create runbook</Link></Button>
               </li>
@@ -858,7 +858,7 @@ export function RunbooksDashboard() {
           </ul>
           {/* Uncovered impact - aggregate of the gap list above */}
           <div className="mt-2 border-t border-border/70 pt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Uncovered impact · 24h</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Uncovered impact · 24h</p>
             <div className="mt-2 grid grid-cols-3 gap-2">
               {[
                 { label: "Fires 24h", value: String(uncoveredImpact.fires), sub: `across ${uncoveredRules.length} ${uncoveredRules.length === 1 ? "rule" : "rules"}` },
@@ -866,23 +866,23 @@ export function RunbooksDashboard() {
                 { label: "Warnings / Info", value: String(uncoveredImpact.warning + uncoveredImpact.info), sub: "standard tier" },
               ].map((tile) => (
                 <div key={tile.label} className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
-                  <p className="mt-1 font-display text-[15px] font-bold tabular-nums leading-snug text-foreground">{tile.value}</p>
-                  <p className="mt-0.5 truncate text-[10px] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
+                  <p className="mt-1 font-display text-[0.9375rem] font-bold tabular-nums leading-snug text-foreground">{tile.value}</p>
+                  <p className="mt-0.5 truncate text-[0.625rem] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
                 </div>
               ))}
             </div>
           </div>
           {/* Recently covered - coverage momentum from the same store */}
           <div className="mt-3 border-t border-border/70 pt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Recently covered</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Recently covered</p>
             <ul className="mt-1.5 divide-y divide-border/60">
               {recentlyCovered.map((runbook) => (
                 <li key={runbook.id}>
-                  <Link href={`/runbooks/${runbook.id}`} className="flex items-center gap-2 rounded px-1 py-1.5 transition-colors hover:bg-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
-                    <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-foreground/80">{runbook.linkedAlertRuleIds[0]}</span>
-                    <span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-foreground">{runbook.title}</span></span>
-                    <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{timeAgo(new Date(runbook.updatedAt).getTime())}</span>
+                  <Link href={`/runbooks/${runbook.id}`} className="flex items-center gap-2 rounded px-1 py-1.5 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
+                    <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] font-semibold tabular-nums text-foreground/80">{runbook.linkedAlertRuleIds[0]}</span>
+                    <span className="min-w-0 flex-1"><span className="block truncate text-[0.8125rem] font-semibold text-foreground">{runbook.title}</span></span>
+                    <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{timeAgo(new Date(runbook.updatedAt).getTime())}</span>
                   </Link>
                 </li>
               ))}
@@ -890,21 +890,21 @@ export function RunbooksDashboard() {
           </div>
           <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3">
             <span className="text-xs tabular-nums text-muted-foreground">{stats.uncoveredRuleIds.length} of {stats.coverageTotal} rules without runbook</span>
-            <Link href="/alert-rules" className="inline-flex items-center gap-1 rounded text-[13px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">All rules <ArrowRight size={13} aria-hidden className="inline-block align-[-1px]" /></Link>
+            <Link href="/alert-rules" className="inline-flex items-center gap-1 rounded text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">All rules <ArrowRight size={13} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>
           </div>
         </ChartCard>
       </section>
 
       {/* Archive confirm dialog */}
       <Dialog open={confirmArchive != null} onOpenChange={(open) => { if (!open) setConfirmArchive(null); }}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))] rounded-xl p-5">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Archive {confirmArchive?.length ?? 0} runbook{confirmArchive?.length === 1 ? "" : "s"}?</DialogTitle>
-            <DialogDescription className="text-[12px]">Archived runbooks stay in the library under the Archived status and remain readable for audit. Linked alerts will no longer offer them as remediation.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">Archived runbooks stay in the library under the Archived status and remain readable for audit. Linked alerts will no longer offer them as remediation.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setConfirmArchive(null)}>Keep runbooks</Button>
-            <Button className="h-9 rounded-lg bg-[#DC2626] px-4 text-[13px] font-semibold text-white hover:bg-[#B91C1C]" onClick={confirmArchiveNow}>Archive</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmArchive(null)}>Keep runbooks</Button>
+            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={confirmArchiveNow}>Archive</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

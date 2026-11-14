@@ -17,7 +17,7 @@ export function ProviderLogo({ provider, className }: ProviderLogoProps) {
     const d = Array.isArray(pathData) ? pathData.join(" ") : pathData;
     return (
       <svg
-        className={cn("h-[17px] w-[17px] shrink-0 text-[#ed9a24]", className)}
+        className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[#ed9a24]", className)}
         viewBox={`0 0 ${faAws.icon[0]} ${faAws.icon[1]}`}
         aria-hidden="true"
       >
@@ -27,19 +27,19 @@ export function ProviderLogo({ provider, className }: ProviderLogoProps) {
   }
   if (type === "hetzner") {
     return (
-      <svg className={cn("h-[17px] w-[17px] shrink-0 text-[#d50c2d]", className)} viewBox="0 0 24 24" aria-hidden="true">
+      <svg className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[#d50c2d]", className)} viewBox="0 0 24 24" aria-hidden="true">
         <path d={siHetzner.path} fill="currentColor" />
       </svg>
     );
   }
   if (type === "digitalocean") {
     return (
-      <svg className={cn("h-[17px] w-[17px] shrink-0 text-[#0080ff]", className)} viewBox="0 0 24 24" aria-hidden="true">
+      <svg className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[#0080ff]", className)} viewBox="0 0 24 24" aria-hidden="true">
         <path d={siDigitalocean.path} fill="currentColor" />
       </svg>
     );
   }
-  return <OnPremIcon className={cn("h-[17px] w-[17px] shrink-0 text-[#526984]", className)} />;
+  return <OnPremIcon className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[#526984]", className)} />;
 }
 
 export function OnPremIcon({ className }: { className?: string }) {
@@ -54,7 +54,7 @@ export function OnPremIcon({ className }: { className?: string }) {
 /** Maps a location string to a flag for the countries present in the mock data. */
 export function LocationFlag({ location }: { location: string }) {
   const country = location.split(",").at(-1)?.trim();
-  const flagClass = "h-3 w-[17px] shrink-0 rounded-[1px] shadow-[0_0_0_1px_#15243b12]";
+  const flagClass = "h-3 w-[1.0625rem] shrink-0 rounded-[0.0625rem] shadow-[0_0_0_1px_#15243b12]";
 
   if (country === "Germany") {
     return (

@@ -55,7 +55,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
   if (status === "loading" && !certs.length) {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[110px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[6.875rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid gap-4 xl:grid-cols-12"><div className="space-y-4 xl:col-span-8"><div className="h-56 animate-pulse rounded-xl bg-muted" /><div className="h-40 animate-pulse rounded-xl bg-muted" /><div className="h-44 animate-pulse rounded-xl bg-muted" /></div><div className="space-y-4 xl:col-span-4"><div className="h-44 animate-pulse rounded-xl bg-muted" /><div className="h-44 animate-pulse rounded-xl bg-muted" /></div></div>
       </div>
     );
@@ -65,7 +65,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Certificates & Expiration", certId]} title="Certificate not found" subtitle="This certificate is not in the current inventory." />
-        <Card className="grid min-h-[280px] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No certificate matches “{certId}”</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to certificates</Button></div></Card>
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No certificate matches “{certId}”</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to certificates</Button></div></Card>
       </div>
     );
   }
@@ -127,7 +127,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
         <div className="flex min-w-0 flex-col gap-4 xl:col-span-8">
           <Card className="flex flex-col rounded-xl p-5">
             <h2 className="text-sm font-semibold text-foreground">Overview</h2>
-            <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 text-[13px] sm:grid-cols-2">
+            <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 text-[0.8125rem] sm:grid-cols-2">
               <Field label="Common name" value={<span className="break-all font-mono">{cert.commonName}</span>} />
               <Field label="Issuer" value={<span className="flex items-center gap-2">{cert.issuer}<IssuerTypeBadge type={cert.issuerType} /></span>} />
               <Field label="SANs" value={<span className="break-all">{cert.sans.join(", ")}</span>} />
@@ -142,7 +142,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               <Field label="Hosts" valueNode={<HostChips hosts={cert.hostIds} max={4} />} />
             </dl>
             <div className="mt-4 flex items-center gap-2 rounded-lg border border-border bg-muted/40 p-3">
-              <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
+              <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
               <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); notify({ message: "Fingerprint copied" }); } catch { notify({ message: "Clipboard unavailable" }); } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
             </div>
           </Card>
@@ -155,9 +155,9 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
                 return <span key={threshold} className="absolute inset-y-0 border-l border-dashed border-amber-400" style={{ left: `${pos}%` }} aria-hidden="true" />;
               })}
               <div className="absolute inset-y-0 left-0 rounded-l-lg bg-emerald-500/30" style={{ width: `${Math.min(100, totalPct)}%` }} />
-              <div className="absolute inset-y-0 w-[3px] bg-slate-900 dark:bg-slate-100" style={{ left: `calc(${Math.min(100, totalPct)}% - 1px)` }} aria-hidden="true" />
+              <div className="absolute inset-y-0 w-[0.1875rem] bg-slate-900 dark:bg-slate-100" style={{ left: `calc(${Math.min(100, totalPct)}% - 0.0625rem)` }} aria-hidden="true" />
             </div>
-            <div className="mt-2 flex flex-wrap items-center gap-4 text-[11px] text-muted-foreground">
+            <div className="mt-2 flex flex-wrap items-center gap-4 text-[0.6875rem] text-muted-foreground">
               <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-emerald-500" />Issued</span>
               <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-amber-500" />Alert thresholds (60/30/14/7/1d)</span>
               <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-slate-700 dark:bg-slate-200" />Today</span>
@@ -165,16 +165,16 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
           </ChartCard>
 
           <ChartCard title="Certificate chain" actions={<span className="text-xs text-muted-foreground">{cert.issuerType === "Self-signed" ? "Self-signed — no chain" : "3 nodes"}</span>}>
-            <ol className="flex flex-col gap-2 text-[13px]">
+            <ol className="flex flex-col gap-2 text-[0.8125rem]">
               {[
                 { node: "Leaf", name: cert.commonName, status: certStatus, tone: "emerald" as const },
                 { node: "Intermediate", name: cert.issuerType === "Self-signed" ? "—" : `${cert.issuer} intermediate`, status: cert.chainValid ? "Valid" : "Invalid", tone: cert.chainValid ? "emerald" as const : "rose" as const },
                 { node: "Root", name: cert.issuerType === "Self-signed" ? "—" : cert.issuer === "Internal CA" ? "Nexus Internal Root CA" : `${cert.issuer} Root`, status: "Valid", tone: "emerald" as const },
               ].map((row) => (
                 <li key={row.node} className="flex items-center gap-3 rounded-lg border border-border p-2.5">
-                  <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px] font-bold", row.tone === "emerald" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")}>{row.node === "Leaf" ? "L" : row.node === "Intermediate" ? "I" : "R"}</span>
-                  <span className="min-w-0 flex-1"><span className="block text-[11px] uppercase tracking-wide text-muted-foreground">{row.node}</span><span className="block truncate font-medium text-foreground" title={row.name}>{row.name}</span></span>
-                  <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold", row.status === "Valid" || row.status === "Healthy" ? "bg-emerald-100 text-emerald-700" : row.status === "Expired" || row.status === "Invalid" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-800")}>{row.status}</span>
+                  <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full text-[0.6875rem] font-bold", row.tone === "emerald" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")}>{row.node === "Leaf" ? "L" : row.node === "Intermediate" ? "I" : "R"}</span>
+                  <span className="min-w-0 flex-1"><span className="block text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{row.node}</span><span className="block truncate font-medium text-foreground" title={row.name}>{row.name}</span></span>
+                  <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[0.6875rem] font-semibold", row.status === "Valid" || row.status === "Healthy" ? "bg-emerald-100 text-emerald-700" : row.status === "Expired" || row.status === "Invalid" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-800")}>{row.status}</span>
                 </li>
               ))}
             </ol>
@@ -182,7 +182,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
 
           <ChartCard title="Deployed on" actions={<span className="text-xs text-muted-foreground">{hostsPort.length} host{hostsPort.length === 1 ? "" : "s"}</span>}>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[480px] text-left text-[13px]">
+              <table className="w-full min-w-[30rem] text-left text-[0.8125rem]">
                 <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-2 py-2 font-semibold">Host</th><th className="px-2 py-2 font-semibold">Service</th><th className="px-2 py-2 font-semibold">Port</th><th className="px-2 py-2 font-semibold">Last checked</th><th className="px-2 py-2 text-right font-semibold"><span className="sr-only">Action</span></th></tr></thead>
                 <tbody>
                   {hostsPort.map((host) => (
@@ -204,11 +204,11 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
         <div className="flex min-w-0 flex-col gap-4 xl:col-span-4">
           <Card className="flex flex-col rounded-xl p-5">
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><ShieldCheck size={15} aria-hidden="true" />Health checks</h2>
-            <ul className="mt-3 flex flex-col divide-y divide-border text-[13px]">
+            <ul className="mt-3 flex flex-col divide-y divide-border text-[0.8125rem]">
               {healthChecks(cert).map((check) => (
                 <li key={check.name} className="flex items-start gap-2.5 py-2">
                   <span className={cn("mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full", check.pass ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300")}>{check.pass ? <CheckCircle2 size={11} /> : <AlertTriangle size={11} />}</span>
-                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{check.name}</span><span className="mt-0.5 block text-[11px] text-muted-foreground">{check.detail}</span></span>
+                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{check.name}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{check.detail}</span></span>
                 </li>
               ))}
             </ul>
@@ -219,21 +219,21 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><Clock3 size={15} aria-hidden="true" />Expiry alerts</h2>
               <button type="button" onClick={() => notify({ message: "Policy editor opened (mock)" })} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Edit policy</button>
             </div>
-            <p className="mt-2 text-[11px] text-muted-foreground">Thresholds (days before expiry) · channels</p>
+            <p className="mt-2 text-[0.6875rem] text-muted-foreground">Thresholds (days before expiry) · channels</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {[60, 30, 14, 7, 1].map((threshold) => <span key={threshold} className="rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-[11px] font-semibold text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">{threshold}d</span>)}
+              {[60, 30, 14, 7, 1].map((threshold) => <span key={threshold} className="rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-[0.6875rem] font-semibold text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">{threshold}d</span>)}
             </div>
-            <div className="mt-2 flex flex-wrap gap-1.5">{["Email", "Slack", "PagerDuty"].map((channel) => <span key={channel} className="rounded-md border border-border bg-muted/40 px-2 py-1 text-[11px] font-medium text-muted-foreground">{channel}</span>)}</div>
-            <p className="mt-3 border-t border-border pt-3 text-[11px] text-muted-foreground">Policy: <b className="text-foreground">Default production policy</b> · applies to all certs in this scope</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">{["Email", "Slack", "PagerDuty"].map((channel) => <span key={channel} className="rounded-md border border-border bg-muted/40 px-2 py-1 text-[0.6875rem] font-medium text-muted-foreground">{channel}</span>)}</div>
+            <p className="mt-3 border-t border-border pt-3 text-[0.6875rem] text-muted-foreground">Policy: <b className="text-foreground">Default production policy</b> · applies to all certs in this scope</p>
           </Card>
 
           <Card className="flex flex-col rounded-xl p-5">
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><GitBranch size={15} aria-hidden="true" />Timeline</h2>
             <ol className="mt-2 flex flex-col divide-y divide-border">
               {events.slice(0, 6).map((event) => (
-                <li key={event.id} className="flex items-start gap-2 py-2 text-[13px]">
-                  <span className={cn("mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px]", event.type === "renewed" || event.type === "deployed" ? "bg-emerald-100 text-emerald-700" : event.type === "revoked" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700")}>{event.type === "renewed" ? <CheckCircle2 size={11} /> : event.type === "revoked" ? <AlertTriangle size={11} /> : <Clock3 size={11} />}</span>
-                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{event.actor}</span><span className="mt-0.5 block text-[11px] text-muted-foreground">{event.detail}</span><span className="mt-0.5 block text-[10px] text-muted-foreground">{mounted ? timeAgo(event.at) : "…"}</span></span>
+                <li key={event.id} className="flex items-start gap-2 py-2 text-[0.8125rem]">
+                  <span className={cn("mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full text-[0.625rem]", event.type === "renewed" || event.type === "deployed" ? "bg-emerald-100 text-emerald-700" : event.type === "revoked" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700")}>{event.type === "renewed" ? <CheckCircle2 size={11} /> : event.type === "revoked" ? <AlertTriangle size={11} /> : <Clock3 size={11} />}</span>
+                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{event.actor}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{event.detail}</span><span className="mt-0.5 block text-[0.625rem] text-muted-foreground">{mounted ? timeAgo(event.at) : "…"}</span></span>
                 </li>
               ))}
               {events.length === 0 && <li className="py-3 text-center text-xs text-muted-foreground">No events yet.</li>}
@@ -264,7 +264,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
 function MiniMetric({ label, value, valueNode, tone }: { label: string; value?: string; valueNode?: React.ReactNode; tone?: string }) {
   return (
     <Card className="flex flex-col rounded-xl p-4">
-      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className={cn("mt-1.5 font-display text-2xl font-bold leading-none tabular-nums", tone ?? "text-foreground")}>{valueNode ?? value}</p>
     </Card>
   );
@@ -273,8 +273,8 @@ function MiniMetric({ label, value, valueNode, tone }: { label: string; value?: 
 function Field({ label, value, valueNode }: { label: string; value?: React.ReactNode; valueNode?: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 min-w-0 text-[13px] text-foreground">{valueNode ?? value}</dd>
+      <dt className="text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 min-w-0 text-[0.8125rem] text-foreground">{valueNode ?? value}</dd>
     </div>
   );
 }

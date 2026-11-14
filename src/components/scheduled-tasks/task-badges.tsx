@@ -32,9 +32,9 @@ export function TaskTypeBadge({ type, className }: { type: TaskType; className?:
 }
 
 export const RUN_STATUS_META: Record<RunStatus, { label: string; icon: ComponentType<IconProps & { spin?: boolean }>; badgeClass: string }> = {
-  success: { label: "Success", icon: CheckCircle2, badgeClass: "bg-[#16A34A]/10 text-[#16A34A] dark:bg-emerald-500/15 dark:text-emerald-400" },
-  failed: { label: "Failed", icon: XCircle, badgeClass: "bg-[#DC2626]/10 text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  running: { label: "Running", icon: Loader2, badgeClass: "bg-[#3B82F6]/10 text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-400" },
+  success: { label: "Success", icon: CheckCircle2, badgeClass: "bg-green-600/10 text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400" },
+  failed: { label: "Failed", icon: XCircle, badgeClass: "bg-red-600/10 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  running: { label: "Running", icon: Loader2, badgeClass: "bg-blue-500/10 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
   skipped: { label: "Skipped", icon: MinusCircle, badgeClass: "bg-slate-200/70 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300" },
 };
 
@@ -42,7 +42,7 @@ export function RunStatusBadge({ status, className }: { status: RunStatus; class
   const meta = RUN_STATUS_META[status];
   const Icon = meta.icon;
   return (
-    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[10px] font-semibold", meta.badgeClass, className)}>
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.badgeClass, className)}>
       <Icon size={11} aria-hidden className={status === "running" ? "animate-spin" : undefined} />
       {status === "skipped" ? "Skipped" : meta.label}
     </Badge>
@@ -60,8 +60,8 @@ export function SkippedMaintenanceBadge({ className }: { className?: string }) {
 
 export function EnabledBadge({ enabled, className }: { enabled: boolean; className?: string }) {
   return enabled ? (
-    <Badge variant="outline" className={cn("h-6 gap-1 border-transparent bg-[#16A34A]/10 px-2 py-0 text-xs font-semibold whitespace-nowrap text-[#16A34A] dark:bg-emerald-500/15 dark:text-emerald-400", className)}>
-      <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#16A34A] dark:bg-emerald-400" />
+    <Badge variant="outline" className={cn("h-6 gap-1 border-transparent bg-green-600/10 px-2 py-0 text-xs font-semibold whitespace-nowrap text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400", className)}>
+      <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green-600 dark:bg-emerald-400" />
       Active
     </Badge>
   ) : (

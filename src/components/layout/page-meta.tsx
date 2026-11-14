@@ -24,7 +24,7 @@ interface PageMetaProps {
 export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefresh = true, actions, lastUpdated = "Nov 7, 2026 12:09", onRefresh }: PageMetaProps) {
   return (
     <div className="flex min-h-6 flex-wrap items-center justify-between gap-3">
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted-foreground">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
         <Home size={13} aria-hidden="true" className="text-muted-foreground" />
         {breadcrumbs.map((crumb) => (
           <span key={crumb} className="flex items-center gap-1.5">
@@ -35,10 +35,10 @@ export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefre
           </span>
         ))}
       </nav>
-      <div className="flex items-center gap-3 text-[13px] text-muted-foreground">
+      <div className="flex items-center gap-3 text-[0.8125rem] text-muted-foreground">
         {actions}
         {demo && (
-          <Badge variant="secondary" className="border-transparent bg-[#e2efff] px-2.5 py-1 text-[12px] font-semibold tracking-wide text-[#1476d4] dark:bg-[#17385c] dark:text-[#82c1ff]">
+          <Badge variant="secondary" className="border-transparent bg-[#e2efff] px-2.5 py-1 text-[0.75rem] font-semibold tracking-wide text-[#1476d4] dark:bg-[#17385c] dark:text-[#82c1ff]">
             DEMO DATA
           </Badge>
         )}

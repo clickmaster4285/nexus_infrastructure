@@ -53,10 +53,10 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
           if (!point) return "";
           const day = daily[point.dataIndex];
           return [
-            `<div style="font-weight:600;margin-bottom:4px">${day.label}</div>`,
-            `<div style="display:flex;justify-content:space-between;gap:16px;line-height:20px"><span>Uptime</span><b style="font-variant-numeric:tabular-nums">${point.value.toFixed(2)}%</b></div>`,
-            `<div style="display:flex;justify-content:space-between;gap:16px;line-height:20px;color:var(--muted-foreground)"><span>Downtime</span><b style="font-variant-numeric:tabular-nums">${day.downtimeMinutes}m</b></div>`,
-            `<div style="display:flex;justify-content:space-between;gap:16px;line-height:20px;color:var(--muted-foreground)"><span>Incidents</span><b style="font-variant-numeric:tabular-nums">${day.incidents}</b></div>`,
+            `<div style="font-weight:600;margin-bottom:0.25rem">${day.label}</div>`,
+            `<div style="display:flex;justify-content:space-between;gap:1rem;line-height:1.25rem"><span>Uptime</span><b style="font-variant-numeric:tabular-nums">${point.value.toFixed(2)}%</b></div>`,
+            `<div style="display:flex;justify-content:space-between;gap:1rem;line-height:1.25rem;color:var(--muted-foreground)"><span>Downtime</span><b style="font-variant-numeric:tabular-nums">${day.downtimeMinutes}m</b></div>`,
+            `<div style="display:flex;justify-content:space-between;gap:1rem;line-height:1.25rem;color:var(--muted-foreground)"><span>Incidents</span><b style="font-variant-numeric:tabular-nums">${day.incidents}</b></div>`,
           ].join("");
         },
       },
@@ -115,5 +115,5 @@ export function UptimeTrendChart({ daily, target }: UptimeTrendChartProps) {
     };
   }, [daily, target]);
 
-  return <div ref={hostRef} className="h-[300px] w-full" role="img" aria-label="Daily uptime percentage with target reference line" />;
+  return <div ref={hostRef} className="h-[18.75rem] w-full" role="img" aria-label="Daily uptime percentage with target reference line" />;
 }

@@ -21,21 +21,21 @@ interface PageHeadingProps {
 
 export function PageHeading({ title, description, icon, iconClassName, statusBadge, children, actionsAlign = "bottom", className }: PageHeadingProps) {
   return (
-    <div className={cn("mb-2.5 mt-1 flex min-h-[72px] flex-wrap items-center justify-between gap-3", className)}>
+    <div className={cn("mb-2.5 mt-1 flex min-h-[4.5rem] flex-wrap items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-center gap-2.5">
         {icon && (
-          <span aria-hidden="true" className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#e6f8ef] text-[#22c55e] dark:bg-[#123a2a] dark:text-[#4fd69a]", iconClassName)}>
+          <span aria-hidden="true" className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#e6f8ef] text-green-500 dark:bg-[#123a2a] dark:text-[#4fd69a]", iconClassName)}>
             {icon}
           </span>
         )}
         <div className="min-w-0">
           <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-            <h1 className="font-display text-[32px] font-bold leading-[1.2] tracking-tight text-foreground">
+            <h1 className="font-display text-[2rem] font-bold leading-[1.2] tracking-tight text-foreground">
               {title}
             </h1>
             {statusBadge}
           </div>
-          {description && <p className="mt-1 text-[14px] text-muted-foreground">{description}</p>}
+          {description && <p className="mt-1 text-[0.875rem] text-muted-foreground">{description}</p>}
         </div>
       </div>
       {children && (

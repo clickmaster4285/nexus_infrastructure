@@ -82,7 +82,7 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
           </thead>
           <tbody>
             {rows.map((asset) => (
-              <tr key={asset.host} className={cn("border-b border-border/60 align-middle transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40", !asset.protected && "bg-red-50/40 dark:bg-red-500/5")}>
+              <tr key={asset.host} className={cn("border-b border-border/60 align-middle transition-colors hover:bg-slate-50 dark:hover:bg-muted/40", !asset.protected && "bg-red-50/40 dark:bg-red-500/5")}>
                 <td className="px-3 py-2 align-middle">
                   <span className="block font-mono text-xs text-foreground">{asset.host}</span>
                   <span className="mt-0.5 block truncate text-xs text-muted-foreground">{asset.owner}</span>
@@ -97,9 +97,9 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
                 <td className="px-3 py-2 align-middle text-xs tabular-nums text-muted-foreground">{asset.protected ? "meets policy" : "—"}</td>
                 <td className="px-3 py-2 text-right align-middle">
                   {asset.protected ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#16A34A] dark:text-emerald-400"><ShieldCheck size={13} aria-hidden="true" />Protected</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-emerald-400"><ShieldCheck size={13} aria-hidden="true" />Protected</span>
                   ) : (
-                    <Button variant="outline" className="h-8 rounded-lg border-red-200 px-2.5 text-xs font-semibold text-[#DC2626] hover:bg-red-50 dark:border-red-500/30 dark:text-red-400" onClick={() => setProtectHost(asset.host)}>
+                    <Button variant="outline" className="h-8 rounded-lg border-red-200 px-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400" onClick={() => setProtectHost(asset.host)}>
                       <AlertTriangle size={12} aria-hidden="true" className="mr-1" />Protect now
                     </Button>
                   )}
@@ -112,7 +112,7 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
 
       {/* Protect now dialog */}
       <Dialog open={protectHost != null} onOpenChange={(open) => { if (!open) setProtectHost(null); }}>
-        <DialogContent className="w-[min(520px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(32.5rem,calc(100vw-2rem))]">
           <DialogHeader>
             <DialogTitle>Protect {protectTarget?.host}</DialogTitle>
             <DialogDescription>Enable a backup policy for this asset. Choose tier, schedule and destination pool.</DialogDescription>
@@ -134,8 +134,8 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
                     )}
                   >
                     <span className="flex items-center justify-between gap-2">
-                      <b className="text-[13px] text-foreground">{policy.tier}</b>
-                      {policy.tier === "Critical" ? <span className="rounded bg-orange-50 px-1.5 text-[10px] font-semibold text-orange-700 dark:bg-orange-500/10 dark:text-orange-300">recommended</span> : null}
+                      <b className="text-[0.8125rem] text-foreground">{policy.tier}</b>
+                      {policy.tier === "Critical" ? <span className="rounded bg-orange-50 px-1.5 text-[0.625rem] font-semibold text-orange-700 dark:bg-orange-500/10 dark:text-orange-300">recommended</span> : null}
                     </span>
                     <span className="mt-1 block text-xs text-muted-foreground">RPO {policy.rpoHours}h · RTO {policy.rtoMinutes}m</span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">Keep {policy.retentionDays} days · {policy.copies} copies</span>
@@ -147,12 +147,12 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
               <span className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium text-muted-foreground">Every day</span>
               <label className="flex items-center gap-2 text-xs text-muted-foreground">
                 At
-                <Input type="time" value={scheduleTime} onChange={(event) => setScheduleTime(event.target.value)} className="h-9 w-[120px] text-sm" aria-label="Backup time" />
+                <Input type="time" value={scheduleTime} onChange={(event) => setScheduleTime(event.target.value)} className="h-9 w-[7.5rem] text-sm" aria-label="Backup time" />
               </label>
               <label className="flex items-center gap-2 text-xs text-muted-foreground">
                 Timezone
                 <Select value={timeZone} onValueChange={setTimeZone}>
-                  <SelectTrigger className="h-9 w-[160px] text-xs" aria-label="Timezone"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-9 w-[10rem] text-xs" aria-label="Timezone"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {["Asia/Karachi", "UTC", "Europe/London", "Europe/Berlin"].map((zone) => <SelectItem key={zone} value={zone}>{zone}</SelectItem>)}
                   </SelectContent>
@@ -175,15 +175,15 @@ export function CoverageTab({ assetViews, onProtect }: { assetViews: AssetView[]
                     )}
                   >
                     <LocationCell poolId={pool.id} className="min-w-0 flex-1" />
-                    {pool.immutable && <span className="shrink-0 rounded bg-emerald-50 px-1.5 text-[10px] font-semibold uppercase text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">WORM</span>}
+                    {pool.immutable && <span className="shrink-0 rounded bg-emerald-50 px-1.5 text-[0.625rem] font-semibold uppercase text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">WORM</span>}
                   </button>
                 );
               })}
             </div>
           </div>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setProtectHost(null)}>Cancel</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[13px] font-semibold" onClick={submitProtect}>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setProtectHost(null)}>Cancel</Button>
+            <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={submitProtect}>
               <CheckCircle2 size={15} aria-hidden="true" />Enable backup
             </Button>
           </DialogFooter>

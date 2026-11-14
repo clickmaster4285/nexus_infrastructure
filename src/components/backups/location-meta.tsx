@@ -14,7 +14,7 @@ export const POOL_LABELS: Record<string, string> = {
 export function LocationCell({ poolId, className }: { poolId: string; className?: string }) {
   const Icon = POOL_ICON[poolId as keyof typeof POOL_ICON] ?? HardDrive;
   return (
-    <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-[13px] text-foreground", className)}>
+    <span className={cn("inline-flex min-w-0 items-center gap-1.5 text-[0.8125rem] text-foreground", className)}>
       <Icon size={15} aria-hidden="true" className="shrink-0 text-muted-foreground" />
       <span className="truncate">{POOL_LABELS[poolId] ?? poolId}</span>
     </span>

@@ -67,23 +67,23 @@ export function MultiSelect({ label, options, selected, onChange, className, wid
         aria-label={label}
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          "inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-[0.8125rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           active > 0 ? "border-primary/50 bg-primary/5 text-foreground" : "border-input bg-card text-muted-foreground hover:bg-accent",
         )}
         style={width ? { width } : undefined}
       >
         <span className="truncate">{label}</span>
         {active > 0 && (
-          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">{active}</span>
+          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[0.625rem] font-bold text-primary-foreground">{active}</span>
         )}
         <ChevronDown size={14} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />
       </button>
       {open && (
-        <div role="group" aria-label={label} className="motion-menu-in absolute left-0 top-10 z-40 w-56 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
+        <div role="group" aria-label={label} className="motion-menu-in absolute left-0 top-10 z-40 w-56 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
           <div className="flex items-center justify-between gap-2 px-2 py-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+            <span className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
             {active > 0 && (
-              <button type="button" onClick={() => onChange([])} className="inline-flex items-center gap-0.5 rounded text-[11px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <button type="button" onClick={() => onChange([])} className="inline-flex items-center gap-0.5 rounded text-[0.6875rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <X size={11} aria-hidden="true" />Clear
               </button>
             )}
@@ -91,7 +91,7 @@ export function MultiSelect({ label, options, selected, onChange, className, wid
           {options.map((option) => {
             const checked = selected.includes(option.value);
             return (
-              <label key={option.value} className="flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-[13px] text-foreground transition-colors hover:bg-[#F3F4F6] dark:hover:bg-accent">
+              <label key={option.value} className="flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 dark:hover:bg-accent">
                 <input
                   type="checkbox"
                   checked={checked}

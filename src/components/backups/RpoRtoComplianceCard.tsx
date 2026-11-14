@@ -37,9 +37,9 @@ function barWidth(value: number | null, target: number): number {
 function barColor(value: number | null, target: number): string {
   if (value == null || target <= 0) return "bg-muted";
   const ratio = value / target;
-  if (ratio <= 0.8) return "bg-[#16A34A]";
-  if (ratio <= 1) return "bg-[#D97706]";
-  return "bg-[#DC2626]";
+  if (ratio <= 0.8) return "bg-green-600";
+  if (ratio <= 1) return "bg-amber-600";
+  return "bg-red-600";
 }
 function formatShortDuration(minutes: number | null): string {
   if (minutes == null) return "—";
@@ -85,28 +85,28 @@ function TierRow({ tier, index }: { tier: TierCompliance; index: number }) {
   return (
     <div className={cn(index === 0 ? "pb-3" : "pt-3")}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[13px] font-semibold text-foreground">{tier.label}<span className="ml-1.5 text-xs font-normal tabular-nums text-muted-foreground">{tier.total} jobs</span></p>
+        <p className="text-[0.8125rem] font-semibold text-foreground">{tier.label}<span className="ml-1.5 text-xs font-normal tabular-nums text-muted-foreground">{tier.total} jobs</span></p>
         <span className="flex items-center gap-2">
-          <span className="flex items-center gap-1"><span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">RPO</span><MetBadge met={rpoOk} /></span>
-          <span className="flex items-center gap-1"><span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">RTO</span><MetBadge met={rtoOk} /></span>
+          <span className="flex items-center gap-1"><span className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">RPO</span><MetBadge met={rpoOk} /></span>
+          <span className="flex items-center gap-1"><span className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">RTO</span><MetBadge met={rtoOk} /></span>
         </span>
       </div>
       <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">RPO</p>
-          <p className="mt-1 text-[13px] font-semibold tabular-nums text-foreground">worst {formatShortDuration(tier.worstLagMinutes)} <span className="text-muted-foreground">/ {tier.rpoTargetLabel}</span></p>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">RPO</p>
+          <p className="mt-1 text-[0.8125rem] font-semibold tabular-nums text-foreground">worst {formatShortDuration(tier.worstLagMinutes)} <span className="text-muted-foreground">/ {tier.rpoTargetLabel}</span></p>
           <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={Math.round(barWidth(tier.worstLagMinutes, tier.worstLagTargetMinutes))} aria-valuemin={0} aria-valuemax={100} aria-label={`${tier.label} tier RPO vs target`}>
             <div className={cn("h-full rounded-full", barColor(tier.worstLagMinutes, tier.worstLagTargetMinutes))} style={{ width: `${barWidth(tier.worstLagMinutes, tier.worstLagTargetMinutes)}%` }} />
           </div>
-          <p className="mt-1.5 text-[11px] tabular-nums text-muted-foreground">{tier.met}/{tier.total} within RPO</p>
+          <p className="mt-1.5 text-[0.6875rem] tabular-nums text-muted-foreground">{tier.met}/{tier.total} within RPO</p>
         </div>
         <div className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">RTO</p>
-          <p className="mt-1 text-[13px] font-semibold tabular-nums text-foreground">last {formatShortDuration(tier.rtoActualMinutes)} <span className="text-muted-foreground">/ {tier.rtoTargetLabel}</span></p>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">RTO</p>
+          <p className="mt-1 text-[0.8125rem] font-semibold tabular-nums text-foreground">last {formatShortDuration(tier.rtoActualMinutes)} <span className="text-muted-foreground">/ {tier.rtoTargetLabel}</span></p>
           <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={Math.round(barWidth(tier.rtoActualMinutes, tier.rtoActualTargetMinutes ?? tier.rtoTargetMinutes))} aria-valuemin={0} aria-valuemax={100} aria-label={`${tier.label} tier RTO vs target`}>
             <div className={cn("h-full rounded-full", barColor(tier.rtoActualMinutes, tier.rtoActualTargetMinutes ?? tier.rtoTargetMinutes))} style={{ width: `${barWidth(tier.rtoActualMinutes, tier.rtoActualTargetMinutes ?? tier.rtoTargetMinutes)}%` }} />
           </div>
-          <p className="mt-1.5 text-[11px] tabular-nums text-muted-foreground">from last recovery test</p>
+          <p className="mt-1.5 text-[0.6875rem] tabular-nums text-muted-foreground">from last recovery test</p>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ export function RpoRtoComplianceCard({ critical, standard, jobs, views, runs, on
   return (
     <ChartCard
       title="RPO / RTO Compliance"
-      className="h-full min-h-[340px] p-4"
+      className="h-full min-h-[21.25rem] p-4"
       actions={
         <AlertMenu
           label="Compliance actions"
@@ -159,14 +159,14 @@ export function RpoRtoComplianceCard({ critical, standard, jobs, views, runs, on
       {/* Breaching now (or all-clear callout) */}
       {breaching.length > 0 ? (
         <div className="mt-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Breaching now</p>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Breaching now</p>
           <ul className="mt-1 divide-y divide-border/60">
             {breaching.map(({ job, view }) => (
               <li key={job.id} className="flex items-center gap-2 py-1.5">
-                <span className="h-full w-[3px] shrink-0 rounded-full bg-[#DC2626]" aria-hidden="true" />
+                <span className="h-full w-[0.1875rem] shrink-0 rounded-full bg-red-600" aria-hidden="true" />
                 <span className="min-w-0">
-                  <span className="block truncate text-[13px] font-semibold text-foreground" title={job.name}>{job.name}</span>
-                  <span className="mt-0.5 block text-[11px] tabular-nums text-muted-foreground">age {formatShortDuration(view?.rpoLagMinutes ?? null)} / target {formatShortDuration(job.rpoTargetMinutes)}</span>
+                  <span className="block truncate text-[0.8125rem] font-semibold text-foreground" title={job.name}>{job.name}</span>
+                  <span className="mt-0.5 block text-[0.6875rem] tabular-nums text-muted-foreground">age {formatShortDuration(view?.rpoLagMinutes ?? null)} / target {formatShortDuration(job.rpoTargetMinutes)}</span>
                 </span>
                 <button
                   type="button"
@@ -188,11 +188,11 @@ export function RpoRtoComplianceCard({ critical, standard, jobs, views, runs, on
       {/* 30-day compliance sparkline + next drill due */}
       <div className="mt-3 border-t border-border/70 pt-3">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Compliance - 30d</p>
-          <span className="text-[10px] tabular-nums text-muted-foreground">target 95%</span>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Compliance - 30d</p>
+          <span className="text-[0.625rem] tabular-nums text-muted-foreground">target 95%</span>
         </div>
         <div className="mt-1"><ComplianceSparkline values={sparkValues} target={95} /></div>
-        <p className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <p className="mt-2 flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
           <CalendarClock size={12} aria-hidden="true" />
           <span className="truncate">Next drill due {new Date(Date.now() + 11 * DAY).toLocaleDateString(undefined, { month: "short", day: "numeric" })} · Full DR failover · app-server-01</span>
         </p>

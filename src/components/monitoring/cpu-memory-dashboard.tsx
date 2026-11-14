@@ -129,16 +129,16 @@ const ROWS_PER_PAGE = 8;
  * tables stay calm and readable.
  */
 const USAGE_LEGEND = [
-  { label: "Critical (>85%)", light: "bg-[#ef4444]", dark: "bg-[#f87171]" },
-  { label: "High (70–85%)", light: "bg-[#f59e0b]", dark: "bg-[#fbbf24]" },
-  { label: "Normal", light: "bg-[#3b82f6]", dark: "bg-[#60a5fa]" },
+  { label: "Critical (>85%)", light: "bg-red-500", dark: "bg-red-400" },
+  { label: "High (70–85%)", light: "bg-amber-500", dark: "bg-amber-400" },
+  { label: "Normal", light: "bg-blue-500", dark: "bg-blue-400" },
 ];
 
 /** Bar colours per severity band, with muted dark-mode variants. */
 function usageBarColor(value: number): string {
-  if (value > 85) return "bg-[#ef4444] dark:bg-[#f87171]";
-  if (value >= 70) return "bg-[#f59e0b] dark:bg-[#fbbf24]";
-  return "bg-[#3b82f6] dark:bg-[#60a5fa]";
+  if (value > 85) return "bg-red-500 dark:bg-red-400";
+  if (value >= 70) return "bg-amber-500 dark:bg-amber-400";
+  return "bg-blue-500 dark:bg-blue-400";
 }
 
 /** Usage percentage with a small threshold-coloured progress bar. */
@@ -146,7 +146,7 @@ function UsageCell({ value }: { value: number }) {
   return (
     <span className="flex items-center justify-end gap-2 whitespace-nowrap">
       <span className="font-medium tabular-nums text-foreground">{value.toFixed(1)}%</span>
-      <span className="h-[5px] w-[110px] shrink-0 overflow-hidden rounded-full bg-muted">
+      <span className="h-[0.3125rem] w-[6.875rem] shrink-0 overflow-hidden rounded-full bg-muted">
         <span className={cn("block h-full rounded-full", usageBarColor(value))} style={{ width: `${Math.min(value, 100)}%` }} />
       </span>
     </span>
@@ -155,9 +155,9 @@ function UsageCell({ value }: { value: number }) {
 
 /** Breakdown segments for the CPU stacked bar. */
 const CPU_BREAKDOWN_SEGMENTS = [
-  { label: "User", color: "bg-[#2878ed] dark:bg-[#60a5fa]" },
-  { label: "System", color: "bg-[#8a45df] dark:bg-[#a78bfa]" },
-  { label: "I/O Wait", color: "bg-[#f39a12] dark:bg-[#fbbf24]" },
+  { label: "User", color: "bg-[#2878ed] dark:bg-blue-400" },
+  { label: "System", color: "bg-[#8a45df] dark:bg-violet-400" },
+  { label: "I/O Wait", color: "bg-[#f39a12] dark:bg-amber-400" },
 ];
 
 /** Stacked bar summarising user / system / I/O wait split of CPU time. */
@@ -167,7 +167,7 @@ function CpuBreakdown({ server }: { server: ServerResourceMetrics }) {
   return (
     <span
       title={`User ${server.user.toFixed(1)}% · System ${server.system.toFixed(1)}% · I/O Wait ${server.ioWait.toFixed(1)}%`}
-      className="flex h-[5px] w-[100px] shrink-0 overflow-hidden rounded-full bg-muted"
+      className="flex h-[0.3125rem] w-[6.25rem] shrink-0 overflow-hidden rounded-full bg-muted"
     >
       {CPU_BREAKDOWN_SEGMENTS.map((segment, index) => (
         <span
@@ -251,7 +251,7 @@ function SortableHeader({ label, sortKey, activeKey, direction, onSort, align = 
 }) {
   const isActive = activeKey === sortKey;
   return (
-    <th scope="col" className={cn("whitespace-nowrap px-1 pb-1.5 text-[11px] font-medium text-muted-foreground", align === "right" && "text-right")}>
+    <th scope="col" className={cn("whitespace-nowrap px-1 pb-1.5 text-[0.6875rem] font-medium text-muted-foreground", align === "right" && "text-right")}>
       <button
         type="button"
         onClick={() => onSort(sortKey)}
@@ -288,7 +288,7 @@ function TablePagination({ page, pageCount, onPageChange }: {
   page: number; pageCount: number; onPageChange: (page: number) => void;
 }) {
   return (
-    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[12px] text-muted-foreground">
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 text-[0.75rem] text-muted-foreground">
       <UsageLegend />
       <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
         <button
@@ -338,8 +338,8 @@ function TablePagination({ page, pageCount, onPageChange }: {
 
 function UsageDistribution({ data }: { data: typeof cpuDistribution }) {
   return (
-    <div className="flex h-[180px] w-full max-w-[360px] items-center justify-center gap-2.5">
-      <div className="relative h-[148px] w-[52%] shrink-0">
+    <div className="flex h-[11.25rem] w-full max-w-[22.5rem] items-center justify-center gap-2.5">
+      <div className="relative h-[9.25rem] w-[52%] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="59%" outerRadius="88%" paddingAngle={1} stroke="none">
@@ -349,12 +349,12 @@ function UsageDistribution({ data }: { data: typeof cpuDistribution }) {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className="font-display text-[24px] font-extrabold leading-tight text-foreground">48</b>
-          <span className="text-[13px] text-muted-foreground">Servers</span>
+          <b className="font-display text-[1.5rem] font-extrabold leading-tight text-foreground">48</b>
+          <span className="text-[0.8125rem] text-muted-foreground">Servers</span>
         </div>
       </div>
       <div className="min-w-0 flex-1 space-y-3">
-        {data.map((item) => <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1 text-[12px]"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} /><span className="whitespace-nowrap text-foreground">{item.name.replace(" - ", "–")}</span><span className="whitespace-nowrap text-foreground">{item.value} ({Math.round(item.value / 48 * 100)}%)</span></div>)}
+        {data.map((item) => <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1 text-[0.75rem]"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} /><span className="whitespace-nowrap text-foreground">{item.name.replace(" - ", "–")}</span><span className="whitespace-nowrap text-foreground">{item.value} ({Math.round(item.value / 48 * 100)}%)</span></div>)}
       </div>
     </div>
   );
@@ -362,10 +362,10 @@ function UsageDistribution({ data }: { data: typeof cpuDistribution }) {
 
 function ProcessList({ title, items, onViewAll }: { title: string; items: { name: string; value: number; width: string; color: string }[]; onViewAll: () => void }) {
   return (
-    <Panel title={title} className="min-w-0" action={<button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+    <Panel title={title} className="min-w-0" action={<button onClick={onViewAll} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
       <div className="flex flex-1 items-center justify-center pb-1 pt-3">
         <div className="w-full translate-y-2 space-y-3">
-          {items.map((item) => <div key={item.name} className="grid grid-cols-[minmax(0,1fr)_minmax(40px,1fr)_42px] items-center gap-2 text-[12px]"><span className="truncate text-foreground">{item.name}</span><div className="h-[7px] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}%</b></div>)}
+          {items.map((item) => <div key={item.name} className="grid grid-cols-[minmax(0,1fr)_minmax(2.5rem,1fr)_2.625rem] items-center gap-2 text-[0.75rem]"><span className="truncate text-foreground">{item.name}</span><div className="h-[0.4375rem] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: item.width }} /></div><b className="text-right text-foreground">{item.value}%</b></div>)}
         </div>
       </div>
     </Panel>
@@ -455,10 +455,10 @@ export function CpuMemoryDashboard() {
 
   const timeControls = (value: string, setValue: (next: string) => void) => (
     <div className="flex items-center gap-0.5">
-      <select aria-label="Aggregation" value={value} onChange={(event) => setValue(event.target.value)} className="h-8 rounded border border-border bg-card px-2 text-[12px] text-foreground">
+      <select aria-label="Aggregation" value={value} onChange={(event) => setValue(event.target.value)} className="h-8 rounded border border-border bg-card px-2 text-[0.75rem] text-foreground">
         {["Average", "Maximum", "Minimum"].map((item) => <option key={item}>{item}</option>)}
       </select>
-      {["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded px-1.5 py-1 text-[11px] font-semibold ${period === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
+      {["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setPeriod(item)} className={`rounded px-1.5 py-1 text-[0.6875rem] font-semibold ${period === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}
     </div>
   );
 
@@ -467,50 +467,50 @@ export function CpuMemoryDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "CPU & Memory"]} showRefresh={false} variant="detail" />
       <PageHeading title="CPU & Memory" description="Monitor and analyze CPU and memory utilization across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 
       <section aria-label="CPU and memory summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[100px] self-stretch" labelClassName="text-[12px] leading-4" valueClassName="text-[24px] leading-7" trendClassName="text-[11px] leading-4" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.25rem] self-stretch" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}
       </section>
 
       <section aria-label="CPU and memory trends" className="grid gap-2.5 xl:grid-cols-[1.14fr_1.14fr_0.72fr]">
         <Panel title="CPU Usage Over Time" className="min-w-0" action={timeControls(cpuAverage, setCpuAverage)}>
-          <div className="h-[190px] w-full pt-1">
+          <div className="h-[11.875rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={cpuHistory} margin={{ top: 4, right: 3, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical />
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <Area dataKey="average" name="Average CPU" type="monotone" stroke="#2878ed" strokeWidth={2} fill="#2878ed" fillOpacity={0.12} dot={{ r: 1.8 }} />
                 {cpuSeries.filter((item) => item.key !== "average").map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={1.8} dot={{ r: 1.6 }} />)}
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-1 text-[11px] text-muted-foreground">{cpuSeries.map((item) => <span key={item.key} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ background: item.color }} />{item.name}</span>)}</div>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-1 text-[0.6875rem] text-muted-foreground">{cpuSeries.map((item) => <span key={item.key} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ background: item.color }} />{item.name}</span>)}</div>
         </Panel>
 
         <Panel title="Memory Usage Over Time" className="min-w-0" action={timeControls(memoryAverage, setMemoryAverage)}>
-          <div className="h-[190px] w-full pt-1">
+          <div className="h-[11.875rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={memoryHistory} margin={{ top: 4, right: 3, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical />
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 {memorySeries.map((item) => <Line key={item.key} dataKey={item.key} name={item.name} type="monotone" stroke={item.color} strokeWidth={1.8} dot={{ r: 1.6 }} />)}
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[11px] text-muted-foreground">{memorySeries.map((item) => <span key={item.key} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ background: item.color }} />{item.name}</span>)}</div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[0.6875rem] text-muted-foreground">{memorySeries.map((item) => <span key={item.key} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ background: item.color }} />{item.name}</span>)}</div>
         </Panel>
 
         <Panel title="Current Usage Summary" className="min-w-0">
-          <div className="flex h-[174px] items-center gap-2">
-            <div className="relative h-[112px] w-[49%] shrink-0">
+          <div className="flex h-[10.875rem] items-center gap-2">
+            <div className="relative h-[7rem] w-[49%] shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={[{ name: "Used CPU", value: 32.4, color: "#2878ed" }, { name: "CPU remaining", value: 67.6, color: "#e7eef8" }, { name: "Used memory", value: 68.7, color: "#35b879" }, { name: "Memory remaining", value: 31.3, color: "#e7eef8" }]} dataKey="value" cx="50%" cy="50%" innerRadius="67%" outerRadius="89%" startAngle={90} endAngle={-270} stroke="none">
@@ -519,20 +519,20 @@ export function CpuMemoryDashboard() {
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><Server size={15} className="text-muted-foreground" /><b className="font-display text-[16px] font-extrabold leading-tight text-foreground">48</b><span className="text-[11px] text-muted-foreground">Servers</span></div>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><Server size={15} className="text-muted-foreground" /><b className="font-display text-[1rem] font-extrabold leading-tight text-foreground">48</b><span className="text-[0.6875rem] text-muted-foreground">Servers</span></div>
             </div>
             <div className="min-w-0 flex-1 space-y-3">
-              {[["CPU Usage", "32.4%", "bg-blue-600", "32.4%"], ["Memory Usage", "68.7%", "bg-emerald-500", "68.7%"], ["Total Used Memory", "165.3 GB", "bg-purple-500", "68.7%"], ["Total CPU Cores", "256", "bg-blue-500", "100%"]].map(([label, value, color, width]) => <div key={label} className="text-[11px]"><div className="mb-1 flex justify-between gap-1"><span className="truncate text-muted-foreground">{label}</span><b className="shrink-0 text-foreground">{value}</b></div><div className="h-[4px] rounded-full bg-muted"><div className={`h-full rounded-full ${color}`} style={{ width }} /></div><div className="mt-0.5 text-right text-[11px] text-muted-foreground">{label === "Total Used Memory" ? "of 240.0 GB" : label === "Total CPU Cores" ? "Across all servers" : ""}</div></div>)}
+              {[["CPU Usage", "32.4%", "bg-blue-600", "32.4%"], ["Memory Usage", "68.7%", "bg-emerald-500", "68.7%"], ["Total Used Memory", "165.3 GB", "bg-purple-500", "68.7%"], ["Total CPU Cores", "256", "bg-blue-500", "100%"]].map(([label, value, color, width]) => <div key={label} className="text-[0.6875rem]"><div className="mb-1 flex justify-between gap-1"><span className="truncate text-muted-foreground">{label}</span><b className="shrink-0 text-foreground">{value}</b></div><div className="h-[0.25rem] rounded-full bg-muted"><div className={`h-full rounded-full ${color}`} style={{ width }} /></div><div className="mt-0.5 text-right text-[0.6875rem] text-muted-foreground">{label === "Total Used Memory" ? "of 240.0 GB" : label === "Total CPU Cores" ? "Across all servers" : ""}</div></div>)}
             </div>
           </div>
         </Panel>
       </section>
 
       <section aria-label="Top CPU and memory servers" className="grid items-stretch gap-2.5 xl:grid-cols-2">
-        <Panel title="Top Servers by CPU Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Servers by CPU Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by CPU usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto">
-              <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
+              <table className="w-full min-w-[35rem] table-fixed text-left text-[0.7813rem]">
                 <colgroup>
                   <col style={{ width: "26%" }} /><col style={{ width: "30%" }} /><col style={{ width: "24%" }} />
                   <col style={{ width: "9%" }} /><col style={{ width: "11%" }} />
@@ -541,7 +541,7 @@ export function CpuMemoryDashboard() {
                   <tr className="border-b border-border text-muted-foreground">
                     <SortableHeader label="Server Name" sortKey="name" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} />
                     <SortableHeader label="CPU Usage" sortKey="cpu" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} align="right" />
-                    <th scope="col" className="whitespace-nowrap px-1 pb-1.5 text-[11px] font-medium text-muted-foreground">
+                    <th scope="col" className="whitespace-nowrap px-1 pb-1.5 text-[0.6875rem] font-medium text-muted-foreground">
                       <span className="inline-flex items-center gap-1">Breakdown<BreakdownInfo /></span>
                     </th>
                     <SortableHeader label="Cores" sortKey="cores" activeKey={cpuSort.key} direction={cpuSort.direction} onSort={(key) => toggleSort(cpuSort, key, setCpuSort, () => setCpuPage(1))} align="right" />
@@ -550,7 +550,7 @@ export function CpuMemoryDashboard() {
                 </thead>
                 <tbody>
                   {visibleCpuServers.map((server) => (
-                    <tr key={server.name} className="h-[34px] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
+                    <tr key={server.name} className="h-[2.125rem] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
                       <td className="px-1"><ServerNameCell server={server} /></td>
                       <td className="px-1 text-right"><UsageCell value={server.cpu} /></td>
                       <td className="px-1"><CpuBreakdown server={server} /></td>
@@ -569,10 +569,10 @@ export function CpuMemoryDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Servers by Memory Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Servers by Memory Usage" className="flex min-w-0 flex-col p-3.5" action={<button onClick={() => toast("Showing all servers by memory usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto">
-              <table className="w-full min-w-[560px] table-fixed text-left text-[12.5px]">
+              <table className="w-full min-w-[35rem] table-fixed text-left text-[0.7813rem]">
                 <colgroup>
                   <col style={{ width: "26%" }} /><col style={{ width: "30%" }} /><col style={{ width: "17%" }} />
                   <col style={{ width: "9%" }} /><col style={{ width: "9%" }} /><col style={{ width: "9%" }} />
@@ -589,7 +589,7 @@ export function CpuMemoryDashboard() {
                 </thead>
                 <tbody>
                   {visibleMemoryServers.map((server) => (
-                    <tr key={server.name} className="h-[34px] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
+                    <tr key={server.name} className="h-[2.125rem] border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50">
                       <td className="px-1"><ServerNameCell server={server} /></td>
                       <td className="px-1 text-right"><UsageCell value={server.memory} /></td>
                       <td className="whitespace-nowrap px-1 text-right font-normal tabular-nums text-muted-foreground">{memoryUsedGb(server)} / {server.memoryTotal} GB</td>
@@ -611,16 +611,16 @@ export function CpuMemoryDashboard() {
       </section>
 
       <section aria-label="CPU and memory details" className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
-        <Panel title="CPU Usage Distribution" className="min-w-0"><div className="flex min-h-[220px] flex-1 items-center justify-center"><UsageDistribution data={cpuDistribution} /></div></Panel>
-        <Panel title="Memory Usage Distribution" className="min-w-0"><div className="flex min-h-[220px] flex-1 items-center justify-center"><UsageDistribution data={memoryDistribution} /></div></Panel>
+        <Panel title="CPU Usage Distribution" className="min-w-0"><div className="flex min-h-[13.75rem] flex-1 items-center justify-center"><UsageDistribution data={cpuDistribution} /></div></Panel>
+        <Panel title="Memory Usage Distribution" className="min-w-0"><div className="flex min-h-[13.75rem] flex-1 items-center justify-center"><UsageDistribution data={memoryDistribution} /></div></Panel>
         <ProcessList title="Top Processes by CPU" items={cpuProcesses} onViewAll={() => toast("Showing all CPU processes.")} />
         <ProcessList title="Top Processes by Memory" items={memoryProcesses} onViewAll={() => toast("Showing all memory processes.")} />
-        <Panel title="Recent Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all CPU and memory alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
-          <div className="space-y-2.5 pt-1.5">{alerts.map((alert) => <div key={alert.text} className="grid grid-cols-[10px_minmax(0,1fr)_38px] items-center gap-1.5 text-[12px]"><i className={`grid h-2.5 w-2.5 place-items-center rounded-full text-white ${alert.tone === "critical" ? "bg-rose-500" : alert.tone === "warning" ? "bg-amber-500" : alert.tone === "healthy" ? "bg-emerald-500" : "bg-blue-500"}`}>{alert.tone === "critical" ? "×" : alert.tone === "warning" ? "!" : "•"}</i><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="text-right text-muted-foreground">{alert.ago}</span></div>)}</div>
+        <Panel title="Recent Alerts" className="min-w-0" action={<button onClick={() => toast("Showing all CPU and memory alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+          <div className="space-y-2.5 pt-1.5">{alerts.map((alert) => <div key={alert.text} className="grid grid-cols-[10px_minmax(0,1fr)_2.375rem] items-center gap-1.5 text-[0.75rem]"><i className={`grid h-2.5 w-2.5 place-items-center rounded-full text-white ${alert.tone === "critical" ? "bg-rose-500" : alert.tone === "warning" ? "bg-amber-500" : alert.tone === "healthy" ? "bg-emerald-500" : "bg-blue-500"}`}>{alert.tone === "critical" ? "×" : alert.tone === "warning" ? "!" : "•"}</i><span className="truncate font-semibold text-foreground">{alert.text}</span><span className="text-right text-muted-foreground">{alert.ago}</span></div>)}</div>
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

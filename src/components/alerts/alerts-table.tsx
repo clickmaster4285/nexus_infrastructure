@@ -33,23 +33,23 @@ const STATUS_RANK: Record<AlertStatus, number> = { firing: 0, acknowledged: 1, s
 const PAGE_SIZES = [10, 20, 50];
 
 const SEVERITY_BADGE: Record<AlertSeverity, { label: string; icon: typeof Zap; className: string }> = {
-  critical: { label: "Critical", icon: AlertTriangle, className: "bg-[#FEE2E2] text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  warning: { label: "Warning", icon: AlertTriangle, className: "bg-[#FEF3C7] text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
-  info: { label: "Info", icon: Info, className: "bg-[#DBEAFE] text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-400" },
+  critical: { label: "Critical", icon: AlertTriangle, className: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  warning: { label: "Warning", icon: AlertTriangle, className: "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  info: { label: "Info", icon: Info, className: "bg-blue-100 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
 };
 
 const STATUS_BADGE: Record<AlertStatus, { label: string; icon: typeof Zap; className: string }> = {
-  firing: { label: "Firing", icon: Zap, className: "bg-[#DC2626]/10 text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  acknowledged: { label: "Acknowledged", icon: CheckCheck, className: "bg-[#D97706]/10 text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
+  firing: { label: "Firing", icon: Zap, className: "bg-red-600/10 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  acknowledged: { label: "Acknowledged", icon: CheckCheck, className: "bg-amber-600/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
   silenced: { label: "Silenced", icon: BellOff, className: "bg-slate-200/70 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300" },
-  resolved: { label: "Resolved", icon: CheckCircle2, className: "bg-[#16A34A]/10 text-[#16A34A] dark:bg-emerald-500/15 dark:text-emerald-400" },
+  resolved: { label: "Resolved", icon: CheckCircle2, className: "bg-green-600/10 text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400" },
 };
 
 function SeverityBadge({ severity }: { severity: AlertSeverity }) {
   const meta = SEVERITY_BADGE[severity];
   const Icon = meta.icon;
   return (
-    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[10px] font-semibold", meta.className)}>
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.className)}>
       <Icon size={11} aria-hidden="true" />
       {meta.label}
     </Badge>
@@ -60,7 +60,7 @@ function StatusBadge({ status }: { status: AlertStatus }) {
   const meta = STATUS_BADGE[status];
   const Icon = meta.icon;
   return (
-    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[10px] font-semibold", meta.className)}>
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.className)}>
       <Icon size={11} aria-hidden="true" />
       {meta.label}
     </Badge>
@@ -75,14 +75,14 @@ function initialsFor(email: string): string {
 }
 
 function AssigneeCell({ assignee }: { assignee: string | null }) {
-  if (!assignee) return <span className="text-[12px] text-muted-foreground">Unassigned</span>;
+  if (!assignee) return <span className="text-[0.75rem] text-muted-foreground">Unassigned</span>;
   const toneIndex = [...assignee].reduce((sum, char) => sum + char.charCodeAt(0), 0) % AVATAR_TONES.length;
   return (
     <span className="flex items-center gap-2" title={assignee}>
-      <span aria-hidden="true" className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold", AVATAR_TONES[toneIndex])}>
+      <span aria-hidden="true" className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-full text-[0.625rem] font-bold", AVATAR_TONES[toneIndex])}>
         {initialsFor(assignee)}
       </span>
-      <span className="hidden truncate text-[12px] text-foreground xl:inline">{assignee}</span>
+      <span className="hidden truncate text-[0.75rem] text-foreground xl:inline">{assignee}</span>
     </span>
   );
 }
@@ -198,7 +198,7 @@ export function AlertsTable(props: AlertsTableProps) {
       : <ArrowUpDown size={12} aria-hidden="true" className="opacity-0 transition-opacity group-hover:opacity-50" />;
 
   const header = (key: SortKey, label: string, className?: string) => (
-    <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
+    <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
       <button type="button" onClick={() => toggleSort(key)} className="group inline-flex items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         {label}
         {sortIndicator(key)}
@@ -224,12 +224,12 @@ export function AlertsTable(props: AlertsTableProps) {
               />
             </th>
             {header("severity", "Severity", "hidden sm:table-cell")}
-            <th scope="col" className="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Alert</th>
+            <th scope="col" className="px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Alert</th>
             {header("host", "Host / Service", "hidden lg:table-cell")}
             {header("status", "Status", "hidden md:table-cell")}
             {header("triggered", "Triggered")}
             {header("duration", "Duration", "hidden xl:table-cell")}
-            <th scope="col" className="hidden px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:table-cell">Assignee</th>
+            <th scope="col" className="hidden px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground sm:table-cell">Assignee</th>
             <th scope="col" className="w-10 px-2 py-2"><span className="sr-only">Actions</span></th>
           </tr>
         </thead>
@@ -247,7 +247,7 @@ export function AlertsTable(props: AlertsTableProps) {
                 aria-selected={isSelected}
                 className={cn(
                   "relative cursor-pointer border-b border-border/70 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
-                  "hover:bg-[#F8FAFC] dark:hover:bg-accent",
+                  "hover:bg-slate-50 dark:hover:bg-accent",
                   isSelected && "bg-primary/[0.06] dark:bg-primary/10",
                   alert.severity === "critical" && alert.status === "firing" && "shadow-[inset_3px_0_0_#DC2626]",
                 )}
@@ -262,22 +262,22 @@ export function AlertsTable(props: AlertsTableProps) {
                   />
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle sm:table-cell"><SeverityBadge severity={alert.severity} /></td>
-                <td className="min-w-0 max-w-[340px] px-3 py-2.5 align-middle">
-                  <p className="truncate text-[13px] font-semibold text-foreground">{alert.name}</p>
-                  <p className="truncate text-[12px] text-muted-foreground" title={alert.message}>{alert.message}</p>
+                <td className="min-w-0 max-w-[21.25rem] px-3 py-2.5 align-middle">
+                  <p className="truncate text-[0.8125rem] font-semibold text-foreground">{alert.name}</p>
+                  <p className="truncate text-[0.75rem] text-muted-foreground" title={alert.message}>{alert.message}</p>
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle lg:table-cell">
-                  <p className="text-[13px] text-foreground">{alert.host}</p>
-                  <p className="text-[12px] text-muted-foreground">{alert.service}</p>
-                  {isServerInMaintenance(alert.host) && <span className="mt-0.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-0.5 text-[12px] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-violet-500" />Suppressed</span>}
+                  <p className="text-[0.8125rem] text-foreground">{alert.host}</p>
+                  <p className="text-[0.75rem] text-muted-foreground">{alert.service}</p>
+                  {isServerInMaintenance(alert.host) && <span className="mt-0.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-violet-500" />Suppressed</span>}
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle md:table-cell"><StatusBadge status={alert.status} /></td>
                 <td className="whitespace-nowrap px-3 py-2.5 align-middle">
-                  <span className="text-[12px] text-foreground">{timeAgo(alert.epochMs)}</span>
+                  <span className="text-[0.75rem] text-foreground">{timeAgo(alert.epochMs)}</span>
                   <span className="sr-only">{formatDateTime(alert.epochMs)}</span>
-                  <p className="hidden text-[11px] text-muted-foreground" aria-hidden="true">{formatDateTime(alert.epochMs)}</p>
+                  <p className="hidden text-[0.6875rem] text-muted-foreground" aria-hidden="true">{formatDateTime(alert.epochMs)}</p>
                 </td>
-                <td className="hidden whitespace-nowrap px-3 py-2.5 align-middle text-[12px] tabular-nums text-muted-foreground xl:table-cell">
+                <td className="hidden whitespace-nowrap px-3 py-2.5 align-middle text-[0.75rem] tabular-nums text-muted-foreground xl:table-cell">
                   {alertDuration(alert, nowRef.current)}
                 </td>
                 <td className="hidden px-3 py-2.5 align-middle sm:table-cell"><AssigneeCell assignee={alert.assignee} /></td>
@@ -304,12 +304,12 @@ export function AlertsTable(props: AlertsTableProps) {
 
       {/* Pagination footer */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5">
-        <p className="text-[12px] text-muted-foreground" aria-live="polite">
+        <p className="text-[0.75rem] text-muted-foreground" aria-live="polite">
           Showing {start + 1}-{start + visible.length} of {alerts.length}
         </p>
         <div className="flex items-center gap-2">
           <Select value={String(pageSize)} onValueChange={(value) => { setPageSize(Number(value)); setPage(1); }}>
-            <SelectTrigger aria-label="Rows per page" className="h-8 w-[110px] rounded-lg text-[12px]"><SelectValue /></SelectTrigger>
+            <SelectTrigger aria-label="Rows per page" className="h-8 w-[6.875rem] rounded-lg text-[0.75rem]"><SelectValue /></SelectTrigger>
             <SelectContent>
               {PAGE_SIZES.map((size) => (
                 <SelectItem key={size} value={String(size)}>{size} / page</SelectItem>
@@ -325,7 +325,7 @@ export function AlertsTable(props: AlertsTableProps) {
           >
             <ChevronLeft size={15} aria-hidden="true" />
           </button>
-          <span className="min-w-[64px] text-center text-[12px] font-medium text-foreground">Page {safePage} / {maxPage}</span>
+          <span className="min-w-[4rem] text-center text-[0.75rem] font-medium text-foreground">Page {safePage} / {maxPage}</span>
           <button
             type="button"
             onClick={() => setPage((current) => Math.min(maxPage, current + 1))}

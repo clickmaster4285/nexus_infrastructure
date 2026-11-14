@@ -302,18 +302,18 @@ export function TasksDashboard() {
       {status === "loading" && (
         <>
           <section aria-busy="true" aria-label="Loading KPIs" className="grid grid-cols-2 items-stretch gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6">
-            {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[88px] animate-pulse rounded-xl bg-muted" />)}
+            {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[5.5rem] animate-pulse rounded-xl bg-muted" />)}
           </section>
           <section className="grid items-stretch gap-4 xl:grid-cols-3">
-            <div className="h-[300px] animate-pulse rounded-xl bg-muted xl:col-span-2" />
-            <div className="h-[300px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted xl:col-span-2" />
+            <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted" />
           </section>
-          <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+          <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
         </>
       )}
 
       {status === "error" && (
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Scheduled tasks could not be loaded</p>
             <p className="text-sm text-muted-foreground">The task service failed to respond. Retry to reload it.</p>
@@ -398,9 +398,9 @@ export function TasksDashboard() {
 
       {/* Delete confirm */}
       <Dialog open={deleteTargets != null} onOpenChange={(open) => { if (!open) setDeleteTargets(null); }}>
-        <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm"><Trash2 size={16} aria-hidden className="text-[#DC2626]" />Delete {deleteTargets?.length ?? 0} task{(deleteTargets?.length ?? 0) === 1 ? "" : "s"}?</DialogTitle>
+            <DialogTitle className="flex items-center gap-2 text-sm"><Trash2 size={16} aria-hidden className="text-red-600" />Delete {deleteTargets?.length ?? 0} task{(deleteTargets?.length ?? 0) === 1 ? "" : "s"}?</DialogTitle>
             <DialogDescription>
               {deleteNames.length > 0 && <span className="mb-1 block font-medium text-foreground">{deleteNames.join(", ")}{(deleteTargets?.length ?? 0) > 5 ? "…" : ""}</span>}
               This removes the task{(deleteTargets?.length ?? 0) === 1 ? "" : "s"} and all recorded runs. This cannot be undone.
@@ -415,8 +415,8 @@ export function TasksDashboard() {
 
       {/* Toast */}
       {toast && (
-        <div role="status" key={toast.id} className="fixed bottom-5 right-5 z-[1400] flex max-w-sm items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-[13px] font-medium text-white shadow-lg dark:bg-slate-100 dark:text-slate-900">
-          <CheckCircle2 size={15} aria-hidden className="shrink-0 text-[#4ade80] dark:text-[#16A34A]" />
+        <div role="status" key={toast.id} className="fixed bottom-5 right-5 z-[1400] flex max-w-sm items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-[0.8125rem] font-medium text-white shadow-lg dark:bg-slate-100 dark:text-slate-900">
+          <CheckCircle2 size={15} aria-hidden className="shrink-0 text-green-400 dark:text-green-600" />
           <span className="min-w-0">{toast.message}</span>
         </div>
       )}

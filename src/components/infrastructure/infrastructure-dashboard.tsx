@@ -28,9 +28,9 @@ export function InfrastructureDashboard() {
   return (
     <>
       <PageMeta breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} />
-      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="bottom" className="mt-1 min-h-[72px]">
+      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="bottom" className="mt-1 min-h-[4.5rem]">
         <Select value={environment} onValueChange={setEnvironment}>
-          <SelectTrigger className="h-9 min-w-[145px] text-[12px]" aria-label="Filter by environment">
+          <SelectTrigger className="h-9 min-w-[9.0625rem] text-[0.75rem]" aria-label="Filter by environment">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -42,7 +42,7 @@ export function InfrastructureDashboard() {
           </SelectContent>
         </Select>
         <Select value={provider} onValueChange={setProvider}>
-          <SelectTrigger className="h-9 min-w-[145px] text-[12px]" aria-label="Filter by provider">
+          <SelectTrigger className="h-9 min-w-[9.0625rem] text-[0.75rem]" aria-label="Filter by provider">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -54,7 +54,7 @@ export function InfrastructureDashboard() {
           </SelectContent>
         </Select>
         <Select value={groupBy} onValueChange={setGroupBy}>
-          <SelectTrigger className="h-9 min-w-[160px] text-[12px]" aria-label="Group assets by">
+          <SelectTrigger className="h-9 min-w-[10rem] text-[0.75rem]" aria-label="Group assets by">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -72,28 +72,28 @@ export function InfrastructureDashboard() {
           <MetricCard
             key={item.label}
             item={item}
-            className="h-[112px] items-center gap-2.5 p-4"
-            labelClassName="text-[13px] leading-[18px]"
-            valueClassName="text-[26px] leading-[30px]"
-            trendClassName="text-[12px] leading-4"
-            detailClassName="mt-0.5 text-[12px] leading-4"
+            className="h-[7rem] items-center gap-2.5 p-4"
+            labelClassName="text-[0.8125rem] leading-[1.125rem]"
+            valueClassName="text-[1.625rem] leading-[1.875rem]"
+            trendClassName="text-[0.75rem] leading-4"
+            detailClassName="mt-0.5 text-[0.75rem] leading-4"
           />
         ))}
       </section>
 
-      <section aria-label="Topology and health" className="mt-4 grid items-stretch gap-4 lg:grid-cols-[minmax(0,2.1fr)_minmax(290px,0.82fr)]">
+      <section aria-label="Topology and health" className="mt-4 grid items-stretch gap-4 lg:grid-cols-[minmax(0,2.1fr)_minmax(18.125rem,0.82fr)]">
         <TopologyPanel />
         <InfrastructureHealthPanel
-          className="h-[472px]"
+          className="h-[29.5rem]"
           onAlertSelect={(severity) => router.push(severity ? `/alerts?severity=${severity}` : "/alerts")}
         />
       </section>
 
       <section aria-label="Breakdown" className="mt-4 grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <AssetsEnvironmentPanel className="h-[238px]" />
-        <DonutPanel title="Provider Distribution" data={providerDistribution} total={48} totalLabel="Total Assets" className="h-[238px]" />
-        <InfrastructureEventsPanel className="h-[238px]" />
-        <UnmonitoredAssetsPanel className="h-[238px]" />
+        <AssetsEnvironmentPanel className="h-[14.875rem]" />
+        <DonutPanel title="Provider Distribution" data={providerDistribution} total={48} totalLabel="Total Assets" className="h-[14.875rem]" />
+        <InfrastructureEventsPanel className="h-[14.875rem]" />
+        <UnmonitoredAssetsPanel className="h-[14.875rem]" />
       </section>
     </>
   );

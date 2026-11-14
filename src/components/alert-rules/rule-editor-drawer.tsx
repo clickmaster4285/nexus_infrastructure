@@ -51,7 +51,7 @@ const STEPS = ["Basics", "Condition", "Target", "Notifications"] as const;
 const ENVIRONMENTS = ["production", "staging", "development"] as const;
 
 const fieldClass =
-  "h-9 w-full rounded-lg border border-input bg-card px-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
+  "h-9 w-full rounded-lg border border-input bg-card px-3 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
 const DEFAULT_CONDITION: RuleCondition = { metric: "CPU usage", operator: ">", value: 90, unit: "%", duration: "5m", evaluationInterval: "30s" };
 
@@ -161,7 +161,7 @@ function validate(draft: RuleEditorDraft): { basics: Record<string, string>; con
 
 const TABULAR = "tabular-nums";
 
-/** Right-side rule editor (560px, full-screen on mobile), 4-step stepper with live preview. */
+/** Right-side rule editor (35rem, full-screen on mobile), 4-step stepper with live preview. */
 export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerProps) {
   const open = state !== null;
   const editingRule = state?.mode === "edit" ? state.rule : null;
@@ -255,11 +255,11 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
         role="dialog"
         aria-modal="true"
         aria-labelledby="rule-editor-title"
-        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[560px]"
+        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:w-[35rem]"
       >
         {/* Header */}
         <header className="flex items-center justify-between gap-3 border-b border-border p-5">
-          <h2 id="rule-editor-title" className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">{title}</h2>
+          <h2 id="rule-editor-title" className="truncate font-display text-[1.0625rem] font-bold tracking-tight text-foreground">{title}</h2>
           <button
             type="button"
             data-autofocus
@@ -290,13 +290,13 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] font-bold",
-                      current ? "border-primary bg-primary text-primary-foreground" : done ? "border-[#16A34A] bg-[#16A34A] text-white" : "border-border text-muted-foreground",
+                      "grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[0.625rem] font-bold",
+                      current ? "border-primary bg-primary text-primary-foreground" : done ? "border-green-600 bg-green-600 text-white" : "border-border text-muted-foreground",
                     )}
                   >
                     {index + 1}
                   </span>
-                  <span className={cn("hidden truncate text-[12px] font-medium sm:inline", current ? "text-foreground" : "text-muted-foreground")}>{label}</span>
+                  <span className={cn("hidden truncate text-[0.75rem] font-medium sm:inline", current ? "text-foreground" : "text-muted-foreground")}>{label}</span>
                 </button>
                 {index < STEPS.length - 1 && <span aria-hidden="true" className="h-px w-3 shrink-0 bg-border sm:w-4" />}
               </li>
@@ -309,7 +309,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
           {step === 0 && (
             <section aria-label="Basics" className="grid gap-3">
               <div className="grid gap-1">
-                <label htmlFor="rule-name" className="text-[12px] font-medium text-muted-foreground">Name</label>
+                <label htmlFor="rule-name" className="text-[0.75rem] font-medium text-muted-foreground">Name</label>
                 <input
                   id="rule-name"
                   value={draft.name}
@@ -319,22 +319,22 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                   aria-describedby={attempted && errors.basics.name ? "rule-name-error" : undefined}
                   className={fieldClass}
                 />
-                {attempted && errors.basics.name && <p id="rule-name-error" role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{errors.basics.name}</p>}
+                {attempted && errors.basics.name && <p id="rule-name-error" role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{errors.basics.name}</p>}
               </div>
               <div className="grid gap-1">
-                <label htmlFor="rule-description" className="text-[12px] font-medium text-muted-foreground">Description</label>
+                <label htmlFor="rule-description" className="text-[0.75rem] font-medium text-muted-foreground">Description</label>
                 <textarea
                   id="rule-description"
                   value={draft.description}
                   onChange={(event) => setDraft((current) => ({ ...current, description: event.target.value }))}
                   rows={2}
                   placeholder="What should on-call do when this fires?"
-                  className="w-full rounded-lg border border-input bg-card px-3 py-2 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                  className="w-full rounded-lg border border-input bg-card px-3 py-2 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="grid gap-1">
-                  <label htmlFor="rule-severity" className="text-[12px] font-medium text-muted-foreground">Severity</label>
+                  <label htmlFor="rule-severity" className="text-[0.75rem] font-medium text-muted-foreground">Severity</label>
                   <select id="rule-severity" value={draft.severity} onChange={(event) => setDraft((current) => ({ ...current, severity: event.target.value as RuleSeverity }))} className={fieldClass}>
                     {RULE_SEVERITIES.map((severity) => (
                       <option key={severity} value={severity}>{severity}</option>
@@ -342,7 +342,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                   </select>
                 </div>
                 <div className="grid gap-1">
-                  <label htmlFor="rule-tags" className="text-[12px] font-medium text-muted-foreground">Tags (comma separated)</label>
+                  <label htmlFor="rule-tags" className="text-[0.75rem] font-medium text-muted-foreground">Tags (comma separated)</label>
                   <input
                     id="rule-tags"
                     value={draft.tags.join(", ")}
@@ -358,7 +358,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
           {step === 1 && (
             <section aria-label="Condition" className="grid gap-4">
               <div className="grid gap-1">
-                <label htmlFor="rule-type" className="text-[12px] font-medium text-muted-foreground">Rule type</label>
+                <label htmlFor="rule-type" className="text-[0.75rem] font-medium text-muted-foreground">Rule type</label>
                 <select
                   id="rule-type"
                   value={draft.type}
@@ -381,22 +381,22 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
               {/* Live preview */}
               <div className="rounded-xl border border-border/80 p-3">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Preview · last 24h</h3>
-                  <span className="text-[11px] font-medium text-muted-foreground">Threshold {thresholdValue}{thresholdUnit}</span>
+                  <h3 className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Preview · last 24h</h3>
+                  <span className="text-[0.6875rem] font-medium text-muted-foreground">Threshold {thresholdValue}{thresholdUnit}</span>
                 </div>
-                <div className="mt-2 h-[110px] w-full" aria-label="Threshold preview chart">
+                <div className="mt-2 h-[6.875rem] w-full" aria-label="Threshold preview chart">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={preview} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
                       <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="time" interval={9} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
                       <YAxis width={34} tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} axisLine={false} tickLine={false} />
-                      <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
+                      <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 11, background: "var(--popover)" }} />
                       <ReferenceLine y={thresholdValue} stroke="#64748b" strokeDasharray="5 4" />
                       <Line dataKey="value" name="Observed" type="monotone" stroke="#1565e8" strokeWidth={1.8} dot={false} activeDot={{ r: 3 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <p className={cn("mt-2 text-[12px] font-semibold", estimate > 0 ? "text-[#D97706] dark:text-amber-400" : "text-muted-foreground", TABULAR)}>
+                <p className={cn("mt-2 text-[0.75rem] font-semibold", estimate > 0 ? "text-amber-600 dark:text-amber-400" : "text-muted-foreground", TABULAR)}>
                   ~{estimate} of {preview.length} evaluations would breach (last 24h)
                 </p>
               </div>
@@ -406,7 +406,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
           {step === 2 && (
             <section aria-label="Target" className="grid gap-3">
               <div className="grid gap-1">
-                <label htmlFor="rule-environment" className="text-[12px] font-medium text-muted-foreground">Environment</label>
+                <label htmlFor="rule-environment" className="text-[0.75rem] font-medium text-muted-foreground">Environment</label>
                 <select id="rule-environment" value={draft.environment} onChange={(event) => setDraft((current) => ({ ...current, environment: event.target.value }))} className={fieldClass}>
                   {ENVIRONMENTS.map((environment) => (
                     <option key={environment} value={environment}>{environment}</option>
@@ -414,7 +414,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                 </select>
               </div>
               <div className="grid gap-1" role="group" aria-label="Target kind">
-                <span className="text-[12px] font-medium text-muted-foreground">Target type</span>
+                <span className="text-[0.75rem] font-medium text-muted-foreground">Target type</span>
                 <div className="inline-flex w-max items-center gap-1 rounded-lg border border-border p-0.5">
                   {(["host", "group"] as const).map((kind) => (
                     <button
@@ -423,7 +423,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                       aria-pressed={draft.targetKind === kind}
                       onClick={() => setDraft((current) => ({ ...current, targetKind: kind, target: kind === "host" ? TARGET_HOSTS[0] : TARGET_GROUPS[0] }))}
                       className={cn(
-                        "h-7 rounded-md px-4 text-[12px] font-semibold capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "h-7 rounded-md px-4 text-[0.75rem] font-semibold capitalize transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         draft.targetKind === kind ? "bg-secondary text-foreground shadow-sm" : "text-muted-foreground hover:bg-accent",
                       )}
                     >
@@ -433,7 +433,7 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                 </div>
               </div>
               <div className="grid gap-1">
-                <label htmlFor="rule-target" className="text-[12px] font-medium text-muted-foreground">{draft.targetKind === "host" ? "Host" : "Group"}</label>
+                <label htmlFor="rule-target" className="text-[0.75rem] font-medium text-muted-foreground">{draft.targetKind === "host" ? "Host" : "Group"}</label>
                 <select
                   id="rule-target"
                   value={draft.target}
@@ -445,10 +445,10 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
                     <option key={target} value={target}>{target}</option>
                   ))}
                 </select>
-                {attempted && errors.target.target && <p role="alert" className="text-[11px] font-medium text-[#DC2626] dark:text-red-400">{errors.target.target}</p>}
+                {attempted && errors.target.target && <p role="alert" className="text-[0.6875rem] font-medium text-red-600 dark:text-red-400">{errors.target.target}</p>}
               </div>
               <div className="grid gap-1">
-                <label htmlFor="rule-exclude" className="text-[12px] font-medium text-muted-foreground">Exclude (comma separated)</label>
+                <label htmlFor="rule-exclude" className="text-[0.75rem] font-medium text-muted-foreground">Exclude (comma separated)</label>
                 <input
                   id="rule-exclude"
                   value={draft.exclude.join(", ")}
@@ -474,21 +474,21 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
         {/* Footer */}
         <footer className="flex items-center gap-2 border-t border-border p-4">
           {step > 0 ? (
-            <Button variant="outline" onClick={() => setStep((current) => current - 1)} className="h-9 gap-1 rounded-lg px-3 text-[13px]">
+            <Button variant="outline" onClick={() => setStep((current) => current - 1)} className="h-9 gap-1 rounded-lg px-3 text-[0.8125rem]">
               <ChevronLeft size={15} aria-hidden="true" />Back
             </Button>
           ) : (
-            <Button variant="ghost" onClick={attemptClose} className="h-9 rounded-lg px-3 text-[13px] text-muted-foreground">Cancel</Button>
+            <Button variant="ghost" onClick={attemptClose} className="h-9 rounded-lg px-3 text-[0.8125rem] text-muted-foreground">Cancel</Button>
           )}
           <div className="ml-auto flex items-center gap-2">
             {step < STEPS.length - 1 ? (
-              <Button onClick={goNext} className="h-9 gap-1 rounded-lg px-4 text-[13px]">
+              <Button onClick={goNext} className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem]">
                 Next<ChevronRight size={15} aria-hidden="true" />
               </Button>
             ) : (
               <>
-                <Button variant="outline" onClick={() => submit(false)} className="h-9 rounded-lg px-4 text-[13px]">Save</Button>
-                <Button onClick={() => submit(true)} className="h-9 rounded-lg px-4 text-[13px]">Save & Enable</Button>
+                <Button variant="outline" onClick={() => submit(false)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Save</Button>
+                <Button onClick={() => submit(true)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Save & Enable</Button>
               </>
             )}
           </div>
@@ -503,8 +503,8 @@ export function RuleEditorDrawer({ state, onSave, onClose }: RuleEditorDrawerPro
             <DialogDescription>This rule has edits that were not saved. Closing now will lose them.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDiscardOpen(false)} className="h-9 rounded-lg px-4 text-[13px]">Keep editing</Button>
-            <Button variant="destructive" onClick={() => { setDiscardOpen(false); onClose(); }} className="h-9 rounded-lg px-4 text-[13px]">Discard</Button>
+            <Button variant="outline" onClick={() => setDiscardOpen(false)} className="h-9 rounded-lg px-4 text-[0.8125rem]">Keep editing</Button>
+            <Button variant="destructive" onClick={() => { setDiscardOpen(false); onClose(); }} className="h-9 rounded-lg px-4 text-[0.8125rem]">Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

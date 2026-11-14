@@ -71,7 +71,7 @@ export function InviteUserDialog({ open, onOpenChange, onDone }: BaseDialogProps
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Invite user</DialogTitle>
           <DialogDescription>Sends an invite email. The user appears as “Invited” until they accept.</DialogDescription>
@@ -138,7 +138,7 @@ export function CreateTokenDialog({ open, onOpenChange, onDone }: BaseDialogProp
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Create API token</DialogTitle>
           <DialogDescription>Token secret is shown only once after creation.</DialogDescription>
@@ -183,7 +183,7 @@ export function CreateRoleDialog({ open, onOpenChange, onDone }: BaseDialogProps
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Create role</DialogTitle>
           <DialogDescription>Start from a template or blank. Edit permissions after creation.</DialogDescription>
@@ -220,7 +220,7 @@ export function TokenSecretDialog({ open, onOpenChange, token, onDone }: { open:
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(500px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(31.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="text-amber-700 dark:text-amber-400">Save this token now</DialogTitle>
           <DialogDescription>This is the only time the secret is shown. It cannot be retrieved later.</DialogDescription>
@@ -240,7 +240,7 @@ export function TokenSecretDialog({ open, onOpenChange, token, onDone }: { open:
 export function ConfirmActionDialog({ open, onOpenChange, title, description, confirmLabel, danger, onConfirm, onDone }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description: string; confirmLabel: string; danger?: boolean; onConfirm: () => AccessDialogDone["message"]; onDone: (result: AccessDialogDone) => void }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className={danger ? "text-red-700 dark:text-red-400" : "text-foreground"}>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

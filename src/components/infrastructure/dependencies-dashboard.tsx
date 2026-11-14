@@ -148,8 +148,8 @@ function DependencyDonut({ data, size = "large" }: { data: { name: string; value
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const compact = size === "small";
   return (
-    <div className={`flex items-center justify-center gap-3 ${compact ? "h-[160px]" : "h-[150px]"}`}>
-      <div className={`relative shrink-0 ${compact ? "h-[120px] w-[120px]" : "h-[112px] w-[112px]"}`}>
+    <div className={`flex items-center justify-center gap-3 ${compact ? "h-[10rem]" : "h-[9.375rem]"}`}>
+      <div className={`relative shrink-0 ${compact ? "h-[7.5rem] w-[7.5rem]" : "h-[7rem] w-[7rem]"}`}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="65%" outerRadius="89%" paddingAngle={1} stroke="none">
@@ -159,13 +159,13 @@ function DependencyDonut({ data, size = "large" }: { data: { name: string; value
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className={`font-display font-extrabold leading-tight text-foreground ${compact ? "text-[19px]" : "text-[20px]"}`}>{total}</b>
-          <span className="text-[12px] text-muted-foreground">Total</span>
+          <b className={`font-display font-extrabold leading-tight text-foreground ${compact ? "text-[1.1875rem]" : "text-[1.25rem]"}`}>{total}</b>
+          <span className="text-[0.75rem] text-muted-foreground">Total</span>
         </div>
       </div>
       <div className="min-w-0 flex-1 space-y-2.5">
         {data.map((item) => (
-          <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 text-[12px]">
+          <div key={item.name} className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 text-[0.75rem]">
             <i className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
             <span className="truncate text-foreground">{item.name}</span>
             <span className="whitespace-nowrap text-foreground">{item.value} ({Math.round(item.value / total * 100)}%)</span>
@@ -180,9 +180,9 @@ function DistributionRows({ items, color = "bg-blue-500" }: { items: { name: str
   return (
     <div className="space-y-3 pt-2">
       {items.map((item) => (
-        <div key={item.name} className="grid grid-cols-[minmax(0,1fr)_minmax(48px,1fr)_32px] items-center gap-2 text-[12px]">
+        <div key={item.name} className="grid grid-cols-[minmax(0,1fr)_minmax(3rem,1fr)_2rem] items-center gap-2 text-[0.75rem]">
           <span className="truncate text-foreground">{item.name}</span>
-          <div className="h-[6px] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color ? "" : color}`} style={{ width: item.width, ...(item.color ? { backgroundColor: item.color } : {}) }} /></div>
+          <div className="h-[0.375rem] rounded-full bg-muted"><div className={`h-full rounded-full ${item.color ? "" : color}`} style={{ width: item.width, ...(item.color ? { backgroundColor: item.color } : {}) }} /></div>
           <b className="text-right text-foreground">{item.count}</b>
         </div>
       ))}
@@ -237,14 +237,14 @@ export function DependenciesDashboard() {
       <PageMeta breadcrumbs={["Infrastructure", "Dependencies"]} variant="detail" />
       <PageHeading title="Dependencies" description="Monitor your infrastructure dependencies and service relationships in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><RefreshCw size={15} />Refresh</Button>
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Dependency is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Dependency</Button>
+          <Button variant="outline" size="sm" onClick={refresh} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><RefreshCw size={15} />Refresh</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Add Dependency is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Dependency</Button>
         </div>
       </PageHeading>
 
       <section aria-label="Dependency metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[82px]" labelClassName="text-[12px]" valueClassName="text-[24px]" trendClassName="text-[11px]" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}
       </section>
 
       <section aria-label="Dependency health overview" className="grid gap-2.5 md:grid-cols-[1fr_1.38fr_1fr]">
@@ -252,20 +252,20 @@ export function DependenciesDashboard() {
           <DependencyDonut data={healthSlices} />
         </Panel>
         <Panel title="Dependency Health Over Time" range="24h" className="min-w-0">
-          <div className="h-[160px] w-full pt-1">
+          <div className="h-[10rem] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={healthData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="time" interval={1} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(value) => `${value}%`} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
+                <Tooltip contentStyle={{ border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)" }} />
                 <Line dataKey="healthy" name="Healthy" type="monotone" stroke="#27ad5a" strokeWidth={1.7} dot={{ r: 1.5 }} />
                 <Line dataKey="warning" name="Warning" type="monotone" stroke="#f28a13" strokeWidth={1.7} dot={{ r: 1.5 }} />
                 <Line dataKey="critical" name="Critical" type="monotone" stroke="#ed3346" strokeWidth={1.7} dot={{ r: 1.5 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[12px] text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-[0.75rem] text-muted-foreground">
             {[["Healthy", "#27ad5a"], ["Warning", "#f28a13"], ["Critical", "#ed3346"]].map(([label, color]) => <span key={label} className="flex items-center gap-1"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
           </div>
         </Panel>
@@ -275,9 +275,9 @@ export function DependenciesDashboard() {
       </section>
 
       <section aria-label="Dependencies and response times" className="grid items-stretch gap-2.5 md:grid-cols-[2.1fr_1fr]">
-        <Panel title="Dependencies" className="flex h-full min-w-0 flex-col" action={<span className="text-[12px] text-muted-foreground">Updated {updatedAt}</span>}>
+        <Panel title="Dependencies" className="flex h-full min-w-0 flex-col" action={<span className="text-[0.75rem] text-muted-foreground">Updated {updatedAt}</span>}>
           <div className="min-h-0 flex-1 overflow-auto pt-1">
-            <table className="w-full min-w-[1040px] text-left text-[12px]">
+            <table className="w-full min-w-[65rem] text-left text-[0.75rem]">
               <colgroup>
                 {[24, 10, 14, 15, 9, 9, 10, 6, 3].map((width, index) => <col key={index} style={{ width: `${width}%` }} />)}
               </colgroup>
@@ -289,7 +289,7 @@ export function DependenciesDashboard() {
                     <td title={item.type} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.type}</td>
                     <td title={item.parent} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.parent}</td>
                     <td title={item.target} className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.target}</td>
-                    <td className="overflow-hidden px-2 py-2.5"><span className={`rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${statusClass[item.status]}`}>{item.status}</span></td>
+                    <td className="overflow-hidden px-2 py-2.5"><span className={`rounded-full px-1.5 py-0.5 text-[0.6875rem] font-semibold ${statusClass[item.status]}`}>{item.status}</span></td>
                     <td className="overflow-hidden px-2 py-2.5"><span className={`inline-flex items-center gap-1.5 whitespace-nowrap font-semibold ${statusColor[item.status]}`}><i className={`h-2 w-2 shrink-0 rounded-full ${item.status === "Healthy" ? "bg-emerald-500" : item.status === "Warning" ? "bg-amber-500" : "bg-rose-500"}`} />{item.status}</span></td>
                     <td className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.response}</td>
                     <td className="overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2.5 text-foreground">{item.uptime}</td>
@@ -299,7 +299,7 @@ export function DependenciesDashboard() {
               </tbody>
             </table>
           </div>
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[12px] text-muted-foreground">
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[0.75rem] text-muted-foreground">
             <span>Showing {rangeStart}-{rangeEnd} of {totalDependencyCount} dependencies</span>
             <div aria-label="Dependency pagination" className="flex items-center gap-1">
               <button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={currentPage === 1} className="inline-flex h-8 items-center gap-1 rounded-md border border-border px-2 text-foreground transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
@@ -320,9 +320,9 @@ export function DependenciesDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Dependencies by Response Time" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all dependencies by response time.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Dependencies by Response Time" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all dependencies by response time.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="min-h-0 flex-1 overflow-auto pt-1">
-            <table className="w-full min-w-[320px] table-fixed text-left text-[12px]">
+            <table className="w-full min-w-[20rem] table-fixed text-left text-[0.75rem]">
               <colgroup><col className="w-[52%]" /><col className="w-[24%]" /><col className="w-[24%]" /></colgroup>
               <thead><tr className="border-b border-border text-muted-foreground"><th className="pb-1.5">Dependency</th><th className="pb-1.5">Type</th><th className="whitespace-nowrap pb-1.5 text-right">Response Time</th></tr></thead>
               <tbody>
@@ -331,9 +331,9 @@ export function DependenciesDashboard() {
                   const tone = isSlow ? "text-amber-600" : "text-emerald-600";
                   return (
                     <tr key={item.name} className="border-b border-border/70 last:border-0">
-                      <td className="overflow-hidden py-[9px] font-semibold text-foreground"><span className="block truncate whitespace-nowrap" title={item.name}><span className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${isSlow ? "bg-amber-500" : "bg-emerald-500"}`} />{item.name}</span></td>
-                      <td className="overflow-hidden py-[9px] text-foreground"><span className="block truncate whitespace-nowrap" title={item.type}>{item.type}</span></td>
-                      <td className={`whitespace-nowrap py-[9px] text-right font-semibold ${tone}`}>{item.responseMs} ms</td>
+                      <td className="overflow-hidden py-[0.5625rem] font-semibold text-foreground"><span className="block truncate whitespace-nowrap" title={item.name}><span className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${isSlow ? "bg-amber-500" : "bg-emerald-500"}`} />{item.name}</span></td>
+                      <td className="overflow-hidden py-[0.5625rem] text-foreground"><span className="block truncate whitespace-nowrap" title={item.type}>{item.type}</span></td>
+                      <td className={`whitespace-nowrap py-[0.5625rem] text-right font-semibold ${tone}`}>{item.responseMs} ms</td>
                     </tr>
                   );
                 })}
@@ -352,17 +352,17 @@ export function DependenciesDashboard() {
         <Panel title="Dependencies by Type" className="min-w-0">
           <DistributionRows items={dependencyTypes.map((item) => ({ name: item.name, count: item.value, width: `${item.value / 42 * 100}%`, color: item.color }))} />
         </Panel>
-        <Panel title="Top Parent Services" className="min-w-0" action={<button onClick={() => toast("Showing all parent services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Parent Services" className="min-w-0" action={<button onClick={() => toast("Showing all parent services.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <DistributionRows items={topParents} />
         </Panel>
-        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all dependency events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Recent Events" className="min-w-0" action={<button onClick={() => toast("Showing all dependency events.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="space-y-2.5 pt-1.5">
-            {events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_48px] items-center gap-2 text-[12px]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
+            {events.map((event) => <div key={event.text} className="grid grid-cols-[8px_minmax(0,1fr)_3rem] items-center gap-2 text-[0.75rem]"><i className={`h-2 w-2 rounded-full ${event.color}`} /><span className="truncate font-semibold text-foreground">{event.text}</span><span className="text-right text-muted-foreground">{event.ago}</span></div>)}
           </div>
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

@@ -19,13 +19,13 @@ export function NoisyRulesCard({ rules, onRuleClick }: NoisyRulesCardProps) {
     <Panel
       title="Top Noisy Rules"
       className="flex h-full min-w-0 flex-col rounded-xl p-5"
-      titleClassName="text-[16px] font-semibold"
+      titleClassName="text-[1rem] font-semibold"
       headerClassName="h-10"
       showOptions
-      action={<span className="text-[12px] text-muted-foreground">Last 24h</span>}
+      action={<span className="text-[0.75rem] text-muted-foreground">Last 24h</span>}
     >
       {rules.length === 0 ? (
-        <p className="mt-auto mb-auto text-center text-[13px] text-muted-foreground">No alerts triggered in the last 24h.</p>
+        <p className="mt-auto mb-auto text-center text-[0.8125rem] text-muted-foreground">No alerts triggered in the last 24h.</p>
       ) : (
         <ul className="flex flex-col gap-3.5 py-1" aria-label="Top noisy alert rules">
           {rules.map((rule) => (
@@ -37,8 +37,8 @@ export function NoisyRulesCard({ rules, onRuleClick }: NoisyRulesCardProps) {
                 aria-label={`Filter alerts by rule ${rule.name} (${rule.count} alerts)`}
               >
                 <span className="flex items-baseline justify-between gap-3">
-                  <span className="min-w-0 truncate text-[13px] font-medium text-foreground group-hover:underline">{rule.name}</span>
-                  <span className="shrink-0 text-[12px] font-semibold tabular-nums text-muted-foreground">{rule.count}</span>
+                  <span className="min-w-0 truncate text-[0.8125rem] font-medium text-foreground group-hover:underline">{rule.name}</span>
+                  <span className="shrink-0 text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{rule.count}</span>
                 </span>
                 <span className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-muted">
                   <span
@@ -52,7 +52,7 @@ export function NoisyRulesCard({ rules, onRuleClick }: NoisyRulesCardProps) {
           ))}
         </ul>
       )}
-      <p className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Alerts triggered per rule · click to filter</p>
+      <p className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Alerts triggered per rule · click to filter</p>
     </Panel>
   );
 }

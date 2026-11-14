@@ -18,7 +18,7 @@ export function CoverageBanner({ unprotectedCount, rpoBreachCount, onView }: Cov
 
   if (issues === 0) {
     return (
-      <div role="status" className="flex min-h-[40px] flex-wrap items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
+      <div role="status" className="flex min-h-[2.5rem] flex-wrap items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
         <CheckCheck size={14} aria-hidden="true" className="shrink-0" />
         <span className="font-medium">All assets protected</span>
         <span aria-hidden="true" className="text-emerald-300 dark:text-emerald-600">&middot;</span>
@@ -28,7 +28,7 @@ export function CoverageBanner({ unprotectedCount, rpoBreachCount, onView }: Cov
   }
 
   return (
-    <div role="status" className="flex min-h-[40px] flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200/80 bg-amber-50 px-4 py-2 dark:border-amber-500/25 dark:bg-amber-500/10">
+    <div role="status" className="flex min-h-[2.5rem] flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200/80 bg-amber-50 px-4 py-2 dark:border-amber-500/25 dark:bg-amber-500/10">
       <p className="flex min-w-0 flex-wrap items-center gap-x-2 text-sm text-amber-900 dark:text-amber-200">
         <ShieldAlert size={14} aria-hidden="true" className="shrink-0" />
         <span className="font-semibold">{unprotectedCount} asset{unprotectedCount === 1 ? "" : "s"} with no backup</span>
@@ -42,7 +42,7 @@ export function CoverageBanner({ unprotectedCount, rpoBreachCount, onView }: Cov
       <button
         type="button"
         onClick={onView}
-        className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-amber-200 bg-white px-3 text-[13px] font-semibold text-amber-800 shadow-sm transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-amber-500/30 dark:bg-amber-500/15 dark:text-amber-200"
+        className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-amber-200 bg-white px-3 text-[0.8125rem] font-semibold text-amber-800 shadow-sm transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-amber-500/30 dark:bg-amber-500/15 dark:text-amber-200"
       >
         View<ChevronRight size={13} aria-hidden="true" />
       </button>

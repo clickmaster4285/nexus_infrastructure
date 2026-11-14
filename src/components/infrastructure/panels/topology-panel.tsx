@@ -34,12 +34,12 @@ const TOPOLOGY_HEIGHT = 270;
 const TOPOLOGY_MODAL_FIT_OPTIONS = { padding: 0.04, minZoom: 0.4, maxZoom: 2.5, duration: 300 };
 
 const compactButton =
-  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[11px] font-medium text-[#516680] transition-colors hover:border-[#a9c8eb] hover:text-[#176dbb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[#c6d2e1]";
+  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[0.6875rem] font-medium text-[#516680] transition-colors hover:border-[#a9c8eb] hover:text-[#176dbb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[#c6d2e1]";
 
 function HealthBadge({ status }: { status: string }) {
   const degraded = status === "Degraded";
   return (
-    <span className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#61758e] dark:text-[#a9bcd2]">
+    <span className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#61758e] dark:text-[#a9bcd2]">
       <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full bg-[#20b475]", degraded && "bg-[#f0a02d]")} />
       {status}
     </span>
@@ -53,7 +53,7 @@ const brandIconAssets: Record<string, string> = {
 };
 
 function TopologyIcon({ name, size, tone }: { name: string; size: number; tone?: string }) {
-  if (name === "on-prem") return <OnPremIcon className="h-[17px] w-[17px]" />;
+  if (name === "on-prem") return <OnPremIcon className="h-[1.0625rem] w-[1.0625rem]" />;
   const brandAsset = brandIconAssets[name];
   if (brandAsset) {
     // Static brand SVG served from /public — plain img is intentional (no next/image optimization needed for 1-2 KB icons).
@@ -304,23 +304,23 @@ function TopologyNode({ node, compact = false, position, handlePrefix = "card", 
     <article
       data-topology-node={key}
       className={cn(
-        "flex min-w-0 touch-none select-none items-start gap-2 rounded-[7px] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] dark:border-[#29394e]",
+        "flex min-w-0 touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] dark:border-border",
         !compact && "absolute",
-        compact && "relative h-[35px] w-full shrink-0 items-center gap-1.5 border-0 border-b border-[#eff2f6] bg-transparent px-2 py-1.5 shadow-none last:border-b-0 dark:border-[#29394e]",
+        compact && "relative h-[2.1875rem] w-full shrink-0 items-center gap-1.5 border-0 border-b border-[#eff2f6] bg-transparent px-2 py-1.5 shadow-none last:border-b-0 dark:border-border",
         dragHandlers && "cursor-grab active:cursor-grabbing",
       )}
       style={compact ? undefined : style}
       {...dragHandlers}
     >
-      <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles[node.tone] ?? iconToneStyles.blue)}>
+      <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles[node.tone] ?? iconToneStyles.blue)}>
         <TopologyIcon name={node.icon} size={compact ? 16 : 19} tone={node.tone} />
       </span>
       <div className={cn("flex min-w-0 flex-col items-start gap-1", compact && "flex-1 flex-row items-center justify-between gap-2")}>
-        <b className="max-w-full truncate text-[11px] font-bold text-[#536b87] dark:text-[#c4d1e1]">{node.name}</b>
+        <b className="max-w-full truncate text-[0.6875rem] font-bold text-[#536b87] dark:text-[#c4d1e1]">{node.name}</b>
         {!compact && (
           <>
             <HealthBadge status={node.status} />
-            <small className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#8393a8] dark:text-[#9babc0]">
+            <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#8393a8] dark:text-muted-foreground">
               <Icon name="workflow" size={9} /> {node.detail}
             </small>
           </>
@@ -487,10 +487,10 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
       onWheel={handleWheelZoom}
       className={cn(
         "relative cursor-grab touch-none select-none overflow-hidden active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-        bleed ? "mt-1 h-[420px] min-h-[420px] w-[calc(100%+24px)] -mx-3 -mb-2.5 flex-none" : "h-full min-h-0 w-full",
+        bleed ? "mt-1 h-[26.25rem] min-h-[26.25rem] w-[calc(100%+1.5rem)] -mx-3 -mb-2.5 flex-none" : "h-full min-h-0 w-full",
       )}
     >
-      <div className="absolute h-[270px] w-[895px] origin-top-left transition-transform" style={{ left: canvasOffset.x, top: canvasOffset.y, transform: `scale(${zoom})`, transitionDuration: `${fitDuration}ms` }}>
+      <div className="absolute h-[16.875rem] w-[55.9375rem] origin-top-left transition-transform" style={{ left: canvasOffset.x, top: canvasOffset.y, transform: `scale(${zoom})`, transitionDuration: `${fitDuration}ms` }}>
         <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" viewBox="0 0 895 270" aria-hidden="true">
           <defs>
             <marker id={arrowId} markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
@@ -512,33 +512,33 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* Cloud providers column */}
           <section
             data-topology-node="cloud-providers"
-            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[7px] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-[#29394e] dark:bg-[#152236]"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border dark:bg-[#152236]"
             style={{ left: layout["cloud-providers"].x, top: layout["cloud-providers"].y, width: layout["cloud-providers"].width, height: layout["cloud-providers"].height }}
             {...dragHandlers("cloud-providers")}
           >
-            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[11px] font-medium text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
-              <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[#e8edf4] px-2 text-[0.6875rem] font-medium text-[#526882] dark:border-border dark:text-[#c4d1e1]">
+              <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="cloud" size={17} />
               </span>
               <b>Cloud Providers</b>
             </div>
             {cloudProviders.map((provider) => (
-              <div key={provider.name} className="grid h-[48px] grid-cols-[27px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[#f0f3f7] px-2 py-1 last:border-b-0 dark:border-[#29394e]">
+              <div key={provider.name} className="grid h-[3rem] grid-cols-[27px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[#f0f3f7] px-2 py-1 last:border-b-0 dark:border-border">
                 <span
                   className={cn(
-                    "grid h-[25px] w-[25px] place-items-center rounded-full",
+                    "grid h-[1.5625rem] w-[1.5625rem] place-items-center rounded-full",
                     provider.tone === "orange" && "bg-[#f49a24] text-white",
                     provider.tone === "blue" && "bg-[#2684f5] text-white",
-                    provider.tone === "red" && "rounded-[5px] bg-[#d7193f] text-white",
+                    provider.tone === "red" && "rounded-[0.3125rem] bg-[#d7193f] text-white",
                   )}
                 >
-                  <ProviderLogo provider={provider.name} className="h-[17px] w-[17px] text-white" />
+                  <ProviderLogo provider={provider.name} className="h-[1.0625rem] w-[1.0625rem] text-white" />
                 </span>
                 <div className="min-w-0">
-                  <b className="block truncate text-[11px] font-semibold leading-tight text-[#536b87] dark:text-[#c4d1e1]">{provider.name}</b>
+                  <b className="block truncate text-[0.6875rem] font-semibold leading-tight text-[#536b87] dark:text-[#c4d1e1]">{provider.name}</b>
                   <HealthBadge status={provider.status} />
                 </div>
-                <small className="whitespace-nowrap text-[11px] text-[#8695a8] dark:text-[#9babc0]">{provider.assets} instances</small>
+                <small className="whitespace-nowrap text-[0.6875rem] text-[#8695a8] dark:text-muted-foreground">{provider.assets} instances</small>
               </div>
             ))}
             <TopologyHandles nodeId={`${idPrefix}-cloud-providers`} />
@@ -559,17 +559,17 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* External endpoints */}
           <article
             data-topology-node="external-endpoints"
-            className="absolute flex min-w-0 cursor-grab touch-none select-none items-start gap-2 rounded-[7px] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-[#29394e]"
+            className="absolute flex min-w-0 cursor-grab touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[#dce6f1] bg-card p-2.5 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border"
             style={{ left: layout["external-endpoints"].x, top: layout["external-endpoints"].y, width: layout["external-endpoints"].width, height: layout["external-endpoints"].height }}
             {...dragHandlers("external-endpoints")}
           >
-            <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+            <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
               <Icon name="globe" size={17} />
             </span>
             <div className="flex min-w-0 flex-col items-start gap-1">
-              <b className="whitespace-nowrap text-[11px] font-bold text-[#536b87] dark:text-[#c4d1e1]">External Endpoints</b>
+              <b className="whitespace-nowrap text-[0.6875rem] font-bold text-[#536b87] dark:text-[#c4d1e1]">External Endpoints</b>
               <HealthBadge status="Healthy" />
-              <small className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#8393a8] dark:text-[#9babc0]">
+              <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[#8393a8] dark:text-muted-foreground">
                 <Icon name="workflow" size={9} /> 3 endpoints
               </small>
             </div>
@@ -579,12 +579,12 @@ const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; f
           {/* Databases column */}
           <section
             data-topology-node="databases"
-            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[7px] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-[#29394e] dark:bg-[#152236]"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[#dce6f1] bg-white/85 shadow-[0_1px_3px_#19395b08] active:cursor-grabbing dark:border-border dark:bg-[#152236]"
             style={{ left: layout.databases.x, top: layout.databases.y, width: layout.databases.width, height: layout.databases.height }}
             {...dragHandlers("databases")}
           >
-            <div className="flex h-[39px] items-center gap-2 border-b border-[#e8edf4] px-2 text-[11px] font-medium text-[#526882] dark:border-[#29394e] dark:text-[#c4d1e1]">
-              <span className={cn("grid h-[27px] w-[27px] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[#e8edf4] px-2 text-[0.6875rem] font-medium text-[#526882] dark:border-border dark:text-[#c4d1e1]">
+              <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
                 <Icon name="database" size={17} />
               </span>
               <b>Databases</b>
@@ -614,7 +614,7 @@ interface TopologyToolbarProps {
 function TopologyToolbar({ canvasRef, onExpand, onAutoLayout, modal = false, hideExpand = false, hideZoomButtons = false }: TopologyToolbarProps) {
   const buttonClass = cn(compactButton, modal && "select-none");
   return (
-    <div className={cn("absolute right-[35px] top-2.5 z-[3] flex gap-1.5", modal && "static inset-auto z-auto m-0 ml-auto")}>
+    <div className={cn("absolute right-[2.1875rem] top-2.5 z-[3] flex gap-1.5", modal && "static inset-auto z-auto m-0 ml-auto")}>
       <button type="button" className={buttonClass} onClick={() => (onAutoLayout ? onAutoLayout() : canvasRef.current?.resetLayout())}>
         <Workflow size={13} aria-hidden="true" />Auto Layout
       </button>
@@ -660,7 +660,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
 
   return createPortal(
     <div
-      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(15,23,42,0.55)] p-4 backdrop-blur-[3px] motion-reduce:animate-none"
+      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(15,23,42,0.55)] p-4 backdrop-blur-[0.1875rem] motion-reduce:animate-none"
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -669,9 +669,9 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-label="Infrastructure Topology"
-        className="animate-topology-modal-scale flex h-[92vh] max-h-[1000px] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-[14px] border border-[#e2e8f0] bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)] motion-reduce:animate-none"
+        className="animate-topology-modal-scale flex h-[92vh] max-h-[62.5rem] w-[96vw] max-w-[112.5rem] flex-col overflow-hidden rounded-[0.875rem] border border-slate-200 bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)] motion-reduce:animate-none"
       >
-        <header className="flex h-14 min-h-14 items-center gap-3 border-b border-[#e2e8f0] px-5">
+        <header className="flex h-14 min-h-14 items-center gap-3 border-b border-slate-200 px-5">
           <TopologyToolbar
             canvasRef={canvasRef}
             onExpand={onClose}
@@ -684,7 +684,7 @@ function TopologyModal({ onClose }: { onClose: () => void }) {
             type="button"
             aria-label="Close topology"
             onClick={onClose}
-            className="grid h-[27px] w-[28px] shrink-0 cursor-pointer select-none place-items-center rounded-md border border-border bg-card text-[#516680] transition-colors hover:bg-accent"
+            className="grid h-[1.6875rem] w-[1.75rem] shrink-0 cursor-pointer select-none place-items-center rounded-md border border-border bg-card text-[#516680] transition-colors hover:bg-accent"
           >
             <X size={16} />
           </button>
@@ -705,7 +705,7 @@ export function TopologyPanel() {
 
   return (
     <>
-      <Card className="relative flex h-[472px] min-w-0 flex-col overflow-hidden p-2.5">
+      <Card className="relative flex h-[29.5rem] min-w-0 flex-col overflow-hidden p-2.5">
         <TopologyToolbar canvasRef={canvasRef} onExpand={() => setIsExpanded(true)} />
         <TopologyCanvas ref={canvasRef} fitPadding={0.05} idPrefix="card" bleed />
       </Card>

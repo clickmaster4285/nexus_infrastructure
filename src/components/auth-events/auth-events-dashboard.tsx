@@ -513,10 +513,10 @@ export function AuthEventsDashboard() {
   if (loadState === "loading") {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[92px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[5.75rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }, (_, index) => <div key={index} className="h-28 animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="grid items-stretch gap-4 xl:grid-cols-12"><div className="h-[340px] animate-pulse rounded-xl bg-muted xl:col-span-8" /><div className="h-[340px] animate-pulse rounded-xl bg-muted xl:col-span-4" /></div>
-        <div className="h-[260px] animate-pulse rounded-xl bg-muted" />
+        <div className="grid items-stretch gap-4 xl:grid-cols-12"><div className="h-[21.25rem] animate-pulse rounded-xl bg-muted xl:col-span-8" /><div className="h-[21.25rem] animate-pulse rounded-xl bg-muted xl:col-span-4" /></div>
+        <div className="h-[16.25rem] animate-pulse rounded-xl bg-muted" />
       </div>
     );
   }
@@ -525,7 +525,7 @@ export function AuthEventsDashboard() {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Authentication Events"]} title="Authentication Events" subtitle="Logins, failures, and SSO anomalies across your fleet." />
-        <Card className="grid min-h-[320px] place-items-center rounded-xl p-6">
+        <Card className="grid min-h-[20rem] place-items-center rounded-xl p-6">
           <div className="text-center">
             <CircleAlert className="mx-auto text-rose-500" size={28} />
             <h2 className="mt-2 text-base font-semibold">Authentication events could not be loaded</h2>
@@ -588,12 +588,12 @@ export function AuthEventsDashboard() {
 
       {/* Stat cards */}
       <section aria-label="Authentication KPIs" className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-3 xl:grid-cols-6">
-        <StatCard icon={<FingerprintIcon size={19} />} label="Total Events" value={summary.total.toLocaleString()} delta={summary.deltas.total} deltaPercent={summary.deltas.totalPct} goodDirection="up" iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" className="min-h-[112px]" detail="in the last 24h" />
-        <StatCard icon={<CheckCircle2 size={19} />} label="Successful Logins" value={summary.success.toLocaleString()} delta={summary.deltas.success} deltaPercent={summary.deltas.successPct} goodDirection="up" iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" className="min-h-[112px]" detail="in the last 24h" />
-        <StatCard icon={<XCircle size={19} />} label="Failed Logins" value={summary.failed.toLocaleString()} delta={summary.deltas.failed} deltaPercent={summary.deltas.failedPct} goodDirection="down" iconTone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" className="min-h-[112px]" detail={`${failureRate}% failure rate`} onClick={() => applyFilters({ tab: "failed" })} onClickLabel="Show only failed logins" />
-        <StatCard icon={<KeyRound size={19} />} label="MFA Coverage" value={`${summary.mfaCoveragePct}%`} delta={summary.deltas.mfaCoverage} deltaPercent="1.2 pts" goodDirection="up" iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" className="min-h-[112px]" detail="of enabled accounts" />
-        <StatCard icon={<Lock size={19} />} label="Locked Accounts" value={String(summary.lockedAccounts)} delta={summary.deltas.locked} deltaPercent="+2 today" goodDirection="down" iconTone="bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300" className="min-h-[112px]" detail="locked right now" onClick={() => applyFilters({ tab: "lockouts" })} onClickLabel="Show account lockout events" />
-        <StatCard icon={<ShieldAlert size={19} />} label="Suspicious Events" value={String(summary.suspicious)} delta={summary.deltas.suspicious} deltaPercent="+3 today" goodDirection="down" iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" className="min-h-[112px]" detail="in the last 24h" onClick={() => applyFilters({ tab: "suspicious" })} onClickLabel="Show suspicious events" />
+        <StatCard icon={<FingerprintIcon size={19} />} label="Total Events" value={summary.total.toLocaleString()} delta={summary.deltas.total} deltaPercent={summary.deltas.totalPct} goodDirection="up" iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" className="min-h-[7rem]" detail="in the last 24h" />
+        <StatCard icon={<CheckCircle2 size={19} />} label="Successful Logins" value={summary.success.toLocaleString()} delta={summary.deltas.success} deltaPercent={summary.deltas.successPct} goodDirection="up" iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" className="min-h-[7rem]" detail="in the last 24h" />
+        <StatCard icon={<XCircle size={19} />} label="Failed Logins" value={summary.failed.toLocaleString()} delta={summary.deltas.failed} deltaPercent={summary.deltas.failedPct} goodDirection="down" iconTone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" className="min-h-[7rem]" detail={`${failureRate}% failure rate`} onClick={() => applyFilters({ tab: "failed" })} onClickLabel="Show only failed logins" />
+        <StatCard icon={<KeyRound size={19} />} label="MFA Coverage" value={`${summary.mfaCoveragePct}%`} delta={summary.deltas.mfaCoverage} deltaPercent="1.2 pts" goodDirection="up" iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" className="min-h-[7rem]" detail="of enabled accounts" />
+        <StatCard icon={<Lock size={19} />} label="Locked Accounts" value={String(summary.lockedAccounts)} delta={summary.deltas.locked} deltaPercent="+2 today" goodDirection="down" iconTone="bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300" className="min-h-[7rem]" detail="locked right now" onClick={() => applyFilters({ tab: "lockouts" })} onClickLabel="Show account lockout events" />
+        <StatCard icon={<ShieldAlert size={19} />} label="Suspicious Events" value={String(summary.suspicious)} delta={summary.deltas.suspicious} deltaPercent="+3 today" goodDirection="down" iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" className="min-h-[7rem]" detail="in the last 24h" onClick={() => applyFilters({ tab: "suspicious" })} onClickLabel="Show suspicious events" />
       </section>
 
       {/* Row 1 � activity chart + detections */}
@@ -659,7 +659,7 @@ export function AuthEventsDashboard() {
         <div ref={detectionsRef} className="min-w-0 scroll-mt-4 xl:col-span-4">
           <ChartCard
             title="Active Detections"
-            className="h-full min-h-[280px]"
+            className="h-full min-h-[17.5rem]"
             actions={
               <div className="flex items-center gap-2">
                 <div className="flex rounded-lg border border-border bg-muted/40 p-0.5" role="group" aria-label="Detection status filter">
@@ -684,7 +684,7 @@ export function AuthEventsDashboard() {
                       <button type="button" onClick={() => setDetectionDialog(detection)} className="flex w-full flex-col gap-1 rounded-md px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open detection ${detection.id}`}>
                         <span className="flex w-full items-center gap-2">
                           <DetectionTypeIcon type={detection.type} />
-                          <span className="min-w-0 flex-1 truncate font-mono text-[13px] font-semibold text-foreground">{detection.subject}</span>
+                          <span className="min-w-0 flex-1 truncate font-mono text-[0.8125rem] font-semibold text-foreground">{detection.subject}</span>
                           <DetectionStatusInline status={detection.status} />
                         </span>
                         <span className="flex w-full items-center gap-2 pl-9">
@@ -743,7 +743,7 @@ export function AuthEventsDashboard() {
           title="Failure Reasons"
           actions={<AuthCardMenu label="Failure reasons" onExport={() => handleExport("csv")} />}
         >
-          <ul className="flex flex-1 flex-col justify-center gap-[7px]">
+          <ul className="flex flex-1 flex-col justify-center gap-[0.4375rem]">
             {AUTH_FAILURE_REASONS.slice().sort((a, b) => b.count - a.count).map((entry) => {
               const pct = Math.round((entry.count / AUTH_FAILURE_REASONS.reduce((acc, item) => acc + item.count, 0)) * 100);
               return (
@@ -769,9 +769,9 @@ export function AuthEventsDashboard() {
           <ul className="flex flex-1 flex-col divide-y divide-border">
             {AUTH_LOCATIONS.map((location) => (
               <li key={location.countryCode}>
-                <button type="button" onClick={() => applyFilters({ country: location.country })} className="flex w-full items-center gap-2 py-[7px] text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1" aria-label={`Filter by country ${location.country}`}>
+                <button type="button" onClick={() => applyFilters({ country: location.country })} className="flex w-full items-center gap-2 py-[0.4375rem] text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1" aria-label={`Filter by country ${location.country}`}>
                   <CountryFlag code={location.countryCode} name={location.country} />
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-foreground">
+                  <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium text-foreground">
                     {location.country}
                     {location.unusual && <span className="ml-1.5 inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-1.5 py-0.5 align-middle text-xs font-semibold text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300">unusual</span>}
                   </span>
@@ -800,7 +800,7 @@ export function AuthEventsDashboard() {
                   <button type="button" onClick={() => updateParams({ q: account.user, page: null })} className="flex min-w-0 flex-1 items-center gap-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md p-1 hover:bg-muted/50" aria-label={`Filter events for ${account.user}`}>
                     <InitialsAvatar name={account.user.split("@")[0]} size={26} />
                     <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-1.5"><span className="truncate text-[13px] font-medium text-foreground">{account.user}</span>{lockedUser && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"><Lock size={10} />Locked</span>}</span>
+                      <span className="flex items-center gap-1.5"><span className="truncate text-[0.8125rem] font-medium text-foreground">{account.user}</span>{lockedUser && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"><Lock size={10} />Locked</span>}</span>
                       <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-rose-400" style={{ width: `${Math.round((account.failedAttempts / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{account.failedAttempts} failed � {timeAgo(new Date(Date.now() - account.lastAttemptMinutesAgo * 60_000).toISOString())}</span></span>
                     </span>
                   </button>
@@ -828,7 +828,7 @@ export function AuthEventsDashboard() {
               <li key={source.ip} className="flex items-center gap-2 py-2">
                 <CountryFlag code={source.countryCode} name={source.country} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-mono text-[13px] font-semibold text-foreground">{source.ip}{source.anonymizer && <span className="ml-1.5 rounded border border-violet-200 bg-violet-50 px-1 py-0.5 align-middle text-xs font-semibold text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300" title="Traffic via known anonymizer exit">anonymizer</span>}</p>
+                  <p className="truncate font-mono text-[0.8125rem] font-semibold text-foreground">{source.ip}{source.anonymizer && <span className="ml-1.5 rounded border border-violet-200 bg-violet-50 px-1 py-0.5 align-middle text-xs font-semibold text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300" title="Traffic via known anonymizer exit">anonymizer</span>}</p>
                   <p className="text-xs text-muted-foreground"><b className="tabular-nums text-foreground">{source.attempts}</b> attempts � <b className="tabular-nums text-foreground">{source.users}</b> users targeted</p>
                 </div>
                 <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold", source.status === "Blocked" ? "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" : source.status === "Watch" ? "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" : "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300")}>
@@ -852,7 +852,7 @@ export function AuthEventsDashboard() {
                 <Link href={`/access-control?user=${encodeURIComponent(account.account)}`} className="flex items-center gap-2 py-2 rounded-md px-1 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40">
                   <InitialsAvatar name={account.account.replace(/[@.-]/g, " ")} size={26} />
                   <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-1.5"><span className="truncate text-[13px] font-medium text-foreground">{account.account}</span><span className={cn("inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold", account.type === "Admin" ? "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300")}>{account.type}</span>{account.interactiveService && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300" title="Interactive login from a service account"><AlertTriangle size={10} />interactive</span>}</span>
+                    <span className="flex items-center gap-1.5"><span className="truncate text-[0.8125rem] font-medium text-foreground">{account.account}</span><span className={cn("inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold", account.type === "Admin" ? "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300")}>{account.type}</span>{account.interactiveService && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300" title="Interactive login from a service account"><AlertTriangle size={10} />interactive</span>}</span>
                     <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">Last login {timeAgo(account.lastLogin)}{account.flags.map((flag) => <span key={flag} className="rounded border border-orange-200 bg-orange-50 px-1 py-0.5 text-xs font-medium text-orange-800 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-300">{flag === "off_hours" ? "off-hours" : flag === "new_location" ? "new location" : flag}</span>)}</span>
                   </span>
                 </Link>
@@ -900,7 +900,7 @@ export function AuthEventsDashboard() {
             <FilterSelect value={userTypeFilter} onChange={(value) => applyFilters({ userType: value })} label="User type" options={["Human", "Admin", "Service"]} allLabel="All user types" />
             <FilterSelect value={riskFilter} onChange={(value) => applyFilters({ risk: value })} label="Risk" options={["low", "medium", "high"]} allLabel="All risk" />
             <FilterSelect value={range} onChange={(value) => updateParams({ range: value, page: null, bucket: null })} label="Time range" options={["1H", "24H", "7D", "30D"]} allLabel="" hideAll />
-            <div className="relative min-w-[180px] flex-1 sm:min-w-[220px]">
+            <div className="relative min-w-[11.25rem] flex-1 sm:min-w-[13.75rem]">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search user, IP, app�" aria-label="Search events" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
@@ -960,7 +960,7 @@ export function AuthEventsDashboard() {
 
           {/* Table */}
           <div className="overflow-x-auto" onMouseEnter={() => setHoveringTable(true)} onMouseLeave={() => setHoveringTable(false)}>
-            <table className="w-full min-w-[1080px] text-left text-[13px]">
+            <table className="w-full min-w-[67.5rem] text-left text-[0.8125rem]">
               <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="w-10 px-3 py-2.5"><input type="checkbox" aria-label="Select all events on this page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
@@ -973,7 +973,7 @@ export function AuthEventsDashboard() {
                   <th className="hidden px-2 py-2.5 font-semibold lg:table-cell">Target</th>
                   <th className="hidden px-2 py-2.5 font-semibold xl:table-cell">Device</th>
                   <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
-                  <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[18px]" : "left-0.5")} /></button></span></th>
+                  <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[1.125rem]" : "left-0.5")} /></button></span></th>
                 </tr>
               </thead>
               <tbody>
@@ -989,26 +989,26 @@ export function AuthEventsDashboard() {
                       </td>
                       <td className="px-2 py-2 align-middle whitespace-nowrap" title={fullTime(event.time, utc)}>
                         <span className="block font-semibold tabular-nums text-foreground">{timeAgo(event.time)}</span>
-                        <span className="block text-[11px] text-muted-foreground">{dateTimeShort(event.time, utc)}{utc ? " UTC" : ""}</span>
+                        <span className="block text-[0.6875rem] text-muted-foreground">{dateTimeShort(event.time, utc)}{utc ? " UTC" : ""}</span>
                       </td>
                       <td className="px-2 py-2 align-middle">
                         <div className="flex items-center gap-2">
                           <InitialsAvatar name={event.user.split("@")[0]} size={compact ? 22 : 28} />
                           <span className="min-w-0">
-                            <span className="block max-w-[180px] truncate font-medium text-foreground" title={event.user}>{event.user}</span>
-                            <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">{event.userType}{accountLocked ? " � locked" : ""}</span>
+                            <span className="block max-w-[11.25rem] truncate font-medium text-foreground" title={event.user}>{event.user}</span>
+                            <span className="block text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{event.userType}{accountLocked ? " � locked" : ""}</span>
                           </span>
                         </div>
                       </td>
                       <td className="px-2 py-2 align-middle whitespace-nowrap">
-                        <span className="flex items-center gap-1.5"><span className="font-mono text-[13px] font-semibold text-foreground">{event.id}</span><span className="text-muted-foreground">�</span><span className="text-muted-foreground">{event.eventType}</span></span>
+                        <span className="flex items-center gap-1.5"><span className="font-mono text-[0.8125rem] font-semibold text-foreground">{event.id}</span><span className="text-muted-foreground">�</span><span className="text-muted-foreground">{event.eventType}</span></span>
                       </td>
                       <td className="hidden px-2 py-2 align-middle whitespace-nowrap text-muted-foreground md:table-cell">{event.method}</td>
                       <td className="px-2 py-2 align-middle"><ResultBadge result={event.result} /></td>
                       <td className="px-2 py-2 align-middle">
                         <div className="flex items-center gap-1.5">
-                          <CountryFlag code={event.countryCode} name={event.country} className="h-[14px] w-[19px]" />
-                          <span className="min-w-0"><span className="block font-mono text-[12px] text-foreground">{event.ip}</span><span className="block text-[11px] text-muted-foreground">{event.city}</span></span>
+                          <CountryFlag code={event.countryCode} name={event.country} className="h-[0.875rem] w-[1.1875rem]" />
+                          <span className="min-w-0"><span className="block font-mono text-[0.75rem] text-foreground">{event.ip}</span><span className="block text-[0.6875rem] text-muted-foreground">{event.city}</span></span>
                         </div>
                       </td>
                       <td className="hidden px-2 py-2 align-middle whitespace-nowrap lg:table-cell">
@@ -1061,7 +1061,7 @@ export function AuthEventsDashboard() {
           </div>
 
           <Pagination page={clampedPage} pageSize={pageSize} totalItems={filtered.length} onPageChange={(next) => updateParams({ page: String(next) })} onPageSizeChange={(size) => { setPageSize(size); updateParams({ page: null }); }} noun="events" pageSizeOptions={[10, 25, 50]} />
-          <p className="border-t border-border px-4 py-2 text-[11px] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching events sampled from a 24h fleet-wide workload ({summary.total.toLocaleString()} events). Times shown in <b>{utc ? "UTC" : "local time"}</b> � {timeZoneLabel()}.</p>
+          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching events sampled from a 24h fleet-wide workload ({summary.total.toLocaleString()} events). Times shown in <b>{utc ? "UTC" : "local time"}</b> � {timeZoneLabel()}.</p>
         </Card>
       </section>
 
@@ -1082,7 +1082,7 @@ export function AuthEventsDashboard() {
         onInvestigate={(id) => { setAuthDetectionStatus(id, "Investigating"); setDetections((current) => current.map((item) => item.id === id ? { ...item, status: "Investigating" } : item)); setDetectionDialog(null); notify({ message: `${id} assigned to IAM team` }); }}
       />
       <Dialog open={saveViewOpen} onOpenChange={setSaveViewOpen}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
           <DialogHeader>
             <DialogTitle>Save current view</DialogTitle>
             <DialogDescription>Stores the active filters as a named view in this browser.</DialogDescription>
@@ -1120,7 +1120,7 @@ type FilterOption = string;
 
 function FilterSelect({ value, onChange, label, options, allLabel, hideAll = false }: { value: string; onChange: (value: string) => void; label: string; options: FilterOption[]; allLabel: string; hideAll?: boolean }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[150px] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
+    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[9.375rem] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
       {!hideAll && <option value="all">{allLabel}</option>}
       {options.map((option) => <option key={option} value={option}>{option}</option>)}
     </select>
@@ -1266,7 +1266,7 @@ function LoginActivityChart({ mode, buckets, methodDistribution, hidden, peakBuc
     return () => { chart.off("click", handler); };
   }, [hostRef, onBarClick]);
 
-  return <div ref={hostRef} className="h-[230px] min-h-[230px] w-full flex-1" role="img" aria-label="Authentication activity chart" />;
+  return <div ref={hostRef} className="h-[14.375rem] min-h-[14.375rem] w-full flex-1" role="img" aria-label="Authentication activity chart" />;
 }
 
 function MethodDonut({ onSelect }: { onSelect: (method: string) => void }) {
@@ -1303,11 +1303,11 @@ function MethodDonut({ onSelect }: { onSelect: (method: string) => void }) {
   }, [hostRef, onSelect]);
 
   return (
-    <div className="relative h-[130px] min-h-[130px] w-[130px]">
+    <div className="relative h-[8.125rem] min-h-[8.125rem] w-[8.125rem]">
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Auth methods donut chart" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <b className="font-display text-[18px] leading-none text-foreground tabular-nums">{summary.total.toLocaleString()}</b>
-        <span className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">logins · 24h</span>
+        <b className="font-display text-[1.125rem] leading-none text-foreground tabular-nums">{summary.total.toLocaleString()}</b>
+        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">logins · 24h</span>
       </div>
     </div>
   );

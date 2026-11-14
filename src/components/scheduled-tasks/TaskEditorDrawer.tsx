@@ -208,8 +208,8 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
 
   if (!open) return null;
 
-  const fieldLabel = "mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground";
-  const textArea = "w-full resize-none rounded-lg border border-input bg-card px-3 py-2 text-[13px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const fieldLabel = "mb-1 block text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground";
+  const textArea = "w-full resize-none rounded-lg border border-input bg-card px-3 py-2 text-[0.8125rem] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
   return createPortal(
     <>
@@ -218,7 +218,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-editor-title"
-        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[640px]"
+        className="animate-drawer-in fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[40rem]"
       >
         <div className="shrink-0 border-b border-border px-5 py-4">
           <div className="flex items-start justify-between gap-3">
@@ -226,7 +226,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
               <h2 id="task-editor-title" className="font-display text-base font-bold tracking-tight text-foreground">
                 {isEdit ? "Edit Scheduled Task" : "Create Scheduled Task"}
               </h2>
-              <p className="mt-0.5 text-[12px] text-muted-foreground">{isEdit ? `Editing ${task?.id}` : "Backups, patching, reports and recurring jobs."}</p>
+              <p className="mt-0.5 text-[0.75rem] text-muted-foreground">{isEdit ? `Editing ${task?.id}` : "Backups, patching, reports and recurring jobs."}</p>
             </div>
             <button
               type="button"
@@ -255,13 +255,13 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                     <span
                       aria-hidden
                       className={cn(
-                        "grid h-5 w-5 shrink-0 place-items-center rounded-full text-[9px] font-bold",
-                        current ? "bg-primary text-primary-foreground" : done ? "bg-[#16A34A] text-white" : "bg-muted text-muted-foreground",
+                        "grid h-5 w-5 shrink-0 place-items-center rounded-full text-[0.5625rem] font-bold",
+                        current ? "bg-primary text-primary-foreground" : done ? "bg-green-600 text-white" : "bg-muted text-muted-foreground",
                       )}
                     >
                       {done && !current ? <Check size={11} strokeWidth={3} /> : index + 1}
                     </span>
-                    <span className={cn("hidden truncate text-[10px] font-semibold md:inline", current ? "text-foreground" : "text-muted-foreground")}>{label}</span>
+                    <span className={cn("hidden truncate text-[0.625rem] font-semibold md:inline", current ? "text-foreground" : "text-muted-foreground")}>{label}</span>
                   </button>
                   {index < STEP_LABELS.length - 1 && <span aria-hidden className="mx-1 h-px min-w-2 flex-1 bg-border" />}
                 </li>
@@ -284,9 +284,9 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                   placeholder="Nightly database backup"
                   aria-invalid={nameError ? true : undefined}
                   aria-describedby={nameError ? "task-name-error" : undefined}
-                  className={cn("h-10 text-[13px]", nameError && "border-[#DC2626]")}
+                  className={cn("h-10 text-[0.8125rem]", nameError && "border-red-600")}
                 />
-                {nameError && <p id="task-name-error" role="alert" className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-[#DC2626]"><AlertCircle size={11} aria-hidden />{nameError}</p>}
+                {nameError && <p id="task-name-error" role="alert" className="mt-1 inline-flex items-center gap-1 text-[0.6875rem] font-medium text-red-600"><AlertCircle size={11} aria-hidden />{nameError}</p>}
               </div>
               <div>
                 <label htmlFor="task-description" className={fieldLabel}>Description</label>
@@ -296,7 +296,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <div>
                   <label htmlFor="task-type" className={fieldLabel}>Type</label>
                   <Select value={draft.type} onValueChange={(type) => patch({ type: type as TaskType })}>
-                    <SelectTrigger id="task-type" className="h-9 w-full text-[13px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="task-type" className="h-9 w-full text-[0.8125rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {TYPE_ORDER.map((type) => <SelectItem key={type} value={type}>{TASK_TYPE_LABELS[type]}</SelectItem>)}
                     </SelectContent>
@@ -305,7 +305,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <div>
                   <label htmlFor="task-owner" className={fieldLabel}>Owner</label>
                   <Select value={draft.owner} onValueChange={(owner) => patch({ owner })}>
-                    <SelectTrigger id="task-owner" className="h-9 w-full text-[13px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="task-owner" className="h-9 w-full text-[0.8125rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {TASK_OWNERS.map((owner) => <SelectItem key={owner} value={owner}>{owner}</SelectItem>)}
                     </SelectContent>
@@ -316,7 +316,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <label htmlFor="task-tags" className={fieldLabel}>Tags</label>
                 <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-input bg-card p-1.5 focus-within:ring-2 focus-within:ring-ring">
                   {draft.tags.map((tag) => (
-                    <span key={tag} className="inline-flex h-6 items-center gap-1 rounded-full bg-muted pl-2 pr-1 text-[11px] font-medium text-foreground">
+                    <span key={tag} className="inline-flex h-6 items-center gap-1 rounded-full bg-muted pl-2 pr-1 text-[0.6875rem] font-medium text-foreground">
                       {tag}
                       <button type="button" onClick={() => patch({ tags: draft.tags.filter((item) => item !== tag) })} aria-label={`Remove tag ${tag}`} className="grid h-4 w-4 place-items-center rounded-full text-muted-foreground hover:text-foreground">
                         <X size={10} aria-hidden />
@@ -330,10 +330,10 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                     onKeyDown={(event) => { if (event.key === "Enter" || event.key === ",") { event.preventDefault(); addTag(); } }}
                     onBlur={addTag}
                     placeholder={draft.tags.length === 0 ? "backup, database…" : ""}
-                    className="h-6 min-w-[120px] flex-1 bg-transparent px-1 text-[12px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    className="h-6 min-w-[7.5rem] flex-1 bg-transparent px-1 text-[0.75rem] text-foreground placeholder:text-muted-foreground focus:outline-none"
                   />
                 </div>
-                <p className="mt-1 text-[10px] text-muted-foreground">Press Enter to add a tag.</p>
+                <p className="mt-1 text-[0.625rem] text-muted-foreground">Press Enter to add a tag.</p>
               </div>
             </fieldset>
           )}
@@ -365,11 +365,11 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 />
               </div>
               <div className="rounded-lg border border-border bg-muted/30 p-3">
-                <p className="flex items-center gap-1.5 text-[11px] font-semibold text-foreground"><Info size={12} aria-hidden />Resolves to {resolvedHosts.length} host{resolvedHosts.length === 1 ? "" : "s"}</p>
+                <p className="flex items-center gap-1.5 text-[0.6875rem] font-semibold text-foreground"><Info size={12} aria-hidden />Resolves to {resolvedHosts.length} host{resolvedHosts.length === 1 ? "" : "s"}</p>
                 <div className="mt-1.5 flex flex-wrap gap-1">
                   {resolvedHosts.length === 0
-                    ? <span className="text-[11px] text-muted-foreground">Global scope — runs on every managed host.</span>
-                    : resolvedHosts.map((host) => <span key={host} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-foreground">{host}</span>)}
+                    ? <span className="text-[0.6875rem] text-muted-foreground">Global scope — runs on every managed host.</span>
+                    : resolvedHosts.map((host) => <span key={host} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] text-foreground">{host}</span>)}
                 </div>
               </div>
             </fieldset>
@@ -392,7 +392,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <div>
                   <label htmlFor="task-builtin" className={fieldLabel}>Built-in action</label>
                   <Select value={draft.execution.builtin ?? "run-backup"} onValueChange={(builtin) => patchExecution({ builtin })}>
-                    <SelectTrigger id="task-builtin" className="h-9 w-full text-[13px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="task-builtin" className="h-9 w-full text-[0.8125rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {BUILTIN_ACTIONS.map((action) => <SelectItem key={action.value} value={action.value}>{action.label}</SelectItem>)}
                     </SelectContent>
@@ -401,14 +401,14 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
               ) : (
                 <div>
                   <label htmlFor="task-command" className={fieldLabel}>Command / script</label>
-                  <textarea id="task-command" value={draft.execution.command} onChange={(event) => patchExecution({ command: event.target.value })} rows={2} spellCheck={false} placeholder="/opt/scripts/job.sh --flag" className={cn(textArea, "font-mono text-[12px]")} />
+                  <textarea id="task-command" value={draft.execution.command} onChange={(event) => patchExecution({ command: event.target.value })} rows={2} spellCheck={false} placeholder="/opt/scripts/job.sh --flag" className={cn(textArea, "font-mono text-[0.75rem]")} />
                 </div>
               )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="task-retries" className={fieldLabel}>Retries on failure</label>
                   <Select value={String(draft.execution.retries)} onValueChange={(value) => patchExecution({ retries: Number(value) })}>
-                    <SelectTrigger id="task-retries" className="h-9 w-full text-[13px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="task-retries" className="h-9 w-full text-[0.8125rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {RETRY_OPTIONS.map((retries) => <SelectItem key={retries} value={String(retries)}>{retries}</SelectItem>)}
                     </SelectContent>
@@ -417,7 +417,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <div>
                   <label htmlFor="task-timeout" className={fieldLabel}>Timeout</label>
                   <Select value={String(draft.execution.timeoutMinutes)} onValueChange={(value) => patchExecution({ timeoutMinutes: Number(value) })}>
-                    <SelectTrigger id="task-timeout" className="h-9 w-full text-[13px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="task-timeout" className="h-9 w-full text-[0.8125rem]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {TIMEOUT_OPTIONS.map((minutes) => <SelectItem key={minutes} value={String(minutes)}>{minutes} min</SelectItem>)}
                     </SelectContent>
@@ -431,7 +431,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                   options={["Skip", "Queue"] as const}
                   onChange={(value) => patchExecution({ concurrency: value === "Skip" ? "skip" : "queue" })}
                 />
-                <p className="mt-1 text-[10px] text-muted-foreground">Skip: ignore the tick if the previous run is still going. Queue: start after it finishes.</p>
+                <p className="mt-1 text-[0.625rem] text-muted-foreground">Skip: ignore the tick if the previous run is still going. Queue: start after it finishes.</p>
               </div>
             </fieldset>
           )}
@@ -442,15 +442,15 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
               <div className="space-y-3 rounded-lg border border-border p-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-[13px] font-medium text-foreground">On failure</p>
-                    <p className="text-[11px] text-muted-foreground">Notify when the run fails or times out.</p>
+                    <p className="text-[0.8125rem] font-medium text-foreground">On failure</p>
+                    <p className="text-[0.6875rem] text-muted-foreground">Notify when the run fails or times out.</p>
                   </div>
                   <ToggleSwitch checked={draft.notifications.onFailure} onChange={(checked) => patchNotifications({ onFailure: checked })} label="Notify on failure" size="sm" />
                 </div>
                 <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-3">
                   <div>
-                    <p className="text-[13px] font-medium text-foreground">On success</p>
-                    <p className="text-[11px] text-muted-foreground">Notify on every successful run (noisy for frequent jobs).</p>
+                    <p className="text-[0.8125rem] font-medium text-foreground">On success</p>
+                    <p className="text-[0.6875rem] text-muted-foreground">Notify on every successful run (noisy for frequent jobs).</p>
                   </div>
                   <ToggleSwitch checked={draft.notifications.onSuccess} onChange={(checked) => patchNotifications({ onSuccess: checked })} label="Notify on success" size="sm" />
                 </div>
@@ -467,7 +467,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                         aria-pressed={active}
                         onClick={() => toggleChannel(channel)}
                         className={cn(
-                          "h-8 rounded-full border px-3 text-[12px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          "h-8 rounded-full border px-3 text-[0.75rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                           active ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card text-muted-foreground hover:bg-accent",
                         )}
                       >
@@ -481,7 +481,7 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                 <label htmlFor="task-recipients" className={fieldLabel}>Recipients</label>
                 <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-input bg-card p-1.5 focus-within:ring-2 focus-within:ring-ring">
                   {draft.notifications.recipients.map((recipient) => (
-                    <span key={recipient} className="inline-flex h-6 items-center gap-1 rounded-full bg-muted pl-2 pr-1 text-[11px] font-medium text-foreground">
+                    <span key={recipient} className="inline-flex h-6 items-center gap-1 rounded-full bg-muted pl-2 pr-1 text-[0.6875rem] font-medium text-foreground">
                       {recipient}
                       <button type="button" onClick={() => patchNotifications({ recipients: draft.notifications.recipients.filter((item) => item !== recipient) })} aria-label={`Remove ${recipient}`} className="grid h-4 w-4 place-items-center rounded-full text-muted-foreground hover:text-foreground">
                         <X size={10} aria-hidden />
@@ -495,17 +495,17 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                     onKeyDown={(event) => { if (event.key === "Enter" || event.key === ",") { event.preventDefault(); const values = recipientInput.split(",").map((v) => v.trim()).filter(Boolean); if (values.length) patchNotifications({ recipients: [...new Set([...draft.notifications.recipients, ...values])] }); setRecipientInput(""); } }}
                     onBlur={() => { const values = recipientInput.split(",").map((v) => v.trim()).filter(Boolean); if (values.length) patchNotifications({ recipients: [...new Set([...draft.notifications.recipients, ...values])] }); setRecipientInput(""); }}
                     placeholder={draft.notifications.recipients.length === 0 ? "ops@nexus.io, #ops-alerts…" : ""}
-                    className="h-6 min-w-[160px] flex-1 bg-transparent px-1 text-[12px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    className="h-6 min-w-[10rem] flex-1 bg-transparent px-1 text-[0.75rem] text-foreground placeholder:text-muted-foreground focus:outline-none"
                   />
                 </div>
-                <p className="mt-1 text-[10px] text-muted-foreground">Separate multiple recipients with commas.</p>
+                <p className="mt-1 text-[0.625rem] text-muted-foreground">Separate multiple recipients with commas.</p>
               </div>
             </fieldset>
           )}
 
           {/* Conflict warnings (visible on every step once known) */}
           {(conflicts.windows.length > 0 || conflicts.tasks.length > 0) && (
-            <div role="alert" className="mt-4 rounded-lg border border-[#D97706]/40 bg-[#FEF3C7] p-3 text-[12px] text-[#92400e] dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+            <div role="alert" className="mt-4 rounded-lg border border-amber-600/40 bg-amber-100 p-3 text-[0.75rem] text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
               <p className="flex items-center gap-1.5 font-bold"><TriangleAlert size={13} aria-hidden />Scheduling conflict</p>
               <ul className="mt-1 list-inside list-disc space-y-0.5">
                 {conflicts.windows.map((window) => (
@@ -515,27 +515,27 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
                   <li key={other.id}>Overlaps heavy task <span className="font-mono font-semibold">{other.id}</span> ({other.name}) near the same time.</li>
                 ))}
               </ul>
-              <p className="mt-1 text-[11px] opacity-80">Task will still run; consider shifting the schedule or relying on the concurrency policy.</p>
+              <p className="mt-1 text-[0.6875rem] opacity-80">Task will still run; consider shifting the schedule or relying on the concurrency policy.</p>
             </div>
           )}
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border px-5 py-3">
-          <button type="button" onClick={goBack} disabled={step === 0} className="inline-flex h-9 items-center gap-1 rounded-lg px-2 text-[13px] font-medium text-muted-foreground transition-colors enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <button type="button" onClick={goBack} disabled={step === 0} className="inline-flex h-9 items-center gap-1 rounded-lg px-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <ChevronLeft size={15} aria-hidden />Back
           </button>
           <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="sm" onClick={requestClose} className="h-9 text-[13px]">Cancel</Button>
+            <Button variant="ghost" size="sm" onClick={requestClose} className="h-9 text-[0.8125rem]">Cancel</Button>
             {isEdit ? (
-              <Button size="sm" onClick={() => submit("save")} className="h-9 gap-1.5 text-[13px]"><Check size={14} aria-hidden />Save changes</Button>
+              <Button size="sm" onClick={() => submit("save")} className="h-9 gap-1.5 text-[0.8125rem]"><Check size={14} aria-hidden />Save changes</Button>
             ) : (
               <>
-                <Button variant="outline" size="sm" onClick={() => submit("save")} className="h-9 text-[13px]">Save</Button>
-                <Button size="sm" onClick={() => submit("saveAndEnable")} className="h-9 gap-1.5 text-[13px]"><Check size={14} aria-hidden />Save &amp; Enable</Button>
+                <Button variant="outline" size="sm" onClick={() => submit("save")} className="h-9 text-[0.8125rem]">Save</Button>
+                <Button size="sm" onClick={() => submit("saveAndEnable")} className="h-9 gap-1.5 text-[0.8125rem]"><Check size={14} aria-hidden />Save &amp; Enable</Button>
               </>
             )}
             {step < 4 && (
-              <Button variant="outline" size="sm" onClick={goNext} className="h-9 gap-1 text-[13px]">Continue<ChevronRight size={14} aria-hidden /></Button>
+              <Button variant="outline" size="sm" onClick={goNext} className="h-9 gap-1 text-[0.8125rem]">Continue<ChevronRight size={14} aria-hidden /></Button>
             )}
           </div>
         </div>
@@ -543,9 +543,9 @@ export function TaskEditorDrawer({ open, onClose, task, allTasks, onSubmit }: Ta
 
       {/* Unsaved changes confirm */}
       <Dialog open={discardOpen} onOpenChange={setDiscardOpen}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm"><ShieldAlert size={16} aria-hidden className="text-[#D97706]" />Discard unsaved changes?</DialogTitle>
+            <DialogTitle className="flex items-center gap-2 text-sm"><ShieldAlert size={16} aria-hidden className="text-amber-600" />Discard unsaved changes?</DialogTitle>
             <DialogDescription>Your edits to this task will be lost. This cannot be undone.</DialogDescription>
           </DialogHeader>
           <DialogFooter>

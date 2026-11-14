@@ -86,9 +86,9 @@ function formatCapacity(gb: number): string {
 
 /** Threshold colours for a usage percentage. */
 function usageTone(usage: number): { bar: string } {
-  if (usage >= 85) return { bar: "bg-[#F87171]" };
-  if (usage >= 70) return { bar: "bg-[#FBBF24]" };
-  return { bar: "bg-[#60A5FA]" };
+  if (usage >= 85) return { bar: "bg-red-400" };
+  if (usage >= 70) return { bar: "bg-amber-400" };
+  return { bar: "bg-blue-400" };
 }
 
 /** Soft tint pill tone for a latency value in milliseconds. */
@@ -100,22 +100,22 @@ function latencyTone(latency: number): string {
 
 /** Distinct muted colours so every server gets its own bar colour. */
 const serverPalette = [
-  "bg-[#60A5FA]",
-  "bg-[#34D399]",
-  "bg-[#FBBF24]",
-  "bg-[#A78BFA]",
-  "bg-[#22D3EE]",
-  "bg-[#F87171]",
-  "bg-[#F472B6]",
-  "bg-[#84CC16]",
-  "bg-[#FB923C]",
-  "bg-[#38BDF8]",
-  "bg-[#4ADE80]",
-  "bg-[#94A3B8]",
-  "bg-[#C084FC]",
-  "bg-[#2DD4BF]",
-  "bg-[#FDE047]",
-  "bg-[#818CF8]",
+  "bg-blue-400",
+  "bg-emerald-400",
+  "bg-amber-400",
+  "bg-violet-400",
+  "bg-cyan-400",
+  "bg-red-400",
+  "bg-pink-400",
+  "bg-lime-500",
+  "bg-orange-400",
+  "bg-sky-400",
+  "bg-green-400",
+  "bg-slate-400",
+  "bg-purple-400",
+  "bg-teal-400",
+  "bg-yellow-300",
+  "bg-indigo-400",
 ];
 
 /** Stable server -> colour map so the same server keeps its colour everywhere. */
@@ -224,11 +224,11 @@ function DiskChartTooltip({ active, payload, label, lines }: {
 }) {
   if (!active || !payload?.length) return null;
   return <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
-    <div className="mb-1.5 text-[12px] font-semibold text-foreground">{label}</div>
+    <div className="mb-1.5 text-[0.75rem] font-semibold text-foreground">{label}</div>
     <div className="space-y-1">{payload.map((entry) => {
       const series = lines.find((item) => item.key === entry.dataKey);
       if (!series) return null;
-      return <div key={series.key} className="flex items-center justify-between gap-5 whitespace-nowrap text-[12px]">
+      return <div key={series.key} className="flex items-center justify-between gap-5 whitespace-nowrap text-[0.75rem]">
         <span className="flex items-center gap-1.5 text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: series.color }} />{series.name}</span>
         <b className="tabular-nums text-foreground">{Number(entry.value ?? 0).toFixed(series.unit === "%" ? 1 : 0)} {series.unit}</b>
       </div>;
@@ -296,16 +296,16 @@ function TrendChart({
   const barTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) => Math.round(maxY * ratio));
 
   return <div className="flex min-h-0 flex-1 flex-col gap-2">
-    <div className="flex h-[54px] min-h-[54px] flex-wrap content-start items-start gap-x-2 gap-y-1.5 overflow-visible">
+    <div className="flex h-[3.375rem] min-h-[3.375rem] flex-wrap content-start items-start gap-x-2 gap-y-1.5 overflow-visible">
       {lines.map((line) => {
         const isOn = enabled.includes(line.key);
         const latest = Number(visibleData.at(-1)?.[line.key] ?? 0);
-        return <button key={line.key} title={isOn ? `Hide ${line.name}` : "Click to show"} aria-pressed={isOn} onClick={() => setEnabled((current) => isOn ? current.filter((key) => key !== line.key) : [...current, line.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[12px] font-medium ${isOn ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: isOn ? line.color : "#94a3b8" }} />{line.name}<b className="tabular-nums">{latest.toFixed(line.unit === "%" ? 1 : 0)} {line.unit}</b></button>;
+        return <button key={line.key} title={isOn ? `Hide ${line.name}` : "Click to show"} aria-pressed={isOn} onClick={() => setEnabled((current) => isOn ? current.filter((key) => key !== line.key) : [...current, line.key])} className={`inline-flex h-6 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[0.75rem] font-medium ${isOn ? "border-border bg-background text-foreground" : "border-transparent bg-muted text-muted-foreground line-through"}`}><i className="h-2 w-2 rounded-full" style={{ backgroundColor: isOn ? line.color : "#94a3b8" }} />{line.name}<b className="tabular-nums">{latest.toFixed(line.unit === "%" ? 1 : 0)} {line.unit}</b></button>;
       })}
     </div>
-    <div ref={chartRef} data-chart-id={id} className="relative min-h-[220px] flex-1" aria-label={`${id} chart, latest point ${latestTime ?? ""}`}>
-      {unitTitle && <span className="absolute left-10 top-0 z-10 text-[10px] font-medium text-muted-foreground">{unitTitle}</span>}
-      {kind === "stacked" && <span className="pointer-events-none absolute right-5 top-[15%] z-10 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-500 dark:border-red-900/60 dark:bg-red-950/50 dark:text-red-300">Capacity warning</span>}
+    <div ref={chartRef} data-chart-id={id} className="relative min-h-[13.75rem] flex-1" aria-label={`${id} chart, latest point ${latestTime ?? ""}`}>
+      {unitTitle && <span className="absolute left-10 top-0 z-10 text-[0.625rem] font-medium text-muted-foreground">{unitTitle}</span>}
+      {kind === "stacked" && <span className="pointer-events-none absolute right-5 top-[15%] z-10 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[0.625rem] font-semibold text-red-500 dark:border-red-900/60 dark:bg-red-950/50 dark:text-red-300">Capacity warning</span>}
       <ResponsiveContainer width="100%" height="100%">
         {kind === "bar" ? <BarChart data={visibleData} syncId="disk-storage-trends" syncMethod="value" barGap={3} barCategoryGap="20%" margin={{ top: 18, right: 16, left: 2, bottom: 0 }}>
           <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" vertical /><XAxis dataKey="time" ticks={ticks} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} padding={{ left: 4, right: 16 }} /><YAxis domain={[0, maxY]} ticks={barTicks} tickFormatter={(value) => value === 0 ? "0" : `${(value / 1000).toFixed(value % 1000 ? 1 : 0)}K`} width={36} tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} axisLine={false} tickLine={false} /><Tooltip cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "4 4" }} content={<DiskChartTooltip lines={lines} />} />{activeLines.map((line) => <Bar key={line.key} dataKey={line.key} name={line.name} fill={line.color} radius={[3, 3, 0, 0]} maxBarSize={12} />)}
@@ -318,7 +318,7 @@ function TrendChart({
         </AreaChart>}
       </ResponsiveContainer>
     </div>
-    <div className="flex h-10 min-h-10 flex-wrap content-center items-center justify-center gap-x-2 gap-y-0 text-[12px] leading-5 text-muted-foreground">
+    <div className="flex h-10 min-h-10 flex-wrap content-center items-center justify-center gap-x-2 gap-y-0 text-[0.75rem] leading-5 text-muted-foreground">
       {[...summary, ...(kind === "area" && peak ? [{ label: "Peak", value: `${peak.value.toFixed(1)} MB/s · ${peak.time}` }] : [])].map((item, index) => <span key={item.label} className="whitespace-nowrap">{index > 0 && <span className="mr-2 text-muted-foreground/60">·</span>}{item.label} <b className={item.tone ?? "text-foreground"}>{item.value}</b></span>)}
     </div>
   </div>;
@@ -334,13 +334,13 @@ function ChartActions({ range, setRange, aggregation, setAggregation, exportPng,
   toast: (message: string) => void;
 }) {
   return <div className="flex shrink-0 items-center gap-1">
-    <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">{["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setRange(item)} aria-pressed={range === item} className={`rounded px-1.5 py-1 text-[10px] font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>
+    <div className="flex items-center rounded-md border border-border p-0.5" aria-label="Chart time range">{["1H", "6H", "12H", "24H"].map((item) => <button key={item} onClick={() => setRange(item)} aria-pressed={range === item} className={`rounded px-1.5 py-1 text-[0.625rem] font-semibold ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>
     <details className="relative"><summary aria-label="Chart options" className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-accent"><MoreVertical size={15} /></summary><div className="absolute right-0 top-8 z-30 w-40 rounded-lg border border-border bg-popover p-1 shadow-lg">
-      <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Aggregation · {aggregation}</div>
-      {["Average", "Max", "Min"].map((option) => <button key={option} onClick={() => { setAggregation(option); toast(`${option} aggregation selected.`); }} className="w-full rounded px-2.5 py-1.5 text-left text-[11px] text-foreground hover:bg-accent">{option}</button>)}
+      <div className="px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Aggregation · {aggregation}</div>
+      {["Average", "Max", "Min"].map((option) => <button key={option} onClick={() => { setAggregation(option); toast(`${option} aggregation selected.`); }} className="w-full rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent">{option}</button>)}
       <div className="my-1 border-t border-border" />
-      <button onClick={exportPng} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[11px] text-foreground hover:bg-accent"><Download size={13} />Export PNG</button>
-      <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[11px] text-foreground hover:bg-accent"><Download size={13} />Export CSV</button>
+      <button onClick={exportPng} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export PNG</button>
+      <button onClick={exportCsv} className="flex w-full items-center gap-2 rounded px-2.5 py-1.5 text-left text-[0.6875rem] text-foreground hover:bg-accent"><Download size={13} />Export CSV</button>
     </div></details>
   </div>;
 }
@@ -348,7 +348,7 @@ function ChartActions({ range, setRange, aggregation, setAggregation, exportPng,
 function StorageDonut() {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-between gap-2 py-2">
-      <div className="relative h-[150px] w-[150px] shrink-0">
+      <div className="relative h-[9.375rem] w-[9.375rem] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={storageSlices} dataKey="value" nameKey="name" innerRadius="72%" outerRadius="94%" paddingAngle={1} stroke="none">
@@ -357,11 +357,11 @@ function StorageDonut() {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <b className="font-display text-[20px] font-extrabold leading-tight tabular-nums text-foreground">{totalStorageTB.toFixed(2)}</b>
-          <span className="text-[12px] text-muted-foreground">TB · Total</span>
+          <b className="font-display text-[1.25rem] font-extrabold leading-tight tabular-nums text-foreground">{totalStorageTB.toFixed(2)}</b>
+          <span className="text-[0.75rem] text-muted-foreground">TB · Total</span>
         </div>
       </div>
-      <div className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 gap-y-1.5 text-[12px]">
+      <div className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 gap-y-1.5 text-[0.75rem]">
         {storageSlices.map((item) => <div key={item.name} className="contents">
           <span className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</span>
           <span className="whitespace-nowrap text-right tabular-nums text-muted-foreground">{item.value.toFixed(2)} TB</span>
@@ -375,13 +375,13 @@ function StorageDonut() {
 function DistributionDonut({ data, total }: { data: typeof usageBands | typeof fileSystems; total: number }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center gap-3 pt-2">
-      <div className="relative h-[150px] w-[150px] shrink-0">
+      <div className="relative h-[9.375rem] w-[9.375rem] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart><Pie data={data} dataKey="value" innerRadius="72%" outerRadius="94%" paddingAngle={1} stroke="none">{data.map((item) => <Cell key={item.name} fill={item.color} />)}</Pie></PieChart>
         </ResponsiveContainer>
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[24px] font-extrabold leading-tight tabular-nums text-foreground">{total}</b><span className="text-[12px] text-muted-foreground">Total</span></div>
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><b className="font-display text-[1.5rem] font-extrabold leading-tight tabular-nums text-foreground">{total}</b><span className="text-[0.75rem] text-muted-foreground">Total</span></div>
       </div>
-      <div className="grid w-full grid-cols-[minmax(0,1fr)_40px_52px] items-center gap-x-3 gap-y-2 text-[12px]">
+      <div className="grid w-full grid-cols-[minmax(0,1fr)_40px_3.25rem] items-center gap-x-3 gap-y-2 text-[0.75rem]">
         {data.map((item) => <div key={item.name} className="contents">
           <span className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</span>
           <b className="whitespace-nowrap text-right tabular-nums text-foreground">{item.value}</b>
@@ -401,14 +401,14 @@ function SortHeader({ label, sortKey, activeKey, direction, onSort, align = "lef
 }) {
   const isActive = activeKey === sortKey;
   return (
-    <th scope="col" className={cn("whitespace-nowrap px-1 pb-1.5 text-[11px] font-medium text-[#64748B] dark:text-slate-400", align === "right" && "text-right")}>
+    <th scope="col" className={cn("whitespace-nowrap px-1 pb-1.5 text-[0.6875rem] font-medium text-slate-500 dark:text-slate-400", align === "right" && "text-right")}>
       <button
         type="button"
         onClick={() => onSort(sortKey)}
         aria-label={`Sort by ${label}`}
         className={cn(
-          "inline-flex items-center gap-1 whitespace-nowrap rounded transition-colors hover:text-[#1E293B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-slate-100",
-          isActive && "text-[#1E293B] dark:text-slate-100",
+          "inline-flex items-center gap-1 whitespace-nowrap rounded transition-colors hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-slate-100",
+          isActive && "text-slate-800 dark:text-slate-100",
         )}
       >
         {label}
@@ -423,7 +423,7 @@ function TableFooter({ page, pageCount, onPageChange }: {
   page: number; pageCount: number; onPageChange: (page: number) => void;
 }) {
   return (
-    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-[#F1F5F9] pt-2.5 text-[12px] text-[#64748B] dark:border-border dark:text-slate-400">
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2.5 text-[0.75rem] text-slate-500 dark:border-border dark:text-slate-400">
       <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
         <button
           type="button"
@@ -475,8 +475,8 @@ function UsageCell({ usage }: { usage: number }) {
   const tone = usageTone(usage);
   return (
     <span className="flex items-center justify-end gap-2 whitespace-nowrap">
-      <b className="font-medium tabular-nums text-[#1E293B] dark:text-slate-100">{usage.toFixed(1)}%</b>
-      <span className="h-[5px] w-[100px] shrink-0 overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-white/10">
+      <b className="font-medium tabular-nums text-slate-800 dark:text-slate-100">{usage.toFixed(1)}%</b>
+      <span className="h-[0.3125rem] w-[6.25rem] shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
         <span className={cn("block h-full rounded-full", tone.bar)} style={{ width: `${Math.min(usage, 100)}%` }} />
       </span>
     </span>
@@ -488,9 +488,9 @@ function DualIoBar({ read, write }: { read: number; write: number }) {
   const total = read + write;
   const readShare = total ? (read / total) * 100 : 50;
   return (
-    <span className="mt-1 flex h-[4px] w-[100px] shrink-0 overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-white/10">
-      <span className="block h-full bg-[#60A5FA]" style={{ width: `${readShare}%` }} />
-      <span className="block h-full bg-[#34D399]" style={{ width: `${100 - readShare}%` }} />
+    <span className="mt-1 flex h-[0.25rem] w-[6.25rem] shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+      <span className="block h-full bg-blue-400" style={{ width: `${readShare}%` }} />
+      <span className="block h-full bg-emerald-400" style={{ width: `${100 - readShare}%` }} />
     </span>
   );
 }
@@ -498,7 +498,7 @@ function DualIoBar({ read, write }: { read: number; write: number }) {
 /** Soft tint pill showing the I/O latency. */
 function LatencyBadge({ latency }: { latency: number }) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[12px] font-semibold tabular-nums", latencyTone(latency))}>
+    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[0.75rem] font-semibold tabular-nums", latencyTone(latency))}>
       {latency} ms
     </span>
   );
@@ -511,14 +511,14 @@ function TopDiskBars({ items, throughput = false }: { items: { name: string; usa
       <div className="flex min-h-0 flex-1 flex-col justify-between">
         {items.map((item) => {
           const value = item.usage ?? item.value ?? 0;
-          return <div key={item.name} className="grid h-8 grid-cols-[minmax(88px,110px)_minmax(16px,1fr)_80px] items-center gap-1.5 text-[12px]">
+          return <div key={item.name} className="grid h-8 grid-cols-[minmax(5.5rem,6.875rem)_minmax(1rem,1fr)_5rem] items-center gap-1.5 text-[0.75rem]">
             <span title={item.name} className="min-w-0 truncate whitespace-nowrap text-foreground">{item.name}</span>
-            <div className="h-[7px] min-w-0 rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: `${max ? value / max * 100 : 0}%` }} /></div>
-            <b className="w-[80px] whitespace-nowrap text-right tabular-nums text-foreground">{throughput ? item.label : `${item.usage}%`}</b>
+            <div className="h-[0.4375rem] min-w-0 rounded-full bg-muted"><div className={`h-full rounded-full ${item.color}`} style={{ width: `${max ? value / max * 100 : 0}%` }} /></div>
+            <b className="w-[5rem] whitespace-nowrap text-right tabular-nums text-foreground">{throughput ? item.label : `${item.usage}%`}</b>
           </div>;
         })}
       </div>
-      <div className="mt-2 border-t border-border pt-2 text-[12px] text-muted-foreground">Showing {items.length} of {TOTAL_SERVERS} servers</div>
+      <div className="mt-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Showing {items.length} of {TOTAL_SERVERS} servers</div>
     </div>
   );
 }
@@ -624,47 +624,47 @@ export function DiskStorageDashboard() {
       <PageMeta breadcrumbs={["Monitoring", "Disk & Storage"]} showRefresh={false} variant="detail" />
       <PageHeading title="Disk & Storage" description="Monitor disk usage, storage performance, and I/O metrics across your infrastructure in real-time." actionsAlign="top" variant="detail">
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Download size={15} />Export CSV</Button>
-          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[12px]"><Plus size={15} />Add Widget</Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Download size={15} />Export CSV</Button>
+          <Button size="sm" onClick={() => toast("Add Widget is a mockup action.")} className="h-9 gap-1.5 whitespace-nowrap px-3 text-[0.75rem]"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeading>
 
       <section aria-label="Storage summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[100px]" labelClassName="text-[12px] leading-4" valueClassName="text-[24px] leading-7" trendClassName="text-[11px] leading-4" />)}
+        {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.25rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}
       </section>
 
       <section aria-label="Storage trends" className="grid items-stretch gap-2.5 xl:grid-cols-3">
-        <Panel title="Disk Usage Over Time" className="h-[360px] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("disk-usage-trend")} exportCsv={() => exportChartCsv("disk-usage-trend", diskUsageHistory, [{ key: "used", name: "Used", color: "#2878ed", unit: "%" }, { key: "other", name: "Other", color: "#f39a12", unit: "%" }, { key: "free", name: "Free", color: "#35b879", unit: "%" }])} toast={toast} />}>
+        <Panel title="Disk Usage Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("disk-usage-trend")} exportCsv={() => exportChartCsv("disk-usage-trend", diskUsageHistory, [{ key: "used", name: "Used", color: "#2878ed", unit: "%" }, { key: "other", name: "Other", color: "#f39a12", unit: "%" }, { key: "free", name: "Free", color: "#35b879", unit: "%" }])} toast={toast} />}>
           <TrendChart id="disk-usage-trend" data={diskUsageHistory} lines={[{ key: "used", name: "Used", color: "#2878ed", unit: "%" }, { key: "other", name: "Other", color: "#f39a12", unit: "%" }, { key: "free", name: "Free", color: "#35b879", unit: "%" }]} kind="stacked" range={chartRange} aggregation={aggregation} summary={[{ label: "Used", value: `${diskUsagePercent.toFixed(1)}%` }, { label: "Trend vs yesterday", value: "▲ 0.4%", tone: "text-success" }, { label: "Forecast", value: `Full in ~${Math.round((100 - diskUsagePercent) / 1.02)} days` }]} onToast={toast} />
         </Panel>
-        <Panel title="I/O Throughput Over Time" className="h-[360px] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("io-throughput-trend")} exportCsv={() => exportChartCsv("io-throughput-trend", throughputHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "MB/s" }, { key: "write", name: "Write", color: "#35b879", unit: "MB/s" }])} toast={toast} />}>
+        <Panel title="I/O Throughput Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("io-throughput-trend")} exportCsv={() => exportChartCsv("io-throughput-trend", throughputHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "MB/s" }, { key: "write", name: "Write", color: "#35b879", unit: "MB/s" }])} toast={toast} />}>
           <TrendChart id="io-throughput-trend" data={throughputHistory} lines={[{ key: "read", name: "Read", color: "#2878ed", unit: "MB/s" }, { key: "write", name: "Write", color: "#35b879", unit: "MB/s" }]} kind="area" range={chartRange} aggregation={aggregation} unitTitle="MB/s" summary={[{ label: "Avg Read", value: `${averageOf(throughputReadValues).toFixed(1)} MB/s` }, { label: "Avg Write", value: `${averageOf(throughputWriteValues).toFixed(1)} MB/s` }]} onToast={toast} />
         </Panel>
-        <Panel title="IOPS Over Time" className="h-[360px] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("iops-trend")} exportCsv={() => exportChartCsv("iops-trend", iopsHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "IOPS" }, { key: "write", name: "Write", color: "#35b879", unit: "IOPS" }])} toast={toast} />}>
+        <Panel title="IOPS Over Time" className="h-[22.5rem] min-w-0" showOptions={false} action={<ChartActions range={chartRange} setRange={setChartRange} aggregation={aggregation} setAggregation={setAggregation} exportPng={() => exportChartPng("iops-trend")} exportCsv={() => exportChartCsv("iops-trend", iopsHistory, [{ key: "read", name: "Read", color: "#2878ed", unit: "IOPS" }, { key: "write", name: "Write", color: "#35b879", unit: "IOPS" }])} toast={toast} />}>
           <TrendChart id="iops-trend" data={iopsHistory} lines={[{ key: "read", name: "Read", color: "#2878ed", unit: "IOPS" }, { key: "write", name: "Write", color: "#35b879", unit: "IOPS" }]} kind="bar" range={chartRange} aggregation={aggregation} summary={[{ label: "Avg IOPS", value: `${Math.round(averageOf(iopsValues)).toLocaleString()}` }, { label: "Peak IOPS", value: `${Math.max(...iopsValues).toLocaleString()}` }]} onToast={toast} />
         </Panel>
       </section>
 
       <section aria-label="Disk details" className="grid items-stretch gap-2.5 xl:grid-cols-[1.14fr_1.04fr_0.82fr] 2xl:grid-cols-[1.45fr_1.25fr_0.62fr]">
-        <Panel title="Top Disks by Usage" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all disks by usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Disks by Usage" className="flex h-full min-w-0 flex-col" action={<button onClick={() => toast("Showing all disks by usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto 2xl:overflow-visible">
-              <table className="w-full min-w-[520px] table-fixed text-left text-[12px]">
+              <table className="w-full min-w-[32.5rem] table-fixed text-left text-[0.75rem]">
                 <colgroup><col style={{ width: "30%" }} /><col style={{ width: "14%" }} /><col style={{ width: 130 }} /><col /></colgroup>
-                <thead><tr className="border-b border-[#F1F5F9] dark:border-border">
+                <thead><tr className="border-b border-slate-100 dark:border-border">
                   <SortHeader label="Server / Mount" sortKey="server" activeKey={usageSort.key} direction={usageSort.direction} onSort={sortUsage} />
                   <SortHeader label="Filesystem" sortKey="filesystem" activeKey={usageSort.key} direction={usageSort.direction} onSort={sortUsage} />
                   <SortHeader label="Used / Capacity" sortKey="used" activeKey={usageSort.key} direction={usageSort.direction} onSort={sortUsage} align="right" />
                   <SortHeader label="Usage" sortKey="usage" activeKey={usageSort.key} direction={usageSort.direction} onSort={sortUsage} />
                 </tr></thead>
                 <tbody>{visibleUsageRows.map((disk) => (
-                  <tr key={`${disk.server}-${disk.mount}`} className="h-10 border-b border-[#F1F5F9] transition-colors hover:bg-[#F8FAFC] dark:border-border dark:hover:bg-white/5">
+                  <tr key={`${disk.server}-${disk.mount}`} className="h-10 border-b border-slate-100 transition-colors hover:bg-slate-50 dark:border-border dark:hover:bg-white/5">
                     <td className="px-1 py-1">
-                      <div className="truncate text-[13px] font-medium text-[#1E293B] transition-colors hover:text-primary hover:underline dark:text-slate-100">{disk.server}</div>
-                      <div className="truncate text-[12px] text-[#64748B] dark:text-slate-400">{disk.mount}</div>
+                      <div className="truncate text-[0.8125rem] font-medium text-slate-800 transition-colors hover:text-primary hover:underline dark:text-slate-100">{disk.server}</div>
+                      <div className="truncate text-[0.75rem] text-slate-500 dark:text-slate-400">{disk.mount}</div>
                     </td>
-                    <td className="px-1 py-1"><span className="rounded bg-[#E2E8F0] px-1.5 py-0.5 text-[10px] font-medium text-[#475569] dark:bg-slate-700 dark:text-slate-200">{disk.filesystem}</span></td>
-                    <td className="whitespace-nowrap px-1 py-1 text-right font-medium tabular-nums text-[#1E293B] dark:text-slate-100">{disk.usedGB.toFixed(1)} / {formatCapacity(disk.capacityGB)}</td>
+                    <td className="px-1 py-1"><span className="rounded bg-slate-200 px-1.5 py-0.5 text-[0.625rem] font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-200">{disk.filesystem}</span></td>
+                    <td className="whitespace-nowrap px-1 py-1 text-right font-medium tabular-nums text-slate-800 dark:text-slate-100">{disk.usedGB.toFixed(1)} / {formatCapacity(disk.capacityGB)}</td>
                     <td className="whitespace-nowrap py-1 pl-3 pr-1"><UsageCell usage={disk.usage} /></td>
                   </tr>
                 ))}</tbody>
@@ -678,28 +678,28 @@ export function DiskStorageDashboard() {
           </div>
         </Panel>
 
-        <Panel title="Top Disks by I/O Activity" className="flex h-full min-w-0 flex-col" optionsButtonClassName="focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-1 focus-visible:ring-offset-card" action={<button onClick={() => toast("Showing all disks by I/O activity.")} className="mr-1.5 inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Top Disks by I/O Activity" className="flex h-full min-w-0 flex-col" optionsButtonClassName="focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-1 focus-visible:ring-offset-card" action={<button onClick={() => toast("Showing all disks by I/O activity.")} className="mr-1.5 inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="flex min-h-0 flex-1 flex-col pt-1">
             <div className="min-h-0 flex-1 overflow-auto 2xl:overflow-visible">
-              <table className="w-full min-w-[440px] table-fixed text-left text-[12px]">
+              <table className="w-full min-w-[27.5rem] table-fixed text-left text-[0.75rem]">
                 <colgroup><col style={{ width: "30%" }} /><col style={{ width: "34%" }} /><col style={{ width: "18%" }} /><col style={{ width: "18%" }} /></colgroup>
-                <thead><tr className="border-b border-[#F1F5F9] dark:border-border">
+                <thead><tr className="border-b border-slate-100 dark:border-border">
                   <SortHeader label="Server / Disk" sortKey="server" activeKey={ioSort.key} direction={ioSort.direction} onSort={sortIo} />
                   <SortHeader label="Read / Write" sortKey="read" activeKey={ioSort.key} direction={ioSort.direction} onSort={sortIo} />
                   <SortHeader label="IOPS" sortKey="iops" activeKey={ioSort.key} direction={ioSort.direction} onSort={sortIo} align="right" />
                   <SortHeader label="Latency" sortKey="latency" activeKey={ioSort.key} direction={ioSort.direction} onSort={sortIo} align="right" />
                 </tr></thead>
                 <tbody>{visibleIoRows.map((disk) => (
-                  <tr key={`${disk.server}-${disk.device}`} className="h-10 border-b border-[#F1F5F9] transition-colors hover:bg-[#F8FAFC] dark:border-border dark:hover:bg-white/5">
+                  <tr key={`${disk.server}-${disk.device}`} className="h-10 border-b border-slate-100 transition-colors hover:bg-slate-50 dark:border-border dark:hover:bg-white/5">
                     <td className="px-1 py-1">
-                      <div className="truncate text-[13px] font-medium text-[#1E293B] transition-colors hover:text-primary hover:underline dark:text-slate-100">{disk.server}</div>
-                      <div className="truncate text-[12px] text-[#64748B] dark:text-slate-400">{disk.device}</div>
+                      <div className="truncate text-[0.8125rem] font-medium text-slate-800 transition-colors hover:text-primary hover:underline dark:text-slate-100">{disk.server}</div>
+                      <div className="truncate text-[0.75rem] text-slate-500 dark:text-slate-400">{disk.device}</div>
                     </td>
                     <td className="px-1 py-1">
-                      <div className="whitespace-nowrap font-medium tabular-nums text-[#1E293B] dark:text-slate-100">{disk.read.toFixed(1)} / {disk.write.toFixed(1)} MB/s</div>
+                      <div className="whitespace-nowrap font-medium tabular-nums text-slate-800 dark:text-slate-100">{disk.read.toFixed(1)} / {disk.write.toFixed(1)} MB/s</div>
                       <DualIoBar read={disk.read} write={disk.write} />
                     </td>
-                    <td className="whitespace-nowrap px-1 py-1 text-right font-medium tabular-nums text-[#1E293B] dark:text-slate-100">{disk.iopsK}K</td>
+                    <td className="whitespace-nowrap px-1 py-1 text-right font-medium tabular-nums text-slate-800 dark:text-slate-100">{disk.iopsK}K</td>
                     <td className="px-1 py-1 text-right"><LatencyBadge latency={disk.latency} /></td>
                   </tr>
                 ))}</tbody>
@@ -721,32 +721,32 @@ export function DiskStorageDashboard() {
               { label: "Total Partitions", value: totalPartitions.toLocaleString() },
               { label: "Total File Systems", value: totalFileSystems.toLocaleString() },
             ].map(({ label, value }) => <div key={label} className="min-w-0 rounded-lg bg-[#F8F9FB] p-2.5 dark:bg-slate-800/70">
-              <div className="text-[12px] leading-tight text-muted-foreground">{label}</div>
-              <b className="mt-1 block text-[16px] font-bold tabular-nums text-foreground">{value}</b>
+              <div className="text-[0.75rem] leading-tight text-muted-foreground">{label}</div>
+              <b className="mt-1 block text-[1rem] font-bold tabular-nums text-foreground">{value}</b>
             </div>)}
           </div>
-          <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Updated 2m ago</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Updated 2m ago</div>
         </Panel>
       </section>
 
       <section aria-label="Storage breakdown and alerts" className="grid items-stretch gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
         <Panel title="Disk Usage Distribution" className="flex h-full min-w-0 flex-col p-4"><DistributionDonut data={usageBands} total={TOTAL_DISKS} /></Panel>
         <Panel title="File System Distribution" className="flex h-full min-w-0 flex-col p-4"><DistributionDonut data={fileSystems} total={totalFileSystems} /></Panel>
-        <Panel title="Disk Usage by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by disk usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topDiskUsage} /></Panel>
-        <Panel title="I/O by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by I/O throughput.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topThroughput} throughput /></Panel>
-        <Panel title="Recent Alerts" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all disk alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
+        <Panel title="Disk Usage by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by disk usage.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topDiskUsage} /></Panel>
+        <Panel title="I/O by Server" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all servers by I/O throughput.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}><TopDiskBars items={topThroughput} throughput /></Panel>
+        <Panel title="Recent Alerts" className="flex h-full min-w-0 flex-col p-4" action={<button onClick={() => toast("Showing all disk alerts.")} className="inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary">View All <ArrowRight size={14} strokeWidth={2.5} aria-hidden="true" /></button>}>
           <div className="min-h-0 flex-1 space-y-2.5 overflow-y-auto pt-2">
-            {alerts.map((alert) => <div key={alert.text} className="grid min-h-7 grid-cols-[8px_minmax(0,1fr)_56px] items-center gap-1 text-[12px]">
+            {alerts.map((alert) => <div key={alert.text} className="grid min-h-7 grid-cols-[8px_minmax(0,1fr)_3.5rem] items-center gap-1 text-[0.75rem]">
               <i aria-label={`${alert.tone} alert`} className="h-2 w-2 rounded-full" style={{ backgroundColor: alert.color }} />
               <span title={alert.text} className="truncate font-medium text-foreground">{alert.text}</span>
-              <span className="w-[56px] whitespace-nowrap text-right tabular-nums text-muted-foreground">{alert.ago}</span>
+              <span className="w-[3.5rem] whitespace-nowrap text-right tabular-nums text-muted-foreground">{alert.ago}</span>
             </div>)}
           </div>
-          <div className="mt-auto border-t border-border pt-2 text-[12px] text-muted-foreground">Showing {alerts.length} of {TOTAL_ALERTS} alerts</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Showing {alerts.length} of {TOTAL_ALERTS} alerts</div>
         </Panel>
       </section>
 
-      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[12px] text-foreground shadow-lg">{notice}</div>}
+      {notice && <div role="status" className="fixed bottom-4 right-4 z-[1100] rounded-lg border border-border bg-card px-3 py-2 text-[0.75rem] text-foreground shadow-lg">{notice}</div>}
     </div>
   );
 }

@@ -18,12 +18,12 @@ function TierCard({ policy, jobs, views, onEdit }: { policy: Policy; jobs: Backu
   const assessable = enabled.length;
   const pct = assessable > 0 ? Math.round((met / assessable) * 100) : null;
   const assetCount = new Set(tierJobs.map((job) => job.host)).size;
-  const complianceTone = pct == null ? "text-muted-foreground" : pct >= 90 ? "text-[#16A34A] dark:text-emerald-400" : pct >= 70 ? "text-[#D97706] dark:text-amber-400" : "text-[#DC2626] dark:text-red-400";
+  const complianceTone = pct == null ? "text-muted-foreground" : pct >= 90 ? "text-green-600 dark:text-emerald-400" : pct >= 70 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400";
 
   return (
     <ChartCard
       title={`${policy.tier} tier`}
-      className="h-full min-h-[260px] p-4"
+      className="h-full min-h-[16.25rem] p-4"
       actions={(
         <Badge variant="outline" className={cn("h-6 border-transparent px-2 text-xs font-semibold", policy.tier === "Critical" ? "bg-orange-50 text-orange-700 dark:bg-orange-500/10 dark:text-orange-300" : "bg-slate-100 text-slate-600 dark:bg-slate-500/15 dark:text-slate-300")}>
           {policy.id === "POL-critical" ? "default · critical" : "default · standard"}
@@ -39,7 +39,7 @@ function TierCard({ policy, jobs, views, onEdit }: { policy: Policy; jobs: Backu
         ].map((item) => (
           <div key={item.label} className="rounded-lg bg-muted/50 px-3 py-2">
             <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{item.label}</dt>
-            <dd className="mt-1 font-display text-[15px] font-bold tabular-nums text-foreground">{item.value}</dd>
+            <dd className="mt-1 font-display text-[0.9375rem] font-bold tabular-nums text-foreground">{item.value}</dd>
           </div>
         ))}
       </dl>
@@ -50,7 +50,7 @@ function TierCard({ policy, jobs, views, onEdit }: { policy: Policy; jobs: Backu
         <span><b className={cn("tabular-nums", complianceTone)}>{pct == null ? "—" : `${pct}%`}</b> in RPO</span>
       </div>
       <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={met} aria-valuemin={0} aria-valuemax={assessable} aria-label={`${policy.tier} tier RPO compliance`}>
-        <div className={cn("h-full rounded-full", pct == null ? "bg-muted" : pct >= 90 ? "bg-[#16A34A]" : pct >= 70 ? "bg-[#D97706]" : "bg-[#DC2626]")} style={{ width: `${pct ?? 0}%` }} />
+        <div className={cn("h-full rounded-full", pct == null ? "bg-muted" : pct >= 90 ? "bg-green-600" : pct >= 70 ? "bg-amber-600" : "bg-red-600")} style={{ width: `${pct ?? 0}%` }} />
       </div>
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3">

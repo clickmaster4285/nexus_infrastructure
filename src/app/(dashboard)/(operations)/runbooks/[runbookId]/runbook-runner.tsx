@@ -127,7 +127,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
 
   if (!runbook) {
     return (
-      <div className="mx-auto grid min-h-[320px] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
+      <div className="mx-auto grid min-h-[20rem] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
         <div>
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
@@ -249,14 +249,14 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
           <p className="mt-0.5 text-sm text-muted-foreground">{runbook.title} · {runbook.id}</p>
           <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
             {[{ label: "Duration", value: formatDurationMs(durationMs) }, { label: "Steps done", value: `${doneStepIds.length}/${steps.length}` }, { label: "Notes", value: String(totalNoteCount) }].map((tile) => (
-              <div key={tile.label} className="rounded-lg bg-muted/50 p-3"><dt className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</dt><dd className="mt-1 font-display text-lg font-extrabold tabular-nums text-foreground">{tile.value}</dd></div>
+              <div key={tile.label} className="rounded-lg bg-muted/50 p-3"><dt className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</dt><dd className="mt-1 font-display text-lg font-extrabold tabular-nums text-foreground">{tile.value}</dd></div>
             ))}
           </dl>
           <fieldset className="mt-4 text-left">
             <legend className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Result</legend>
             <div className="mt-1.5 flex gap-2" role="radiogroup" aria-label="Execution result">
               {(["Completed", "Failed", "Aborted"] as RunbookExecutionResult[]).map((option) => (
-                <button key={option} type="button" role="radio" aria-checked={result === option} onClick={() => setResult(option)} className={cn("h-9 flex-1 rounded-lg border text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", result === option ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-accent")}>{option}</button>
+                <button key={option} type="button" role="radio" aria-checked={result === option} onClick={() => setResult(option)} className={cn("h-9 flex-1 rounded-lg border text-[0.8125rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", result === option ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-accent")}>{option}</button>
               ))}
             </div>
           </fieldset>
@@ -279,7 +279,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
             <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100} aria-label="Run progress"><div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${progressPct}%` }} /></div>
           </div>
           <label className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">Link to incident
-            <select aria-label="Link to incident" value={incidentId ?? ""} onChange={(event) => setIncidentId(event.target.value || null)} className="h-9 max-w-[180px] rounded-lg border border-border bg-card px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <select aria-label="Link to incident" value={incidentId ?? ""} onChange={(event) => setIncidentId(event.target.value || null)} className="h-9 max-w-[11.25rem] rounded-lg border border-border bg-card px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <option value="">No incident</option>
               {incidents.map((incident) => <option key={incident.id} value={incident.id}>{incident.id} — {incident.title.slice(0, 40)}</option>)}
             </select>
@@ -330,7 +330,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                       className={cn("flex w-56 items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-full", state === "done" ? "border-border bg-muted/40 text-muted-foreground" : state === "current" ? "border-primary bg-primary/5 text-foreground ring-1 ring-primary" : "border-border bg-card text-muted-foreground hover:bg-accent")}
                     >
                       <Icon size={14} aria-hidden className={cn("shrink-0", state === "done" && "text-emerald-600 dark:text-emerald-400", state === "current" && "text-primary")} />
-                      <span className="min-w-0"><span className="block truncate font-semibold">{index + 1}. {step.title}</span><span className="mt-0.5 block text-[11px] tabular-nums">{step.type} · {step.estimatedMinutes}m</span></span>
+                      <span className="min-w-0"><span className="block truncate font-semibold">{index + 1}. {step.title}</span><span className="mt-0.5 block text-[0.6875rem] tabular-nums">{step.type} · {step.estimatedMinutes}m</span></span>
                     </button>
                   </li>
                 );
@@ -350,12 +350,12 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                 <p className="mt-2 text-sm leading-snug text-foreground/90">{currentStep.description}</p>
                 {currentStep.command && (
                   <div className="relative mt-2">
-                    <pre className="overflow-x-auto rounded-lg border border-border bg-[#0F172A] p-3 font-mono text-[12px] leading-relaxed text-slate-100"><code>{currentStep.command}</code></pre>
+                    <pre className="overflow-x-auto rounded-lg border border-border bg-slate-900 p-3 font-mono text-[0.75rem] leading-relaxed text-slate-100"><code>{currentStep.command}</code></pre>
                     <button type="button" aria-label="Copy command" className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-md border border-border/60 bg-card/80 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { try { void navigator.clipboard?.writeText(currentStep.command!).then(() => showToast("Command copied."), () => showToast("Copy failed.")); } catch { showToast("Clipboard unavailable."); } }}><Clipboard size={13} aria-hidden /></button>
-                    {currentStep.expectedOutput && <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{currentStep.expectedOutput}</p>}
+                    {currentStep.expectedOutput && <p className="mt-1.5 text-[0.6875rem] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{currentStep.expectedOutput}</p>}
                   </div>
                 )}
-                {!currentStep.command && currentStep.expectedOutput && <p className="mt-2 text-[11px] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{currentStep.expectedOutput}</p>}
+                {!currentStep.command && currentStep.expectedOutput && <p className="mt-2 text-[0.6875rem] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{currentStep.expectedOutput}</p>}
 
                 {/* Warning acknowledgement */}
                 {isWarningStep && (
@@ -367,7 +367,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
 
                 {/* Automated step action */}
                 {currentStep.type === "Automated" && (
-                  <button type="button" className="mt-3 inline-flex h-9 items-center gap-1.5 rounded-lg border border-violet-300 bg-violet-50 px-3 text-[13px] font-semibold text-violet-800 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-200" onClick={() => runAutomatedStep(currentStep)}>
+                  <button type="button" className="mt-3 inline-flex h-9 items-center gap-1.5 rounded-lg border border-violet-300 bg-violet-50 px-3 text-[0.8125rem] font-semibold text-violet-800 transition-colors hover:bg-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-200" onClick={() => runAutomatedStep(currentStep)}>
                     <Terminal size={15} aria-hidden />Run step
                   </button>
                 )}
@@ -389,18 +389,18 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                     <input id="run-note" value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") addNote(); }} className="h-9 min-w-0 flex-1 rounded-lg border border-border bg-card px-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Observation for the run log..." />
                     <Button variant="outline" className="h-9 shrink-0 gap-1 rounded-lg px-3 text-xs" onClick={addNote}><NotebookPen size={13} aria-hidden />Add</Button>
                   </div>
-                  {notes.length > 0 && <ul className="mt-2 space-y-1 text-[11px] text-muted-foreground">{notes.slice(-3).map((note, index) => <li key={`${note.at}-${index}`} className="truncate"><span className="font-semibold text-foreground/70">[{note.stepId}]</span> {note.text}</li>)}</ul>}
+                  {notes.length > 0 && <ul className="mt-2 space-y-1 text-[0.6875rem] text-muted-foreground">{notes.slice(-3).map((note, index) => <li key={`${note.at}-${index}`} className="truncate"><span className="font-semibold text-foreground/70">[{note.stepId}]</span> {note.text}</li>)}</ul>}
                 </div>
 
                 {/* Action bar */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                  <Button variant="ghost" className="h-9 rounded-lg px-3 text-[13px] text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skip…</Button>
-                  <button type="button" className="inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => showToast("Issue reported to the runbook owner (mock).")}>Report issue</button>
+                  <Button variant="ghost" className="h-9 rounded-lg px-3 text-[0.8125rem] text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skip…</Button>
+                  <button type="button" className="inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => showToast("Issue reported to the runbook owner (mock).")}>Report issue</button>
                   <div className="ml-auto flex items-center gap-2">
                     {currentIndex < steps.length - 1 ? (
-                      <Button className="h-9 gap-1 rounded-lg px-4 text-[13px] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => completeStep(currentStep.id)}>Mark complete<CheckCircle2 size={15} aria-hidden /></Button>
+                      <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => completeStep(currentStep.id)}>Mark complete<CheckCircle2 size={15} aria-hidden /></Button>
                     ) : (
-                      <Button className="h-9 gap-1 rounded-lg px-4 text-[13px] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => { completeStep(currentStep.id); finishRun(); }}>Finish<Flag size={15} aria-hidden /></Button>
+                      <Button className="h-9 gap-1 rounded-lg px-4 text-[0.8125rem] font-semibold" disabled={isWarningStep && !acknowledgedCurrent} onClick={() => { completeStep(currentStep.id); finishRun(); }}>Finish<Flag size={15} aria-hidden /></Button>
                     )}
                   </div>
                 </div>
@@ -419,37 +419,37 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
 
       {/* Exit warning dialog */}
       <Dialog open={exitDialog} onOpenChange={setExitDialog}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))] rounded-xl p-5">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Leave the run?</DialogTitle>
-            <DialogDescription className="text-[12px]">Your progress on {runbook.id} will be saved on this device. You can resume later from this page.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">Your progress on {runbook.id} will be saved on this device. You can resume later from this page.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setExitDialog(false)}>Keep running</Button>
-            <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={saveAndExit}>Save &amp; exit</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setExitDialog(false)}>Keep running</Button>
+            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={saveAndExit}>Save &amp; exit</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Automated step confirm dialog */}
       <Dialog open={automateStep != null} onOpenChange={(open) => { if (!open && !automateRunning) { setAutomateStep(null); setAutomateOutput([]); } }}>
-        <DialogContent className="w-[min(520px,calc(100vw-2rem))] rounded-xl p-5">
+        <DialogContent className="w-[min(32.5rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Run automated step?</DialogTitle>
-            <DialogDescription className="text-[12px]"><code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">{automateStep?.command ?? automateStep?.title}</code> will run on <b>{runbook.services[0] ?? "unknown-host"}</b>. Admin permission: <b>{MOCK_ADMIN_PERMISSION ? "granted (mock)" : "denied"}</b>. In production this executes via the backend with a full audit trail.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]"><code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.6875rem]">{automateStep?.command ?? automateStep?.title}</code> will run on <b>{runbook.services[0] ?? "unknown-host"}</b>. Admin permission: <b>{MOCK_ADMIN_PERMISSION ? "granted (mock)" : "denied"}</b>. In production this executes via the backend with a full audit trail.</DialogDescription>
           </DialogHeader>
           {automateOutput.length > 0 && (
-            <pre className="max-h-48 overflow-y-auto rounded-lg border border-border bg-[#0F172A] p-2.5 font-mono text-[11px] leading-relaxed text-emerald-300" aria-live="polite">{automateOutput.join("\n")}</pre>
+            <pre className="max-h-48 overflow-y-auto rounded-lg border border-border bg-slate-900 p-2.5 font-mono text-[0.6875rem] leading-relaxed text-emerald-300" aria-live="polite">{automateOutput.join("\n")}</pre>
           )}
           <DialogFooter className="gap-2">
             {!automateRunning && automateOutput.length === 0 && (
               <>
-                <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => { setAutomateStep(null); setAutomateOutput([]); }}>Cancel</Button>
-                <Button className="h-9 gap-1.5 rounded-lg px-4 text-[13px] font-semibold" onClick={confirmAutomatedRun}><Play size={14} aria-hidden />Run now</Button>
+                <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => { setAutomateStep(null); setAutomateOutput([]); }}>Cancel</Button>
+                <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={confirmAutomatedRun}><Play size={14} aria-hidden />Run now</Button>
               </>
             )}
             {automateOutput.length > 0 && !automateRunning && (
-              <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => { if (automateStep) completeStep(automateStep.id); setAutomateStep(null); setAutomateOutput([]); }}>Done</Button>
+              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => { if (automateStep) completeStep(automateStep.id); setAutomateStep(null); setAutomateOutput([]); }}>Done</Button>
             )}
           </DialogFooter>
         </DialogContent>
@@ -466,7 +466,7 @@ function RollbackChecklistItem({ step, index, onToast }: { step: RunbookStep; in
     <li className={cn("rounded-lg border p-3", checked ? "border-emerald-300 bg-emerald-50/50 dark:border-emerald-500/20 dark:bg-emerald-500/5" : "border-border")}>
       <label className="flex cursor-pointer items-start gap-2">
         <input type="checkbox" checked={checked} onChange={(event) => { setChecked(event.target.checked); if (event.target.checked) onToast(`Rollback step ${index + 1} marked done.`); }} className="mt-0.5 h-4 w-4 accent-[#16A34A]" />
-        <span className="min-w-0"><span className="block text-[13px] font-semibold text-foreground">{index + 1}. {step.title}</span><span className="mt-0.5 block text-xs text-muted-foreground">{step.description}</span>{step.command && <pre className="mt-1.5 overflow-x-auto rounded border border-border bg-[#0F172A] p-2 font-mono text-[11px] text-slate-100"><code>{step.command}</code></pre>}</span>
+        <span className="min-w-0"><span className="block text-[0.8125rem] font-semibold text-foreground">{index + 1}. {step.title}</span><span className="mt-0.5 block text-xs text-muted-foreground">{step.description}</span>{step.command && <pre className="mt-1.5 overflow-x-auto rounded border border-border bg-slate-900 p-2 font-mono text-[0.6875rem] text-slate-100"><code>{step.command}</code></pre>}</span>
       </label>
     </li>
   );

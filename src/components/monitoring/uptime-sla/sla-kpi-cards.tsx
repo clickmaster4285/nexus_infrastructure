@@ -112,7 +112,7 @@ export function SlaStatusBadge({ summary }: { summary: SlaSummary }) {
       ? { label: summary.statusLabel, className: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300", Icon: AlertTriangle }
       : { label: summary.statusLabel, className: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300", Icon: AlertTriangle };
   return (
-    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-semibold", meta.className)}>
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.75rem] font-semibold", meta.className)}>
       <meta.Icon size={13} aria-hidden="true" />{meta.label}
     </span>
   );

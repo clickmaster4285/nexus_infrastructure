@@ -61,7 +61,7 @@ const RANGE_LABEL: Record<TasksRange, string> = {
   Custom: "Custom",
 };
 
-/** MW-style filter bar: status chips row + controls row (36px controls) + active-filter chips. */
+/** MW-style filter bar: status chips row + controls row (2.25rem controls) + active-filter chips. */
 export function TasksFilters({
   filters, onChange, onReset, tabCounts, totalCount, resultCount, compact, onCompactChange,
   savedViews, onSaveView, onApplyView, onDeleteView,
@@ -125,7 +125,7 @@ export function TasksFilters({
 
       {/* Row 2 - search, filters, range, saved views, reset, compact */}
       <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-2">
-        <div className="relative w-full sm:w-auto sm:min-w-[220px] sm:max-w-xs sm:flex-1">
+        <div className="relative w-full sm:w-auto sm:min-w-[13.75rem] sm:max-w-xs sm:flex-1">
           <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
             ref={searchRef}
@@ -133,47 +133,47 @@ export function TasksFilters({
             onChange={(event) => onChange({ query: event.target.value })}
             placeholder="Search tasks, owners, hosts…"
             aria-label="Search tasks"
-            className="h-9 pl-9 pr-10 text-[13px]"
+            className="h-9 pl-9 pr-10 text-[0.8125rem]"
           />
-          <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">/</kbd>
+          <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground">/</kbd>
         </div>
 
         <MultiSelect label="Type" options={TYPE_OPTIONS} selected={filters.types} onChange={(types) => onChange({ types: types as TaskType[] })} width={120} />
         <MultiSelect label="Target group" options={GROUP_OPTIONS} selected={filters.groups} onChange={(groups) => onChange({ groups })} width={160} />
         <MultiSelect label="Owner" options={OWNER_OPTIONS} selected={filters.owners} onChange={(owners) => onChange({ owners })} width={130} />
 
-        <SegmentedControl value={filters.range} options={RANGE_OPTIONS} onChange={(value) => onChange({ range: value as TasksRange })} buttonClassName="h-8 px-2.5 text-[13px]" />
+        <SegmentedControl value={filters.range} options={RANGE_OPTIONS} onChange={(value) => onChange({ range: value as TasksRange })} buttonClassName="h-8 px-2.5 text-[0.8125rem]" />
         {filters.range === "Custom" && (
           <span className="flex items-center gap-1.5">
-            <Input type="date" value={filters.customFrom} onChange={(event) => onChange({ customFrom: event.target.value })} className="h-9 w-[145px] text-[13px]" aria-label="From date" />
+            <Input type="date" value={filters.customFrom} onChange={(event) => onChange({ customFrom: event.target.value })} className="h-9 w-[9.0625rem] text-[0.8125rem]" aria-label="From date" />
             <span className="text-muted-foreground">-</span>
-            <Input type="date" value={filters.customTo} onChange={(event) => onChange({ customTo: event.target.value })} className="h-9 w-[145px] text-[13px]" aria-label="To date" />
+            <Input type="date" value={filters.customTo} onChange={(event) => onChange({ customTo: event.target.value })} className="h-9 w-[9.0625rem] text-[0.8125rem]" aria-label="To date" />
           </span>
         )}
 
         <div className="ml-auto flex items-center gap-2">
           <div ref={viewsRef} className="relative">
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[13px]" onClick={() => setViewsOpen((value) => !value)} aria-haspopup="true" aria-expanded={viewsOpen}>
+            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setViewsOpen((value) => !value)} aria-haspopup="true" aria-expanded={viewsOpen}>
               <ListFilter size={14} aria-hidden="true" />Saved Views<ChevronDown size={13} aria-hidden="true" className="text-muted-foreground" />
             </Button>
             {viewsOpen && (
-              <div role="menu" aria-label="Saved views" className="motion-menu-in absolute right-0 top-10 z-40 w-64 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
-                <p className="px-2 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Presets</p>
+              <div role="menu" aria-label="Saved views" className="motion-menu-in absolute right-0 top-10 z-40 w-64 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
+                <p className="px-2 pb-1 pt-1.5 text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Presets</p>
                 {PRESET_VIEWS.map((view) => (
-                  <button key={view.name} type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="flex h-8 w-full items-center rounded-md px-2 text-left text-[13px] text-foreground transition-colors hover:bg-[#F3F4F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-accent">
+                  <button key={view.name} type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="flex h-8 w-full items-center rounded-md px-2 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-accent">
                     {view.name}
                   </button>
                 ))}
                 {savedViews.length > 0 && (
                   <>
                     <div className="mx-2 my-1 border-t border-border/70" />
-                    <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">My views</p>
+                    <p className="px-2 pb-1 pt-1 text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">My views</p>
                     {savedViews.map((view) => (
-                      <div key={view.name} className="group flex h-8 w-full items-center rounded-md transition-colors hover:bg-[#F3F4F6] dark:hover:bg-accent">
-                        <button type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="h-full min-w-0 flex-1 truncate px-2 text-left text-[13px] text-foreground focus-visible:outline-none">
+                      <div key={view.name} className="group flex h-8 w-full items-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-accent">
+                        <button type="button" onClick={() => { onApplyView(view); setViewsOpen(false); }} className="h-full min-w-0 flex-1 truncate px-2 text-left text-[0.8125rem] text-foreground focus-visible:outline-none">
                           {view.name}
                         </button>
-                        <button type="button" onClick={() => onDeleteView(view.name)} aria-label={`Delete view ${view.name}`} className="mr-1 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-[#DC2626] focus-visible:opacity-100 focus-visible:outline-none group-hover:opacity-100">
+                        <button type="button" onClick={() => onDeleteView(view.name)} aria-label={`Delete view ${view.name}`} className="mr-1 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-red-600 focus-visible:opacity-100 focus-visible:outline-none group-hover:opacity-100">
                           <Trash2 size={13} aria-hidden="true" />
                         </button>
                       </div>
@@ -197,7 +197,7 @@ export function TasksFilters({
                     onChange={(event) => setSaveName(event.target.value)}
                     placeholder="Save current view…"
                     aria-label="Save current view as"
-                    className="h-8 min-w-0 flex-1 rounded-md border border-input bg-card px-2 text-[12px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="h-8 min-w-0 flex-1 rounded-md border border-input bg-card px-2 text-[0.75rem] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                   <button type="submit" disabled={!saveName.trim()} aria-label="Save view" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-40">
                     <Save size={14} aria-hidden="true" />
@@ -211,7 +211,7 @@ export function TasksFilters({
             <button
               type="button"
               onClick={onReset}
-              className="rounded text-[13px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="rounded text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Clear all<span className="ml-1 tabular-nums text-muted-foreground">({activeCount})</span>
             </button>
@@ -219,7 +219,7 @@ export function TasksFilters({
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-[13px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-[0.8125rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             title="Reset all filters"
           >
             <RotateCcw size={13} aria-hidden="true" />Reset
@@ -230,7 +230,7 @@ export function TasksFilters({
             aria-checked={compact}
             aria-label="Compact rows"
             onClick={() => onCompactChange(!compact)}
-            className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-[0.75rem] font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             title={compact ? "Switch to comfortable rows" : "Switch to compact rows"}
           >
             <ChevronRight size={13} aria-hidden="true" />Compact
@@ -241,19 +241,19 @@ export function TasksFilters({
       {/* Row 3 - active filter chips */}
       {activeCount > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2" aria-label="Active filters">
-          <span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
+          <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Active:</span>
           {activeChips.map((chip) => (
             <button
               key={chip.key}
               type="button"
               onClick={chip.onRemove}
               aria-label={`Remove filter ${chip.label}`}
-              className="inline-flex h-7 max-w-[260px] items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-7 max-w-[16.25rem] items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 text-[0.75rem] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="truncate">{chip.label}</span><X size={11} aria-hidden="true" />
             </button>
           ))}
-          <button type="button" onClick={onReset} className="rounded text-[12px] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear all</button>
+          <button type="button" onClick={onReset} className="rounded text-[0.75rem] font-semibold text-muted-foreground hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Clear all</button>
         </div>
       )}
     </div>

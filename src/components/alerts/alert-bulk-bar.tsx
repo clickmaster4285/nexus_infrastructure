@@ -35,34 +35,34 @@ export function AlertBulkBar({ count, onAcknowledge, onAssign, onSilence, onReso
       aria-label="Bulk actions"
       className="animate-fade-in flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2"
     >
-      <span className="text-[13px] font-semibold text-foreground">
+      <span className="text-[0.8125rem] font-semibold text-foreground">
         {count} selected
       </span>
       <span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
-      <Button size="sm" variant="outline" onClick={onAcknowledge} className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]">
+      <Button size="sm" variant="outline" onClick={onAcknowledge} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
         <CheckCircle2 size={13} aria-hidden="true" />Acknowledge
       </Button>
       <AlertMenu
         label="Assign selected alerts"
         submenuAlign="left"
         width={180}
-        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]"><UserPlus size={13} aria-hidden="true" />Assign</Button>}
+        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]"><UserPlus size={13} aria-hidden="true" />Assign</Button>}
         items={assignItems}
       />
       <AlertMenu
         label="Silence selected alerts"
         submenuAlign="left"
         width={150}
-        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]"><BellOff size={13} aria-hidden="true" />Silence</Button>}
+        trigger={<Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]"><BellOff size={13} aria-hidden="true" />Silence</Button>}
         items={silenceItems}
       />
-      <Button size="sm" variant="outline" onClick={onResolve} className="h-8 gap-1.5 rounded-lg px-2.5 text-[12px]">
+      <Button size="sm" variant="outline" onClick={onResolve} className="h-8 gap-1.5 rounded-lg px-2.5 text-[0.75rem]">
         <ShieldCheck size={13} aria-hidden="true" />Resolve
       </Button>
       <button
         type="button"
         onClick={onClear}
-        className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <X size={13} aria-hidden="true" />Clear
       </button>

@@ -238,7 +238,7 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
         role="dialog"
         aria-modal="true"
         aria-labelledby="backup-policy-title"
-        className="fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[560px]"
+        className="fixed inset-y-0 right-0 z-[1300] flex w-full flex-col border-l border-border bg-card shadow-2xl sm:max-w-[35rem]"
       >
         <header className="flex items-center gap-2 border-b border-border p-5">
           <div className="min-w-0">
@@ -318,7 +318,7 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
               <div className="mt-2 flex flex-wrap items-center gap-3">
                 <label className="flex items-center gap-2 text-xs text-muted-foreground">
                   At
-                  <Input type="time" value={time} onChange={(event) => setTime(event.target.value)} className="h-9 w-[120px] text-sm" aria-label="Backup time" />
+                  <Input type="time" value={time} onChange={(event) => setTime(event.target.value)} className="h-9 w-[7.5rem] text-sm" aria-label="Backup time" />
                 </label>
                 {kind === "weekly" && (
                   <div className="flex items-center gap-1" role="group" aria-label="Days of week">
@@ -350,21 +350,21 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
                   id="policy-cron"
                   value={cron}
                   onChange={(event) => setCron(event.target.value)}
-                  className={cn("mt-1 h-9 font-mono text-[13px]", cronError && "border-[#DC2626] focus-visible:ring-[#DC2626]/40")}
+                  className={cn("mt-1 h-9 font-mono text-[0.8125rem]", cronError && "border-red-600 focus-visible:ring-red-600/40")}
                   aria-invalid={Boolean(cronError)}
                   aria-describedby={cronError ? "policy-cron-error" : undefined}
                   spellCheck={false}
                   autoComplete="off"
                 />
                 {cronError
-                  ? <p id="policy-cron-error" className="mt-1 flex items-center gap-1 text-xs font-medium text-[#DC2626] dark:text-red-400"><AlertTriangle size={11} aria-hidden="true" />{cronError}</p>
+                  ? <p id="policy-cron-error" className="mt-1 flex items-center gap-1 text-xs font-medium text-red-600 dark:text-red-400"><AlertTriangle size={11} aria-hidden="true" />{cronError}</p>
                   : <p className="mt-1 text-xs text-muted-foreground">Five fields: minute hour day-of-month month day-of-week.</p>}
               </div>
             )}
             <label className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
               Timezone
               <Select value={timeZone} onValueChange={setTimeZone}>
-                <SelectTrigger className="h-9 w-[180px] text-xs" aria-label="Timezone"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 w-[11.25rem] text-xs" aria-label="Timezone"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {SCHEDULE_TIME_ZONES.map((zone) => <SelectItem key={zone} value={zone}>{zone}</SelectItem>)}
                 </SelectContent>
@@ -376,7 +376,7 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
                 {nextRunsPreview.length > 0
                   ? nextRunsPreview.map((ms) => (
                     <li key={ms} className="flex items-center gap-2">
-                      <CheckCircle2 size={11} aria-hidden="true" className="text-[#16A34A]" />
+                      <CheckCircle2 size={11} aria-hidden="true" className="text-green-600" />
                       {new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }).format(ms)}
                     </li>
                   ))
@@ -395,7 +395,7 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
           <section aria-label="Retention" className="mt-5">
             <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground"><Server size={11} aria-hidden="true" />Retention</h3>
             <label className="mt-1.5 block text-xs font-medium text-muted-foreground" htmlFor="policy-retention">Keep backups for (days)</label>
-            <Input id="policy-retention" type="number" min={1} max={3650} value={retentionDays} onChange={(event) => setRetentionDays(Number(event.target.value))} className="mt-1 h-9 w-[140px] text-sm" />
+            <Input id="policy-retention" type="number" min={1} max={3650} value={retentionDays} onChange={(event) => setRetentionDays(Number(event.target.value))} className="mt-1 h-9 w-[8.75rem] text-sm" />
             <p className="mt-1 text-xs text-muted-foreground">Oldest full backups beyond this window are pruned first; daily verification snapshots expire sooner.</p>
           </section>
 
@@ -428,7 +428,7 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
               })}
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-1 font-mono text-[11px] font-semibold text-foreground"><Lock size={11} aria-hidden="true" />AES-256 (managed)</span>
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-1 font-mono text-[0.6875rem] font-semibold text-foreground"><Lock size={11} aria-hidden="true" />AES-256 (managed)</span>
               <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
                 Immutability (WORM)
                 <ToggleSwitch checked={immutability} onChange={setImmutability} label="Toggle immutability" size="sm" />
@@ -469,16 +469,16 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
         </div>
 
         <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-border p-4">
-          <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={requestClose}>Cancel</Button>
+          <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={requestClose}>Cancel</Button>
           {mode === "create" ? (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => create(false)} disabled={Boolean(cronError) || !name.trim()}>Create paused</Button>
-              <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => create(true)} disabled={Boolean(cronError) || !name.trim()}>Create &amp; Enable</Button>
+              <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => create(false)} disabled={Boolean(cronError) || !name.trim()}>Create paused</Button>
+              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => create(true)} disabled={Boolean(cronError) || !name.trim()}>Create &amp; Enable</Button>
             </>
           ) : (
             <>
-              <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => save(false)} disabled={Boolean(cronError)}>Save</Button>
-              <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => save(true)} disabled={Boolean(cronError)}>Save &amp; Enable</Button>
+              <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => save(false)} disabled={Boolean(cronError)}>Save</Button>
+              <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => save(true)} disabled={Boolean(cronError)}>Save &amp; Enable</Button>
             </>
           )}
         </footer>
@@ -492,8 +492,8 @@ export function BackupPolicyDrawer({ job, mode = "edit", onClose, onSave, onCrea
             <DialogDescription>Your edits to this backup policy have not been saved. Closing now will lose them.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setConfirmDiscard(false)}>Keep editing</Button>
-            <Button className="h-9 rounded-lg bg-[#DC2626] px-4 text-[13px] font-semibold text-white hover:bg-[#B91C1C]" onClick={() => { setConfirmDiscard(false); onClose(); }}>Discard</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmDiscard(false)}>Keep editing</Button>
+            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={() => { setConfirmDiscard(false); onClose(); }}>Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

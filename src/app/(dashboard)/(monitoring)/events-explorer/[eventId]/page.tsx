@@ -79,7 +79,7 @@ export default function EventDetailPage() {
         <section className="grid place-items-center rounded-xl border border-border bg-card p-10 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="text-sm font-semibold text-foreground">We could not find <code className="font-mono">{params.eventId}</code></p>
-            <p className="text-[13px] text-muted-foreground">The event may have been purged from the retention window, or the link may be incorrect.</p>
+            <p className="text-[0.8125rem] text-muted-foreground">The event may have been purged from the retention window, or the link may be incorrect.</p>
             <Button asChild className="mt-1 h-9 rounded-lg px-4 text-sm">
               <Link href="/events-explorer"><ChevronLeft size={15} />Event Explorer</Link>
             </Button>
@@ -121,8 +121,8 @@ export default function EventDetailPage() {
       />
 
       <section className="grid items-stretch gap-4 xl:grid-cols-[1.6fr_1fr]">
-        <Panel title="Overview" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
-          <dl className="grid flex-1 grid-cols-[110px_minmax(0,1fr)] gap-y-2 pt-1 text-[13px]">
+        <Panel title="Overview" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
+          <dl className="grid flex-1 grid-cols-[110px_minmax(0,1fr)] gap-y-2 pt-1 text-[0.8125rem]">
             <dt className="text-muted-foreground">Event ID</dt><dd className="font-mono text-foreground">{event.id}</dd>
             <dt className="text-muted-foreground">Time</dt><dd className="tabular-nums text-foreground">{new Date(event.at).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</dd>
             <dt className="text-muted-foreground">Source</dt><dd className="text-foreground">{event.source}</dd>
@@ -137,27 +137,27 @@ export default function EventDetailPage() {
             {event.assignee && <><dt className="text-muted-foreground">Assignee</dt><dd className="text-foreground">{event.assignee}</dd></>}
           </dl>
           <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
-            <Link href="/logs-explorer" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-primary hover:underline"><FileText size={14} aria-hidden="true" />View in Logs</Link>
-            <button type="button" onClick={() => { void navigator.clipboard?.writeText(`${window.location.origin}/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied."); }} className="inline-flex items-center gap-1.5 text-[13px] font-medium text-primary hover:underline"><ClipboardCopy size={14} aria-hidden="true" />Copy link</button>
+            <Link href="/logs-explorer" className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><FileText size={14} aria-hidden="true" />View in Logs</Link>
+            <button type="button" onClick={() => { void navigator.clipboard?.writeText(`${window.location.origin}/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied."); }} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><ClipboardCopy size={14} aria-hidden="true" />Copy link</button>
           </div>
         </Panel>
 
         <div className="flex min-w-0 flex-col gap-4">
-          <Panel title="Description" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
-            <p className="pt-1 text-[13px] leading-6 text-foreground">{event.description}</p>
+          <Panel title="Description" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
+            <p className="pt-1 text-[0.8125rem] leading-6 text-foreground">{event.description}</p>
           </Panel>
-          <Panel title="Timeline" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold">
+          <Panel title="Timeline" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold">
             <ol className="flex flex-1 flex-col justify-between gap-3 pt-1" aria-label="Resolution timeline">
               {timelineSteps.map((step, index) => (
-                <li key={step.label} className="flex items-center gap-3 text-[13px]">
-                  <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-full border", step.done ? "border-emerald-300 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300" : "border-border bg-card text-muted-foreground")}>{step.done ? <CheckCircle2 size={14} aria-hidden="true" /> : <span className="text-[10px] font-bold">{index + 1}</span>}</span>
+                <li key={step.label} className="flex items-center gap-3 text-[0.8125rem]">
+                  <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-full border", step.done ? "border-emerald-300 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300" : "border-border bg-card text-muted-foreground")}>{step.done ? <CheckCircle2 size={14} aria-hidden="true" /> : <span className="text-[0.625rem] font-bold">{index + 1}</span>}</span>
                   <span className={cn("font-medium", step.done ? "text-foreground" : "text-muted-foreground")}>{step.label}</span>
-                  {step.time && <span className="ml-auto text-[12px] text-muted-foreground">{step.time}</span>}
+                  {step.time && <span className="ml-auto text-[0.75rem] text-muted-foreground">{step.time}</span>}
                 </li>
               ))}
             </ol>
             {currentStatus === "Resolved" && (
-              <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 text-[13px] font-semibold text-emerald-700 dark:text-emerald-300">
+              <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 text-[0.8125rem] font-semibold text-emerald-700 dark:text-emerald-300">
                 <CheckCircle2 size={16} aria-hidden="true" />Event resolved · MTTR {event.mttrMinutes ?? "—"}m
               </div>
             )}
@@ -165,7 +165,7 @@ export default function EventDetailPage() {
         </div>
       </section>
 
-      <Panel title="Related Events" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[16px] font-semibold" action={<Link href="/events-explorer" className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></Link>}>
+      <Panel title="Related Events" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<Link href="/events-explorer" className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></Link>}>
         <ul className="flex flex-1 flex-col divide-y divide-border/60 pt-1">
           {related.map((item) => {
             const RelatedStatusIcon = STATUS_META[item.status].icon;
@@ -173,15 +173,15 @@ export default function EventDetailPage() {
               <li key={item.id}>
                 <Link href={`/events-explorer/${item.id}`} className="grid h-11 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold", SEVERITY_BADGE[item.severity])}>{item.severity}</span>
-                  <span className="min-w-0 truncate text-[13px] text-foreground" title={item.message}>{item.message}</span>
+                  <span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={item.message}>{item.message}</span>
                   <span className={cn("inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-semibold", STATUS_META[item.status].className)}><RelatedStatusIcon size={11} aria-hidden="true" />{item.status}</span>
                 </Link>
               </li>
             );
           })}
-          {related.length === 0 && <li className="py-4 text-center text-[13px] text-muted-foreground">No related events in the current retention window.</li>}
+          {related.length === 0 && <li className="py-4 text-center text-[0.8125rem] text-muted-foreground">No related events in the current retention window.</li>}
         </ul>
-        <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[13px]">
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[0.8125rem]">
           <span>
             {previous ? <button type="button" onClick={() => router.push(`/events-explorer/${previous.id}`)} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"><ChevronLeft size={14} aria-hidden="true" />Previous event</button> : <span className="text-muted-foreground">First event</span>}
           </span>

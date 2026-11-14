@@ -105,7 +105,7 @@ function useNow(intervalMs: number): number {
 
 function activityMeta(type: string): { icon: LucideIcon; verb: string; tone: string } {
   switch (type) {
-    case "created": return { icon: Siren, verb: "declared", tone: "bg-red-100 text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" };
+    case "created": return { icon: Siren, verb: "declared", tone: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" };
     case "acknowledged": return { icon: CheckCheck, verb: "acknowledged", tone: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" };
     case "escalated": return { icon: ChevronsUp, verb: "escalated", tone: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" };
     case "resolved": return { icon: CheckCircle2, verb: "resolved", tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400" };
@@ -173,12 +173,12 @@ function downloadBlob(content: string, type: string, filename: string) {
 }
 
 const tooltipStyle = {
-  border: "1px solid var(--border)",
+  border: "0.0625rem solid var(--border)",
   borderRadius: 8,
   fontSize: 12,
   background: "var(--popover)",
   color: "var(--popover-foreground)",
-  boxShadow: "0 4px 14px rgba(20,40,71,0.07)",
+  boxShadow: "0 0.25rem 0.875rem rgba(20,40,71,0.07)",
 } as const;
 
 function TrendTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ dataKey?: string; value?: number }>; label?: string }) {
@@ -186,13 +186,13 @@ function TrendTooltip({ active, payload, label }: { active?: boolean; payload?: 
   const rows = payload.filter((entry) => typeof entry.value === "number" && entry.value > 0);
   if (!rows.length) return null;
   return (
-    <div style={tooltipStyle} className="min-w-[140px] px-3 py-2">
-      <p className="mb-1.5 text-[12px] font-semibold">{label}</p>
+    <div style={tooltipStyle} className="min-w-[8.75rem] px-3 py-2">
+      <p className="mb-1.5 text-[0.75rem] font-semibold">{label}</p>
       <div className="space-y-1">
         {rows.map((entry) => {
           const severity = entry.dataKey as IncidentSeverity;
           return (
-            <div key={severity} className="flex items-center justify-between gap-4 text-[12px]">
+            <div key={severity} className="flex items-center justify-between gap-4 text-[0.75rem]">
               <span className="flex items-center gap-1.5">
                 <i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: SEV_DOT[severity] }} />
                 {SEV_SHORT[severity]}
@@ -210,7 +210,7 @@ function DonutTooltip({ active, payload }: { active?: boolean; payload?: Array<{
   if (!active || !payload?.length) return null;
   const item = payload[0];
   return (
-    <div style={tooltipStyle} className="px-3 py-2 text-[12px]">
+    <div style={tooltipStyle} className="px-3 py-2 text-[0.75rem]">
       <p className="font-semibold">{item.name}</p>
       <p className="tabular-nums text-muted-foreground">{item.value} incidents ({item.payload?.pct?.toFixed(1)}%)</p>
     </div>
@@ -684,9 +684,9 @@ export function IncidentsDashboard() {
   const goToIncident = (id: string) => router.push(`/incidents/${id}`);
 
   const errorState = (
-    <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+    <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
       <div className="flex max-w-md flex-col items-center gap-2">
-        <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><TriangleAlert size={20} /></span>
+        <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
         <p className="font-display text-base font-bold text-foreground">Incidents could not be loaded</p>
         <p className="text-sm text-muted-foreground">The incident service failed to respond. Retry to reload the queue.</p>
         <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
@@ -697,14 +697,14 @@ export function IncidentsDashboard() {
   const skeletonState = (
     <>
       <section aria-busy="true" aria-label="Loading incident summary" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-        {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[104px] animate-pulse rounded-xl bg-muted" />)}
+        {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[6.5rem] animate-pulse rounded-xl bg-muted" />)}
       </section>
       <section aria-busy="true" className="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-12">
-        <div className="h-[320px] animate-pulse rounded-xl bg-muted md:col-span-2 xl:col-span-6" />
-        <div className="h-[320px] animate-pulse rounded-xl bg-muted xl:col-span-3" />
-        <div className="h-[320px] animate-pulse rounded-xl bg-muted xl:col-span-3" />
+        <div className="h-[20rem] animate-pulse rounded-xl bg-muted md:col-span-2 xl:col-span-6" />
+        <div className="h-[20rem] animate-pulse rounded-xl bg-muted xl:col-span-3" />
+        <div className="h-[20rem] animate-pulse rounded-xl bg-muted xl:col-span-3" />
       </section>
-      <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+      <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
     </>
   );
 
@@ -729,7 +729,7 @@ export function IncidentsDashboard() {
             />
             <Link
               href="/incidents/new"
-              className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#DC2626] px-4 text-sm font-semibold text-white shadow transition-colors hover:bg-[#B91C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white shadow transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <Siren size={15} aria-hidden="true" />Declare Incident
             </Link>
@@ -745,7 +745,7 @@ export function IncidentsDashboard() {
         <>
           {/* Active incidents banner */}
           {stats.open > 0 ? (
-            <div role="status" className="flex min-h-[44px] flex-wrap items-center justify-between gap-2 rounded-xl border border-red-200/80 bg-red-50 px-4 py-1.5 dark:border-red-500/25 dark:bg-red-500/10">
+            <div role="status" className="flex min-h-[2.75rem] flex-wrap items-center justify-between gap-2 rounded-xl border border-red-200/80 bg-red-50 px-4 py-1.5 dark:border-red-500/25 dark:bg-red-500/10">
               <p className="flex min-w-0 flex-wrap items-center gap-x-2 text-sm text-red-900 dark:text-red-200">
                 <Siren size={15} aria-hidden="true" className="shrink-0" />
                 <span className="font-semibold">{stats.open} active incident{stats.open === 1 ? "" : "s"}</span>
@@ -757,13 +757,13 @@ export function IncidentsDashboard() {
               <button
                 type="button"
                 onClick={viewActive}
-                className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-red-200 bg-white px-3 text-[13px] font-semibold text-red-800 shadow-sm transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/15 dark:text-red-200"
+                className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg border border-red-200 bg-white px-3 text-[0.8125rem] font-semibold text-red-800 shadow-sm transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/15 dark:text-red-200"
               >
                 View active<ChevronRight size={13} aria-hidden="true" />
               </button>
             </div>
           ) : (
-            <div role="status" className="flex min-h-[44px] items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50 px-4 py-1.5 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
+            <div role="status" className="flex min-h-[2.75rem] items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50 px-4 py-1.5 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
               <CheckCircle2 size={15} aria-hidden="true" />
               <span className="font-semibold">No active incidents</span>
               <span className="text-emerald-700/80 dark:text-emerald-300/80">— everything is within SLO right now.</span>
@@ -772,12 +772,12 @@ export function IncidentsDashboard() {
 
           {/* Stat cards */}
           <section aria-label="Incident key performance indicators" className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-3 xl:grid-cols-6">
-            <StatCard icon={<Siren size={20} aria-hidden="true" />} iconTone="bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]" label="Open Incidents" value={nfLocale(stats.open)} delta={2} deltaPercent="50.0%" goodDirection="down" className="h-full" />
+            <StatCard icon={<Siren size={20} aria-hidden="true" />} iconTone="bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" label="Open Incidents" value={nfLocale(stats.open)} delta={2} deltaPercent="50.0%" goodDirection="down" className="h-full" />
             <StatCard icon={<TriangleAlert size={20} aria-hidden="true" />} iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400" label="Critical (SEV1-2)" value={nfLocale(stats.criticalOpen)} delta={1} deltaPercent="33.3%" goodDirection="down" className="h-full" />
             <StatCard icon={<CheckCheck size={20} aria-hidden="true" />} iconTone="bg-[#e2f0ff] text-[#1379e8] dark:bg-[#17385c] dark:text-[#5fb0ff]" label="Acknowledged" value={nfLocale(stats.ackOpen)} delta={2} deltaPercent="66.7%" goodDirection="up" detail={`of ${stats.open} open`} className="h-full" />
             <StatCard icon={<Clock3 size={20} aria-hidden="true" />} iconTone="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300" label="MTTA" value={stats.mtta == null ? "—" : formatMinutes(stats.mtta)} delta={2} deltaPercent="20.0%" goodDirection="down" className="h-full" />
             <StatCard icon={<Timer size={20} aria-hidden="true" />} iconTone="bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300" label="MTTR" value={stats.mttr == null ? "—" : formatMinutes(stats.mttr)} delta={-24} deltaPercent="9.6%" goodDirection="down" className="h-full" />
-            <StatCard icon={<CheckCircle2 size={20} aria-hidden="true" />} iconTone="bg-[#dff7eb] text-[#16A34A] dark:bg-[#123a2a] dark:text-[#4fd69a]" label="Resolved (30d)" value={nfLocale(stats.resolved30d)} delta={6} deltaPercent="33.3%" goodDirection="up" className="h-full" />
+            <StatCard icon={<CheckCircle2 size={20} aria-hidden="true" />} iconTone="bg-[#dff7eb] text-green-600 dark:bg-[#123a2a] dark:text-[#4fd69a]" label="Resolved (30d)" value={nfLocale(stats.resolved30d)} delta={6} deltaPercent="33.3%" goodDirection="up" className="h-full" />
           </section>
 
           {/* Insights row 1: trend / severity donut / top services */}
@@ -799,7 +799,7 @@ export function IncidentsDashboard() {
                 </div>
               }
             >
-              <div className="h-[180px] w-full">
+              <div className="h-[11.25rem] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={trend} margin={{ top: 8, right: 16, left: 0, bottom: 0 }} barCategoryGap="28%">
                     <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -834,9 +834,9 @@ export function IncidentsDashboard() {
                 })}
               </div>
               <div className="mt-auto grid grid-cols-3 divide-x divide-border border-t border-border pt-3 text-center">
-                <div className="px-2"><p className="text-[12px] text-muted-foreground">Total</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendTotal}</p></div>
-                <div className="px-2"><p className="text-[12px] text-muted-foreground">Peak day</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendPeak.total > 0 ? trendPeak.total : "—"}<span className="ml-1 text-[12px] font-medium text-muted-foreground">{trendPeak.total > 0 ? trendPeak.label : ""}</span></p></div>
-                <div className="px-2"><p className="text-[12px] text-muted-foreground">Avg / day</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendAvg.toFixed(1)}</p></div>
+                <div className="px-2"><p className="text-[0.75rem] text-muted-foreground">Total</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendTotal}</p></div>
+                <div className="px-2"><p className="text-[0.75rem] text-muted-foreground">Peak day</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendPeak.total > 0 ? trendPeak.total : "—"}<span className="ml-1 text-[0.75rem] font-medium text-muted-foreground">{trendPeak.total > 0 ? trendPeak.label : ""}</span></p></div>
+                <div className="px-2"><p className="text-[0.75rem] text-muted-foreground">Avg / day</p><p className="font-display text-lg font-bold tabular-nums text-foreground">{trendAvg.toFixed(1)}</p></div>
               </div>
             </ChartCard>
 
@@ -855,7 +855,7 @@ export function IncidentsDashboard() {
               }
             >
               <div className="flex flex-1 items-center gap-4">
-                <div className="relative h-[130px] w-[130px] shrink-0" role="img" aria-label={`Severity distribution across ${incidents.length} incidents`}>
+                <div className="relative h-[8.125rem] w-[8.125rem] shrink-0" role="img" aria-label={`Severity distribution across ${incidents.length} incidents`}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie data={severityDonut} dataKey="value" nameKey="short" innerRadius={47} outerRadius={65} paddingAngle={2} strokeWidth={2}>
@@ -866,8 +866,8 @@ export function IncidentsDashboard() {
                   </ResponsiveContainer>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid place-items-center">
                     <div className="text-center">
-                      <p className="font-display text-[22px] font-bold leading-none tabular-nums text-foreground">{incidents.length}</p>
-                      <p className="mt-1 text-[12px] text-muted-foreground">Total</p>
+                      <p className="font-display text-[1.375rem] font-bold leading-none tabular-nums text-foreground">{incidents.length}</p>
+                      <p className="mt-1 text-[0.75rem] text-muted-foreground">Total</p>
                     </div>
                   </div>
                 </div>
@@ -886,8 +886,8 @@ export function IncidentsDashboard() {
                             active ? "border-primary bg-primary/5" : "border-transparent hover:bg-muted/60",
                           )}
                         >
-                          <span className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: entry.color }} />{entry.short}</span>
-                          <span className="text-[13px] font-bold tabular-nums text-foreground">{entry.value}<span className="ml-1 text-[12px] font-medium text-muted-foreground">{entry.pct.toFixed(1)}%</span></span>
+                          <span className="flex items-center gap-1.5 text-[0.75rem] font-semibold text-foreground"><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: entry.color }} />{entry.short}</span>
+                          <span className="text-[0.8125rem] font-bold tabular-nums text-foreground">{entry.value}<span className="ml-1 text-[0.75rem] font-medium text-muted-foreground">{entry.pct.toFixed(1)}%</span></span>
                         </button>
                       </li>
                     );
@@ -919,22 +919,22 @@ export function IncidentsDashboard() {
                       title={`Filter incidents by ${service}`}
                       aria-pressed={filters.service === service}
                       className={cn(
-                        "grid w-full grid-cols-[minmax(0,1fr)_minmax(56px,1.4fr)_2rem] items-center gap-2 rounded-lg px-1.5 py-[7px] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "grid w-full grid-cols-[minmax(0,1fr)_minmax(3.5rem,1.4fr)_2rem] items-center gap-2 rounded-lg px-1.5 py-[0.4375rem] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         filters.service === service ? "bg-primary/5 ring-1 ring-inset ring-primary/40" : "hover:bg-muted/60",
                       )}
                     >
                       <span className="flex min-w-0 items-center gap-2">
                         <TechLogo name={service} className="!h-6 !w-6 !rounded-md [&_svg]:!h-3.5 [&_svg]:!w-3.5" />
-                        <span className="truncate text-[13px] font-medium text-foreground">{service}</span>
+                        <span className="truncate text-[0.8125rem] font-medium text-foreground">{service}</span>
                       </span>
-                      <span aria-hidden="true" className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-[#3b82f6]" style={{ width: `${(count / maxServiceCount) * 100}%` }} /></span>
-                      <b className="text-right text-[13px] tabular-nums text-foreground">{count}</b>
+                      <span aria-hidden="true" className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${(count / maxServiceCount) * 100}%` }} /></span>
+                      <b className="text-right text-[0.8125rem] tabular-nums text-foreground">{count}</b>
                     </button>
                   </li>
                 ))}
               </ul>
               <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
-                <span className="text-[12px] text-muted-foreground">{topServices.length} of {INCIDENT_SERVICES.length} services</span>
+                <span className="text-[0.75rem] text-muted-foreground">{topServices.length} of {INCIDENT_SERVICES.length} services</span>
                 <ViewAllLink label="View all" onClick={() => setFilter("service", "all")} />
               </div>
             </ChartCard>
@@ -945,12 +945,12 @@ export function IncidentsDashboard() {
           <Panel
             title="Incidents"
             showOptions={false}
-            titleClassName="text-[16px] font-semibold"
+            titleClassName="text-[1rem] font-semibold"
             headerClassName="h-10"
             className="flex min-w-0 flex-col rounded-xl p-4"
             action={
               <div className="flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[12px] font-semibold text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-1 text-[0.75rem] font-semibold text-muted-foreground">
                   <SlidersHorizontal size={11} aria-hidden="true" />
                   {filtered.length} {filtered.length === 1 ? "incident" : "incidents"}
                 </span>
@@ -958,7 +958,7 @@ export function IncidentsDashboard() {
                   value={density === "default" ? "Default" : "Compact"}
                   options={["Default", "Compact"]}
                   onChange={(value) => setDensity(value === "Compact" ? "compact" : "default")}
-                  buttonClassName="h-7 px-2 text-[12px]"
+                  buttonClassName="h-7 px-2 text-[0.75rem]"
                 />
                 <AlertMenu
                   label="Table options"
@@ -1025,7 +1025,7 @@ export function IncidentsDashboard() {
               </button>
 
               <Select value={filters.service} onValueChange={(value) => setFilter("service", value)}>
-                <SelectTrigger className="h-9 w-[148px] text-sm" aria-label="Filter by service"><SelectValue placeholder="Service" /></SelectTrigger>
+                <SelectTrigger className="h-9 w-[9.25rem] text-sm" aria-label="Filter by service"><SelectValue placeholder="Service" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all" className="text-sm">All services</SelectItem>
                   {INCIDENT_SERVICES.map((service) => <SelectItem key={service} value={service} className="text-sm">{service}</SelectItem>)}
@@ -1033,7 +1033,7 @@ export function IncidentsDashboard() {
               </Select>
 
               <Select value={filters.team} onValueChange={(value) => setFilter("team", value)}>
-                <SelectTrigger className="h-9 w-[150px] text-sm" aria-label="Filter by team"><SelectValue placeholder="Team" /></SelectTrigger>
+                <SelectTrigger className="h-9 w-[9.375rem] text-sm" aria-label="Filter by team"><SelectValue placeholder="Team" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all" className="text-sm">All teams</SelectItem>
                   {INCIDENT_TEAMS.map((team) => <SelectItem key={team} value={team} className="text-sm">{team}</SelectItem>)}
@@ -1041,7 +1041,7 @@ export function IncidentsDashboard() {
               </Select>
 
               <Select value={filters.commander} onValueChange={(value) => setFilter("commander", value)}>
-                <SelectTrigger className="h-9 w-[158px] text-sm" aria-label="Filter by commander"><SelectValue placeholder="Commander" /></SelectTrigger>
+                <SelectTrigger className="h-9 w-[9.875rem] text-sm" aria-label="Filter by commander"><SelectValue placeholder="Commander" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all" className="text-sm">All commanders</SelectItem>
                   {INCIDENT_PEOPLE.map((person) => <SelectItem key={person} value={person} className="text-sm">{person}</SelectItem>)}
@@ -1052,13 +1052,13 @@ export function IncidentsDashboard() {
 
               {filters.range === "Custom" && (
                 <span className="flex items-center gap-1.5">
-                  <Input type="date" value={filters.customFrom} onChange={(event) => setFilter("customFrom", event.target.value)} aria-label="From date" className="h-9 w-[138px] text-sm" />
+                  <Input type="date" value={filters.customFrom} onChange={(event) => setFilter("customFrom", event.target.value)} aria-label="From date" className="h-9 w-[8.625rem] text-sm" />
                   <span className="text-sm text-muted-foreground">–</span>
-                  <Input type="date" value={filters.customTo} onChange={(event) => setFilter("customTo", event.target.value)} aria-label="To date" className="h-9 w-[138px] text-sm" />
+                  <Input type="date" value={filters.customTo} onChange={(event) => setFilter("customTo", event.target.value)} aria-label="To date" className="h-9 w-[8.625rem] text-sm" />
                 </span>
               )}
 
-              <div className="relative min-w-[190px] flex-1">
+              <div className="relative min-w-[11.875rem] flex-1">
                 <Search size={15} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   ref={searchRef}
@@ -1069,7 +1069,7 @@ export function IncidentsDashboard() {
                   aria-label="Search incidents"
                   className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-9 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
                 />
-                <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 grid h-5 w-5 -translate-y-1/2 place-items-center rounded border border-border bg-muted text-[12px] font-semibold text-muted-foreground">/</kbd>
+                <kbd aria-hidden="true" className="pointer-events-none absolute right-2.5 top-1/2 grid h-5 w-5 -translate-y-1/2 place-items-center rounded border border-border bg-muted text-[0.75rem] font-semibold text-muted-foreground">/</kbd>
               </div>
 
               <AlertMenu
@@ -1094,15 +1094,15 @@ export function IncidentsDashboard() {
 
             {/* Bulk actions bar */}
             {selectedIds.length > 0 && (
-              <div role="region" aria-label="Bulk actions" className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-[13px] text-foreground">
+              <div role="region" aria-label="Bulk actions" className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-[0.8125rem] text-foreground">
                 <b className="tabular-nums">{selectedIds.length} selected</b>
                 <span aria-hidden="true" className="text-muted-foreground">·</span>
-                <AlertMenu label="Bulk assign" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[13px]">Assign<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkAssignItems} />
-                <AlertMenu label="Bulk change status" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[13px]">Change status<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkStatusItems} />
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[13px]" onClick={() => bulkRun(resolve, "{n} incident(s) resolved.")}><CheckCircle2 size={13} aria-hidden="true" />Resolve</Button>
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[13px]" onClick={() => bulkAcknowledge()}><CheckCheck size={13} aria-hidden="true" />Acknowledge</Button>
-                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[13px]" onClick={() => exportRows("csv", sorted.filter((incident) => selectedIds.includes(incident.id)), "selected incidents")}><FileDown size={13} aria-hidden="true" />Export</Button>
-                <button type="button" onClick={() => setSelectedIds([])} className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 text-[13px] text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={13} aria-hidden="true" />Clear</button>
+                <AlertMenu label="Bulk assign" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[0.8125rem]">Assign<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkAssignItems} />
+                <AlertMenu label="Bulk change status" trigger={<Button variant="ghost" size="sm" className="h-8 gap-1 rounded-lg px-2 text-[0.8125rem]">Change status<ChevronDown size={12} aria-hidden="true" /></Button>} items={bulkStatusItems} />
+                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => bulkRun(resolve, "{n} incident(s) resolved.")}><CheckCircle2 size={13} aria-hidden="true" />Resolve</Button>
+                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => bulkAcknowledge()}><CheckCheck size={13} aria-hidden="true" />Acknowledge</Button>
+                <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-lg px-2 text-[0.8125rem]" onClick={() => exportRows("csv", sorted.filter((incident) => selectedIds.includes(incident.id)), "selected incidents")}><FileDown size={13} aria-hidden="true" />Export</Button>
+                <button type="button" onClick={() => setSelectedIds([])} className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 text-[0.8125rem] text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Clear selection"><X size={13} aria-hidden="true" />Clear</button>
               </div>
             )}
 
@@ -1110,16 +1110,16 @@ export function IncidentsDashboard() {
             {totalFiltered === 0 ? (
               <div className="flex flex-col items-center gap-2 py-14 text-center">
                 <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
-                <p className="font-display text-[15px] font-bold text-foreground">No incidents match your filters</p>
-                <p className="text-[13px] text-muted-foreground">Try widening the time range or clearing the filters.</p>
-                <Button variant="outline" size="sm" onClick={resetFilters} className="mt-1 h-9 rounded-lg px-3 text-[13px]">Reset filters</Button>
+                <p className="font-display text-[0.9375rem] font-bold text-foreground">No incidents match your filters</p>
+                <p className="text-[0.8125rem] text-muted-foreground">Try widening the time range or clearing the filters.</p>
+                <Button variant="outline" size="sm" onClick={resetFilters} className="mt-1 h-9 rounded-lg px-3 text-[0.8125rem]">Reset filters</Button>
               </div>
             ) : (
               <>
                 <div className="mt-3 overflow-x-auto">
-                  <table className="w-full min-w-[980px] text-left text-[13px]">
+                  <table className="w-full min-w-[61.25rem] text-left text-[0.8125rem]">
                     <thead>
-                      <tr className="border-b border-border text-[12px] text-muted-foreground">
+                      <tr className="border-b border-border text-[0.75rem] text-muted-foreground">
                         <th scope="col" className="w-10 px-2 pb-2.5">
                           <input ref={selectAllRef} type="checkbox" checked={allFilteredSelected} onChange={pageToggleAll} aria-label="Select all incidents on this page" className="h-4 w-4 accent-[#DC2626]" />
                         </th>
@@ -1136,7 +1136,7 @@ export function IncidentsDashboard() {
                         <th scope="col" className="pb-2.5 pr-3 font-medium" aria-sort={sortKey === "started" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
                           <div className="flex items-center gap-2">
                             <button type="button" onClick={() => sortBy("started")} className="inline-flex items-center gap-1 rounded font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Started{sortKey === "started" ? (sortDir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button>
-                            <SegmentedControl value={timeMode === "utc" ? "UTC" : "Local"} options={["UTC", "Local"]} onChange={(value) => setTimeMode(value === "UTC" ? "utc" : "local")} buttonClassName="h-7 px-2 text-[12px]" />
+                            <SegmentedControl value={timeMode === "utc" ? "UTC" : "Local"} options={["UTC", "Local"]} onChange={(value) => setTimeMode(value === "UTC" ? "utc" : "local")} buttonClassName="h-7 px-2 text-[0.75rem]" />
                           </div>
                         </th>
                         <th scope="col" className="hidden pb-2.5 pr-3 font-medium md:table-cell" aria-sort={sortKey === "duration" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
@@ -1173,21 +1173,21 @@ export function IncidentsDashboard() {
                               <input type="checkbox" checked={selected} onChange={(event) => selectIncident(incident.id, event.target.checked)} aria-label={`Select ${incident.id}`} className="h-4 w-4 accent-[#DC2626]" />
                             </td>
                             <td className="whitespace-nowrap pr-3">
-                              <Link href={`/incidents/${incident.id}`} className="font-mono text-[13px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{incident.id}</Link>
+                              <Link href={`/incidents/${incident.id}`} className="font-mono text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{incident.id}</Link>
                             </td>
-                            <td className="max-w-[330px] pr-3">
-                              <span className="block truncate text-[13px] font-semibold text-foreground" title={incident.title}><Highlight text={incident.title} query={filters.query} /></span>
-                              <span className="block truncate text-[12px] text-muted-foreground" title={incident.impact}><Highlight text={incident.impact} query={filters.query} /></span>
+                            <td className="max-w-[20.625rem] pr-3">
+                              <span className="block truncate text-[0.8125rem] font-semibold text-foreground" title={incident.title}><Highlight text={incident.title} query={filters.query} /></span>
+                              <span className="block truncate text-[0.75rem] text-muted-foreground" title={incident.impact}><Highlight text={incident.impact} query={filters.query} /></span>
                             </td>
                             <td className="whitespace-nowrap pr-3"><SeverityBadge severity={incident.severity} /></td>
                             <td className="whitespace-nowrap pr-3"><StatusBadge status={incident.status} /></td>
                             <td className="hidden pr-3 lg:table-cell" onClick={(event) => event.stopPropagation()}>
-                              <div className="flex max-w-[180px] flex-wrap items-center gap-1">
+                              <div className="flex max-w-[11.25rem] flex-wrap items-center gap-1">
                                 {incident.affectedServices.slice(0, 2).map((service) => (
-                                  <button key={service} type="button" onClick={() => setFilter("service", service)} title={`Filter by ${service}`} className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</button>
+                                  <button key={service} type="button" onClick={() => setFilter("service", service)} title={`Filter by ${service}`} className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</button>
                                 ))}
                                 {incident.affectedServices.length > 2 && (
-                                  <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground" title={incident.affectedServices.slice(2).join(", ")}>+{incident.affectedServices.length - 2}</span>
+                                  <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-medium text-muted-foreground" title={incident.affectedServices.slice(2).join(", ")}>+{incident.affectedServices.length - 2}</span>
                                 )}
                               </div>
                             </td>
@@ -1195,13 +1195,13 @@ export function IncidentsDashboard() {
                               <span className="flex items-center gap-2" title={`Commander: ${incident.commander}${incident.assignee ? ` · Assignee: ${incident.assignee}` : ""}`}>
                                 <InitialsAvatar name={incident.commander} size={24} />
                                 <span className="hidden min-w-0 xl:inline">
-                                  <span className="block max-w-[120px] truncate text-[13px] font-medium leading-tight text-foreground">{incident.commander}</span>
-                                  <span className="block max-w-[120px] truncate text-[12px] leading-tight text-muted-foreground">{incident.assignee ? `→ ${incident.assignee}` : "Unassigned"}</span>
+                                  <span className="block max-w-[7.5rem] truncate text-[0.8125rem] font-medium leading-tight text-foreground">{incident.commander}</span>
+                                  <span className="block max-w-[7.5rem] truncate text-[0.75rem] leading-tight text-muted-foreground">{incident.assignee ? `→ ${incident.assignee}` : "Unassigned"}</span>
                                 </span>
                               </span>
                             </td>
-                            <td className="whitespace-nowrap pr-3 text-[13px] text-foreground" title={fullTimestamp(Date.parse(incident.startedAt), timeMode === "utc")}>{timeAgo(Date.parse(incident.startedAt))}</td>
-                            <td className="hidden whitespace-nowrap pr-3 text-[13px] tabular-nums text-foreground md:table-cell" title={open ? "Live — incident still open" : `Resolved in ${formatMinutes(durationMinutes(incident))}`}>
+                            <td className="whitespace-nowrap pr-3 text-[0.8125rem] text-foreground" title={fullTimestamp(Date.parse(incident.startedAt), timeMode === "utc")}>{timeAgo(Date.parse(incident.startedAt))}</td>
+                            <td className="hidden whitespace-nowrap pr-3 text-[0.8125rem] tabular-nums text-foreground md:table-cell" title={open ? "Live — incident still open" : `Resolved in ${formatMinutes(durationMinutes(incident))}`}>
                               {formatMinutes(durationMinutes(incident, now))}
                               {open && <span className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle" aria-hidden="true" />}
                             </td>
@@ -1233,15 +1233,15 @@ export function IncidentsDashboard() {
                 </div>
 
                 {/* Pagination footer */}
-                <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[13px] text-muted-foreground">
+                <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-[0.8125rem] text-muted-foreground">
                   <p>
                     Showing <b className="font-semibold text-foreground">{pageStart}–{pageEnd}</b> of <b className="font-semibold text-foreground">{totalFiltered}</b> incident{totalFiltered === 1 ? "" : "s"}
                     <span className="hidden sm:inline"> · Times: {timeMode === "utc" ? "UTC" : tzLabel}</span>
                   </p>
                   <div className="flex flex-wrap items-center gap-1.5">
                     <Select value={String(pageSize)} onValueChange={(value) => { setPageSize(Number(value)); setPage(1); }}>
-                      <SelectTrigger className="h-8 w-[74px] text-[13px]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
-                      <SelectContent>{PAGE_SIZE_OPTIONS.map((size) => <SelectItem key={size} value={String(size)} className="text-[13px]">{size}</SelectItem>)}</SelectContent>
+                      <SelectTrigger className="h-8 w-[4.625rem] text-[0.8125rem]" aria-label="Rows per page"><SelectValue /></SelectTrigger>
+                      <SelectContent>{PAGE_SIZE_OPTIONS.map((size) => <SelectItem key={size} value={String(size)} className="text-[0.8125rem]">{size}</SelectItem>)}</SelectContent>
                     </Select>
                     <Button variant="outline" size="icon" className="h-8 w-8" disabled={clampedPage <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))} aria-label="Previous page"><ChevronLeft size={15} /></Button>
                     {pageNumbers.map((item, index) =>
@@ -1253,7 +1253,7 @@ export function IncidentsDashboard() {
                           aria-current={item === clampedPage ? "page" : undefined}
                           aria-label={`Page ${item}`}
                           className={cn(
-                            "grid h-8 w-8 place-items-center rounded-md border text-[13px] tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            "grid h-8 w-8 place-items-center rounded-md border text-[0.8125rem] tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                             item === clampedPage ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground hover:bg-accent",
                           )}
                         >
@@ -1296,15 +1296,15 @@ export function IncidentsDashboard() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <p className="truncate text-sm font-semibold text-foreground">{person.name}</p>
-                        <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[12px] font-semibold", pill)}>{label}</span>
+                        <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", pill)}>{label}</span>
                       </div>
-                      <p className="truncate text-[12px] text-muted-foreground">{person.role}</p>
-                      <p className="mt-0.5 text-[12px] text-muted-foreground">since {person.since} · Next: {person.nextShift}</p>
+                      <p className="truncate text-[0.75rem] text-muted-foreground">{person.role}</p>
+                      <p className="mt-0.5 text-[0.75rem] text-muted-foreground">since {person.since} · Next: {person.nextShift}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <Button onClick={() => showToast("On-call paged — Marcus Lee (Platform · Primary).")} className="mt-3 h-9 w-full gap-1.5 rounded-lg bg-[#DC2626] text-sm text-white hover:bg-[#B91C1C]">
+              <Button onClick={() => showToast("On-call paged — Marcus Lee (Platform · Primary).")} className="mt-3 h-9 w-full gap-1.5 rounded-lg bg-red-600 text-sm text-white hover:bg-red-700">
                 <Phone size={15} aria-hidden="true" />Page on-call
               </Button>
             </ChartCard>
@@ -1334,18 +1334,18 @@ export function IncidentsDashboard() {
                         className="flex w-full items-center gap-3 rounded-md py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-[13px] font-medium text-foreground" title={incident.title}>{incident.title}</span>
-                          <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
-                            <span className={cn("rounded-full px-1.5 py-0.5 text-[12px] font-semibold", incident.postmortem.status === "Published" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{incident.postmortem.status}</span>
+                          <span className="block truncate text-[0.8125rem] font-medium text-foreground" title={incident.title}>{incident.title}</span>
+                          <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.75rem] text-muted-foreground">
+                            <span className={cn("rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold", incident.postmortem.status === "Published" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{incident.postmortem.status}</span>
                             <span>{incident.commander}</span>
                             <span aria-hidden="true">·</span>
                             <span>{timeAgo(Date.parse(incident.startedAt))}</span>
                             <span aria-hidden="true">·</span>
-                            <span className="font-mono text-[12px]">{incident.id}</span>
+                            <span className="font-mono text-[0.75rem]">{incident.id}</span>
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className="block text-[13px] font-semibold tabular-nums text-foreground">{done}/{totalItems} done</span>
+                          <span className="block text-[0.8125rem] font-semibold tabular-nums text-foreground">{done}/{totalItems} done</span>
                           <span aria-hidden="true" className="mt-1 block h-1.5 w-20 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-emerald-500" style={{ width: `${totalItems ? (done / totalItems) * 100 : 0}%` }} /></span>
                         </span>
                       </button>
@@ -1354,7 +1354,7 @@ export function IncidentsDashboard() {
                 })}
               </ul>
               <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
-                <span className="text-[12px] text-muted-foreground">Action items tracked per postmortem</span>
+                <span className="text-[0.75rem] text-muted-foreground">Action items tracked per postmortem</span>
                 <ViewAllLink onClick={() => setFilter("status", "Resolved")} />
               </div>
             </ChartCard>
@@ -1382,15 +1382,15 @@ export function IncidentsDashboard() {
                         className="flex w-full items-center gap-2.5 rounded-md py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         <span aria-hidden="true" className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full", meta.tone)}><ActivityIcon size={13} /></span>
-                        <span className="min-w-0 flex-1 truncate text-[13px] leading-snug text-foreground" title={entry.text}><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author.split(" ")[0]}</b> {meta.verb} <span className="font-mono text-[12px] font-semibold text-primary">{entry.incidentId}</span></span>
-                        <span className="shrink-0 text-[12px] tabular-nums text-muted-foreground" title={fullTimestamp(entry.epochMs, timeMode === "utc")}>{timeAgo(entry.epochMs)}</span>
+                        <span className="min-w-0 flex-1 truncate text-[0.8125rem] leading-snug text-foreground" title={entry.text}><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author.split(" ")[0]}</b> {meta.verb} <span className="font-mono text-[0.75rem] font-semibold text-primary">{entry.incidentId}</span></span>
+                        <span className="shrink-0 text-[0.75rem] tabular-nums text-muted-foreground" title={fullTimestamp(entry.epochMs, timeMode === "utc")}>{timeAgo(entry.epochMs)}</span>
                       </button>
                     </li>
                   );
                 })}
               </ul>
               <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
-                <span className="text-[12px] text-muted-foreground">Declared → acknowledged → resolved</span>
+                <span className="text-[0.75rem] text-muted-foreground">Declared → acknowledged → resolved</span>
                 <ViewAllLink href="/audit-logs" />
               </div>
             </ChartCard>
@@ -1411,7 +1411,7 @@ export function IncidentsDashboard() {
 
       {/* Add update dialog */}
       <Dialog open={addUpdateId != null} onOpenChange={(open) => { if (!open) setAddUpdateId(null); }}>
-        <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
           <DialogHeader>
             <DialogTitle>Add update{addUpdateId ? ` — ${addUpdateId}` : ""}</DialogTitle>
             <DialogDescription>Posts to the incident timeline. Use “Internal note” for responder-only context; it is visible to the whole team in this demo.</DialogDescription>

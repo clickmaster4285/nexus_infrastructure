@@ -47,7 +47,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         valueAside={<Sparkline values={stats.successSparkline} color="#34D399" label="Success rate - trailing 14 days" className="block h-6 w-20" />}
         onClick={() => onKpiClick("success-rate")}
         onClickLabel="Show successful backup jobs"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
       <StatCard
         icon={<Shield size={18} aria-hidden="true" />}
@@ -59,7 +59,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         trendClassName="text-muted-foreground whitespace-nowrap"
         onClick={() => onKpiClick("protected")}
         onClickLabel="Show asset coverage"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
       <StatCard
         icon={<Database size={18} aria-hidden="true" />}
@@ -73,7 +73,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         goodDirection="down"
         onClick={() => onKpiClick("failed")}
         onClickLabel="Show failed backup jobs"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
       <StatCard
         icon={<Database size={18} aria-hidden="true" />}
@@ -85,7 +85,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         trendClassName="text-muted-foreground whitespace-nowrap"
         onClick={() => onKpiClick("size-30d")}
         onClickLabel="Show all backup jobs"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
       <StatCard
         icon={<ShieldCheck size={18} aria-hidden="true" />}
@@ -100,7 +100,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         onClick={() => onKpiClick("rpo")}
         onClickLabel="Show RPO breach jobs"
         goodDirection="up"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
       <StatCard
         icon={<FlaskConical size={18} aria-hidden="true" />}
@@ -113,7 +113,7 @@ export function BackupsKpiRow({ stats, lastRestoreTest, onKpiClick }: {
         onClick={() => onKpiClick("last-restore-test")}
         onClickLabel="Show restore drills"
         goodDirection="up"
-        className="h-full min-h-[88px] p-4"
+        className="h-full min-h-[5.5rem] p-4"
       />
     </section>
   );

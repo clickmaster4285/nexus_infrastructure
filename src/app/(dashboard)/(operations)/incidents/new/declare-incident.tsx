@@ -71,9 +71,9 @@ const RESPONSE_EXPECTED: Record<IncidentSeverity, string> = {
 };
 
 const ALERT_SEVERITY_BADGE: Record<AlertSeverity, { label: string; className: string }> = {
-  critical: { label: "Critical", className: "bg-[#FEE2E2] text-[#DC2626] dark:bg-red-500/15 dark:text-red-400" },
-  warning: { label: "Warning", className: "bg-[#FEF3C7] text-[#D97706] dark:bg-amber-500/15 dark:text-amber-400" },
-  info: { label: "Info", className: "bg-[#DBEAFE] text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-400" },
+  critical: { label: "Critical", className: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  warning: { label: "Warning", className: "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  info: { label: "Info", className: "bg-blue-100 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
 };
 
 const TAG_SUGGESTIONS = ["payment", "api", "customer-facing", "database", "latency", "deploy", "canary", "network", "cache", "web"];
@@ -338,7 +338,7 @@ export function DeclareIncident() {
         aria-describedby={!isValid ? "declare-missing" : undefined}
         className={cn(
           "h-10 gap-1.5 rounded-lg px-5 text-sm font-semibold text-white",
-          severity === "SEV1" || severity === "SEV2" ? "bg-[#DC2626] hover:bg-[#B91C1C]" : "bg-primary hover:bg-primary/90",
+          severity === "SEV1" || severity === "SEV2" ? "bg-red-600 hover:bg-red-700" : "bg-primary hover:bg-primary/90",
           className,
         )}
       >
@@ -361,7 +361,7 @@ export function DeclareIncident() {
         title="Declare Incident"
         subtitle="Open a new incident, page responders and start the timeline."
         icon={<Siren size={22} />}
-        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]"
+        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]"
         actions={
           <>
             <Button variant="ghost" onClick={cancel} className="h-10 gap-1.5 rounded-lg px-3 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Incidents</Button>
@@ -380,7 +380,7 @@ export function DeclareIncident() {
           <SectionCard step={1} title="Basics">
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between gap-2">
-                <label htmlFor="incident-title" className="text-sm font-medium text-foreground">Title <span aria-hidden="true" className="text-[#DC2626]">*</span></label>
+                <label htmlFor="incident-title" className="text-sm font-medium text-foreground">Title <span aria-hidden="true" className="text-red-600">*</span></label>
                 <span className="text-xs tabular-nums text-muted-foreground">{title.length}/{TITLE_MAX}</span>
               </div>
               <input
@@ -400,7 +400,7 @@ export function DeclareIncident() {
             </div>
 
             <fieldset className="flex flex-col gap-1.5" aria-describedby={submitted && severity === null ? severityErrorId : undefined}>
-              <legend className="text-sm font-medium text-foreground">Severity <span aria-hidden="true" className="text-[#DC2626]">*</span></legend>
+              <legend className="text-sm font-medium text-foreground">Severity <span aria-hidden="true" className="text-red-600">*</span></legend>
               <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
                 {SEVERITY_CARDS.map(({ severity: value, icon: Icon, title: cardTitle, description, active, radio }, index) => {
                   const checked = severity === value;
@@ -437,7 +437,7 @@ export function DeclareIncident() {
           {/* 2 · Impact */}
           <SectionCard step={2} title="Impact">
             <fieldset className="flex flex-col gap-1.5">
-              <legend className="text-sm font-medium text-foreground">Affected services <span aria-hidden="true" className="text-[#DC2626]">*</span></legend>
+              <legend className="text-sm font-medium text-foreground">Affected services <span aria-hidden="true" className="text-red-600">*</span></legend>
               {showServiceSearch && (
                 <div className="relative">
                   <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -509,7 +509,7 @@ export function DeclareIncident() {
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between gap-2">
-                  <label htmlFor="commander-select" className="text-sm font-medium text-foreground">Commander{needsCommander && <span aria-hidden="true" className="text-[#DC2626]"> *</span>}</label>
+                  <label htmlFor="commander-select" className="text-sm font-medium text-foreground">Commander{needsCommander && <span aria-hidden="true" className="text-red-600"> *</span>}</label>
                   <button type="button" onClick={() => setCommander(CURRENT_USER_NAME)} className="rounded-md px-1.5 py-0.5 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Assign to me</button>
                 </div>
                 <Select value={commander} onValueChange={setCommander}>
@@ -567,7 +567,7 @@ export function DeclareIncident() {
                   className={cn(inputClass, "pl-9")}
                 />
               </div>
-              <div role="group" aria-label="Recent alerts" className="max-h-[200px] divide-y divide-border overflow-y-auto rounded-lg border border-border">
+              <div role="group" aria-label="Recent alerts" className="max-h-[12.5rem] divide-y divide-border overflow-y-auto rounded-lg border border-border">
                 {filteredAlerts.map((alert) => {
                   const checked = linkedAlertIds.includes(alert.id);
                   const badge = ALERT_SEVERITY_BADGE[alert.severity];
@@ -611,7 +611,7 @@ export function DeclareIncident() {
                   onBlur={() => commitTags(tagsDraft)}
                   placeholder={tags.length === 0 ? "payment, api, customer-facing" : ""}
                   aria-label="Add tag"
-                  className="h-8 min-w-[120px] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  className="h-8 min-w-[7.5rem] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
               {tagSuggestions.length > 0 && (
@@ -745,7 +745,7 @@ export function DeclareIncident() {
       </form>
 
       {/* Sticky bottom bar on small screens */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:left-[232px] xl:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:left-[14.5rem] xl:hidden">
         <div className="flex items-center gap-2 px-4 py-2.5">
           <Button type="button" variant="outline" onClick={cancel} className="h-11 rounded-lg px-4 text-sm">Cancel</Button>
           {declareButton("h-11 flex-1 justify-center")}
@@ -763,7 +763,7 @@ export function DeclareIncident() {
           </DialogHeader>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setConfirmOpen(false)} className="h-10 rounded-lg px-4 text-sm">Cancel</Button>
-            <Button type="button" onClick={() => { setConfirmOpen(false); performDeclare(); }} disabled={submitting} className="h-10 gap-1.5 rounded-lg bg-[#DC2626] px-4 text-sm font-semibold text-white hover:bg-[#B91C1C]">
+            <Button type="button" onClick={() => { setConfirmOpen(false); performDeclare(); }} disabled={submitting} className="h-10 gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700">
               {submitting ? <Loader2 size={15} aria-hidden="true" className="animate-spin" /> : <Siren size={15} aria-hidden="true" />}Declare Incident
             </Button>
           </DialogFooter>

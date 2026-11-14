@@ -193,14 +193,14 @@ export function WindowDetail({ windowId }: { windowId: string }) {
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId]} title="Maintenance Window" subtitle="Loading window details…" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
         <div aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
-            <div className="h-[240px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[280px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[220px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[17.5rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[13.75rem] animate-pulse rounded-xl bg-muted" />
           </div>
           <div className="space-y-4 xl:col-span-4">
-            <div className="h-[200px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[220px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[160px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[12.5rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[13.75rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[10rem] animate-pulse rounded-xl bg-muted" />
           </div>
         </div>
       </div>
@@ -211,9 +211,9 @@ export function WindowDetail({ windowId }: { windowId: string }) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId]} title="Maintenance Window" subtitle="The maintenance service failed to respond." icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
-            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><TriangleAlert size={20} /></span>
+            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window could not be loaded</p>
             <p className="text-sm text-muted-foreground">Retry to reload the schedule.</p>
             <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
@@ -227,7 +227,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId]} title="Window not found" subtitle="No maintenance window with this ID exists." icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Wrench size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window not found</p>
@@ -335,31 +335,31 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-violet-200/70 bg-violet-50 px-4 py-2.5 dark:border-violet-500/25 dark:bg-violet-500/10">
               <span aria-hidden="true" className={cn("h-2 w-2 rounded-full", live ? "animate-pulse bg-violet-500" : completed ? "bg-emerald-500" : "bg-blue-500")} />
               <p className="font-display text-base font-bold tabular-nums text-violet-900 dark:text-violet-200">{countdownLabel}</p>
-              <span className="text-[12px] text-violet-800/80 dark:text-violet-300/80">{live ? "alerts muted until end" : completed ? "window closed, alerts restored" : "alerts will mute at start"}</span>
+              <span className="text-[0.75rem] text-violet-800/80 dark:text-violet-300/80">{live ? "alerts muted until end" : completed ? "window closed, alerts restored" : "alerts will mute at start"}</span>
             </div>
             <dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Starts</dt>
-                <dd className="mt-1 text-sm tabular-nums text-foreground">{formatDateTime(startMs)}<span className="ml-1.5 text-[12px] text-muted-foreground">({timeAgo(startMs)})</span></dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Starts</dt>
+                <dd className="mt-1 text-sm tabular-nums text-foreground">{formatDateTime(startMs)}<span className="ml-1.5 text-[0.75rem] text-muted-foreground">({timeAgo(startMs)})</span></dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Ends</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Ends</dt>
                 <dd className="mt-1 text-sm tabular-nums text-foreground">{formatDateTime(endMs)}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Duration</dt>
-                <dd className="mt-1 text-sm tabular-nums text-foreground">{durationLabel(plannedDurationMin)}<span className="ml-1.5 text-[12px] text-muted-foreground">planned</span></dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Duration</dt>
+                <dd className="mt-1 text-sm tabular-nums text-foreground">{durationLabel(plannedDurationMin)}<span className="ml-1.5 text-[0.75rem] text-muted-foreground">planned</span></dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Time zone</dt>
-                <dd className="mt-1 text-sm text-foreground">{window_.timeZone}<span className="block text-[12px] text-muted-foreground">local to this window · your browser: {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Time zone</dt>
+                <dd className="mt-1 text-sm text-foreground">{window_.timeZone}<span className="block text-[0.75rem] text-muted-foreground">local to this window · your browser: {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Recurrence</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Recurrence</dt>
                 <dd className="mt-1 flex items-center gap-1.5 text-sm text-foreground">{window_.recurrence.kind !== "none" && <Repeat size={13} aria-hidden="true" className="text-teal-600" />}{recurrenceSummary}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Change ticket</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Change ticket</dt>
                 <dd className="mt-1 flex items-center gap-1.5 text-sm">
                   <span className="font-mono text-foreground">{window_.changeTicket ?? "—"}</span>
                   {window_.changeTicket && (
@@ -368,23 +368,23 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 </dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Owner</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Owner</dt>
                 <dd className="mt-1 flex items-center gap-2 text-sm text-foreground"><InitialsAvatar name={window_.owner} size={22} />{window_.owner}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Approver</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Approver</dt>
                 <dd className="mt-1 flex items-center gap-2 text-sm text-foreground">{window_.approver ? (<><InitialsAvatar name={window_.approver} size={22} />{window_.approver}</>) : <span className="text-muted-foreground">Not required (Emergency)</span>}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Created</dt>
-                <dd className="mt-1 text-sm text-foreground">{formatDateTime(Date.parse(window_.createdAt))}<span className="ml-1.5 text-[12px] text-muted-foreground">by {window_.createdBy}</span></dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Created</dt>
+                <dd className="mt-1 text-sm text-foreground">{formatDateTime(Date.parse(window_.createdAt))}<span className="ml-1.5 text-[0.75rem] text-muted-foreground">by {window_.createdBy}</span></dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">ID</dt>
-                <dd className="mt-1 font-mono text-[13px] text-foreground">{window_.id}</dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">ID</dt>
+                <dd className="mt-1 font-mono text-[0.8125rem] text-foreground">{window_.id}</dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Description</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Description</dt>
                 <dd className="mt-1 text-sm leading-snug text-foreground">{window_.description || "No description provided."}</dd>
               </div>
             </dl>
@@ -393,15 +393,15 @@ export function WindowDetail({ windowId }: { windowId: string }) {
           {/* Scope */}
           <ChartCard
             title="Scope"
-            actions={<span className="rounded-full bg-muted px-2 py-1 text-[12px] font-semibold tabular-nums text-muted-foreground">{coveredHosts.length} host{coveredHosts.length === 1 ? "" : "s"}</span>}
+            actions={<span className="rounded-full bg-muted px-2 py-1 text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{coveredHosts.length} host{coveredHosts.length === 1 ? "" : "s"}</span>}
           >
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] border-collapse text-left">
+              <table className="w-full min-w-[32.5rem] border-collapse text-left">
                 <thead>
                   <tr className="border-b border-border">
-                    <th scope="col" className="py-1.5 pr-3 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Server</th>
-                    <th scope="col" className="py-1.5 pr-3 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Group</th>
-                    <th scope="col" className="py-1.5 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Status</th>
+                    <th scope="col" className="py-1.5 pr-3 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Server</th>
+                    <th scope="col" className="py-1.5 pr-3 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Group</th>
+                    <th scope="col" className="py-1.5 text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -414,18 +414,18 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                       <tr key={host} className="border-b border-border/60 last:border-b-0">
                         <td className="py-2 pr-3">
                           {canonical ? (
-                            <Link href={`/server-details/${encodeURIComponent(canonical)}`} className="font-mono text-[13px] text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{host}</Link>
+                            <Link href={`/server-details/${encodeURIComponent(canonical)}`} className="font-mono text-[0.8125rem] text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{host}</Link>
                           ) : (
-                            <span className="font-mono text-[13px] text-foreground">{host}</span>
+                            <span className="font-mono text-[0.8125rem] text-foreground">{host}</span>
                           )}
                         </td>
-                        <td className="py-2 pr-3 text-[13px] text-muted-foreground">{groupNames || "—"}</td>
+                        <td className="py-2 pr-3 text-[0.8125rem] text-muted-foreground">{groupNames || "—"}</td>
                         <td className="py-2">
                           {live
-                            ? <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-[12px] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />In Maintenance</span>
+                            ? <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />In Maintenance</span>
                             : completed
-                              ? <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-100 px-2 py-0.5 text-[12px] font-semibold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">Restored</span>
-                              : <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-blue-100 px-2 py-0.5 text-[12px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-400">Scheduled</span>}
+                              ? <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-100 px-2 py-0.5 text-[0.75rem] font-semibold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">Restored</span>
+                              : <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-blue-100 px-2 py-0.5 text-[0.75rem] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-400">Scheduled</span>}
                         </td>
                       </tr>
                     );
@@ -436,7 +436,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 </tbody>
               </table>
             </div>
-            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-border/70 pt-3 text-[13px]">
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-border/70 pt-3 text-[0.8125rem]">
               <span className="text-muted-foreground">Services: {window_.scope.services.length > 0 ? window_.scope.services.join(", ") : "—"}</span>
               <span className="text-muted-foreground">Tags: {window_.scope.tags.length > 0 ? window_.scope.tags.map((tag) => `#${tag}`).join(" ") : "—"}</span>
               {window_.scope.exclude.length > 0 && <span className="text-muted-foreground">Excluded: <span className="font-mono">{window_.scope.exclude.join(", ")}</span></span>}
@@ -447,10 +447,10 @@ export function WindowDetail({ windowId }: { windowId: string }) {
           {/* Timeline */}
           <ChartCard
             title="Timeline"
-            actions={<span className="rounded-full bg-muted px-2 py-1 text-[12px] font-semibold tabular-nums text-muted-foreground">{window_.timeline.length} entries</span>}
+            actions={<span className="rounded-full bg-muted px-2 py-1 text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{window_.timeline.length} entries</span>}
           >
             <form onSubmit={submitNote} className="mb-4 flex flex-col gap-2 rounded-xl border border-border bg-muted/30 p-3">
-              <label htmlFor="note-draft" className="text-[12px] font-medium text-foreground">Add note</label>
+              <label htmlFor="note-draft" className="text-[0.75rem] font-medium text-foreground">Add note</label>
               <textarea
                 id="note-draft"
                 rows={2}
@@ -469,15 +469,15 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 const EntryIcon = meta.icon;
                 return (
                   <li key={entry.id} className="relative pb-4 last:pb-0">
-                    <span aria-hidden="true" className={cn("absolute -left-[34px] top-0.5 grid h-6 w-6 place-items-center rounded-full border border-border bg-card", meta.tone)}>
+                    <span aria-hidden="true" className={cn("absolute -left-[2.125rem] top-0.5 grid h-6 w-6 place-items-center rounded-full border border-border bg-card", meta.tone)}>
                       <EntryIcon size={12} />
                     </span>
                     <div className="flex flex-wrap items-baseline gap-x-2">
-                      <span className="font-mono text-[12px] tabular-nums text-muted-foreground">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
-                      <span className="text-[12px] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
-                      <span className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">· {meta.label}</span>
+                      <span className="font-mono text-[0.75rem] tabular-nums text-muted-foreground">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                      <span className="text-[0.75rem] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
+                      <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">· {meta.label}</span>
                     </div>
-                    <p className="mt-0.5 text-[13px] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
                   </li>
                 );
               })}
@@ -490,26 +490,26 @@ export function WindowDetail({ windowId }: { windowId: string }) {
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
                   <p className="font-display text-2xl font-bold tabular-nums text-foreground">{window_.summary.suppressedAlerts}</p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">Alerts suppressed</p>
+                  <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">Alerts suppressed</p>
                 </div>
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
                   <p className="font-display text-2xl font-bold tabular-nums text-foreground">{window_.summary.suppressedIncidents}</p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">Incidents suppressed</p>
+                  <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">Incidents suppressed</p>
                 </div>
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
                   <p className="font-display text-2xl font-bold tabular-nums text-foreground">{actualDurationMin != null ? durationLabel(actualDurationMin) : "—"}</p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">Actual duration</p>
+                  <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">Actual duration</p>
                 </div>
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
                   <p className={cn("font-display text-2xl font-bold tabular-nums", plannedVsActual != null && plannedVsActual > 15 ? "text-amber-700 dark:text-amber-400" : "text-foreground")}>
                     {plannedVsActual == null ? "—" : plannedVsActual === 0 ? "on time" : plannedVsActual > 0 ? `+${plannedVsActual}m` : `${plannedVsActual}m`}
                   </p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">vs planned</p>
+                  <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">vs planned</p>
                 </div>
               </div>
               {window_.summary.notes && (
                 <div className="mt-3">
-                  <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Notes</h3>
+                  <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Notes</h3>
                   <p className="mt-1 text-sm leading-snug text-foreground">{window_.summary.notes}</p>
                 </div>
               )}
@@ -523,7 +523,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
           {/* Status stepper */}
           <ChartCard title="Status">
             {window_.status === "Cancelled" ? (
-              <p className="flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[13px] text-slate-700 dark:border-slate-500/30 dark:bg-slate-500/10 dark:text-slate-300"><Ban size={15} aria-hidden="true" className="mt-0.5 shrink-0" />This window was cancelled. Its muted alerts were restored.</p>
+              <p className="flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[0.8125rem] text-slate-700 dark:border-slate-500/30 dark:bg-slate-500/10 dark:text-slate-300"><Ban size={15} aria-hidden="true" className="mt-0.5 shrink-0" />This window was cancelled. Its muted alerts were restored.</p>
             ) : (
               <ol className="space-y-0">
                 {["Scheduled", "In Progress", "Completed"].map((step, index) => {
@@ -534,7 +534,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                     <li key={step} className="flex gap-3">
                       <div className="flex flex-col items-center">
                         <span aria-hidden="true" className={cn(
-                          "grid h-6 w-6 place-items-center rounded-full border text-[12px] font-bold",
+                          "grid h-6 w-6 place-items-center rounded-full border text-[0.75rem] font-bold",
                           done ? "border-emerald-500 bg-emerald-500 text-white" : current ? "border-violet-500 bg-violet-500 text-white" : "border-border bg-card text-muted-foreground",
                         )}>
                           {done ? <Check size={13} /> : index + 1}
@@ -542,8 +542,8 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                         {index < 2 && <span aria-hidden="true" className={cn("w-0.5 flex-1", done && !current ? "bg-emerald-500" : "bg-border", "min-h-8")} />}
                       </div>
                       <div className="pb-5">
-                        <p className={cn("text-sm font-semibold", reached ? "text-foreground" : "text-muted-foreground")}>{step}{current && <span className="ml-2 text-[12px] font-normal text-violet-700 dark:text-violet-300">current</span>}</p>
-                        <p className="mt-0.5 text-[12px] text-muted-foreground">
+                        <p className={cn("text-sm font-semibold", reached ? "text-foreground" : "text-muted-foreground")}>{step}{current && <span className="ml-2 text-[0.75rem] font-normal text-violet-700 dark:text-violet-300">current</span>}</p>
+                        <p className="mt-0.5 text-[0.75rem] text-muted-foreground">
                           {index === 0 && formatDateTime(startMs)}
                           {index === 1 && (live ? `since ${new Date(startMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}` : stepIndex >= 1 ? formatDateTime(startMs) : "—")}
                           {index === 2 && (completed ? formatDateTime(endMs) : "Pending")}
@@ -564,27 +564,27 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 : <span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-lg bg-muted text-muted-foreground"><Bell size={17} /></span>}
               <div>
                 <p className="text-sm font-semibold text-foreground">{window_.alertBehavior.muteAlerts ? "Alerts muted for scope" : "Alerts stay live"}</p>
-                <p className="text-[12px] text-muted-foreground">{window_.alertBehavior.suppressIncidents ? "Incident auto-creation suppressed" : "Incidents will be created normally"}</p>
+                <p className="text-[0.75rem] text-muted-foreground">{window_.alertBehavior.suppressIncidents ? "Incident auto-creation suppressed" : "Incidents will be created normally"}</p>
               </div>
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-2">
               {window_.alertBehavior.allowCritical
-                ? <span className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-0.5 text-[12px] font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300"><Zap size={11} aria-hidden="true" />SEV1 allowed through</span>
-                : <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[12px] font-semibold text-muted-foreground">All severities muted</span>}
-              {window_.alertBehavior.autoEnd && <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[12px] font-semibold text-muted-foreground">Auto-end + unmute at end</span>}
+                ? <span className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-0.5 text-[0.75rem] font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300"><Zap size={11} aria-hidden="true" />SEV1 allowed through</span>
+                : <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-muted-foreground">All severities muted</span>}
+              {window_.alertBehavior.autoEnd && <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-muted-foreground">Auto-end + unmute at end</span>}
             </div>
             <div className="mt-3 border-t border-border/70 pt-3">
-              <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Muted rules ({mutedRules.length})</h3>
+              <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Muted rules ({mutedRules.length})</h3>
               <ul className="mt-1.5 divide-y divide-border/60">
                 {mutedRules.map((rule) => (
                   <li key={rule.id}>
-                    <Link href={`/alert-rules?rule=${rule.id}`} className="flex items-center justify-between gap-2 py-1.5 text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                    <Link href={`/alert-rules?rule=${rule.id}`} className="flex items-center justify-between gap-2 py-1.5 text-[0.8125rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                       <span className="min-w-0 truncate text-foreground" title={rule.name}>{rule.name}</span>
-                      <span className="shrink-0 font-mono text-[12px] text-primary">{rule.id}</span>
+                      <span className="shrink-0 font-mono text-[0.75rem] text-primary">{rule.id}</span>
                     </Link>
                   </li>
                 ))}
-                {mutedRules.length === 0 && <li className="py-2 text-[13px] text-muted-foreground">No specific rules muted.</li>}
+                {mutedRules.length === 0 && <li className="py-2 text-[0.8125rem] text-muted-foreground">No specific rules muted.</li>}
               </ul>
             </div>
           </ChartCard>
@@ -593,11 +593,11 @@ export function WindowDetail({ windowId }: { windowId: string }) {
           <ChartCard title="Notifications">
             <div className="flex flex-wrap gap-1.5">
               {window_.notifyChannels.map((channel) => (
-                <span key={channel} className="inline-flex items-center gap-1 rounded-md border border-border bg-muted px-2 py-1 text-[12px] font-semibold text-foreground"><Bell size={11} aria-hidden="true" />{channel}</span>
+                <span key={channel} className="inline-flex items-center gap-1 rounded-md border border-border bg-muted px-2 py-1 text-[0.75rem] font-semibold text-foreground"><Bell size={11} aria-hidden="true" />{channel}</span>
               ))}
-              {window_.notifyChannels.length === 0 && <span className="text-[13px] text-muted-foreground">No channels configured.</span>}
+              {window_.notifyChannels.length === 0 && <span className="text-[0.8125rem] text-muted-foreground">No channels configured.</span>}
             </div>
-            <ul className="mt-3 space-y-1.5 text-[13px] text-muted-foreground">
+            <ul className="mt-3 space-y-1.5 text-[0.8125rem] text-muted-foreground">
               <li className="flex items-center justify-between gap-2"><span>Window created</span><span className="tabular-nums">{new Date(window_.createdAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span></li>
               {window_.timeline.filter((entry) => entry.type === "approved").map((entry) => (
                 <li key={entry.id} className="flex items-center justify-between gap-2"><span>Approval notice sent</span><span className="tabular-nums">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span></li>
@@ -611,23 +611,23 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <ChartCard title="Upcoming occurrences">
               <ul className="divide-y divide-border/60">
                 {occurrences.map((occurrenceMs) => (
-                  <li key={occurrenceMs} className="flex items-center justify-between gap-2 py-1.5 text-[13px]">
+                  <li key={occurrenceMs} className="flex items-center justify-between gap-2 py-1.5 text-[0.8125rem]">
                     <span className="text-foreground">{new Date(occurrenceMs).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</span>
                     <span className="tabular-nums text-muted-foreground">{new Date(occurrenceMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} · in {formatCountdown(occurrenceMs, now)}</span>
                   </li>
                 ))}
-                {occurrences.length === 0 && <li className="py-2 text-[13px] text-muted-foreground">Series has ended.</li>}
+                {occurrences.length === 0 && <li className="py-2 text-[0.8125rem] text-muted-foreground">Series has ended.</li>}
               </ul>
             </ChartCard>
           )}
 
           {/* Prev / next */}
           <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card p-2">
-            <button type="button" onClick={() => older && router.push(`/maintenance-windows/${older.id}`)} disabled={!older} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={older ? `Older window ${older.id}` : "No older windows"}>
+            <button type="button" onClick={() => older && router.push(`/maintenance-windows/${older.id}`)} disabled={!older} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={older ? `Older window ${older.id}` : "No older windows"}>
               <ChevronLeft size={15} aria-hidden="true" className="shrink-0" /><span className="truncate">{older ? older.id : "No older"}</span>
             </button>
-            <span className="text-[12px] tabular-nums text-muted-foreground">{currentIndex + 1} / {chronological.length}</span>
-            <button type="button" onClick={() => newer && router.push(`/maintenance-windows/${newer.id}`)} disabled={!newer} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={newer ? `Newer window ${newer.id}` : "No newer windows"}>
+            <span className="text-[0.75rem] tabular-nums text-muted-foreground">{currentIndex + 1} / {chronological.length}</span>
+            <button type="button" onClick={() => newer && router.push(`/maintenance-windows/${newer.id}`)} disabled={!newer} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={newer ? `Newer window ${newer.id}` : "No newer windows"}>
               <span className="truncate">{newer ? newer.id : "No newer"}</span><ChevronRight size={15} aria-hidden="true" className="shrink-0" />
             </button>
           </div>
@@ -657,7 +657,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setCancelOpen(false)}>Keep window</Button>
-            <Button className="h-10 rounded-lg bg-[#DC2626] px-4 text-sm font-semibold text-white hover:bg-[#B91C1C]" onClick={confirmCancel}>Cancel window</Button>
+            <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={confirmCancel}>Cancel window</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

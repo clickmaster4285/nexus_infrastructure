@@ -33,8 +33,8 @@ import { nextRuns } from "@/utils/nextRun";
 import { cn } from "@/lib/utils";
 
 const SEVERITY_TONE: Record<string, string> = {
-  critical: "text-[#DC2626] dark:text-red-400",
-  warning: "text-[#D97706] dark:text-amber-400",
+  critical: "text-red-600 dark:text-red-400",
+  warning: "text-amber-600 dark:text-amber-400",
   info: "text-muted-foreground",
 };
 
@@ -57,7 +57,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
   if (!job) {
     return (
-      <div className="mx-auto grid min-h-[320px] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
+      <div className="mx-auto grid min-h-[20rem] max-w-xl place-items-center rounded-xl border border-border bg-card p-8 text-center">
         <div>
           <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Job not found</h1>
@@ -94,9 +94,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <Link2 size={13} aria-hidden="true" />{job.taskId}
               </Link>
             )}
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[13px]" onClick={() => setRestoreOpen(true)}><ArchiveRestore size={14} aria-hidden="true" />Restore</Button>
-            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[13px]" onClick={() => setPolicyOpen(true)}><Pencil size={14} aria-hidden="true" />Edit</Button>
-            <Button className="h-9 gap-1.5 rounded-lg px-3 text-[13px] font-semibold" onClick={() => router.push(`/backups-and-recovery?tab=jobs&q=${job.id}`)}>
+            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setRestoreOpen(true)}><ArchiveRestore size={14} aria-hidden="true" />Restore</Button>
+            <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]" onClick={() => setPolicyOpen(true)}><Pencil size={14} aria-hidden="true" />Edit</Button>
+            <Button className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem] font-semibold" onClick={() => router.push(`/backups-and-recovery?tab=jobs&q=${job.id}`)}>
               <PlayCircle size={14} aria-hidden="true" />Run now
             </Button>
           </div>
@@ -149,7 +149,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     type="button"
                     onClick={() => setLogRunId((cur) => (cur === run.id ? null : run.id))}
                     aria-expanded={logRunId === run.id}
-                    className="flex w-full items-center gap-2 rounded px-1 py-1 text-left transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex w-full items-center gap-2 rounded px-1 py-1 text-left transition-colors hover:bg-slate-50 dark:hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <BackupStatusBadge status={run.status} />
                     <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
@@ -158,7 +158,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     <span className="shrink-0 text-xs font-semibold text-primary">{logRunId === run.id ? "Hide log" : "Log"}</span>
                   </button>
                   {logRunId === run.id && (
-                    <pre className="mt-2 max-h-64 overflow-auto rounded-lg border border-border bg-[#0B1220] p-3 font-mono text-[11px] leading-[1.7] text-slate-200">{run.log}</pre>
+                    <pre className="mt-2 max-h-64 overflow-auto rounded-lg border border-border bg-[#0B1220] p-3 font-mono text-[0.6875rem] leading-[1.7] text-slate-200">{run.log}</pre>
                   )}
                 </li>
               ))}
@@ -194,7 +194,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             </div>
             <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
               <dt className="text-muted-foreground">RPO</dt>
-              <dd className={cn("text-right font-semibold tabular-nums", view?.rpoMet === false ? "text-[#DC2626] dark:text-red-400" : "text-foreground")}>{formatRpoCell(view?.rpoLagMinutes ?? null, job.rpoTargetMinutes)}</dd>
+              <dd className={cn("text-right font-semibold tabular-nums", view?.rpoMet === false ? "text-red-600 dark:text-red-400" : "text-foreground")}>{formatRpoCell(view?.rpoLagMinutes ?? null, job.rpoTargetMinutes)}</dd>
               <dt className="text-muted-foreground">Last success</dt><dd className="text-right tabular-nums text-foreground">{view?.lastSuccessMs ? timeAgo(view.lastSuccessMs) : "never"}</dd>
               <dt className="text-muted-foreground">Last run</dt><dd className="text-right tabular-nums text-foreground">{view?.lastRun ? timeAgo(view.lastRun.epochMs) : "never"}</dd>
               <dt className="text-muted-foreground">Next run</dt><dd className="text-right tabular-nums text-foreground">{job.enabled ? (next[0] != null ? formatCountdown(next[0]) : "—") : "Paused"}</dd>
@@ -230,7 +230,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <ul className="mt-2 divide-y divide-border/60">
               {incidents.map((incident) => (
                 <li key={incident.id} className="flex items-center gap-2 py-1.5 text-xs">
-                  <span className="w-14 shrink-0 font-semibold text-[#D97706]">{incident.severity}</span>
+                  <span className="w-14 shrink-0 font-semibold text-amber-600">{incident.severity}</span>
                   <span className="min-w-0 truncate text-foreground" title={incident.title}>{incident.title}</span>
                   <Link href="/incidents" className="ml-auto shrink-0 font-semibold text-primary hover:underline">Open</Link>
                 </li>

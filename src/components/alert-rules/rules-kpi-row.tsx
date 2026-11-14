@@ -28,7 +28,7 @@ function Sparkline({ values, label }: { values: number[]; label: string }) {
   );
 }
 
-/** Compact 88px KPI cards with 32px icon tiles — all numbers derive from the rules array. */
+/** Compact 5.5rem KPI cards with 2rem icon tiles — all numbers derive from the rules array. */
 export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
   const yesterdayFired = Math.max(1, Math.round(stats.fired24h * 0.89));
   const firedDeltaPct = Math.round(((stats.fired24h - yesterdayFired) / yesterdayFired) * 100);
@@ -55,7 +55,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
       label: "Enabled",
       value: String(stats.enabled),
       icon: CheckCircle2,
-      iconTone: "bg-[#E9F9EF] text-[#16A34A] dark:bg-emerald-950/60 dark:text-emerald-400",
+      iconTone: "bg-[#E9F9EF] text-green-600 dark:bg-emerald-950/60 dark:text-emerald-400",
       hint: <span>{stats.enabledPct}% of rules</span>,
     },
     {
@@ -63,7 +63,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
       label: "Muted / Disabled",
       value: String(stats.mutedOrDisabled),
       icon: BellOff,
-      iconTone: "bg-slate-100 text-[#94A3B8] dark:bg-slate-800 dark:text-slate-400",
+      iconTone: "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-400",
       hint: <span>{stats.muted} muted · {stats.disabled} disabled</span>,
     },
     {
@@ -71,7 +71,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
       label: "Fired (24h)",
       value: String(stats.fired24h),
       icon: Activity,
-      iconTone: "bg-[#FEF3C7] text-[#D97706] dark:bg-amber-950/50 dark:text-amber-400",
+      iconTone: "bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400",
       hint: (
         <span className="inline-flex items-center gap-0.5 text-rose-600 dark:text-rose-400">
           <TrendingUp size={11} aria-hidden="true" />
@@ -94,7 +94,7 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
         >
           <Card
             className={cn(
-              "flex h-full min-h-[88px] w-full items-center gap-3 rounded-xl p-4 transition-colors hover:border-primary/50",
+              "flex h-full min-h-[5.5rem] w-full items-center gap-3 rounded-xl p-4 transition-colors hover:border-primary/50",
               active === card.key && "bg-primary/[0.04]",
             )}
           >
@@ -102,12 +102,12 @@ export function RulesKpiRow({ stats, active, onSelect }: RulesKpiRowProps) {
               <card.icon size={17} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[12px] font-medium leading-snug text-muted-foreground">{card.label}</p>
+              <p className="text-[0.75rem] font-medium leading-snug text-muted-foreground">{card.label}</p>
               <div className="flex items-end justify-between gap-2">
-                <p className="font-display text-[22px] font-bold leading-tight tracking-tight text-foreground tabular-nums">{card.value}</p>
+                <p className="font-display text-[1.375rem] font-bold leading-tight tracking-tight text-foreground tabular-nums">{card.value}</p>
                 {card.sparkline && <Sparkline values={stats.fireSparkline} label="Fires over the last 24 hours" />}
               </div>
-              <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">{card.hint}</p>
+              <p className="mt-0.5 text-[0.6875rem] leading-tight text-muted-foreground">{card.hint}</p>
             </div>
           </Card>
         </button>

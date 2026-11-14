@@ -25,7 +25,7 @@ import { fullTimestamp, timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";
 
 const TIMELINE_META: Record<string, { icon: LucideIcon; tone: string; label: string }> = {
-  created: { icon: Siren, tone: "bg-red-100 text-[#DC2626] dark:bg-red-500/15 dark:text-red-400", label: "Declared" },
+  created: { icon: Siren, tone: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400", label: "Declared" },
   acknowledged: { icon: CheckCheck, tone: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300", label: "Acknowledged" },
   update: { icon: FileText, tone: "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300", label: "Update" },
   escalated: { icon: ChevronsUp, tone: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400", label: "Escalated" },
@@ -154,17 +154,17 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident details…" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident details…" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
         <div aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
-            <div className="h-[260px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[320px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[160px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[16.25rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[20rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[10rem] animate-pulse rounded-xl bg-muted" />
           </div>
           <div className="space-y-4 xl:col-span-4">
-            <div className="h-[240px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[200px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[180px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[12.5rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[11.25rem] animate-pulse rounded-xl bg-muted" />
           </div>
         </div>
       </div>
@@ -174,10 +174,10 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (isError) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="The incident could not be loaded." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="The incident could not be loaded." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
-            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><TriangleAlert size={20} /></span>
+            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><TriangleAlert size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Incident could not be loaded</p>
             <p className="text-sm text-muted-foreground">The incident service failed to respond. Retry to reload.</p>
             <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
@@ -190,8 +190,8 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (!incident) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident not found" subtitle="No incident with this ID exists." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident not found" subtitle="No incident with this ID exists." icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]" />
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Siren size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Incident not found</p>
@@ -229,7 +229,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         title={incident.title}
         subtitle={incident.impact}
         icon={<Siren size={22} />}
-        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]"
+        iconClassName="h-11 w-11 rounded-xl bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]"
         statusBadge={<span className="flex items-center gap-1.5"><SeverityBadge severity={incident.severity} /><StatusBadge status={incident.status} /></span>}
         onRefresh={reload}
         lastUpdated={timeAgo(now)}
@@ -248,7 +248,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               trigger={<Button variant="outline" className="h-10 gap-1.5 rounded-lg px-3 text-sm">Change status</Button>}
               items={statusItems}
             />
-            <Button onClick={handleResolve} disabled={!open} className="h-10 gap-1.5 rounded-lg bg-[#16A34A] px-4 text-sm font-semibold text-white hover:bg-[#128A3E]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
+            <Button onClick={handleResolve} disabled={!open} className="h-10 gap-1.5 rounded-lg bg-green-600 px-4 text-sm font-semibold text-white hover:bg-[#128A3E]"><CheckCircle2 size={15} aria-hidden="true" />Resolve</Button>
           </div>
         }
       />
@@ -272,54 +272,54 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
           >
             <dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Impact</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Impact</dt>
                 <dd className="mt-1 text-sm leading-snug text-foreground">{incident.impact}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Started</dt>
-                <dd className="mt-1 text-sm tabular-nums text-foreground" title={fullTimestamp(startedMs, false)}>{fullTimestamp(startedMs, true)}<span className="ml-1.5 text-[12px] text-muted-foreground">({timeAgo(startedMs)})</span></dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Started</dt>
+                <dd className="mt-1 text-sm tabular-nums text-foreground" title={fullTimestamp(startedMs, false)}>{fullTimestamp(startedMs, true)}<span className="ml-1.5 text-[0.75rem] text-muted-foreground">({timeAgo(startedMs)})</span></dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Duration {open && <span className="ml-1 normal-case text-red-600 dark:text-red-400">live</span>}</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Duration {open && <span className="ml-1 normal-case text-red-600 dark:text-red-400">live</span>}</dt>
                 <dd className="mt-1 text-sm tabular-nums text-foreground">{formatMinutes(durationMin)}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Commander</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Commander</dt>
                 <dd className="mt-1 flex items-center gap-2 text-sm text-foreground"><InitialsAvatar name={incident.commander} size={22} />{incident.commander}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Assignee</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Assignee</dt>
                 <dd className="mt-1 flex items-center gap-2 text-sm text-foreground">{incident.assignee ? (<><InitialsAvatar name={incident.assignee} size={22} />{incident.assignee}</>) : <span className="text-muted-foreground">Unassigned</span>}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Team</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Team</dt>
                 <dd className="mt-1 text-sm text-foreground">{incident.team}</dd>
               </div>
               <div>
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">ID</dt>
-                <dd className="mt-1 font-mono text-[13px] text-foreground">{incident.id}</dd>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">ID</dt>
+                <dd className="mt-1 font-mono text-[0.8125rem] text-foreground">{incident.id}</dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Affected services</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Affected services</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {incident.affectedServices.map((service) => (
-                    <Link key={service} href={`/incidents?service=${encodeURIComponent(service)}`} className="rounded-md border border-border bg-muted px-2 py-1 text-[12px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
+                    <Link key={service} href={`/incidents?service=${encodeURIComponent(service)}`} className="rounded-md border border-border bg-muted px-2 py-1 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
                   ))}
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Affected hosts</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Affected hosts</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {incident.affectedHosts.map((host) => (
-                    <span key={host} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[12px] text-foreground">{host}</span>
+                    <span key={host} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[0.75rem] text-foreground">{host}</span>
                   ))}
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">Tags</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Tags</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {incident.tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-blue-50 px-2 py-0.5 text-[12px] font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-300">#{tag}</span>
+                    <span key={tag} className="rounded-full bg-blue-50 px-2 py-0.5 text-[0.75rem] font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-300">#{tag}</span>
                   ))}
                 </dd>
               </div>
@@ -331,7 +331,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             title="Timeline"
             actions={
               <div className="flex items-center gap-1.5">
-                <span className="rounded-full bg-muted px-2 py-1 text-[12px] font-semibold tabular-nums text-muted-foreground">{incident.timeline.length} entries</span>
+                <span className="rounded-full bg-muted px-2 py-1 text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{incident.timeline.length} entries</span>
                 <AlertMenu
                   label="Timeline options"
                   trigger={kebabButton("Timeline options")}
@@ -342,7 +342,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
           >
             {/* Add update */}
             <form onSubmit={(event) => { event.preventDefault(); submitUpdate(); }} className="mb-4 flex flex-col gap-2 rounded-xl border border-border bg-muted/30 p-3">
-              <label htmlFor="timeline-update" className="text-[12px] font-medium text-foreground">Add update</label>
+              <label htmlFor="timeline-update" className="text-[0.75rem] font-medium text-foreground">Add update</label>
               <textarea
                 id="timeline-update"
                 rows={2}
@@ -353,7 +353,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <Select value={updateType} onValueChange={(value) => setUpdateType(value as "update" | "note" | "status")}>
-                  <SelectTrigger className="h-9 w-[170px] text-sm" aria-label="Update type"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-9 w-[10.625rem] text-sm" aria-label="Update type"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="update" className="text-sm">Update</SelectItem>
                     <SelectItem value="note" className="text-sm">Internal note</SelectItem>
@@ -370,15 +370,15 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 const EntryIcon = meta.icon;
                 return (
                   <li key={entry.id} className="relative pb-4 last:pb-0">
-                    <span aria-hidden="true" className={cn("absolute -left-[34px] top-0.5 grid h-6 w-6 place-items-center rounded-full border border-border bg-card", meta.tone)}>
+                    <span aria-hidden="true" className={cn("absolute -left-[2.125rem] top-0.5 grid h-6 w-6 place-items-center rounded-full border border-border bg-card", meta.tone)}>
                       <EntryIcon size={12} />
                     </span>
                     <div className="flex flex-wrap items-baseline gap-x-2">
-                      <span className="font-mono text-[12px] tabular-nums text-muted-foreground" title={fullTimestamp(entry.epochMs, false)}>{new Date(entry.epochMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>
-                      <span className="text-[12px] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
-                      <span className="text-[12px] font-semibold text-muted-foreground">· {meta.label}</span>
+                      <span className="font-mono text-[0.75rem] tabular-nums text-muted-foreground" title={fullTimestamp(entry.epochMs, false)}>{new Date(entry.epochMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>
+                      <span className="text-[0.75rem] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
+                      <span className="text-[0.75rem] font-semibold text-muted-foreground">· {meta.label}</span>
                     </div>
-                    <p className="mt-0.5 text-[13px] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
                   </li>
                 );
               })}
@@ -390,7 +390,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             title="Linked Alerts"
             actions={
               <div className="flex items-center gap-1.5">
-                <span className="rounded-full bg-muted px-2 py-1 text-[12px] font-semibold tabular-nums text-muted-foreground">{linked.length} linked</span>
+                <span className="rounded-full bg-muted px-2 py-1 text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{linked.length} linked</span>
                 <AlertMenu
                   label="Linked alerts options"
                   trigger={kebabButton("Linked alerts options")}
@@ -400,7 +400,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             }
           >
             {linked.length === 0 ? (
-              <p className="text-[13px] text-muted-foreground">No alerts linked to this incident.</p>
+              <p className="text-[0.8125rem] text-muted-foreground">No alerts linked to this incident.</p>
             ) : (
               <ul className="flex flex-col divide-y divide-border/70">
                 {linked.map((alert) => (
@@ -408,10 +408,10 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                     <Link href={`/alerts?alert=${alert.id}`} className="flex items-center gap-3 rounded-md py-2.5 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       <i aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: ALERT_SEVERITY_DOT[alert.severity] }} />
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-medium text-foreground" title={alert.name}>{alert.name}</span>
-                        <span className="mt-0.5 block font-mono text-[12px] text-muted-foreground">{alert.id} · {alert.host} · {timeAgo(alert.epochMs)}</span>
+                        <span className="block truncate text-[0.8125rem] font-medium text-foreground" title={alert.name}>{alert.name}</span>
+                        <span className="mt-0.5 block font-mono text-[0.75rem] text-muted-foreground">{alert.id} · {alert.host} · {timeAgo(alert.epochMs)}</span>
                       </span>
-                      <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[12px] font-semibold", alert.status === "resolved" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : alert.status === "acknowledged" ? "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300" : "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300")}>{alert.status}</span>
+                      <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", alert.status === "resolved" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : alert.status === "acknowledged" ? "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300" : "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300")}>{alert.status}</span>
                     </Link>
                   </li>
                 ))}
@@ -425,7 +425,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             actions={
               <div className="flex items-center gap-1.5">
                 {incident.postmortem.status !== "None" && (
-                  <span className={cn("rounded-full px-2 py-1 text-[12px] font-semibold", incident.postmortem.status === "Published" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{incident.postmortem.status}</span>
+                  <span className={cn("rounded-full px-2 py-1 text-[0.75rem] font-semibold", incident.postmortem.status === "Published" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{incident.postmortem.status}</span>
                 )}
                 <AlertMenu
                   label="Postmortem options"
@@ -443,29 +443,29 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             {incident.postmortem.status === "None" ? (
               <div className="flex flex-col items-center gap-2 py-4 text-center">
                 <p className="text-sm font-medium text-foreground">No postmortem started yet</p>
-                <p className="max-w-sm text-[13px] text-muted-foreground">Capture what happened, the root cause and the action items while it is fresh.</p>
+                <p className="max-w-sm text-[0.8125rem] text-muted-foreground">Capture what happened, the root cause and the action items while it is fresh.</p>
                 <Button onClick={() => { startPostmortem(incident.id); showToast("Postmortem draft created."); }} className="mt-1 h-9 rounded-lg bg-primary px-4 text-sm text-primary-foreground hover:bg-primary/90">Start postmortem</Button>
               </div>
             ) : (
               <div className="space-y-4">
                 <section>
-                  <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Summary</h3>
+                  <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Summary</h3>
                   <p className="mt-1 text-sm leading-snug text-foreground">{incident.postmortem.summary}</p>
                 </section>
                 <section className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Root cause</h3>
+                    <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Root cause</h3>
                     <p className="mt-1 text-sm leading-snug text-foreground">{incident.postmortem.rootCause}</p>
                   </div>
                   <div>
-                    <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Impact</h3>
+                    <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Impact</h3>
                     <p className="mt-1 text-sm leading-snug text-foreground">{incident.postmortem.impact}</p>
                   </div>
                 </section>
                 <section>
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Action items</h3>
-                    <span className="text-[12px] font-semibold tabular-nums text-muted-foreground">{pmDone}/{pmTotal} done</span>
+                    <h3 className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Action items</h3>
+                    <span className="text-[0.75rem] font-semibold tabular-nums text-muted-foreground">{pmDone}/{pmTotal} done</span>
                   </div>
                   <span aria-hidden="true" className="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${pmTotal ? (pmDone / pmTotal) * 100 : 0}%` }} /></span>
                   <ul className="mt-2 flex flex-col divide-y divide-border/70">
@@ -478,15 +478,15 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                           aria-label={item.done ? `Mark action item not done: ${item.text}` : `Mark action item done: ${item.text}`}
                           onClick={() => toggleActionItem(incident.id, item.id)}
                           className={cn(
-                            "mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            "mt-0.5 grid h-[1.125rem] w-[1.125rem] shrink-0 place-items-center rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                             item.done ? "border-emerald-600 bg-emerald-600 text-white" : "border-border bg-card hover:border-primary",
                           )}
                         >
                           {item.done && <Check size={12} aria-hidden="true" />}
                         </button>
                         <span className="min-w-0 flex-1">
-                          <span className={cn("block text-[13px] leading-snug text-foreground", item.done && "text-muted-foreground line-through")}>{item.text}</span>
-                          <span className="mt-0.5 block text-[12px] text-muted-foreground">{item.owner} · due {item.due}</span>
+                          <span className={cn("block text-[0.8125rem] leading-snug text-foreground", item.done && "text-muted-foreground line-through")}>{item.text}</span>
+                          <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">{item.owner} · due {item.due}</span>
                         </span>
                       </li>
                     ))}
@@ -533,7 +533,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                         {isPast ? <Check size={14} aria-hidden="true" /> : <StepIcon size={14} aria-hidden="true" />}
                       </span>
                       <span className="min-w-0 flex-1 text-sm font-medium text-foreground">{step}</span>
-                      {isCurrent && <span className="shrink-0 rounded-full bg-foreground/90 px-2 py-0.5 text-[12px] font-semibold text-background">Current</span>}
+                      {isCurrent && <span className="shrink-0 rounded-full bg-foreground/90 px-2 py-0.5 text-[0.75rem] font-semibold text-background">Current</span>}
                     </button>
                   </li>
                 );
@@ -600,7 +600,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                   <InitialsAvatar name={name} size={34} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium text-foreground">{name}{name === CURRENT_USER_NAME ? " (you)" : ""}</span>
-                    <span className="block text-[12px] text-muted-foreground">{role}</span>
+                    <span className="block text-[0.75rem] text-muted-foreground">{role}</span>
                   </span>
                 </li>
               ))}
@@ -624,10 +624,10 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 <li key={service} className="flex items-center gap-2.5 py-2.5">
                   <span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", dot)} />
                   <span className="min-w-0 flex-1">
-                    <Link href={`/incidents?service=${encodeURIComponent(service)}`} className="block truncate text-[13px] font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
-                    <span className="block truncate font-mono text-[12px] text-muted-foreground">{incident.affectedHosts.join(", ")}</span>
+                    <Link href={`/incidents?service=${encodeURIComponent(service)}`} className="block truncate text-[0.8125rem] font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
+                    <span className="block truncate font-mono text-[0.75rem] text-muted-foreground">{incident.affectedHosts.join(", ")}</span>
                   </span>
-                  <span className={cn("shrink-0 text-[12px] font-semibold", text)}>{label}</span>
+                  <span className={cn("shrink-0 text-[0.75rem] font-semibold", text)}>{label}</span>
                 </li>
               ))}
             </ul>
@@ -640,12 +640,12 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         {newer ? (
           <Link href={`/incidents/${newer.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <ChevronLeft size={15} aria-hidden="true" />
-            <span><span className="block text-left text-[12px] leading-none text-muted-foreground">Newer</span><span className="mt-0.5 block max-w-[220px] truncate font-mono text-[13px] font-semibold leading-none text-foreground">{newer.id}</span></span>
+            <span><span className="block text-left text-[0.75rem] leading-none text-muted-foreground">Newer</span><span className="mt-0.5 block max-w-[13.75rem] truncate font-mono text-[0.8125rem] font-semibold leading-none text-foreground">{newer.id}</span></span>
           </Link>
         ) : <span aria-hidden="true" />}
         {older ? (
           <Link href={`/incidents/${older.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span><span className="block text-right text-[12px] leading-none text-muted-foreground">Older</span><span className="mt-0.5 block max-w-[220px] truncate font-mono text-[13px] font-semibold leading-none text-foreground">{older.id}</span></span>
+            <span><span className="block text-right text-[0.75rem] leading-none text-muted-foreground">Older</span><span className="mt-0.5 block max-w-[13.75rem] truncate font-mono text-[0.8125rem] font-semibold leading-none text-foreground">{older.id}</span></span>
             <ChevronRight size={15} aria-hidden="true" />
           </Link>
         ) : <span aria-hidden="true" />}

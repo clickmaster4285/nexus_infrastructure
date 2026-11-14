@@ -234,7 +234,7 @@ export function AlertRulesDashboard() {
           title="Alert Rules"
           subtitle="Threshold, anomaly and composite rules with notification policies"
         />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">Alert rules could not be loaded</p>
             <p className="text-sm text-muted-foreground">The rules service failed for this request. Retry to reload it.</p>
@@ -277,10 +277,10 @@ export function AlertRulesDashboard() {
       {isLoading ? (
         <>
           <section aria-busy="true" aria-label="Loading rule KPIs" className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-[88px] animate-pulse rounded-xl bg-muted" />)}
+            {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-[5.5rem] animate-pulse rounded-xl bg-muted" />)}
           </section>
-          <div className="h-[120px] animate-pulse rounded-xl bg-muted" />
-          <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+          <div className="h-[7.5rem] animate-pulse rounded-xl bg-muted" />
+          <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
         </>
       ) : (
         <>
@@ -289,11 +289,11 @@ export function AlertRulesDashboard() {
           <Panel
             title="Rules"
             className="flex min-w-0 flex-col rounded-xl p-5"
-            titleClassName="text-[16px] font-semibold"
+            titleClassName="text-[1rem] font-semibold"
             headerClassName="h-10"
             showOptions
             action={
-              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[12px] font-semibold text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-muted-foreground">
                 <SlidersHorizontal size={11} aria-hidden="true" />
                 {rules.length} {rules.length === 1 ? "rule" : "rules"}
               </span>
@@ -339,13 +339,13 @@ export function AlertRulesDashboard() {
                   <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground">
                     <BellOff size={20} />
                   </span>
-                  <p className="font-display text-[15px] font-bold text-foreground">No rules match your filters</p>
-                  <p className="text-[13px] text-muted-foreground">Try widening the filters or clearing them.</p>
+                  <p className="font-display text-[0.9375rem] font-bold text-foreground">No rules match your filters</p>
+                  <p className="text-[0.8125rem] text-muted-foreground">Try widening the filters or clearing them.</p>
                   <div className="mt-1 flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setFilters(DEFAULT_RULE_FILTERS)} className="h-9 rounded-lg px-3 text-[13px]">
+                    <Button variant="outline" size="sm" onClick={() => setFilters(DEFAULT_RULE_FILTERS)} className="h-9 rounded-lg px-3 text-[0.8125rem]">
                       Clear filters
                     </Button>
-                    <Button size="sm" onClick={() => setEditorState({ mode: "create" })} className="h-9 gap-1.5 rounded-lg px-3 text-[13px]">
+                    <Button size="sm" onClick={() => setEditorState({ mode: "create" })} className="h-9 gap-1.5 rounded-lg px-3 text-[0.8125rem]">
                       <Plus size={14} aria-hidden="true" />Create Rule
                     </Button>
                   </div>
@@ -386,8 +386,8 @@ export function AlertRulesDashboard() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteTargets([])} className="h-9 rounded-lg px-4 text-[13px]">Cancel</Button>
-            <Button variant="destructive" onClick={confirmDelete} className="h-9 rounded-lg px-4 text-[13px]">Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteTargets([])} className="h-9 rounded-lg px-4 text-[0.8125rem]">Cancel</Button>
+            <Button variant="destructive" onClick={confirmDelete} className="h-9 rounded-lg px-4 text-[0.8125rem]">Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

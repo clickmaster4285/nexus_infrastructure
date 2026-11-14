@@ -89,7 +89,7 @@ export function ApproveChangeDialog({ open, onOpenChange, change, onDone }: Base
   const valid = ticket.trim().length > 0 || reason.trim().length > 0;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><Check size={17} className="text-emerald-600" aria-hidden="true" />Approve change</DialogTitle>
           <DialogDescription>Approves <b>{change.id}</b> on <b>{change.assetName}</b>. A ticket or a written reason is required for the audit trail.</DialogDescription>
@@ -122,7 +122,7 @@ export function RejectChangeDialog({ open, onOpenChange, change, onDone }: BaseD
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><ShieldAlert size={16} className="text-red-500" aria-hidden="true" />Reject change</DialogTitle>
           <DialogDescription>Rejects <b>{change.id}</b>. The change will be reverted on <b>{change.assetName}</b> at the next agent sync (mock).</DialogDescription>
@@ -154,7 +154,7 @@ export function MarkExpectedDialog({ open, onOpenChange, change, onDone }: BaseD
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Mark as expected</DialogTitle>
           <DialogDescription>Suppresses drift alerts for <b>{change.id}</b>. Reclassifies it as an approved recurring change.</DialogDescription>
@@ -191,7 +191,7 @@ export function AcceptBaselineDialog({ open, onOpenChange, change, onDone }: Bas
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(460px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(28.75rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Accept as new baseline</DialogTitle>
           <DialogDescription>The current state of <b>{change.path.split(":")[0]}</b> becomes the new compliance baseline for <b>{change.assetName}</b>. Approved by <b>{CURRENT_USER_NAME}</b>.</DialogDescription>
@@ -235,7 +235,7 @@ export function RollbackDialog({ open, onOpenChange, change, snapshots, onDone }
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(500px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(31.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><AlertTriangle size={16} className="text-red-500" aria-hidden="true" />Rollback change</DialogTitle>
           <DialogDescription>Restores <b>{change.id}</b> on <b>{change.assetName}</b> from a snapshot. Type the asset name to confirm.</DialogDescription>
@@ -312,7 +312,7 @@ export function RunDriftScanDialog({ open, onOpenChange, onDone, onScanned }: Ba
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><ScanLine size={17} className="text-primary" aria-hidden="true" />Run drift scan</DialogTitle>
           <DialogDescription>Compares current state against the approved baseline. In production this runs on the agents; here it is simulated.</DialogDescription>
@@ -353,7 +353,7 @@ export function RunDriftScanDialog({ open, onOpenChange, onDone, onScanned }: Ba
         ) : (
           <div className="flex flex-col gap-3">
             <p className="flex items-center gap-2 text-sm font-semibold text-foreground"><Layers size={15} aria-hidden="true" />2 new drifts detected</p>
-            <ul className="flex flex-col divide-y divide-border rounded-lg border border-border text-[13px]">
+            <ul className="flex flex-col divide-y divide-border rounded-lg border border-border text-[0.8125rem]">
               {found.map((change) => (
                 <li key={change.id} className="flex items-center gap-2 px-3 py-2">
                   <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"><AlertTriangle size={12} /></span>

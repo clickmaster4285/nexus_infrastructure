@@ -17,7 +17,7 @@ export function FailureReasonsCard({ runs, onViewFailed, onExport }: { runs: Bac
   return (
     <ChartCard
       title="Failure Reasons (7d)"
-      className="h-full min-h-[280px] p-4"
+      className="h-full min-h-[17.5rem] p-4"
       actions={
         <div className="flex items-center gap-1">
           <button
@@ -52,7 +52,7 @@ export function FailureReasonsCard({ runs, onViewFailed, onExport }: { runs: Bac
           >
             <span className="w-24 shrink-0 truncate text-xs text-muted-foreground group-hover:text-foreground">{reason.label}</span>
             <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted" role="presentation">
-              <div className="h-full rounded-full bg-[#F87171]" style={{ width: `${reason.pct}%` }} />
+              <div className="h-full rounded-full bg-red-400" style={{ width: `${reason.pct}%` }} />
             </div>
             <span className="w-7 shrink-0 text-right text-xs tabular-nums font-semibold text-foreground">{reason.count}</span>
           </button>

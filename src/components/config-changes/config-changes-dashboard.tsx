@@ -452,10 +452,10 @@ export function ConfigChangesDashboard() {
   if (loadState === "loading") {
     return (
       <div className="space-y-4 pb-4" aria-busy="true">
-        <div className="h-[92px] animate-pulse rounded-xl bg-muted" />
+        <div className="h-[5.75rem] animate-pulse rounded-xl bg-muted" />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">{Array.from({ length: 6 }, (_, index) => <div key={index} className="h-28 animate-pulse rounded-xl bg-muted" />)}</div>
-        <div className="grid items-stretch gap-4 xl:grid-cols-12"><div className="h-[340px] animate-pulse rounded-xl bg-muted xl:col-span-8" /><div className="h-[340px] animate-pulse rounded-xl bg-muted xl:col-span-4" /></div>
-        <div className="h-[240px] animate-pulse rounded-xl bg-muted" />
+        <div className="grid items-stretch gap-4 xl:grid-cols-12"><div className="h-[21.25rem] animate-pulse rounded-xl bg-muted xl:col-span-8" /><div className="h-[21.25rem] animate-pulse rounded-xl bg-muted xl:col-span-4" /></div>
+        <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
       </div>
     );
   }
@@ -464,7 +464,7 @@ export function ConfigChangesDashboard() {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Configuration Changes"]} title="Configuration Changes" subtitle="Track configuration drift and changes across managed hosts." />
-        <Card className="grid min-h-[320px] place-items-center rounded-xl p-6">
+        <Card className="grid min-h-[20rem] place-items-center rounded-xl p-6">
           <div className="text-center">
             <CircleAlert className="mx-auto text-rose-500" size={28} />
             <h2 className="mt-2 text-base font-semibold">Configuration changes could not be loaded</h2>
@@ -522,12 +522,12 @@ export function ConfigChangesDashboard() {
 
       {/* Stat cards */}
       <section aria-label="Configuration change KPIs" className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-3 xl:grid-cols-6">
-        <StatCard icon={<FileDiff size={19} />} label="Total Changes (24h)" value={summary.total24h.toLocaleString()} delta={summary.deltas.total} deltaPercent={summary.deltas.totalPct} goodDirection="up" iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" className="min-h-[112px]" detail="in the last 24h" />
-        <StatCard icon={<AlertTriangle size={19} />} label="Unapproved" value={String(summary.unapproved)} delta={summary.deltas.unapproved} deltaPercent="+2 today" goodDirection="down" iconTone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" className="min-h-[112px]" detail="awaiting review" onClick={() => applyFilters({ tab: "unapproved" })} onClickLabel="Show unapproved changes" />
-        <StatCard icon={<Globe size={19} />} label="Drifted Assets" value={String(summary.driftedAssets)} delta={summary.deltas.driftedAssets} deltaPercent="+1 today" goodDirection="down" iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" className="min-h-[112px]" detail="off approved baseline" onClick={() => applyFilters({ tab: "drift" })} onClickLabel="Show drifted changes" />
-        <StatCard icon={<ShieldAlert size={19} />} label="High / Critical Risk" value={String(summary.highCriticalRisk)} delta={summary.deltas.highCriticalRisk} deltaPercent="-3 vs yesterday" goodDirection="down" iconTone="bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" className="min-h-[112px]" detail="in the last 24h" onClick={() => applyFilters({ tab: "highrisk" })} onClickLabel="Show high risk changes" />
-        <StatCard icon={<RotateCcw size={19} />} label="Rolled Back" value={String(summary.rolledBack)} delta={summary.deltas.rolledBack} deltaPercent="+1 today" goodDirection="down" iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" className="min-h-[112px]" detail="in the last 24h" onClick={() => applyFilters({ tab: "rolledback" })} onClickLabel="Show rolled back changes" />
-        <StatCard icon={<CheckCircle2 size={19} />} label="Baseline Compliance" value={`${summary.compliancePct}%`} delta={summary.deltas.compliance} deltaPercent="+1.4 pts" goodDirection="up" iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" className="min-h-[112px]" detail="CIS Ubuntu 22.04" />
+        <StatCard icon={<FileDiff size={19} />} label="Total Changes (24h)" value={summary.total24h.toLocaleString()} delta={summary.deltas.total} deltaPercent={summary.deltas.totalPct} goodDirection="up" iconTone="bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" className="min-h-[7rem]" detail="in the last 24h" />
+        <StatCard icon={<AlertTriangle size={19} />} label="Unapproved" value={String(summary.unapproved)} delta={summary.deltas.unapproved} deltaPercent="+2 today" goodDirection="down" iconTone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" className="min-h-[7rem]" detail="awaiting review" onClick={() => applyFilters({ tab: "unapproved" })} onClickLabel="Show unapproved changes" />
+        <StatCard icon={<Globe size={19} />} label="Drifted Assets" value={String(summary.driftedAssets)} delta={summary.deltas.driftedAssets} deltaPercent="+1 today" goodDirection="down" iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" className="min-h-[7rem]" detail="off approved baseline" onClick={() => applyFilters({ tab: "drift" })} onClickLabel="Show drifted changes" />
+        <StatCard icon={<ShieldAlert size={19} />} label="High / Critical Risk" value={String(summary.highCriticalRisk)} delta={summary.deltas.highCriticalRisk} deltaPercent="-3 vs yesterday" goodDirection="down" iconTone="bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" className="min-h-[7rem]" detail="in the last 24h" onClick={() => applyFilters({ tab: "highrisk" })} onClickLabel="Show high risk changes" />
+        <StatCard icon={<RotateCcw size={19} />} label="Rolled Back" value={String(summary.rolledBack)} delta={summary.deltas.rolledBack} deltaPercent="+1 today" goodDirection="down" iconTone="bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" className="min-h-[7rem]" detail="in the last 24h" onClick={() => applyFilters({ tab: "rolledback" })} onClickLabel="Show rolled back changes" />
+        <StatCard icon={<CheckCircle2 size={19} />} label="Baseline Compliance" value={`${summary.compliancePct}%`} delta={summary.deltas.compliance} deltaPercent="+1.4 pts" goodDirection="up" iconTone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" className="min-h-[7rem]" detail="CIS Ubuntu 22.04" />
       </section>
 
       {/* Row 1 - timeline chart + needs review */}
@@ -628,11 +628,11 @@ export function ConfigChangesDashboard() {
               .map((change) => (
                 <li key={change.id} className="group relative flex-1">
                   <button type="button" onClick={() => openEvent(change.id)} className="flex h-full w-full items-center gap-2 rounded-md px-2 py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40" aria-label={`Open change ${change.id}`}>
-                    <ConfigRiskBadge risk={change.risk} className="w-[72px] shrink-0 justify-center" />
+                    <ConfigRiskBadge risk={change.risk} className="w-[4.5rem] shrink-0 justify-center" />
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate font-mono text-[12px] font-semibold text-foreground" title={change.path}>{change.path}</span>
+                      <span className="block truncate font-mono text-[0.75rem] font-semibold text-foreground" title={change.path}>{change.path}</span>
                       <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><b className="shrink-0 text-foreground">{change.assetName}</b><span className="truncate">· {change.changeType} · {change.category}</span></span>
-                      <span className="mt-0.5 block text-[11px] tabular-nums text-muted-foreground">{mounted ? timeAgo(change.detectedAt) : "…"}{change.maintenanceWindowId ? ` · via ${change.maintenanceWindowId}` : " · outside window"}</span>
+                      <span className="mt-0.5 block text-[0.6875rem] tabular-nums text-muted-foreground">{mounted ? timeAgo(change.detectedAt) : "…"}{change.maintenanceWindowId ? ` · via ${change.maintenanceWindowId}` : " · outside window"}</span>
                     </span>
                     <ApprovalBadge status={change.approvalStatus} className="shrink-0" />
                   </button>
@@ -647,9 +647,9 @@ export function ConfigChangesDashboard() {
             )}
           </ul>
           <div className="mt-3 grid grid-cols-3 gap-2 border-t border-border pt-3 text-center">
-            <div className="rounded-lg bg-rose-50 p-1.5 dark:bg-rose-500/10"><b className="block text-base tabular-nums text-rose-700 dark:text-rose-300">{summary.unapproved}</b><span className="text-[11px] text-muted-foreground">unapproved</span></div>
-            <div className="rounded-lg bg-orange-50 p-1.5 dark:bg-orange-500/10"><b className="block text-base tabular-nums text-orange-700 dark:text-orange-300">{summary.highCriticalRisk}</b><span className="text-[11px] text-muted-foreground">high / critical</span></div>
-            <div className="rounded-lg bg-blue-50 p-1.5 dark:bg-blue-500/10"><b className="block text-base tabular-nums text-blue-700 dark:text-blue-300">{oldestQueueAge(events)}</b><span className="text-[11px] text-muted-foreground">oldest in queue</span></div>
+            <div className="rounded-lg bg-rose-50 p-1.5 dark:bg-rose-500/10"><b className="block text-base tabular-nums text-rose-700 dark:text-rose-300">{summary.unapproved}</b><span className="text-[0.6875rem] text-muted-foreground">unapproved</span></div>
+            <div className="rounded-lg bg-orange-50 p-1.5 dark:bg-orange-500/10"><b className="block text-base tabular-nums text-orange-700 dark:text-orange-300">{summary.highCriticalRisk}</b><span className="text-[0.6875rem] text-muted-foreground">high / critical</span></div>
+            <div className="rounded-lg bg-blue-50 p-1.5 dark:bg-blue-500/10"><b className="block text-base tabular-nums text-blue-700 dark:text-blue-300">{oldestQueueAge(events)}</b><span className="text-[0.6875rem] text-muted-foreground">oldest in queue</span></div>
           </div>
           <div className="mt-3 border-t border-border pt-3">
             <ViewAllLink href="/configuration-changes?tab=unapproved" label="Review all" />
@@ -659,15 +659,15 @@ export function ConfigChangesDashboard() {
 
       {/* Row 2 - donut, drift by group, compliance */}
       <section className="grid items-stretch gap-4 xl:grid-cols-3">
-        <ChartCard title="Changes by Type" className="min-h-[390px]" actions={<AuthCardMenu label="Changes by type" onExport={() => handleExport("csv")} />}>
+        <ChartCard title="Changes by Type" className="min-h-[24.375rem]" actions={<AuthCardMenu label="Changes by type" onExport={() => handleExport("csv")} />}>
           <div className="flex flex-1 flex-col items-center gap-5">
             <TypeDonut onSelect={(category) => applyFilters({ category })} />
             <ul className="grid w-full grid-cols-3 gap-x-4 gap-y-3 text-sm">
               {CONFIG_CATEGORY_MIX.slice(0, 6).map(([category, count]) => (
                 <li key={category}>
                   <button type="button" onClick={() => applyFilters({ category })} className="flex w-full flex-col items-start gap-0.5 rounded-md p-1.5 text-left hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`Filter by ${category}`}>
-                    <span className="flex min-w-0 items-center gap-1.5 text-[11px] text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category] }} aria-hidden="true" /><span className="truncate">{category}</span></span>
-                    <span className="flex w-full items-baseline justify-between gap-2"><b className="tabular-nums text-foreground">{count}</b><span className="text-[11px] tabular-nums text-muted-foreground">{Math.round((count / summary.total24h) * 100)}%</span></span>
+                    <span className="flex min-w-0 items-center gap-1.5 text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category] }} aria-hidden="true" /><span className="truncate">{category}</span></span>
+                    <span className="flex w-full items-baseline justify-between gap-2"><b className="tabular-nums text-foreground">{count}</b><span className="text-[0.6875rem] tabular-nums text-muted-foreground">{Math.round((count / summary.total24h) * 100)}%</span></span>
                   </button>
                 </li>
               ))}
@@ -684,7 +684,7 @@ export function ConfigChangesDashboard() {
               return (
                 <li key={group.group}>
                   <button type="button" onClick={() => applyFilters({ group: group.group })} className="flex w-full items-center gap-2 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1" aria-label={`Filter by group ${group.group}`}>
-                    <span className="w-32 shrink-0 truncate text-[13px] font-medium text-foreground">{group.group}</span>
+                    <span className="w-32 shrink-0 truncate text-[0.8125rem] font-medium text-foreground">{group.group}</span>
                     <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-orange-400" style={{ width: `${Math.max(12, pct)}%` }} /></div>
                     <span className="w-12 shrink-0 text-right text-xs tabular-nums text-muted-foreground"><b className="text-foreground">{group.drifted}</b> drifted</span>
                     <span className="hidden w-16 shrink-0 text-right text-xs tabular-nums text-muted-foreground sm:block">worst {group.worst}</span>
@@ -712,7 +712,7 @@ export function ConfigChangesDashboard() {
           </div>
           <ol className="mt-3 flex flex-1 flex-col divide-y divide-border">
             {CONFIG_COMPLIANCE.failedRules.map((rule) => (
-              <li key={rule.id} className="flex items-center gap-2 py-1.5 text-[13px]">
+              <li key={rule.id} className="flex items-center gap-2 py-1.5 text-[0.8125rem]">
                 <code className="w-14 shrink-0 font-mono text-xs text-muted-foreground">{rule.id}</code>
                 <span className="min-w-0 flex-1 truncate text-foreground" title={rule.name}>{rule.name}</span>
                 <span className="shrink-0 rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold tabular-nums text-rose-700 dark:bg-rose-500/10 dark:text-rose-300">{rule.assets} assets</span>
@@ -738,7 +738,7 @@ export function ConfigChangesDashboard() {
                 <>
                   <OsIcon os={asset.assetOs} className="mt-0.5" />
                   <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-2"><span className="truncate font-mono text-[13px] font-semibold text-foreground">{asset.assetId}</span>{asset.unapproved > 0 && <span className="inline-flex shrink-0 items-center rounded-full bg-rose-100 px-1.5 py-0.5 text-xs font-semibold text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">{asset.unapproved} unapproved</span>}</span>
+                    <span className="flex items-center gap-2"><span className="truncate font-mono text-[0.8125rem] font-semibold text-foreground">{asset.assetId}</span>{asset.unapproved > 0 && <span className="inline-flex shrink-0 items-center rounded-full bg-rose-100 px-1.5 py-0.5 text-xs font-semibold text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">{asset.unapproved} unapproved</span>}</span>
                     <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500/80" style={{ width: `${Math.round((asset.total / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{asset.total} changes · {mounted ? timeAgo(asset.last) : "…"}</span></span>
                   </span>
                 </>
@@ -783,8 +783,8 @@ export function ConfigChangesDashboard() {
               <li key={link.changeId} className="flex flex-1 flex-col justify-center py-2">
                 <div className="flex items-center gap-2">
                   <button type="button" onClick={() => openEvent(link.changeId)} className="min-w-0 flex-1 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                    <span className="block truncate font-mono text-[13px] font-semibold text-primary hover:underline">{link.changeId}</span>
-                    <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><span aria-hidden="true" className="text-[15px] leading-none text-muted-foreground">→</span><Link href={`/incidents/${link.incidentId}`} onClick={(event) => event.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{link.incidentId}</Link><span className="shrink-0">· {link.minutesAfter} min later</span></span>
+                    <span className="block truncate font-mono text-[0.8125rem] font-semibold text-primary hover:underline">{link.changeId}</span>
+                    <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><span aria-hidden="true" className="text-[0.9375rem] leading-none text-muted-foreground">→</span><Link href={`/incidents/${link.incidentId}`} onClick={(event) => event.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{link.incidentId}</Link><span className="shrink-0">· {link.minutesAfter} min later</span></span>
                   </button>
                   <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold", link.confidence === "Likely cause" ? "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{link.confidence}</span>
                 </div>
@@ -844,7 +844,7 @@ export function ConfigChangesDashboard() {
             <FilterSelect value={changedByFilter} onChange={(value) => applyFilters({ changedBy: value })} label="Changed by" options={["ops@nexus.io", "automation@nexus.io", "agent", "apt", "marcus.lee@nexus.io", "sara.iqbal@nexus.io", "unknown"]} allLabel="All actors" />
             <FilterSelect value={statusFilter} onChange={(value) => applyFilters({ status: value })} label="Status" options={["Open", "Reviewed", "Reverted", "Rolled back", "Accepted as new baseline"]} allLabel="All statuses" />
             <FilterSelect value={range} onChange={(value) => updateParams({ range: value, page: null, bucket: null })} label="Time range" options={["1H", "24H", "7D", "30D"]} allLabel="" hideAll />
-            <div className="relative min-w-[180px] flex-1 sm:min-w-[220px]">
+            <div className="relative min-w-[11.25rem] flex-1 sm:min-w-[13.75rem]">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search asset, path, setting, user, ticket…" aria-label="Search changes" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
@@ -888,7 +888,7 @@ export function ConfigChangesDashboard() {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1120px] text-left text-[13px]">
+            <table className="w-full min-w-[70rem] text-left text-[0.8125rem]">
               <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="w-10 px-3 py-2.5"><input type="checkbox" aria-label="Select all changes on this page" className="h-4 w-4 accent-[var(--primary)]" checked={pageRows.length > 0 && pageRows.every((row) => selected.has(row.id))} onChange={toggleSelectPage} /></th>
@@ -901,7 +901,7 @@ export function ConfigChangesDashboard() {
                   <th className="px-2 py-2.5"><button type="button" onClick={() => toggleSort("riskScore")} className="inline-flex items-center gap-1 font-semibold uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Risk {sort.key === "riskScore" ? (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />) : <ArrowUpDown size={11} className="opacity-60" />}</button></th>
                   <th className="hidden px-2 py-2.5 font-semibold sm:table-cell">Drift</th>
                   <th className="hidden px-2 py-2.5 font-semibold lg:table-cell">Status</th>
-                  <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[18px]" : "left-0.5")} /></button></span></th>
+                  <th className="px-2 py-2.5 text-right"><span className="sr-only">Actions</span><span className="mr-2 hidden items-center gap-1.5 font-semibold normal-case sm:inline-flex">UTC<button type="button" onClick={() => updateParams({ tz: utc ? null : "utc" })} role="switch" aria-checked={utc} aria-label="Toggle UTC times" className={cn("relative h-5 w-9 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", utc ? "bg-primary" : "bg-muted")}><span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all", utc ? "left-[1.125rem]" : "left-0.5")} /></button></span></th>
                 </tr>
               </thead>
               <tbody>
@@ -913,34 +913,34 @@ export function ConfigChangesDashboard() {
                   return (
                     <tr key={change.id} tabIndex={0} role="link" aria-label={`Open change ${change.id}`} onClick={() => openEvent(change.id)} onKeyDown={(keyEvent) => { if (keyEvent.key === "Enter" || keyEvent.key === " ") { keyEvent.preventDefault(); openEvent(change.id); } }} className="group relative cursor-pointer border-b border-border/70 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40">
                       <td className={cn("relative px-3 align-middle", compact ? "py-1.5" : "py-2.5")}>
-                        <span aria-hidden="true" className={cn("absolute inset-y-0 left-0 w-[3px]", change.risk === "Critical" ? "bg-red-500" : change.risk === "High" ? "bg-orange-400" : change.risk === "Medium" ? "bg-amber-400" : "bg-blue-400")} />
+                        <span aria-hidden="true" className={cn("absolute inset-y-0 left-0 w-[0.1875rem]", change.risk === "Critical" ? "bg-red-500" : change.risk === "High" ? "bg-orange-400" : change.risk === "Medium" ? "bg-amber-400" : "bg-blue-400")} />
                         <input type="checkbox" aria-label={`Select ${change.id}`} className="ml-1 h-4 w-4 accent-[var(--primary)]" checked={selected.has(change.id)} onClick={(clickEvent) => clickEvent.stopPropagation()} onKeyDown={(keyEvent) => keyEvent.stopPropagation()} onChange={() => toggleSelect(change.id)} />
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 align-middle" title={fullTime(change.detectedAt, utc)}>
                         <span className="block font-semibold tabular-nums text-foreground">{mounted ? timeAgo(change.detectedAt) : "…"}</span>
-                        <span className="block text-[11px] text-muted-foreground">{dateTimeShort(change.detectedAt, utc)}{utc ? " UTC" : ""}</span>
+                        <span className="block text-[0.6875rem] text-muted-foreground">{dateTimeShort(change.detectedAt, utc)}{utc ? " UTC" : ""}</span>
                       </td>
                       <td className="px-2 py-2 align-middle">
                         <span className="flex items-center gap-2">
                           <OsIcon os={change.assetOs} />
-                          {href ? <Link href={href} onClick={(clickEvent) => clickEvent.stopPropagation()} className="max-w-[150px] truncate font-mono text-[13px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" title={change.assetId}>{change.assetId}</Link> : <span className="max-w-[150px] truncate font-mono text-[13px] font-semibold text-foreground">{change.assetId}</span>}
+                          {href ? <Link href={href} onClick={(clickEvent) => clickEvent.stopPropagation()} className="max-w-[9.375rem] truncate font-mono text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" title={change.assetId}>{change.assetId}</Link> : <span className="max-w-[9.375rem] truncate font-mono text-[0.8125rem] font-semibold text-foreground">{change.assetId}</span>}
                         </span>
                       </td>
-                      <td className="max-w-[320px] px-2 py-2 align-middle">
-                        <span className="block truncate text-[13px] font-semibold text-foreground" title={change.path}>{highlight(file)}{setting ? <span className="text-muted-foreground">: {setting}</span> : null}</span>
-                        <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11px] text-muted-foreground"><ChangeTypeBadge type={change.changeType} /><span className="truncate">{change.category}</span><span className="hidden font-mono text-[10px] text-slate-500 xl:inline" title={diffSummary(change.path, change.beforeValue, change.afterValue)}>{diffSummary(change.path, change.beforeValue, change.afterValue)}</span></span>
+                      <td className="max-w-[20rem] px-2 py-2 align-middle">
+                        <span className="block truncate text-[0.8125rem] font-semibold text-foreground" title={change.path}>{highlight(file)}{setting ? <span className="text-muted-foreground">: {setting}</span> : null}</span>
+                        <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[0.6875rem] text-muted-foreground"><ChangeTypeBadge type={change.changeType} /><span className="truncate">{change.category}</span><span className="hidden font-mono text-[0.625rem] text-slate-500 xl:inline" title={diffSummary(change.path, change.beforeValue, change.afterValue)}>{diffSummary(change.path, change.beforeValue, change.afterValue)}</span></span>
                       </td>
                       <td className="hidden px-2 py-2 align-middle md:table-cell"><ConfigSourceBadge source={change.source} /></td>
                       <td className="hidden px-2 py-2 align-middle md:table-cell">
                         <span className="flex items-center gap-2">
                           {change.changedBy === "unknown" || change.changedBy === "agent" || change.changedBy === "apt"
-                            ? <span className="grid h-6 w-6 place-items-center rounded-full bg-slate-100 text-[11px] font-bold uppercase text-slate-500 dark:bg-slate-500/20">?</span>
+                            ? <span className="grid h-6 w-6 place-items-center rounded-full bg-slate-100 text-[0.6875rem] font-bold uppercase text-slate-500 dark:bg-slate-500/20">?</span>
                             : <InitialsAvatar name={change.changedBy.split("@")[0]} size={22} />}
-                          <span className="max-w-[130px] truncate text-muted-foreground" title={change.changedBy}>{change.changedBy}</span>
+                          <span className="max-w-[8.125rem] truncate text-muted-foreground" title={change.changedBy}>{change.changedBy}</span>
                         </span>
                       </td>
                       <td className="px-2 py-2 align-middle">
-                        <div className="flex flex-col items-start gap-1"><ApprovalBadge status={change.approvalStatus} />{change.maintenanceWindowId ? <span className="inline-flex items-center gap-1 rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-800 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300" title={`Via maintenance window ${change.maintenanceWindowId}`}>{change.maintenanceWindowId}</span> : change.ticket ? <span className="inline-flex items-center gap-1 rounded border border-slate-200 px-1.5 py-0.5 font-mono text-[11px] text-slate-600 dark:border-slate-600 dark:text-slate-300">{change.ticket}</span> : null}</div>
+                        <div className="flex flex-col items-start gap-1"><ApprovalBadge status={change.approvalStatus} />{change.maintenanceWindowId ? <span className="inline-flex items-center gap-1 rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-[0.6875rem] font-medium text-teal-800 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300" title={`Via maintenance window ${change.maintenanceWindowId}`}>{change.maintenanceWindowId}</span> : change.ticket ? <span className="inline-flex items-center gap-1 rounded border border-slate-200 px-1.5 py-0.5 font-mono text-[0.6875rem] text-slate-600 dark:border-slate-600 dark:text-slate-300">{change.ticket}</span> : null}</div>
                       </td>
                       <td className="px-2 py-2 align-middle"><div className="flex flex-col items-start gap-1"><ConfigRiskBadge risk={change.risk} /><RiskScoreBar score={change.riskScore} /></div></td>
                       <td className="hidden px-2 py-2 align-middle sm:table-cell">{change.driftFromBaseline ? <span className="inline-flex items-center gap-1 text-xs font-semibold text-orange-700 dark:text-orange-300" title="Drifted from baseline"><Bug size={12} aria-hidden="true" />Drift</span> : <span className="text-xs text-muted-foreground">-</span>}</td>
@@ -986,7 +986,7 @@ export function ConfigChangesDashboard() {
           </div>
 
           <Pagination page={clampedPage} pageSize={pageSize} totalItems={filtered.length} onPageChange={(next) => updateParams({ page: String(next) })} onPageSizeChange={(size) => { setPageSize(size); updateParams({ page: null }); }} noun="changes" pageSizeOptions={[10, 25, 50]} />
-          <p className="border-t border-border px-4 py-2 text-[11px] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching changes sampled from a 24h fleet-wide workload ({summary.total24h} changes). Times shown in <b>{utc ? "UTC" : "local time"}</b> · {timeZoneLabel()}.</p>
+          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching changes sampled from a 24h fleet-wide workload ({summary.total24h} changes). Times shown in <b>{utc ? "UTC" : "local time"}</b> · {timeZoneLabel()}.</p>
         </Card>
       </section>
 
@@ -999,7 +999,7 @@ export function ConfigChangesDashboard() {
       <CreateIncidentDialog open={incidentTarget != null} onOpenChange={(open) => { if (!open) setIncidentTarget(null); }} prefill={incidentTarget ? { title: incidentTarget.title, impact: incidentTarget.impact, hosts: incidentTarget.hosts } : { title: "", impact: "" }} onDone={notify} />
       <RunDriftScanDialog open={scanOpen} onOpenChange={setScanOpen} onDone={notify} onScanned={load} />
       <Dialog open={saveViewOpen} onOpenChange={setSaveViewOpen}>
-        <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+        <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
           <DialogHeader>
             <DialogTitle>Save current view</DialogTitle>
             <DialogDescription>Stores the active filters as a named view in this browser.</DialogDescription>
@@ -1033,7 +1033,7 @@ type FilterOption = string;
 
 function FilterSelect({ value, onChange, label, options, allLabel, hideAll = false }: { value: string; onChange: (value: string) => void; label: string; options: FilterOption[]; allLabel: string; hideAll?: boolean }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[155px] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
+    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label} className="h-9 max-w-[9.6875rem] rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
       {!hideAll && <option value="all">{allLabel}</option>}
       {options.map((option) => <option key={option} value={option}>{option}</option>)}
     </select>
@@ -1233,7 +1233,7 @@ function ChangeTimelineChart({ mode, buckets, hidden, windowMarkers, onBarClick 
     return () => { chart.off("click", handler); };
   }, [hostRef, onBarClick]);
 
-  return <div ref={hostRef} className="h-[230px] min-h-[230px] w-full flex-1" role="img" aria-label="Configuration change timeline chart" />;
+  return <div ref={hostRef} className="h-[14.375rem] min-h-[14.375rem] w-full flex-1" role="img" aria-label="Configuration change timeline chart" />;
 }
 
 function TypeDonut({ onSelect }: { onSelect: (category: string) => void }) {
@@ -1270,11 +1270,11 @@ function TypeDonut({ onSelect }: { onSelect: (category: string) => void }) {
   }, [hostRef, onSelect]);
 
   return (
-    <div className="relative h-[160px] min-h-[160px] w-[160px]">
+    <div className="relative h-[10rem] min-h-[10rem] w-[10rem]">
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Changes by category donut chart" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <b className="font-display text-[22px] leading-none text-foreground tabular-nums">{summary.total24h}</b>
-        <span className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">changes · 24h</span>
+        <b className="font-display text-[1.375rem] leading-none text-foreground tabular-nums">{summary.total24h}</b>
+        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">changes · 24h</span>
       </div>
     </div>
   );

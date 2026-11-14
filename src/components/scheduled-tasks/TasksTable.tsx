@@ -173,14 +173,14 @@ export function TasksTable({
       <div className="overflow-x-hidden">
         <table className="w-full table-fixed border-collapse text-left">
           <colgroup>
-            <col style={{ width: "40px" }} />
+            <col style={{ width: "2.5rem" }} />
             <col style={{ width: "32%" }} />
             <col style={{ width: "20%" }} />
             <col style={{ width: "14%" }} />
             <col style={{ width: "14%" }} />
             <col style={{ width: "12%" }} />
-            <col style={{ width: "80px" }} />
-            <col style={{ width: "48px" }} />
+            <col style={{ width: "5rem" }} />
+            <col style={{ width: "3rem" }} />
           </colgroup>
           <thead className="sticky top-0 z-10">
             <tr className="border-b border-border bg-card shadow-[0_1px_0_0_var(--border)]">
@@ -207,13 +207,13 @@ export function TasksTable({
             {visible.length === 0 && (
               <tr>
                 <td colSpan={8}>
-                  <div className="flex min-h-[220px] flex-col items-center justify-center gap-2 py-10 text-center">
+                  <div className="flex min-h-[13.75rem] flex-col items-center justify-center gap-2 py-10 text-center">
                     <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><FilterX size={20} /></span>
                     <p className="font-display text-base font-bold text-foreground">No tasks match your filters</p>
                     <p className="max-w-sm text-sm text-muted-foreground">Try clearing the search or filters to see the full task list.</p>
                     <div className="mt-1 flex items-center gap-2">
-                      <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-4 text-[13px]" onClick={onClearFilters}>Clear filters</Button>
-                      <Button className="h-9 gap-1.5 rounded-lg px-4 text-[13px]" onClick={onCreateTask}><Inbox size={14} aria-hidden="true" />Create Task</Button>
+                      <Button variant="outline" className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={onClearFilters}>Clear filters</Button>
+                      <Button className="h-9 gap-1.5 rounded-lg px-4 text-[0.8125rem]" onClick={onCreateTask}><Inbox size={14} aria-hidden="true" />Create Task</Button>
                     </div>
                   </div>
                 </td>
@@ -244,15 +244,15 @@ export function TasksTable({
                   onClick={() => onOpenDrawer(task)}
                   onFocus={() => setFocusedId(task.id)}
                   className={cn(
-                    "group cursor-pointer border-b border-border/60 align-middle transition-colors last:border-0 hover:bg-[#F8FAFC] focus-visible:outline-none dark:hover:bg-muted/40",
+                    "group cursor-pointer border-b border-border/60 align-middle transition-colors last:border-0 hover:bg-slate-50 focus-visible:outline-none dark:hover:bg-muted/40",
                     rowHeight,
-                    focusedId === task.id && "bg-[#EFF6FF] dark:bg-blue-500/10",
+                    focusedId === task.id && "bg-blue-50 dark:bg-blue-500/10",
                     selected && "bg-primary/[0.06] dark:bg-primary/10",
                   )}
                 >
-                  {/* Checkbox (failed rows carry the 3px red indicator) */}
+                  {/* Checkbox (failed rows carry the 0.1875rem red indicator) */}
                   <td className="relative px-3 py-1.5 align-middle" onClick={(event) => event.stopPropagation()}>
-                    {lastFailed && <span aria-hidden="true" className="absolute left-0 top-0 h-full w-[3px] rounded-r-sm bg-[#DC2626]" />}
+                    {lastFailed && <span aria-hidden="true" className="absolute left-0 top-0 h-full w-[0.1875rem] rounded-r-sm bg-red-600" />}
                     <input
                       type="checkbox"
                       aria-label={`Select ${task.id}`}
@@ -267,16 +267,16 @@ export function TasksTable({
                     <span className="flex items-center gap-1.5">
                       <span className="font-mono text-xs text-muted-foreground">{task.id}</span>
                       {isRunning && (
-                        <span className="inline-flex h-6 items-center gap-1 whitespace-nowrap rounded-full bg-[#3B82F6]/10 px-2 text-xs font-semibold tabular-nums text-[#3B82F6] dark:bg-blue-500/15 dark:text-blue-300">
+                        <span className="inline-flex h-6 items-center gap-1 whitespace-nowrap rounded-full bg-blue-500/10 px-2 text-xs font-semibold tabular-nums text-blue-500 dark:bg-blue-500/15 dark:text-blue-300">
                           Running {Math.round(progress * 100)}%
                         </span>
                       )}
                     </span>
-                    <span className="mt-0.5 block truncate text-[13px] font-semibold text-foreground group-hover:text-primary" title={task.name}>{task.name}</span>
+                    <span className="mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground group-hover:text-primary" title={task.name}>{task.name}</span>
                     <span className="mt-0.5 block truncate text-xs leading-snug text-muted-foreground" title={task.description}>{task.description}</span>
                     {isRunning && (
-                      <span className="mt-1 block h-[3px] w-full max-w-[280px] overflow-hidden rounded-full bg-[#3B82F6]/15" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100} aria-label="Run progress">
-                        <span className="block h-full rounded-full bg-[#3B82F6] transition-[width] duration-1000 ease-linear" style={{ width: `${Math.round(progress * 100)}%` }} />
+                      <span className="mt-1 block h-[0.1875rem] w-full max-w-[17.5rem] overflow-hidden rounded-full bg-blue-500/15" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100} aria-label="Run progress">
+                        <span className="block h-full rounded-full bg-blue-500 transition-[width] duration-1000 ease-linear" style={{ width: `${Math.round(progress * 100)}%` }} />
                       </span>
                     )}
                   </td>
@@ -299,7 +299,7 @@ export function TasksTable({
                             key={`${chip.kind}-${chip.label}`}
                             title={chip.label}
                             className={cn(
-                              "max-w-[92px] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 text-xs",
+                              "max-w-[5.75rem] truncate rounded-md border border-border bg-muted px-1.5 py-0.5 text-xs",
                               chip.kind === "host" ? "font-mono text-foreground" : "text-muted-foreground",
                             )}
                           >
@@ -319,11 +319,11 @@ export function TasksTable({
                         )}
                       </span>
                       {popoverOpen && (
-                        <div role="dialog" aria-label="All targets" className="motion-menu-in absolute left-0 top-7 z-30 w-56 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] dark:border-border dark:bg-popover">
+                        <div role="dialog" aria-label="All targets" className="motion-menu-in absolute left-0 top-7 z-30 w-56 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] dark:border-border dark:bg-popover">
                           {chips.map((chip) => (
                             <div key={`${chip.kind}-${chip.label}`} className="flex items-center justify-between gap-2 rounded-md px-2 py-1 text-xs">
                               <span className={cn("truncate", chip.kind === "host" ? "font-mono text-foreground" : "text-muted-foreground")}>{chip.label}</span>
-                              <Badge variant="secondary" className="shrink-0 text-[10px]">{chip.kind}</Badge>
+                              <Badge variant="secondary" className="shrink-0 text-[0.625rem]">{chip.kind}</Badge>
                             </div>
                           ))}
                           <button type="button" onClick={() => setTargetPopoverId(null)} className="mt-1 flex h-7 w-full items-center justify-center rounded-md text-xs font-medium text-muted-foreground hover:bg-accent">Close</button>
@@ -347,10 +347,10 @@ export function TasksTable({
                   {/* Next run */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
                     {!task.enabled ? (
-                      <span className="text-[13px] font-medium text-muted-foreground">Paused</span>
+                      <span className="text-[0.8125rem] font-medium text-muted-foreground">Paused</span>
                     ) : nextRunMs != null ? (
                       <>
-                        <span className="block truncate text-[13px] font-semibold tabular-nums text-primary">{formatCountdown(nextRunMs, now)}</span>
+                        <span className="block truncate text-[0.8125rem] font-semibold tabular-nums text-primary">{formatCountdown(nextRunMs, now)}</span>
                         <span className="mt-0.5 block truncate text-xs tabular-nums text-muted-foreground" title={new Date(nextRunMs).toLocaleString()}>
                           {new Date(nextRunMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </span>

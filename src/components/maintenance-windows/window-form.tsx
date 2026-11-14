@@ -81,7 +81,7 @@ function SearchableMultiSelect({ label, options, selected, onChange, placeholder
         <ChevronDown size={14} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />
       </button>
       {open && (
-        <div className="absolute left-0 top-10 z-40 w-full min-w-56 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
+        <div className="absolute left-0 top-10 z-40 w-full min-w-56 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover">
           <div className="relative border-b border-border/60 p-1">
             <Search size={13} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -97,13 +97,13 @@ function SearchableMultiSelect({ label, options, selected, onChange, placeholder
             {filtered.map((option) => {
               const checked = selected.includes(option.value);
               return (
-                <label key={option.value} className="flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-[13px] text-foreground transition-colors hover:bg-[#F3F4F6] dark:hover:bg-accent">
+                <label key={option.value} className="flex h-8 cursor-pointer items-center gap-2 rounded-md px-2 text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 dark:hover:bg-accent">
                   <input type="checkbox" checked={checked} onChange={() => toggle(option.value)} className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]" />
                   <span className="min-w-0 flex-1 truncate">{option.label}</span>
                 </label>
               );
             })}
-            {filtered.length === 0 && <p className="px-2 py-2 text-[13px] text-muted-foreground">No matches.</p>}
+            {filtered.length === 0 && <p className="px-2 py-2 text-[0.8125rem] text-muted-foreground">No matches.</p>}
           </div>
         </div>
       )}
@@ -116,7 +116,7 @@ function SelectedChips({ values, onRemove, mono = false }: { values: string[]; o
   return (
     <div className="mt-1.5 flex flex-wrap gap-1.5">
       {values.map((value) => (
-        <span key={value} className={cn("inline-flex items-center gap-1 rounded-md border border-border bg-muted py-0.5 pl-1.5 pr-1 text-[12px] text-foreground", mono && "font-mono")}>
+        <span key={value} className={cn("inline-flex items-center gap-1 rounded-md border border-border bg-muted py-0.5 pl-1.5 pr-1 text-[0.75rem] text-foreground", mono && "font-mono")}>
           {value}
           <button type="button" onClick={() => onRemove(value)} aria-label={`Remove ${value}`} className="rounded p-0.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X size={11} aria-hidden="true" />
@@ -390,14 +390,14 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", breadcrumbTail]} title="Loading…" subtitle="Loading maintenance window details" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
         <div aria-busy="true" className="grid items-start gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
-            <div className="h-[300px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[240px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[260px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[16.25rem] animate-pulse rounded-xl bg-muted" />
           </div>
           <div className="space-y-4 xl:col-span-4">
-            <div className="h-[280px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[200px] animate-pulse rounded-xl bg-muted" />
-            <div className="h-[240px] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[17.5rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[12.5rem] animate-pulse rounded-xl bg-muted" />
+            <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
           </div>
         </div>
       </div>
@@ -408,9 +408,9 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", breadcrumbTail]} title="Maintenance windows unavailable" subtitle="The maintenance service failed to respond." icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
-            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><AlertTriangle size={20} /></span>
+            <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><AlertTriangle size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Couldn’t load the form data</p>
             <p className="text-sm text-muted-foreground">Retry to reach the maintenance service again.</p>
             <Button onClick={reload} className="h-10 gap-1.5 rounded-lg px-4 text-sm"><RotateCcw size={15} />Retry</Button>
@@ -424,7 +424,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId ?? "Not found"]} title="Window not found" subtitle="No maintenance window with this ID exists." icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Wrench size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window not found</p>
@@ -458,9 +458,9 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
 
   const sectionHeader = (step: number, titleText: string, hint?: string) => (
     <div className="mb-3 flex items-center gap-2.5">
-      <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full bg-primary/10 text-[12px] font-bold text-primary">{step}</span>
+      <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full bg-primary/10 text-[0.75rem] font-bold text-primary">{step}</span>
       <h2 id={step === 1 ? "section-basics" : `section-${step}`} className="font-display text-sm font-bold text-foreground">{titleText}</h2>
-      {hint && <span className="text-[12px] text-muted-foreground">{hint}</span>}
+      {hint && <span className="text-[0.75rem] text-muted-foreground">{hint}</span>}
     </div>
   );
 
@@ -469,7 +469,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
   );
 
   const fieldError = (key: "title" | "start" | "end" | "owner") => errors[key]
-    ? <p role="alert" className="mt-1 text-[12px] text-red-600 dark:text-red-400">{errors[key]}</p>
+    ? <p role="alert" className="mt-1 text-[0.75rem] text-red-600 dark:text-red-400">{errors[key]}</p>
     : null;
 
   const checkboxCard = (id: string, checked: boolean, onChange: (value: boolean) => void, icon: React.ReactNode, titleText: string, desc: string, tone = "default") => (
@@ -481,7 +481,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
       <span aria-hidden="true" className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-muted text-foreground">{icon}</span>
       <span className="min-w-0">
         <span className="block text-sm font-semibold text-foreground">{titleText}</span>
-        <span className="mt-0.5 block text-[12px] leading-snug text-muted-foreground">{desc}</span>
+        <span className="mt-0.5 block text-[0.75rem] leading-snug text-muted-foreground">{desc}</span>
       </span>
     </label>
   );
@@ -518,7 +518,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
               <div>
                 <div className="mb-1.5 flex items-center justify-between gap-2">
                   {fieldLabel("field-title", "Title", true)}
-                  <span className="text-[12px] tabular-nums text-muted-foreground">{title.length}/{MAX_TITLE}</span>
+                  <span className="text-[0.75rem] tabular-nums text-muted-foreground">{title.length}/{MAX_TITLE}</span>
                 </div>
                 <Input
                   id="field-title"
@@ -548,13 +548,13 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                         <input type="radio" name="window-type" value={value} checked={selected} onChange={() => setTypeAndPrefill(value)} className="sr-only" />
                         <Icon size={17} aria-hidden="true" className={cn("mb-1.5", value === "Emergency" ? "text-red-600 dark:text-red-400" : "text-foreground")} />
                         <span className="block text-sm font-bold text-foreground">{value}</span>
-                        <span className="mt-0.5 block text-[12px] leading-snug text-muted-foreground">{blurb}</span>
+                        <span className="mt-0.5 block text-[0.75rem] leading-snug text-muted-foreground">{blurb}</span>
                       </label>
                     );
                   })}
                 </div>
                 {type === "Emergency" && (
-                  <p role="note" className="mt-2 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-[12px] text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                  <p role="note" className="mt-2 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-[0.75rem] text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                     <Zap size={13} aria-hidden="true" className="mt-0.5 shrink-0" />Emergency windows skip the approver and may start immediately. SEV1 alerts still break through.
                   </p>
                 )}
@@ -583,7 +583,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                     <Ticket size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input id="field-ticket" value={changeTicket} onChange={(event) => setChangeTicket(event.target.value)} placeholder="CHG-2041" className="h-9 pl-9 text-sm font-mono" aria-describedby="ticket-hint" />
                   </div>
-                  <p id="ticket-hint" className="mt-1 text-[12px] text-muted-foreground">ITIL change-request id for audit trail.</p>
+                  <p id="ticket-hint" className="mt-1 text-[0.75rem] text-muted-foreground">ITIL change-request id for audit trail.</p>
                 </div>
               </div>
             </div>
@@ -629,7 +629,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                     {MAINTENANCE_TIME_ZONES.map((zone) => <SelectItem key={zone} value={zone}>{zone}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <p className="mt-1 text-[12px] text-muted-foreground">Your local time now: <span className="tabular-nums text-foreground">{tzNow}</span></p>
+                <p className="mt-1 text-[0.75rem] text-muted-foreground">Your local time now: <span className="tabular-nums text-foreground">{tzNow}</span></p>
               </div>
               <div>
                 <span className="mb-1.5 block text-sm font-medium text-foreground">Quick duration</span>
@@ -639,26 +639,26 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                       key={label as string}
                       type="button"
                       onClick={() => applyDurationChip(minutes as number)}
-                      className="h-8 rounded-lg border border-border bg-card px-2.5 text-[13px] font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="h-8 rounded-lg border border-border bg-card px-2.5 text-[0.8125rem] font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {label as string}
                     </button>
                   ))}
-                  <button type="button" onClick={startsNow} className="inline-flex h-8 items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 text-[13px] font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <button type="button" onClick={startsNow} className="inline-flex h-8 items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 text-[0.8125rem] font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     <Zap size={12} aria-hidden="true" />Starts now
                   </button>
                 </div>
-                {durationLabel && <p className="mt-1 text-[12px] text-muted-foreground">Duration: <span className="font-semibold text-foreground">{durationLabel}</span></p>}
+                {durationLabel && <p className="mt-1 text-[0.75rem] text-muted-foreground">Duration: <span className="font-semibold text-foreground">{durationLabel}</span></p>}
               </div>
             </div>
 
             {durationWarning && (
-              <p role="alert" className="mt-3 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-[12px] text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+              <p role="alert" className="mt-3 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-[0.75rem] text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                 <AlertTriangle size={13} aria-hidden="true" className="mt-0.5 shrink-0" />Longer than 24 hours. Consider splitting this into multiple windows.
               </p>
             )}
             {startInPast && (
-              <p role="alert" className="mt-3 flex items-start gap-1.5 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-[12px] text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
+              <p role="alert" className="mt-3 flex items-start gap-1.5 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-[0.75rem] text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
                 <AlertTriangle size={13} aria-hidden="true" className="mt-0.5 shrink-0" />Start time is in the past. Only Emergency windows can start in the past.
               </p>
             )}
@@ -690,7 +690,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                             aria-pressed={selected}
                             onClick={() => toggleDay(index)}
                             className={cn(
-                              "h-9 w-9 rounded-lg border text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                              "h-9 w-9 rounded-lg border text-[0.75rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                               selected ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent",
                             )}
                           >
@@ -751,8 +751,8 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
               {fieldLabel("field-exclude", "Exclude")}
               <SearchableMultiSelect label="Exclude servers from scope" options={SCOPE_SERVERS.map((server) => ({ value: server, label: server }))} selected={exclude} onChange={setExclude} placeholder="Filter servers to exclude…" />
               <SelectedChips values={exclude} onRemove={(value) => setExclude((current) => current.filter((item) => item !== value))} mono />
-              <p className="mt-2 flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-[12px] font-semibold text-foreground"><CheckCircle2 size={12} aria-hidden="true" className="text-emerald-600" />{previewCount} server{previewCount === 1 ? "" : "s"} covered</span>
+              <p className="mt-2 flex flex-wrap items-center gap-2 text-[0.75rem] text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-foreground"><CheckCircle2 size={12} aria-hidden="true" className="text-emerald-600" />{previewCount} server{previewCount === 1 ? "" : "s"} covered</span>
                 {previewCount === 0 && <span className="text-red-600 dark:text-red-400">Select at least one target.</span>}
               </p>
             </div>
@@ -770,7 +770,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <div className="mt-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-medium text-foreground">Mute specific rules</span>
-                <div className="flex items-center gap-2 text-[12px]">
+                <div className="flex items-center gap-2 text-[0.75rem]">
                   <span className="tabular-nums text-muted-foreground">{excludedFromRules} of {matchedRules.length} rules selected</span>
                   {matchedRules.length > 0 && (
                     <button type="button" className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded" onClick={() => setMutedRuleIds((current) => current.length === matchedRules.length ? [] : matchedRules.map((rule) => rule.id))}>
@@ -784,7 +784,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                   {matchedRules.map((rule) => {
                     const checked = mutedRuleIds.includes(rule.id);
                     return (
-                      <label key={rule.id} className="flex cursor-pointer items-center gap-2 border-b border-border/60 px-2.5 py-1.5 text-[13px] transition-colors last:border-b-0 hover:bg-accent/50">
+                      <label key={rule.id} className="flex cursor-pointer items-center gap-2 border-b border-border/60 px-2.5 py-1.5 text-[0.8125rem] transition-colors last:border-b-0 hover:bg-accent/50">
                         <input
                           type="checkbox"
                           checked={checked}
@@ -792,23 +792,23 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                           className="h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[#1479e8]"
                           aria-label={`Mute ${rule.id} ${rule.name}`}
                         />
-                        <span className="w-16 shrink-0 font-mono text-[12px] text-muted-foreground">{rule.id}</span>
+                        <span className="w-16 shrink-0 font-mono text-[0.75rem] text-muted-foreground">{rule.id}</span>
                         <span className="min-w-0 flex-1 truncate text-foreground" title={rule.name}>{rule.name}</span>
-                        <span className="hidden shrink-0 text-[12px] text-muted-foreground sm:inline">{rule.target}</span>
+                        <span className="hidden shrink-0 text-[0.75rem] text-muted-foreground sm:inline">{rule.target}</span>
                       </label>
                     );
                   })}
-                  {matchedRules.length === 0 && <p className="px-3 py-3 text-[13px] text-muted-foreground">No alert rules target the covered hosts.</p>}
+                  {matchedRules.length === 0 && <p className="px-3 py-3 text-[0.8125rem] text-muted-foreground">No alert rules target the covered hosts.</p>}
                 </div>
               ) : (
-                <p className="mt-1.5 rounded-lg border border-border bg-muted/40 px-3 py-2 text-[12px] text-muted-foreground">Enable “Mute alerts for scope” to pick specific rules.</p>
+                <p className="mt-1.5 rounded-lg border border-border bg-muted/40 px-3 py-2 text-[0.75rem] text-muted-foreground">Enable “Mute alerts for scope” to pick specific rules.</p>
               )}
             </div>
 
             <label className="mt-4 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border p-3">
               <span className="min-w-0">
                 <span className="block text-sm font-semibold text-foreground">Auto-end and unmute</span>
-                <span className="mt-0.5 block text-[12px] text-muted-foreground">When the end time passes, the window closes itself and alerts are restored.</span>
+                <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">When the end time passes, the window closes itself and alerts are restored.</span>
               </span>
               <button
                 type="button"
@@ -818,7 +818,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 onClick={(event) => { event.preventDefault(); setAutoEnd((value) => !value); }}
                 className={cn("relative h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", autoEnd ? "bg-primary" : "bg-muted")}
               >
-                <span aria-hidden="true" className={cn("absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all", autoEnd ? "left-[22px]" : "left-0.5")} />
+                <span aria-hidden="true" className={cn("absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all", autoEnd ? "left-[1.375rem]" : "left-0.5")} />
               </button>
             </label>
           </section>
@@ -840,7 +840,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
               <div>
                 {fieldLabel("field-approver", "Approver")}
                 {type === "Emergency" ? (
-                  <p className="flex h-9 items-center rounded-lg border border-dashed border-border bg-muted/30 px-3 text-[13px] text-muted-foreground">Skipped for Emergency windows</p>
+                  <p className="flex h-9 items-center rounded-lg border border-dashed border-border bg-muted/30 px-3 text-[0.8125rem] text-muted-foreground">Skipped for Emergency windows</p>
                 ) : (
                   <Select value={approver || "none"} onValueChange={(value) => setApprover(value === "none" ? "" : value)}>
                     <SelectTrigger id="field-approver" className="h-9 text-sm" aria-label="Approver"><SelectValue placeholder="Select approver" /></SelectTrigger>
@@ -865,7 +865,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                       aria-pressed={checked}
                       onClick={() => setChannels((current) => checked ? current.filter((item) => item !== channel) : [...current, channel])}
                       className={cn(
-                        "inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[0.8125rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         checked ? "border-primary/60 bg-primary/5 text-primary" : "border-border text-muted-foreground hover:bg-accent",
                       )}
                     >
@@ -888,7 +888,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                       aria-pressed={notifyBefore === value}
                       onClick={() => setNotifyBefore(value)}
                       className={cn(
-                        "h-9 w-14 rounded-lg border text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "h-9 w-14 rounded-lg border text-[0.8125rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         notifyBefore === value ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-accent",
                       )}
                     >
@@ -924,12 +924,12 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               <WindowStatusBadge status="Scheduled" />
               <WindowTypeBadge type={type} />
-              {recurrenceKind !== "none" && <span className="inline-flex items-center gap-1 rounded-md bg-teal-50 px-2 py-0.5 text-[12px] font-semibold text-teal-700 dark:bg-teal-500/10 dark:text-teal-300"><Repeat size={11} aria-hidden="true" />{recurrenceKind === "daily" ? "Daily" : recurrenceKind === "weekly" ? "Weekly" : "Monthly"}</span>}
+              {recurrenceKind !== "none" && <span className="inline-flex items-center gap-1 rounded-md bg-teal-50 px-2 py-0.5 text-[0.75rem] font-semibold text-teal-700 dark:bg-teal-500/10 dark:text-teal-300"><Repeat size={11} aria-hidden="true" />{recurrenceKind === "daily" ? "Daily" : recurrenceKind === "weekly" ? "Weekly" : "Monthly"}</span>}
             </div>
-            <dl className="mt-3 space-y-2 text-[13px]">
+            <dl className="mt-3 space-y-2 text-[0.8125rem]">
               <div className="flex items-start gap-2">
                 <CalendarClock size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />
-                <span className="text-foreground">{scheduleSummary}{durationLabel && <span className="text-muted-foreground"> · {durationLabel}</span>}<br /><span className="text-[12px] text-muted-foreground">{timeZone} (window) · your time shown above</span></span>
+                <span className="text-foreground">{scheduleSummary}{durationLabel && <span className="text-muted-foreground"> · {durationLabel}</span>}<br /><span className="text-[0.75rem] text-muted-foreground">{timeZone} (window) · your time shown above</span></span>
               </div>
               <div className="flex items-start gap-2">
                 <Wrench size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />
@@ -952,8 +952,8 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             </dl>
             {previewCount > 0 && (
               <div className="mt-3 flex flex-wrap gap-1 border-t border-border/70 pt-3">
-                {[...servers, ...groups].slice(0, 6).map((chip) => <span key={chip} className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[12px] text-muted-foreground">{chip}</span>)}
-                {previewCount > 6 && <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[12px] font-semibold text-muted-foreground">+{previewCount - 6}</span>}
+                {[...servers, ...groups].slice(0, 6).map((chip) => <span key={chip} className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.75rem] text-muted-foreground">{chip}</span>)}
+                {previewCount > 6 && <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-[0.75rem] font-semibold text-muted-foreground">+{previewCount - 6}</span>}
               </div>
             )}
           </section>
@@ -965,21 +965,21 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
               {conflicts.length > 0 && <ConflictBadge />}
             </div>
             {conflicts.length === 0 ? (
-              <p className="flex items-start gap-2 text-[13px] text-muted-foreground"><CheckCircle2 size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-emerald-600" />No overlapping windows on this scope.</p>
+              <p className="flex items-start gap-2 text-[0.8125rem] text-muted-foreground"><CheckCircle2 size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-emerald-600" />No overlapping windows on this scope.</p>
             ) : (
               <>
-                <p className="flex items-start gap-2 text-[13px] font-semibold text-red-800 dark:text-red-300"><AlertTriangle size={15} aria-hidden="true" className="mt-0.5 shrink-0" />{conflicts.length} overlapping window{conflicts.length === 1 ? "" : "s"} on this scope:</p>
+                <p className="flex items-start gap-2 text-[0.8125rem] font-semibold text-red-800 dark:text-red-300"><AlertTriangle size={15} aria-hidden="true" className="mt-0.5 shrink-0" />{conflicts.length} overlapping window{conflicts.length === 1 ? "" : "s"} on this scope:</p>
                 <ul className="mt-2 space-y-1.5">
                   {conflicts.slice(0, 4).map((conflict) => (
                     <li key={conflict.id}>
-                      <Link href={`/maintenance-windows/${conflict.id}`} className="flex items-center justify-between gap-2 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-[13px] transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/10">
-                        <span className="min-w-0"><span className="font-mono text-[12px] text-muted-foreground">{conflict.id}</span><span className="block truncate font-medium text-foreground">{conflict.title}</span></span>
-                        <span className="shrink-0 text-[12px] tabular-nums text-muted-foreground">{new Date(conflict.start).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                      <Link href={`/maintenance-windows/${conflict.id}`} className="flex items-center justify-between gap-2 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-[0.8125rem] transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/10">
+                        <span className="min-w-0"><span className="font-mono text-[0.75rem] text-muted-foreground">{conflict.id}</span><span className="block truncate font-medium text-foreground">{conflict.title}</span></span>
+                        <span className="shrink-0 text-[0.75rem] tabular-nums text-muted-foreground">{new Date(conflict.start).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
                       </Link>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-2 text-[12px] text-red-800/80 dark:text-red-300/80">Submitting anyway will keep both windows and their mutes active.</p>
+                <p className="mt-2 text-[0.75rem] text-red-800/80 dark:text-red-300/80">Submitting anyway will keep both windows and their mutes active.</p>
               </>
             )}
           </section>
@@ -987,13 +987,13 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
           {/* Checklist */}
           <section aria-labelledby="section-checklist" className="rounded-xl border border-border bg-card p-4">
             <h2 id="section-checklist" className="font-display text-sm font-bold text-foreground">Checklist</h2>
-            <p className="mt-0.5 text-[12px] text-muted-foreground"><b className={checklistDone === checklist.length ? "text-emerald-700 dark:text-emerald-400" : "text-foreground"}>{checklistDone} of {checklist.length}</b> required done</p>
+            <p className="mt-0.5 text-[0.75rem] text-muted-foreground"><b className={checklistDone === checklist.length ? "text-emerald-700 dark:text-emerald-400" : "text-foreground"}>{checklistDone} of {checklist.length}</b> required done</p>
             <div role="progressbar" aria-valuenow={checklistDone} aria-valuemin={0} aria-valuemax={checklist.length} aria-label="Required fields completed" className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div className={cn("h-full rounded-full transition-all", checklistDone === checklist.length ? "bg-emerald-500" : "bg-primary")} style={{ width: `${(checklistDone / checklist.length) * 100}%` }} />
             </div>
             <ul className="mt-3 space-y-1.5">
               {checklist.map((item) => (
-                <li key={item.label} className="flex items-center gap-2 text-[13px]">
+                <li key={item.label} className="flex items-center gap-2 text-[0.8125rem]">
                   {item.done
                     ? <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-emerald-600" />
                     : <Circle size={15} aria-hidden="true" className="shrink-0 text-muted-foreground" />}
@@ -1001,7 +1001,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 </li>
               ))}
             </ul>
-            <p className="mt-3 border-t border-border/70 pt-2 text-[12px] text-muted-foreground">Local preview · nothing is saved until you submit.</p>
+            <p className="mt-3 border-t border-border/70 pt-2 text-[0.75rem] text-muted-foreground">Local preview · nothing is saved until you submit.</p>
           </section>
         </div>
       </form>
@@ -1017,7 +1017,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" className="h-10 rounded-lg px-4 text-sm" onClick={() => setConfirmSubmit(null)}>Back</Button>
-            <Button className="h-10 rounded-lg bg-[#DC2626] px-4 text-sm font-semibold text-white hover:bg-[#B91C1C]" onClick={() => { setConfirmSubmit(null); persist(); }}>Start now and mute {excludedFromRules}</Button>
+            <Button className="h-10 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700" onClick={() => { setConfirmSubmit(null); persist(); }}>Start now and mute {excludedFromRules}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

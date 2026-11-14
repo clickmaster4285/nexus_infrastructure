@@ -72,7 +72,7 @@ const iconTone: Record<ServerGroup["icon"], string> = {
 };
 
 const chartTooltip = {
-  contentStyle: { border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)", color: "var(--popover-foreground)" },
+  contentStyle: { border: "0.0625rem solid var(--border)", borderRadius: 8, fontSize: 12, background: "var(--popover)", color: "var(--popover-foreground)" },
 };
 
 const environments: (GroupEnvironment | "All Environments")[] = ["All Environments", "Production", "Staging", "Dev"];
@@ -109,7 +109,7 @@ function GroupPerformanceTooltip({ active, payload, label }: {
   const point = payload?.[0]?.payload;
   if (!active || !point) return null;
   return (
-    <div className="min-w-40 rounded-lg border border-border bg-popover px-3 py-2.5 text-[12px] text-popover-foreground shadow-lg">
+    <div className="min-w-40 rounded-lg border border-border bg-popover px-3 py-2.5 text-[0.75rem] text-popover-foreground shadow-lg">
       <p className="mb-2 font-semibold">{label}</p>
       {performanceSeries.map((series) => <div key={series.key} className="flex items-center gap-2 py-0.5"><i className="h-2 w-2 rounded-full" style={{ background: series.color }} /><span className="text-muted-foreground">{series.name}</span><b className="ml-auto tabular-nums">{point[series.key]}%</b></div>)}
     </div>
@@ -125,7 +125,7 @@ function HealthTrendTooltip({ active, payload, label }: {
   const total = point ? point.healthy + point.degraded + point.offline : 0;
   if (!active || !point || !total) return null;
   return (
-    <div className="rounded-lg border border-border bg-popover px-3 py-2.5 text-[12px] text-popover-foreground shadow-lg">
+    <div className="rounded-lg border border-border bg-popover px-3 py-2.5 text-[0.75rem] text-popover-foreground shadow-lg">
       <p className="mb-2 font-semibold">{label}</p>
       {(["healthy", "degraded", "offline"] as const).map((key) => {
         const name = key === "healthy" ? "Healthy" : key === "degraded" ? "Degraded" : "Offline";
@@ -159,7 +159,7 @@ function Sparkline({ values, color }: { values: number[]; color: string }) {
 
 function StatusPill({ status }: { status: GroupStatus }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-semibold", statusTone[status])}>
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.75rem] font-semibold", statusTone[status])}>
       <i aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: statusColor[status] }} />
       {status}
     </span>
@@ -173,7 +173,7 @@ function SectionCard({ title, icon: Icon, children, action, className = "" }: {
   return (
     <Card className={cn("flex h-full min-w-0 flex-col rounded-xl p-5", className)}>
       <div className={cn("mb-4 flex shrink-0 items-center justify-between gap-3", compactHeader && "mb-3 min-h-10")}>
-        <CardTitle className={cn("flex items-center gap-2 text-[18px] font-semibold", compactHeader && "min-w-0 overflow-hidden text-ellipsis whitespace-nowrap")}>
+        <CardTitle className={cn("flex items-center gap-2 text-[1.125rem] font-semibold", compactHeader && "min-w-0 overflow-hidden text-ellipsis whitespace-nowrap")}>
           <Icon size={18} className="shrink-0 text-primary" />
           {title}
         </CardTitle>
@@ -218,7 +218,7 @@ function GroupCard({ group, selected, onSelect, onMenu }: {
           <span aria-hidden="true" className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-full", iconTone[group.icon])}>
             <GroupIcon size={17} />
           </span>
-          <span title={group.name} className="min-w-0 flex-1 truncate whitespace-nowrap text-[15px] font-semibold leading-5 text-foreground">{group.name}</span>
+          <span title={group.name} className="min-w-0 flex-1 truncate whitespace-nowrap text-[0.9375rem] font-semibold leading-5 text-foreground">{group.name}</span>
         </div>
         <button
           type="button"
@@ -235,10 +235,10 @@ function GroupCard({ group, selected, onSelect, onMenu }: {
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <StatusPill status={group.status} />
-        <span className="text-[13px] font-semibold text-foreground">{group.servers} Servers</span>
+        <span className="text-[0.8125rem] font-semibold text-foreground">{group.servers} Servers</span>
       </div>
 
-      <p className="mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground">
+      <p className="mt-2 flex items-center gap-1.5 text-[0.75rem] text-muted-foreground">
         <MapPin size={12} aria-hidden="true" />
         {group.location}
       </p>
@@ -247,7 +247,7 @@ function GroupCard({ group, selected, onSelect, onMenu }: {
         <div className="min-w-0 flex-1">
           <Sparkline values={group.trend} color={statusColor[group.status]} />
         </div>
-        <span className={cn("shrink-0 rounded-md px-2 py-0.5 text-[13px] font-semibold", statusTone[group.status])}>
+        <span className={cn("shrink-0 rounded-md px-2 py-0.5 text-[0.8125rem] font-semibold", statusTone[group.status])}>
           {group.health.toFixed(1)}%
         </span>
       </div>
@@ -268,7 +268,7 @@ function GroupListRow({ group, selected, onSelect }: { group: ServerGroup; selec
         }
       }}
       className={cn(
-        "h-[54px] cursor-pointer border-b border-border/70 text-[14px] transition-colors last:border-0 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+        "h-[3.375rem] cursor-pointer border-b border-border/70 text-[0.875rem] transition-colors last:border-0 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
         selected && "bg-primary/5",
       )}
     >
@@ -312,14 +312,14 @@ function CreateGroupDialog({ open, onOpenChange, onCreate }: {
           <DialogDescription>Add a group to organize and monitor your servers.</DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
-          <label className="block space-y-2 text-[13px] font-medium text-muted-foreground">
+          <label className="block space-y-2 text-[0.8125rem] font-medium text-muted-foreground">
             Group name
-            <Input autoFocus required value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Production Web" className="h-10 text-[14px]" />
+            <Input autoFocus required value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Production Web" className="h-10 text-[0.875rem]" />
           </label>
-          <label className="block space-y-2 text-[13px] font-medium text-muted-foreground">
+          <label className="block space-y-2 text-[0.8125rem] font-medium text-muted-foreground">
             Location
             <Select value={location} onValueChange={setLocation}>
-              <SelectTrigger aria-label="Group location" className="h-10 text-[14px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label="Group location" className="h-10 text-[0.875rem]"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {["AWS – Virginia", "AWS – Ohio", "AWS – Frankfurt", "AWS – Ireland", "DigitalOcean – NYC", "Vultr – Tokyo", "Hetzner – Germany", "Ubuntu – London"].map((item) => (
                   <SelectItem key={item} value={item}>{item}</SelectItem>
@@ -327,10 +327,10 @@ function CreateGroupDialog({ open, onOpenChange, onCreate }: {
               </SelectContent>
             </Select>
           </label>
-          <label className="block space-y-2 text-[13px] font-medium text-muted-foreground">
+          <label className="block space-y-2 text-[0.8125rem] font-medium text-muted-foreground">
             Environment
             <Select value={environment} onValueChange={(value) => setEnvironment(value as GroupEnvironment)}>
-              <SelectTrigger aria-label="Group environment" className="h-10 text-[14px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger aria-label="Group environment" className="h-10 text-[0.875rem]"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {(["Production", "Staging", "Dev"] as GroupEnvironment[]).map((item) => (
                   <SelectItem key={item} value={item}>{item}</SelectItem>
@@ -549,12 +549,12 @@ export function ServerGroupsDashboard() {
         lastUpdated={lastUpdated}
         onRefresh={refresh}
         actions={<div className="flex flex-wrap items-center gap-2">
-          <Button onClick={() => setCreateOpen(true)} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Plus size={16} />Create Group</Button>
-          <Button variant="outline" onClick={exportReport} className="h-10 gap-2 rounded-lg px-4 text-[14px] font-medium"><Download size={16} />Export</Button>
+          <Button onClick={() => setCreateOpen(true)} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Plus size={16} />Create Group</Button>
+          <Button variant="outline" onClick={exportReport} className="h-10 gap-2 rounded-lg px-4 text-[0.875rem] font-medium"><Download size={16} />Export</Button>
         </div>}
       />
 
-      <section aria-label="Server group metrics" className="grid grid-cols-2 items-stretch gap-4 min-[900px]:grid-cols-3 xl:grid-cols-6">
+      <section aria-label="Server group metrics" className="grid grid-cols-2 items-stretch gap-4 min-[56.25rem]:grid-cols-3 xl:grid-cols-6">
         <KpiCard icon={Boxes} label="Total Groups" value={String(totalGroups)} trend="↑ 1 new" tone="bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300" />
         <KpiCard icon={ShieldCheck} label="Healthy Groups" value={String(healthyGroups)} trend={`${Math.round((healthyGroups / Math.max(totalGroups, 1)) * 100)}% of total`} tone="bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300" />
         <KpiCard icon={Activity} label="Degraded Groups" value={String(degradedGroups)} trend={`${((degradedGroups / Math.max(totalGroups, 1)) * 100).toFixed(1)}% of total`} tone="bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-300" />
@@ -563,25 +563,25 @@ export function ServerGroupsDashboard() {
         <KpiCard icon={Sparkles} label="Avg. Health" value={`${averageHealth.toFixed(1)}%`} trend="↑ 0.4%" tone="bg-teal-50 text-teal-600 dark:bg-teal-950 dark:text-teal-300" />
       </section>
 
-      <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[1280px]:grid-cols-[minmax(0,1fr)_360px]">
+      <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[80rem]:grid-cols-[minmax(0,1fr)_22.5rem]">
         <Card className="flex h-full min-h-0 min-w-0 flex-col rounded-xl p-5">
           <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-3">
-            <CardTitle className="text-[18px] font-semibold">Server Groups</CardTitle>
+            <CardTitle className="text-[1.125rem] font-semibold">Server Groups</CardTitle>
             <div className="flex w-full flex-wrap items-center gap-2 xl:w-auto">
               <label className="relative min-w-44 flex-1 xl:w-56 xl:flex-none">
                 <Server size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search groups..." aria-label="Search groups" className="h-9 pl-9 text-[13px]" />
+                <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search groups..." aria-label="Search groups" className="h-9 pl-9 text-[0.8125rem]" />
               </label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="h-9 w-36 text-[13px]" aria-label="Filter groups by status"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 w-36 text-[0.8125rem]" aria-label="Filter groups by status"><SelectValue /></SelectTrigger>
                 <SelectContent>{statuses.map((value) => <SelectItem key={value} value={value}>{value}</SelectItem>)}</SelectContent>
               </Select>
               <Select value={locationFilter} onValueChange={setLocationFilter}>
-                <SelectTrigger className="h-9 w-44 text-[13px]" aria-label="Filter groups by location"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 w-44 text-[0.8125rem]" aria-label="Filter groups by location"><SelectValue /></SelectTrigger>
                 <SelectContent>{locations.map((value) => <SelectItem key={value} value={value}>{value}</SelectItem>)}</SelectContent>
               </Select>
               <Select value={environmentFilter} onValueChange={setEnvironmentFilter}>
-                <SelectTrigger className="h-9 w-44 text-[13px]" aria-label="Filter groups by environment"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 w-44 text-[0.8125rem]" aria-label="Filter groups by environment"><SelectValue /></SelectTrigger>
                 <SelectContent>{environments.map((value) => <SelectItem key={value} value={value}>{value}</SelectItem>)}</SelectContent>
               </Select>
               <div className="flex shrink-0 rounded-lg border border-border p-0.5">
@@ -608,12 +608,12 @@ export function ServerGroupsDashboard() {
           </div>
 
           {filteredGroups.length === 0 ? (
-            <div className="flex min-h-40 flex-1 flex-col items-center justify-center gap-2 text-[14px] text-muted-foreground">
+            <div className="flex min-h-40 flex-1 flex-col items-center justify-center gap-2 text-[0.875rem] text-muted-foreground">
               <Server size={20} />
               No server groups match these filters.
             </div>
           ) : view === "grid" ? (
-            <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-1 items-stretch gap-4 min-[640px]:grid-cols-2 min-[1100px]:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+            <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-1 items-stretch gap-4 min-[40rem]:grid-cols-2 min-[68.75rem]:grid-cols-[repeat(auto-fill,minmax(13.75rem,1fr))]">
               {visibleGroups.map((group) => (
                 <div key={group.id} className="relative flex min-h-0">
                   <GroupCard group={group} selected={selectedId === group.id} onSelect={() => setSelectedId(group.id)} onMenu={() => setMenuGroup((current) => current === group.id ? null : group.id)} />
@@ -624,7 +624,7 @@ export function ServerGroupsDashboard() {
                           key={action}
                           type="button"
                           onClick={() => runMenuAction(action, group)}
-                          className={cn("block w-full rounded-md px-3 py-2 text-left text-[13px] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", action === "Delete group" && "text-destructive")}
+                          className={cn("block w-full rounded-md px-3 py-2 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", action === "Delete group" && "text-destructive")}
                         >
                           {action}
                         </button>
@@ -636,9 +636,9 @@ export function ServerGroupsDashboard() {
             </div>
           ) : (
             <div className="min-h-0 flex-1 overflow-x-auto">
-              <table className="w-full min-w-[720px] border-collapse text-left">
+              <table className="w-full min-w-[45rem] border-collapse text-left">
                 <thead>
-                  <tr className="bg-muted/60 text-[13px] font-semibold text-muted-foreground">
+                  <tr className="bg-muted/60 text-[0.8125rem] font-semibold text-muted-foreground">
                     <th scope="col" className="border-b border-border px-3 py-3">Group Name</th>
                     <th scope="col" className="border-b border-border px-3 py-3">Status</th>
                     <th scope="col" className="border-b border-border px-3 py-3 text-center">Servers</th>
@@ -656,10 +656,10 @@ export function ServerGroupsDashboard() {
             </div>
           )}
 
-          <div className="mt-auto flex shrink-0 items-center justify-between border-t border-border pt-3 text-[12px] text-muted-foreground">
+          <div className="mt-auto flex shrink-0 items-center justify-between border-t border-border pt-3 text-[0.75rem] text-muted-foreground">
             <span>Showing {Math.min(visibleGroupCount, filteredGroups.length)} of {filteredGroups.length} groups</span>
             {filteredGroups.length > visibleGroupCount && (
-              <Button variant="ghost" onClick={() => setVisibleGroupCount((count) => count + 12)} className="h-8 px-2 text-[12px] font-semibold text-primary">
+              <Button variant="ghost" onClick={() => setVisibleGroupCount((count) => count + 12)} className="h-8 px-2 text-[0.75rem] font-semibold text-primary">
                 Load more
               </Button>
             )}
@@ -668,9 +668,9 @@ export function ServerGroupsDashboard() {
 
         <div className="flex min-w-0 flex-col gap-5">
           <SectionCard title="Group Health Overview" icon={ShieldCheck}>
-            <div className="flex h-full min-h-[300px] flex-col justify-between gap-4">
-              <div className="flex min-h-[176px] flex-1 flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
-                <div className="relative h-[170px] w-[170px] shrink-0">
+            <div className="flex h-full min-h-[18.75rem] flex-col justify-between gap-4">
+              <div className="flex min-h-[11rem] flex-1 flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+                <div className="relative h-[10.625rem] w-[10.625rem] shrink-0">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -698,8 +698,8 @@ export function ServerGroupsDashboard() {
                     {hoveredHealthStatus ? (() => {
                       const item = healthOverview.find((status) => status.name === hoveredHealthStatus)!;
                       const percent = totalGroups ? item.value / totalGroups * 100 : 0;
-                      return <><b className="font-display text-[24px] font-bold leading-none text-foreground">{item.value} · {percent.toFixed(0)}%</b><span className="mt-1 text-[12px] text-muted-foreground">{item.name}</span></>;
-                    })() : <><b className="font-display text-[28px] font-bold leading-none text-foreground">{healthyPercent.toFixed(0)}%</b><span className="mt-1 text-[12px] text-muted-foreground">Healthy</span></>}
+                      return <><b className="font-display text-[1.5rem] font-bold leading-none text-foreground">{item.value} · {percent.toFixed(0)}%</b><span className="mt-1 text-[0.75rem] text-muted-foreground">{item.name}</span></>;
+                    })() : <><b className="font-display text-[1.75rem] font-bold leading-none text-foreground">{healthyPercent.toFixed(0)}%</b><span className="mt-1 text-[0.75rem] text-muted-foreground">Healthy</span></>}
                   </div>
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-3">
@@ -707,7 +707,7 @@ export function ServerGroupsDashboard() {
                     const percent = totalGroups ? item.value / totalGroups * 100 : 0;
                     return (
                       <div key={item.name} className="min-w-0">
-                        <div className="flex items-center gap-2 whitespace-nowrap text-[12px] sm:text-[13px]">
+                        <div className="flex items-center gap-2 whitespace-nowrap text-[0.75rem] sm:text-[0.8125rem]">
                           <i aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: item.color }} />
                           <span className="min-w-0 flex-1 truncate text-muted-foreground">{item.name}</span>
                           <b className="shrink-0 tabular-nums text-foreground">{item.value} · {percent.toFixed(0)}%</b>
@@ -723,18 +723,18 @@ export function ServerGroupsDashboard() {
                   { label: "Avg Health", value: `${averageHealth.toFixed(1)}%` },
                   { label: "Affected Groups", value: String(degradedGroups + offlineGroups) },
                   { label: "Active Incidents", value: String(groups.filter((group) => group.status !== "Healthy").length) },
-                ].map((stat) => <div key={stat.label} className="min-w-0 rounded-lg bg-muted/70 p-2.5 text-center"><b className="block truncate text-[15px] font-bold tabular-nums text-foreground">{stat.value}</b><span className="mt-0.5 block truncate text-[11px] text-muted-foreground">{stat.label}</span></div>)}
+                ].map((stat) => <div key={stat.label} className="min-w-0 rounded-lg bg-muted/70 p-2.5 text-center"><b className="block truncate text-[0.9375rem] font-bold tabular-nums text-foreground">{stat.value}</b><span className="mt-0.5 block truncate text-[0.6875rem] text-muted-foreground">{stat.label}</span></div>)}
               </div>
             </div>
           </SectionCard>
 
           <SectionCard title="Health Trend" icon={Activity} action={
             <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5" aria-label="Health trend range">
-              {healthRanges.map((range) => <button key={range} type="button" onClick={() => setTrendRange(range)} aria-pressed={trendRange === range} className={cn("rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors", trendRange === range ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>{range}</button>)}
+              {healthRanges.map((range) => <button key={range} type="button" onClick={() => setTrendRange(range)} aria-pressed={trendRange === range} className={cn("rounded-md px-2.5 py-1 text-[0.6875rem] font-medium transition-colors", trendRange === range ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>{range}</button>)}
             </div>
           }>
-            <div className="flex h-full min-h-[300px] flex-col gap-2">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
+            <div className="flex h-full min-h-[18.75rem] flex-col gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[0.6875rem]">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">
                   <span>Now <b className="text-foreground">{latestHealthyPercent.toFixed(0)}%</b></span>
                   <span>Avg <b className="text-foreground">{averageTrendHealth.toFixed(0)}%</b></span>
@@ -742,10 +742,10 @@ export function ServerGroupsDashboard() {
                 </div>
                 <span className={cn("rounded-full px-2 py-1 font-semibold", trendDelta >= 0 ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300")}>{trendDelta >= 0 ? "▲" : "▼"} {Math.abs(trendDelta).toFixed(1)}%</span>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px]">
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.6875rem]">
                 {healthOverview.map((item) => <button key={item.name} type="button" onClick={() => toggleHealthSeries(item.name)} aria-pressed={visibleHealthSeries[item.name]} className={cn("inline-flex items-center gap-1.5 rounded px-1 py-0.5 transition-opacity", !visibleHealthSeries[item.name] && "opacity-40")}><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}</button>)}
               </div>
-              <div className="min-h-[220px] w-full flex-1">
+              <div className="min-h-[13.75rem] w-full flex-1">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={trendData} stackOffset="expand" margin={{ top: 6, right: 18, left: -18, bottom: 0 }}>
                     <defs>
@@ -766,18 +766,18 @@ export function ServerGroupsDashboard() {
         </div>
       </section>
 
-      <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[1280px]:grid-cols-12">
-        <div className="min-w-0 min-[1280px]:col-span-5">
+      <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[80rem]:grid-cols-12">
+        <div className="min-w-0 min-[80rem]:col-span-5">
           <SectionCard title="Group Performance" icon={Cpu} className="p-4" action={
             <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
               <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">
-                {performanceMetrics.map((metric) => <button key={metric} type="button" onClick={() => setPerformanceMetric(metric)} aria-pressed={performanceMetric === metric} className={cn("rounded-md px-1.5 py-1 text-[10px] whitespace-nowrap", performanceMetric === metric ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{metric === "Memory Usage" ? "Memory" : metric === "Network Usage" ? "Network" : metric === "CPU Usage" ? "CPU" : "Disk"}</button>)}
+                {performanceMetrics.map((metric) => <button key={metric} type="button" onClick={() => setPerformanceMetric(metric)} aria-pressed={performanceMetric === metric} className={cn("rounded-md px-1.5 py-1 text-[0.625rem] whitespace-nowrap", performanceMetric === metric ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{metric === "Memory Usage" ? "Memory" : metric === "Network Usage" ? "Network" : metric === "CPU Usage" ? "CPU" : "Disk"}</button>)}
               </div>
-              <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">{(["24h", "7d"] as const).map((range) => <button key={range} type="button" onClick={() => setPerformanceRange(range)} aria-pressed={performanceRange === range} className={cn("rounded-md px-1.5 py-1 text-[10px]", performanceRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{range}</button>)}</div>
+              <div className="inline-flex rounded-lg border border-border bg-muted/60 p-0.5">{(["24h", "7d"] as const).map((range) => <button key={range} type="button" onClick={() => setPerformanceRange(range)} aria-pressed={performanceRange === range} className={cn("rounded-md px-1.5 py-1 text-[0.625rem]", performanceRange === range ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{range}</button>)}</div>
             </div>
           }>
-            <div className="flex h-full min-h-[310px] flex-col gap-2">
-              <div className="min-h-[240px] w-full flex-1">
+            <div className="flex h-full min-h-[19.375rem] flex-col gap-2">
+              <div className="min-h-[15rem] w-full flex-1">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={performanceData} margin={{ top: 6, right: 16, left: -18, bottom: 0 }}>
                     <defs>{performanceSeries.map((series) => <linearGradient key={series.key} id={"performance-" + series.key + "-gradient"} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={series.color} stopOpacity={0.3} /><stop offset="100%" stopColor={series.color} stopOpacity={0} /></linearGradient>)}</defs>
@@ -789,10 +789,10 @@ export function ServerGroupsDashboard() {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] sm:text-[11px]">
+              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[0.625rem] sm:text-[0.6875rem]">
                 {performanceSeries.map((series) => <button key={series.key} type="button" onClick={() => { setVisiblePerformanceSeries((current) => ({ ...current, [series.key]: !current[series.key] })); setSelectedId(series.groupId); }} aria-pressed={visiblePerformanceSeries[series.key]} className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded px-1 py-0.5 text-muted-foreground", !visiblePerformanceSeries[series.key] && "opacity-40")}><i className="h-2 w-2 rounded-full" style={{ background: series.color }} />{series.name} <b className="text-foreground">{performanceLatest?.[series.key] ?? 0}%</b></button>)}
               </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[10px] text-muted-foreground sm:text-[11px]">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.625rem] text-muted-foreground sm:text-[0.6875rem]">
                 <span>Avg <b className="text-foreground">{performanceAverage.toFixed(1)}%</b></span>
                 <span>Peak <b className="text-foreground">{performancePeak.value}% · {performancePeak.name}</b></span>
                 <span className={cn("font-semibold", performanceDelta >= 0 ? "text-emerald-600" : "text-rose-600")}>{performanceDelta >= 0 ? "▲" : "▼"} {Math.abs(performanceDelta).toFixed(1)}%</span>
@@ -800,40 +800,40 @@ export function ServerGroupsDashboard() {
             </div>
           </SectionCard>
         </div>
-        <div className="min-w-0 min-[1280px]:col-span-3">
+        <div className="min-w-0 min-[80rem]:col-span-3">
           {selectedGroup ? <SectionCard title="Group Details" icon={Server} className="p-4">
-            <div className="flex h-full min-h-[310px] flex-col">
+            <div className="flex h-full min-h-[19.375rem] flex-col">
               <Select value={selectedGroup.id} onValueChange={setSelectedId}>
-                <SelectTrigger aria-label="Select server group" className="h-9 w-full text-[12px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger aria-label="Select server group" className="h-9 w-full text-[0.75rem]"><SelectValue /></SelectTrigger>
                 <SelectContent>{groups.map((group) => <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>)}</SelectContent>
               </Select>
-              <div className="mt-3 flex min-w-0 items-center justify-between gap-2"><h3 title={selectedGroup.name} className="truncate text-[14px] font-semibold text-foreground">{selectedGroup.name}</h3><StatusPill status={selectedGroup.status} /></div>
+              <div className="mt-3 flex min-w-0 items-center justify-between gap-2"><h3 title={selectedGroup.name} className="truncate text-[0.875rem] font-semibold text-foreground">{selectedGroup.name}</h3><StatusPill status={selectedGroup.status} /></div>
               <dl className="mt-3 grid gap-2">
-                {([["Servers", String(selectedGroup.servers)], ["Location", selectedGroup.location], ["Environment", selectedGroup.environment], ["Avg. Uptime", selectedGroup.uptime.toFixed(1) + "%"]] as [string, string][]).map(([label, value]) => <div key={label} className="flex min-w-0 items-center justify-between gap-3 text-[12px]"><dt className="shrink-0 text-muted-foreground">{label}</dt><dd title={value} className="min-w-0 truncate text-right font-semibold text-foreground">{value}</dd></div>)}
+                {([["Servers", String(selectedGroup.servers)], ["Location", selectedGroup.location], ["Environment", selectedGroup.environment], ["Avg. Uptime", selectedGroup.uptime.toFixed(1) + "%"]] as [string, string][]).map(([label, value]) => <div key={label} className="flex min-w-0 items-center justify-between gap-3 text-[0.75rem]"><dt className="shrink-0 text-muted-foreground">{label}</dt><dd title={value} className="min-w-0 truncate text-right font-semibold text-foreground">{value}</dd></div>)}
               </dl>
               <div className="mt-3 border-t border-border pt-3">
-                <p className="mb-2 text-[12px] font-semibold text-foreground">Current Load</p>
+                <p className="mb-2 text-[0.75rem] font-semibold text-foreground">Current Load</p>
                 <div className="space-y-2.5">
-                  {([["CPU", selectedGroup.cpu], ["Memory", selectedGroup.memory], ["Disk", selectedGroup.disk]] as [string, number][]).map(([label, value]) => { const color = value < 70 ? "#22C55E" : value <= 85 ? "#F59E0B" : "#EF4444"; return <div key={label}><div className="mb-1 flex items-center justify-between text-[11px]"><span className="text-muted-foreground">{label}</span><b className="tabular-nums text-foreground">{value}%</b></div><div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full transition-[width] duration-500" style={{ width: Math.max(0, Math.min(value, 100)) + "%", backgroundColor: color }} /></div></div>; })}
+                  {([["CPU", selectedGroup.cpu], ["Memory", selectedGroup.memory], ["Disk", selectedGroup.disk]] as [string, number][]).map(([label, value]) => { const color = value < 70 ? "#22C55E" : value <= 85 ? "#F59E0B" : "#EF4444"; return <div key={label}><div className="mb-1 flex items-center justify-between text-[0.6875rem]"><span className="text-muted-foreground">{label}</span><b className="tabular-nums text-foreground">{value}%</b></div><div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full transition-[width] duration-500" style={{ width: Math.max(0, Math.min(value, 100)) + "%", backgroundColor: color }} /></div></div>; })}
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2">
-                {[{ label: "Active Alerts", value: String(activeAlerts) }, { label: "Last Incident", value: lastIncident === "No incidents" ? lastIncident : lastIncident.split(", ").at(-1) ?? lastIncident }].map((tile) => <div key={tile.label} className="min-w-0 rounded-lg bg-muted/70 p-2"><span className="block truncate text-[10px] text-muted-foreground">{tile.label}</span><b title={tile.value} className="mt-0.5 block truncate text-[12px] font-semibold text-foreground">{tile.value}</b></div>)}
+                {[{ label: "Active Alerts", value: String(activeAlerts) }, { label: "Last Incident", value: lastIncident === "No incidents" ? lastIncident : lastIncident.split(", ").at(-1) ?? lastIncident }].map((tile) => <div key={tile.label} className="min-w-0 rounded-lg bg-muted/70 p-2"><span className="block truncate text-[0.625rem] text-muted-foreground">{tile.label}</span><b title={tile.value} className="mt-0.5 block truncate text-[0.75rem] font-semibold text-foreground">{tile.value}</b></div>)}
               </div>
-              <Link href={"/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto inline-flex items-center gap-1 self-end pt-3 text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View Details <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>
+              <Link href={"/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto inline-flex items-center gap-1 self-end pt-3 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View Details <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>
             </div>
           </SectionCard> : null}
         </div>
-        <div className="min-w-0 min-[1280px]:col-span-4">
-          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>}>
-            <div className="flex h-full min-h-[310px] flex-col">
-              <div className="mb-2 flex gap-1 border-b border-border pb-2">{(["All", "Open", "Resolved"] as const).map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={cn("rounded-full px-2.5 py-1 text-[11px]", eventFilter === filter ? "bg-primary/10 font-semibold text-primary" : "text-muted-foreground hover:bg-accent")}>{filter}</button>)}</div>
+        <div className="min-w-0 min-[80rem]:col-span-4">
+          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>}>
+            <div className="flex h-full min-h-[19.375rem] flex-col">
+              <div className="mb-2 flex gap-1 border-b border-border pb-2">{(["All", "Open", "Resolved"] as const).map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={cn("rounded-full px-2.5 py-1 text-[0.6875rem]", eventFilter === filter ? "bg-primary/10 font-semibold text-primary" : "text-muted-foreground hover:bg-accent")}>{filter}</button>)}</div>
               <div className="min-h-0 flex-1">
-                {eventRows.length ? eventRows.map((event: GroupEvent) => <div key={event.time + "-" + event.group} className="grid h-12 grid-cols-[44px_minmax(0,1fr)_80px] items-center gap-2 border-b border-border/70 px-1 last:border-0 hover:bg-muted/50">
-                  <time title={event.time.replace(", ", ", 2026 ")} className="whitespace-nowrap text-[11px] tabular-nums text-muted-foreground">{event.time.split(", ").at(-1)}</time><div className="min-w-0 leading-tight"><b title={event.group} className="block truncate text-[11px] font-semibold text-foreground">{event.group}</b><span title={event.event} className="block truncate text-[11px] text-muted-foreground">{event.event}</span></div><div className="flex justify-end"><EventBadge status={event.status} /></div>
-                </div>) : <p className="py-6 text-center text-[12px] text-muted-foreground">No {eventFilter.toLowerCase()} events.</p>}
+                {eventRows.length ? eventRows.map((event: GroupEvent) => <div key={event.time + "-" + event.group} className="grid h-12 grid-cols-[44px_minmax(0,1fr)_5rem] items-center gap-2 border-b border-border/70 px-1 last:border-0 hover:bg-muted/50">
+                  <time title={event.time.replace(", ", ", 2026 ")} className="whitespace-nowrap text-[0.6875rem] tabular-nums text-muted-foreground">{event.time.split(", ").at(-1)}</time><div className="min-w-0 leading-tight"><b title={event.group} className="block truncate text-[0.6875rem] font-semibold text-foreground">{event.group}</b><span title={event.event} className="block truncate text-[0.6875rem] text-muted-foreground">{event.event}</span></div><div className="flex justify-end"><EventBadge status={event.status} /></div>
+                </div>) : <p className="py-6 text-center text-[0.75rem] text-muted-foreground">No {eventFilter.toLowerCase()} events.</p>}
               </div>
-              <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[11px] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[12px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link></div>
+              <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link></div>
             </div>
           </SectionCard>
         </div>
@@ -842,7 +842,7 @@ export function ServerGroupsDashboard() {
       <CreateGroupDialog open={createOpen} onOpenChange={setCreateOpen} onCreate={createGroup} />
 
       {notice && (
-        <div role="status" className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[13px] text-foreground shadow-lg">
+        <div role="status" className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[0.8125rem] text-foreground shadow-lg">
           <Check size={16} className="text-emerald-600" />
           {notice}
           <button type="button" title="Dismiss" aria-label="Dismiss notification" onClick={() => setNotice("")} className="ml-2 rounded p-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -852,7 +852,7 @@ export function ServerGroupsDashboard() {
       )}
 
       {refreshing && (
-        <div className="fixed bottom-5 left-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[13px] text-foreground shadow-lg">
+        <div className="fixed bottom-5 left-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[0.8125rem] text-foreground shadow-lg">
           <RefreshCw size={15} className="animate-spin text-primary" />
           Refreshing…
         </div>
@@ -871,7 +871,7 @@ function EventBadge({ status }: { status: GroupEvent["status"] }) {
     Critical: "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
   };
   return (
-    <span className={cn("inline-flex w-20 shrink-0 items-center justify-center gap-1 rounded-full px-1.5 py-1 text-[10px] font-semibold whitespace-nowrap", tone[status])}>
+    <span className={cn("inline-flex w-20 shrink-0 items-center justify-center gap-1 rounded-full px-1.5 py-1 text-[0.625rem] font-semibold whitespace-nowrap", tone[status])}>
       <i aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
     </span>

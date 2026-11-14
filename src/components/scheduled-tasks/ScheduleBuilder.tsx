@@ -22,7 +22,7 @@ const KEY_TO_KIND: Record<ScheduleKind, (typeof KIND_OPTIONS)[number]> = {
   daily: "Daily", weekly: "Weekly", monthly: "Monthly", cron: "Cron",
 };
 
-const TIME_INPUT = "h-9 rounded-lg border border-input bg-card px-2 text-[13px] tabular-nums text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+const TIME_INPUT = "h-9 rounded-lg border border-input bg-card px-2 text-[0.8125rem] tabular-nums text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 /** Step 2 control: structured schedule editor with cron validation and a "Next 5 runs" preview. */
 export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
@@ -53,7 +53,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
     onChange({ ...value, daysOfWeek: next });
   };
 
-  const fieldLabel = "mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground";
+  const fieldLabel = "mb-1 block text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground";
 
   return (
     <div className="space-y-4">
@@ -89,7 +89,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
                     aria-pressed={active}
                     onClick={() => toggleWeekday(day)}
                     className={cn(
-                      "h-8 w-9 rounded-md border text-[11px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      "h-8 w-9 rounded-md border text-[0.6875rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       active ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card text-muted-foreground hover:bg-accent",
                     )}
                   >
@@ -105,7 +105,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
           <div>
             <label htmlFor="schedule-dom" className={fieldLabel}>Day of month</label>
             <Select value={String(value.dayOfMonth ?? 1)} onValueChange={(day) => onChange({ ...value, dayOfMonth: Number(day) })}>
-              <SelectTrigger id="schedule-dom" className="h-9 w-[92px] text-[13px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger id="schedule-dom" className="h-9 w-[5.75rem] text-[0.8125rem]"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
                   <SelectItem key={day} value={String(day)}>{day}</SelectItem>
@@ -118,7 +118,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
         <div>
           <label htmlFor="schedule-tz" className={fieldLabel}>Timezone</label>
           <Select value={value.timeZone} onValueChange={(timeZone) => onChange({ ...value, timeZone })}>
-            <SelectTrigger id="schedule-tz" className="h-9 w-[180px] text-[12px]"><SelectValue /></SelectTrigger>
+            <SelectTrigger id="schedule-tz" className="h-9 w-[11.25rem] text-[0.75rem]"><SelectValue /></SelectTrigger>
             <SelectContent>
               {SCHEDULE_TIME_ZONES.map((timeZone) => <SelectItem key={timeZone} value={timeZone}>{timeZone}</SelectItem>)}
             </SelectContent>
@@ -139,32 +139,32 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
             aria-invalid={cronError ? true : undefined}
             aria-describedby={cronError ? "schedule-cron-error" : undefined}
             className={cn(
-              "w-full resize-none rounded-lg border bg-card px-3 py-2 font-mono text-[12px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              cronError ? "border-[#DC2626] focus-visible:ring-[#DC2626]/40" : "border-input",
+              "w-full resize-none rounded-lg border bg-card px-3 py-2 font-mono text-[0.75rem] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              cronError ? "border-red-600 focus-visible:ring-red-600/40" : "border-input",
             )}
           />
           {cronError
             ? (
-              <p id="schedule-cron-error" role="alert" className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-[#DC2626]">
+              <p id="schedule-cron-error" role="alert" className="mt-1 inline-flex items-center gap-1 text-[0.6875rem] font-medium text-red-600">
                 <AlertCircle size={11} aria-hidden />{cronError}
               </p>
             )
-            : <p className="mt-1 text-[10px] text-muted-foreground">minute hour day-of-month month day-of-week</p>}
+            : <p className="mt-1 text-[0.625rem] text-muted-foreground">minute hour day-of-month month day-of-week</p>}
         </div>
       )}
 
       <div>
         <span className={fieldLabel}>Next 5 runs</span>
         {preview.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-border px-3 py-2 text-[11px] text-muted-foreground">
+          <p className="rounded-lg border border-dashed border-border px-3 py-2 text-[0.6875rem] text-muted-foreground">
             {value.kind === "cron" ? "Fix the cron expression to see upcoming runs." : "Select at least one day."}
           </p>
         ) : (
           <ol className="overflow-hidden rounded-lg border border-border">
             {preview.map((atMs, index) => (
-              <li key={atMs} className="flex items-center justify-between gap-2 border-t border-border/60 px-3 py-1.5 text-[11px] first:border-t-0">
+              <li key={atMs} className="flex items-center justify-between gap-2 border-t border-border/60 px-3 py-1.5 text-[0.6875rem] first:border-t-0">
                 <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
-                  <CalendarCheck2 size={12} aria-hidden className="text-[#16A34A]" />
+                  <CalendarCheck2 size={12} aria-hidden className="text-green-600" />
                   {new Date(atMs).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}
                 </span>
                 <span className="tabular-nums text-muted-foreground">{new Date(atMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} <span className="text-muted-foreground/70">· {value.timeZone}</span></span>

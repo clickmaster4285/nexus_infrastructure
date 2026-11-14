@@ -31,7 +31,7 @@ export function ToggleSwitch({ checked, onChange, label, disabled = false, size 
       className={cn(
         "relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
         dims,
-        checked ? "bg-[#16A34A]" : "bg-slate-300 dark:bg-slate-600",
+        checked ? "bg-green-600" : "bg-slate-300 dark:bg-slate-600",
       )}
     >
       <span

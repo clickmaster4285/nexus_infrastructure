@@ -14,13 +14,13 @@ const POOL_ICON = { "pool-nas": HardDrive, "pool-s3": Cloud, "pool-vault": Archi
 const TIER_LABEL = { "on-prem": "on-prem · NAS", cloud: "cloud · S3", offsite: "offsite · cold vault" } as const;
 
 function barClass(pct: number): string {
-  if (pct > 85) return "bg-[#DC2626]";
-  if (pct >= 70) return "bg-[#D97706]";
-  return "bg-[#3B82F6]";
+  if (pct > 85) return "bg-red-600";
+  if (pct >= 70) return "bg-amber-600";
+  return "bg-blue-500";
 }
 function pctTextClass(pct: number): string {
-  if (pct > 85) return "text-[#DC2626] dark:text-red-400";
-  if (pct >= 70) return "text-[#D97706] dark:text-amber-400";
+  if (pct > 85) return "text-red-600 dark:text-red-400";
+  if (pct >= 70) return "text-amber-600 dark:text-amber-400";
   return "text-muted-foreground";
 }
 
@@ -52,7 +52,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
   return (
     <ChartCard
       title="Storage Usage"
-      className="h-full min-h-[280px] p-4"
+      className="h-full min-h-[17.5rem] p-4"
       actions={
         <AlertMenu
           label="Storage actions"
@@ -78,7 +78,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
                   <Icon size={16} />
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-[13px] font-semibold leading-tight text-foreground">{pool.name}</p>
+                  <p className="truncate text-[0.8125rem] font-semibold leading-tight text-foreground">{pool.name}</p>
                   <p className="truncate text-xs text-muted-foreground">
                     {TIER_LABEL[pool.tier]} · +{pool.growthGBPerWeek} GB/wk{isSoonest && <span className="ml-1 font-semibold text-amber-700 dark:text-amber-400">Full in ~{soonestFull?.days}d</span>}
                   </p>
@@ -89,10 +89,10 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
                     <span className="hidden sm:inline"> · {(pool.capacityTB - pool.usedTB).toFixed(1)} TB free</span>
                   </p>
                   <p className="flex items-center gap-1">
-                    <Badge variant="outline" className={cn("h-5 gap-1 border-transparent px-1.5 text-[10px] font-semibold", pool.immutable ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300" : "bg-slate-100 text-slate-500 dark:bg-slate-500/15 dark:text-slate-300")}>
+                    <Badge variant="outline" className={cn("h-5 gap-1 border-transparent px-1.5 text-[0.625rem] font-semibold", pool.immutable ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300" : "bg-slate-100 text-slate-500 dark:bg-slate-500/15 dark:text-slate-300")}>
                       <Lock size={9} aria-hidden="true" />{pool.immutable ? "Immutable" : "Not immutable"}
                     </Badge>
-                    <Badge variant="outline" className="h-5 gap-1 border-transparent bg-blue-50 px-1.5 text-[10px] font-semibold text-blue-800 dark:bg-blue-500/10 dark:text-blue-300"><Lock size={9} aria-hidden="true" />AES-256</Badge>
+                    <Badge variant="outline" className="h-5 gap-1 border-transparent bg-blue-50 px-1.5 text-[0.625rem] font-semibold text-blue-800 dark:bg-blue-500/10 dark:text-blue-300"><Lock size={9} aria-hidden="true" />AES-256</Badge>
                   </p>
                 </div>
               </div>
@@ -118,10 +118,10 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
       {s3 && (
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Forecast (30d) · AWS S3</p>
-            <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400">Full in ~34d ({forecastEnd})</span>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Forecast (30d) · AWS S3</p>
+            <span className="text-[0.625rem] font-semibold text-amber-700 dark:text-amber-400">Full in ~34d ({forecastEnd})</span>
           </div>
-          <div className="mt-1 h-[80px] w-full" role="img" aria-label="Projected AWS S3 usage over 30 days against capacity">
+          <div className="mt-1 h-[5rem] w-full" role="img" aria-label="Projected AWS S3 usage over 30 days against capacity">
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <AreaChart data={FORECAST_DAYS} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
                 <CartesianGrid vertical={false} stroke="#E5E7EB" />
@@ -143,9 +143,9 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
           { label: "Reclaimable", value: `${reclaimedTb > 0 ? "0.0" : "1.8"} TB`, sub: "expired restore points" },
         ].map((tile) => (
           <div key={tile.label} className="min-w-0 rounded-lg bg-muted/50 p-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
-            <p className="mt-1 font-display text-[15px] font-bold leading-snug tabular-nums text-foreground">{tile.value}</p>
-            <p className="mt-0.5 truncate text-[10px] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
+            <p className="mt-1 font-display text-[0.9375rem] font-bold leading-snug tabular-nums text-foreground">{tile.value}</p>
+            <p className="mt-0.5 truncate text-[0.625rem] text-muted-foreground" title={tile.sub}>{tile.sub}</p>
           </div>
         ))}
       </div>
@@ -156,7 +156,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
         </p>
       ) : (
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[11px] text-muted-foreground">Expired points &gt; 90d are safe to prune.</p>
+          <p className="text-[0.6875rem] text-muted-foreground">Expired points &gt; 90d are safe to prune.</p>
           <Button variant="outline" className="h-8 gap-1.5 rounded-lg px-2.5 text-xs font-semibold" onClick={() => setConfirmClean(true)}>
             <Eraser size={13} aria-hidden="true" />Clean up
           </Button>
@@ -176,8 +176,8 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
             <DialogDescription>Restore points older than 90 days (verified successful) will be pruned from Local NAS and AWS S3. Active backup sets are not affected. You can undo this for 30 days.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setConfirmClean(false)}>Keep points</Button>
-            <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => { setReclaimedTb(1.8); setConfirmClean(false); }}>Reclaim 1.8 TB</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setConfirmClean(false)}>Keep points</Button>
+            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => { setReclaimedTb(1.8); setConfirmClean(false); }}>Reclaim 1.8 TB</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

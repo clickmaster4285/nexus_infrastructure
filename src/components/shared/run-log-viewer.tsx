@@ -41,16 +41,16 @@ export function RunLogViewer({ open, onOpenChange, title, subtitle, badge, meta,
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(680px,calc(100vw-2rem))] max-w-none gap-0 overflow-hidden p-0" aria-describedby="run-log-description">
+      <DialogContent className="w-[min(42.5rem,calc(100vw-2rem))] max-w-none gap-0 overflow-hidden p-0" aria-describedby="run-log-description">
         <DialogHeader className="border-b border-border px-5 py-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <DialogTitle className="font-display text-sm font-bold tracking-tight">Run log</DialogTitle>
-              <DialogDescription id="run-log-description" className="mt-0.5 truncate text-[12px]">
+              <DialogDescription id="run-log-description" className="mt-0.5 truncate text-[0.75rem]">
                 {subtitle} · {title}
               </DialogDescription>
               {(badge || (meta && meta.length > 0)) && (
-                <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
+                <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[0.6875rem] text-muted-foreground">
                   {badge}
                   {meta?.map((item, index) => (
                     <span key={index} className="tabular-nums">{index > 0 || badge ? "· " : ""}{item}</span>
@@ -64,23 +64,23 @@ export function RunLogViewer({ open, onOpenChange, title, subtitle, badge, meta,
               aria-label="Copy log to clipboard"
               className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              {copied ? <Check size={15} aria-hidden="true" className="text-[#16A34A]" /> : <Copy size={15} aria-hidden="true" />}
+              {copied ? <Check size={15} aria-hidden="true" className="text-green-600" /> : <Copy size={15} aria-hidden="true" />}
             </button>
           </div>
         </DialogHeader>
-        <div className="max-h-[420px] overflow-auto bg-[#0B1220] p-0">
-          <pre className="min-w-max px-0 py-3 font-mono text-[11px] leading-[1.7] text-slate-200">
+        <div className="max-h-[26.25rem] overflow-auto bg-[#0B1220] p-0">
+          <pre className="min-w-max px-0 py-3 font-mono text-[0.6875rem] leading-[1.7] text-slate-200">
             {lines.map((line, index) => (
               <div key={index} className="flex hover:bg-white/5">
                 <span aria-hidden="true" className="w-10 shrink-0 select-none pr-3 text-right text-slate-600">{index + 1}</span>
-                <code className={cn("pr-5", /error|failed/i.test(line) && "text-[#fca5a5]", /exit code 0/.test(line) && "text-[#86efac]")}>{line}</code>
+                <code className={cn("pr-5", /error|failed/i.test(line) && "text-red-300", /exit code 0/.test(line) && "text-green-300")}>{line}</code>
               </div>
             ))}
           </pre>
         </div>
         <div className="flex items-center justify-between border-t border-border px-5 py-2.5">
-          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">{lines.length} lines</span>
-          <button type="button" onClick={() => onOpenChange(false)} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-[12px] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <span className="text-[0.625rem] uppercase tracking-wide text-muted-foreground">{lines.length} lines</span>
+          <button type="button" onClick={() => onOpenChange(false)} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <X size={13} aria-hidden="true" />Close
           </button>
         </div>

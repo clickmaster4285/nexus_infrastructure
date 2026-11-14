@@ -31,11 +31,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     <div className={dark ? "dark" : undefined}>
       <div className="min-h-screen bg-background text-foreground">
         <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-        <div className="min-h-screen lg:pl-[232px]">
+        <div className="min-h-screen lg:pl-[14.5rem]">
           <Header onMenu={() => setMobileOpen(true)} dark={dark} onThemeToggle={toggleTheme} />
           <main className={isServerDashboard
-            ? "mx-auto flex min-h-[calc(100dvh-54px)] w-full max-w-[1800px] flex-col px-6 pb-0 pt-6"
-            : "mx-auto w-full max-w-[1800px] px-3 pb-4 pt-3 sm:px-5"}>
+            ? "mx-auto flex min-h-[calc(100dvh-3.375rem)] w-full max-w-[112.5rem] flex-col px-6 pb-0 pt-6"
+            : "mx-auto w-full max-w-[112.5rem] px-3 pb-4 pt-3 sm:px-5"}>
             {children}
           </main>
         </div>

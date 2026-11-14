@@ -49,11 +49,11 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
 
   return createPortal(
     <div className="fixed inset-0 z-[40]" role="dialog" aria-modal="true" aria-label={`Certificate ${title}`}>
-      <button type="button" aria-label="Close drawer" className="absolute inset-0 bg-[#0c1b2c]/55 backdrop-blur-[2px]" onClick={onClose} />
-      <div ref={panelRef} tabIndex={-1} className="absolute inset-y-0 right-0 flex w-[min(520px,100vw)] flex-col border-l border-border bg-card shadow-2xl outline-none">
+      <button type="button" aria-label="Close drawer" className="absolute inset-0 bg-[#0c1b2c]/55 backdrop-blur-[0.125rem]" onClick={onClose} />
+      <div ref={panelRef} tabIndex={-1} className="absolute inset-y-0 right-0 flex w-[min(32.5rem,100vw)] flex-col border-l border-border bg-card shadow-2xl outline-none">
         <div className="flex items-center justify-between gap-2 border-b border-border px-5 py-3.5">
           <span className="min-w-0">
-            <span className="block font-mono text-[11px] font-semibold text-muted-foreground">{cert?.id ?? certId}</span>
+            <span className="block font-mono text-[0.6875rem] font-semibold text-muted-foreground">{cert?.id ?? certId}</span>
             <span className="mt-0.5 block truncate text-sm font-bold text-foreground" title={title}>{title}</span>
           </span>
           <button type="button" onClick={onClose} aria-label="Close drawer" className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><X size={17} /></button>
@@ -68,18 +68,18 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
 
               {/* Validity timeline */}
               <div className="mt-4 rounded-lg border border-border p-3">
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground"><span>Issued {new Date(cert.issuedAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span><span>Expires {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span></div>
+                <div className="flex items-center justify-between text-[0.6875rem] text-muted-foreground"><span>Issued {new Date(cert.issuedAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span><span>Expires {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span></div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted" role="img" aria-label={`Validity progress ${pct}%`}><div className={cn("h-full rounded-full", pct > 90 ? "bg-red-500" : pct > 70 ? "bg-amber-400" : "bg-emerald-500")} style={{ width: `${pct}%` }} /></div>
-                <p className="mt-1.5 text-[11px] text-muted-foreground">Today — {pct}% of validity elapsed</p>
+                <p className="mt-1.5 text-[0.6875rem] text-muted-foreground">Today — {pct}% of validity elapsed</p>
               </div>
 
-              <dl className="mt-4 grid grid-cols-2 gap-3 text-[13px]">
-                <div><dt className="text-[11px] text-muted-foreground">Issuer</dt><dd className="font-medium">{cert.issuer}</dd></div>
-                <div><dt className="text-[11px] text-muted-foreground">Algorithm</dt><dd className="font-mono text-xs">{cert.signatureAlgorithm}</dd></div>
-                <div><dt className="text-[11px] text-muted-foreground">Key</dt><dd>{cert.keyType} {cert.keySize}</dd></div>
-                <div><dt className="text-[11px] text-muted-foreground">Service</dt><dd>{cert.service} · :{cert.port}</dd></div>
-                <div><dt className="text-[11px] text-muted-foreground">Auto-renew</dt><dd>{cert.autoRenew ? "Enabled" : "Manual"}</dd></div>
-                <div><dt className="text-[11px] text-muted-foreground">Owner</dt><dd>{cert.ownerId}</dd></div>
+              <dl className="mt-4 grid grid-cols-2 gap-3 text-[0.8125rem]">
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Issuer</dt><dd className="font-medium">{cert.issuer}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Algorithm</dt><dd className="font-mono text-xs">{cert.signatureAlgorithm}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Key</dt><dd>{cert.keyType} {cert.keySize}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Service</dt><dd>{cert.service} · :{cert.port}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Auto-renew</dt><dd>{cert.autoRenew ? "Enabled" : "Manual"}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Owner</dt><dd>{cert.ownerId}</dd></div>
               </dl>
 
               <div className="mt-4 flex items-center justify-between gap-2 rounded-lg bg-muted/40 p-3">
@@ -87,25 +87,25 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
                 <HealthBar score={score} />
               </div>
 
-              <p className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">SANs ({cert.sans.length})</p>
-              <ul className="mt-1 flex flex-wrap gap-1.5">{cert.sans.map((san) => <li key={san} className="rounded border border-border bg-muted/40 px-2 py-1 font-mono text-[11px] text-muted-foreground">{san}</li>)}</ul>
+              <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">SANs ({cert.sans.length})</p>
+              <ul className="mt-1 flex flex-wrap gap-1.5">{cert.sans.map((san) => <li key={san} className="rounded border border-border bg-muted/40 px-2 py-1 font-mono text-[0.6875rem] text-muted-foreground">{san}</li>)}</ul>
 
-              <p className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Hosts</p>
+              <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Hosts</p>
               <HostChips hosts={cert.hostIds} max={4} className="mt-1" />
 
               <div className="mt-4 flex items-center gap-2 rounded-lg border border-border p-3">
-                <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
+                <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground" title={cert.fingerprintSha256}>{cert.fingerprintSha256}</span>
                 <button type="button" onClick={() => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); } catch { /* noop */ } }} aria-label="Copy fingerprint" className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"><Copy size={14} /></button>
               </div>
 
               {events.length > 0 && (
                 <>
-                  <p className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Recent events</p>
+                  <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Recent events</p>
                   <ul className="mt-1 divide-y divide-border rounded-lg border border-border">
                     {events.slice(0, 4).map((event) => (
-                      <li key={event.id} className="flex items-start gap-2 px-3 py-2 text-[12px]">
+                      <li key={event.id} className="flex items-start gap-2 px-3 py-2 text-[0.75rem]">
                         <span className="min-w-0 flex-1 text-muted-foreground">{event.detail}</span>
-                        <span className="shrink-0 tabular-nums text-[11px] text-muted-foreground">{timeAgo(event.at)}</span>
+                        <span className="shrink-0 tabular-nums text-[0.6875rem] text-muted-foreground">{timeAgo(event.at)}</span>
                       </li>
                     ))}
                   </ul>

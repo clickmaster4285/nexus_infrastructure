@@ -42,7 +42,7 @@ export function UptimeCalendar({ daily, target, onSelectDay }: UptimeCalendarPro
   }, [weeks]);
 
   const toneFor = (uptime: number | null) => {
-    if (uptime == null) return "bg-[#E5E7EB] dark:bg-slate-700";
+    if (uptime == null) return "bg-gray-200 dark:bg-slate-700";
     if (uptime >= target) return "bg-emerald-500 dark:bg-emerald-500";
     if (uptime >= target - 0.05) return "bg-amber-400 dark:bg-amber-400";
     return "bg-rose-500 dark:bg-rose-500";
@@ -50,8 +50,8 @@ export function UptimeCalendar({ daily, target, onSelectDay }: UptimeCalendarPro
 
   return (
     <div className="flex flex-1 flex-col gap-2">
-      <div className="flex gap-[3px]">
-        <div className="flex w-7 flex-col justify-between pt-4 text-[10px] font-medium text-muted-foreground">
+      <div className="flex gap-[0.1875rem]">
+        <div className="flex w-7 flex-col justify-between pt-4 text-[0.625rem] font-medium text-muted-foreground">
           {WEEKDAY_LABELS.map((label, index) => (
             <span key={label} className={cn(index % 2 === 0 ? "opacity-100" : "opacity-0")}>{label}</span>
           ))}
@@ -59,10 +59,10 @@ export function UptimeCalendar({ daily, target, onSelectDay }: UptimeCalendarPro
         <div className="min-w-0 flex-1">
           <div className="relative h-4">
             {monthLabels.map(({ index, label }) => (
-              <span key={`${label}-${index}`} className="absolute text-[10px] font-medium text-muted-foreground" style={{ left: `calc(${index * (17 / Math.max(weeks.length, 1))}% + 2px)` }}>{label}</span>
+              <span key={`${label}-${index}`} className="absolute text-[0.625rem] font-medium text-muted-foreground" style={{ left: `calc(${index * (17 / Math.max(weeks.length, 1))}% + 0.125rem)` }}>{label}</span>
             ))}
           </div>
-          <div className="grid grid-flow-col grid-rows-7 gap-[3px]" role="img" aria-label="Daily uptime heatmap, Monday to Sunday, last 120 days">
+          <div className="grid grid-flow-col grid-rows-7 gap-[0.1875rem]" role="img" aria-label="Daily uptime heatmap, Monday to Sunday, last 120 days">
             {weeks.flat().map((day, index) => (
               <button
                 key={day?.iso ?? `empty-${index}`}
@@ -71,17 +71,17 @@ export function UptimeCalendar({ daily, target, onSelectDay }: UptimeCalendarPro
                 onClick={() => day && onSelectDay?.(day)}
                 title={day ? `${day.label} — ${day.uptime.toFixed(2)}% uptime · ${day.downtimeMinutes}m downtime · ${day.incidents} incident${day.incidents === 1 ? "" : "s"}` : "No data"}
                 aria-label={day ? `${day.label}, ${day.uptime.toFixed(2)} percent uptime, ${day.downtimeMinutes} minutes downtime, ${day.incidents} incidents` : "No data"}
-                className={cn("h-3.5 w-3.5 rounded-[3px] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", toneFor(day?.uptime ?? null))}
+                className={cn("h-3.5 w-3.5 rounded-[0.1875rem] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", toneFor(day?.uptime ?? null))}
               />
             ))}
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted-foreground">
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[3px] bg-emerald-500" />&ge; {target}%</span>
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[3px] bg-amber-400" />&lt; target</span>
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[3px] bg-rose-500" />Breach</span>
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[3px] bg-[#E5E7EB] dark:bg-slate-700" />No data</span>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.75rem] text-muted-foreground">
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[0.1875rem] bg-emerald-500" />&ge; {target}%</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[0.1875rem] bg-amber-400" />&lt; target</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[0.1875rem] bg-rose-500" />Breach</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-3 rounded-[0.1875rem] bg-gray-200 dark:bg-slate-700" />No data</span>
       </div>
     </div>
   );

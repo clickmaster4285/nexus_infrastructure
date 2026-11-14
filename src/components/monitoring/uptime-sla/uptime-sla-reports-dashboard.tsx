@@ -101,7 +101,7 @@ export function UptimeSlaReportsDashboard() {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Monitoring", "Uptime & SLA Reports"]} title="Uptime & SLA Reports" subtitle="SLA attainment, downtime and error budget across your infrastructure" demo />
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <p className="font-display text-base font-bold text-foreground">SLA data could not be loaded</p>
             <p className="text-sm text-muted-foreground">The report service failed for the requested window. Retry to reload it.</p>
@@ -139,21 +139,21 @@ export function UptimeSlaReportsDashboard() {
           ))}
         </div>
         <Select value="all" onValueChange={() => notify("All services shown.")}>
-          <SelectTrigger aria-label="Services" className="h-9 min-w-[140px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="Services" className="h-9 min-w-[8.75rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All services</SelectItem>
             {services.map((service) => <SelectItem key={service.id} value={service.name}>{service.name}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger aria-label="Infrastructure type" className="h-9 min-w-[140px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="Infrastructure type" className="h-9 min-w-[8.75rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All types</SelectItem>
             {["API", "Web", "Database", "VM", "Cache", "Network"].map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={String(slaTarget)} onValueChange={(value) => { const parsed = Number(value); if (isValidTarget(parsed)) setSlaTarget(parsed); }}>
-          <SelectTrigger aria-label="SLA target" className="h-9 min-w-[150px] rounded-lg text-sm"><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="SLA target" className="h-9 min-w-[9.375rem] rounded-lg text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {VALID_TARGETS.map((target) => <SelectItem key={target} value={String(target)}>SLA {target}%</SelectItem>)}
           </SelectContent>
@@ -162,41 +162,41 @@ export function UptimeSlaReportsDashboard() {
 
       {isLoading ? (
         <section aria-busy="true" aria-label="Loading SLA report" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-          {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[104px] animate-pulse rounded-xl bg-muted" />)}
+          {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[6.5rem] animate-pulse rounded-xl bg-muted" />)}
         </section>
       ) : (
         <SlaKpiCards summary={summary} />
       )}
 
       {/* Uptime trend — full width */}
-      <Panel title="Uptime Trend" className="flex min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[12px] text-muted-foreground">Target {slaTarget.toFixed(2)}% · {RANGE_TEXT[range]}</span>}>
-        {isLoading ? <div className="h-[300px] animate-pulse rounded-lg bg-muted" /> : <UptimeTrendChart daily={fleetDaily} target={slaTarget} />}
+      <Panel title="Uptime Trend" className="flex min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[0.75rem] text-muted-foreground">Target {slaTarget.toFixed(2)}% · {RANGE_TEXT[range]}</span>}>
+        {isLoading ? <div className="h-[18.75rem] animate-pulse rounded-lg bg-muted" /> : <UptimeTrendChart daily={fleetDaily} target={slaTarget} />}
       </Panel>
 
       {/* Error budget + calendar */}
       <section className="grid items-stretch gap-4 xl:grid-cols-2">
-        <Panel title="Error Budget" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions>
-          {isLoading ? <div className="h-[150px] animate-pulse rounded-lg bg-muted" /> : <ErrorBudgetCard budget={errorBudget} />}
+        <Panel title="Error Budget" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions>
+          {isLoading ? <div className="h-[9.375rem] animate-pulse rounded-lg bg-muted" /> : <ErrorBudgetCard budget={errorBudget} />}
         </Panel>
-        <Panel title="Uptime Calendar" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[12px] text-muted-foreground">120 days</span>}>
-          {isLoading ? <div className="h-[150px] animate-pulse rounded-lg bg-muted" /> : <UptimeCalendar daily={fleetDaily} target={slaTarget} onSelectDay={(day) => setSelectedDay((current) => (current === day.iso ? null : day.iso))} />}
-          {selectedDay && <p className="mt-2 text-[12px] text-primary">Showing incidents for {new Date(selectedDay).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · <button onClick={() => setSelectedDay(null)} className="font-semibold hover:underline">Clear</button></p>}
+        <Panel title="Uptime Calendar" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[0.75rem] text-muted-foreground">120 days</span>}>
+          {isLoading ? <div className="h-[9.375rem] animate-pulse rounded-lg bg-muted" /> : <UptimeCalendar daily={fleetDaily} target={slaTarget} onSelectDay={(day) => setSelectedDay((current) => (current === day.iso ? null : day.iso))} />}
+          {selectedDay && <p className="mt-2 text-[0.75rem] text-primary">Showing incidents for {new Date(selectedDay).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · <button onClick={() => setSelectedDay(null)} className="font-semibold hover:underline">Clear</button></p>}
         </Panel>
       </section>
 
       {/* Service table + incidents */}
       <section className="grid items-stretch gap-4 xl:grid-cols-[1.6fr_1fr]">
-        <Panel title="Service Uptime" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions>
+        <Panel title="Service Uptime" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions>
           <ServiceUptimeTable services={services} search={serviceSearch} onSearchChange={setServiceSearch} typeFilter={typeFilter} onTypeFilterChange={setTypeFilter} />
         </Panel>
-        <Panel title="Downtime Incidents" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions action={<span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[12px] font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300">{visibleIncidents.length} {visibleIncidents.length === 1 ? "incident" : "incidents"}</span>}>
-          {isLoading ? <div className="h-[200px] animate-pulse rounded-lg bg-muted" /> : <DowntimeIncidentsTable incidents={visibleIncidents} />}
+        <Panel title="Downtime Incidents" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions action={<span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[0.75rem] font-semibold text-rose-700 dark:bg-rose-950/60 dark:text-rose-300">{visibleIncidents.length} {visibleIncidents.length === 1 ? "incident" : "incidents"}</span>}>
+          {isLoading ? <div className="h-[12.5rem] animate-pulse rounded-lg bg-muted" /> : <DowntimeIncidentsTable incidents={visibleIncidents} />}
         </Panel>
       </section>
 
       {/* SLA by type */}
-      <Panel title="SLA Compliance by Type" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[16px] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Target {slaTarget.toFixed(1)}%</span>}>
-        {isLoading ? <div className="h-[180px] animate-pulse rounded-lg bg-muted" /> : <SlaByType entries={types} target={slaTarget} onSelectType={(type) => setTypeFilter((current) => (current === type ? "all" : type))} />}
+      <Panel title="SLA Compliance by Type" className="flex h-full min-w-0 flex-col rounded-xl p-5" titleClassName="text-[1rem] font-semibold" headerClassName="h-10" showOptions action={<span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Target {slaTarget.toFixed(1)}%</span>}>
+        {isLoading ? <div className="h-[11.25rem] animate-pulse rounded-lg bg-muted" /> : <SlaByType entries={types} target={slaTarget} onSelectType={(type) => setTypeFilter((current) => (current === type ? "all" : type))} />}
       </Panel>
 
       {toast && <div role="status" className="fixed bottom-4 right-4 z-[1300] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-lg">{toast}</div>}
@@ -206,9 +206,9 @@ export function UptimeSlaReportsDashboard() {
         <div role="dialog" aria-modal="true" aria-labelledby="schedule-title" className="fixed inset-0 z-[1300] grid place-items-center bg-slate-950/40 p-4" onClick={() => setScheduleOpen(false)}>
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl" onClick={(event) => event.stopPropagation()}>
             <h2 id="schedule-title" className="font-display text-base font-bold text-foreground">Schedule report</h2>
-            <p className="mt-1 text-[13px] text-muted-foreground">Email the SLA report to your team automatically.</p>
+            <p className="mt-1 text-[0.8125rem] text-muted-foreground">Email the SLA report to your team automatically.</p>
             <div className="mt-4 space-y-3">
-              <label className="block space-y-1.5 text-[13px] font-medium text-foreground">Frequency
+              <label className="block space-y-1.5 text-[0.8125rem] font-medium text-foreground">Frequency
                 <Select value={scheduleFreq} onValueChange={setScheduleFreq}>
                   <SelectTrigger aria-label="Frequency" className="h-10 w-full rounded-lg text-sm"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -216,7 +216,7 @@ export function UptimeSlaReportsDashboard() {
                   </SelectContent>
                 </Select>
               </label>
-              <label className="block space-y-1.5 text-[13px] font-medium text-foreground">Format
+              <label className="block space-y-1.5 text-[0.8125rem] font-medium text-foreground">Format
                 <Select value={scheduleFormat} onValueChange={setScheduleFormat}>
                   <SelectTrigger aria-label="Format" className="h-10 w-full rounded-lg text-sm"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -224,7 +224,7 @@ export function UptimeSlaReportsDashboard() {
                   </SelectContent>
                 </Select>
               </label>
-              <label className="block space-y-1.5 text-[13px] font-medium text-foreground">Recipients
+              <label className="block space-y-1.5 text-[0.8125rem] font-medium text-foreground">Recipients
                 <input value={scheduleRecipients} onChange={(event) => setScheduleRecipients(event.target.value)} aria-label="Recipients" placeholder="sre@nexus.io, oncall@nexus.io" className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
               </label>
             </div>

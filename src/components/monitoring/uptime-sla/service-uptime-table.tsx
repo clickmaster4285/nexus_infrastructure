@@ -30,7 +30,7 @@ interface ServiceUptimeTableProps {
 
 function StatusPill({ status }: { status: SlaStatus }) {
   const meta = STATUS_META[status];
-  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[12px] font-semibold", meta.className)}>{meta.label}</span>;
+  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", meta.className)}>{meta.label}</span>;
 }
 
 /** Mini 30-day sparkline for the expanded row — flat blue, no fill. */
@@ -46,7 +46,7 @@ function MiniSparkline({ values }: { values: number[] }) {
     return `${x.toFixed(2)},${y.toFixed(2)}`;
   }).join(" ");
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-[60px] w-full" preserveAspectRatio="none" role="img" aria-label="30-day uptime trend">
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-[3.75rem] w-full" preserveAspectRatio="none" role="img" aria-label="30-day uptime trend">
       <polyline points={points} fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
     </svg>
   );
@@ -140,8 +140,8 @@ function KebabMenu({ serviceId, actions, openId, onToggle, onClose }: { serviceI
           id={menuId}
           role="menu"
           aria-label={`Actions for ${serviceId}`}
-          className="motion-menu-in fixed z-[1400] w-48 rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
-          style={{ top: position.top, left: position.left, transformOrigin: position.openUp ? "bottom right" : "top right", ["--menu-slide" as string]: position.openUp ? "4px" : "-4px" }}
+          className="motion-menu-in fixed z-[1400] w-48 rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
+          style={{ top: position.top, left: position.left, transformOrigin: position.openUp ? "bottom right" : "top right", ["--menu-slide" as string]: position.openUp ? "0.25rem" : "-0.25rem" }}
         >
           {actions.map((action) => (
             <button
@@ -149,7 +149,7 @@ function KebabMenu({ serviceId, actions, openId, onToggle, onClose }: { serviceI
               type="button"
               role="menuitem"
               onClick={() => { action.onClick(); onClose(); buttonRef.current?.focus(); }}
-              className="flex h-9 w-full items-center rounded-md px-3 text-left text-[13px] text-foreground transition-colors hover:bg-[#F3F4F6] focus-visible:bg-[#F3F4F6] focus-visible:outline-none dark:hover:bg-accent dark:focus-visible:bg-accent"
+              className="flex h-9 w-full items-center rounded-md px-3 text-left text-[0.8125rem] text-foreground transition-colors hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-none dark:hover:bg-accent dark:focus-visible:bg-accent"
             >
               {action.label}
             </button>
@@ -212,7 +212,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center justify-between gap-2 pb-2">
-        <span className="relative block min-w-[200px] max-w-xs flex-1">
+        <span className="relative block min-w-[12.5rem] max-w-xs flex-1">
           <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input value={search} onChange={(event) => onSearchChange(event.target.value)} placeholder="Search services…" aria-label="Search services by name, type or status" className="h-9 rounded-lg pl-8 text-sm" />
         </span>
@@ -226,18 +226,18 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
       </div>
 
       <div className="min-h-0 flex-1 overflow-x-auto">
-        <table className="w-full text-left text-[13px]">
+        <table className="w-full text-left text-[0.8125rem]">
           <thead>
-            <tr className="border-b border-border text-[12px] text-muted-foreground">
+            <tr className="border-b border-border text-[0.75rem] text-muted-foreground">
               <th scope="col" className="w-9 px-2 py-2" aria-hidden="true" />
               <th scope="col" className="px-2 py-2"><button type="button" onClick={() => toggleSort("name")} className="flex items-center gap-1 font-semibold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Service {sortIcon("name")}</button></th>
               <th scope="col" className="px-2 py-2"><button type="button" onClick={() => toggleSort("uptime")} className="flex items-center gap-1 font-semibold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Uptime {sortIcon("uptime")}</button></th>
               <th scope="col" className="hidden px-2 py-2 md:table-cell"><button type="button" onClick={() => toggleSort("downtime")} className="flex items-center gap-1 font-semibold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Downtime {sortIcon("downtime")}</button></th>
               <th scope="col" className="hidden px-2 py-2 lg:table-cell"><button type="button" onClick={() => toggleSort("incidents")} className="flex items-center gap-1 font-semibold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Incidents {sortIcon("incidents")}</button></th>
-              <th scope="col" className="hidden px-2 py-2 text-[12px] font-semibold md:table-cell">SLA</th>
-              <th scope="col" className="hidden px-2 py-2 text-[12px] font-semibold lg:table-cell">Status</th>
-              <th scope="col" className="w-[120px] px-2 py-2 text-[12px] font-semibold">30 days</th>
-              <th scope="col" className="w-12 px-2 py-2 text-right text-[12px] font-semibold"><span className="sr-only">Actions</span></th>
+              <th scope="col" className="hidden px-2 py-2 text-[0.75rem] font-semibold md:table-cell">SLA</th>
+              <th scope="col" className="hidden px-2 py-2 text-[0.75rem] font-semibold lg:table-cell">Status</th>
+              <th scope="col" className="w-[7.5rem] px-2 py-2 text-[0.75rem] font-semibold">30 days</th>
+              <th scope="col" className="w-12 px-2 py-2 text-right text-[0.75rem] font-semibold"><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -249,14 +249,14 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
               const serviceIncidents = DOWNTIME_INCIDENTS.filter((incident) => incident.serviceName === service.name);
               return (
                 <Fragment key={service.id}>
-                  <tr className={cn("border-b border-border/70 last:border-0 transition-colors hover:bg-[#F8FAFC] dark:hover:bg-slate-800/60", status === "breached" && "border-l-4 border-l-rose-500", status === "at_risk" && "border-l-4 border-l-amber-400")}>
+                  <tr className={cn("border-b border-border/70 last:border-0 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60", status === "breached" && "border-l-4 border-l-rose-500", status === "at_risk" && "border-l-4 border-l-amber-400")}>
                     <td className="px-2 py-3 align-middle">
                       <button type="button" onClick={() => toggleExpand(service.id)} aria-expanded={isExpanded} aria-label={`${isExpanded ? "Collapse" : "Expand"} ${service.name}`} className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-accent"><ChevronRight size={14} className={cn("transition-transform duration-150", isExpanded && "rotate-90")} aria-hidden="true" /></button>
                     </td>
                     <td className="px-2 py-3 align-middle">
                       <div className="flex min-w-0 items-center gap-2">
-                        <span className="whitespace-nowrap text-[13px] font-semibold text-foreground">{service.name}</span>
-                        <span className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-semibold uppercase text-muted-foreground">{service.type}</span>
+                        <span className="whitespace-nowrap text-[0.8125rem] font-semibold text-foreground">{service.name}</span>
+                        <span className="rounded bg-muted px-1.5 py-0.5 text-[0.6875rem] font-semibold uppercase text-muted-foreground">{service.type}</span>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-2 py-3 align-middle tabular-nums">
@@ -267,10 +267,10 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                     <td className="hidden whitespace-nowrap px-2 py-3 align-middle tabular-nums text-muted-foreground md:table-cell">{service.slaTarget.toFixed(2)}%</td>
                     <td className="hidden whitespace-nowrap px-2 py-3 align-middle lg:table-cell"><StatusPill status={status} /></td>
                     <td className="px-2 py-3 align-middle">
-                      <div className="flex h-4 w-[120px] items-center gap-[2px]" role="img" aria-label={`30-day uptime history for ${service.name}`}>
+                      <div className="flex h-4 w-[7.5rem] items-center gap-[0.125rem]" role="img" aria-label={`30-day uptime history for ${service.name}`}>
                         {service.dailyUptime.slice(-30).map((value, index) => {
                           const date = new Date(); date.setDate(date.getDate() - (service.dailyUptime.length - 1 - index));
-                          return <span key={index} className={cn("h-3.5 w-[3px] rounded-[1px]", value >= service.slaTarget ? "bg-emerald-500" : value >= service.slaTarget - 0.5 ? "bg-amber-400" : "bg-rose-500")} title={`${date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · ${value.toFixed(2)}% · ${value < service.slaTarget ? "breach" : "met"}`} />;
+                          return <span key={index} className={cn("h-3.5 w-[0.1875rem] rounded-[0.0625rem]", value >= service.slaTarget ? "bg-emerald-500" : value >= service.slaTarget - 0.5 ? "bg-amber-400" : "bg-rose-500")} title={`${date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · ${value.toFixed(2)}% · ${value < service.slaTarget ? "breach" : "met"}`} />;
                         })}
                       </div>
                     </td>
@@ -288,12 +288,12 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                         <div className="overflow-hidden">
                           <div className="grid gap-3 border-t border-border/60 px-3 py-3 sm:grid-cols-[1.2fr_1fr]">
                             <div className="min-w-0 rounded-lg border border-border/70 bg-card p-3">
-                              <div className="mb-2 flex items-center justify-between gap-2 text-[12px] text-muted-foreground"><span className="font-semibold uppercase tracking-[0.06em]">30-day uptime</span><b className="tabular-nums text-foreground">{service.currentUptime.toFixed(2)}%</b></div>
+                              <div className="mb-2 flex items-center justify-between gap-2 text-[0.75rem] text-muted-foreground"><span className="font-semibold uppercase tracking-[0.06em]">30-day uptime</span><b className="tabular-nums text-foreground">{service.currentUptime.toFixed(2)}%</b></div>
                               <MiniSparkline values={service.dailyUptime} />
                             </div>
                             <div className="min-w-0 rounded-lg border border-border/70 bg-card p-3">
-                              <div className="mb-2 flex items-center justify-between gap-2 text-[12px] text-muted-foreground"><span className="font-semibold uppercase tracking-[0.06em]">Incidents</span><b className="tabular-nums text-foreground">{serviceIncidents.length}</b></div>
-                              <ul className="flex flex-col gap-1.5 text-[12px]">
+                              <div className="mb-2 flex items-center justify-between gap-2 text-[0.75rem] text-muted-foreground"><span className="font-semibold uppercase tracking-[0.06em]">Incidents</span><b className="tabular-nums text-foreground">{serviceIncidents.length}</b></div>
+                              <ul className="flex flex-col gap-1.5 text-[0.75rem]">
                                 {serviceIncidents.length === 0 && <li className="text-muted-foreground">No incidents in this window</li>}
                                 {serviceIncidents.map((incident) => (
                                   <li key={incident.id}>
@@ -305,7 +305,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                                   </li>
                                 ))}
                               </ul>
-                              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[12px] text-muted-foreground">
+                              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[0.75rem] text-muted-foreground">
                                 <span>Low: <b className="text-foreground">{minBar.toFixed(2)}%</b></span>
                                 <span>Breach days: <b className="text-foreground">{breachDays}</b></span>
                                 <span>MTTR: <b className="text-foreground">{service.mttrMinutes}m</b></span>
@@ -321,7 +321,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
               );
             })}
             {sorted.length === 0 && (
-              <tr><td colSpan={9} className="py-10 text-center"><div className="flex flex-col items-center gap-2"><SearchX size={24} className="text-muted-foreground" aria-hidden="true" /><p className="text-sm font-semibold text-foreground">No services match your search</p><p className="text-[12px] text-muted-foreground">Clear search or change the type filter.</p><button type="button" onClick={() => { onSearchChange(""); onTypeFilterChange("all"); }} className="mt-1 text-sm font-medium text-primary hover:underline">Clear filters</button></div></td></tr>
+              <tr><td colSpan={9} className="py-10 text-center"><div className="flex flex-col items-center gap-2"><SearchX size={24} className="text-muted-foreground" aria-hidden="true" /><p className="text-sm font-semibold text-foreground">No services match your search</p><p className="text-[0.75rem] text-muted-foreground">Clear search or change the type filter.</p><button type="button" onClick={() => { onSearchChange(""); onTypeFilterChange("all"); }} className="mt-1 text-sm font-medium text-primary hover:underline">Clear filters</button></div></td></tr>
             )}
           </tbody>
         </table>
@@ -336,20 +336,20 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
           { label: "Total Incidents", value: String(stats.incidents) },
         ].map((item) => (
           <div key={item.label} className="flex flex-col gap-0.5">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">{item.label}</span>
-            <b className="text-[14px] tabular-nums text-foreground">{item.value}</b>
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-muted-foreground">{item.label}</span>
+            <b className="text-[0.875rem] tabular-nums text-foreground">{item.value}</b>
           </div>
         ))}
       </div>
-      <div className="mt-1 flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-2 text-[12px] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
+      <div className="mt-1 flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-2 text-[0.75rem] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
         <Search size={13} aria-hidden="true" className="shrink-0" />
         <span className="min-w-0">Worst performer: <b>{stats.worst?.name ?? "—"} ({stats.worst?.currentUptime.toFixed(2)}%)</b></span>
       </div>
 
       {/* Pagination / footer */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-2 pt-3">
-        <p className="text-[12px] text-muted-foreground">Showing <b className="text-foreground">1-{sorted.length}</b> of <b className="text-foreground">{sorted.length}</b> services</p>
-        <Link href="/all-servers" className="inline-flex shrink-0 items-center gap-1 text-[13px] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all services →</Link>
+        <p className="text-[0.75rem] text-muted-foreground">Showing <b className="text-foreground">1-{sorted.length}</b> of <b className="text-foreground">{sorted.length}</b> services</p>
+        <Link href="/all-servers" className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all services →</Link>
       </div>
     </div>
   );

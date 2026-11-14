@@ -510,9 +510,9 @@ export function BackupsDashboard() {
       />
 
       {isError && (
-        <section role="alert" className="grid min-h-[320px] place-items-center rounded-xl border border-border bg-card p-6 text-center">
+        <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-[#DC2626] dark:bg-red-500/10"><HardDriveDownload size={20} aria-hidden="true" /></span>
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><HardDriveDownload size={20} aria-hidden="true" /></span>
             <h2 className="font-display text-base font-bold text-foreground">Couldn&rsquo;t load backups</h2>
             <p className="text-sm text-muted-foreground">The backup store did not respond. Check the pipeline and try again.</p>
             <Button variant="outline" className="h-10 gap-1.5 rounded-lg px-4 text-sm" onClick={reload}>
@@ -525,16 +525,16 @@ export function BackupsDashboard() {
       {isLoading && (
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[88px] animate-pulse rounded-xl bg-muted" />)}
+            {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-[5.5rem] animate-pulse rounded-xl bg-muted" />)}
           </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-            <div className="h-[280px] animate-pulse rounded-xl bg-muted xl:col-span-8" />
-            <div className="h-[280px] animate-pulse rounded-xl bg-muted xl:col-span-4" />
+            <div className="h-[17.5rem] animate-pulse rounded-xl bg-muted xl:col-span-8" />
+            <div className="h-[17.5rem] animate-pulse rounded-xl bg-muted xl:col-span-4" />
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-[280px] animate-pulse rounded-xl bg-muted" />)}
+            {Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-[17.5rem] animate-pulse rounded-xl bg-muted" />)}
           </div>
-          <div className="h-[520px] animate-pulse rounded-xl bg-muted" />
+          <div className="h-[32.5rem] animate-pulse rounded-xl bg-muted" />
         </>
       )}
 
@@ -653,7 +653,7 @@ export function BackupsDashboard() {
             <label className="block text-xs font-medium text-muted-foreground" htmlFor="run-job">
               Job
               <Select value={runDialogJobId} onValueChange={setRunDialogJobId}>
-                <SelectTrigger id="run-job" className="mt-1 h-9 w-full text-[13px]" aria-label="Job"><SelectValue /></SelectTrigger>
+                <SelectTrigger id="run-job" className="mt-1 h-9 w-full text-[0.8125rem]" aria-label="Job"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {allJobs.map((job) => <SelectItem key={job.id} value={job.id}>{job.name} · {job.host}</SelectItem>)}
                 </SelectContent>
@@ -662,7 +662,7 @@ export function BackupsDashboard() {
             <label className="block text-xs font-medium text-muted-foreground" htmlFor="run-type">
               Type
               <Select value={runDialogType} onValueChange={(value) => setRunDialogType(value as BackupType)}>
-                <SelectTrigger id="run-type" className="mt-1 h-9 w-full text-[13px]" aria-label="Backup type"><SelectValue /></SelectTrigger>
+                <SelectTrigger id="run-type" className="mt-1 h-9 w-full text-[0.8125rem]" aria-label="Backup type"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {(["full", "incremental", "differential", "snapshot"] as BackupType[]).map((value) => <SelectItem key={value} value={value}>{BACKUP_TYPE_LABELS[value]} backup</SelectItem>)}
                 </SelectContent>
@@ -670,8 +670,8 @@ export function BackupsDashboard() {
             </label>
           </div>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setRunDialogOpen(false)}>Cancel</Button>
-            <Button className="h-9 rounded-lg px-4 text-[13px] font-semibold" onClick={() => {
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setRunDialogOpen(false)}>Cancel</Button>
+            <Button className="h-9 rounded-lg px-4 text-[0.8125rem] font-semibold" onClick={() => {
               if (runDialogJobId) {
                 handleRunNow(runDialogJobId);
                 setRunDialogOpen(false);
@@ -726,8 +726,8 @@ export function BackupsDashboard() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" className="h-9 rounded-lg px-4 text-[13px]" onClick={() => setDeleteIds(null)}>Keep jobs</Button>
-            <Button className="h-9 rounded-lg bg-[#DC2626] px-4 text-[13px] font-semibold text-white hover:bg-[#B91C1C]" onClick={confirmDelete}>Delete</Button>
+            <Button variant="outline" className="h-9 rounded-lg px-4 text-[0.8125rem]" onClick={() => setDeleteIds(null)}>Keep jobs</Button>
+            <Button className="h-9 rounded-lg bg-red-600 px-4 text-[0.8125rem] font-semibold text-white hover:bg-red-700" onClick={confirmDelete}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -737,7 +737,7 @@ export function BackupsDashboard() {
         <div
           role="status"
           key={toast.id}
-          className="fixed bottom-4 left-1/2 z-[1500] flex w-[min(520px,calc(100vw-2rem))] -translate-x-1/2 items-center gap-3 rounded-xl border border-border bg-popover px-4 py-2.5 text-sm text-popover-foreground shadow-lg"
+          className="fixed bottom-4 left-1/2 z-[1500] flex w-[min(32.5rem,calc(100vw-2rem))] -translate-x-1/2 items-center gap-3 rounded-xl border border-border bg-popover px-4 py-2.5 text-sm text-popover-foreground shadow-lg"
         >
           <Check size={15} aria-hidden="true" className="shrink-0 text-emerald-600 dark:text-emerald-400" />
           <span className="min-w-0 flex-1">{toast.message}</span>

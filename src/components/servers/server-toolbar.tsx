@@ -46,7 +46,7 @@ export function ServerToolbar({ search, filters, onSearchChange, onFilterChange,
   return (
     <div className="flex flex-wrap items-center gap-2.5 border-b border-border p-3">
       {/* Search */}
-      <label className="flex h-[38px] min-w-[220px] flex-1 cursor-text items-center gap-2.5 rounded-md border border-input bg-card px-3 text-muted-foreground transition-colors focus-within:ring-2 focus-within:ring-ring">
+      <label className="flex h-[2.375rem] min-w-[13.75rem] flex-1 cursor-text items-center gap-2.5 rounded-md border border-input bg-card px-3 text-muted-foreground transition-colors focus-within:ring-2 focus-within:ring-ring">
         <Search size={16} aria-hidden="true" />
         <input
           type="search"
@@ -54,14 +54,14 @@ export function ServerToolbar({ search, filters, onSearchChange, onFilterChange,
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search servers, hostnames or IP addresses..."
           aria-label="Search servers"
-          className="w-full min-w-0 bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground"
+          className="w-full min-w-0 bg-transparent text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground"
         />
       </label>
 
       {/* Filters */}
       {filterDefinitions.map(({ key, label, shortLabel, options }) => (
         <Select key={key} value={filters[key]} onValueChange={(value) => onFilterChange(key, value)}>
-          <SelectTrigger className="h-[38px] w-[112px] text-[12px]" aria-label={`Filter by ${label}`}>
+          <SelectTrigger className="h-[2.375rem] w-[7rem] text-[0.75rem]" aria-label={`Filter by ${label}`}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -76,11 +76,11 @@ export function ServerToolbar({ search, filters, onSearchChange, onFilterChange,
 
       {/* Actions */}
       <div className="ml-auto flex gap-2">
-        <Button size="sm" className="h-[38px] text-[12px]" onClick={onAddServer}>
+        <Button size="sm" className="h-[2.375rem] text-[0.75rem]" onClick={onAddServer}>
           <Plus size={13} aria-hidden="true" />
           Add Server
         </Button>
-        <Button size="sm" variant="outline" className="h-[38px] text-[12px] text-[#526780]" onClick={onExport}>
+        <Button size="sm" variant="outline" className="h-[2.375rem] text-[0.75rem] text-[#526780]" onClick={onExport}>
           <Download size={13} aria-hidden="true" />
           Export
         </Button>

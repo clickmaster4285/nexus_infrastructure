@@ -72,7 +72,7 @@ export function StatCard({
 
   return (
     <Card
-      className={cn("flex h-full min-h-[104px] w-full min-w-0 items-center gap-3 rounded-xl p-4", onClick && "cursor-pointer transition-colors hover:border-primary/40 focus-within:ring-2 focus-within:ring-ring", className)}
+      className={cn("flex h-full min-h-[6.5rem] w-full min-w-0 items-center gap-3 rounded-xl p-4", onClick && "cursor-pointer transition-colors hover:border-primary/40 focus-within:ring-2 focus-within:ring-ring", className)}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
       aria-label={onClick ? onClickLabel ?? label : undefined}
@@ -83,14 +83,14 @@ export function StatCard({
         {icon}
       </span>
       <div className="min-w-0 flex-1">
-        <p className={cn("text-[12px] font-medium leading-snug text-muted-foreground", labelClassName)}>{label}</p>
-        <p className={cn("font-display whitespace-nowrap text-[24px] font-bold leading-tight tracking-tight text-foreground tabular-nums", valueClassName)}>{value}</p>
+        <p className={cn("text-[0.75rem] font-medium leading-snug text-muted-foreground", labelClassName)}>{label}</p>
+        <p className={cn("font-display whitespace-nowrap text-[1.5rem] font-bold leading-tight tracking-tight text-foreground tabular-nums", valueClassName)}>{value}</p>
         {trendNode && (
-          <div className={cn("mt-0.5 flex items-center gap-0.5 whitespace-nowrap text-[12px] leading-tight text-emerald-600", trendTone, trendClassName)}>
+          <div className={cn("mt-0.5 flex items-center gap-0.5 whitespace-nowrap text-[0.75rem] leading-tight text-emerald-600", trendTone, trendClassName)}>
             {trendNode}
           </div>
         )}
-        {detail && <div className={cn("mt-1 text-[12px] leading-snug text-muted-foreground", detailClassName)}>{detail}</div>}
+        {detail && <div className={cn("mt-1 text-[0.75rem] leading-snug text-muted-foreground", detailClassName)}>{detail}</div>}
       </div>
       {valueAside && <div className="shrink-0 self-center">{valueAside}</div>}
     </Card>

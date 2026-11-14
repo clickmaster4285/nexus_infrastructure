@@ -31,12 +31,12 @@ export function IssuerTypeBadge({ type, className }: { type: CertIssuerType; cla
 
 export function WeakBadge({ weak, className }: { weak: boolean; className?: string }) {
   if (!weak) return null;
-  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-red-200 bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300", className)}><AlertTriangle size={10} aria-hidden="true" />WEAK</span>;
+  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-red-200 bg-red-50 px-1.5 py-0.5 text-[0.625rem] font-semibold text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300", className)}><AlertTriangle size={10} aria-hidden="true" />WEAK</span>;
 }
 
 export function ChainBadge({ valid, className }: { valid: boolean; className?: string }) {
   if (valid) return null;
-  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300", className)}><AlertTriangle size={10} aria-hidden="true" />CHAIN</span>;
+  return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[0.625rem] font-semibold text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300", className)}><AlertTriangle size={10} aria-hidden="true" />CHAIN</span>;
 }
 
 export function HostChips({ hosts, max = 2, className }: { hosts: string[]; max?: number; className?: string }) {
@@ -45,9 +45,9 @@ export function HostChips({ hosts, max = 2, className }: { hosts: string[]; max?
   return (
     <span className={cn("flex min-w-0 items-center gap-1", className)}>
       {shown.map((host) => (
-        <span key={host} className="max-w-[110px] truncate rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground" title={host}>{host}</span>
+        <span key={host} className="max-w-[6.875rem] truncate rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground" title={host}>{host}</span>
       ))}
-      {extra > 0 && <span className="rounded border border-border bg-muted/60 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground" title={hosts.join(", ")}>+{extra}</span>}
+      {extra > 0 && <span className="rounded border border-border bg-muted/60 px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted-foreground" title={hosts.join(", ")}>+{extra}</span>}
     </span>
   );
 }
@@ -63,7 +63,7 @@ export function HealthBar({ score, className }: { score: number; className?: str
   return (
     <div className={cn("flex items-center gap-1.5", className)} role="img" aria-label={`Health score ${score} out of 100`}>
       <div className="h-1.5 w-14 overflow-hidden rounded-full bg-muted"><div className={cn("h-full rounded-full", tone, ALLOWED_BAR_WIDTHS[index])} /></div>
-      <b className="text-[11px] tabular-nums text-foreground">{score}</b>
+      <b className="text-[0.6875rem] tabular-nums text-foreground">{score}</b>
     </div>
   );
 }
@@ -77,10 +77,10 @@ export function DaysLeftBadge({ daysLeft, revoked }: { daysLeft: number; revoked
   return <span className="inline-flex items-center gap-1 text-muted-foreground"><Clock3 size={12} aria-hidden="true" />{daysLeft}d</span>;
 }
 
-/** 3px red stripe for expired rows. */
+/** 0.1875rem red stripe for expired rows. */
 export function ExpiryStripe({ expired }: { expired: boolean }) {
   if (!expired) return null;
-  return <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px] bg-red-500" />;
+  return <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[0.1875rem] bg-red-500" />;
 }
 
 export function outcomeTone(status: CertStatus): { dot: "red" | "orange" | "amber" | "emerald" | "slate" } {

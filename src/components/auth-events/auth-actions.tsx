@@ -99,7 +99,7 @@ export function BlockIpDialog({ open, onOpenChange, ips, onDone }: BaseDialogPro
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><ShieldAlert size={17} className="text-red-500" aria-hidden="true" />{single ? "Block IP address" : `Block ${ips.length} IP addresses`}</DialogTitle>
           <DialogDescription>
@@ -163,7 +163,7 @@ export function LockAccountDialog({ open, onOpenChange, user, locked, onDone }: 
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><Lock size={16} aria-hidden="true" />{locked ? "Unlock account" : "Lock account"}</DialogTitle>
           <DialogDescription>
@@ -196,7 +196,7 @@ function SessionCountDialog({ open, onOpenChange, user, kind, onDone }: BaseDial
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><AlertTriangle size={16} className={kind === "reset" ? "text-amber-500" : "text-red-500"} aria-hidden="true" />{kind === "reset" ? "Force password reset" : "Revoke sessions"}</DialogTitle>
           <DialogDescription>
@@ -231,7 +231,7 @@ export function FalsePositiveDialog({ open, onOpenChange, ids, onDone }: BaseDia
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(440px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(27.5rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Mark as false positive</DialogTitle>
           <DialogDescription>{ids.length} {ids.length === 1 ? "event" : "events"} will be handed back to the detection engine as training feedback. Linked detections keep their status.</DialogDescription>
@@ -254,7 +254,7 @@ export function MarkReviewedDialog({ open, onOpenChange, ids, onDone }: BaseDial
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(420px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Mark as reviewed</DialogTitle>
           <DialogDescription>Marks {ids.length} {ids.length === 1 ? "event" : "events"} as triaged by your team. The finding stays visible in the feed but is tagged “Reviewed”.</DialogDescription>
@@ -285,7 +285,7 @@ export function CreateIncidentDialog({ open, onOpenChange, prefill, onDone }: Ba
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(480px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(30rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Create incident</DialogTitle>
           <DialogDescription>Declares an incident in Incidents with this event as context. Responders are paged per the auth escalation policy.</DialogDescription>
@@ -332,13 +332,13 @@ export function DetectionDialog({ detection, open, onOpenChange, onBlockIp, onLo
   const related = detection.relatedEventIds.map((id) => getAuthEventById(id)).filter((event): event is AuthEvent => event != null);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(560px,calc(100vw-2rem))]">
+      <DialogContent className="w-[min(35rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle className="flex flex-wrap items-center gap-2"><SeverityBadge severity={detection.severity} />{AUTH_DETECTION_LABEL[detection.type]}<span className="font-mono text-sm text-muted-foreground">{detection.id}</span></DialogTitle>
           <DialogDescription className="break-all">{detection.detail}</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg border border-border bg-muted/40 p-3 text-sm sm:grid-cols-4">
-          <div><p className="text-xs text-muted-foreground">Subject</p><p className="mt-0.5 break-all font-mono text-[13px] font-semibold">{detection.subject}</p></div>
+          <div><p className="text-xs text-muted-foreground">Subject</p><p className="mt-0.5 break-all font-mono text-[0.8125rem] font-semibold">{detection.subject}</p></div>
           <div><p className="text-xs text-muted-foreground">Events</p><p className="mt-0.5 font-semibold tabular-nums">{detection.count.toLocaleString()}</p></div>
           <div><p className="text-xs text-muted-foreground">First seen</p><p className="mt-0.5 font-semibold">{timeAgo(detection.firstSeen)}</p></div>
           <div><p className="text-xs text-muted-foreground">Status</p><div className="mt-0.5"><DetectionStatusBadge status={detection.status} /></div></div>
@@ -348,7 +348,7 @@ export function DetectionDialog({ detection, open, onOpenChange, onBlockIp, onLo
           <ul className="mt-1.5 max-h-52 divide-y divide-border overflow-y-auto rounded-lg border border-border">
             {related.map((event) => (
               <li key={event.id}>
-                <a href={`/authentication-events/${event.id}`} className="flex items-center justify-between gap-2 px-3 py-2 text-[13px] transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:bg-muted/50">
+                <a href={`/authentication-events/${event.id}`} className="flex items-center justify-between gap-2 px-3 py-2 text-[0.8125rem] transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:bg-muted/50">
                   <span className="min-w-0 truncate font-mono font-semibold text-primary">{event.id}</span>
                   <span className="min-w-0 truncate text-muted-foreground">{event.method} · {event.result}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">{timeAgo(event.time)}</span>

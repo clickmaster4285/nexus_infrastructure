@@ -53,12 +53,12 @@ export function AlertsKpiRow({ stats, onKpiClick }: AlertsKpiRowProps) {
     },
     {
       key: "critical", label: "Critical", value: String(stats.critical), icon: AlertTriangle,
-      tone: "bg-[#ffeaec] text-[#DC2626] dark:bg-[#492a35] dark:text-[#ff8b98]",
+      tone: "bg-[#ffeaec] text-red-600 dark:bg-[#492a35] dark:text-[#ff8b98]",
       delta: stats.critical - stats.criticalPrev, deltaPercent: deltaPercent(stats.critical, stats.criticalPrev), goodDirection: "down", sparkColor: SEVERITY_COLORS.critical,
     },
     {
       key: "warning", label: "Warning", value: String(stats.warning), icon: AlertTriangle,
-      tone: "bg-[#fff1d7] text-[#D97706] dark:bg-[#493a29] dark:text-[#ffc16e]",
+      tone: "bg-[#fff1d7] text-amber-600 dark:bg-[#493a29] dark:text-[#ffc16e]",
       delta: stats.warning - stats.warningPrev, deltaPercent: deltaPercent(stats.warning, stats.warningPrev), goodDirection: "down", sparkColor: SEVERITY_COLORS.warning,
     },
     {
@@ -73,7 +73,7 @@ export function AlertsKpiRow({ stats, onKpiClick }: AlertsKpiRowProps) {
     },
     {
       key: "resolved", label: "Resolved (24h)", value: String(stats.resolved24h), icon: CheckCircle2,
-      tone: "bg-[#dff7eb] text-[#16A34A] dark:bg-[#123a2a] dark:text-[#4fd69a]",
+      tone: "bg-[#dff7eb] text-green-600 dark:bg-[#123a2a] dark:text-[#4fd69a]",
       delta: stats.resolved24h - stats.resolvedPrev24h, deltaPercent: deltaPercent(stats.resolved24h, stats.resolvedPrev24h), goodDirection: "up", sparkColor: SEVERITY_COLORS.resolved,
     },
   ];

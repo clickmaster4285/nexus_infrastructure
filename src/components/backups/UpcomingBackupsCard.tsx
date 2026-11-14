@@ -37,7 +37,7 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
   return (
     <ChartCard
       title="Upcoming Backups (24h)"
-      className="h-full min-h-[280px] p-4"
+      className="h-full min-h-[17.5rem] p-4"
       actions={
         <div className="flex items-center gap-1">
           <span className="text-xs tabular-nums text-muted-foreground">{rows.length} scheduled</span>
@@ -65,7 +65,7 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
             <li key={id} className="flex items-center gap-2 py-1.5">
               <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-muted text-muted-foreground"><CalendarClock size={14} /></span>
               <span className="min-w-0">
-                <span className="block truncate text-[13px] font-medium text-foreground" title={job.name}>{job.name}</span>
+                <span className="block truncate text-[0.8125rem] font-medium text-foreground" title={job.name}>{job.name}</span>
                 <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job.host} · {EXACT.format(atMs)}</span>
               </span>
               <span className="ml-auto flex shrink-0 flex-col items-end gap-1">
@@ -73,7 +73,7 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
                 {conflict ? (
                   <a
                     href={`/maintenance-windows/${encodeURIComponent(conflict.id)}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#D97706] hover:underline dark:text-amber-400"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
                     title={`Overlaps maintenance window ${conflict.id}`}
                   >
                     <AlertTriangle size={11} aria-hidden="true" />Maintenance

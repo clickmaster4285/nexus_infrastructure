@@ -140,7 +140,7 @@ export function AlertMenu({ trigger, items, label, align = "end", width = MENU_W
             id={menuId}
             role="menu"
             aria-label={label}
-            className="motion-menu-in fixed z-[1400] rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
+            className="motion-menu-in fixed z-[1400] rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover"
             style={{ top: position.top, left: position.left, width, transformOrigin: position.openUp ? "bottom right" : "top right" }}
           >
             {items.map((item) => {
@@ -167,10 +167,10 @@ export function AlertMenu({ trigger, items, label, align = "end", width = MENU_W
                     aria-haspopup={hasSubmenu ? "menu" : undefined}
                     aria-expanded={hasSubmenu ? submenuOpen : undefined}
                     className={cn(
-                      "flex h-9 w-full items-center gap-2 rounded-md px-3 text-left text-[13px] text-foreground transition-colors focus-visible:outline-none",
-                      "hover:bg-[#F3F4F6] focus-visible:bg-[#F3F4F6] dark:hover:bg-accent dark:focus-visible:bg-accent",
+                      "flex h-9 w-full items-center gap-2 rounded-md px-3 text-left text-[0.8125rem] text-foreground transition-colors focus-visible:outline-none",
+                      "hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-accent dark:focus-visible:bg-accent",
                       item.disabled && "cursor-not-allowed opacity-40",
-                      item.danger && "text-[#DC2626] dark:text-red-400",
+                      item.danger && "text-red-600 dark:text-red-400",
                     )}
                   >
                     <span className="min-w-0 flex-1 truncate">{item.label}</span>
@@ -181,7 +181,7 @@ export function AlertMenu({ trigger, items, label, align = "end", width = MENU_W
                       role="menu"
                       aria-label={item.label}
                       className={cn(
-                        "motion-menu-in absolute z-[1410] w-[150px] rounded-[10px] border border-[#E5E7EB] bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover",
+                        "motion-menu-in absolute z-[1410] w-[9.375rem] rounded-[0.625rem] border border-gray-200 bg-white p-1.5 shadow-[0_8px_24px_rgba(16,24,40,0.12)] outline-none dark:border-border dark:bg-popover",
                         submenuAlign === "right" ? "right-full mr-1" : "left-full ml-1",
                         submenuUp ? "bottom-0" : "top-0",
                       )}
@@ -199,8 +199,8 @@ export function AlertMenu({ trigger, items, label, align = "end", width = MENU_W
                             close();
                           }}
                           className={cn(
-                            "flex h-8 w-full items-center gap-1.5 rounded-md px-2.5 text-left text-[12px] text-foreground transition-colors focus-visible:outline-none",
-                            "hover:bg-[#F3F4F6] focus-visible:bg-[#F3F4F6] dark:hover:bg-accent dark:focus-visible:bg-accent",
+                            "flex h-8 w-full items-center gap-1.5 rounded-md px-2.5 text-left text-[0.75rem] text-foreground transition-colors focus-visible:outline-none",
+                            "hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-accent dark:focus-visible:bg-accent",
                             sub.disabled && "cursor-not-allowed opacity-40",
                           )}
                         >
