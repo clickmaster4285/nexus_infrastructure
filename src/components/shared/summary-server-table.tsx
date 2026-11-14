@@ -54,7 +54,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
         : ["Service", "Latency", "Trend"];
 
   return (
-    <Panel title={title} className={cn("min-h-[11.375rem] p-2.5", className)}>
+    <Panel size="lg" title={title} className={cn("min-h-[11.375rem] p-2.5", className)}>
       <div className="min-w-0 flex-1 overflow-x-auto">
         <table className="w-full table-fixed border-collapse">
           <thead>
@@ -64,7 +64,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
                   key={header}
                   scope="col"
                   className={cn(
-                    "whitespace-nowrap border-y border-border px-2 py-1.5 text-center text-[0.5625rem] font-semibold text-[oklch(0.5077_0.0481_255.16)] dark:text-muted-foreground",
+                    "whitespace-nowrap border-y border-border px-2 py-2 text-center text-[0.75rem] leading-[1.2] font-semibold text-[oklch(0.5077_0.0481_255.16)] dark:text-muted-foreground",
                     index === 0 && "w-[38%]",
                   )}
                 >
@@ -77,14 +77,14 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "metric" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
+                  <td className="truncate px-2 py-2.5 leading-[1.25] text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className={cn("px-2 py-1.5 text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className={cn("px-2 py-2.5 leading-[1.25] text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
-                  <td className="px-2 py-1.5 text-center">
+                  <td className="px-2 py-2.5 leading-[1.25] text-center">
                     <TrendIndicator trend={row.trend} />
                   </td>
                 </tr>
@@ -92,12 +92,12 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "backup" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
+                  <td className="truncate px-2 py-2.5 leading-[1.25] text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
-                  <td className="px-2 py-1.5 text-center text-[0.8125rem] text-[oklch(0.4972_0.0484_255.17)] dark:text-[oklch(0.8156_0.0279_255.11)]">{row.free}</td>
-                  <td className={cn("px-2 py-1.5 text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
+                  <td className="px-2 py-2.5 leading-[1.25] text-center text-[0.8125rem] text-[oklch(0.4972_0.0484_255.17)] dark:text-[oklch(0.8156_0.0279_255.11)]">{row.free}</td>
+                  <td className={cn("px-2 py-2.5 leading-[1.25] text-center text-[0.8125rem] font-semibold", metricTextColor[row.color] ?? metricTextColor.blue)}>
                     {row.usage}%
                   </td>
                 </tr>
@@ -105,13 +105,13 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
             {props.kind === "latency" &&
               props.rows.map((row) => (
                 <tr key={row.name} className="border-b border-border/60 last:border-b-0">
-                  <td className="truncate px-2 py-1.5 text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
+                  <td className="truncate px-2 py-2.5 leading-[1.25] text-[0.8125rem] font-medium text-[oklch(0.2947_0.0474_257.44)] dark:text-[oklch(0.9083_0.0214_252.5)]">
                     <span aria-hidden="true" className={cn("mr-1.5 inline-block h-[0.375rem] w-[0.375rem] rounded-full align-middle", dotColor[row.color] ?? dotColor.blue)} />
                     {row.name}
                   </td>
                   <td
                     className={cn(
-                    "px-2 py-1.5 text-center text-[0.8125rem] font-semibold",
+                    "px-2 py-2.5 leading-[1.25] text-center text-[0.8125rem] font-semibold",
                       row.color === "green" || row.color === "teal"
                         ? "text-[oklch(0.6275_0.1381_159.56)] dark:text-[oklch(0.7869_0.1465_160.69)]"
                         : row.color === "amber"
@@ -121,7 +121,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
                   >
                     {row.latency}
                   </td>
-                  <td className="truncate px-2 py-1.5 text-center text-[0.75rem] text-muted-foreground">
+                  <td className="truncate px-2 py-2.5 leading-[1.25] text-center text-[0.75rem] text-muted-foreground">
                     <LatencyTrendIndicator trend={row.trend} />
                   </td>
                 </tr>
@@ -129,7 +129,7 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
           </tbody>
         </table>
       </div>
-      <Link href={link.href} className="executive-overview-trend mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[0.75rem] font-semibold text-primary transition-colors hover:text-primary/80">
+      <Link href={link.href} className="mt-1.5 inline-flex w-fit items-center gap-1.5 pt-1 text-[0.75rem] font-semibold text-primary transition-colors hover:text-primary/80">
         View all {link.label} <ArrowRight className={linkArrowColor(kind, title)} size={12} aria-hidden="true" />
       </Link>
     </Panel>
@@ -139,20 +139,20 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
 function TrendIndicator({ trend }: { trend: string }) {
   if (trend === "↑") {
     return (
-      <span className="executive-overview-trend inline-flex items-center justify-center text-destructive" role="img" aria-label="Increasing">
+      <span className="inline-flex items-center justify-center text-destructive" role="img" aria-label="Increasing">
         <ArrowUp size={14} strokeWidth={2.6} />
       </span>
     );
   }
   if (trend === "↓") {
     return (
-      <span className="executive-overview-trend inline-flex items-center justify-center text-success" role="img" aria-label="Decreasing">
+      <span className="inline-flex items-center justify-center text-success" role="img" aria-label="Decreasing">
         <ArrowDown size={14} strokeWidth={2.6} />
       </span>
     );
   }
   return (
-    <span className="executive-overview-trend inline-flex items-center justify-center text-muted-foreground" role="img" aria-label="Stable">
+    <span className="inline-flex items-center justify-center text-muted-foreground" role="img" aria-label="Stable">
       <ArrowRight size={14} strokeWidth={2.4} />
     </span>
   );

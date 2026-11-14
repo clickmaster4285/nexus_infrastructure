@@ -17,21 +17,7 @@ import {
 import { ArrowRight, MapPin, Wrench } from "lucide-react";
 import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
-const PANEL = cn(
-  "min-w-0 p-4!",
-  "[&>div:first-child]:mb-1 [&>div:first-child]:min-h-8",
-  "[&>div:last-child]:text-xs",
-  "[&_.font-display.text-sm]:text-[1rem]! [&_.font-display.text-sm]:font-semibold! [&_.font-display.text-sm]:leading-[1.25]",
-  "[&_.recharts-cartesian-axis-tick-value]:text-[0.75rem]!",
-  "[&_.executive-overview-donut]:h-[10.5rem] [&_.executive-overview-donut]:min-h-0",
-  "[&_.executive-overview-donut-legend]:gap-2.5 [&_.executive-overview-donut-legend]:text-xs",
-  "[&_.executive-overview-donut-legend-row]:text-xs",
-  "[&_.executive-overview-availability-row]:grid-cols-[minmax(6.25rem,1fr)_42px_minmax(5.625rem,1.2fr)] [&_.executive-overview-availability-row]:min-h-[1.5625rem] [&_.executive-overview-availability-row]:text-xs",
-  "[&_.executive-overview-trend]:text-[0.75rem]!",
-  "[&_table]:table-fixed",
-  "[&_th]:px-2 [&_th]:py-2 [&_th]:text-[0.75rem]! [&_th]:leading-[1.2]",
-  "[&_td]:px-2 [&_td]:py-2.5 [&_td]:text-[0.8125rem]! [&_td]:leading-[1.25]",
-);
+const PANEL = "min-w-0 p-4";
 
 export function ExecutiveOverview() {
   return (

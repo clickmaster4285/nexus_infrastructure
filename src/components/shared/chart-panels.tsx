@@ -35,7 +35,7 @@ const tooltip = {
 };
 
 const axis = {
-  tick: { fill: "var(--muted-foreground)", fontSize: 10 },
+  tick: { fill: "var(--muted-foreground)", fontSize: 12 },
   axisLine: { stroke: "var(--border)" },
   tickLine: false,
 };
@@ -84,7 +84,7 @@ function TrendChart({ data, keys, colors }: TrendChartProps) {
 export function HealthTrendPanel({ className }: { className?: string }) {
   const colors = ["oklch(0.6958 0.1561 156.66)", "oklch(0.808 0.161 83.12)", "oklch(0.6406 0.2075 21.05)"];
   return (
-    <Panel title="Infrastructure Health Trend" range="24h" className={className}>
+    <Panel size="lg" title="Infrastructure Health Trend" range="24h" className={className}>
       <TrendChart data={healthTrend as unknown as Record<string, unknown>[]} keys={["healthy", "warning", "critical"]} colors={colors} />
       <Legend items={[{ name: "Healthy", color: colors[0] }, { name: "Warning", color: colors[1] }, { name: "Critical", color: colors[2] }]} />
     </Panel>
@@ -94,7 +94,7 @@ export function HealthTrendPanel({ className }: { className?: string }) {
 export function UsagePanel({ className }: { className?: string }) {
   const colors = ["oklch(0.6311 0.1762 253.47)", "oklch(0.598 0.234 307.76)"];
   return (
-    <Panel title="CPU & Memory Usage" range="24h" className={className}>
+    <Panel size="lg" title="CPU & Memory Usage" range="24h" className={className}>
       <TrendChart data={usageTrend as unknown as Record<string, unknown>[]} keys={["cpu", "memory"]} colors={colors} />
       <Legend items={[{ name: "CPU Usage", color: colors[0] }, { name: "Memory Usage", color: colors[1] }]} />
     </Panel>
@@ -103,7 +103,7 @@ export function UsagePanel({ className }: { className?: string }) {
 
 export function StoragePanel({ className }: { className?: string }) {
   return (
-    <Panel title="Disk Usage & Storage Growth" range="7d" className={className}>
+    <Panel size="lg" title="Disk Usage & Storage Growth" range="7d" className={className}>
       <div className="min-h-0 w-full flex-1 pt-1.5">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={storageTrend} margin={{ top: 6, right: 4, left: -16, bottom: 0 }}>
@@ -124,7 +124,7 @@ export function StoragePanel({ className }: { className?: string }) {
 
 export function NetworkTrafficPanel({ className }: { className?: string }) {
   return (
-    <Panel title="Network Traffic" range="24h" className={className}>
+    <Panel size="lg" title="Network Traffic" range="24h" className={className}>
       <div className="min-h-0 w-full flex-1 pt-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={traffic} margin={{ top: 5, right: 18, left: 0, bottom: 0 }}>
@@ -156,10 +156,10 @@ const segmentColors = ["oklch(0.7395 0.1592 157.98)", "oklch(0.7981 0.1404 157.3
 
 export function AvailabilityPanel({ className }: { className?: string }) {
   return (
-    <Panel title="Server Availability" range="24h" className={className}>
+    <Panel size="lg" title="Server Availability" range="24h" className={className}>
       <div className="flex flex-1 flex-col gap-3 pt-2">
         {serverAvailability.map((server) => (
-          <div key={server.name} className="executive-overview-availability-row grid grid-cols-[minmax(6.25rem,1fr)_29px_1.2fr] items-center gap-2 text-[0.75rem] text-[oklch(0.5082_0.0495_256.03)] dark:text-[oklch(0.7879_0.0377_252.13)]">
+          <div key={server.name} className="grid min-h-[1.5625rem] grid-cols-[minmax(6.25rem,1fr)_2.625rem_minmax(5.625rem,1.2fr)] items-center gap-2 text-xs text-[oklch(0.5082_0.0495_256.03)] dark:text-[oklch(0.7879_0.0377_252.13)]">
             <span className="truncate">{server.name}</span>
             <span className="whitespace-nowrap text-right">{server.count}</span>
             <div className="flex h-2.5 overflow-hidden rounded-sm bg-muted" aria-hidden="true">

@@ -22,13 +22,15 @@ interface PanelProps {
   optionsButtonClassName?: string;
   /** Optional classes for the header row, e.g. "h-10" for a taller header. */
   headerClassName?: string;
+  /** Shared dense layout used by the overview dashboards. */
+  size?: "default" | "lg";
 }
 
-export function Panel({ title, children, range, className, titleClassName, action, showOptions = true, optionsButtonClassName, headerClassName }: PanelProps) {
+export function Panel({ title, children, range, className, titleClassName, action, showOptions = true, optionsButtonClassName, headerClassName, size = "default" }: PanelProps) {
   return (
     <Card className={cn("flex min-w-0 flex-col p-2.5", className)}>
-      <div className={cn("flex shrink-0 items-center justify-between gap-2", headerClassName ?? "h-6")}>
-        <CardTitle className={cn("truncate", titleClassName)}>{title}</CardTitle>
+      <div className={cn("flex shrink-0 items-center justify-between gap-2", headerClassName ?? (size === "lg" ? "mb-1 h-8" : "h-6"))}>
+        <CardTitle className={cn("truncate", size === "lg" && "text-base font-semibold leading-[1.25]", titleClassName)}>{title}</CardTitle>
         <div className="flex shrink-0 items-center gap-0.5">
           {action}
           {range && (
@@ -64,7 +66,7 @@ export interface LegendItem {
 
 export function Legend({ items }: { items: LegendItem[] }) {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-0.5 text-[0.5625rem] text-muted-foreground">
+    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-0.5 text-xs text-muted-foreground">
       {items.map((item) => (
         <span key={item.name} className="flex items-center gap-1.5 whitespace-nowrap">
           <span aria-hidden="true" className="h-[0.4375rem] w-[0.4375rem] rounded-full" style={{ background: item.color }} />

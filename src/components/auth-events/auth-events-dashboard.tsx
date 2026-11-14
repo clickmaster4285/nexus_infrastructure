@@ -112,10 +112,10 @@ function mulberry32(seed: number): () => number {
 }
 
 const METHOD_SERIES = [
-  { name: "Password", color: "oklch(0.7535 0.139 232.66)", weight: 8 214 },
-  { name: "SSO/SAML", color: "oklch(0.709 0.1592 293.54)", weight: 5 893 },
-  { name: "MFA/TOTP", color: "oklch(0.8369 0.1644 84.43)", weight: 2 213 },
-  { name: "SSH key", color: "oklch(0.7729 0.1535 163.22)", weight: 1 471 },
+  { name: "Password", color: "oklch(0.7535 0.139 232.66)", weight: 8_214 },
+  { name: "SSO/SAML", color: "oklch(0.709 0.1592 293.54)", weight: 5_893 },
+  { name: "MFA/TOTP", color: "oklch(0.8369 0.1644 84.43)", weight: 2_213 },
+  { name: "SSH key", color: "oklch(0.7729 0.1535 163.22)", weight: 1_471 },
   { name: "API token", color: "oklch(0.7107 0.0351 256.79)", weight: 629 },
 ];
 

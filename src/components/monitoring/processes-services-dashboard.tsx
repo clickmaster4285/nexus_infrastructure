@@ -73,10 +73,10 @@ const memoryProcesses = [
 ];
 
 const serviceStates = [
-  { name: "Running", value: SERVICE COUNTS.running, percent: servicePercent(SERVICE COUNTS.running), color: "oklch(0.6969 0.146 157.59)" },
-  { name: "Failed", value: SERVICE COUNTS.failed, percent: servicePercent(SERVICE COUNTS.failed), color: "oklch(0.6197 0.2192 21.68)" },
+  { name: "Running", value: SERVICE_COUNTS.running, percent: servicePercent(SERVICE_COUNTS.running), color: "oklch(0.6969 0.146 157.59)" },
+  { name: "Failed", value: SERVICE_COUNTS.failed, percent: servicePercent(SERVICE_COUNTS.failed), color: "oklch(0.6197 0.2192 21.68)" },
   { name: "Stopped", value: 0, percent: servicePercent(0), color: "oklch(0.7593 0.163 68.27)" },
-  { name: "Unknown", value: SERVICE COUNTS.total - SERVICE COUNTS.running - SERVICE COUNTS.failed, percent: servicePercent(SERVICE COUNTS.total - SERVICE COUNTS.running - SERVICE COUNTS.failed), color: "oklch(0.73 0.0349 256.79)" },
+  { name: "Unknown", value: SERVICE_COUNTS.total - SERVICE_COUNTS.running - SERVICE_COUNTS.failed, percent: servicePercent(SERVICE_COUNTS.total - SERVICE_COUNTS.running - SERVICE_COUNTS.failed), color: "oklch(0.73 0.0349 256.79)" },
 ];
 const serviceTotals = serviceStates.reduce((sum, item) => sum + item.value, 0);
 const serviceHealthStats = [

@@ -553,10 +553,10 @@ export function ConfigChangesDashboard() {
           {chartMode === "approval" && (
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm" aria-label="Toggle approval series">
               {[
-                { name: "Approved", count: CONFIG APPROVAL MIX.approved, color: "oklch(0.7729 0.1535 163.22)" },
-                { name: "Unapproved", count: CONFIG APPROVAL MIX.unapproved, color: "oklch(0.7106 0.1661 22.22)" },
-                { name: "Pending", count: CONFIG APPROVAL MIX.pending, color: "oklch(0.8369 0.1644 84.43)" },
-                { name: "Expected", count: CONFIG APPROVAL MIX.expected, color: "oklch(0.7107 0.0351 256.79)" },
+                { name: "Approved", count: CONFIG_APPROVAL_MIX.approved, color: "oklch(0.7729 0.1535 163.22)" },
+                { name: "Unapproved", count: CONFIG_APPROVAL_MIX.unapproved, color: "oklch(0.7106 0.1661 22.22)" },
+                { name: "Pending", count: CONFIG_APPROVAL_MIX.pending, color: "oklch(0.8369 0.1644 84.43)" },
+                { name: "Expected", count: CONFIG_APPROVAL_MIX.expected, color: "oklch(0.7107 0.0351 256.79)" },
               ].map((entry) => {
                 const active = !hiddenSeries.has(entry.name);
                 return (

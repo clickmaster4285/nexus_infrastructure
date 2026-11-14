@@ -1059,7 +1059,7 @@ function RowActionMenu({ eventId, open, onToggle, onClose, onAcknowledge, onAssi
 /* Stat cards                                                          */
 /* ------------------------------------------------------------------ */
 const STAT_CARDS = [
-  { label: "Total Events", value: formatCompact(EVENT TOTALS.total), icon: Bell, tone: "bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]", delta: 142, pct: "6.1%", dir: "up" as const },
+  { label: "Total Events", value: formatCompact(EVENT_TOTALS.total), icon: Bell, tone: "bg-[oklch(0.9492_0.0252_249.95)] text-[oklch(0.5854_0.1886_255.66)] dark:bg-[oklch(0.3358_0.0746_252.64)] dark:text-[oklch(0.7396_0.14_249.73)]", delta: 142, pct: "6.1%", dir: "up" as const },
   { label: "Open Events", value: EVENT_TOTALS.open.toLocaleString("en-US"), icon: CircleAlert, tone: "bg-[oklch(0.9544_0.023_10.96)] text-[oklch(0.6219_0.2045_21.23)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]", delta: 26, pct: "9.1%", dir: "down" as const },
   { label: "Resolved", value: formatCompact(EVENT_TOTALS.resolved), icon: CheckCircle2, tone: "bg-[oklch(0.9553_0.0297_164.3)] text-[oklch(0.6367_0.1492_156.39)] dark:bg-[oklch(0.3149_0.0537_163.8)] dark:text-[oklch(0.7869_0.1465_160.69)]", delta: 118, pct: "7.4%", dir: "up" as const },
   { label: "Critical", value: EVENT_TOTALS.critical.toLocaleString("en-US"), icon: ShieldAlert, tone: "bg-[oklch(0.9544_0.023_10.96)] text-[oklch(0.6219_0.2045_21.23)] dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]", delta: 8, pct: "6.9%", dir: "down" as const },
