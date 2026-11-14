@@ -14,8 +14,7 @@ import { CanvasRenderer } from "echarts/renderers";
 
 echarts.use([ELineChart, GridComponent, MarkLineComponent, MarkPointComponent, TooltipComponent, CanvasRenderer]);
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { TechLogo } from "@/components/shared/icon";
@@ -645,11 +644,10 @@ export function DatabaseMonitoringDashboard() {
   const locationMarkerCount = new Set(databaseRows.map((database) => database.location)).size;
 
   return <div className="space-y-4 pb-3">
-    <PageMeta breadcrumbs={["Monitoring", "Database Monitoring"]} lastUpdated={lastUpdated} onRefresh={refreshPage} />
-    <PageHeading title="Database Monitoring" description="Monitor your databases performance, health and activity in real-time." actionsAlign="top">
-      <div className="flex shrink-0 items-center gap-2">
-        <span className={`hidden items-center gap-1.5 rounded-full px-3 py-2 text-[0.75rem] font-semibold sm:flex ${issueCount ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{issueCount ? <AlertTriangle size={14} /> : <Check size={14} />}{issueCount ? `${issueCount} Database${issueCount === 1 ? "" : "s"} Need Attention` : "All Databases Healthy"}</span><Button variant="outline" onClick={exportReport} className="whitespace-nowrap"><Download size={15} />Export Report</Button><Button onClick={() => setAddDialogOpen(true)} className="whitespace-nowrap"><Plus size={15} />Add Database</Button></div>
-    </PageHeading>
+    <PageHeader breadcrumbs={["Monitoring", "Database Monitoring"]} lastUpdated={lastUpdated} onRefresh={refreshPage} title="Database Monitoring" subtitle="Monitor your databases performance, health and activity in real-time.">
+        <div className="flex shrink-0 items-center gap-2">
+        <span className={`hidden items-center gap-1.5 rounded-full px-3 py-2 text-[0.75rem] font-semibold sm:flex ${issueCount ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}>{issueCount ? <AlertTriangle size={14} /> : <Check size={14} />}{issueCount ? `${issueCount} Database${issueCount === 1 ? "" : "s"} Need Attention` : "All Databases Healthy"}</span><Button variant="outline" onClick={exportReport} className="whitespace-nowrap"><Download size={15} />Export Report</Button><Button onClick={() => setAddDialogOpen(true)} className="whitespace-nowrap"><Plus size={15} />Add Database</Button></div
+      </PageHeader>
     <section aria-label="Database monitoring summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">{currentStats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.75rem] gap-3 p-4" labelClassName="text-[0.8125rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.75rem]" />)}</section>
 
     <section aria-label="Database performance and status" className="grid items-stretch gap-4 xl:grid-cols-[1.7fr_0.85fr_1.05fr]">

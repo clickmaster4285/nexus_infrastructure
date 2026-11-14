@@ -26,8 +26,7 @@ import { LabelLayout } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
 import type { EChartsOption } from "echarts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -882,13 +881,12 @@ export function NetworkMonitoringDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Network Monitoring"]} showRefresh={false} variant="detail" />
-      <PageHeading title="Network Monitoring" description="Real-time overview of your network performance, traffic, and connectivity." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Monitoring", "Network Monitoring"]} showRefresh={false} title="Network Monitoring" subtitle="Real-time overview of your network performance, traffic, and connectivity.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
-        </div>
-      </PageHeading>
+        </div
+      </PageHeader>
 
       <section aria-label="Network summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-7">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}

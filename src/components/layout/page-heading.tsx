@@ -13,15 +13,13 @@ interface PageHeadingProps {
   children?: React.ReactNode;
   /** Controls the vertical alignment of heading actions. */
   actionsAlign?: "top" | "bottom" | "end";
-  /** Larger heading scale used by server detail dashboards. */
-  variant?: "default" | "detail";
   /** Extra classes merged onto the root row, e.g. tighter spacing. */
   className?: string;
 }
 
 export function PageHeading({ title, description, icon, iconClassName, statusBadge, children, actionsAlign = "bottom", className }: PageHeadingProps) {
   return (
-    <div className={cn("mb-2.5 mt-1 flex min-h-[4.5rem] flex-wrap items-center justify-between gap-3", className)}>
+    <div className={cn("mb-2.5 flex min-h-18 flex-wrap items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-center gap-2.5">
         {icon && (
           <span aria-hidden="true" className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[oklch(0.9634_0.0223_164.52)] text-green-500 dark:bg-[oklch(0.3149_0.0537_163.8)] dark:text-[oklch(0.7869_0.1465_160.69)]", iconClassName)}>

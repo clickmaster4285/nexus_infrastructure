@@ -7,8 +7,7 @@ import * as echarts from "echarts";
 import type { EChartsOption } from "echarts";
 import { ArrowRight, ArrowUpRight, Check, CircleCheck, CircleX, Clock3, TriangleAlert } from "lucide-react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { Icon, TechLogo } from "@/components/shared/icon";
 import { Panel } from "@/components/shared/panel";
 import { MetricCard } from "@/components/shared/metric-card";
@@ -252,9 +251,8 @@ export function GlobalHealthDashboard() {
   }), [palette, isDark, healthyCollectorCount, staleCollectorCount, downCollectorCount]);
 
   return <>
-    <PageMeta breadcrumbs={["Overview", "Global Health"]} />
-    <PageHeading title="Global Health" description="Infrastructure and monitoring health at a glance." />
-    <section aria-label="Key metrics" className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+    <PageHeader breadcrumbs={["Overview", "Global Health"]} title="Global Health" subtitle="Infrastructure and monitoring health at a glance." />
+        <section aria-label="Key metrics" className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
       {globalHealthStats.map((item) => <MetricCard key={item.label} item={item} className="min-h-[6.25rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.75rem]" />)}
     </section>
 

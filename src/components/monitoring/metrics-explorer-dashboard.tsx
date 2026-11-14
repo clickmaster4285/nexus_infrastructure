@@ -9,8 +9,7 @@ import {
   ArrowRight, Download, Expand, MoreVertical, Plus, Save, Search, X,
 } from "lucide-react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -412,14 +411,13 @@ export function MetricsExplorerDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Metrics Explorer"]} showRefresh={false} variant="detail" />
-      <PageHeading title="Metrics Explorer" description="Explore, visualize, and analyze metrics from across your infrastructure in real-time." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Monitoring", "Metrics Explorer"]} showRefresh={false} title="Metrics Explorer" subtitle="Explore, visualize, and analyze metrics from across your infrastructure in real-time.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={() => toast("View saved.")} className="whitespace-nowrap"><Save size={15} />Save View</Button>
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Create Metric is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Create Metric</Button>
-        </div>
-      </PageHeading>
+        </div
+      </PageHeader>
 
       <section aria-label="Metric summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName={item.label === "Avg. Ingestion Rate" ? "text-[1.125rem]" : "text-[1.5rem]"} trendClassName="text-[0.6875rem]" />)}

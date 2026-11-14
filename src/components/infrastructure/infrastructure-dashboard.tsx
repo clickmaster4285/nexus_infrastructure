@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { DonutPanel } from "@/components/shared/donut-panel";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,8 +26,7 @@ export function InfrastructureDashboard() {
 
   return (
     <>
-      <PageMeta breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} />
-      <PageHeading title="Infrastructure Dashboard" description="Global infrastructure topology and resource health" actionsAlign="bottom" className="mt-1 min-h-[4.5rem]">
+      <PageHeader breadcrumbs={["Infrastructure", "Infrastructure Dashboard"]} title="Infrastructure Dashboard" subtitle="Global infrastructure topology and resource health">
         <Select value={environment} onValueChange={setEnvironment}>
           <SelectTrigger className="h-9 min-w-[9.0625rem] text-[0.75rem]" aria-label="Filter by environment">
             <SelectValue />
@@ -64,8 +62,8 @@ export function InfrastructureDashboard() {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
-      </PageHeading>
+        </Select
+      </PageHeader>
 
       <section aria-label="Infrastructure summary" className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {infrastructureStats.map((item) => (

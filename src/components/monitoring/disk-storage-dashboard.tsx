@@ -7,8 +7,7 @@ import {
 } from "recharts";
 import { ArrowDown, ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Download, MoreVertical, Plus, Server } from "lucide-react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -621,13 +620,12 @@ export function DiskStorageDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Disk & Storage"]} showRefresh={false} variant="detail" />
-      <PageHeading title="Disk & Storage" description="Monitor disk usage, storage performance, and I/O metrics across your infrastructure in real-time." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Monitoring", "Disk & Storage"]} showRefresh={false} title="Disk & Storage" subtitle="Monitor disk usage, storage performance, and I/O metrics across your infrastructure in real-time.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
-        </div>
-      </PageHeading>
+        </div
+      </PageHeader>
 
       <section aria-label="Storage summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.25rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}

@@ -12,8 +12,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { ServiceIcon } from "@/components/shared/icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -90,9 +89,8 @@ function ServerPicker() {
   const matches = servers.filter((server) => `${server.name} ${server.ip}`.toLowerCase().includes(query.toLowerCase()));
   return (
     <div className="min-w-0">
-      <PageMeta breadcrumbs={["Infrastructure", "Server Details"]} />
-      <PageHeading title="Server Details" description="Choose a server to view its details" />
-      <Card className="p-4">
+      <PageHeader breadcrumbs={["Infrastructure", "Server Details"]} title="Server Details" subtitle="Choose a server to view its details" />
+        <Card className="p-4">
         <label htmlFor="server-picker-search" className="mb-2 block text-[0.75rem] font-medium text-muted-foreground">Search servers</label>
         <input id="server-picker-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name or IP" className="mb-3 h-9 w-full rounded-md border border-input bg-card px-3 text-[0.8125rem] text-foreground sm:max-w-sm" />
         <ul className="divide-y divide-border">
@@ -313,12 +311,12 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
 
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-3 pb-3">
-      <PageMeta breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} variant="detail" lastUpdated={lastUpdated} actions={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[0.75rem] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[0.75rem] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} />
-      <PageHeading title={server.name} description={`${server.host} · ${server.environment} server`} actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} lastUpdated={lastUpdated} statusBadge={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[0.75rem] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[0.75rem] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} title={server.name} subtitle={`${server.host} · ${server.environment} server`}>
         <Button asChild variant="outline" ><Link href="/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
         <Button variant="outline" onClick={refresh} ><RotateCw size={15} />Refresh</Button>
         <Button variant="outline" onClick={() => showNotice("Server report exported.")} ><Download size={15} />Export</Button>
-      </PageHeading>
+      
+      </PageHeader>
 
       <section aria-label="Server summary" className="grid min-w-0 grid-cols-1 items-stretch gap-3 lg:grid-cols-[minmax(14.375rem,1.25fr)_minmax(0,4fr)]">
         <Card className="flex h-full min-w-0 flex-col p-4">
@@ -543,5 +541,3 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
     </div>
   );
 }
-
-

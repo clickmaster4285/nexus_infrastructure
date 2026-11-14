@@ -5,6 +5,7 @@ import { PageMeta } from "@/components/layout/page-meta";
 
 interface PageHeaderProps {
   breadcrumbs: string[];
+  breadcrumbLinks?: Record<string, string>;
   title: string;
   subtitle: string;
   /** Optional page icon rendered in a soft green tile left of the title. */
@@ -14,20 +15,20 @@ interface PageHeaderProps {
   /** Optional status pill rendered next to the title, before the actions. */
   statusBadge?: ReactNode;
   actions?: ReactNode;
+  /** Hides the refresh button, e.g. on placeholder pages. */
+  showRefresh?: boolean;
   lastUpdated?: string;
   onRefresh?: () => void;
   /** Shows the demo badge when explicitly enabled. */
   demo?: boolean;
   /** Actions rendered in the page title row. */
   children?: ReactNode;
-  /** Header density. Default keeps the larger detail-page rhythm. */
-  variant?: "default" | "detail";
 }
 
-export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = false, children, variant = "detail" }: PageHeaderProps) {
+export function PageHeader({ breadcrumbs, breadcrumbLinks, title, subtitle, icon, iconClassName, statusBadge, actions, showRefresh = true, lastUpdated, onRefresh, demo = false, children }: PageHeaderProps) {
   return (
     <div className="min-w-0">
-      <PageMeta breadcrumbs={breadcrumbs} variant={variant} demo={demo} lastUpdated={lastUpdated} onRefresh={onRefresh} />
+      <PageMeta breadcrumbs={breadcrumbs} breadcrumbLinks={breadcrumbLinks} demo={demo} showRefresh={showRefresh} lastUpdated={lastUpdated} onRefresh={onRefresh} />
       <PageHeading
         title={title}
         description={subtitle}
@@ -35,7 +36,6 @@ export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, 
         iconClassName={iconClassName ?? "h-11 w-11 rounded-xl"}
         statusBadge={statusBadge}
         actionsAlign="bottom"
-        variant={variant}
       >
         {actions}
         {children}

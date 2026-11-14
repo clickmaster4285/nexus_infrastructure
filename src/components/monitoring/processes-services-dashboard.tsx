@@ -5,8 +5,7 @@ import * as echarts from "echarts";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { ArrowRight, Download, MoreVertical, Plus } from "lucide-react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { TechLogo } from "@/components/shared/icon";
 import { Panel } from "@/components/shared/panel";
@@ -493,13 +492,12 @@ export function ProcessesServicesDashboard() {
   };
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Monitoring", "Processes & Services"]} showRefresh={false} variant="detail" />
-      <PageHeading title="Processes & Services" description="Monitor all running processes and services across your infrastructure in real-time." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Monitoring", "Processes & Services"]} showRefresh={false} title="Processes & Services" subtitle="Monitor all running processes and services across your infrastructure in real-time.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
-        </div>
-      </PageHeading>
+        </div
+      </PageHeader>
 
       <section aria-label="Process and service summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[6.25rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}

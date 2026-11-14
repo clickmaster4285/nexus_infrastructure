@@ -11,8 +11,7 @@ import {
   Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { Icon } from "@/components/shared/icon";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
@@ -142,10 +141,8 @@ export function NetworkDevicesDashboard() {
   };
 
   return <div className="space-y-2.5 pb-3">
-    <PageMeta breadcrumbs={["Infrastructure", "Network Devices"]} variant="detail" />
-    <PageHeading title="Network Devices" description="Monitor and manage all network devices across your infrastructure" actionsAlign="top" variant="detail" />
-
-    <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">{stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.5rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}</div>
+    <PageHeader breadcrumbs={["Infrastructure", "Network Devices"]} title="Network Devices" subtitle="Monitor and manage all network devices across your infrastructure" />
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">{stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.5rem]" labelClassName="text-[0.75rem] leading-4" valueClassName="text-[1.5rem] leading-7" trendClassName="text-[0.6875rem] leading-4" />)}</div>
 
     <div className="grid gap-2.5 xl:grid-cols-[1fr_1.3fr_1.3fr]">
       <Panel title="Device Health Overview" className="min-w-0" action={<Select defaultValue="24h"><SelectTrigger className="h-8 w-[4.75rem] text-[0.75rem]"><SelectValue /></SelectTrigger><SelectContent>{["1h", "6h", "24h", "7d"].map((range) => <SelectItem key={range} value={range}>{range}</SelectItem>)}</SelectContent></Select>}>

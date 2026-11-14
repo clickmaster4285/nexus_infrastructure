@@ -14,8 +14,6 @@ interface PageMetaProps {
   showRefresh?: boolean;
   /** Extra controls rendered on the right, before the demo badge. */
   actions?: React.ReactNode;
-  /** Larger breadcrumb and status scale used by server detail dashboards. */
-  variant?: "default" | "detail";
   /** Timestamp label, overridable by pages with a working refresh action. */
   lastUpdated?: string;
   onRefresh?: () => void;

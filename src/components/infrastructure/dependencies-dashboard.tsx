@@ -9,8 +9,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -234,14 +233,13 @@ export function DependenciesDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Infrastructure", "Dependencies"]} variant="detail" />
-      <PageHeading title="Dependencies" description="Monitor your infrastructure dependencies and service relationships in real-time." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Infrastructure", "Dependencies"]} title="Dependencies" subtitle="Monitor your infrastructure dependencies and service relationships in real-time.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={refresh} className="whitespace-nowrap"><RefreshCw size={15} />Refresh</Button>
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
           <Button onClick={() => toast("Add Dependency is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Dependency</Button>
-        </div>
-      </PageHeading>
+        </div
+      </PageHeader>
 
       <section aria-label="Dependency metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}

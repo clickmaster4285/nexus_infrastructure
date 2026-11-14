@@ -25,7 +25,6 @@ export function ExecutiveOverview() {
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
         subtitle="Complete view of your infrastructure health and performance"
-        variant="default"
       />
 
       {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return (

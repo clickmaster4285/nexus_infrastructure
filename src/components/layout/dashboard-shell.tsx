@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
@@ -9,8 +8,6 @@ import { Sidebar } from "@/components/layout/sidebar";
 const THEME_STORAGE_KEY = "nexus-theme";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isServerDashboard = pathname === "/server-details" || pathname.startsWith("/server-details/") || pathname === "/server-groups";
   const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,9 +30,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
         <div className="min-h-screen lg:pl-[14.5rem]">
           <Header onMenu={() => setMobileOpen(true)} dark={dark} onThemeToggle={toggleTheme} />
-          <main className={isServerDashboard
-            ? "mx-auto flex min-h-[calc(100dvh-3.375rem)] w-full max-w-[112.5rem] flex-col px-6 pb-0 pt-6"
-            : "mx-auto w-full max-w-[112.5rem] px-3 pb-4 pt-3 sm:px-5"}>
+          <main className="mx-auto flex min-h-[calc(100dvh-3.375rem)] w-full max-w-[112.5rem] flex-col px-3 pb-4 pt-3 sm:px-5">
             {children}
           </main>
         </div>

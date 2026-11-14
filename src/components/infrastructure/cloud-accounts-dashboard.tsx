@@ -9,8 +9,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { MetricCard } from "@/components/shared/metric-card";
 import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
@@ -279,12 +278,11 @@ export function CloudAccountsDashboard() {
 
   return (
     <div className="space-y-2.5 pb-3">
-      <PageMeta breadcrumbs={["Infrastructure", "Cloud Accounts & Providers"]} variant="detail" />
-      <PageHeading title="Cloud Accounts & Providers" description="Monitor and manage your cloud accounts, usage, and provider health in real-time." actionsAlign="top" variant="detail">
+      <PageHeader breadcrumbs={["Infrastructure", "Cloud Accounts & Providers"]} title="Cloud Accounts & Providers" subtitle="Monitor and manage your cloud accounts, usage, and provider health in real-time.">
         <Button variant="outline" onClick={refresh} ><RefreshCw size={15} />Refresh</Button>
         <Button variant="outline" onClick={exportCsv} ><Download size={15} />Export CSV</Button>
-        <Button onClick={() => toast("Add Account is a mockup action.")} ><Plus size={15} />Add Account</Button>
-      </PageHeading>
+        <Button onClick={() => toast("Add Account is a mockup action.")} ><Plus size={15} />Add Account</Button
+      </PageHeader>
 
       <section aria-label="Cloud account metrics" className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((item) => <MetricCard key={item.label} item={item} className="h-[5.125rem]" labelClassName="text-[0.75rem]" valueClassName="text-[1.5rem]" trendClassName="text-[0.6875rem]" />)}

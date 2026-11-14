@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { PageHeading } from "@/components/layout/page-heading";
-import { PageMeta } from "@/components/layout/page-meta";
+import { PageHeader } from "@/components/layout/page-header";
 import { Card } from "@/components/ui/card";
 import { MetricCard } from "@/components/shared/metric-card";
 import { AddServerDialog } from "@/components/servers/add-server-dialog";
@@ -144,10 +143,8 @@ export function AllServersDashboard() {
   return (
     <>
       <div className="min-w-0">
-          <PageMeta breadcrumbs={["Infrastructure", "All Servers"]} />
-          <PageHeading title="All Servers" description="Monitor and manage your infrastructure fleet" />
-
-          <section aria-label="Fleet summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 xl:grid-cols-6">
+          <PageHeader breadcrumbs={["Infrastructure", "All Servers"]} title="All Servers" subtitle="Monitor and manage your infrastructure fleet" />
+        <section aria-label="Fleet summary" className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 xl:grid-cols-6">
             {metricCards.map((item) => (
               <MetricCard key={item.label} item={item} className="h-[5.375rem]" labelClassName="text-[0.6875rem]" trendClassName="text-[0.625rem]" />
             ))}
