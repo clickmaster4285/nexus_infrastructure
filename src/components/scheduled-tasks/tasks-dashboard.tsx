@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { TasksKpiRow, type KpiKey } from "@/components/scheduled-tasks/TasksKpiRow";
 import { ExecutionTrendCard, type TrendRange } from "@/components/scheduled-tasks/ExecutionTrendCard";
-import { UpcomingRunsCard } from "@/components/scheduled-tasks/UpcomingRunsCard";
+import { TopFailingTasksCard } from "@/components/scheduled-tasks/TopFailingTasksCard";
 import { TasksFilters, type SavedView } from "@/components/scheduled-tasks/TasksFilters";
 import { TasksTable } from "@/components/scheduled-tasks/TasksTable";
 import { TaskBulkBar } from "@/components/scheduled-tasks/TaskBulkBar";
@@ -62,7 +62,7 @@ export function TasksDashboard() {
   } = useScheduledTasks(filters);
 
   const stats = useMemo(() => deriveTaskStats(allTasks, runs), [allTasks, runs]);
-  const trend = useMemo(() => deriveTrend(runs, trendRange === "7D" ? 7 : 30), [runs, trendRange]);
+  const trend = useMemo(() => deriveTrend(runs, trendRange === "7D" ? 7 : trendRange === "30D" ? 30 : 90), [runs, trendRange]);
   const drawerTask = drawerTaskId ? allTasks.find((task) => task.id === drawerTaskId) ?? null : null;
 
   /* Saved views in localStorage */
@@ -326,17 +326,15 @@ export function TasksDashboard() {
         <>
           <TasksKpiRow stats={stats} activeKpi={kpiActive} onKpiClick={handleKpiClick} />
 
-          <section className="grid items-stretch gap-4 xl:grid-cols-3">
-            <div className="min-w-0 xl:col-span-2">
+          <section className="grid items-stretch gap-4 xl:grid-cols-12">
+            <div className="min-w-0 xl:col-span-8">
               <ExecutionTrendCard data={trend} range={trendRange} onRangeChange={setTrendRange} onExport={exportTrendCsv} />
             </div>
-            <div className="min-w-0">
-              <UpcomingRunsCard
-                upcoming={stats.upcoming}
-                onViewAll={() => { resetFilters(); }}
-              />
+            <div className="min-w-0 xl:col-span-4">
+              <TopFailingTasksCard tasks={allTasks} runs={runs} />
             </div>
           </section>
+
 
           <TasksFilters
             filters={filters}

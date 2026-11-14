@@ -81,7 +81,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   aria-expanded={isExpanded}
                   aria-controls={submenuId}
                   onClick={() => setExpanded((current) => (current === group.title ? null : group.title))}
-                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-medium text-[#f0f5fa] transition-colors hover:bg-white/5"
+                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-medium text-[#f0f5fa] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
                 >
                   <GroupIcon size={15} className="shrink-0 text-[#c9d5e4]" aria-hidden="true" />
                   <span className="min-w-0 flex-1 truncate">{group.title}</span>
@@ -111,7 +111,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                               aria-current={isActive ? "page" : undefined}
                               onClick={onClose}
                               className={cn(
-                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[26px] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40",
+                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[26px] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30",
                                 isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                               )}
                             >

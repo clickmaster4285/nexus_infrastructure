@@ -33,7 +33,7 @@ const MUTED_HINT = "inline-block text-[12px] font-normal text-muted-foreground";
 /** Six KPI cards, MW density: 88px, icon left, label / value / hint stacked. */
 export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) {
   const successRate = stats.successRate7d;
-  const failedHint = `${stats.tabCounts.failed} task${stats.tabCounts.failed === 1 ? "" : "s"} Â· ${stats.failed24h} run${stats.failed24h === 1 ? "" : "s"}`;
+  const failedHint = `${stats.tabCounts.failed} task${stats.tabCounts.failed === 1 ? "" : "s"} · ${stats.failed24h} run${stats.failed24h === 1 ? "" : "s"}`;
 
   const cards: Array<{
     key: KpiKey;
@@ -77,7 +77,7 @@ export function TasksKpiRow({ stats, activeKpi, onKpiClick }: TasksKpiRowProps) 
       goodDirection: "down", clickLabel: "Filter table to tasks whose last run failed",
     },
     {
-      key: "success", label: "Success Rate (7d)", value: successRate == null ? "â€”" : `${successRate}%`, icon: CheckCircle2,
+      key: "success", label: "Success Rate (7d)", value: successRate == null ? "—" : `${successRate}%`, icon: CheckCircle2,
       tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400",
       trend: stats.successRateDelta == null ? <span className={MUTED_HINT}>vs prev 7d</span> : trendNode(stats.successRateDelta, "pts vs prev 7d"),
       trendClassName: (stats.successRateDelta ?? 0) >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400",

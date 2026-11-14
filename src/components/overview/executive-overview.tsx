@@ -1,4 +1,5 @@
 import { PageHeader } from "@/components/layout/page-header";
+import Link from "next/link";
 import { AvailabilityPanel, HealthTrendPanel, NetworkTrafficPanel, StoragePanel, UsagePanel } from "@/components/shared/chart-panels";
 import { DonutPanel } from "@/components/shared/donut-panel";
 import { MetricCard } from "@/components/shared/metric-card";
@@ -13,7 +14,8 @@ import {
   memoryServers,
   stats,
 } from "@/data/mock/dashboard";
-import { Wrench, ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Wrench } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { activeMaintenanceWindows, serversInMaintenance } from "@/mocks/maintenanceWindows";
 
 const PANEL = cn(
@@ -39,7 +41,15 @@ export function ExecutiveOverview() {
         breadcrumbs={["Overview", "Executive Overview"]}
         title="Executive Overview"
         subtitle="Complete view of your infrastructure health and performance"
-      />
+      >
+        <Button asChild variant="outline" className="h-9 rounded-lg px-3 text-[13px]">
+          <Link href="/server-sites">
+            <MapPin size={15} aria-hidden="true" />
+            Server Sites
+            <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </Button>
+      </PageHeader>
 
       {(() => { const active = activeMaintenanceWindows(); if (active.length === 0) return null; const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); return (
         <div role="status" className="flex min-h-[44px] flex-wrap items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-[13px] text-violet-900 dark:border-violet-900/70 dark:bg-violet-950/30 dark:text-violet-200">

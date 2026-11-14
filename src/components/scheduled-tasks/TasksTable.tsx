@@ -284,8 +284,8 @@ export function TasksTable({
                   {/* Type & schedule */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
                     <TaskTypeBadge type={task.type} />
-                    <span className="mt-0.5 block truncate text-xs font-medium text-foreground" title={`${cronForSchedule(task.schedule)} Â· ${task.schedule.timeZone}`}>
-                      {formatSchedule(task.schedule)}<span className="ml-1 font-normal text-muted-foreground">Â· {task.schedule.timeZone.replace("Asia/", "")}</span>
+                    <span className="mt-0.5 block truncate text-xs font-medium text-foreground" title={`${cronForSchedule(task.schedule)} · ${task.schedule.timeZone}`}>
+                      {formatSchedule(task.schedule)}<span className="ml-1 font-normal text-muted-foreground">· {task.schedule.timeZone.replace("Asia/", "")}</span>
                     </span>
                   </td>
 
@@ -338,7 +338,7 @@ export function TasksTable({
                       <>
                         {lastRun.maintenance && lastRun.status === "skipped" ? <SkippedMaintenanceBadge /> : <RunStatusBadge status={lastRun.status} />}
                         <span className="mt-0.5 block truncate text-xs tabular-nums text-muted-foreground" title={new Date(lastRun.startedAt).toLocaleString()}>
-                          {timeAgo(lastRun.epochMs)} Â· {formatDuration(lastRun.durationMs)}
+                          {timeAgo(lastRun.epochMs)} · {formatDuration(lastRun.durationMs)}
                         </span>
                       </>
                     ) : <span className="text-xs text-muted-foreground">Never run</span>}
@@ -355,7 +355,7 @@ export function TasksTable({
                           {new Date(nextRunMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </span>
                       </>
-                    ) : <span className="text-xs text-muted-foreground">â€”</span>}
+                    ) : <span className="text-xs text-muted-foreground">—</span>}
                   </td>
 
                   {/* Toggle */}

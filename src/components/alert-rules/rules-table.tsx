@@ -1,10 +1,12 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Info, Mail, MessageSquare, Webhook, Zap, AlertTriangle, BellOff, CheckCircle2, Ban } from "lucide-react";
 
 import { AlertMenu, type AlertMenuItem } from "@/components/alerts/alert-menu";
 import { maintenanceWindowMutingRule } from "@/mocks/maintenanceWindows";
+import { getRunbookForRule } from "@/mocks/runbooks";
 import { ToggleSwitch } from "@/components/alert-rules/toggle-switch";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -116,8 +118,10 @@ function ChannelIcons({ channels }: { channels: NotificationChannel[] }) {
   );
 }
 
-function kebabItemsFor(rule: AlertRule, actions: Pick<RulesTableProps, "onEdit" | "onDuplicate" | "onMute" | "onUnmute" | "onDelete" | "onViewAlerts">): AlertMenuItem[] {
+function kebabItemsFor(rule: AlertRule, actions: Pick<RulesTableProps, "onEdit" | "onDuplicate" | "onMute" | "onUnmute" | "onDelete" | "onViewAlerts">, navigate: (href: string) => void): AlertMenuItem[] {
+  const linked = getRunbookForRule(rule.id);
   const items: AlertMenuItem[] = [
+    { key: "runbook", label: linked ? `Open runbook ${linked.id}` : "Create runbook", onSelect: () => navigate(linked ? `/runbooks/${linked.id}` : `/runbooks/new?rule=${rule.id}`) },
     { key: "edit", label: "Edit rule", onSelect: () => actions.onEdit(rule) },
     { key: "duplicate", label: "Duplicate", onSelect: () => actions.onDuplicate(rule) },
   ];
@@ -141,6 +145,7 @@ function kebabItemsFor(rule: AlertRule, actions: Pick<RulesTableProps, "onEdit" 
 /** Rules table: priority columns (secondary hidden on small screens), sorting, pagination, bulk select. */
 export function RulesTable(props: RulesTableProps) {
   const { rules, selectedIds, onSelectionChange, columns = { type: true, notifications: true, activity: true }, density = "comfortable", onToggle, onOpenDetail, ...actions } = props;
+  const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("severity");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [pageSize, setPageSize] = useState(10);
@@ -301,7 +306,7 @@ export function RulesTable(props: RulesTableProps) {
                 <td className="px-2 py-2.5 text-right align-middle" onClick={(event) => event.stopPropagation()}>
                   <AlertMenu
                     label={`Actions for ${rule.id}`}
-                    items={kebabItemsFor(rule, actions)}
+                    items={kebabItemsFor(rule, actions, (href) => router.push(href))}
                     trigger={
                       <button
                         type="button"

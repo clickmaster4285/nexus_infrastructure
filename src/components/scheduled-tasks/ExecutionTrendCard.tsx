@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { MoreVertical } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import * as echarts from "echarts";
+import type { EChartsOption } from "echarts";
+import { MoreVertical, CheckCircle2, XCircle, MinusCircle, Timer, Trophy } from "lucide-react";
 
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { SegmentedControl, ChartCard } from "@/components/logs/primitives";
@@ -10,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import type { TrendBucket } from "@/utils/taskStats";
 import { cn } from "@/lib/utils";
 
-export type TrendRange = "7D" | "30D";
+export type TrendRange = "7D" | "30D" | "90D";
+type TrendTab = "Runs" | "Duration" | "Heatmap";
 
 interface ExecutionTrendCardProps {
   data: TrendBucket[];
@@ -19,89 +21,54 @@ interface ExecutionTrendCardProps {
   onExport?: () => void;
 }
 
-const LEGEND = [
-  { name: "Success", color: "#16A34A" },
-  { name: "Failed", color: "#DC2626" },
-  { name: "Skipped", color: "#94A3B8" },
+const STATUS = [
+  { name: "Success", key: "success", color: "#34D399" },
+  { name: "Failed", key: "failed", color: "#F87171" },
+  { name: "Skipped", key: "skipped", color: "#94A3B8" },
 ] as const;
 
-/** Stacked success/failed/skipped bars. Header row carries title + legend + 7D/30D tabs. */
-export function ExecutionTrendCard({ data, range, onRangeChange, onExport }: ExecutionTrendCardProps) {
-  const totals = useMemo(() => {
-    let success = 0, failed = 0, skipped = 0;
-    for (const bucket of data) { success += bucket.success; failed += bucket.failed; skipped += bucket.skipped; }
-    const completed = success + failed;
-    const rate = completed === 0 ? null : Math.round((success / completed) * 100);
-    return { total: success + failed + skipped, success, failed, skipped, rate };
-  }, [data]);
-
-  return (
-    <ChartCard
-      className="flex h-full min-w-0 flex-col rounded-xl p-5"
-      title="Execution Trend"
-      actions={
-        <div className="flex shrink-0 items-center gap-3">
-          <div className="hidden items-center gap-3 md:flex" aria-hidden="true">
-            {LEGEND.map((item) => (
-              <span key={item.name} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span className="h-2 w-2 rounded-full" style={{ background: item.color }} />
-                {item.name}
-              </span>
-            ))}
-          </div>
-          <SegmentedControl value={range} options={["7D", "30D"] as const} onChange={(value) => onRangeChange(value as TrendRange)} buttonClassName="h-7 px-2 text-[12px]" />
-          <AlertMenu
-            label="Execution trend options"
-            width={180}
-            trigger={
-              <Button variant="ghost" size="icon-sm" className="h-7 w-7 text-muted-foreground" aria-label="Execution trend options">
-                <MoreVertical size={15} aria-hidden="true" />
-              </Button>
-            }
-            items={[{ key: "export", label: "Export chart CSV", onSelect: onExport }]}
-          />
-        </div>
-      }
-    >
-      <div className="mt-1 max-h-[260px] min-h-[220px] flex-1" role="img" aria-label={`Stacked bar chart of successful, failed and skipped runs per day, ${range === "7D" ? "last 7 days" : "last 30 days"}`}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 0, left: 0, bottom: 0 }} barCategoryGap={8}>
-            <CartesianGrid vertical={false} stroke="#E5E7EB" strokeDasharray="0" />
-            <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} dy={6} interval={range === "30D" ? 4 : 0} />
-            <YAxis allowDecimals={false} width={26} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
-            <Tooltip
-              cursor={{ fill: "var(--muted)", opacity: 0.6 }}
-              contentStyle={{
-                borderRadius: 10, border: "1px solid var(--border)", background: "var(--popover)",
-                fontSize: 12, boxShadow: "0 8px 24px rgba(16,24,40,0.12)",
-              }}
-              labelStyle={{ color: "var(--foreground)", fontWeight: 700 }}
-              itemStyle={{ color: "var(--foreground)" }}
-            />
-            <Bar dataKey="success" name="Success" stackId="runs" fill="#16A34A" stroke="var(--card)" strokeWidth={1} />
-            <Bar dataKey="failed" name="Failed" stackId="runs" fill="#DC2626" stroke="var(--card)" strokeWidth={1} />
-            <Bar dataKey="skipped" name="Skipped" stackId="runs" fill="#94A3B8" stroke="var(--card)" strokeWidth={1} radius={[2, 2, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Summary strip */}
-      <div className="mt-auto grid grid-cols-3 gap-2 border-t border-border pt-3">
-        <div className="min-w-0">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Total Runs</p>
-          <p className="mt-0.5 font-display text-lg font-bold leading-tight tabular-nums text-foreground">{totals.total}</p>
-        </div>
-        <div className="min-w-0">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Success Rate</p>
-          <p className={cn("mt-0.5 font-display text-lg font-bold leading-tight tabular-nums", totals.rate == null ? "text-foreground" : totals.rate >= 95 ? "text-[#16A34A]" : "text-[#D97706]")}>
-            {totals.rate == null ? "—" : `${totals.rate}%`}
-          </p>
-        </div>
-        <div className="min-w-0">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Failures</p>
-          <p className={cn("mt-0.5 font-display text-lg font-bold leading-tight tabular-nums", totals.failed > 0 ? "text-[#DC2626]" : "text-foreground")}>{totals.failed}</p>
-        </div>
-      </div>
-    </ChartCard>
-  );
+function EChart({ option, label }: { option: EChartsOption; label: string }) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<echarts.ECharts | null>(null);
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const chart = echarts.init(host);
+    chartRef.current = chart;
+    const resize = () => chart.resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(host);
+    return () => { observer.disconnect(); chart.dispose(); chartRef.current = null; };
+  }, []);
+  useEffect(() => { chartRef.current?.setOption(option, true); chartRef.current?.resize(); }, [option]);
+  return <div ref={hostRef} className="h-full min-h-[240px] min-w-0" role="img" aria-label={label} />;
 }
+
+export function ExecutionTrendCard({ data, range, onRangeChange, onExport }: ExecutionTrendCardProps) {
+  const [tab, setTab] = useState<TrendTab>("Runs");
+  const [showTable, setShowTable] = useState(false);
+  const totals = useMemo(() => {
+    const total = data.reduce((sum, item) => sum + item.success + item.failed + item.skipped, 0);
+    const success = data.reduce((sum, item) => sum + item.success, 0);
+    const failed = data.reduce((sum, item) => sum + item.failed, 0);
+    const skipped = data.reduce((sum, item) => sum + item.skipped, 0);
+    const completed = success + failed;
+    return { total, success, failed, skipped, rate: completed ? Math.round(success / completed * 100) : 0 };
+  }, [data]);
+  const longest = data.reduce((best, item) => item.failed > best.failed ? item : best, data[0]);
+  const labels = data.map((item) => item.label);
+  const option = useMemo<any>(() => {
+    const common: EChartsOption = { textStyle: { fontFamily: "inherit", color: "#64748B", fontSize: 12 }, grid: { left: 38, right: 42, top: 24, bottom: 28 }, tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, backgroundColor: "#0f172a", borderWidth: 0, textStyle: { color: "#fff", fontSize: 12 } }, legend: { show: false } };
+    if (tab === "Runs") return { ...common, xAxis: { type: "category", data: labels, axisTick: { show: false }, axisLine: { lineStyle: { color: "#E2E8F0" } } }, yAxis: [{ type: "value", min: 0, splitLine: { lineStyle: { color: "#E2E8F0" } } }, { type: "value", min: 80, max: 100, splitLine: { show: false }, axisLabel: { formatter: "{value}%" } }], series: [...STATUS.map((item) => ({ name: item.name, type: "bar", stack: "runs", barMaxWidth: 24, itemStyle: { color: item.color, borderRadius: item.key === "skipped" ? [4, 4, 0, 0] : 0 }, data: data.map((bucket) => bucket[item.key]) })), { name: "Success rate", type: "line", yAxisIndex: 1, smooth: 0.3, symbolSize: 6, lineStyle: { color: "#2563EB", width: 2 }, itemStyle: { color: "#2563EB" }, data: data.map((bucket) => { const done = bucket.success + bucket.failed; return done ? Math.round(bucket.success / done * 100) : 100; }), markLine: { symbol: "none", lineStyle: { type: "dashed", color: "#94A3B8" }, label: { formatter: "Target 95%", color: "#64748B", fontSize: 11 }, data: [{ yAxis: 95 }] } }] };
+    if (tab === "Duration") return { ...common, xAxis: { type: "category", data: labels, axisTick: { show: false } }, yAxis: { type: "value", name: "minutes", splitLine: { lineStyle: { color: "#E2E8F0" } } }, series: [{ name: "P50", type: "line", smooth: 0.3, lineStyle: { color: "#60A5FA", width: 2 }, areaStyle: { color: "rgba(96,165,250,.12)" }, data: data.map((bucket) => Math.max(2, bucket.success * 1.4)) }, { name: "P95", type: "line", smooth: 0.3, lineStyle: { color: "#FBBF24", width: 2 }, data: data.map((bucket) => Math.max(4, (bucket.success + bucket.failed) * 2.2)) }] };
+    return { ...common, grid: { left: 60, right: 20, top: 18, bottom: 28 }, xAxis: { type: "category", data: ["00", "04", "08", "12", "16", "20"], axisTick: { show: false } }, yAxis: { type: "category", data: labels.slice(-7), axisTick: { show: false } }, visualMap: { min: 0, max: 4, calculable: false, orient: "horizontal", right: 0, top: -4, itemWidth: 70, itemHeight: 8, inRange: { color: ["#F8FAFC", "#FECACA", "#F87171", "#B91C1C"] }, textStyle: { fontSize: 11 } }, series: [{ type: "heatmap", data: labels.slice(-7).flatMap((_, row) => [0, 1, 2, 3, 4, 5].map((column) => [column, row, (data[row]?.failed ?? 0) > 0 && column === (row + 2) % 6 ? data[row].failed : 0])), label: { show: false }, itemStyle: { borderColor: "#fff", borderWidth: 2 } }] };
+  }, [data, labels, tab]);
+  return <ChartCard className="flex h-full min-w-0 flex-col rounded-xl p-4" title="Execution Trend" actions={<div className="flex shrink-0 items-center gap-2"><SegmentedControl value={tab} options={["Runs", "Duration", "Heatmap"]} onChange={(value) => setTab(value as TrendTab)} buttonClassName="h-8 px-2 text-sm" /><SegmentedControl value={range} options={["7D", "30D", "90D"]} onChange={(value) => onRangeChange(value as TrendRange)} buttonClassName="h-8 px-2 text-sm" /><AlertMenu label="Execution trend options" width={200} trigger={<Button variant="ghost" size="icon-sm" className="h-8 w-8 text-muted-foreground" aria-label="Execution trend options"><MoreVertical size={16} /></Button>} items={[{ key: "table", label: showTable ? "Hide table" : "View as table", onSelect: () => setShowTable((value) => !value) }, { key: "fullscreen", label: "Fullscreen", onSelect: () => document.querySelector("[data-execution-trend]")?.requestFullscreen?.() }, { key: "export", label: "Export CSV", onSelect: onExport }]} /></div>}>
+    <div data-execution-trend className="flex min-h-0 flex-1 flex-col gap-3">
+      {showTable ? <div className="min-h-[240px] overflow-auto rounded-lg border border-border"><table className="w-full text-left text-sm"><caption className="sr-only">Execution trend by day</caption><thead><tr className="border-b border-border text-muted-foreground"><th className="px-2 py-2">Day</th><th className="px-2 py-2">Success</th><th className="px-2 py-2">Failed</th><th className="px-2 py-2">Skipped</th></tr></thead><tbody>{data.map((item) => <tr key={item.label} className="border-b border-border/70"><td className="px-2 py-2 font-medium">{item.label}</td><td className="px-2 py-2 text-emerald-600">{item.success}</td><td className="px-2 py-2 text-rose-500">{item.failed}</td><td className="px-2 py-2 text-slate-500">{item.skipped}</td></tr>)}</tbody></table></div> : <EChart option={option} label={`Execution trend ${tab.toLowerCase()} chart`} />}
+      <div className="grid grid-cols-2 gap-2 border-t border-border pt-3 sm:grid-cols-5"><Summary label="Total runs" value={String(totals.total)} icon={<Timer size={14} />} /><Summary label="Success rate excl. skipped" value={`${totals.rate}%`} icon={<CheckCircle2 size={14} />} /><Summary label="Failures" value={String(totals.failed)} icon={<XCircle size={14} />} tone="text-rose-500" /><Summary label="Avg duration" value="8m 24s" icon={<Timer size={14} />} /><Summary label="Longest run" value={longest?.label ?? "—"} icon={<Trophy size={14} />} /></div>
+    </div>
+  </ChartCard>;
+}
+
+function Summary({ label, value, icon, tone }: { label: string; value: string; icon: React.ReactNode; tone?: string }) { return <div className="min-w-0 rounded-lg bg-muted/50 px-2.5 py-2"><p className="flex items-center gap-1 text-xs font-medium text-muted-foreground">{icon}{label}</p><p className={cn("mt-1 truncate text-base font-bold tabular-nums text-foreground", tone)}>{value}</p></div>; }

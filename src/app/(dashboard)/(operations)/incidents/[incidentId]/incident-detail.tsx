@@ -20,6 +20,7 @@ import {
   linkedAlerts, severityRank, type Incident, type IncidentStatus,
 } from "@/mocks/incidents";
 import { useIncidents } from "@/mocks/useIncidents";
+import { getRunbookForIncident } from "@/mocks/runbooks";
 import { fullTimestamp, timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";
 
@@ -100,6 +101,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   }, [router]);
 
   const incident = useMemo(() => incidents.find((item) => item.id === incidentId) ?? null, [incidents, incidentId]);
+  const linkedRunbook = useMemo(() => (incident ? getRunbookForIncident(incident.id) : null), [incident]);
 
   const chronological = useMemo(() => [...incidents].sort((a, b) => Date.parse(b.startedAt) - Date.parse(a.startedAt)), [incidents]);
   const currentIndex = chronological.findIndex((item) => item.id === incidentId);
@@ -432,7 +434,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                     ? [{ key: "start", label: "Start postmortem", onSelect: () => { startPostmortem(incident.id); showToast("Postmortem draft created."); } }]
                     : [
                         { key: "copy", label: "Export as Markdown", onSelect: () => downloadBlob(`# ${incident.id} — ${incident.title}\n\n## Summary\n${incident.postmortem.summary}\n\n## Root cause\n${incident.postmortem.rootCause}\n\n## Impact\n${incident.postmortem.impact}\n\n## Action items\n${incident.postmortem.actionItems.map((item) => `- [${item.done ? "x" : " "}] ${item.text} (${item.owner}, due ${item.due})`).join("\n")}`, "text/markdown;charset=utf-8", `${incident.id.toLowerCase()}-postmortem.md`) },
-                        { key: "runbooks", label: "Open runbooks", onSelect: () => router.push("/runbooks") },
+                          { key: "runbooks", label: (linkedRunbook ? `Open runbook ${linkedRunbook.id}` : "Open runbooks"), onSelect: () => router.push(linkedRunbook ? `/runbooks/${linkedRunbook.id}` : "/runbooks") },
                       ]}
                 />
               </div>

@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import {
-  CalendarClock, Check, ClipboardList, Copy, FileText, Hand, History, Mail, Pencil, Play, Pause, RotateCcw, Timer, Users, X, Zap,
+  CalendarClock, Check, ClipboardList, Copy, FileText, Hand, HardDriveDownload, History, Mail, Pencil, Play, Pause, RotateCcw, Timer, Users, X, Zap,
 } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -14,6 +15,7 @@ import { EnvironmentBadge, RunStatusBadge, SkippedMaintenanceBadge, TaskTypeBadg
 import { RunLogViewer } from "@/components/shared/run-log-viewer";
 import { useTaskRuns } from "@/hooks/useTaskRuns";
 import { BUILTIN_ACTIONS, CURRENT_USER_NAME, type ScheduledTask } from "@/mocks/scheduledTasks";
+import { TASK_ID_TO_BACKUP_JOB } from "@/mocks/backups";
 import { timeAgo } from "@/mocks/logs";
 import { formatScheduleLong } from "@/utils/formatSchedule";
 import { formatDuration } from "@/utils/taskStats";
@@ -139,6 +141,14 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
               {task.enabled ? <><Pause size={13} aria-hidden />Pause</> : <><Play size={13} aria-hidden />Resume</>}
             </Button>
             <Button size="sm" variant="outline" onClick={() => onEdit(task)} className="h-8 gap-1.5 text-[12px]"><Pencil size={13} aria-hidden />Edit</Button>
+            {task.type === "backup" && TASK_ID_TO_BACKUP_JOB[task.id] && (
+              <Link
+                href={`/backups-and-recovery?backup=${TASK_ID_TO_BACKUP_JOB[task.id]}`}
+                className="inline-flex h-8 items-center gap-1.5 rounded px-1 text-[12px] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <HardDriveDownload size={13} aria-hidden />View in Backups
+              </Link>
+            )}
           </div>
         </div>
 

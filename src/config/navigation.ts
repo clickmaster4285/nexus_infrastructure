@@ -61,9 +61,9 @@ export const NAV_GROUPS: NavGroup[] = [
     title: "Infrastructure",
     icon: Boxes,
     items: [
+      { label: "Server Sites", href: "/server-sites", icon: MapPin },
       { label: "All Servers", href: "/all-servers", icon: Server },
       { label: "Server Groups", href: "/server-groups", icon: Boxes },
-      { label: "Data Centers & Locations", href: "/data-centers-and-locations", icon: MapPin },
       { label: "Network Devices", href: "/network-devices", icon: Router },
       { label: "Containers & Docker", href: "/containers-and-docker", icon: Container },
       { label: "Cloud Accounts & Providers", href: "/cloud-accounts-and-providers", icon: Cloud },

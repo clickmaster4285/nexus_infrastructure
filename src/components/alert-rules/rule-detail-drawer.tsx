@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { BellOff, CheckCircle2, Copy, Mail, MessageSquare, PenLine, ShieldOff, Webhook, X, Zap } from "lucide-react";
+import { BellOff, BookOpen, CheckCircle2, Copy, Mail, MessageSquare, PenLine, ShieldOff, Webhook, X, Zap } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AlertRule, NotificationChannel, RuleSeverity, RuleStatus, RuleType } from "@/mocks/alertRules";
 import { maintenanceWindowMutingRule } from "@/mocks/maintenanceWindows";
+import { getRunbookForRule } from "@/mocks/runbooks";
 import { formatCondition } from "@/utils/formatCondition";
 import { formatDateTime } from "@/utils/alertStats";
 import { timeAgo } from "@/mocks/logs";
@@ -201,6 +202,24 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
             <SummaryRow label="Repeat interval">every {rule.notifications.repeatInterval}</SummaryRow>
             <SummaryRow label="Quiet hours">{rule.notifications.respectQuietHours ? "Respected" : "Ignored"}</SummaryRow>
           </dl>
+
+          <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Runbook</h3>
+          {(() => {
+            const linked = getRunbookForRule(rule.id);
+            return linked ? (
+              <p className="mt-1.5 text-[13px]">
+                <Link href={`/runbooks/${linked.id}`} className="inline-flex max-w-full items-center gap-1.5 rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <BookOpen size={13} aria-hidden="true" className="shrink-0" />
+                  <span className="truncate">{linked.id} · {linked.title}</span>
+                </Link>
+              </p>
+            ) : (
+              <p className="mt-1.5 text-[13px] text-muted-foreground">
+                No runbook linked.{" "}
+                <Link href={`/runbooks/new?rule=${rule.id}`} className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Create one →</Link>
+              </p>
+            );
+          })()}
 
           <h3 className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Recent alerts</h3>
           {rule.recentFires.length === 0 ? (

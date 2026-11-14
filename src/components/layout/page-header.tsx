@@ -18,9 +18,11 @@ interface PageHeaderProps {
   onRefresh?: () => void;
   /** Shows the "DEMO DATA" badge. Defaults to true for mock-driven pages. */
   demo?: boolean;
+  /** Actions rendered in the page title row. */
+  children?: ReactNode;
 }
 
-export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = true }: PageHeaderProps) {
+export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, statusBadge, actions, lastUpdated, onRefresh, demo = true, children }: PageHeaderProps) {
   return (
     <>
       <PageMeta breadcrumbs={breadcrumbs} variant="detail" demo={demo} lastUpdated={lastUpdated} onRefresh={onRefresh} />
@@ -34,6 +36,7 @@ export function PageHeader({ breadcrumbs, title, subtitle, icon, iconClassName, 
         variant="detail"
       >
         {actions}
+        {children}
       </PageHeading>
     </>
   );
