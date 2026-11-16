@@ -84,7 +84,7 @@ export function InfrastructureDashboard() {
         <TopologyPanel />
         <InfrastructureHealthPanel
           className="h-[29.5rem]"
-          onAlertSelect={(severity) => router.push(severity ? `/alerts?severity=${severity}` : "/alerts")}
+          onAlertSelect={(severity) => router.push(severity ? `/operations/alerts?severity=${severity}` : "/operations/alerts")}
         />
       </section>
 

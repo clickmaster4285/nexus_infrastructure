@@ -70,7 +70,7 @@ export function UserDetail({ userId }: UserDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Access Control", userId]} title="User not found" subtitle="This user does not exist in the current set." />
-        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No user matches “{userId}”</h2><p className="mt-1 text-sm text-muted-foreground">It may have been deleted or the link is incorrect.</p><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to users</Button></div></Card>
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No user matches â€œ{userId}â€</h2><p className="mt-1 text-sm text-muted-foreground">It may have been deleted or the link is incorrect.</p><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to users</Button></div></Card>
       </div>
     );
   }
@@ -91,7 +91,7 @@ export function UserDetail({ userId }: UserDetailProps) {
         breadcrumbs={["Security", "Access Control", user.name]}
         title={user.name}
         subtitle={user.email}
-        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "…"}
+        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "â€¦"}
         onRefresh={reload}
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><UserStatusBadge status={user.status} /><MfaBadge enabled={user.mfaEnabled} />{user.roleIds.map((roleId, index) => <span key={index} className="rounded border border-border bg-muted/40 px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">{getRoleById(roleId)?.name ?? roleId}</span>)}</span>}
         actions={
@@ -118,15 +118,15 @@ export function UserDetail({ userId }: UserDetailProps) {
             <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 text-[0.8125rem] sm:grid-cols-2">
               <Field label="Name" value={user.name} />
               <Field label="Email" value={<span className="font-mono text-xs">{user.email}</span>} />
-              <Field label="Groups" value={user.groupIds.join(", ") || "—"} />
-              <Field label="Sites" value={user.siteIds.join(", ") || "—"} />
+              <Field label="Groups" value={user.groupIds.join(", ") || "â€”"} />
+              <Field label="Sites" value={user.siteIds.join(", ") || "â€”"} />
               <Field label="Created" value={new Date(user.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} />
-              <Field label="Invited by" value={user.invitedBy ?? "—"} />
+              <Field label="Invited by" value={user.invitedBy ?? "â€”"} />
               <Field label="Password changed" value={user.passwordLastChangedAt ? timeAgo(user.passwordLastChangedAt) : "Never"} />
-              <Field label="Last login IP" value={<span className="font-mono text-xs">{user.lastLoginIp ?? "—"}</span>} />
+              <Field label="Last login IP" value={<span className="font-mono text-xs">{user.lastLoginIp ?? "â€”"}</span>} />
             </dl>
             <div className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">
-              <Link href={`/authentication-events?q=${encodeURIComponent(user.email)}`} className="text-xs font-semibold text-primary hover:underline">View authentication events →</Link>
+              <Link href={`/security/authentication-events?q=${encodeURIComponent(user.email)}`} className="text-xs font-semibold text-primary hover:underline">View authentication events â†’</Link>
             </div>
           </Card>
 
@@ -142,7 +142,7 @@ export function UserDetail({ userId }: UserDetailProps) {
             <div className="mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">High-risk permissions</p>
               <ul className="mt-2 flex flex-wrap gap-2">
-                {highRisk.length === 0 && <li className="text-xs text-muted-foreground">None — low risk profile.</li>}
+                {highRisk.length === 0 && <li className="text-xs text-muted-foreground">None â€” low risk profile.</li>}
                 {highRisk.map((perm) => (
                   <li key={perm} className="inline-flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-[0.6875rem] font-medium text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300"><ShieldAlert size={11} />{RISK_LABELS[perm] ?? perm}</li>
                 ))}
@@ -160,7 +160,7 @@ export function UserDetail({ userId }: UserDetailProps) {
                     {session.device.toLowerCase().includes("iphone") ? <Smartphone size={16} className="text-muted-foreground" aria-hidden="true" /> : <Laptop size={16} className="text-muted-foreground" aria-hidden="true" />}
                     <div className="min-w-0 flex-1">
                       <p className="text-[0.8125rem] font-semibold text-foreground">{session.device}</p>
-                      <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{session.ip} · {session.location} · started {mounted ? timeAgo(session.startedAt) : "…"}</p>
+                      <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{session.ip} Â· {session.location} Â· started {mounted ? timeAgo(session.startedAt) : "â€¦"}</p>
                     </div>
                     <button type="button" onClick={() => { revokeSession(user.id, session.id); reload(); }} className="shrink-0 rounded-lg border border-red-200 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Revoke</button>
                   </li>
@@ -194,7 +194,7 @@ export function UserDetail({ userId }: UserDetailProps) {
                 { action: "Password changed", at: user.passwordLastChangedAt ?? user.createdAt, detail: "via self-service" },
                 { action: "Role updated", at: user.createdAt, detail: user.roleIds.join(", ") },
               ].map((item, index) => (
-                <li key={index} className="flex items-center justify-between gap-2 py-2"><span className="min-w-0"><span className="block font-medium text-foreground">{item.action}</span><span className="block truncate text-muted-foreground">{item.detail}</span></span><span className="shrink-0 tabular-nums text-muted-foreground">{mounted ? timeAgo(item.at) : "…"}</span></li>
+                <li key={index} className="flex items-center justify-between gap-2 py-2"><span className="min-w-0"><span className="block font-medium text-foreground">{item.action}</span><span className="block truncate text-muted-foreground">{item.detail}</span></span><span className="shrink-0 tabular-nums text-muted-foreground">{mounted ? timeAgo(item.at) : "â€¦"}</span></li>
               ))}
             </ul>
           </Card>

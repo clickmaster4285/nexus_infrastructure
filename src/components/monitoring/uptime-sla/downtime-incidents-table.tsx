@@ -20,7 +20,7 @@ function formatStarted(iso: string): string {
   return new Date(iso).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 }
 
-/** Downtime incidents — compact table with downtime analytics, severity split and insight strip. */
+/** Downtime incidents â€” compact table with downtime analytics, severity split and insight strip. */
 export function DowntimeIncidentsTable({ incidents }: { incidents: DowntimeIncident[] }) {
   const resolved = incidents.filter((incident) => incident.status === "Resolved");
   const totalMinutes = resolved.reduce((sum, incident) => sum + incident.durationMinutes, 0);
@@ -93,7 +93,7 @@ export function DowntimeIncidentsTable({ incidents }: { incidents: DowntimeIncid
               );
               const rowClass = cn("border-b border-border/70 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors", canOpen && "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring");
               const rowProps = canOpen
-                ? { role: "link" as const, tabIndex: 0, onClick: () => { if (typeof window !== "undefined") window.location.assign(`/events-explorer/${incident.eventId}`); }, onKeyDown: (event: React.KeyboardEvent) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); window.location.assign(`/events-explorer/${incident.eventId}`); } }, "aria-label": `Open incident ${incident.id} in Event Explorer` }
+                ? { role: "link" as const, tabIndex: 0, onClick: () => { if (typeof window !== "undefined") window.location.assign(`/monitoring/events-explorer/${incident.eventId}`); }, onKeyDown: (event: React.KeyboardEvent) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); window.location.assign(`/monitoring/events-explorer/${incident.eventId}`); } }, "aria-label": `Open incident ${incident.id} in Event Explorer` }
                 : {};
               return (
                 <tr key={incident.id} className={rowClass} {...rowProps}>{content}</tr>

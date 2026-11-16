@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -317,13 +317,13 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
     if (mode === "new") {
       const created = createRunbook(input);
       showToast(status === "Draft" ? `Saved ${created.id} as draft.` : `Published ${created.id}.`);
-      router.push(`/runbooks/${created.id}`);
+      router.push(`/operations/runbooks/${created.id}`);
       return;
     }
     if (existing) {
       const result = updateRunbook(existing.id, input);
       showToast(status === "Draft" ? `Saved ${existing.id} as draft.` : `Published v${result?.version ?? existing.version + 1} of ${existing.id}.`);
-      router.push(`/runbooks/${existing.id}`);
+      router.push(`/operations/runbooks/${existing.id}`);
     }
   };
 
@@ -345,7 +345,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
   };
   const onCancelClick = () => {
     if (dirty) setCancelDialog(true);
-    else router.push(existing ? `/runbooks/${existing.id}` : "/runbooks");
+    else router.push(existing ? `/operations/runbooks/${existing.id}` : "/operations/runbooks");
   };
 
   if (mode === "edit" && !existing) {
@@ -355,7 +355,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists, so there is nothing to edit.</p>
-          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/operations/runbooks")}>Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -382,7 +382,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
       <PageHeader
         breadcrumbs={["Operations", "Runbooks", mode === "new" ? "New runbook" : (existing?.title ?? "Edit runbook")]}
         title={mode === "new" ? "New Runbook" : `Edit: ${existing?.title ?? runbookId}`}
-        subtitle={mode === "new" ? "Document a remediation procedure and link it to the alerts it remediates." : `Editing ${existing?.id ?? runbookId} — publish to ship a new version.`}
+        subtitle={mode === "new" ? "Document a remediation procedure and link it to the alerts it remediates." : `Editing ${existing?.id ?? runbookId} â€” publish to ship a new version.`}
         icon={<BookOpen size={20} aria-hidden />}
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
@@ -394,7 +394,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
       />
 
       <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
-        {/* LEFT — numbered cards */}
+        {/* LEFT â€” numbered cards */}
         <div className="min-w-0 space-y-4 xl:col-span-8">
           {/* 1. Basics */}
           <section aria-label="1. Basics" className="rounded-xl border border-border bg-card p-4">
@@ -442,7 +442,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           {/* 2. Link */}
           <section aria-label="2. Link" className="rounded-xl border border-border bg-card p-4">
             <h2 className="text-sm font-bold text-foreground"><span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded bg-muted align-middle text-[0.6875rem] tabular-nums">2</span>Link</h2>
-            <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{linkedRuleIds.length} alert rule{linkedRuleIds.length === 1 ? "" : "s"} linked · {services.length} service{services.length === 1 ? "" : "s"}</p>
+            <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{linkedRuleIds.length} alert rule{linkedRuleIds.length === 1 ? "" : "s"} linked Â· {services.length} service{services.length === 1 ? "" : "s"}</p>
             <div className="mt-2 grid grid-cols-1 gap-3 lg:grid-cols-2">
               {/* Alert rules multi-select */}
               <div className="min-w-0">
@@ -459,7 +459,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
                       </label>
                     );
                   })}
-                  {filteredRules.length === 0 && <p className="px-1.5 py-2 text-[0.6875rem] text-muted-foreground">No rules match “{ruleSearch}”.</p>}
+                  {filteredRules.length === 0 && <p className="px-1.5 py-2 text-[0.6875rem] text-muted-foreground">No rules match â€œ{ruleSearch}â€.</p>}
                 </div>
                 <div className="mt-1 flex flex-wrap gap-1">{linkedRuleIds.map((ruleId) => <button key={ruleId} type="button" onClick={() => setLinkedRuleIds((current) => current.filter((id) => id !== ruleId))} aria-label={`Unlink ${ruleId}`} className="inline-flex h-6 items-center gap-1 rounded-lg bg-primary/10 px-1.5 text-[0.6875rem] font-semibold tabular-nums text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<X size={10} aria-hidden /></button>)}</div>
               </div>
@@ -502,20 +502,20 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           </section>
 
           {/* 4. Steps */}
-          {renderStepSection("4. Steps", steps, "steps", "No steps yet — add the first step of the procedure.")}
+          {renderStepSection("4. Steps", steps, "steps", "No steps yet â€” add the first step of the procedure.")}
 
           {/* 5. Rollback & Verification */}
-          {renderStepSection("5. Rollback", rollbackSteps, "rollbackSteps", "No rollback steps — what to undo if the fix backfires.")}
-          {renderStepSection("6. Verification", verificationSteps, "verificationSteps", "No verification steps — how to confirm the fix worked.")}
+          {renderStepSection("5. Rollback", rollbackSteps, "rollbackSteps", "No rollback steps â€” what to undo if the fix backfires.")}
+          {renderStepSection("6. Verification", verificationSteps, "verificationSteps", "No verification steps â€” how to confirm the fix worked.")}
         </div>
 
-        {/* RIGHT — sticky: live preview + checklist + templates */}
+        {/* RIGHT â€” sticky: live preview + checklist + templates */}
         <div className="min-w-0 space-y-4 xl:col-span-4 xl:sticky xl:top-4">
           {/* Live preview */}
           <section aria-label="Live preview" className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-sm font-bold text-foreground">Live preview</h2>
-              <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{mode === "edit" ? `v${existing?.version ?? 1} → v${publishVersion}` : "v1 preview"}</span>
+              <span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{mode === "edit" ? `v${existing?.version ?? 1} â†’ v${publishVersion}` : "v1 preview"}</span>
             </div>
             <div className="mt-2 rounded-lg border border-border bg-muted/30 p-3">
               <div className="flex flex-wrap items-center gap-1.5">
@@ -525,7 +525,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
               </div>
               <h3 className="mt-1.5 text-sm font-extrabold leading-snug text-foreground">{title.trim() || "Untitled runbook"}</h3>
               <p className="mt-0.5 line-clamp-2 text-[0.6875rem] leading-snug text-muted-foreground">{summary.trim() || "No summary yet."}</p>
-              <p className="mt-2 text-[0.6875rem] tabular-nums text-muted-foreground">{steps.length} steps · {rollbackSteps.length} rollback · {verificationSteps.length} verification · ~{formatMinutes(totalMinutes)}</p>
+              <p className="mt-2 text-[0.6875rem] tabular-nums text-muted-foreground">{steps.length} steps Â· {rollbackSteps.length} rollback Â· {verificationSteps.length} verification Â· ~{formatMinutes(totalMinutes)}</p>
               <ol className="mt-1.5 space-y-0.5 text-[0.6875rem] text-muted-foreground">{steps.slice(0, 3).map((step, index) => <li key={step.id} className="truncate">{index + 1}. {step.title || "Untitled step"}</li>)}</ol>
             </div>
           </section>
@@ -552,18 +552,18 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
               <ul className="mt-2 space-y-1.5">
                 {Object.entries(TEMPLATES).map(([key, tpl]) => (
                   <li key={key}>
-                    <button type="button" onClick={() => { setTitle(tpl.title); setSummary(tpl.summary); setCategory(tpl.category); setSeverity(tpl.severity); setTagsInput(tpl.tags.join(", ")); setPrerequisites([...tpl.prerequisites]); setSteps(tpl.steps.map((step) => ({ id: nextId(), ...step }))); setVerificationSteps([{ id: nextId(), title: "Verify recovery", description: "Confirm service health back to baseline.", type: "Check", command: "", expectedOutput: "Error rate and latency back to baseline.", estimatedMinutes: 5 }]); showToast(`Applied template “${tpl.title}”.`); }} className="flex w-full items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-2 text-left text-xs font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{tpl.title}<ArrowUp size={12} aria-hidden className="rotate-90 text-muted-foreground" /></button>
+                    <button type="button" onClick={() => { setTitle(tpl.title); setSummary(tpl.summary); setCategory(tpl.category); setSeverity(tpl.severity); setTagsInput(tpl.tags.join(", ")); setPrerequisites([...tpl.prerequisites]); setSteps(tpl.steps.map((step) => ({ id: nextId(), ...step }))); setVerificationSteps([{ id: nextId(), title: "Verify recovery", description: "Confirm service health back to baseline.", type: "Check", command: "", expectedOutput: "Error rate and latency back to baseline.", estimatedMinutes: 5 }]); showToast(`Applied template â€œ${tpl.title}â€.`); }} className="flex w-full items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-2 text-left text-xs font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{tpl.title}<ArrowUp size={12} aria-hidden className="rotate-90 text-muted-foreground" /></button>
                   </li>
                 ))}
               </ul>
-              <div className="mt-2 flex items-center gap-1.5 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><ShieldCheck size={12} aria-hidden />Templates never auto-link alert rules — link them in step 2.</div>
+              <div className="mt-2 flex items-center gap-1.5 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><ShieldCheck size={12} aria-hidden />Templates never auto-link alert rules â€” link them in step 2.</div>
             </section>
           )}
 
           {/* Meta */}
           <section aria-label="Document meta" className="rounded-xl border border-border bg-card p-4 text-[0.6875rem] text-muted-foreground">
-            <p className="flex items-center gap-1.5"><InitialsAvatar name={owner} size={16} />Owner {owner} · {team} team</p>
-            <p className="mt-1">Estimated {formatMinutes(totalMinutes)} · reviewed every {reviewIntervalDays} days{existing ? ` · last reviewed ${new Date(existing.lastReviewedAt).toLocaleDateString()}` : ""}</p>
+            <p className="flex items-center gap-1.5"><InitialsAvatar name={owner} size={16} />Owner {owner} Â· {team} team</p>
+            <p className="mt-1">Estimated {formatMinutes(totalMinutes)} Â· reviewed every {reviewIntervalDays} days{existing ? ` Â· last reviewed ${new Date(existing.lastReviewedAt).toLocaleDateString()}` : ""}</p>
           </section>
         </div>
       </div>
@@ -573,7 +573,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
         <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))] rounded-xl p-5">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Publish v{publishVersion}?</DialogTitle>
-            <DialogDescription className="text-[0.75rem]">“{title.trim() || "Untitled runbook"}” will become visible to every linked alert and appear as the remediation for {linkedRuleIds.length} rule{linkedRuleIds.length === 1 ? "" : "s"}.</DialogDescription>
+            <DialogDescription className="text-[0.75rem]">â€œ{title.trim() || "Untitled runbook"}â€ will become visible to every linked alert and appear as the remediation for {linkedRuleIds.length} rule{linkedRuleIds.length === 1 ? "" : "s"}.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
             <Button variant="outline"  onClick={() => setPublishDialog(false)}>Keep editing</Button>
@@ -591,7 +591,7 @@ export function RunbookEditor({ mode, runbookId, prefilledRuleId, prefilledTempl
           </DialogHeader>
           <DialogFooter className="gap-2">
             <Button variant="outline"  onClick={() => setCancelDialog(false)}>Keep editing</Button>
-            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={() => { setCancelDialog(false); router.push(existing ? `/runbooks/${existing.id}` : "/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
+            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={() => { setCancelDialog(false); router.push(existing ? `/operations/runbooks/${existing.id}` : "/operations/runbooks"); }}><X size={13} aria-hidden />Discard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

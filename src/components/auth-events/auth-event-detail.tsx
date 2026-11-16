@@ -211,7 +211,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
   };
   const flagTone = riskTone(event.riskScore);
   const copyLink = async () => {
-    const url = `${window.location.origin}/authentication-events/${event.id}`;
+    const url = `${window.location.origin}/security/authentication-events/${event.id}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -251,11 +251,11 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
           </div>
         }
       />
-      <p className="-mt-2 text-xs text-muted-foreground">Times in local time � {timeZoneLabel()} � {summary.total.toLocaleString()} events scanned in the last 24h</p>
+      <p className="-mt-2 text-xs text-muted-foreground">Times in local time ï¿½ {timeZoneLabel()} ï¿½ {summary.total.toLocaleString()} events scanned in the last 24h</p>
 
 
       <div className="grid items-start gap-4 xl:grid-cols-12">
-        {/* LEFT � overview / risk / activity / related */}
+        {/* LEFT ï¿½ overview / risk / activity / related */}
         <div className="flex min-w-0 flex-col gap-4 xl:col-span-8">
           <Card className="flex flex-col rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
@@ -270,7 +270,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               <DetailRow label="Event type" value={event.eventType} />
               <DetailRow label="Failure reason" value={event.failureReason ?? "-"} />
               <DetailRow label="Target" value={targetLink ? <Link href={targetLink} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline">{event.targetKind === "server" ? <Server size={13} aria-hidden="true" /> : <AppWindow size={13} aria-hidden="true" />}{event.target}</Link> : <span className="inline-flex items-center gap-1.5 text-foreground">{event.targetKind === "server" ? <Server size={13} aria-hidden="true" /> : <AppWindow size={13} aria-hidden="true" />}{event.target}</span>} />
-              <DetailRow label="Source" value={<span className="flex items-center gap-2"><CountryFlag code={event.countryCode} name={event.country} /><span className="font-mono text-[0.8125rem]">{event.ip}</span><span className="text-muted-foreground">� {event.city}</span></span>} />
+              <DetailRow label="Source" value={<span className="flex items-center gap-2"><CountryFlag code={event.countryCode} name={event.country} /><span className="font-mono text-[0.8125rem]">{event.ip}</span><span className="text-muted-foreground">ï¿½ {event.city}</span></span>} />
               <DetailRow label="Device" value={<span className="flex items-center gap-2">{event.browser === "curl" || event.browser === "OpenSSH" ? <SquareTerminal size={14} aria-hidden="true" /> : <Laptop size={14} aria-hidden="true" />}{event.device}</span>} />
               <DetailRow label="MFA" value={event.mfaUsed ? <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400"><KeyRound size={13} aria-hidden="true" />Used</span> : <span className="inline-flex items-center gap-1 font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={13} aria-hidden="true" />Not used</span>} />
               <DetailRow label="Privileged" value={event.userType === "Admin" ? "Yes - administrator" : event.userType === "Service" ? "Service account" : "No"} />
@@ -322,7 +322,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               {userEvents.map((item) => (
                 <li key={item.id} className="relative pb-2.5 last:pb-0">
                   <span aria-hidden="true" className={cn("absolute -left-[1.3125rem] top-1 h-2.5 w-2.5 rounded-full ring-2 ring-card", item.result === "Success" ? "bg-emerald-400" : item.result === "Failed" ? "bg-rose-400" : item.result === "Blocked" ? "bg-red-600" : "bg-amber-400")} />
-                  <button type="button" onClick={() => router.push(`/authentication-events/${item.id}`)} className="flex w-full flex-wrap items-center gap-x-3 gap-y-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+                  <button type="button" onClick={() => router.push(`/security/authentication-events/${item.id}`)} className="flex w-full flex-wrap items-center gap-x-3 gap-y-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
                     <b className="font-mono text-xs text-primary">{item.id}</b>
                     <span className="text-xs text-foreground">{item.method}</span>
                     <span className="text-xs text-muted-foreground">{item.target}</span>
@@ -334,7 +334,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
             </ol>
           </ChartCard>
 
-          <ChartCard title="Related events" actions={<span className="text-xs text-muted-foreground">Same user or same IP � top 8 by risk</span>}>
+          <ChartCard title="Related events" actions={<span className="text-xs text-muted-foreground">Same user or same IP ï¿½ top 8 by risk</span>}>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[35rem] text-left text-[0.8125rem]">
                 <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
@@ -342,8 +342,8 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
                 </thead>
                 <tbody>
                   {relatedEvents.map((item) => (
-                    <tr key={item.id} className="cursor-pointer border-b border-border/70 hover:bg-muted/40 focus-within:bg-muted/40" onClick={() => router.push(`/authentication-events/${item.id}`)}>
-                      <td className="px-2 py-2"><Link href={`/authentication-events/${item.id}`} onClick={(clickEvent) => clickEvent.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{item.id}</Link></td>
+                    <tr key={item.id} className="cursor-pointer border-b border-border/70 hover:bg-muted/40 focus-within:bg-muted/40" onClick={() => router.push(`/security/authentication-events/${item.id}`)}>
+                      <td className="px-2 py-2"><Link href={`/security/authentication-events/${item.id}`} onClick={(clickEvent) => clickEvent.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{item.id}</Link></td>
                       <td className="px-2 py-2"><ResultBadge result={item.result} /></td>
                       <td className="px-2 py-2 font-mono text-xs">{item.ip}</td>
                       <td className="px-2 py-2 text-muted-foreground">{item.target}</td>
@@ -358,7 +358,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
           </ChartCard>
         </div>
 
-        {/* RIGHT � source IP / account / linked */}
+        {/* RIGHT ï¿½ source IP / account / linked */}
         <div className="flex min-w-0 flex-col gap-4 xl:col-span-4">
           <Card className="flex flex-col rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
@@ -371,7 +371,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
               <CountryFlag code={event.countryCode} name={event.country} className="h-6 w-9" />
               <div className="min-w-0">
                 <p className="break-all font-mono text-base font-bold text-foreground">{event.ip}</p>
-                <p className="text-xs text-muted-foreground">{event.city}, {event.country} � {asn?.asn} � {asn?.org}</p>
+                <p className="text-xs text-muted-foreground">{event.city}, {event.country} ï¿½ {asn?.asn} ï¿½ {asn?.org}</p>
               </div>
               <button type="button" onClick={() => { void copyLink(); }} aria-label="Copy event link" className="ml-auto grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}</button>
             </div>
@@ -389,13 +389,13 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
           <Card className="flex flex-col rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><UserRound size={15} aria-hidden="true" />Account</h2>
-              <Link href={`/access-control?user=${encodeURIComponent(event.user)}`} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Access Control ?</Link>
+              <Link href={`/security/access-control?user=${encodeURIComponent(event.user)}`} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Access Control ?</Link>
             </div>
             <div className="mt-3 flex items-center gap-3">
               <InitialsAvatar name={event.user.split("@")[0]} size={40} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold text-foreground">{event.user}</p>
-                <p className="text-xs text-muted-foreground">{event.userType === "Service" ? "Service account" : event.userType === "Admin" ? "Administrator" : "Operations"}{event.userType === "Admin" ? " � privileged" : ""}</p>
+                <p className="text-xs text-muted-foreground">{event.userType === "Service" ? "Service account" : event.userType === "Admin" ? "Administrator" : "Operations"}{event.userType === "Admin" ? " ï¿½ privileged" : ""}</p>
               </div>
               {locked && <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"><Lock size={11} aria-hidden="true" />Locked</span>}
             </div>
@@ -413,7 +413,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><KeyRound size={15} aria-hidden="true" />Linked</h2>
             <ul className="mt-2 flex flex-col divide-y divide-border text-[0.8125rem]">
               <li className="flex items-center justify-between gap-2 py-2">
-                <span className="flex min-w-0 items-center gap-2"><Bug size={14} className="shrink-0 text-orange-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Detection</span>{linkedDetection ? <Link href={`/authentication-events?tab=suspicious`} className="block truncate font-semibold text-primary hover:underline">{linkedDetection.id} � {AUTH_DETECTION_LABEL[linkedDetection.type]}</Link> : <span className="text-muted-foreground">None linked</span>}</span></span>
+                <span className="flex min-w-0 items-center gap-2"><Bug size={14} className="shrink-0 text-orange-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Detection</span>{linkedDetection ? <Link href={`/security/authentication-events?tab=suspicious`} className="block truncate font-semibold text-primary hover:underline">{linkedDetection.id} ï¿½ {AUTH_DETECTION_LABEL[linkedDetection.type]}</Link> : <span className="text-muted-foreground">None linked</span>}</span></span>
                 {linkedDetection && <SeverityBadge severity={linkedDetection.severity} />}
               </li>
               <li className="flex items-center justify-between gap-2 py-2">
@@ -421,7 +421,7 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
                 <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForEvent)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Create ?</button>
               </li>
               <li className="flex items-center justify-between gap-2 py-2">
-                <span className="flex min-w-0 items-center gap-2"><KeyRound size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span><Link href="/alert-rules" className="text-primary hover:underline">RUL-1042 � Auth failure burst</Link></span></span>
+                <span className="flex min-w-0 items-center gap-2"><KeyRound size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span><Link href="/operations/alert-rules" className="text-primary hover:underline">RUL-1042 ï¿½ Auth failure burst</Link></span></span>
               </li>
             </ul>
             <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border pt-3">
@@ -435,11 +435,11 @@ export function AuthEventDetail({ eventId }: AuthEventDetailProps) {
       {/* Prev / Next */}
       <div className="flex items-center justify-between gap-3">
         {newerEvent
-          ? <Button variant="outline"  onClick={() => router.push(`/authentication-events/${newerEvent.id}`)}><ChevronLeft size={15} />Newer � {newerEvent.id}</Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/security/authentication-events/${newerEvent.id}`)}><ChevronLeft size={15} />Newer ï¿½ {newerEvent.id}</Button>
           : <span />}
         <span className="text-xs text-muted-foreground">{eventIndex >= 0 ? `${eventIndex + 1} of ${ordered.length}` : ""}</span>
         {olderEvent
-          ? <Button variant="outline"  onClick={() => router.push(`/authentication-events/${olderEvent.id}`)}>{olderEvent.id} � Older<ChevronRight size={15} /></Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/security/authentication-events/${olderEvent.id}`)}>{olderEvent.id} ï¿½ Older<ChevronRight size={15} /></Button>
           : <span />}
       </div>
 

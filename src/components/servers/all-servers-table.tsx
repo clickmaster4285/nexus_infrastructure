@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -161,8 +161,8 @@ export function AllServersTable({
                     {openActionsId === server.id && (
                       <div role="menu" aria-label={`${server.name} actions`} className="absolute right-2 top-9 z-20 min-w-36 rounded-md border border-border bg-popover p-1 text-left shadow-lg">
                         <Link role="menuitem" href={detailsPath} onClick={(event) => { event.stopPropagation(); setOpenActionsId(null); }} className="block rounded px-2 py-1.5 text-[0.75rem] text-popover-foreground hover:bg-accent">View Details</Link>
-                        <Link role="menuitem" href={`/logs-explorer?server=${encodeURIComponent(server.name)}`} onClick={(event) => { event.stopPropagation(); setOpenActionsId(null); }} className="block rounded px-2 py-1.5 text-[0.75rem] text-popover-foreground hover:bg-accent">View Logs</Link>
-                        <Link role="menuitem" href={`/metrics-explorer?server=${encodeURIComponent(server.name)}`} onClick={(event) => { event.stopPropagation(); setOpenActionsId(null); }} className="block rounded px-2 py-1.5 text-[0.75rem] text-popover-foreground hover:bg-accent">View Metrics</Link>
+                        <Link role="menuitem" href={`/monitoring/logs-explorer?server=${encodeURIComponent(server.name)}`} onClick={(event) => { event.stopPropagation(); setOpenActionsId(null); }} className="block rounded px-2 py-1.5 text-[0.75rem] text-popover-foreground hover:bg-accent">View Logs</Link>
+                        <Link role="menuitem" href={`/monitoring/metrics-explorer?server=${encodeURIComponent(server.name)}`} onClick={(event) => { event.stopPropagation(); setOpenActionsId(null); }} className="block rounded px-2 py-1.5 text-[0.75rem] text-popover-foreground hover:bg-accent">View Metrics</Link>
                       </div>
                     )}
                   </td>

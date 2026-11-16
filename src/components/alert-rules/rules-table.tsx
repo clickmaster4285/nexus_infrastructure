@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -121,7 +121,7 @@ function ChannelIcons({ channels }: { channels: NotificationChannel[] }) {
 function kebabItemsFor(rule: AlertRule, actions: Pick<RulesTableProps, "onEdit" | "onDuplicate" | "onMute" | "onUnmute" | "onDelete" | "onViewAlerts">, navigate: (href: string) => void): AlertMenuItem[] {
   const linked = getRunbookForRule(rule.id);
   const items: AlertMenuItem[] = [
-    { key: "runbook", label: linked ? `Open runbook ${linked.id}` : "Create runbook", onSelect: () => navigate(linked ? `/runbooks/${linked.id}` : `/runbooks/new?rule=${rule.id}`) },
+    { key: "runbook", label: linked ? `Open runbook ${linked.id}` : "Create runbook", onSelect: () => navigate(linked ? `/operations/runbooks/${linked.id}` : `/operations/runbooks/new?rule=${rule.id}`) },
     { key: "edit", label: "Edit rule", onSelect: () => actions.onEdit(rule) },
     { key: "duplicate", label: "Duplicate", onSelect: () => actions.onDuplicate(rule) },
   ];
@@ -280,7 +280,7 @@ export function RulesTable(props: RulesTableProps) {
                       <StatusIcon size={10} aria-hidden="true" />
                       {rule.status}
                     </span>
-                    {mutedByWindow && <a href={`/maintenance-windows/${mutedByWindow}`} className="inline-flex items-center gap-1 text-[0.75rem] font-semibold text-violet-600 hover:underline dark:text-violet-400" onClick={(event) => event.stopPropagation()}>by {mutedByWindow}</a>}
+                    {mutedByWindow && <a href={`/operations/maintenance-windows/${mutedByWindow}`} className="inline-flex items-center gap-1 text-[0.75rem] font-semibold text-violet-600 hover:underline dark:text-violet-400" onClick={(event) => event.stopPropagation()}>by {mutedByWindow}</a>}
                   </div>
                 </td>
                 <td className="min-w-0 max-w-[20rem] px-3 py-2.5 align-middle">

@@ -1,0 +1,6 @@
+{
+  "/(dashboard)/overview/infrastructure/page": "app/(dashboard)/overview/infrastructure/page.js",
+  "/(dashboard)/overview/executive/page": "app/(dashboard)/overview/executive/page.js",
+  "/(dashboard)/infrastructure/containers-and-docker/page": "app/(dashboard)/infrastructure/containers-and-docker/page.js",
+  "/(dashboard)/infrastructure/network-topology/page": "app/(dashboard)/infrastructure/network-topology/page.js"
+}

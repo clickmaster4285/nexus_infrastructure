@@ -6,7 +6,7 @@ import type { SLA_TYPE_BREAKDOWN } from "@/mocks/uptimeSla";
 
 interface SlaByTypeProps {
   entries: typeof SLA_TYPE_BREAKDOWN;
-  /** SLA target — types at/below it render as breached or at risk. */
+  /** SLA target â€” types at/below it render as breached or at risk. */
   target: number;
   /** Click a row to filter the Service Uptime table (toggle by clicking again). */
   onSelectType?: (type: string) => void;
@@ -18,7 +18,7 @@ const STATUS_META = {
   breached: { label: "Breached", className: "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300" },
 } as const;
 
-/** Horizontal bars — flat `oklch(0.6231 0.188 259.81)` Met / `oklch(0.6658 0.1574 58.32)` at-risk / `oklch(0.5771 0.2152 27.33)` breached, SLA target marker, delta, summary strip and footer. */
+/** Horizontal bars â€” flat `oklch(0.6231 0.188 259.81)` Met / `oklch(0.6658 0.1574 58.32)` at-risk / `oklch(0.5771 0.2152 27.33)` breached, SLA target marker, delta, summary strip and footer. */
 export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
   const values = entries.map((entry) => entry.uptime);
   const min = Math.min(...values, target);
@@ -49,7 +49,7 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
                 type="button"
                 onClick={() => onSelectType?.(entry.type)}
                 aria-label={`${entry.type} uptime ${entry.uptime.toFixed(2)}%, ${status === "met" ? "met" : status} against SLA ${target}%. Click to filter Service Uptime table.`}
-                title={`${entry.type} · uptime ${entry.uptime.toFixed(2)}% · downtime ${entry.downtimeMinutes}m · ${entry.incidents} incident${entry.incidents === 1 ? "" : "s"} · ${entry.services} service${entry.services === 1 ? "" : "s"}`}
+                title={`${entry.type} Â· uptime ${entry.uptime.toFixed(2)}% Â· downtime ${entry.downtimeMinutes}m Â· ${entry.incidents} incident${entry.incidents === 1 ? "" : "s"} Â· ${entry.services} service${entry.services === 1 ? "" : "s"}`}
                 className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-slate-800/60 sm:flex-nowrap sm:py-1"
               >
                 <span className="min-w-[4.5rem] text-[0.8125rem] font-medium text-foreground sm:w-[5.5rem]">{entry.type}</span>
@@ -72,7 +72,7 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
       <div className="mt-1 grid grid-cols-3 divide-x divide-border rounded-lg border border-border/70 bg-muted/30 py-2.5" aria-label="Compliance summary">
         {[
           { label: "Meeting SLA", value: `${metCount} / ${entries.length}` },
-          { label: "Lowest", value: lowest ? `${lowest.type} ${lowest.uptime.toFixed(2)}%` : "—" },
+          { label: "Lowest", value: lowest ? `${lowest.type} ${lowest.uptime.toFixed(2)}%` : "â€”" },
           { label: "Average", value: `${average.toFixed(2)}%` },
         ].map((stat) => (
           <div key={stat.label} className="flex min-w-0 flex-col items-center gap-0.5 px-2">
@@ -84,8 +84,8 @@ export function SlaByType({ entries, target, onSelectType }: SlaByTypeProps) {
 
       {/* Footer pinned to bottom */}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
-        <span>Based on last 30 days · {entries.length} service types</span>
-        <Link href="/database-monitoring" className="inline-flex shrink-0 items-center gap-1 font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View details <ArrowRight size={12} aria-hidden="true" /></Link>
+        <span>Based on last 30 days Â· {entries.length} service types</span>
+        <Link href="/monitoring/database-monitoring" className="inline-flex shrink-0 items-center gap-1 font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View details <ArrowRight size={12} aria-hidden="true" /></Link>
       </div>
     </div>
   );

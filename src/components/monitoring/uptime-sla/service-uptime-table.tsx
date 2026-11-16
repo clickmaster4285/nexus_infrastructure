@@ -33,7 +33,7 @@ function StatusPill({ status }: { status: SlaStatus }) {
   return <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", meta.className)}>{meta.label}</span>;
 }
 
-/** Mini 30-day sparkline for the expanded row — flat blue, no fill. */
+/** Mini 30-day sparkline for the expanded row â€” flat blue, no fill. */
 function MiniSparkline({ values }: { values: number[] }) {
   const width = 280;
   const height = 60;
@@ -161,7 +161,7 @@ function KebabMenu({ serviceId, actions, openId, onToggle, onClose }: { serviceI
   );
 }
 
-/** Service uptime table — flat matte, footer stats, accordion rows, portal menu. */
+/** Service uptime table â€” flat matte, footer stats, accordion rows, portal menu. */
 export function ServiceUptimeTable({ services, search, onSearchChange, typeFilter, onTypeFilterChange }: ServiceUptimeTableProps) {
   const [sortKey, setSortKey] = useState<"name" | "uptime" | "downtime" | "incidents">("uptime");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -214,7 +214,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
       <div className="flex flex-wrap items-center justify-between gap-2 pb-2">
         <span className="relative block min-w-[12.5rem] max-w-xs flex-1">
           <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input value={search} onChange={(event) => onSearchChange(event.target.value)} placeholder="Search services…" aria-label="Search services by name, type or status" className="h-9 rounded-lg pl-8 text-sm" />
+          <Input value={search} onChange={(event) => onSearchChange(event.target.value)} placeholder="Search servicesâ€¦" aria-label="Search services by name, type or status" className="h-9 rounded-lg pl-8 text-sm" />
         </span>
         <Select value={typeFilter} onValueChange={onTypeFilterChange}>
           <SelectTrigger aria-label="Filter by type" className="h-9 w-36 rounded-lg text-sm"><SelectValue placeholder="Type" /></SelectTrigger>
@@ -270,13 +270,13 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                       <div className="flex h-4 w-[7.5rem] items-center gap-[0.125rem]" role="img" aria-label={`30-day uptime history for ${service.name}`}>
                         {service.dailyUptime.slice(-30).map((value, index) => {
                           const date = new Date(); date.setDate(date.getDate() - (service.dailyUptime.length - 1 - index));
-                          return <span key={index} className={cn("h-3.5 w-[0.1875rem] rounded-[0.0625rem]", value >= service.slaTarget ? "bg-emerald-500" : value >= service.slaTarget - 0.5 ? "bg-amber-400" : "bg-rose-500")} title={`${date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · ${value.toFixed(2)}% · ${value < service.slaTarget ? "breach" : "met"}`} />;
+                          return <span key={index} className={cn("h-3.5 w-[0.1875rem] rounded-[0.0625rem]", value >= service.slaTarget ? "bg-emerald-500" : value >= service.slaTarget - 0.5 ? "bg-amber-400" : "bg-rose-500")} title={`${date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} Â· ${value.toFixed(2)}% Â· ${value < service.slaTarget ? "breach" : "met"}`} />;
                         })}
                       </div>
                     </td>
                     <td className="px-2 py-3 align-middle">
                       <KebabMenu serviceId={service.id} openId={menuOpenId} onToggle={setMenuOpenId} onClose={() => setMenuOpenId(null)} actions={[
-                        { label: "View incidents", onClick: () => { window.location.assign("/incidents"); } },
+                        { label: "View incidents", onClick: () => { window.location.assign("/operations/incidents"); } },
                         { label: "Download report", onClick: () => notifyDownload(service.name) },
                         { label: "Set SLA target", onClick: () => notifySlaTarget(service.name) },
                       ]} />
@@ -297,7 +297,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                                 {serviceIncidents.length === 0 && <li className="text-muted-foreground">No incidents in this window</li>}
                                 {serviceIncidents.map((incident) => (
                                   <li key={incident.id}>
-                                    <Link href={`/events-explorer/${incident.eventId}`} className="grid grid-cols-[auto_auto_1fr] items-center gap-2 rounded-md px-1 py-0.5 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                                    <Link href={`/monitoring/events-explorer/${incident.eventId}`} className="grid grid-cols-[auto_auto_1fr] items-center gap-2 rounded-md px-1 py-0.5 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                                       <span className="tabular-nums text-foreground">{new Date(incident.startedAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}</span>
                                       <span className="tabular-nums text-muted-foreground">{incident.durationMinutes}m</span>
                                       <span className="min-w-0 truncate text-foreground">{incident.cause}</span>
@@ -309,7 +309,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
                                 <span>Low: <b className="text-foreground">{minBar.toFixed(2)}%</b></span>
                                 <span>Breach days: <b className="text-foreground">{breachDays}</b></span>
                                 <span>MTTR: <b className="text-foreground">{service.mttrMinutes}m</b></span>
-                                <Link href={`/events-explorer?q=${encodeURIComponent(service.name)}`} className="ml-auto font-medium text-primary hover:underline">View events →</Link>
+                                <Link href={`/monitoring/events-explorer?q=${encodeURIComponent(service.name)}`} className="ml-auto font-medium text-primary hover:underline">View events â†’</Link>
                               </div>
                             </div>
                           </div>
@@ -327,7 +327,7 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
         </table>
       </div>
 
-      {/* Table footer summary — 4 stats + worst performer */}
+      {/* Table footer summary â€” 4 stats + worst performer */}
       <div className="grid grid-cols-2 gap-2 border-t border-border pt-2 pt-3 sm:grid-cols-4" aria-label="Service uptime summary">
         {[
           { label: "Services", value: String(services.length) },
@@ -343,13 +343,13 @@ export function ServiceUptimeTable({ services, search, onSearchChange, typeFilte
       </div>
       <div className="mt-1 flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-2 text-[0.75rem] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
         <Search size={13} aria-hidden="true" className="shrink-0" />
-        <span className="min-w-0">Worst performer: <b>{stats.worst?.name ?? "—"} ({stats.worst?.currentUptime.toFixed(2)}%)</b></span>
+        <span className="min-w-0">Worst performer: <b>{stats.worst?.name ?? "â€”"} ({stats.worst?.currentUptime.toFixed(2)}%)</b></span>
       </div>
 
       {/* Pagination / footer */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-2 pt-3">
         <p className="text-[0.75rem] text-muted-foreground">Showing <b className="text-foreground">1-{sorted.length}</b> of <b className="text-foreground">{sorted.length}</b> services</p>
-        <Link href="/all-servers" className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all services →</Link>
+        <Link href="/infrastructure/all-servers" className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all services â†’</Link>
       </div>
     </div>
   );

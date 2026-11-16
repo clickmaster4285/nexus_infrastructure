@@ -77,7 +77,7 @@ function SearchableMultiSelect({ label, options, selected, onChange, placeholder
         onClick={() => setOpen((value) => !value)}
         className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-input bg-card px-3 text-sm text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <span className="truncate">{selected.length > 0 ? <>{label} · <b>{selected.length}</b></> : label}</span>
+        <span className="truncate">{selected.length > 0 ? <>{label} Â· <b>{selected.length}</b></> : label}</span>
         <ChevronDown size={14} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />
       </button>
       {open && (
@@ -346,11 +346,11 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
       if (mode === "edit" && editing) {
         updateWindow(editing.id, input);
         try { window.sessionStorage.setItem("nexus:maintenance-toast", `${editing.id} updated`); } catch { /* sessionStorage unavailable */ }
-        router.push(`/maintenance-windows/${editing.id}`);
+        router.push(`/operations/maintenance-windows/${editing.id}`);
       } else {
         const id = createWindow(input);
         try { window.sessionStorage.setItem("nexus:maintenance-toast", `${id} scheduled`); } catch { /* sessionStorage unavailable */ }
-        router.push(`/maintenance-windows/${id}`);
+        router.push(`/operations/maintenance-windows/${id}`);
       }
     }, 350);
   }, [buildInput, mode, editing, updateWindow, createWindow, router]);
@@ -375,7 +375,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
   const startValid = Number.isFinite(startMs);
   const endValid = Number.isFinite(endMs);
   const scheduleSummary = startValid && endValid
-    ? `${new Date(startMs).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}, ${new Date(startMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} → ${new Date(endMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
+    ? `${new Date(startMs).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}, ${new Date(startMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} â†’ ${new Date(endMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
     : "Pick a start and end time";
   const durationLabel = Number.isFinite(durationMs) && durationMs > 0
     ? durationMs >= 24 * 60 * 60_000 ? `${Math.floor(durationMs / 86_400_000)}d ${Math.floor((durationMs % 86_400_000) / 3_600_000)}h` : durationMs >= 3_600_000 ? `${Math.floor(durationMs / 3_600_000)}h ${Math.round((durationMs % 3_600_000) / 60_000)}m` : `${Math.round(durationMs / 60_000)}m`
@@ -387,7 +387,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
   if (isLoading) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Maintenance Windows", breadcrumbTail]} title="Loading…" subtitle="Loading maintenance window details" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
+        <PageHeader breadcrumbs={["Operations", "Maintenance Windows", breadcrumbTail]} title="Loadingâ€¦" subtitle="Loading maintenance window details" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
         <div aria-busy="true" className="grid items-start gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
             <div className="h-[18.75rem] animate-pulse rounded-xl bg-muted" />
@@ -411,7 +411,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
         <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
           <div className="flex max-w-md flex-col items-center gap-2">
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600 dark:bg-red-500/10"><AlertTriangle size={20} /></span>
-            <p className="font-display text-base font-bold text-foreground">Couldn’t load the form data</p>
+            <p className="font-display text-base font-bold text-foreground">Couldnâ€™t load the form data</p>
             <p className="text-sm text-muted-foreground">Retry to reach the maintenance service again.</p>
             <Button onClick={reload} ><RotateCcw size={15} />Retry</Button>
           </div>
@@ -429,7 +429,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Wrench size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window not found</p>
             <p className="text-sm text-muted-foreground"><span className="font-mono">{windowId}</span> does not exist or was already purged.</p>
-            <Link href="/maintenance-windows" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Maintenance Windows</Link>
+            <Link href="/operations/maintenance-windows" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Maintenance Windows</Link>
           </div>
         </section>
       </div>
@@ -446,11 +446,11 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
           icon={<Wrench size={22} />}
           iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300"
           statusBadge={<span className="flex items-center gap-1.5"><WindowStatusBadge status={editing.status} /><WindowTypeBadge type={editing.type} /></span>}
-          actions={<Link href={`/maintenance-windows/${editing.id}`} className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowLeft size={15} />Back to window</Link>}
+          actions={<Link href={`/operations/maintenance-windows/${editing.id}`} className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ArrowLeft size={15} />Back to window</Link>}
         />
         <section role="status" className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
           <CheckCircle2 size={18} aria-hidden="true" className="shrink-0 text-emerald-600" />
-          <span>The record is read-only. <Link className="font-semibold text-primary hover:underline" href={`/maintenance-windows/${editing.id}`}>Duplicate this window</Link> to schedule a similar one.</span>
+          <span>The record is read-only. <Link className="font-semibold text-primary hover:underline" href={`/operations/maintenance-windows/${editing.id}`}>Duplicate this window</Link> to schedule a similar one.</span>
         </section>
       </div>
     );
@@ -499,9 +499,9 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
         iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300"
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Link href={editing ? `/maintenance-windows/${editing.id}` : "/maintenance-windows"} className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Cancel</Link>
+            <Link href={editing ? `/operations/maintenance-windows/${editing.id}` : "/operations/maintenance-windows"} className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Cancel</Link>
             <Button onClick={() => handleSubmit()} disabled={submitting} >
-              {submitting ? <><RotateCcw size={15} className="animate-spin" aria-hidden="true" />Saving…</> : <><CalendarClock size={15} aria-hidden="true" />{submitLabel}</>}
+              {submitting ? <><RotateCcw size={15} className="animate-spin" aria-hidden="true" />Savingâ€¦</> : <><CalendarClock size={15} aria-hidden="true" />{submitLabel}</>}
             </Button>
           </div>
         }
@@ -728,28 +728,28 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 {fieldLabel("field-servers", "Servers")}
-                <SearchableMultiSelect label="Add servers" options={SCOPE_SERVERS.map((server) => ({ value: server, label: server }))} selected={servers} onChange={setServers} placeholder="Filter servers…" />
+                <SearchableMultiSelect label="Add servers" options={SCOPE_SERVERS.map((server) => ({ value: server, label: server }))} selected={servers} onChange={setServers} placeholder="Filter serversâ€¦" />
                 <SelectedChips values={servers} onRemove={(value) => setServers((current) => current.filter((item) => item !== value))} mono />
               </div>
               <div>
                 {fieldLabel("field-groups", "Server groups")}
-                <SearchableMultiSelect label="Add groups" options={SCOPE_GROUPS.map((group) => ({ value: group.id, label: group.name }))} selected={groups} onChange={setGroups} placeholder="Filter groups…" />
+                <SearchableMultiSelect label="Add groups" options={SCOPE_GROUPS.map((group) => ({ value: group.id, label: group.name }))} selected={groups} onChange={setGroups} placeholder="Filter groupsâ€¦" />
                 <SelectedChips values={groups.map((id) => SCOPE_GROUPS.find((group) => group.id === id)?.name ?? id)} onRemove={(name) => setGroups((current) => current.filter((id) => (SCOPE_GROUPS.find((group) => group.name === name)?.id ?? name) !== id))} />
               </div>
               <div>
                 {fieldLabel("field-services", "Services")}
-                <SearchableMultiSelect label="Add services" options={SCOPE_SERVICES.map((service) => ({ value: service, label: service }))} selected={services} onChange={setServices} placeholder="Filter services…" />
+                <SearchableMultiSelect label="Add services" options={SCOPE_SERVICES.map((service) => ({ value: service, label: service }))} selected={services} onChange={setServices} placeholder="Filter servicesâ€¦" />
                 <SelectedChips values={services} onRemove={(value) => setServices((current) => current.filter((item) => item !== value))} />
               </div>
               <div>
                 {fieldLabel("field-tags", "Tags")}
-                <SearchableMultiSelect label="Add tags" options={SCOPE_TAGS.map((tag) => ({ value: tag, label: tag }))} selected={tags} onChange={setTags} placeholder="Filter tags…" />
+                <SearchableMultiSelect label="Add tags" options={SCOPE_TAGS.map((tag) => ({ value: tag, label: tag }))} selected={tags} onChange={setTags} placeholder="Filter tagsâ€¦" />
                 <SelectedChips values={tags} onRemove={(value) => setTags((current) => current.filter((item) => item !== value))} />
               </div>
             </div>
             <div className="mt-4 border-t border-border/70 pt-4">
               {fieldLabel("field-exclude", "Exclude")}
-              <SearchableMultiSelect label="Exclude servers from scope" options={SCOPE_SERVERS.map((server) => ({ value: server, label: server }))} selected={exclude} onChange={setExclude} placeholder="Filter servers to exclude…" />
+              <SearchableMultiSelect label="Exclude servers from scope" options={SCOPE_SERVERS.map((server) => ({ value: server, label: server }))} selected={exclude} onChange={setExclude} placeholder="Filter servers to excludeâ€¦" />
               <SelectedChips values={exclude} onRemove={(value) => setExclude((current) => current.filter((item) => item !== value))} mono />
               <p className="mt-2 flex flex-wrap items-center gap-2 text-[0.75rem] text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-[0.75rem] font-semibold text-foreground"><CheckCircle2 size={12} aria-hidden="true" className="text-emerald-600" />{previewCount} server{previewCount === 1 ? "" : "s"} covered</span>
@@ -801,7 +801,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                   {matchedRules.length === 0 && <p className="px-3 py-3 text-[0.8125rem] text-muted-foreground">No alert rules target the covered hosts.</p>}
                 </div>
               ) : (
-                <p className="mt-1.5 rounded-lg border border-border bg-muted/40 px-3 py-2 text-[0.75rem] text-muted-foreground">Enable “Mute alerts for scope” to pick specific rules.</p>
+                <p className="mt-1.5 rounded-lg border border-border bg-muted/40 px-3 py-2 text-[0.75rem] text-muted-foreground">Enable â€œMute alerts for scopeâ€ to pick specific rules.</p>
               )}
             </div>
 
@@ -929,7 +929,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
             <dl className="mt-3 space-y-2 text-[0.8125rem]">
               <div className="flex items-start gap-2">
                 <CalendarClock size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />
-                <span className="text-foreground">{scheduleSummary}{durationLabel && <span className="text-muted-foreground"> · {durationLabel}</span>}<br /><span className="text-[0.75rem] text-muted-foreground">{timeZone} (window) · your time shown above</span></span>
+                <span className="text-foreground">{scheduleSummary}{durationLabel && <span className="text-muted-foreground"> Â· {durationLabel}</span>}<br /><span className="text-[0.75rem] text-muted-foreground">{timeZone} (window) Â· your time shown above</span></span>
               </div>
               <div className="flex items-start gap-2">
                 <Wrench size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />
@@ -939,14 +939,14 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 {muteAlerts ? <BellOff size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" /> : <Bell size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />}
                 <span className="text-foreground">
                   {muteAlerts
-                    ? <><b>{excludedFromRules}</b> alert rule{excludedFromRules === 1 ? "" : "s"} will be muted · <b>{affectedOpenIncidents}</b> incident{affectedOpenIncidents === 1 ? "" : "s"} suppressed</>
+                    ? <><b>{excludedFromRules}</b> alert rule{excludedFromRules === 1 ? "" : "s"} will be muted Â· <b>{affectedOpenIncidents}</b> incident{affectedOpenIncidents === 1 ? "" : "s"} suppressed</>
                     : "Alerts will stay live during this window"}
                 </span>
               </div>
               {channels.length > 0 && (
                 <div className="flex items-start gap-2">
                   <Siren size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted-foreground" />
-                  <span className="text-foreground">Notify {channels.join(", ")} · {notifyBefore} before start</span>
+                  <span className="text-foreground">Notify {channels.join(", ")} Â· {notifyBefore} before start</span>
                 </div>
               )}
             </dl>
@@ -972,7 +972,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 <ul className="mt-2 space-y-1.5">
                   {conflicts.slice(0, 4).map((conflict) => (
                     <li key={conflict.id}>
-                      <Link href={`/maintenance-windows/${conflict.id}`} className="flex items-center justify-between gap-2 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-[0.8125rem] transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/10">
+                      <Link href={`/operations/maintenance-windows/${conflict.id}`} className="flex items-center justify-between gap-2 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-[0.8125rem] transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:bg-red-500/10">
                         <span className="min-w-0"><span className="font-mono text-[0.75rem] text-muted-foreground">{conflict.id}</span><span className="block truncate font-medium text-foreground">{conflict.title}</span></span>
                         <span className="shrink-0 text-[0.75rem] tabular-nums text-muted-foreground">{new Date(conflict.start).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
                       </Link>
@@ -1001,7 +1001,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
                 </li>
               ))}
             </ul>
-            <p className="mt-3 border-t border-border/70 pt-2 text-[0.75rem] text-muted-foreground">Local preview · nothing is saved until you submit.</p>
+            <p className="mt-3 border-t border-border/70 pt-2 text-[0.75rem] text-muted-foreground">Local preview Â· nothing is saved until you submit.</p>
           </section>
         </div>
       </form>
@@ -1028,7 +1028,7 @@ export function WindowForm({ mode, windowId, initialStart }: { mode: "create" | 
           <DialogHeader>
             <DialogTitle>Scope overlaps {conflicts.length === 1 ? conflicts[0]?.id : `${conflicts.length} windows`}</DialogTitle>
             <DialogDescription>
-              {conflicts.slice(0, 3).map((conflict) => conflict.id).join(", ")}{conflicts.length > 3 ? "…" : ""} overlap this window on the same hosts. Alerts may be double-muted. Schedule anyway?
+              {conflicts.slice(0, 3).map((conflict) => conflict.id).join(", ")}{conflicts.length > 3 ? "â€¦" : ""} overlap this window on the same hosts. Alerts may be double-muted. Schedule anyway?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

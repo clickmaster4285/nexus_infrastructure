@@ -137,7 +137,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
   const timelineItems = [...change.timeline].sort((a, b) => a.seq - b.seq);
   const incidentPrefillForChange = {
     title: `Configuration change under investigation: ${change.assetId}`,
-    impact: `Drift on ${change.assetName}: ${change.path} (${change.changeType} · ${change.category}).`,
+    impact: `Drift on ${change.assetName}: ${change.path} (${change.changeType} Â· ${change.category}).`,
     hosts: [change.assetId],
     changeId: change.id,
   };
@@ -155,7 +155,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/configuration-changes/${change.id}`);
+      await navigator.clipboard.writeText(`${window.location.origin}/security/configuration-changes/${change.id}`);
       notify({ message: "Change link copied" });
     } catch {
       notify({ message: "Clipboard unavailable in this context" });
@@ -176,7 +176,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
       <PageHeader
         breadcrumbs={["Security", "Configuration Changes", change.id]}
         title={title}
-        subtitle={`${change.category} · ${change.changeType} · ${change.group} · detected ${mounted ? timeAgo(change.detectedAt) : "…"}`}
+        subtitle={`${change.category} Â· ${change.changeType} Â· ${change.group} Â· detected ${mounted ? timeAgo(change.detectedAt) : "â€¦"}`}
         lastUpdated={lastUpdated.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
         onRefresh={load}
         statusBadge={<span className="flex items-center gap-1.5"><ConfigRiskBadge risk={change.risk} /><ApprovalBadge status={change.approvalStatus} /><ConfigStatusBadge status={change.status} className="hidden sm:inline-flex" /></span>}
@@ -191,7 +191,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               items={[
                 { key: "expected", label: "Mark expected", onSelect: () => setMarkExpectedTarget(change) },
                 { key: "baseline", label: "Accept as baseline", onSelect: () => setAcceptBaselineTarget(change) },
-                { key: "rollback", label: "Rollback…", danger: true, onSelect: () => setRollbackState({ change }) },
+                { key: "rollback", label: "Rollbackâ€¦", danger: true, onSelect: () => setRollbackState({ change }) },
                 { key: "d1", label: "", divider: true },
                 { key: "incident", label: "Create incident", onSelect: () => setIncidentPrefill(incidentPrefillForChange) },
                 { key: "copy", label: "Copy link", onSelect: () => { void copyLink(); } },
@@ -200,7 +200,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
           </div>
         }
       />
-      <p className="-mt-2 text-xs text-muted-foreground">Times in local time · {timeZoneLabel()} · {summary.total24h} changes scanned in the last 24h</p>
+      <p className="-mt-2 text-xs text-muted-foreground">Times in local time Â· {timeZoneLabel()} Â· {summary.total24h} changes scanned in the last 24h</p>
 
       <div className="grid items-start gap-4 xl:grid-cols-12">
         {/* LEFT - overview / diff / risk / impact / timeline */}
@@ -211,7 +211,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               <ChangeTypeBadge type={change.changeType} />
             </div>
             <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              <DetailRow label="Detected" value={<span>{mounted ? timeAgo(change.detectedAt) : "…"} <span className="text-muted-foreground">({fullTime(change.detectedAt)})</span></span>} />
+              <DetailRow label="Detected" value={<span>{mounted ? timeAgo(change.detectedAt) : "â€¦"} <span className="text-muted-foreground">({fullTime(change.detectedAt)})</span></span>} />
               <DetailRow label="Change ID" value={<span className="font-mono text-[0.8125rem]">{change.id}</span>} />
               <DetailRow label="Asset" value={assetHref ? <Link href={assetHref} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"><Server size={13} aria-hidden="true" />{change.assetId}</Link> : <span className="inline-flex items-center gap-1.5"><Server size={13} aria-hidden="true" />{change.assetId}</span>} />
               <DetailRow label="OS" value={<span className="flex items-center gap-2"><OsIcon os={change.assetOs} />{change.assetOs}</span>} />
@@ -219,10 +219,10 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               <DetailRow label="Path / setting" value={<span className="break-all font-mono text-[0.8125rem]" title={change.path}>{file}<span className="text-muted-foreground">: {change.path.split(":").pop()?.trim()}</span></span>} />
               <DetailRow label="Source" value={<ConfigSourceBadge source={change.source} />} />
               <DetailRow label="Changed by" value={<span className="flex items-center gap-2"><InitialsOrUnknown name={change.changedBy} />{change.changedBy}</span>} />
-              <DetailRow label="Ticket / Window" value={(change.ticket || change.maintenanceWindowId) ? <span className="flex flex-wrap items-center gap-2">{change.ticket && <span className="font-mono text-[0.8125rem]">{change.ticket}</span>}{change.maintenanceWindowId && <Link href={`/maintenance-windows/${change.maintenanceWindowId}`} className="inline-flex items-center gap-1 rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-xs font-medium text-teal-800 hover:underline dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300">{change.maintenanceWindowId}</Link>}</span> : <span className="text-muted-foreground">none · outside window</span>} />
-              <DetailRow label="Drift from baseline" value={change.driftFromBaseline ? <span className="inline-flex items-center gap-1 font-semibold text-orange-700 dark:text-orange-300"><Bug size={13} aria-hidden="true" />Yes · off baseline</span> : <span className="text-muted-foreground">No</span>} />
+              <DetailRow label="Ticket / Window" value={(change.ticket || change.maintenanceWindowId) ? <span className="flex flex-wrap items-center gap-2">{change.ticket && <span className="font-mono text-[0.8125rem]">{change.ticket}</span>}{change.maintenanceWindowId && <Link href={`/operations/maintenance-windows/${change.maintenanceWindowId}`} className="inline-flex items-center gap-1 rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-xs font-medium text-teal-800 hover:underline dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300">{change.maintenanceWindowId}</Link>}</span> : <span className="text-muted-foreground">none Â· outside window</span>} />
+              <DetailRow label="Drift from baseline" value={change.driftFromBaseline ? <span className="inline-flex items-center gap-1 font-semibold text-orange-700 dark:text-orange-300"><Bug size={13} aria-hidden="true" />Yes Â· off baseline</span> : <span className="text-muted-foreground">No</span>} />
             </dl>
-            {windowMarker && <p className="mt-3 flex items-center gap-1.5 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1.5 text-xs text-teal-800 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300"><Clock3 size={12} aria-hidden="true" />Applied inside maintenance window <b>{windowMarker.id}</b> · {windowMarker.title}</p>}
+            {windowMarker && <p className="mt-3 flex items-center gap-1.5 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1.5 text-xs text-teal-800 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300"><Clock3 size={12} aria-hidden="true" />Applied inside maintenance window <b>{windowMarker.id}</b> Â· {windowMarker.title}</p>}
           </Card>
 
           <ChartCard
@@ -248,7 +248,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-[0.6875rem] text-muted-foreground">3 lines of context above and below the change · secrets are masked as <code className="rounded bg-muted px-1">[REDACTED]</code> · file-level diff, 1 file changed</p>
+            <p className="mt-2 text-[0.6875rem] text-muted-foreground">3 lines of context above and below the change Â· secrets are masked as <code className="rounded bg-muted px-1">[REDACTED]</code> Â· file-level diff, 1 file changed</p>
           </ChartCard>
 
           <ChartCard title="Risk assessment" actions={<span className="text-xs font-semibold text-muted-foreground">Score <b className="text-base tabular-nums text-foreground">{change.riskScore}</b>/100</span>}>
@@ -269,13 +269,13 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
             <p className="mt-2 text-[0.6875rem] text-muted-foreground">Heuristic breakdown shown for triage; the agent assigns the final {change.riskScore}/100 score.</p>
           </ChartCard>
 
-          <ChartCard title="Impact and correlation" actions={<span className="text-xs text-muted-foreground">±30 min around this change</span>}>
+          <ChartCard title="Impact and correlation" actions={<span className="text-xs text-muted-foreground">Â±30 min around this change</span>}>
             {incidentLink ? (
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-500/20 dark:bg-red-500/5">
                   <div className="min-w-0">
                     <p className="text-xs font-semibold uppercase tracking-wide text-red-800 dark:text-red-300">Correlated incident</p>
-                    <Link href={`/incidents/${incidentLink.incidentId}`} className="mt-0.5 block font-mono text-[0.8125rem] font-bold text-primary hover:underline">{incidentLink.incidentId}</Link>
+                    <Link href={`/operations/incidents/${incidentLink.incidentId}`} className="mt-0.5 block font-mono text-[0.8125rem] font-bold text-primary hover:underline">{incidentLink.incidentId}</Link>
                     <p className="text-xs text-muted-foreground">opened {incidentLink.minutesAfter} minutes after this change</p>
                   </div>
                   <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300"><AlertTriangle size={11} aria-hidden="true" />Likely cause</span>
@@ -284,7 +284,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
                   <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-500/20 dark:bg-amber-500/5">
                     <div className="min-w-0">
                       <p className="text-xs font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-300">Correlated alert rule</p>
-                      <Link href="/alert-rules" className="mt-0.5 block font-mono text-[0.8125rem] font-bold text-primary hover:underline">{change.linkedAlertId}</Link>
+                      <Link href="/operations/alert-rules" className="mt-0.5 block font-mono text-[0.8125rem] font-bold text-primary hover:underline">{change.linkedAlertId}</Link>
                     </div>
                     <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">May be involved</span>
                   </div>
@@ -303,13 +303,13 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-baseline gap-x-2"><b className="text-foreground">{entry.action}</b><span className="text-xs text-muted-foreground">{entry.actor}</span></span>
                     {entry.detail && <span className="mt-0.5 block text-xs text-muted-foreground" title={entry.detail}>{entry.detail}</span>}
-                    <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{mounted ? timeAgo(entry.at) : "…"} · {fullTime(entry.at)}</span>
+                    <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{mounted ? timeAgo(entry.at) : "â€¦"} Â· {fullTime(entry.at)}</span>
                   </span>
                 </li>
               ))}
             </ol>
             <form className="mt-3 flex items-center gap-2" onSubmit={(event) => { event.preventDefault(); addNote(); }}>
-              <input value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Add a note·" aria-label="Add a note to the timeline" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+              <input value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Add a noteÂ·" aria-label="Add a note to the timeline" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
               <Button type="submit" variant="outline"  disabled={noteDraft.trim().length === 0}>Add note</Button>
             </form>
           </ChartCard>
@@ -325,7 +325,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
             <dl className="mt-3 grid grid-cols-1 gap-2 text-[0.8125rem]">
               <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Approver</dt><dd className="font-medium text-foreground">{change.approvedBy ?? "unassigned"}</dd></div>
               <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Ticket</dt><dd className="font-mono">{change.ticket ?? "none"}</dd></div>
-              <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Window</dt><dd>{change.maintenanceWindowId ? <Link href={`/maintenance-windows/${change.maintenanceWindowId}`} className="font-mono text-primary hover:underline">{change.maintenanceWindowId}</Link> : "outside window"}</dd></div>
+              <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Window</dt><dd>{change.maintenanceWindowId ? <Link href={`/operations/maintenance-windows/${change.maintenanceWindowId}`} className="font-mono text-primary hover:underline">{change.maintenanceWindowId}</Link> : "outside window"}</dd></div>
               <div className="flex items-center justify-between gap-2"><dt className="text-muted-foreground">Baseline drift</dt><dd className={change.driftFromBaseline ? "font-semibold text-orange-700 dark:text-orange-300" : "text-muted-foreground"}>{change.driftFromBaseline ? "off baseline" : "match"}</dd></div>
             </dl>
             <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
@@ -343,13 +343,13 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
               <OsIcon os={change.assetOs} className="h-8 w-8" />
               <div className="min-w-0">
                 <p className="truncate font-mono text-sm font-bold text-foreground">{change.assetId}</p>
-                <p className="text-xs text-muted-foreground">{change.assetOs} · {change.group}</p>
+                <p className="text-xs text-muted-foreground">{change.assetOs} Â· {change.group}</p>
               </div>
               {change.driftFromBaseline && <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-orange-100 px-2 py-1 text-xs font-semibold text-orange-800 dark:bg-orange-500/15 dark:text-orange-300"><Bug size={11} aria-hidden="true" />Drifted</span>}
             </div>
             <div className="mt-3 rounded-lg bg-muted/50 p-2 text-[0.8125rem]">
               <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Last snapshot</span><span className="font-mono font-semibold">{snapshots[0]?.id ?? "SNAP-"}</span></div>
-              {snapshots[0] && <p className="mt-0.5 text-xs text-muted-foreground">v{snapshots[0].version} · {snapshots[0].files} files · {mounted ? timeAgo(snapshots[0].takenAt) : "…"}</p>}
+              {snapshots[0] && <p className="mt-0.5 text-xs text-muted-foreground">v{snapshots[0].version} Â· {snapshots[0].files} files Â· {mounted ? timeAgo(snapshots[0].takenAt) : "â€¦"}</p>}
             </div>
           </Card>
 
@@ -359,8 +359,8 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
                 <li key={snapshot.id} className="flex items-center gap-2 py-2">
                   <FileCog size={14} className="shrink-0 text-muted-foreground" aria-hidden="true" />
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-xs font-semibold text-foreground">{snapshot.id} <span className="text-muted-foreground">· v{snapshot.version}</span></p>
-                    <p className="text-[0.6875rem] text-muted-foreground">{mounted ? timeAgo(snapshot.takenAt) : "…"} · {snapshot.files} files</p>
+                    <p className="font-mono text-xs font-semibold text-foreground">{snapshot.id} <span className="text-muted-foreground">Â· v{snapshot.version}</span></p>
+                    <p className="text-[0.6875rem] text-muted-foreground">{mounted ? timeAgo(snapshot.takenAt) : "â€¦"} Â· {snapshot.files} files</p>
                   </div>
                   <button type="button" onClick={() => setDiffMode("baseline")} className="shrink-0 rounded-lg border border-border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Compare</button>
                   <button type="button" onClick={() => setRollbackState({ change, snapshotId: snapshot.id })} className="shrink-0 rounded-lg border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">Rollback</button>
@@ -374,13 +374,13 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><GitBranch size={15} aria-hidden="true" />Linked</h2>
             <ul className="mt-2 flex flex-col divide-y divide-border text-[0.8125rem]">
               <li className="flex items-center justify-between gap-2 py-2">
-                <span className="flex min-w-0 items-center gap-2"><AlertTriangle size={14} className="shrink-0 text-red-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Incident</span>{change.linkedIncidentId ? <Link href={`/incidents/${change.linkedIncidentId}`} className="block truncate font-mono font-semibold text-primary hover:underline">{change.linkedIncidentId}</Link> : <span className="text-muted-foreground">none correlated</span>}</span></span>
+                <span className="flex min-w-0 items-center gap-2"><AlertTriangle size={14} className="shrink-0 text-red-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Incident</span>{change.linkedIncidentId ? <Link href={`/operations/incidents/${change.linkedIncidentId}`} className="block truncate font-mono font-semibold text-primary hover:underline">{change.linkedIncidentId}</Link> : <span className="text-muted-foreground">none correlated</span>}</span></span>
                 <button type="button" onClick={() => setIncidentPrefill(incidentPrefillForChange)} className="shrink-0 text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Create ?</button>
               </li>
-              <li className="flex items-center gap-2 py-2"><ScanSearch size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span>{change.linkedAlertId ? <Link href="/alert-rules" className="font-mono text-primary hover:underline">{change.linkedAlertId}</Link> : <span className="text-muted-foreground">no rule fired</span>}</span></li>
-              <li className="flex items-center gap-2 py-2"><Clock3 size={14} className="shrink-0 text-teal-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Maintenance window</span>{change.maintenanceWindowId ? <Link href={`/maintenance-windows/${change.maintenanceWindowId}`} className="font-mono text-primary hover:underline">{change.maintenanceWindowId}</Link> : <span className="text-muted-foreground">outside window</span>}</span></li>
-              <li className="flex items-center gap-2 py-2"><History size={14} className="shrink-0 text-slate-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Audit entry</span><Link href={`/audit-logs?q=${encodeURIComponent(change.id)}`} className="font-mono text-primary hover:underline">audit-logs?q={change.id}</Link></span></li>
-              <li className="flex items-center gap-2 py-2"><Wrench size={14} className="shrink-0 text-violet-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Runbook</span><Link href="/runbooks" className="text-primary hover:underline">RB-1060 · Memory usage high</Link></span></li>
+              <li className="flex items-center gap-2 py-2"><ScanSearch size={14} className="shrink-0 text-blue-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Alert rule</span>{change.linkedAlertId ? <Link href="/operations/alert-rules" className="font-mono text-primary hover:underline">{change.linkedAlertId}</Link> : <span className="text-muted-foreground">no rule fired</span>}</span></li>
+              <li className="flex items-center gap-2 py-2"><Clock3 size={14} className="shrink-0 text-teal-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Maintenance window</span>{change.maintenanceWindowId ? <Link href={`/operations/maintenance-windows/${change.maintenanceWindowId}`} className="font-mono text-primary hover:underline">{change.maintenanceWindowId}</Link> : <span className="text-muted-foreground">outside window</span>}</span></li>
+              <li className="flex items-center gap-2 py-2"><History size={14} className="shrink-0 text-slate-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Audit entry</span><Link href={`/security/audit-logs?q=${encodeURIComponent(change.id)}`} className="font-mono text-primary hover:underline">audit-logs?q={change.id}</Link></span></li>
+              <li className="flex items-center gap-2 py-2"><Wrench size={14} className="shrink-0 text-violet-500" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs text-muted-foreground">Runbook</span><Link href="/operations/runbooks" className="text-primary hover:underline">RB-1060 Â· Memory usage high</Link></span></li>
             </ul>
           </Card>
         </div>
@@ -389,11 +389,11 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
       {/* Prev / Next */}
       <div className="flex items-center justify-between gap-3">
         {newer
-          ? <Button variant="outline"  onClick={() => router.push(`/configuration-changes/${newer.id}`)}><ChevronLeft size={15} />Newer - {newer.id}</Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/security/configuration-changes/${newer.id}`)}><ChevronLeft size={15} />Newer - {newer.id}</Button>
           : <span />}
         <span className="text-xs text-muted-foreground">{index >= 0 ? `${index + 1} of ${ordered.length}` : ""}</span>
         {older
-          ? <Button variant="outline"  onClick={() => router.push(`/configuration-changes/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button>
+          ? <Button variant="outline"  onClick={() => router.push(`/security/configuration-changes/${older.id}`)}>{older.id} Â· Older<ChevronRight size={15} /></Button>
           : <span />}
       </div>
 

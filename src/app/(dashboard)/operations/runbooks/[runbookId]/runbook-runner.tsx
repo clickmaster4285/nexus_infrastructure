@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -132,7 +132,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists.</p>
-          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}><ChevronLeft size={15} aria-hidden />Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/operations/runbooks")}><ChevronLeft size={15} aria-hidden />Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -168,7 +168,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
     setSkipPromptFor(null);
     setDoneStepIds((current) => (current.includes(stepId) ? current : [...current, stepId]));
     setCurrentIndex((current) => Math.min(current + 1, steps.length));
-    showToast(`Step skipped — reason logged: "${reason}".`);
+    showToast(`Step skipped â€” reason logged: "${reason}".`);
   };
   const addNote = () => {
     const text = noteDraft.trim();
@@ -186,13 +186,13 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
     if (!automateStep) return;
     const host = runbook.services[0] ?? "unknown-host";
     if (!MOCK_ADMIN_PERMISSION) {
-      showToast("Permission denied — automated steps require the admin role.");
+      showToast("Permission denied â€” automated steps require the admin role.");
       setAutomateStep(null);
       return;
     }
     setAutomateRunning(true);
     setAutomateOutput([`[guard] admin permission granted (mock) for ${CURRENT_RUNBOOK_USER}`, `[audit] step "${automateStep.title}" run requested on ${host} by ${CURRENT_RUNBOOK_USER}`, `[exec] ${automateStep.command ?? automateStep.title}`]);
-    const stream = ["[vault] fetched credentials (lease 300s)", "[ssh] connected to " + host, "[exec] running command…", `[stdout] ${automateStep.expectedOutput ?? "command completed"}`, "[exit] 0 — completed in 1.8s"];
+    const stream = ["[vault] fetched credentials (lease 300s)", "[ssh] connected to " + host, "[exec] running commandâ€¦", `[stdout] ${automateStep.expectedOutput ?? "command completed"}`, "[exit] 0 â€” completed in 1.8s"];
     let index = 0;
     streamTimer.current = window.setInterval(() => {
       const line = stream[index];
@@ -211,13 +211,13 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
   };
   const saveAndExit = () => {
     writeProgress(runbook.id, { currentIndex, doneStepIds, skipped, notes, acknowledged, incidentId, startedAt });
-    showToast("Progress saved — resume anytime from this page.");
-    router.push(`/runbooks/${runbook.id}`);
+    showToast("Progress saved â€” resume anytime from this page.");
+    router.push(`/operations/runbooks/${runbook.id}`);
   };
   const exitClicked = () => {
     const hasProgress = doneStepIds.length > 0 || currentIndex > 0 || notes.length > 0;
     if (hasProgress) setExitDialog(true);
-    else router.push(`/runbooks/${runbook.id}`);
+    else router.push(`/operations/runbooks/${runbook.id}`);
   };
   const recordAndReturn = () => {
     const endedAt = new Date().toISOString();
@@ -234,8 +234,8 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
       notes: notes.map((note) => `[${note.stepId}] ${note.text}`).concat(Object.entries(skipped).map(([stepId, reason]) => `[${stepId}] skipped: ${reason}`)).join("\n"),
     });
     clearProgress(runbook.id);
-    showToast("Execution recorded — it now shows under Recent executions.");
-    router.push(`/runbooks/${runbook.id}`);
+    showToast("Execution recorded â€” it now shows under Recent executions.");
+    router.push(`/operations/runbooks/${runbook.id}`);
   };
 
   /* ---------- summary screen ---------- */
@@ -246,7 +246,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
         <div className="rounded-xl border border-border bg-card p-5 text-center">
           <Flag className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
           <h1 className="mt-2 font-display text-lg font-extrabold text-foreground">Run complete</h1>
-          <p className="mt-0.5 text-sm text-muted-foreground">{runbook.title} · {runbook.id}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{runbook.title} Â· {runbook.id}</p>
           <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
             {[{ label: "Duration", value: formatDurationMs(durationMs) }, { label: "Steps done", value: `${doneStepIds.length}/${steps.length}` }, { label: "Notes", value: String(totalNoteCount) }].map((tile) => (
               <div key={tile.label} className="rounded-lg bg-muted/50 p-3"><dt className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</dt><dd className="mt-1 font-display text-lg font-extrabold tabular-nums text-foreground">{tile.value}</dd></div>
@@ -275,13 +275,13 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
         <div className="flex flex-wrap items-center gap-3">
           <button type="button" onClick={exitClicked} className="inline-flex items-center gap-1 rounded-lg text-sm font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronLeft size={15} aria-hidden />Exit</button>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground"><span className="truncate font-semibold text-foreground">{runbook.title}</span><span className="shrink-0 tabular-nums">Step {Math.min(currentIndex + 1, steps.length)} of {steps.length} · {formatDurationMs(elapsedMs)}</span></div>
+            <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground"><span className="truncate font-semibold text-foreground">{runbook.title}</span><span className="shrink-0 tabular-nums">Step {Math.min(currentIndex + 1, steps.length)} of {steps.length} Â· {formatDurationMs(elapsedMs)}</span></div>
             <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100} aria-label="Run progress"><div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${progressPct}%` }} /></div>
           </div>
           <label className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">Link to incident
             <select aria-label="Link to incident" value={incidentId ?? ""} onChange={(event) => setIncidentId(event.target.value || null)} className="h-9 max-w-[11.25rem] rounded-lg border border-border bg-card px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <option value="">No incident</option>
-              {incidents.map((incident) => <option key={incident.id} value={incident.id}>{incident.id} — {incident.title.slice(0, 40)}</option>)}
+              {incidents.map((incident) => <option key={incident.id} value={incident.id}>{incident.id} â€” {incident.title.slice(0, 40)}</option>)}
             </select>
           </label>
         </div>
@@ -330,7 +330,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                       className={cn("flex w-56 items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-full", state === "done" ? "border-border bg-muted/40 text-muted-foreground" : state === "current" ? "border-primary bg-primary/5 text-foreground ring-1 ring-primary" : "border-border bg-card text-muted-foreground hover:bg-accent")}
                     >
                       <Icon size={14} aria-hidden className={cn("shrink-0", state === "done" && "text-emerald-600 dark:text-emerald-400", state === "current" && "text-primary")} />
-                      <span className="min-w-0"><span className="block truncate font-semibold">{index + 1}. {step.title}</span><span className="mt-0.5 block text-[0.6875rem] tabular-nums">{step.type} · {step.estimatedMinutes}m</span></span>
+                      <span className="min-w-0"><span className="block truncate font-semibold">{index + 1}. {step.title}</span><span className="mt-0.5 block text-[0.6875rem] tabular-nums">{step.type} Â· {step.estimatedMinutes}m</span></span>
                     </button>
                   </li>
                 );
@@ -361,7 +361,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
                 {isWarningStep && (
                   <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-lg border border-amber-300 bg-amber-50/60 p-2.5 text-xs font-semibold text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                     <input type="checkbox" checked={acknowledgedCurrent} onChange={(event) => setAcknowledged((current) => ({ ...current, [currentStep.id]: event.target.checked }))} className="mt-0.5 h-4 w-4 accent-[oklch(0.6658_0.1574_58.32)]" />
-                    I understand — this step is destructive or hard to reverse.
+                    I understand â€” this step is destructive or hard to reverse.
                   </label>
                 )}
 
@@ -394,7 +394,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
 
                 {/* Action bar */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                  <Button variant="ghost" className="text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skip…</Button>
+                  <Button variant="ghost" className="text-muted-foreground" onClick={() => setSkipPromptFor((current) => (current === currentStep.id ? null : currentStep.id))}>Skipâ€¦</Button>
                   <button type="button" className="inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => showToast("Issue reported to the runbook owner (mock).")}>Report issue</button>
                   <div className="ml-auto flex items-center gap-2">
                     {currentIndex < steps.length - 1 ? (
@@ -409,7 +409,7 @@ export function RunbookRunner({ runbookId }: { runbookId: string }) {
               <section aria-label="All steps complete" className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-5 text-center dark:border-emerald-500/20 dark:bg-emerald-500/10">
                 <ShieldCheck className="mx-auto h-10 w-10 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 <h2 className="mt-2 font-display text-base font-extrabold text-foreground">All steps processed</h2>
-                <p className="mt-0.5 text-sm text-muted-foreground">{doneStepIds.length} of {steps.length} steps done{Object.keys(skipped).length > 0 ? ` · ${Object.keys(skipped).length} skipped` : ""}.</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{doneStepIds.length} of {steps.length} steps done{Object.keys(skipped).length > 0 ? ` Â· ${Object.keys(skipped).length} skipped` : ""}.</p>
                 <Button className="mt-3" onClick={finishRun}><Flag size={15} aria-hidden />Finish &amp; summary</Button>
               </section>
             )}

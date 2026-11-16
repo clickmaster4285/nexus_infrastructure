@@ -548,7 +548,7 @@ export function IncidentsDashboard() {
   }, [selectedIds, incidents, acknowledge, showToast]);
 
   const copyLink = useCallback((incident: Incident) => {
-    const url = `${window.location.origin}/incidents/${incident.id}`;
+    const url = `${window.location.origin}/operations/incidents/${incident.id}`;
     const done = () => showToast(`Link copied for ${incident.id}.`);
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(done, () => showToast(url));
     else showToast(url);
@@ -681,7 +681,7 @@ export function IncidentsDashboard() {
   /* ------------------------------ render ----------------------------------- */
 
   const rowHeight = density === "compact" ? "h-10" : "h-14";
-  const goToIncident = (id: string) => router.push(`/incidents/${id}`);
+  const goToIncident = (id: string) => router.push(`/operations/incidents/${id}`);
 
   const errorState = (
     <section role="alert" className="grid min-h-[20rem] place-items-center rounded-xl border border-border bg-card p-6 text-center">
@@ -728,7 +728,7 @@ export function IncidentsDashboard() {
               items={exportItems}
             />
             <Link
-              href="/incidents/new"
+              href="/operations/incidents/new"
               className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white shadow transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <Siren size={15} aria-hidden="true" />Declare Incident
@@ -752,7 +752,7 @@ export function IncidentsDashboard() {
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
                 <span>oldest open for {formatMinutes(stats.oldestOpenMin)}</span>
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
-                <span>{stats.sev12Open} SEV1-2</span>{suppressedIncidents24h > 0 && (<><span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span><a href="/maintenance-windows" className="inline-flex items-center gap-1 font-semibold text-red-900 underline decoration-red-300 underline-offset-2 hover:text-red-700 dark:text-red-100 dark:decoration-red-700">{suppressedIncidents24h} suppressed by maintenance</a></>)}
+                <span>{stats.sev12Open} SEV1-2</span>{suppressedIncidents24h > 0 && (<><span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span><a href="/operations/maintenance-windows" className="inline-flex items-center gap-1 font-semibold text-red-900 underline decoration-red-300 underline-offset-2 hover:text-red-700 dark:text-red-100 dark:decoration-red-700">{suppressedIncidents24h} suppressed by maintenance</a></>)}
               </p>
               <button
                 type="button"
@@ -1173,7 +1173,7 @@ export function IncidentsDashboard() {
                               <input type="checkbox" checked={selected} onChange={(event) => selectIncident(incident.id, event.target.checked)} aria-label={`Select ${incident.id}`} className="h-4 w-4 accent-[oklch(0.5771_0.2152_27.33)]" />
                             </td>
                             <td className="whitespace-nowrap pr-3">
-                              <Link href={`/incidents/${incident.id}`} className="font-mono text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{incident.id}</Link>
+                              <Link href={`/operations/incidents/${incident.id}`} className="font-mono text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{incident.id}</Link>
                             </td>
                             <td className="max-w-[20.625rem] pr-3">
                               <span className="block truncate text-[0.8125rem] font-semibold text-foreground" title={incident.title}><Highlight text={incident.title} query={filters.query} /></span>
@@ -1317,7 +1317,7 @@ export function IncidentsDashboard() {
                   trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Postmortem options"><MoreVertical size={15} /></Button>}
                   items={[
                     { key: "resolved", label: "View resolved incidents", onSelect: () => setFilter("status", "Resolved") },
-                    { key: "runbooks", label: "Open runbooks", onSelect: () => router.push("/runbooks") },
+                    { key: "runbooks", label: "Open runbooks", onSelect: () => router.push("/operations/runbooks") },
                   ]}
                 />
               }
@@ -1330,7 +1330,7 @@ export function IncidentsDashboard() {
                     <li key={incident.id}>
                       <button
                         type="button"
-                        onClick={() => router.push(`/incidents/${incident.id}`)}
+                        onClick={() => router.push(`/operations/incidents/${incident.id}`)}
                         className="flex w-full items-center gap-3 rounded-md py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         <span className="min-w-0 flex-1">
@@ -1366,7 +1366,7 @@ export function IncidentsDashboard() {
                 <AlertMenu
                   label="Activity options"
                   trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Activity options"><MoreVertical size={15} /></Button>}
-                  items={[{ key: "audit", label: "Open audit logs", onSelect: () => router.push("/audit-logs") }]}
+                  items={[{ key: "audit", label: "Open audit logs", onSelect: () => router.push("/security/audit-logs") }]}
                 />
               }
             >
@@ -1378,7 +1378,7 @@ export function IncidentsDashboard() {
                     <li key={entry.id}>
                       <button
                         type="button"
-                        onClick={() => router.push(`/incidents/${entry.incidentId}`)}
+                        onClick={() => router.push(`/operations/incidents/${entry.incidentId}`)}
                         className="flex w-full items-center gap-2.5 rounded-md py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         <span aria-hidden="true" className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full", meta.tone)}><ActivityIcon size={13} /></span>
@@ -1391,7 +1391,7 @@ export function IncidentsDashboard() {
               </ul>
               <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
                 <span className="text-[0.75rem] text-muted-foreground">Declared → acknowledged → resolved</span>
-                <ViewAllLink href="/audit-logs" />
+                <ViewAllLink href="/security/audit-logs" />
               </div>
             </ChartCard>
           </section>

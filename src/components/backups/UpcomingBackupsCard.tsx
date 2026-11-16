@@ -51,7 +51,7 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
               </button>
             }
             items={[
-              { key: "scheduled", label: "Open Scheduled Tasks", onSelect: () => { window.location.href = "/scheduled-tasks?type=backup"; } },
+              { key: "scheduled", label: "Open Scheduled Tasks", onSelect: () => { window.location.href = "/operations/scheduled-tasks?type=backup"; } },
               { key: "export", label: "Export schedule (CSV)", onSelect: onExport },
             ]}
           />
@@ -66,13 +66,13 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
               <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-muted text-muted-foreground"><CalendarClock size={14} /></span>
               <span className="min-w-0">
                 <span className="block truncate text-[0.8125rem] font-medium text-foreground" title={job.name}>{job.name}</span>
-                <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job.host} · {EXACT.format(atMs)}</span>
+                <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job.host} Â· {EXACT.format(atMs)}</span>
               </span>
               <span className="ml-auto flex shrink-0 flex-col items-end gap-1">
                 <span className="text-xs font-semibold tabular-nums text-foreground">{formatCountdown(atMs)}</span>
                 {conflict ? (
                   <a
-                    href={`/maintenance-windows/${encodeURIComponent(conflict.id)}`}
+                    href={`/operations/maintenance-windows/${encodeURIComponent(conflict.id)}`}
                     className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
                     title={`Overlaps maintenance window ${conflict.id}`}
                   >
@@ -86,7 +86,7 @@ export function UpcomingBackupsCard({ jobs, onExport }: { jobs: BackupJob[]; onE
           );
         })}
         {rows.length === 0 && (
-          <li className="py-6 text-center text-xs text-muted-foreground">No runs scheduled in the next 24h — check whether jobs are paused.</li>
+          <li className="py-6 text-center text-xs text-muted-foreground">No runs scheduled in the next 24h â€” check whether jobs are paused.</li>
         )}
       </ul>
     </ChartCard>

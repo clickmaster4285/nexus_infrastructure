@@ -65,7 +65,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Certificates & Expiration", certId]} title="Certificate not found" subtitle="This certificate is not in the current inventory." />
-        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No certificate matches “{certId}”</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to certificates</Button></div></Card>
+        <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No certificate matches â€œ{certId}â€</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to certificates</Button></div></Card>
       </div>
     );
   }
@@ -90,8 +90,8 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
       <PageHeader
         breadcrumbs={["Security", "Certificates & Expiration", cert.commonName]}
         title={cert.commonName}
-        subtitle={`${cert.id} · ${cert.issuer} · issued ${new Date(cert.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
-        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "…"}
+        subtitle={`${cert.id} Â· ${cert.issuer} Â· issued ${new Date(cert.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
+        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "â€¦"}
         onRefresh={reload}
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><CertStatusBadge status={certStatus} /><IssuerTypeBadge type={cert.issuerType} /><DaysLeftBadge daysLeft={daysLeft} revoked={cert.revoked} /></span>}
         actions={
@@ -105,7 +105,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               items={[
                 { key: "assign", label: "Assign owner", onSelect: () => setAssignOpen(true) },
                 { key: "toggle", label: cert.autoRenew ? "Disable auto-renew" : "Enable auto-renew", onSelect: () => setAutoRenewOpen(true) },
-                { key: "verify", label: "Verify deployment", onSelect: () => { markCertificateVerified(cert.id); notify({ message: "Handshake verified — chain OK on all hosts" }); } },
+                { key: "verify", label: "Verify deployment", onSelect: () => { markCertificateVerified(cert.id); notify({ message: "Handshake verified â€” chain OK on all hosts" }); } },
                 { key: "fingerprint", label: "Copy fingerprint", onSelect: () => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); notify({ message: "Fingerprint copied" }); } catch { notify({ message: "Clipboard unavailable" }); } } },
                 { key: "revoke", label: "Revoke certificate", danger: true, onSelect: () => setRevokeOpen(true) },
                 { key: "copy", label: "Copy link", onSelect: () => { try { void navigator.clipboard?.writeText(window.location.href); notify({ message: "Link copied" }); } catch { notify({ message: "Clipboard unavailable" }); } } },
@@ -116,7 +116,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
       />
 
       <div className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-4">
-        <MiniMetric label="Days Left" value={cert.revoked ? "—" : String(Math.max(0, daysLeft))} tone={daysLeft < 0 || cert.revoked ? "text-red-600" : daysLeft <= 7 ? "text-orange-600" : daysLeft <= 30 ? "text-amber-700" : "text-foreground"} />
+        <MiniMetric label="Days Left" value={cert.revoked ? "â€”" : String(Math.max(0, daysLeft))} tone={daysLeft < 0 || cert.revoked ? "text-red-600" : daysLeft <= 7 ? "text-orange-600" : daysLeft <= 30 ? "text-amber-700" : "text-foreground"} />
         <MiniMetric label="Validity" value={formatValidity(cert.issuedAt, cert.expiresAt)} tone="text-foreground" />
         <MiniMetric label="Health Score" value={String(score)} tone={score >= 80 ? "text-emerald-600" : score >= 50 ? "text-amber-700" : "text-red-600"} />
         <MiniMetric label="Auto-Renew" valueNode={cert.autoRenew ? <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-700 dark:text-emerald-400"><CheckCircle2 size={16} aria-hidden="true" />Enabled</span> : <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700 dark:text-amber-400"><AlertTriangle size={16} aria-hidden="true" />Manual</span>} tone="text-foreground" />
@@ -136,7 +136,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               <Field label="Public key" value={`${cert.keyType} ${cert.keySize}`} />
               <Field label="Issued" value={new Date(cert.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} />
               <Field label="Expires" value={<span>{new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}<span className="ml-2 text-xs text-muted-foreground">({daysLeft}d)</span></span>} />
-              <Field label="Service" value={`${cert.service} · port ${cert.port}`} />
+              <Field label="Service" value={`${cert.service} Â· port ${cert.port}`} />
               <Field label="Environment" value={cert.environment} />
               <Field label="Renewal method" value={cert.renewalMethod} />
               <Field label="Hosts" valueNode={<HostChips hosts={cert.hostIds} max={4} />} />
@@ -147,7 +147,7 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
             </div>
           </Card>
 
-          <ChartCard title="Validity timeline" actions={<span className="text-xs text-muted-foreground">{new Date(cert.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} → {new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span>}>
+          <ChartCard title="Validity timeline" actions={<span className="text-xs text-muted-foreground">{new Date(cert.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} â†’ {new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span>}>
             <div className="relative h-14 w-full overflow-hidden rounded-lg bg-muted">
               {thresholdMarkers.map((threshold) => {
                 const iso = threshold === 1 ? 1 : Math.max(1, Math.round((Date.parse(cert.expiresAt) - Date.now()) / 86_400_000));
@@ -164,12 +164,12 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
             </div>
           </ChartCard>
 
-          <ChartCard title="Certificate chain" actions={<span className="text-xs text-muted-foreground">{cert.issuerType === "Self-signed" ? "Self-signed — no chain" : "3 nodes"}</span>}>
+          <ChartCard title="Certificate chain" actions={<span className="text-xs text-muted-foreground">{cert.issuerType === "Self-signed" ? "Self-signed â€” no chain" : "3 nodes"}</span>}>
             <ol className="flex flex-col gap-2 text-[0.8125rem]">
               {[
                 { node: "Leaf", name: cert.commonName, status: certStatus, tone: "emerald" as const },
-                { node: "Intermediate", name: cert.issuerType === "Self-signed" ? "—" : `${cert.issuer} intermediate`, status: cert.chainValid ? "Valid" : "Invalid", tone: cert.chainValid ? "emerald" as const : "rose" as const },
-                { node: "Root", name: cert.issuerType === "Self-signed" ? "—" : cert.issuer === "Internal CA" ? "Nexus Internal Root CA" : `${cert.issuer} Root`, status: "Valid", tone: "emerald" as const },
+                { node: "Intermediate", name: cert.issuerType === "Self-signed" ? "â€”" : `${cert.issuer} intermediate`, status: cert.chainValid ? "Valid" : "Invalid", tone: cert.chainValid ? "emerald" as const : "rose" as const },
+                { node: "Root", name: cert.issuerType === "Self-signed" ? "â€”" : cert.issuer === "Internal CA" ? "Nexus Internal Root CA" : `${cert.issuer} Root`, status: "Valid", tone: "emerald" as const },
               ].map((row) => (
                 <li key={row.node} className="flex items-center gap-3 rounded-lg border border-border p-2.5">
                   <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-full text-[0.6875rem] font-bold", row.tone === "emerald" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")}>{row.node === "Leaf" ? "L" : row.node === "Intermediate" ? "I" : "R"}</span>
@@ -187,11 +187,11 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
                 <tbody>
                   {hostsPort.map((host) => (
                     <tr key={host.hostId} className="border-b border-border/70 hover:bg-muted/30">
-                      <td className="px-2 py-2 font-mono font-semibold"><Link href={`/server-details/${encodeURIComponent(host.hostId)}`} className="text-primary hover:underline">{host.hostId}</Link></td>
+                      <td className="px-2 py-2 font-mono font-semibold"><Link href={`/infrastructure/server-details/${encodeURIComponent(host.hostId)}`} className="text-primary hover:underline">{host.hostId}</Link></td>
                       <td className="px-2 py-2 text-muted-foreground">{host.service}</td>
                       <td className="px-2 py-2 tabular-nums text-muted-foreground">{host.port}</td>
-                      <td className="px-2 py-2 whitespace-nowrap text-muted-foreground">{mounted ? timeAgo(host.lastChecked) : "…"}</td>
-                      <td className="px-2 py-2 text-right"><Button variant="outline"  onClick={() => { markCertificateVerified(cert.id); notify({ message: `${host.hostId} — handshake verified, chain OK` }); }}>Verify</Button></td>
+                      <td className="px-2 py-2 whitespace-nowrap text-muted-foreground">{mounted ? timeAgo(host.lastChecked) : "â€¦"}</td>
+                      <td className="px-2 py-2 text-right"><Button variant="outline"  onClick={() => { markCertificateVerified(cert.id); notify({ message: `${host.hostId} â€” handshake verified, chain OK` }); }}>Verify</Button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -219,12 +219,12 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground"><Clock3 size={15} aria-hidden="true" />Expiry alerts</h2>
               <button type="button" onClick={() => notify({ message: "Policy editor opened (mock)" })} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">Edit policy</button>
             </div>
-            <p className="mt-2 text-[0.6875rem] text-muted-foreground">Thresholds (days before expiry) · channels</p>
+            <p className="mt-2 text-[0.6875rem] text-muted-foreground">Thresholds (days before expiry) Â· channels</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {[60, 30, 14, 7, 1].map((threshold) => <span key={threshold} className="rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-[0.6875rem] font-semibold text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">{threshold}d</span>)}
             </div>
             <div className="mt-2 flex flex-wrap gap-1.5">{["Email", "Slack", "PagerDuty"].map((channel) => <span key={channel} className="rounded-md border border-border bg-muted/40 px-2 py-1 text-[0.6875rem] font-medium text-muted-foreground">{channel}</span>)}</div>
-            <p className="mt-3 border-t border-border pt-3 text-[0.6875rem] text-muted-foreground">Policy: <b className="text-foreground">Default production policy</b> · applies to all certs in this scope</p>
+            <p className="mt-3 border-t border-border pt-3 text-[0.6875rem] text-muted-foreground">Policy: <b className="text-foreground">Default production policy</b> Â· applies to all certs in this scope</p>
           </Card>
 
           <Card className="flex flex-col rounded-xl p-5">
@@ -233,13 +233,13 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
               {events.slice(0, 6).map((event) => (
                 <li key={event.id} className="flex items-start gap-2 py-2 text-[0.8125rem]">
                   <span className={cn("mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full text-[0.625rem]", event.type === "renewed" || event.type === "deployed" ? "bg-emerald-100 text-emerald-700" : event.type === "revoked" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700")}>{event.type === "renewed" ? <CheckCircle2 size={11} /> : event.type === "revoked" ? <AlertTriangle size={11} /> : <Clock3 size={11} />}</span>
-                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{event.actor}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{event.detail}</span><span className="mt-0.5 block text-[0.625rem] text-muted-foreground">{mounted ? timeAgo(event.at) : "…"}</span></span>
+                  <span className="min-w-0 flex-1"><span className="block font-semibold text-foreground">{event.actor}</span><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{event.detail}</span><span className="mt-0.5 block text-[0.625rem] text-muted-foreground">{mounted ? timeAgo(event.at) : "â€¦"}</span></span>
                 </li>
               ))}
               {events.length === 0 && <li className="py-3 text-center text-xs text-muted-foreground">No events yet.</li>}
             </ol>
             <form onSubmit={(event) => { event.preventDefault(); addComment(); }} className="mt-3 flex items-center gap-2 border-t border-border pt-3">
-              <input value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Add a note…" aria-label="Add a note" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+              <input value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Add a noteâ€¦" aria-label="Add a note" className="h-9 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
               <Button type="submit" variant="outline"  aria-label="Post note" disabled={comment.trim().length === 0}><Send size={13} /></Button>
             </form>
           </Card>
@@ -247,9 +247,9 @@ export function CertificateDetail({ certId }: CertificateDetailProps) {
       </div>
 
       <div className="flex items-center justify-between gap-3">
-        {newer ? <Button variant="outline"  onClick={() => router.push(`/certificates-and-expiration/${newer.id}`)}><ChevronLeft size={15} />Newer · {newer.id}</Button> : <span />}
+        {newer ? <Button variant="outline"  onClick={() => router.push(`/security/certificates-and-expiration/${newer.id}`)}><ChevronLeft size={15} />Newer Â· {newer.id}</Button> : <span />}
         <span className="text-xs text-muted-foreground">{index >= 0 ? `${index + 1} of ${ordered.length}` : ""}</span>
-        {older ? <Button variant="outline"  onClick={() => router.push(`/certificates-and-expiration/${older.id}`)}>{older.id} · Older<ChevronRight size={15} /></Button> : <span />}
+        {older ? <Button variant="outline"  onClick={() => router.push(`/security/certificates-and-expiration/${older.id}`)}>{older.id} Â· Older<ChevronRight size={15} /></Button> : <span />}
       </div>
 
       <RenewCertificateDialog open={renewOpen} onOpenChange={setRenewOpen} certId={cert.id} onDone={(result) => { notify(result); reload(); }} />
@@ -285,12 +285,12 @@ function healthChecks(cert: { expiresAt: string; commonName: string; sans: strin
   const weakKey = cert.keySize < 2048;
   const hostnameOk = cert.sans.includes(cert.commonName);
   return [
-    { name: "Expiry", pass: days > 0, detail: days > 0 ? `${days} days remaining` : `Expired ${Math.abs(days)} days ago — renew now` },
+    { name: "Expiry", pass: days > 0, detail: days > 0 ? `${days} days remaining` : `Expired ${Math.abs(days)} days ago â€” renew now` },
     { name: "Hostname match", pass: hostnameOk, detail: hostnameOk ? "SAN matches the endpoint's hostname" : "SAN does NOT include the endpoint hostname" },
-    { name: "Chain valid", pass: cert.chainValid, detail: cert.chainValid ? "Leaf → intermediate → root verified against system trust store" : "Certificate chain is broken or incomplete" },
-    { name: "Strong signature", pass: !weakSig, detail: weakSig ? `${cert.signatureAlgorithm} is deprecated — re-issue with SHA-256` : `${cert.signatureAlgorithm} — OK` },
-    { name: "Key size", pass: !weakKey, detail: weakKey ? `${cert.keySize}-bit ${cert.keyType} is too small — minimum 2048` : `${cert.keySize}-bit ${cert.keyType} — OK` },
-    { name: "Revocation", pass: !cert.revoked, detail: cert.revoked ? "Revoked — clients must not trust this cert" : "Not revoked (CRL/OCSP clean)" },
-    { name: "Auto-renew", pass: cert.autoRenew, detail: cert.autoRenew ? "Auto-renew configured — no action needed" : "Manual renewal required before expiry" },
+    { name: "Chain valid", pass: cert.chainValid, detail: cert.chainValid ? "Leaf â†’ intermediate â†’ root verified against system trust store" : "Certificate chain is broken or incomplete" },
+    { name: "Strong signature", pass: !weakSig, detail: weakSig ? `${cert.signatureAlgorithm} is deprecated â€” re-issue with SHA-256` : `${cert.signatureAlgorithm} â€” OK` },
+    { name: "Key size", pass: !weakKey, detail: weakKey ? `${cert.keySize}-bit ${cert.keyType} is too small â€” minimum 2048` : `${cert.keySize}-bit ${cert.keyType} â€” OK` },
+    { name: "Revocation", pass: !cert.revoked, detail: cert.revoked ? "Revoked â€” clients must not trust this cert" : "Not revoked (CRL/OCSP clean)" },
+    { name: "Auto-renew", pass: cert.autoRenew, detail: cert.autoRenew ? "Auto-renew configured â€” no action needed" : "Manual renewal required before expiry" },
   ];
 }

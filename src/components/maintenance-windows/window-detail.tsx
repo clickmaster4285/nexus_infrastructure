@@ -150,7 +150,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
   const mutedRules = useMemo(() => (window_ ? ALERT_RULES.filter((rule) => window_.alertBehavior.mutedRuleIds.includes(rule.id)) : []), [window_]);
   const occurrences = useMemo(() => (window_ ? nextOccurrences(window_, 5, now) : []), [window_, now]);
 
-  const goBack = useCallback(() => router.push("/maintenance-windows"), [router]);
+  const goBack = useCallback(() => router.push("/operations/maintenance-windows"), [router]);
 
   const copy = useCallback((label: string, text: string) => {
     const done = () => showToast(`${label} copied.`);
@@ -182,7 +182,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
 
   const kebabItems: AlertMenuItem[] = window_ ? [
     { key: "duplicate", label: "Duplicate", onSelect: () => { const id = duplicateWindow(window_.id); if (id) showToast(`Duplicated as ${id}.`); } },
-    { key: "copy-link", label: "Copy link", onSelect: () => copy("Link", `${window.location.origin}/maintenance-windows/${window_.id}`) },
+    { key: "copy-link", label: "Copy link", onSelect: () => copy("Link", `${window.location.origin}/operations/maintenance-windows/${window_.id}`) },
     { divider: true, key: "d1", label: "" },
     { key: "cancel", label: "Cancel window", danger: true, disabled: window_.status === "Cancelled" || window_.status === "Completed", onSelect: () => setCancelOpen(true) },
   ] : [];
@@ -190,7 +190,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId]} title="Maintenance Window" subtitle="Loading window details…" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
+        <PageHeader breadcrumbs={["Operations", "Maintenance Windows", windowId]} title="Maintenance Window" subtitle="Loading window detailsâ€¦" icon={<Wrench size={22} />} iconClassName="h-11 w-11 rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300" />
         <div aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
             <div className="h-[15rem] animate-pulse rounded-xl bg-muted" />
@@ -232,7 +232,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Wrench size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Window not found</p>
             <p className="text-sm text-muted-foreground"><span className="font-mono">{windowId}</span> does not exist or was purged.</p>
-            <Link href="/maintenance-windows" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Maintenance Windows</Link>
+            <Link href="/operations/maintenance-windows" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Maintenance Windows</Link>
           </div>
         </section>
       </div>
@@ -284,14 +284,14 @@ export function WindowDetail({ windowId }: { windowId: string }) {
         actions={
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <Button variant="ghost" onClick={goBack} className="text-muted-foreground hover:text-foreground"><ArrowLeft size={15} aria-hidden="true" />Back to Maintenance Windows</Button>
-            <Link href={`/maintenance-windows/${window_.id}/edit`} aria-disabled={!live && !scheduled} tabIndex={!live && !scheduled ? -1 : undefined} className={cn("inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", !live && !scheduled && "pointer-events-none opacity-40")}>Edit</Link>
+            <Link href={`/operations/maintenance-windows/${window_.id}/edit`} aria-disabled={!live && !scheduled} tabIndex={!live && !scheduled ? -1 : undefined} className={cn("inline-flex h-10 items-center gap-1.5 rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", !live && !scheduled && "pointer-events-none opacity-40")}>Edit</Link>
             <AlertMenu
               label="Extend window"
               trigger={<Button variant="outline" disabled={!live && !scheduled} ><ChevronDown size={14} aria-hidden="true" className="order-2" />Extend</Button>}
               items={[
                 { key: "+30", label: "+30 minutes", onSelect: () => { extendWindow(window_.id, 30); showToast(`${window_.id} extended by 30m.`); } },
                 { key: "+60", label: "+1 hour", onSelect: () => { extendWindow(window_.id, 60); showToast(`${window_.id} extended by 1h.`); } },
-                { key: "custom", label: "Custom…", onSelect: () => {
+                { key: "custom", label: "Customâ€¦", onSelect: () => {
                   const raw = window.prompt("Extend by how many minutes?", "45");
                   const minutes = raw ? Number.parseInt(raw, 10) : Number.NaN;
                   if (Number.isFinite(minutes) && minutes > 0) { extendWindow(window_.id, minutes); showToast(`${window_.id} extended by ${minutes}m.`); }
@@ -326,7 +326,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 label="Overview options"
                 trigger={<Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Overview options"><MoreVertical size={15} /></Button>}
                 items={[
-                  { key: "copy-summary", label: "Copy summary", onSelect: () => copy("Summary", `${window_.id} [${window_.status}] ${window_.title}\n${formatDateTime(startMs)} → ${formatDateTime(endMs)} (${window_.timeZone})\nOwner: ${window_.owner} · Ticket: ${window_.changeTicket ?? "—"}`) },
+                  { key: "copy-summary", label: "Copy summary", onSelect: () => copy("Summary", `${window_.id} [${window_.status}] ${window_.title}\n${formatDateTime(startMs)} â†’ ${formatDateTime(endMs)} (${window_.timeZone})\nOwner: ${window_.owner} Â· Ticket: ${window_.changeTicket ?? "â€”"}`) },
                   { key: "copy-ticket", label: "Copy ticket id", onSelect: () => copy("Ticket", window_.changeTicket ?? "") },
                 ]}
               />
@@ -352,7 +352,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
               </div>
               <div>
                 <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Time zone</dt>
-                <dd className="mt-1 text-sm text-foreground">{window_.timeZone}<span className="block text-[0.75rem] text-muted-foreground">local to this window · your browser: {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></dd>
+                <dd className="mt-1 text-sm text-foreground">{window_.timeZone}<span className="block text-[0.75rem] text-muted-foreground">local to this window Â· your browser: {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></dd>
               </div>
               <div>
                 <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Recurrence</dt>
@@ -361,7 +361,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
               <div>
                 <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Change ticket</dt>
                 <dd className="mt-1 flex items-center gap-1.5 text-sm">
-                  <span className="font-mono text-foreground">{window_.changeTicket ?? "—"}</span>
+                  <span className="font-mono text-foreground">{window_.changeTicket ?? "â€”"}</span>
                   {window_.changeTicket && (
                     <button type="button" onClick={() => copy("Ticket", window_.changeTicket ?? "")} aria-label="Copy change ticket id" className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Copy size={12} aria-hidden="true" /></button>
                   )}
@@ -414,12 +414,12 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                       <tr key={host} className="border-b border-border/60 last:border-b-0">
                         <td className="py-2 pr-3">
                           {canonical ? (
-                            <Link href={`/server-details/${encodeURIComponent(canonical)}`} className="font-mono text-[0.8125rem] text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{host}</Link>
+                            <Link href={`/infrastructure/server-details/${encodeURIComponent(canonical)}`} className="font-mono text-[0.8125rem] text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{host}</Link>
                           ) : (
                             <span className="font-mono text-[0.8125rem] text-foreground">{host}</span>
                           )}
                         </td>
-                        <td className="py-2 pr-3 text-[0.8125rem] text-muted-foreground">{groupNames || "—"}</td>
+                        <td className="py-2 pr-3 text-[0.8125rem] text-muted-foreground">{groupNames || "â€”"}</td>
                         <td className="py-2">
                           {live
                             ? <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />In Maintenance</span>
@@ -437,8 +437,8 @@ export function WindowDetail({ windowId }: { windowId: string }) {
               </table>
             </div>
             <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-border/70 pt-3 text-[0.8125rem]">
-              <span className="text-muted-foreground">Services: {window_.scope.services.length > 0 ? window_.scope.services.join(", ") : "—"}</span>
-              <span className="text-muted-foreground">Tags: {window_.scope.tags.length > 0 ? window_.scope.tags.map((tag) => `#${tag}`).join(" ") : "—"}</span>
+              <span className="text-muted-foreground">Services: {window_.scope.services.length > 0 ? window_.scope.services.join(", ") : "â€”"}</span>
+              <span className="text-muted-foreground">Tags: {window_.scope.tags.length > 0 ? window_.scope.tags.map((tag) => `#${tag}`).join(" ") : "â€”"}</span>
               {window_.scope.exclude.length > 0 && <span className="text-muted-foreground">Excluded: <span className="font-mono">{window_.scope.exclude.join(", ")}</span></span>}
               <span className="text-muted-foreground"><b className="text-foreground">{mutedRules.length}</b> alert rules muted</span>
             </div>
@@ -456,7 +456,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 rows={2}
                 value={noteDraft}
                 onChange={(event) => setNoteDraft(event.target.value)}
-                placeholder="What changed? Impact, scope, next steps…"
+                placeholder="What changed? Impact, scope, next stepsâ€¦"
                 className="w-full resize-y rounded-md border border-input bg-card px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
               />
               <div className="flex justify-end">
@@ -475,9 +475,9 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                     <div className="flex flex-wrap items-baseline gap-x-2">
                       <span className="font-mono text-[0.75rem] tabular-nums text-muted-foreground">{new Date(entry.epochMs).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
                       <span className="text-[0.75rem] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
-                      <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">· {meta.label}</span>
+                      <span className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground">Â· {meta.label}</span>
                     </div>
-                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> â€” {entry.text}</p>
                   </li>
                 );
               })}
@@ -497,12 +497,12 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                   <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">Incidents suppressed</p>
                 </div>
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
-                  <p className="font-display text-2xl font-bold tabular-nums text-foreground">{actualDurationMin != null ? durationLabel(actualDurationMin) : "—"}</p>
+                  <p className="font-display text-2xl font-bold tabular-nums text-foreground">{actualDurationMin != null ? durationLabel(actualDurationMin) : "â€”"}</p>
                   <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">Actual duration</p>
                 </div>
                 <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
                   <p className={cn("font-display text-2xl font-bold tabular-nums", plannedVsActual != null && plannedVsActual > 15 ? "text-amber-700 dark:text-amber-400" : "text-foreground")}>
-                    {plannedVsActual == null ? "—" : plannedVsActual === 0 ? "on time" : plannedVsActual > 0 ? `+${plannedVsActual}m` : `${plannedVsActual}m`}
+                    {plannedVsActual == null ? "â€”" : plannedVsActual === 0 ? "on time" : plannedVsActual > 0 ? `+${plannedVsActual}m` : `${plannedVsActual}m`}
                   </p>
                   <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">vs planned</p>
                 </div>
@@ -545,7 +545,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                         <p className={cn("text-sm font-semibold", reached ? "text-foreground" : "text-muted-foreground")}>{step}{current && <span className="ml-2 text-[0.75rem] font-normal text-violet-700 dark:text-violet-300">current</span>}</p>
                         <p className="mt-0.5 text-[0.75rem] text-muted-foreground">
                           {index === 0 && formatDateTime(startMs)}
-                          {index === 1 && (live ? `since ${new Date(startMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}` : stepIndex >= 1 ? formatDateTime(startMs) : "—")}
+                          {index === 1 && (live ? `since ${new Date(startMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}` : stepIndex >= 1 ? formatDateTime(startMs) : "â€”")}
                           {index === 2 && (completed ? formatDateTime(endMs) : "Pending")}
                         </p>
                       </div>
@@ -578,7 +578,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
               <ul className="mt-1.5 divide-y divide-border/60">
                 {mutedRules.map((rule) => (
                   <li key={rule.id}>
-                    <Link href={`/alert-rules?rule=${rule.id}`} className="flex items-center justify-between gap-2 py-1.5 text-[0.8125rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                    <Link href={`/operations/alert-rules?rule=${rule.id}`} className="flex items-center justify-between gap-2 py-1.5 text-[0.8125rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                       <span className="min-w-0 truncate text-foreground" title={rule.name}>{rule.name}</span>
                       <span className="shrink-0 font-mono text-[0.75rem] text-primary">{rule.id}</span>
                     </Link>
@@ -613,7 +613,7 @@ export function WindowDetail({ windowId }: { windowId: string }) {
                 {occurrences.map((occurrenceMs) => (
                   <li key={occurrenceMs} className="flex items-center justify-between gap-2 py-1.5 text-[0.8125rem]">
                     <span className="text-foreground">{new Date(occurrenceMs).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</span>
-                    <span className="tabular-nums text-muted-foreground">{new Date(occurrenceMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} · in {formatCountdown(occurrenceMs, now)}</span>
+                    <span className="tabular-nums text-muted-foreground">{new Date(occurrenceMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} Â· in {formatCountdown(occurrenceMs, now)}</span>
                   </li>
                 ))}
                 {occurrences.length === 0 && <li className="py-2 text-[0.8125rem] text-muted-foreground">Series has ended.</li>}
@@ -623,11 +623,11 @@ export function WindowDetail({ windowId }: { windowId: string }) {
 
           {/* Prev / next */}
           <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card p-2">
-            <button type="button" onClick={() => older && router.push(`/maintenance-windows/${older.id}`)} disabled={!older} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={older ? `Older window ${older.id}` : "No older windows"}>
+            <button type="button" onClick={() => older && router.push(`/operations/maintenance-windows/${older.id}`)} disabled={!older} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={older ? `Older window ${older.id}` : "No older windows"}>
               <ChevronLeft size={15} aria-hidden="true" className="shrink-0" /><span className="truncate">{older ? older.id : "No older"}</span>
             </button>
             <span className="text-[0.75rem] tabular-nums text-muted-foreground">{currentIndex + 1} / {chronological.length}</span>
-            <button type="button" onClick={() => newer && router.push(`/maintenance-windows/${newer.id}`)} disabled={!newer} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={newer ? `Newer window ${newer.id}` : "No newer windows"}>
+            <button type="button" onClick={() => newer && router.push(`/operations/maintenance-windows/${newer.id}`)} disabled={!newer} className="inline-flex h-9 max-w-[46%] items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40" aria-label={newer ? `Newer window ${newer.id}` : "No newer windows"}>
               <span className="truncate">{newer ? newer.id : "No newer"}</span><ChevronRight size={15} aria-hidden="true" className="shrink-0" />
             </button>
           </div>

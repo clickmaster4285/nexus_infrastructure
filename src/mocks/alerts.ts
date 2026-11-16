@@ -1,5 +1,5 @@
 /**
- * Alerts mock data — single source of truth.
+ * Alerts mock data â€” single source of truth.
  *
  * 38 seeded alerts relative to Date.now(), covering a 48h window so the
  * "vs previous period" deltas in the KPI row have something to compare
@@ -7,7 +7,7 @@
  * Events Explorer / Database Monitoring / Uptime & SLA mocks. Every KPI,
  * trend bucket, noisy rule and tab count derives from SAMPLE_ALERTS via
  * `utils/alertStats` so the numbers never contradict each other. To swap
- * in a real API later, replace the fetch layer in `useAlerts` — the
+ * in a real API later, replace the fetch layer in `useAlerts` â€” the
  * types and derived shapes stay the same.
  */
 
@@ -60,7 +60,7 @@ export interface Alert {
   occurrences: number;
   /** Linked Event Explorer record. */
   eventId: string;
-  /** Runbook slug, linked under /runbooks. */
+  /** Runbook slug, linked under /operations/runbooks. */
   runbook: string;
   /** Small metric snapshot for the detail drawer (last ~2h, 5min step). */
   metric: AlertMetricPoint[];
@@ -117,7 +117,7 @@ export const ALERT_RULES: AlertRule[] = [
   {
     ruleId: "RUL-204", name: "Health check failed", severity: "critical", metricName: "Failing checks", unit: "", threshold: 1, peak: 6,
     source: "kubernetes", runbook: "kubernetes-troubleshooting", hosts: ["web-app-01", "web-02"],
-    message: (v) => `Readiness probe failing — ${Math.round(v)}/6 endpoint checks down`,
+    message: (v) => `Readiness probe failing â€” ${Math.round(v)}/6 endpoint checks down`,
   },
   {
     ruleId: "RUL-215", name: "Service unavailable (HTTP 5xx)", severity: "critical", metricName: "5xx rate", unit: "%", threshold: 5, peak: 12.4,
@@ -152,7 +152,7 @@ export const ALERT_RULES: AlertRule[] = [
   {
     ruleId: "RUL-209", name: "Queue depth elevated", severity: "warning", metricName: "Pending jobs", unit: "", threshold: 500, peak: 1240,
     source: "kubernetes", runbook: "queue-backlog", hosts: ["worker-01"],
-    message: (v) => `Queue depth elevated — ${Math.round(v).toLocaleString("en-US")} pending jobs`,
+    message: (v) => `Queue depth elevated â€” ${Math.round(v).toLocaleString("en-US")} pending jobs`,
   },
   {
     ruleId: "RUL-210", name: "Replication lag > 30s", severity: "warning", metricName: "Replication lag", unit: "s", threshold: 30, peak: 42,
@@ -177,7 +177,7 @@ export const ALERT_RULES: AlertRule[] = [
 ];
 
 /* ------------------------------------------------------------------ *
- * Seeded RNG (mulberry32) — deterministic output on every load.
+ * Seeded RNG (mulberry32) â€” deterministic output on every load.
  * ------------------------------------------------------------------ */
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -247,7 +247,7 @@ function buildAlerts(): Alert[] {
     };
 
     pushEntry(0, "triggered", "Alert triggered", spec.message(value));
-    pushEntry(45 * 1000 + Math.floor(rand() * 75) * 1000, "notified", "Notified", "Email · Slack #alerts");
+    pushEntry(45 * 1000 + Math.floor(rand() * 75) * 1000, "notified", "Notified", "Email Â· Slack #alerts");
 
     let acknowledgedAt: string | null = null;
     let acknowledgedBy: string | null = null;

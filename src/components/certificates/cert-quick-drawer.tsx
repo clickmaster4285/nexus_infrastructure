@@ -40,7 +40,7 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
   useEffect(() => { if (certId) panelRef.current?.focus(); }, [certId]);
 
   if (!certId) return null;
-  const title = cert?.commonName ?? "Loading certificate…";
+  const title = cert?.commonName ?? "Loading certificateâ€¦";
 
   const daysLeft = cert ? daysUntilExpiry(cert.expiresAt) : 0;
   const statusOf = cert ? expiryStatus(cert.expiresAt, cert.revoked) : "Healthy";
@@ -70,14 +70,14 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
               <div className="mt-4 rounded-lg border border-border p-3">
                 <div className="flex items-center justify-between text-[0.6875rem] text-muted-foreground"><span>Issued {new Date(cert.issuedAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span><span>Expires {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", year: "numeric" })}</span></div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted" role="img" aria-label={`Validity progress ${pct}%`}><div className={cn("h-full rounded-full", pct > 90 ? "bg-red-500" : pct > 70 ? "bg-amber-400" : "bg-emerald-500")} style={{ width: `${pct}%` }} /></div>
-                <p className="mt-1.5 text-[0.6875rem] text-muted-foreground">Today — {pct}% of validity elapsed</p>
+                <p className="mt-1.5 text-[0.6875rem] text-muted-foreground">Today â€” {pct}% of validity elapsed</p>
               </div>
 
               <dl className="mt-4 grid grid-cols-2 gap-3 text-[0.8125rem]">
                 <div><dt className="text-[0.6875rem] text-muted-foreground">Issuer</dt><dd className="font-medium">{cert.issuer}</dd></div>
                 <div><dt className="text-[0.6875rem] text-muted-foreground">Algorithm</dt><dd className="font-mono text-xs">{cert.signatureAlgorithm}</dd></div>
                 <div><dt className="text-[0.6875rem] text-muted-foreground">Key</dt><dd>{cert.keyType} {cert.keySize}</dd></div>
-                <div><dt className="text-[0.6875rem] text-muted-foreground">Service</dt><dd>{cert.service} · :{cert.port}</dd></div>
+                <div><dt className="text-[0.6875rem] text-muted-foreground">Service</dt><dd>{cert.service} Â· :{cert.port}</dd></div>
                 <div><dt className="text-[0.6875rem] text-muted-foreground">Auto-renew</dt><dd>{cert.autoRenew ? "Enabled" : "Manual"}</dd></div>
                 <div><dt className="text-[0.6875rem] text-muted-foreground">Owner</dt><dd>{cert.ownerId}</dd></div>
               </dl>
@@ -116,7 +116,7 @@ export function CertQuickDrawer({ certId, onClose, onRenew, onRevoke, onToggleAu
                 <Button className="justify-start" onClick={() => onRenew(cert.id)}><RotateCcw size={13} />Renew</Button>
                 <Button variant="outline" className="justify-start" onClick={() => onToggleAutoRenew(cert.id)}>{cert.autoRenew ? <ToggleLeft size={15} /> : <ToggleRight size={15} />}{cert.autoRenew ? "Disable" : "Enable"} auto-renew</Button>
               </div>
-              <Link href={`/certificates-and-expiration/${cert.id}`} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">Open full details <ChevronRight size={14} aria-hidden="true" /></Link>
+              <Link href={`/security/certificates-and-expiration/${cert.id}`} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">Open full details <ChevronRight size={14} aria-hidden="true" /></Link>
             </>
           )}
         </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -81,7 +81,7 @@ export default function EventDetailPage() {
             <p className="text-sm font-semibold text-foreground">We could not find <code className="font-mono">{params.eventId}</code></p>
             <p className="text-[0.8125rem] text-muted-foreground">The event may have been purged from the retention window, or the link may be incorrect.</p>
             <Button asChild className="mt-1">
-              <Link href="/events-explorer"><ChevronLeft size={15} />Event Explorer</Link>
+              <Link href="/monitoring/events-explorer"><ChevronLeft size={15} />Event Explorer</Link>
             </Button>
           </div>
         </section>
@@ -133,12 +133,12 @@ export default function EventDetailPage() {
             <dt className="text-muted-foreground">Severity</dt><dd><span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold", severityBadge)}>{event.severity}</span></dd>
             <dt className="text-muted-foreground">Status</dt><dd><span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold", STATUS_META[currentStatus].className)}><StatusIcon size={11} aria-hidden="true" />{currentStatus}</span></dd>
             <dt className="text-muted-foreground">Duration</dt><dd className="text-foreground">{event.mttrMinutes ? `${event.mttrMinutes}m (MTTR ${event.mttrMinutes}m)` : "Ongoing"}</dd>
-            <dt className="text-muted-foreground">Occurrences</dt><dd className="tabular-nums text-foreground">×{event.count}</dd>
+            <dt className="text-muted-foreground">Occurrences</dt><dd className="tabular-nums text-foreground">Ã—{event.count}</dd>
             {event.assignee && <><dt className="text-muted-foreground">Assignee</dt><dd className="text-foreground">{event.assignee}</dd></>}
           </dl>
           <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
-            <Link href="/logs-explorer" className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><FileText size={14} aria-hidden="true" />View in Logs</Link>
-            <button type="button" onClick={() => { void navigator.clipboard?.writeText(`${window.location.origin}/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied."); }} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><ClipboardCopy size={14} aria-hidden="true" />Copy link</button>
+            <Link href="/monitoring/logs-explorer" className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><FileText size={14} aria-hidden="true" />View in Logs</Link>
+            <button type="button" onClick={() => { void navigator.clipboard?.writeText(`${window.location.origin}/monitoring/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied."); }} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-primary hover:underline"><ClipboardCopy size={14} aria-hidden="true" />Copy link</button>
           </div>
         </Panel>
 
@@ -158,20 +158,20 @@ export default function EventDetailPage() {
             </ol>
             {currentStatus === "Resolved" && (
               <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 text-[0.8125rem] font-semibold text-emerald-700 dark:text-emerald-300">
-                <CheckCircle2 size={16} aria-hidden="true" />Event resolved · MTTR {event.mttrMinutes ?? "—"}m
+                <CheckCircle2 size={16} aria-hidden="true" />Event resolved Â· MTTR {event.mttrMinutes ?? "â€”"}m
               </div>
             )}
           </Panel>
         </div>
       </section>
 
-      <Panel title="Related Events" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<Link href="/events-explorer" className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></Link>}>
+      <Panel title="Related Events" className="flex min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<Link href="/monitoring/events-explorer" className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></Link>}>
         <ul className="flex flex-1 flex-col divide-y divide-border/60 pt-1">
           {related.map((item) => {
             const RelatedStatusIcon = STATUS_META[item.status].icon;
             return (
               <li key={item.id}>
-                <Link href={`/events-explorer/${item.id}`} className="grid h-11 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Link href={`/monitoring/events-explorer/${item.id}`} className="grid h-11 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold", SEVERITY_BADGE[item.severity])}>{item.severity}</span>
                   <span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={item.message}>{item.message}</span>
                   <span className={cn("inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-semibold", STATUS_META[item.status].className)}><RelatedStatusIcon size={11} aria-hidden="true" />{item.status}</span>
@@ -183,10 +183,10 @@ export default function EventDetailPage() {
         </ul>
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-[0.8125rem]">
           <span>
-            {previous ? <button type="button" onClick={() => router.push(`/events-explorer/${previous.id}`)} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"><ChevronLeft size={14} aria-hidden="true" />Previous event</button> : <span className="text-muted-foreground">First event</span>}
+            {previous ? <button type="button" onClick={() => router.push(`/monitoring/events-explorer/${previous.id}`)} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"><ChevronLeft size={14} aria-hidden="true" />Previous event</button> : <span className="text-muted-foreground">First event</span>}
           </span>
           <span>
-            {next ? <button type="button" onClick={() => router.push(`/events-explorer/${next.id}`)} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline">Next event<ChevronRight size={14} aria-hidden="true" /></button> : <span className="text-muted-foreground">Last event</span>}
+            {next ? <button type="button" onClick={() => router.push(`/monitoring/events-explorer/${next.id}`)} className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline">Next event<ChevronRight size={14} aria-hidden="true" /></button> : <span className="text-muted-foreground">Last event</span>}
           </span>
         </div>
       </Panel>

@@ -293,7 +293,7 @@ function CreateGroupDialog({ open, onOpenChange, onCreate }: {
   open: boolean; onOpenChange: (open: boolean) => void; onCreate: (name: string, location: string, environment: GroupEnvironment) => void;
 }) {
   const [name, setName] = useState("");
-  const [location, setLocation] = useState("AWS – Virginia");
+  const [location, setLocation] = useState("AWS â€“ Virginia");
   const [environment, setEnvironment] = useState<GroupEnvironment>("Production");
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -321,7 +321,7 @@ function CreateGroupDialog({ open, onOpenChange, onCreate }: {
             <Select value={location} onValueChange={setLocation}>
               <SelectTrigger aria-label="Group location" className="h-10 text-[0.875rem]"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {["AWS – Virginia", "AWS – Ohio", "AWS – Frankfurt", "AWS – Ireland", "DigitalOcean – NYC", "Vultr – Tokyo", "Hetzner – Germany", "Ubuntu – London"].map((item) => (
+                {["AWS â€“ Virginia", "AWS â€“ Ohio", "AWS â€“ Frankfurt", "AWS â€“ Ireland", "DigitalOcean â€“ NYC", "Vultr â€“ Tokyo", "Hetzner â€“ Germany", "Ubuntu â€“ London"].map((item) => (
                   <SelectItem key={item} value={item}>{item}</SelectItem>
                 ))}
               </SelectContent>
@@ -434,7 +434,7 @@ export function ServerGroupsDashboard() {
     const pointTotal = point.healthy + point.degraded + point.offline;
     const lowestTotal = lowest.healthy + lowest.degraded + lowest.offline;
     return pointTotal && point.healthy / pointTotal < lowest.healthy / lowestTotal ? point : lowest;
-  }, trendData[0] ?? { time: "—", healthy: 0, degraded: 0, offline: 0 });
+  }, trendData[0] ?? { time: "â€”", healthy: 0, degraded: 0, offline: 0 });
   const lowestTrendTotal = lowestTrendPoint.healthy + lowestTrendPoint.degraded + lowestTrendPoint.offline;
   const lowestTrendPercent = lowestTrendTotal ? lowestTrendPoint.healthy / lowestTrendTotal * 100 : 0;
   const previousTrendPoint = trendData[Math.max(0, trendData.length - 2)];
@@ -460,7 +460,7 @@ export function ServerGroupsDashboard() {
   const performancePeak = performanceData.reduce((peak, point) => {
     const candidate = performanceSeries.map((series) => ({ name: series.name, value: point[series.key] })).reduce((max, item) => item.value > max.value ? item : max, { name: "", value: -Infinity });
     return candidate.value > peak.value ? { ...candidate, time: point.time } : peak;
-  }, { name: "—", value: 0, time: "—" });
+  }, { name: "â€”", value: 0, time: "â€”" });
   const performancePrevious = performanceData[Math.max(0, performanceData.length - 2)];
   const performanceLatestAverage = performanceLatest ? performanceSeries.reduce((sum, series) => sum + performanceLatest[series.key], 0) / performanceSeries.length : 0;
   const performancePreviousAverage = performancePrevious ? performanceSeries.reduce((sum, series) => sum + performancePrevious[series.key], 0) / performanceSeries.length : performanceLatestAverage;
@@ -555,12 +555,12 @@ export function ServerGroupsDashboard() {
       />
 
       <section aria-label="Server group metrics" className="grid grid-cols-2 items-stretch gap-4 min-[56.25rem]:grid-cols-3 xl:grid-cols-6">
-        <KpiCard icon={Boxes} label="Total Groups" value={String(totalGroups)} trend="↑ 1 new" tone="bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300" />
+        <KpiCard icon={Boxes} label="Total Groups" value={String(totalGroups)} trend="â†‘ 1 new" tone="bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300" />
         <KpiCard icon={ShieldCheck} label="Healthy Groups" value={String(healthyGroups)} trend={`${Math.round((healthyGroups / Math.max(totalGroups, 1)) * 100)}% of total`} tone="bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300" />
         <KpiCard icon={Activity} label="Degraded Groups" value={String(degradedGroups)} trend={`${((degradedGroups / Math.max(totalGroups, 1)) * 100).toFixed(1)}% of total`} tone="bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-300" />
         <KpiCard icon={Activity} label="Offline Groups" value={String(offlineGroups)} trend={`${((offlineGroups / Math.max(totalGroups, 1)) * 100).toFixed(1)}% of total`} tone="bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-300" />
-        <KpiCard icon={Server} label="Total Servers" value={String(totalServers)} trend="↑ 2 new" tone="bg-violet-50 text-violet-600 dark:bg-violet-950 dark:text-violet-300" />
-        <KpiCard icon={Sparkles} label="Avg. Health" value={`${averageHealth.toFixed(1)}%`} trend="↑ 0.4%" tone="bg-teal-50 text-teal-600 dark:bg-teal-950 dark:text-teal-300" />
+        <KpiCard icon={Server} label="Total Servers" value={String(totalServers)} trend="â†‘ 2 new" tone="bg-violet-50 text-violet-600 dark:bg-violet-950 dark:text-violet-300" />
+        <KpiCard icon={Sparkles} label="Avg. Health" value={`${averageHealth.toFixed(1)}%`} trend="â†‘ 0.4%" tone="bg-teal-50 text-teal-600 dark:bg-teal-950 dark:text-teal-300" />
       </section>
 
       <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 min-[80rem]:grid-cols-[minmax(0,1fr)_22.5rem]">
@@ -698,7 +698,7 @@ export function ServerGroupsDashboard() {
                     {hoveredHealthStatus ? (() => {
                       const item = healthOverview.find((status) => status.name === hoveredHealthStatus)!;
                       const percent = totalGroups ? item.value / totalGroups * 100 : 0;
-                      return <><b className="font-display text-[1.5rem] font-bold leading-none text-foreground">{item.value} · {percent.toFixed(0)}%</b><span className="mt-1 text-[0.75rem] text-muted-foreground">{item.name}</span></>;
+                      return <><b className="font-display text-[1.5rem] font-bold leading-none text-foreground">{item.value} Â· {percent.toFixed(0)}%</b><span className="mt-1 text-[0.75rem] text-muted-foreground">{item.name}</span></>;
                     })() : <><b className="font-display text-[1.75rem] font-bold leading-none text-foreground">{healthyPercent.toFixed(0)}%</b><span className="mt-1 text-[0.75rem] text-muted-foreground">Healthy</span></>}
                   </div>
                 </div>
@@ -710,7 +710,7 @@ export function ServerGroupsDashboard() {
                         <div className="flex items-center gap-2 whitespace-nowrap text-[0.75rem] sm:text-[0.8125rem]">
                           <i aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: item.color }} />
                           <span className="min-w-0 flex-1 truncate text-muted-foreground">{item.name}</span>
-                          <b className="shrink-0 tabular-nums text-foreground">{item.value} · {percent.toFixed(0)}%</b>
+                          <b className="shrink-0 tabular-nums text-foreground">{item.value} Â· {percent.toFixed(0)}%</b>
                         </div>
                         <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${percent}%`, background: item.color }} /></div>
                       </div>
@@ -740,7 +740,7 @@ export function ServerGroupsDashboard() {
                   <span>Avg <b className="text-foreground">{averageTrendHealth.toFixed(0)}%</b></span>
                   <span>Lowest <b className="text-foreground">{lowestTrendPercent.toFixed(0)}% at {lowestTrendPoint.time}</b></span>
                 </div>
-                <span className={cn("rounded-full px-2 py-1 font-semibold", trendDelta >= 0 ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300")}>{trendDelta >= 0 ? "▲" : "▼"} {Math.abs(trendDelta).toFixed(1)}%</span>
+                <span className={cn("rounded-full px-2 py-1 font-semibold", trendDelta >= 0 ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300")}>{trendDelta >= 0 ? "â–²" : "â–¼"} {Math.abs(trendDelta).toFixed(1)}%</span>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.6875rem]">
                 {healthOverview.map((item) => <button key={item.name} type="button" onClick={() => toggleHealthSeries(item.name)} aria-pressed={visibleHealthSeries[item.name]} className={cn("inline-flex items-center gap-1.5 rounded-lg px-1 py-0.5 transition-opacity", !visibleHealthSeries[item.name] && "opacity-40")}><i aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}</button>)}
@@ -794,8 +794,8 @@ export function ServerGroupsDashboard() {
               </div>
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-[0.625rem] text-muted-foreground sm:text-[0.6875rem]">
                 <span>Avg <b className="text-foreground">{performanceAverage.toFixed(1)}%</b></span>
-                <span>Peak <b className="text-foreground">{performancePeak.value}% · {performancePeak.name}</b></span>
-                <span className={cn("font-semibold", performanceDelta >= 0 ? "text-emerald-600" : "text-rose-600")}>{performanceDelta >= 0 ? "▲" : "▼"} {Math.abs(performanceDelta).toFixed(1)}%</span>
+                <span>Peak <b className="text-foreground">{performancePeak.value}% Â· {performancePeak.name}</b></span>
+                <span className={cn("font-semibold", performanceDelta >= 0 ? "text-emerald-600" : "text-rose-600")}>{performanceDelta >= 0 ? "â–²" : "â–¼"} {Math.abs(performanceDelta).toFixed(1)}%</span>
               </div>
             </div>
           </SectionCard>
@@ -820,12 +820,12 @@ export function ServerGroupsDashboard() {
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {[{ label: "Active Alerts", value: String(activeAlerts) }, { label: "Last Incident", value: lastIncident === "No incidents" ? lastIncident : lastIncident.split(", ").at(-1) ?? lastIncident }].map((tile) => <div key={tile.label} className="min-w-0 rounded-lg bg-muted/70 p-2"><span className="block truncate text-[0.625rem] text-muted-foreground">{tile.label}</span><b title={tile.value} className="mt-0.5 block truncate text-[0.75rem] font-semibold text-foreground">{tile.value}</b></div>)}
               </div>
-              <Link href={"/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto inline-flex items-center gap-1 self-end pt-3 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View Details <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>
+              <Link href={"/infrastructure/server-details?group=" + encodeURIComponent(selectedGroup.id)} className="mt-auto inline-flex items-center gap-1 self-end pt-3 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View Details <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>
             </div>
           </SectionCard> : null}
         </div>
         <div className="min-w-0 min-[80rem]:col-span-4">
-          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>}>
+          <SectionCard title="Recent Group Events" icon={Activity} className="p-4" action={<Link href="/monitoring/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link>}>
             <div className="flex h-full min-h-[19.375rem] flex-col">
               <div className="mb-2 flex gap-1 border-b border-border pb-2">{(["All", "Open", "Resolved"] as const).map((filter) => <button key={filter} type="button" onClick={() => setEventFilter(filter)} aria-pressed={eventFilter === filter} className={cn("rounded-full px-2.5 py-1 text-[0.6875rem]", eventFilter === filter ? "bg-primary/10 font-semibold text-primary" : "text-muted-foreground hover:bg-accent")}>{filter}</button>)}</div>
               <div className="min-h-0 flex-1">
@@ -833,7 +833,7 @@ export function ServerGroupsDashboard() {
                   <time title={event.time.replace(", ", ", 2026 ")} className="whitespace-nowrap text-[0.6875rem] tabular-nums text-muted-foreground">{event.time.split(", ").at(-1)}</time><div className="min-w-0 leading-tight"><b title={event.group} className="block truncate text-[0.6875rem] font-semibold text-foreground">{event.group}</b><span title={event.event} className="block truncate text-[0.6875rem] text-muted-foreground">{event.event}</span></div><div className="flex justify-end"><EventBadge status={event.status} /></div>
                 </div>) : <p className="py-6 text-center text-[0.75rem] text-muted-foreground">No {eventFilter.toLowerCase()} events.</p>}
               </div>
-              <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link></div>
+              <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.6875rem] text-muted-foreground"><span>Showing {eventRows.length} of {groupEvents.length} events</span><Link href="/monitoring/events-explorer" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View All <ArrowRight size={14} strokeWidth={2} aria-hidden="true" /></Link></div>
             </div>
           </SectionCard>
         </div>
@@ -854,7 +854,7 @@ export function ServerGroupsDashboard() {
       {refreshing && (
         <div className="fixed bottom-5 left-5 z-40 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-[0.8125rem] text-foreground shadow-lg">
           <RefreshCw size={15} className="animate-spin text-primary" />
-          Refreshing…
+          Refreshingâ€¦
         </div>
       )}
     </div>

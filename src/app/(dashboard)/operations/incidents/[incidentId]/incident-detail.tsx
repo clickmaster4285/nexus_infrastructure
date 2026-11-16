@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -91,13 +91,13 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         showToast(`${declared} declared`);
       }
     } catch {
-      /* sessionStorage unavailable — toast skipped */
+      /* sessionStorage unavailable â€” toast skipped */
     }
   }, [showToast]);
 
   const goBack = useCallback(() => {
-    if (typeof window !== "undefined" && window.history.length > 1 && document.referrer.includes("/incidents")) router.back();
-    else router.push("/incidents");
+    if (typeof window !== "undefined" && window.history.length > 1 && document.referrer.includes("/operations/incidents")) router.back();
+    else router.push("/operations/incidents");
   }, [router]);
 
   const incident = useMemo(() => incidents.find((item) => item.id === incidentId) ?? null, [incidents, incidentId]);
@@ -137,7 +137,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   const handleResolve = useCallback(() => { if (incident) { resolve([incident.id]); showToast(`${incident.id} resolved.`); } }, [incident, resolve, showToast]);
   const handleEscalate = useCallback(() => { if (incident) { escalate([incident.id]); showToast(`${incident.id} escalated to secondary responder.`); } }, [incident, escalate, showToast]);
   const handleAssign = useCallback((person: string | null) => { if (incident) { assign([incident.id], person); showToast(person ? `${incident.id} assigned to ${person}.` : `${incident.id} unassigned.`); } }, [incident, assign, showToast]);
-  const handleStatus = useCallback((next: IncidentStatus) => { if (incident) { changeStatus([incident.id], next); showToast(`${incident.id} → ${next}.`); } }, [incident, changeStatus, showToast]);
+  const handleStatus = useCallback((next: IncidentStatus) => { if (incident) { changeStatus([incident.id], next); showToast(`${incident.id} â†’ ${next}.`); } }, [incident, changeStatus, showToast]);
 
   const submitUpdate = useCallback(() => {
     if (!incident || !updateDraft.trim()) return;
@@ -154,7 +154,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-4 pb-4">
-        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident details…" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" />
+        <PageHeader breadcrumbs={["Operations", "Incidents", incidentId]} title="Incident" subtitle="Loading incident detailsâ€¦" icon={<Siren size={22} />} iconClassName="h-11 w-11 rounded-xl bg-[oklch(0.9544_0.023_10.96)] text-red-600 dark:bg-[oklch(0.328_0.0487_357.32)] dark:text-[oklch(0.7663_0.1406_13.84)]" />
         <div aria-busy="true" className="grid items-stretch gap-4 xl:grid-cols-12">
           <div className="space-y-4 xl:col-span-8">
             <div className="h-[16.25rem] animate-pulse rounded-xl bg-muted" />
@@ -196,7 +196,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-muted text-muted-foreground"><Siren size={20} /></span>
             <p className="font-display text-base font-bold text-foreground">Incident not found</p>
             <p className="text-sm text-muted-foreground"><span className="font-mono">{incidentId}</span> does not exist or was merged into another incident.</p>
-            <Link href="/incidents" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Incidents</Link>
+            <Link href="/operations/incidents" className="mt-1 inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><ArrowLeft size={15} />Back to Incidents</Link>
           </div>
         </section>
       </div>
@@ -264,8 +264,8 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 label="Overview options"
                 trigger={kebabButton("Overview options")}
                 items={[
-                  { key: "copy-link", label: "Copy incident link", onSelect: () => copy("Link", `${window.location.origin}/incidents/${incident.id}`) },
-                  { key: "copy-summary", label: "Copy summary", onSelect: () => copy("Summary", `${incident.id} [${incident.severity}] ${incident.title} — ${incident.impact} — owner: ${incident.commander}`) },
+                  { key: "copy-link", label: "Copy incident link", onSelect: () => copy("Link", `${window.location.origin}/operations/incidents/${incident.id}`) },
+                  { key: "copy-summary", label: "Copy summary", onSelect: () => copy("Summary", `${incident.id} [${incident.severity}] ${incident.title} â€” ${incident.impact} â€” owner: ${incident.commander}`) },
                 ]}
               />
             }
@@ -303,7 +303,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 <dt className="text-[0.75rem] font-medium uppercase tracking-wide text-muted-foreground">Affected services</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {incident.affectedServices.map((service) => (
-                    <Link key={service} href={`/incidents?service=${encodeURIComponent(service)}`} className="rounded-md border border-border bg-muted px-2 py-1 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
+                    <Link key={service} href={`/operations/incidents?service=${encodeURIComponent(service)}`} className="rounded-md border border-border bg-muted px-2 py-1 text-[0.75rem] font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
                   ))}
                 </dd>
               </div>
@@ -335,7 +335,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 <AlertMenu
                   label="Timeline options"
                   trigger={kebabButton("Timeline options")}
-                  items={[{ key: "copy-md", label: "Copy timeline (Markdown)", onSelect: () => copy("Timeline", incident.timeline.map((entry) => `- ${new Date(entry.epochMs).toISOString()} **${entry.author}** — ${entry.text}`).join("\n")) }]}
+                  items={[{ key: "copy-md", label: "Copy timeline (Markdown)", onSelect: () => copy("Timeline", incident.timeline.map((entry) => `- ${new Date(entry.epochMs).toISOString()} **${entry.author}** â€” ${entry.text}`).join("\n")) }]}
                 />
               </div>
             }
@@ -348,7 +348,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 rows={2}
                 value={updateDraft}
                 onChange={(event) => setUpdateDraft(event.target.value)}
-                placeholder="What changed? Impact, scope, next steps…"
+                placeholder="What changed? Impact, scope, next stepsâ€¦"
                 className="w-full resize-y rounded-md border border-input bg-card px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
               />
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -376,9 +376,9 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                     <div className="flex flex-wrap items-baseline gap-x-2">
                       <span className="font-mono text-[0.75rem] tabular-nums text-muted-foreground" title={fullTimestamp(entry.epochMs, false)}>{new Date(entry.epochMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>
                       <span className="text-[0.75rem] text-muted-foreground">{timeAgo(entry.epochMs)}</span>
-                      <span className="text-[0.75rem] font-semibold text-muted-foreground">· {meta.label}</span>
+                      <span className="text-[0.75rem] font-semibold text-muted-foreground">Â· {meta.label}</span>
                     </div>
-                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> — {entry.text}</p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-foreground"><b>{entry.author === CURRENT_USER_NAME ? "You" : entry.author}</b> â€” {entry.text}</p>
                   </li>
                 );
               })}
@@ -394,7 +394,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 <AlertMenu
                   label="Linked alerts options"
                   trigger={kebabButton("Linked alerts options")}
-                  items={[{ key: "alerts", label: "Open Alerts page", onSelect: () => router.push("/alerts") }]}
+                  items={[{ key: "alerts", label: "Open Alerts page", onSelect: () => router.push("/operations/alerts") }]}
                 />
               </div>
             }
@@ -405,11 +405,11 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               <ul className="flex flex-col divide-y divide-border/70">
                 {linked.map((alert) => (
                   <li key={alert.id}>
-                    <Link href={`/alerts?alert=${alert.id}`} className="flex items-center gap-3 rounded-md py-2.5 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <Link href={`/operations/alerts?alert=${alert.id}`} className="flex items-center gap-3 rounded-md py-2.5 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       <i aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: ALERT_SEVERITY_DOT[alert.severity] }} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[0.8125rem] font-medium text-foreground" title={alert.name}>{alert.name}</span>
-                        <span className="mt-0.5 block font-mono text-[0.75rem] text-muted-foreground">{alert.id} · {alert.host} · {timeAgo(alert.epochMs)}</span>
+                        <span className="mt-0.5 block font-mono text-[0.75rem] text-muted-foreground">{alert.id} Â· {alert.host} Â· {timeAgo(alert.epochMs)}</span>
                       </span>
                       <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[0.75rem] font-semibold", alert.status === "resolved" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300" : alert.status === "acknowledged" ? "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300" : "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300")}>{alert.status}</span>
                     </Link>
@@ -433,8 +433,8 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                   items={incident.postmortem.status === "None"
                     ? [{ key: "start", label: "Start postmortem", onSelect: () => { startPostmortem(incident.id); showToast("Postmortem draft created."); } }]
                     : [
-                        { key: "copy", label: "Export as Markdown", onSelect: () => downloadBlob(`# ${incident.id} — ${incident.title}\n\n## Summary\n${incident.postmortem.summary}\n\n## Root cause\n${incident.postmortem.rootCause}\n\n## Impact\n${incident.postmortem.impact}\n\n## Action items\n${incident.postmortem.actionItems.map((item) => `- [${item.done ? "x" : " "}] ${item.text} (${item.owner}, due ${item.due})`).join("\n")}`, "text/markdown;charset=utf-8", `${incident.id.toLowerCase()}-postmortem.md`) },
-                          { key: "runbooks", label: (linkedRunbook ? `Open runbook ${linkedRunbook.id}` : "Open runbooks"), onSelect: () => router.push(linkedRunbook ? `/runbooks/${linkedRunbook.id}` : "/runbooks") },
+                        { key: "copy", label: "Export as Markdown", onSelect: () => downloadBlob(`# ${incident.id} â€” ${incident.title}\n\n## Summary\n${incident.postmortem.summary}\n\n## Root cause\n${incident.postmortem.rootCause}\n\n## Impact\n${incident.postmortem.impact}\n\n## Action items\n${incident.postmortem.actionItems.map((item) => `- [${item.done ? "x" : " "}] ${item.text} (${item.owner}, due ${item.due})`).join("\n")}`, "text/markdown;charset=utf-8", `${incident.id.toLowerCase()}-postmortem.md`) },
+                          { key: "runbooks", label: (linkedRunbook ? `Open runbook ${linkedRunbook.id}` : "Open runbooks"), onSelect: () => router.push(linkedRunbook ? `/operations/runbooks/${linkedRunbook.id}` : "/operations/runbooks") },
                       ]}
                 />
               </div>
@@ -486,7 +486,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                         </button>
                         <span className="min-w-0 flex-1">
                           <span className={cn("block text-[0.8125rem] leading-snug text-foreground", item.done && "text-muted-foreground line-through")}>{item.text}</span>
-                          <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">{item.owner} · due {item.due}</span>
+                          <span className="mt-0.5 block text-[0.75rem] text-muted-foreground">{item.owner} Â· due {item.due}</span>
                         </span>
                       </li>
                     ))}
@@ -548,29 +548,29 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               <AlertMenu
                 label="Response metrics options"
                 trigger={kebabButton("Response metrics options")}
-                items={[{ key: "copy", label: "Copy metrics", onSelect: () => copy("Metrics", `${incident.id} — MTTA ${ackMin != null ? formatMinutes(ackMin) : "—"}, MTTR ${resolveMin != null ? formatMinutes(resolveMin) : "— (open)"}, team MTTA ${averages.mtta != null ? formatMinutes(averages.mtta) : "—"}, team MTTR ${averages.mttr != null ? formatMinutes(averages.mttr) : "—"}`) }]}
+                items={[{ key: "copy", label: "Copy metrics", onSelect: () => copy("Metrics", `${incident.id} â€” MTTA ${ackMin != null ? formatMinutes(ackMin) : "â€”"}, MTTR ${resolveMin != null ? formatMinutes(resolveMin) : "â€” (open)"}, team MTTA ${averages.mtta != null ? formatMinutes(averages.mtta) : "â€”"}, team MTTR ${averages.mttr != null ? formatMinutes(averages.mttr) : "â€”"}`) }]}
               />
             }
           >
             <ul className="flex flex-col divide-y divide-border/70 text-sm">
               <li className="flex items-center justify-between gap-3 py-2.5">
                 <span className="flex min-w-0 items-center gap-2 text-muted-foreground"><Clock3 size={14} aria-hidden="true" />Time to acknowledge</span>
-                <span className="shrink-0 font-semibold tabular-nums text-foreground">{ackMin != null ? formatMinutes(ackMin) : "—"}</span>
+                <span className="shrink-0 font-semibold tabular-nums text-foreground">{ackMin != null ? formatMinutes(ackMin) : "â€”"}</span>
               </li>
               <li className="flex items-center justify-between gap-3 py-2.5">
                 <span className="flex min-w-0 items-center gap-2 text-muted-foreground"><Target size={14} aria-hidden="true" />Time to resolve</span>
-                <span className="shrink-0 font-semibold tabular-nums text-foreground">{resolveMin != null ? formatMinutes(resolveMin) : `${formatMinutes(durationMin)} · open`}</span>
+                <span className="shrink-0 font-semibold tabular-nums text-foreground">{resolveMin != null ? formatMinutes(resolveMin) : `${formatMinutes(durationMin)} Â· open`}</span>
               </li>
               <li className="flex items-center justify-between gap-3 py-2.5">
                 <span className="text-muted-foreground">MTTA vs team avg</span>
                 <span className={cn("flex shrink-0 items-center gap-1 font-semibold tabular-nums", mttaDelta == null ? "text-muted-foreground" : mttaDelta <= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400")}>
-                  {mttaDelta == null ? "—" : (<>{mttaDelta <= 0 ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />}{formatMinutes(Math.abs(mttaDelta))} vs {averages.mtta != null ? formatMinutes(averages.mtta) : "—"}</>)}
+                  {mttaDelta == null ? "â€”" : (<>{mttaDelta <= 0 ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />}{formatMinutes(Math.abs(mttaDelta))} vs {averages.mtta != null ? formatMinutes(averages.mtta) : "â€”"}</>)}
                 </span>
               </li>
               <li className="flex items-center justify-between gap-3 py-2.5">
                 <span className="text-muted-foreground">MTTR vs team avg</span>
                 <span className={cn("flex shrink-0 items-center gap-1 font-semibold tabular-nums", mttrDelta == null ? "text-muted-foreground" : mttrDelta <= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400")}>
-                  {mttrDelta == null ? "—" : (<>{mttrDelta <= 0 ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />}{formatMinutes(Math.abs(mttrDelta))} vs {averages.mttr != null ? formatMinutes(averages.mttr) : "—"}</>)}
+                  {mttrDelta == null ? "â€”" : (<>{mttrDelta <= 0 ? <ArrowDown size={12} aria-hidden="true" /> : <ArrowUp size={12} aria-hidden="true" />}{formatMinutes(Math.abs(mttrDelta))} vs {averages.mttr != null ? formatMinutes(averages.mttr) : "â€”"}</>)}
                 </span>
               </li>
             </ul>
@@ -584,8 +584,8 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 label="People options"
                 trigger={kebabButton("People options")}
                 items={[
-                  { key: "copy", label: "Copy responder list", onSelect: () => copy("Responders", `${incident.id} — commander: ${incident.commander}; assignee: ${incident.assignee ?? "unassigned"}; on-call: ${ON_CALL.primary.name}`) },
-                  { key: "page", label: "Page on-call", onSelect: () => showToast(`On-call paged — ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`) },
+                  { key: "copy", label: "Copy responder list", onSelect: () => copy("Responders", `${incident.id} â€” commander: ${incident.commander}; assignee: ${incident.assignee ?? "unassigned"}; on-call: ${ON_CALL.primary.name}`) },
+                  { key: "page", label: "Page on-call", onSelect: () => showToast(`On-call paged â€” ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`) },
                 ]}
               />
             }
@@ -605,7 +605,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 </li>
               ))}
             </ul>
-            <Button variant="outline" onClick={() => showToast(`On-call paged — ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`)} className="mt-3 w-full"><Phone size={14} aria-hidden="true" />Page on-call</Button>
+            <Button variant="outline" onClick={() => showToast(`On-call paged â€” ${ON_CALL.primary.name} (${ON_CALL.primary.role}).`)} className="mt-3 w-full"><Phone size={14} aria-hidden="true" />Page on-call</Button>
           </ChartCard>
 
           {/* Affected services health */}
@@ -615,7 +615,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               <AlertMenu
                 label="Service health options"
                 trigger={kebabButton("Service health options")}
-                items={[{ key: "deps", label: "View service dependencies", onSelect: () => router.push("/dependencies") }]}
+                items={[{ key: "deps", label: "View service dependencies", onSelect: () => router.push("/infrastructure/dependencies") }]}
               />
             }
           >
@@ -624,7 +624,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
                 <li key={service} className="flex items-center gap-2.5 py-2.5">
                   <span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", dot)} />
                   <span className="min-w-0 flex-1">
-                    <Link href={`/incidents?service=${encodeURIComponent(service)}`} className="block truncate text-[0.8125rem] font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
+                    <Link href={`/operations/incidents?service=${encodeURIComponent(service)}`} className="block truncate text-[0.8125rem] font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{service}</Link>
                     <span className="block truncate font-mono text-[0.75rem] text-muted-foreground">{incident.affectedHosts.join(", ")}</span>
                   </span>
                   <span className={cn("shrink-0 text-[0.75rem] font-semibold", text)}>{label}</span>
@@ -638,13 +638,13 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
       {/* Prev / next incident */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         {newer ? (
-          <Link href={`/incidents/${newer.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <Link href={`/operations/incidents/${newer.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <ChevronLeft size={15} aria-hidden="true" />
             <span><span className="block text-left text-[0.75rem] leading-none text-muted-foreground">Newer</span><span className="mt-0.5 block max-w-[13.75rem] truncate font-mono text-[0.8125rem] font-semibold leading-none text-foreground">{newer.id}</span></span>
           </Link>
         ) : <span aria-hidden="true" />}
         {older ? (
-          <Link href={`/incidents/${older.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <Link href={`/operations/incidents/${older.id}`} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <span><span className="block text-right text-[0.75rem] leading-none text-muted-foreground">Older</span><span className="mt-0.5 block max-w-[13.75rem] truncate font-mono text-[0.8125rem] font-semibold leading-none text-foreground">{older.id}</span></span>
             <ChevronRight size={15} aria-hidden="true" />
           </Link>

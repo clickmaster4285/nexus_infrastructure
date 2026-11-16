@@ -31,7 +31,7 @@ function isRange(value: string | null): value is AlertRangeKey {
   return value === "1h" || value === "6h" || value === "24h" || value === "7d";
 }
 
-/** Operations > Alerts — KPIs, 24h trend, noisy rules, filterable table, detail drawer. */
+/** Operations > Alerts â€” KPIs, 24h trend, noisy rules, filterable table, detail drawer. */
 export function AlertsDashboard() {
   const [filters, setFilters] = useState(DEFAULT_ALERTS_FILTERS);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -151,7 +151,7 @@ export function AlertsDashboard() {
   const tableActions = {
     onAcknowledge: (ids: string[]) => { acknowledge(ids); notify(ids.length === 1 ? `Alert ${ids[0]} acknowledged.` : `${ids.length} alerts acknowledged.`); },
     onResolve: (ids: string[]) => { resolve(ids); notify(ids.length === 1 ? `Alert ${ids[0]} resolved.` : `${ids.length} alerts resolved.`); },
-    onAssign: (ids: string[], user: string | null) => { assign(ids, user); notify(user ? `Assigned ${user} → ${ids.length === 1 ? ids[0] : `${ids.length} alerts`}.` : `Assignee removed.`); },
+    onAssign: (ids: string[], user: string | null) => { assign(ids, user); notify(user ? `Assigned ${user} â†’ ${ids.length === 1 ? ids[0] : `${ids.length} alerts`}.` : `Assignee removed.`); },
     onSilence: (ids: string[], hours: number) => { silence(ids, hours); notify(`Silenced ${ids.length === 1 ? ids[0] : `${ids.length} alerts`} for ${hours}h.`); },
     onCreateRule: (alert: Alert) => notify(`Alert rule draft created from "${alert.ruleName}" (demo).`),
     onCopyLink: copyLink,
@@ -205,7 +205,7 @@ export function AlertsDashboard() {
               items={exportItems}
             />
             <Link
-              href="/alert-rules"
+              href="/operations/alert-rules"
               className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <Plus size={15} aria-hidden="true" />Create Alert Rule
@@ -287,7 +287,7 @@ export function AlertsDashboard() {
                   onAssign={(user) => {
                     const target = user === "" ? null : user;
                     assign(selectedIds, target);
-                    notify(target ? `Assigned ${target} → ${selectedIds.length} ${selectedIds.length === 1 ? "alert" : "alerts"}.` : "Assignee removed.");
+                    notify(target ? `Assigned ${target} â†’ ${selectedIds.length} ${selectedIds.length === 1 ? "alert" : "alerts"}.` : "Assignee removed.");
                   }}
                   onSilence={(hours) => runBulk((ids) => silence(ids, hours), selectedIds, `Silenced ${selectedIds.length} ${selectedIds.length === 1 ? "alert" : "alerts"} for ${hours}h.`)}
                   onResolve={() => runBulk(resolve, selectedIds, `${selectedIds.length} ${selectedIds.length === 1 ? "alert" : "alerts"} resolved.`)}
@@ -326,7 +326,7 @@ export function AlertsDashboard() {
         alert={drawerAlert}
         onClose={() => setDrawerId(null)}
         onAcknowledge={(id) => { acknowledge([id]); notify(`Alert ${id} acknowledged.`); }}
-        onAssign={(id, user) => { assign([id], user); notify(user ? `Assigned ${user} → ${id}.` : `Assignee removed from ${id}.`); }}
+        onAssign={(id, user) => { assign([id], user); notify(user ? `Assigned ${user} â†’ ${id}.` : `Assignee removed from ${id}.`); }}
         onResolve={(id) => { resolve([id]); notify(`Alert ${id} resolved.`); }}
         onAddNote={(id, text) => { addNote(id, text); notify(`Note added to ${id}.`); }}
         onCopyLink={copyLink}

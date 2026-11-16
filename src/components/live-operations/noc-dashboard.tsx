@@ -30,7 +30,7 @@ import { NOC_MAP_STATUS_COLOR, nocMapSites } from "@/data/mock/noc-map";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((mod) => mod.NocOsmMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] animate-pulse place-items-center rounded-lg bg-muted text-[0.75rem] text-muted-foreground">Loading OpenStreetMap…</div> },
+  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] animate-pulse place-items-center rounded-lg bg-muted text-[0.75rem] text-muted-foreground">Loading OpenStreetMapâ€¦</div> },
 );
 
 const STATUS = {
@@ -210,7 +210,7 @@ function buildResourceOption(data: Array<{ time: string; value: number; load: nu
     legend: { show: false },
     tooltip: { trigger: "axis", axisPointer: { type: "cross", lineStyle: { color: isDark ? "oklch(0.7107 0.0351 256.79)" : "oklch(0.5544 0.0407 257.42)", type: "dashed" } }, backgroundColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)", borderColor: gridColor, textStyle: { color: isDark ? "oklch(0.9288 0.0126 255.51)" : "oklch(0.2795 0.0368 260.03)", fontSize: 12 }, extraCssText: "border-radius:0.5rem;box-shadow:0 0.5rem 1.5rem oklch(0.2077 0.0398 265.75 / 0.14);", formatter: (items: unknown) => {
       const points = items as Array<{ axisValue: string; seriesName: string; value: number; color: string }>;
-      return `<b>${points[0]?.axisValue ?? ""}</b><br/>${points.map((point) => `<span style="color:${point.color}">●</span> ${point.seriesName}: <b>${point.value}${point.seriesName === "Load Average" ? "" : ` ${config.unit}`}</b>`).join("<br/>")}`;
+      return `<b>${points[0]?.axisValue ?? ""}</b><br/>${points.map((point) => `<span style="color:${point.color}">â—</span> ${point.seriesName}: <b>${point.value}${point.seriesName === "Load Average" ? "" : ` ${config.unit}`}</b>`).join("<br/>")}`;
     } },
     xAxis: { type: "category", boundaryGap: false, data: data.map((point) => point.time), axisLabel: { color: axisColor, fontSize: 12, hideOverlap: true, interval: Math.max(1, Math.ceil((data.length - 1) / 5)), showMaxLabel: true, margin: 9 }, axisLine: { lineStyle: { color: gridColor } }, axisTick: { show: false } },
     yAxis: [
@@ -243,7 +243,7 @@ function buildHealthTrendOption(data: NocHealthTrendPoint[], isDark: boolean): e
         const points = items as Array<{ axisValue?: string }>;
         const point = data.find((item) => item.time === points[0]?.axisValue);
         if (!point) return "";
-        return `<b>${point.time}</b><br/>Health: <b>${point.health}%</b><br/>Healthy ${point.healthy} · Degraded ${point.degraded} · Offline ${point.offline}`;
+        return `<b>${point.time}</b><br/>Health: <b>${point.health}%</b><br/>Healthy ${point.healthy} Â· Degraded ${point.degraded} Â· Offline ${point.offline}`;
       },
     },
     xAxis: {
@@ -445,8 +445,8 @@ export function LiveOperationsNoc() {
     />
 
     {(() => { const active = activeMaintenanceWindows(); const hosts = serversInMaintenance(); const mutedUntil = active.reduce((min, window) => Math.max(min, Date.parse(window.end)), 0); const hasIncidents = healthMetrics.openIncidents > 0 || criticalCount > 0; if (active.length === 0 && !hasIncidents) return null; return <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[0.8125rem] text-slate-800 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200" role="status">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5"><span className="flex items-center gap-2">{hasIncidents ? <Siren size={16} className="text-rose-600" /> : <Wrench size={16} className="text-violet-600" />}<b>Operations status</b></span>{active.length > 0 && <span className="text-muted-foreground">{active.length} maintenance active · {hosts.length} servers muted until {new Date(mutedUntil).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>}{hasIncidents && <span className="text-rose-700 dark:text-rose-300">{healthMetrics.openIncidents} active incidents · {criticalCount} critical alerts</span>}</div>
-      <div className="flex items-center gap-2">{active.length > 0 && <Button variant="outline"  asChild><a href="/maintenance-windows">View windows <ArrowRight className="ml-1" size={13} /></a></Button>}{hasIncidents && <Button variant="outline"  asChild><a href="/alerts">View incidents <ArrowRight className="ml-1" size={13} /></a></Button>}</div>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5"><span className="flex items-center gap-2">{hasIncidents ? <Siren size={16} className="text-rose-600" /> : <Wrench size={16} className="text-violet-600" />}<b>Operations status</b></span>{active.length > 0 && <span className="text-muted-foreground">{active.length} maintenance active Â· {hosts.length} servers muted until {new Date(mutedUntil).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>}{hasIncidents && <span className="text-rose-700 dark:text-rose-300">{healthMetrics.openIncidents} active incidents Â· {criticalCount} critical alerts</span>}</div>
+      <div className="flex items-center gap-2">{active.length > 0 && <Button variant="outline"  asChild><a href="/operations/maintenance-windows">View windows <ArrowRight className="ml-1" size={13} /></a></Button>}{hasIncidents && <Button variant="outline"  asChild><a href="/operations/alerts">View incidents <ArrowRight className="ml-1" size={13} /></a></Button>}</div>
     </div>; })()}
 
     {refreshing ? <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6" aria-label="Loading metrics">{Array.from({ length: 6 }, (_, index) => <div key={index} className="h-[6.75rem] animate-pulse rounded-xl border bg-card" />)}</div> : <section aria-label="Key metrics" className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 xl:grid-cols-6">
@@ -460,7 +460,7 @@ export function LiveOperationsNoc() {
             <div className="flex w-[7.75rem] shrink-0 flex-col items-center gap-0.5">
               <Donut data={healthLegend} total={healthServerTotal} label={`Current infrastructure health ${nocHealth.score}%`} size={104} cutout={70} centerValue={`${nocHealth.score}%`} centerLabel="Health" centerValueClassName="text-[1.375rem]" />
               <div className="inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem]" aria-label={`Now, ${healthMetrics.trend}% ${healthMetrics.trendDirection} ${healthMetrics.comparison}`}>
-                <span className="text-muted-foreground">Now ·</span>
+                <span className="text-muted-foreground">Now Â·</span>
                 <span className={cn("inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-semibold", healthMetrics.trendDirection === "up" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300" : "bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300")}>
                   <PeriodTrendIcon size={13} aria-hidden="true" />{healthMetrics.trend}% {healthMetrics.comparison}
                 </span>
@@ -518,7 +518,7 @@ export function LiveOperationsNoc() {
           </div>
           <CardFooter className="pt-2">
             <span>Updated {updatedSecondsAgo}s ago</span>
-            <a href="/all-servers" className="group inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-blue-600 hover:underline">
+            <a href="/infrastructure/all-servers" className="group inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem] font-semibold text-blue-600 hover:underline">
               View servers
               <ArrowRight size={16} strokeWidth={2} aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
             </a>
@@ -543,7 +543,7 @@ export function LiveOperationsNoc() {
         showOptions={false}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-[0.75rem]">{mapSites.length} sites · {mapServerCount} servers</Badge>
+            <Badge variant="outline" className="text-[0.75rem]">{mapSites.length} sites Â· {mapServerCount} servers</Badge>
             <button
               type="button"
               onClick={() => setIssuesOnly((value) => !value)}
@@ -573,13 +573,13 @@ export function LiveOperationsNoc() {
                 type="button"
                 onClick={() => handleSelectSite(site)}
                 aria-pressed={selected}
-                title={`${site.code} — ${site.city}: ${site.health}%`}
+                title={`${site.code} â€” ${site.city}: ${site.health}%`}
                 className={cn(
                   "min-w-0 rounded-lg px-2 py-1 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   selected ? "bg-primary/10 ring-1 ring-primary/50" : "bg-muted/60 hover:bg-muted",
                 )}
               >
-                <span className="block truncate text-[0.75rem] font-medium text-foreground">{site.code} — {site.city}</span>
+                <span className="block truncate text-[0.75rem] font-medium text-foreground">{site.code} â€” {site.city}</span>
                 <span className="flex items-center gap-1 text-[0.75rem] tabular-nums text-muted-foreground">
                   <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: NOC_MAP_STATUS_COLOR[site.status] }} />
                   {site.health}%
@@ -592,20 +592,20 @@ export function LiveOperationsNoc() {
     </section>
 
     <section aria-label="Alerts and availability" className="grid items-stretch gap-4 xl:grid-cols-3">
-      <Panel title={<PanelTitle>Active Alerts</PanelTitle>} className="min-h-[23.125rem] p-4" headerClassName="h-10" action={<a href="/alerts" className="text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight className="ml-1 inline" size={13} /></a>}>
+      <Panel title={<PanelTitle>Active Alerts</PanelTitle>} className="min-h-[23.125rem] p-4" headerClassName="h-10" action={<a href="/operations/alerts" className="text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight className="ml-1 inline" size={13} /></a>}>
         <div id="noc-active-alerts" className="flex min-h-0 flex-1 flex-col">
-          <div className="mb-2 flex flex-wrap items-center gap-1.5 pb-2 text-[0.75rem] text-muted-foreground" aria-label="Active alert summary"><span>Unacknowledged <b className="text-foreground">{unacknowledgedAlerts.length}</b></span><span>·</span><span>Oldest <b className="text-foreground">{oldestAlertMinutes}m</b></span><span>·</span><span>MTTA <b className="text-foreground">{nocAlertMetrics.mttaMinutes}m</b></span></div>
+          <div className="mb-2 flex flex-wrap items-center gap-1.5 pb-2 text-[0.75rem] text-muted-foreground" aria-label="Active alert summary"><span>Unacknowledged <b className="text-foreground">{unacknowledgedAlerts.length}</b></span><span>Â·</span><span>Oldest <b className="text-foreground">{oldestAlertMinutes}m</b></span><span>Â·</span><span>MTTA <b className="text-foreground">{nocAlertMetrics.mttaMinutes}m</b></span></div>
           {(healthStatusFilter || alertGroupFilter) && <div className="mb-2 flex flex-wrap items-center gap-1.5 text-[0.75rem] text-muted-foreground">
             {healthStatusFilter && <span>Server status: {healthStatusFilter.status}</span>}
             {alertGroupFilter && <span>Group: {nocServerGroups.find((group) => group.id === alertGroupFilter)?.name}</span>}
             <button type="button" onClick={() => { setHealthStatusFilter(null); setAlertGroupFilter(null); }} className="inline-flex items-center gap-1 rounded-lg px-1.5 py-0.5 text-primary hover:bg-primary/10" aria-label="Clear alert filters"><X size={12} aria-hidden="true" />Clear</button>
           </div>}
-          <ul className="flex flex-1 flex-col divide-y divide-border/70" aria-label="Active alerts">{visibleAlerts.length ? visibleAlerts.map((alert) => { const tone = STATUS[alert.severity]; const StatusIcon = tone.Icon; const ackedBy = acknowledged[alert.id]; return <li key={alert.id} className={cn("flex min-h-[3.625rem] items-center gap-2 py-2", ackedBy && "rounded-md bg-muted/50 px-2 text-muted-foreground")}><span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-1 text-[0.75rem] font-semibold", tone.badge)}><StatusIcon size={12} />{tone.label}</span><span className="min-w-0 flex-1"><b className={cn("block truncate text-[0.8125rem] font-medium", ackedBy ? "text-muted-foreground" : "text-foreground")} title={alert.title}>{alert.title}</b><span className="block truncate text-[0.75rem] text-muted-foreground">{ackedBy ? `Acknowledged by ${ackedBy} · ${nocAlertMetrics.acknowledgedAgo}` : alert.detail}</span></span><span className="flex shrink-0 flex-col items-end gap-1"><time className="text-[0.75rem] tabular-nums text-muted-foreground">{alert.time}</time><span className="flex gap-1"><button type="button" disabled={Boolean(ackedBy)} onClick={() => setAcknowledged((items) => ({ ...items, [alert.id]: nocAlertMetrics.acknowledgedBy }))} className="h-[1.625rem] cursor-pointer rounded-lg border border-border bg-background px-2 text-[0.75rem] font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 disabled:cursor-default disabled:opacity-50" aria-label={`Acknowledge ${alert.title}`}>Ack</button><button type="button" onClick={() => setSnoozed((items) => items.includes(alert.id) ? items : [...items, alert.id])} className="h-[1.625rem] cursor-pointer rounded-lg border border-border bg-background px-2 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:border-amber-400/50 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-amber-950/30" aria-label={`Snooze ${alert.title}`}>Snooze</button></span></span></li>; }) : <li className="grid flex-1 place-items-center py-8 text-center text-[0.8125rem] text-muted-foreground"><span>{alertGroupFilter ? `No active alerts for ${nocServerGroups.find((group) => group.id === alertGroupFilter)?.name ?? "this group"}` : "All clear, no active alerts"}</span></li>}</ul>
-          <CardFooter><span>Showing {visibleAlerts.length} of {activeAlerts.length} alerts</span><span className="flex items-center gap-1"><b className="text-red-600">{criticalCount} critical</b><span>·</span><b className="text-amber-600">{activeAlerts.filter((a) => a.severity === "high").length} warning</b></span></CardFooter>
+          <ul className="flex flex-1 flex-col divide-y divide-border/70" aria-label="Active alerts">{visibleAlerts.length ? visibleAlerts.map((alert) => { const tone = STATUS[alert.severity]; const StatusIcon = tone.Icon; const ackedBy = acknowledged[alert.id]; return <li key={alert.id} className={cn("flex min-h-[3.625rem] items-center gap-2 py-2", ackedBy && "rounded-md bg-muted/50 px-2 text-muted-foreground")}><span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-1 text-[0.75rem] font-semibold", tone.badge)}><StatusIcon size={12} />{tone.label}</span><span className="min-w-0 flex-1"><b className={cn("block truncate text-[0.8125rem] font-medium", ackedBy ? "text-muted-foreground" : "text-foreground")} title={alert.title}>{alert.title}</b><span className="block truncate text-[0.75rem] text-muted-foreground">{ackedBy ? `Acknowledged by ${ackedBy} Â· ${nocAlertMetrics.acknowledgedAgo}` : alert.detail}</span></span><span className="flex shrink-0 flex-col items-end gap-1"><time className="text-[0.75rem] tabular-nums text-muted-foreground">{alert.time}</time><span className="flex gap-1"><button type="button" disabled={Boolean(ackedBy)} onClick={() => setAcknowledged((items) => ({ ...items, [alert.id]: nocAlertMetrics.acknowledgedBy }))} className="h-[1.625rem] cursor-pointer rounded-lg border border-border bg-background px-2 text-[0.75rem] font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 disabled:cursor-default disabled:opacity-50" aria-label={`Acknowledge ${alert.title}`}>Ack</button><button type="button" onClick={() => setSnoozed((items) => items.includes(alert.id) ? items : [...items, alert.id])} className="h-[1.625rem] cursor-pointer rounded-lg border border-border bg-background px-2 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:border-amber-400/50 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-amber-950/30" aria-label={`Snooze ${alert.title}`}>Snooze</button></span></span></li>; }) : <li className="grid flex-1 place-items-center py-8 text-center text-[0.8125rem] text-muted-foreground"><span>{alertGroupFilter ? `No active alerts for ${nocServerGroups.find((group) => group.id === alertGroupFilter)?.name ?? "this group"}` : "All clear, no active alerts"}</span></li>}</ul>
+          <CardFooter><span>Showing {visibleAlerts.length} of {activeAlerts.length} alerts</span><span className="flex items-center gap-1"><b className="text-red-600">{criticalCount} critical</b><span>Â·</span><b className="text-amber-600">{activeAlerts.filter((a) => a.severity === "high").length} warning</b></span></CardFooter>
         </div>
       </Panel>
 
-      <Panel title={<PanelTitle>Service Availability</PanelTitle>} className="min-h-[23.125rem] p-4" headerClassName="h-10" action={<div className="flex items-center gap-2 whitespace-nowrap text-[0.75rem] text-muted-foreground"><span>Scale 99–100%</span><span className="rounded-full bg-muted px-2 py-0.5 text-[0.75rem] text-muted-foreground">SLA {nocServiceAvailabilitySla}%</span></div>}>
+      <Panel title={<PanelTitle>Service Availability</PanelTitle>} className="min-h-[23.125rem] p-4" headerClassName="h-10" action={<div className="flex items-center gap-2 whitespace-nowrap text-[0.75rem] text-muted-foreground"><span>Scale 99â€“100%</span><span className="rounded-full bg-muted px-2 py-0.5 text-[0.75rem] text-muted-foreground">SLA {nocServiceAvailabilitySla}%</span></div>}>
         <div className="flex min-h-0 flex-1 flex-col">
           <ul className="mt-3 flex flex-1 flex-col content-start divide-y divide-border/60">{serviceHealthRows.map((service) => { const status = statusForAvailability(service.value, nocServiceAvailabilitySla); const width = Math.max(0, Math.min(100, (service.value - 99) * 100)); const markerPosition = Math.max(0, Math.min(100, (nocServiceAvailabilitySla - 99) * 100)); return <li key={service.name} className="grid h-[2.75rem] shrink-0 grid-cols-[minmax(0,1fr)_minmax(4.375rem,1.5fr)_auto] items-center gap-3"><span className="flex min-w-0 items-center gap-2 text-[0.8125rem] text-foreground"><ServiceGlyph name={service.name} /><span className="truncate">{service.name}</span></span><div className="relative h-2 rounded-full bg-muted" role="progressbar" aria-label={`${service.name} availability`} aria-valuenow={service.value} aria-valuemin={99} aria-valuemax={100}><span className="absolute inset-y-[-0.125rem] z-[1] w-[0.0938rem] rounded-full bg-slate-400 opacity-90 dark:bg-slate-500" style={{ left: `${markerPosition}%` }} title={`SLA target ${nocServiceAvailabilitySla}%`} /><span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${width}%`, backgroundColor: status.color }} /></div><b className="min-w-[3.125rem] text-right text-[0.8125rem] tabular-nums text-foreground">{service.value}%</b></li>; })}</ul>
           <CardFooter><span>Overall availability</span><b className="text-foreground">{nocOverallAvailability}%</b></CardFooter>
@@ -668,7 +668,7 @@ export function LiveOperationsNoc() {
                         </span>
                         <span className="flex justify-end">
                           {group.alerts.length === 0
-                            ? <span className="text-muted-foreground" aria-label="No alerts">—</span>
+                            ? <span className="text-muted-foreground" aria-label="No alerts">â€”</span>
                             : <span className={cn("rounded px-1.5 py-0.5 font-semibold tabular-nums", alertTone)} aria-label={`${group.alerts.length} active alerts`}>{group.alerts.length}</span>}
                         </span>
                       </button>
@@ -676,7 +676,7 @@ export function LiveOperationsNoc() {
                         <div className="h-full" style={{ width: `${share}%`, backgroundColor: group.color }} />
                       </div>
                       <span id={`server-group-tooltip-${group.id}`} role="tooltip" className="pointer-events-none absolute left-0 top-full z-10 hidden rounded-md bg-slate-900 px-2 py-1 text-[0.75rem] text-white shadow-md group-hover:block group-focus-within:block">
-                        Avg CPU {group.avgCpu}% · Memory {group.avgMemory}% · Last incident {group.lastIncident}
+                        Avg CPU {group.avgCpu}% Â· Memory {group.avgMemory}% Â· Last incident {group.lastIncident}
                       </span>
                     </div>
                   );
@@ -690,7 +690,7 @@ export function LiveOperationsNoc() {
               <span className="block text-[0.75rem] text-muted-foreground">Healthiest group</span>
               <b className="mt-1 block truncate whitespace-nowrap text-[0.9375rem] font-bold leading-tight text-foreground" title={`${healthiestGroup.name} ${healthiestGroup.health}%`}>{healthiestGroup.name} {healthiestGroup.health}%</b>
               <span className="mt-1 block truncate text-[0.75rem] text-muted-foreground">
-                {healthiestGroup.alerts.length} alerts · {healthiestGroup.alerts.filter((alert) => alert.severity === "critical").length === 0 ? "none critical" : `${healthiestGroup.alerts.filter((alert) => alert.severity === "critical").length} critical`}
+                {healthiestGroup.alerts.length} alerts Â· {healthiestGroup.alerts.filter((alert) => alert.severity === "critical").length === 0 ? "none critical" : `${healthiestGroup.alerts.filter((alert) => alert.severity === "critical").length} critical`}
               </span>
             </div>
             <button
@@ -707,7 +707,7 @@ export function LiveOperationsNoc() {
               <b className="mt-1 block truncate whitespace-nowrap text-[0.9375rem] font-bold leading-tight text-foreground" title={`${attentionGroup.name} ${attentionGroup.health}%`}>{attentionGroup.name} {attentionGroup.health}%</b>
               <span className="mt-1 block truncate text-[0.75rem] text-muted-foreground">
                 {attentionGroup.alerts.length
-                  ? `${attentionGroup.alerts.length} alert${attentionGroup.alerts.length === 1 ? "" : "s"} · since ${Math.max(...attentionGroup.alerts.map((alert) => alert.ageMinutes))}m`
+                  ? `${attentionGroup.alerts.length} alert${attentionGroup.alerts.length === 1 ? "" : "s"} Â· since ${Math.max(...attentionGroup.alerts.map((alert) => alert.ageMinutes))}m`
                   : "No active alerts"}
               </span>
             </button>
@@ -717,8 +717,8 @@ export function LiveOperationsNoc() {
             </div>
           </div>
           <CardFooter>
-            <span>Avg group health {averageGroupHealth}% · SLA {nocServerGroupsSla}%</span>
-            <b className="shrink-0 text-foreground">{nocServerGroups.length} groups · {serverGroupTotal} servers</b>
+            <span>Avg group health {averageGroupHealth}% Â· SLA {nocServerGroupsSla}%</span>
+            <b className="shrink-0 text-foreground">{nocServerGroups.length} groups Â· {serverGroupTotal} servers</b>
           </CardFooter>
         </div>
       </Panel>
@@ -726,16 +726,16 @@ export function LiveOperationsNoc() {
 
     <section aria-label="Issues, events and collectors" className="grid items-stretch gap-4 xl:grid-cols-3">
       <Panel title={<PanelTitle>Top Issues</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<Segmented value={topIssueTab} options={issueTabs} onChange={setTopIssueTab} label="Top issue metric" />}>
-        <div className="flex flex-1 flex-col"><ul className="flex flex-1 flex-col justify-between divide-y divide-border/60">{nocTopIssues[topIssueTab].map((issue, index) => { const color = issue.percent > 90 ? "oklch(0.6368 0.2078 25.33)" : issue.percent >= 75 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.7137 0.1434 254.62)"; return <li key={issue.name} className="grid min-h-[3rem] grid-cols-[minmax(5.625rem,.8fr)_minmax(3.75rem,1fr)_auto] items-center gap-2 py-1"><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground" title={issue.name}>{issue.name}</b><span className="text-[0.75rem] text-muted-foreground">{issue.duration}</span></span><span className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${issue.percent}%`, backgroundColor: color }} /></span><b className="w-[3rem] text-right text-[0.8125rem] tabular-nums text-foreground">{issue.percent}%</b></li>; })}</ul><CardFooter><span>Showing {nocTopIssues[topIssueTab].length} of {nocFleet.total} servers</span><span className="flex gap-2 text-[0.75rem]"><span className="text-red-600">● &gt;90%</span><span className="text-amber-600">● 75–90%</span></span></CardFooter></div>
+        <div className="flex flex-1 flex-col"><ul className="flex flex-1 flex-col justify-between divide-y divide-border/60">{nocTopIssues[topIssueTab].map((issue, index) => { const color = issue.percent > 90 ? "oklch(0.6368 0.2078 25.33)" : issue.percent >= 75 ? "oklch(0.7686 0.1647 70.08)" : "oklch(0.7137 0.1434 254.62)"; return <li key={issue.name} className="grid min-h-[3rem] grid-cols-[minmax(5.625rem,.8fr)_minmax(3.75rem,1fr)_auto] items-center gap-2 py-1"><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground" title={issue.name}>{issue.name}</b><span className="text-[0.75rem] text-muted-foreground">{issue.duration}</span></span><span className="h-2 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full" style={{ width: `${issue.percent}%`, backgroundColor: color }} /></span><b className="w-[3rem] text-right text-[0.8125rem] tabular-nums text-foreground">{issue.percent}%</b></li>; })}</ul><CardFooter><span>Showing {nocTopIssues[topIssueTab].length} of {nocFleet.total} servers</span><span className="flex gap-2 text-[0.75rem]"><span className="text-red-600">â— &gt;90%</span><span className="text-amber-600">â— 75â€“90%</span></span></CardFooter></div>
       </Panel>
 
-      <Panel title={<PanelTitle>Recent Events</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<a href="/events-explorer" className="text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight className="ml-1 inline" size={13} /></a>}>
+      <Panel title={<PanelTitle>Recent Events</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<a href="/monitoring/events-explorer" className="text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight className="ml-1 inline" size={13} /></a>}>
         <ul className="flex flex-1 flex-col divide-y divide-border/70">{nocRecentEvents.map((event) => <li key={`${event.title}-${event.time}`} className="flex h-12 shrink-0 items-center gap-2.5"><span className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-full", FEED_TONE[event.tone])}><Icon name={event.icon} size={15} /></span><span className="min-w-0 flex-1"><b className="block truncate text-[0.8125rem] font-medium text-foreground">{event.title}</b><span className="block truncate text-[0.75rem] text-muted-foreground">{event.detail}</span></span><time className="shrink-0 whitespace-nowrap text-[0.75rem] tabular-nums text-muted-foreground">{event.time}</time></li>)}</ul>
         <CardFooter><span>Latest operational updates</span><span>{nocRecentEvents.length} recent</span></CardFooter>
       </Panel>
 
-      <Panel title={<PanelTitle>Monitoring Collectors</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<a href="/metrics-explorer" className="text-[0.75rem] font-medium text-primary hover:underline">Details <ArrowRight className="ml-1 inline" size={13} /></a>}>
-        <div className="flex flex-1 flex-col"><div className="grid grid-cols-[minmax(0,1fr)_minmax(4.5rem,auto)_minmax(3.875rem,auto)] gap-2 border-b border-border pb-2 text-[0.75rem] font-medium text-muted-foreground"><span>Collector</span><span>Status</span><span className="text-right">Ingest</span></div><ul className="flex flex-1 flex-col divide-y divide-border/60">{nocCollectors.map((collector) => <li key={collector.name} className="grid h-[3.25rem] shrink-0 grid-cols-[minmax(0,1fr)_minmax(4.5rem,auto)_minmax(3.875rem,auto)] items-center gap-2"><span className="flex min-w-0 items-center gap-2"><TechLogo name={collector.name} className="!h-8 !w-8 !rounded-lg [&_svg]:!h-[1.125rem] [&_svg]:!w-[1.125rem]" /><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground">{collector.name}</b><span className="block truncate whitespace-nowrap text-[0.75rem] text-muted-foreground">v{collector.version} · {collector.targetsUp}/{collector.targetsTotal} · {collector.heartbeat}</span></span></span><CollectorStatus status={collector.status} /><span className="flex min-w-[3.875rem] flex-col items-end gap-1"><b className="whitespace-nowrap text-[0.75rem] tabular-nums text-foreground">{formatNocIngestionRate(collector.ingestionPerSecond)}</b><CollectorSpark values={collector.spark} name={collector.name} /></span></li>)}</ul><CardFooter><span>{nocCollectorSummary.healthy}/{nocCollectorSummary.total} healthy</span><b className={cn(nocCollectorSummary.offline || nocCollectorSummary.stale ? "text-amber-600" : "text-emerald-600")}>{nocCollectorSummary.offline ? `${nocCollectorSummary.offline} collector${nocCollectorSummary.offline === 1 ? "" : "s"} down` : nocCollectorSummary.stale ? `${nocCollectorSummary.stale} collector${nocCollectorSummary.stale === 1 ? "" : "s"} stale` : "All collectors healthy"}</b></CardFooter></div>
+      <Panel title={<PanelTitle>Monitoring Collectors</PanelTitle>} className="min-h-[24.375rem] p-4" headerClassName="h-10" action={<a href="/monitoring/metrics-explorer" className="text-[0.75rem] font-medium text-primary hover:underline">Details <ArrowRight className="ml-1 inline" size={13} /></a>}>
+        <div className="flex flex-1 flex-col"><div className="grid grid-cols-[minmax(0,1fr)_minmax(4.5rem,auto)_minmax(3.875rem,auto)] gap-2 border-b border-border pb-2 text-[0.75rem] font-medium text-muted-foreground"><span>Collector</span><span>Status</span><span className="text-right">Ingest</span></div><ul className="flex flex-1 flex-col divide-y divide-border/60">{nocCollectors.map((collector) => <li key={collector.name} className="grid h-[3.25rem] shrink-0 grid-cols-[minmax(0,1fr)_minmax(4.5rem,auto)_minmax(3.875rem,auto)] items-center gap-2"><span className="flex min-w-0 items-center gap-2"><TechLogo name={collector.name} className="!h-8 !w-8 !rounded-lg [&_svg]:!h-[1.125rem] [&_svg]:!w-[1.125rem]" /><span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-foreground">{collector.name}</b><span className="block truncate whitespace-nowrap text-[0.75rem] text-muted-foreground">v{collector.version} Â· {collector.targetsUp}/{collector.targetsTotal} Â· {collector.heartbeat}</span></span></span><CollectorStatus status={collector.status} /><span className="flex min-w-[3.875rem] flex-col items-end gap-1"><b className="whitespace-nowrap text-[0.75rem] tabular-nums text-foreground">{formatNocIngestionRate(collector.ingestionPerSecond)}</b><CollectorSpark values={collector.spark} name={collector.name} /></span></li>)}</ul><CardFooter><span>{nocCollectorSummary.healthy}/{nocCollectorSummary.total} healthy</span><b className={cn(nocCollectorSummary.offline || nocCollectorSummary.stale ? "text-amber-600" : "text-emerald-600")}>{nocCollectorSummary.offline ? `${nocCollectorSummary.offline} collector${nocCollectorSummary.offline === 1 ? "" : "s"} down` : nocCollectorSummary.stale ? `${nocCollectorSummary.stale} collector${nocCollectorSummary.stale === 1 ? "" : "s"} stale` : "All collectors healthy"}</b></CardFooter></div>
       </Panel>
     </section>
 
@@ -746,7 +746,7 @@ export function LiveOperationsNoc() {
       </Panel>
 
       <Panel title={<PanelTitle>On-Call &amp; Escalation</PanelTitle>} className="min-h-[20.625rem] p-4" headerClassName="h-10" action={<Badge variant="outline" className="gap-1 text-[0.75rem]"><span className="h-2 w-2 rounded-full bg-emerald-500" />On duty</Badge>}>
-        <div className="flex flex-1 flex-col gap-3"><div className="rounded-xl border border-border bg-muted/40 p-3"><div className="flex items-start justify-between gap-2"><span><span className="block text-[0.75rem] text-muted-foreground">Primary on-call</span><b className="mt-1 block text-[0.9375rem] text-foreground">{nocOnCall.primary.name}</b><span className="text-[0.75rem] text-muted-foreground">{nocOnCall.primary.role} · since {nocOnCall.primary.since}</span></span><span className="grid h-9 w-9 place-items-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"><Shield size={18} /></span></div></div>
+        <div className="flex flex-1 flex-col gap-3"><div className="rounded-xl border border-border bg-muted/40 p-3"><div className="flex items-start justify-between gap-2"><span><span className="block text-[0.75rem] text-muted-foreground">Primary on-call</span><b className="mt-1 block text-[0.9375rem] text-foreground">{nocOnCall.primary.name}</b><span className="text-[0.75rem] text-muted-foreground">{nocOnCall.primary.role} Â· since {nocOnCall.primary.since}</span></span><span className="grid h-9 w-9 place-items-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"><Shield size={18} /></span></div></div>
           <p className="text-[0.75rem] text-muted-foreground">Next shift <b className="ml-1 text-foreground">{nocOnCall.nextShift}</b></p><ul className="flex flex-1 flex-col divide-y divide-border/60">{nocOnCall.escalations.map((contact) => <li key={contact.level} className="flex min-h-[2.625rem] items-center gap-2"><Badge variant="outline" className="text-[0.75rem]">{contact.level}</Badge><span className="min-w-0"><b className="block truncate text-[0.8125rem] text-foreground">{contact.name}</b><span className="block truncate text-[0.75rem] text-muted-foreground">{contact.role}</span></span></li>)}</ul>
           <Button className="w-full" onClick={() => setOnCallPaged(true)}><Bell size={15} />{onCallPaged ? "On-call paged" : "Page on-call"}</Button>{onCallPaged && <span role="status" className="text-center text-[0.75rem] text-emerald-600">Demo page sent to {nocOnCall.primary.name}</span>}
         </div>

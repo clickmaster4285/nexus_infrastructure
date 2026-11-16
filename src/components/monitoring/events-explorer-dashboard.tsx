@@ -35,7 +35,7 @@ echarts.use([BarChart, PieChart, BrushComponent, GridComponent, TooltipComponent
 /* ------------------------------------------------------------------ */
 /* Severity / status styling (consistent across the app)               */
 /* ------------------------------------------------------------------ */
-/** Theme palette — resolved from the .dark class on <html>. */
+/** Theme palette â€” resolved from the .dark class on <html>. */
 const TREND_THEME = {
   light: {
     gridLine: "oklch(0.9276 0.0058 264.53)",
@@ -169,7 +169,7 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Trend chart — stacked bars (Critical/Warning/Info/Debug) + brush    */
+/* Trend chart â€” stacked bars (Critical/Warning/Info/Debug) + brush    */
 /* ------------------------------------------------------------------ */
 interface TrendChartProps {
   data: (typeof EVENT_TRENDS)[TrendRangeKey];
@@ -230,7 +230,7 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
       }, 0);
       const startLabel = new Date(first.epochMs).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
       const endLabel = new Date(last.epochMs).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-      setSelectionBox({ left, width: Math.max(48, right - left), label: `${startLabel} – ${endLabel} · ${visibleTotal.toLocaleString("en-US")} events` });
+      setSelectionBox({ left, width: Math.max(48, right - left), label: `${startLabel} â€“ ${endLabel} Â· ${visibleTotal.toLocaleString("en-US")} events` });
     } catch {
       setSelectionBox(null);
     }
@@ -412,7 +412,7 @@ function TrendChart({ data, hidden, brush, onBrush, highlightIndex = null }: Tre
 }
 
 /* ------------------------------------------------------------------ */
-/* Donut — severity split; debug toggleable                            */
+/* Donut â€” severity split; debug toggleable                            */
 /* ------------------------------------------------------------------ */
 function SeverityDonut({ includeDebug, onToggleSeverity, activeSeverities }: { includeDebug: boolean; onToggleSeverity: (severity: EventSeverity) => void; activeSeverities: ReadonlySet<EventSeverity> }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -493,7 +493,7 @@ function SeverityDonut({ includeDebug, onToggleSeverity, activeSeverities }: { i
 }
 
 /* ------------------------------------------------------------------ */
-/* Heatmap — 7 days x 24 hours                                         */
+/* Heatmap â€” 7 days x 24 hours                                         */
 /* ------------------------------------------------------------------ */
 const HEATMAP_DAYS = Array.from({ length: 7 }, (_, index) => {
   const date = new Date();
@@ -526,7 +526,7 @@ function ActivityHeatmap() {
             {EVENT_HEATMAP[dayIndex].map((count, hour) => (
               <div
                 key={hour}
-                title={`${day} ${String(hour).padStart(2, "0")}:00 — ${count.toLocaleString("en-US")} events`}
+                title={`${day} ${String(hour).padStart(2, "0")}:00 â€” ${count.toLocaleString("en-US")} events`}
                 aria-label={`${day} ${String(hour).padStart(2, "0")}:00, ${count.toLocaleString("en-US")} events`}
                 className={cn("h-[1.375rem] rounded-[0.1875rem]", cellClass[bucket(count)])}
               />
@@ -540,7 +540,7 @@ function ActivityHeatmap() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Sparkline — tiny inline SVG trend line (no new library)              */
+/* Sparkline â€” tiny inline SVG trend line (no new library)              */
 /* ------------------------------------------------------------------ */
 function Sparkline({ values, stroke, className }: { values: number[]; stroke: string; className?: string }) {
   const width = 100;
@@ -631,7 +631,7 @@ function BreakdownBarList({ rows, iconFor, trends, onSelect, headerLabel, severi
 }
 
 /* ------------------------------------------------------------------ */
-/* Distribution bar — stacked share of every source/host in the list   */
+/* Distribution bar â€” stacked share of every source/host in the list   */
 /* ------------------------------------------------------------------ */
 const DISTRIBUTION_SHADES = ROW_HUES.map((hue) => hue.bar);
 
@@ -646,7 +646,7 @@ function DistributionBar({ rows }: { rows: Array<{ name: string; count: number; 
           return (
             <span
               key={row.name}
-              title={`${row.name} · ${row.count.toLocaleString("en-US")} events · ${share.toFixed(1)}%`}
+              title={`${row.name} Â· ${row.count.toLocaleString("en-US")} events Â· ${share.toFixed(1)}%`}
               aria-label={`${row.name} ${row.count.toLocaleString("en-US")} events, ${share.toFixed(1)} percent`}
               className="h-full cursor-default transition-opacity first:rounded-l-full last:rounded-r-full hover:opacity-70"
               style={{ width: `${(row.count / Math.max(total, 1)) * 100}%`, backgroundColor: DISTRIBUTION_SHADES[index % DISTRIBUTION_SHADES.length] }}
@@ -656,7 +656,7 @@ function DistributionBar({ rows }: { rows: Array<{ name: string; count: number; 
       </div>
       <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 sm:grid-cols-3">
         {rows.map((row, index) => (
-          <li key={row.name} className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-[0.75rem] text-muted-foreground" title={`${row.name} · ${row.count.toLocaleString("en-US")} events · ${shareOf(row).toFixed(1)}%`}>
+          <li key={row.name} className="flex min-w-0 items-center gap-1.5 whitespace-nowrap text-[0.75rem] text-muted-foreground" title={`${row.name} Â· ${row.count.toLocaleString("en-US")} events Â· ${shareOf(row).toFixed(1)}%`}>
             <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: DISTRIBUTION_SHADES[index % DISTRIBUTION_SHADES.length] }} />
             <span className="truncate">{row.name}</span>
             <span className="tabular-nums">{shareOf(row).toFixed(1)}%</span>
@@ -677,7 +677,7 @@ const SOURCE_ICONS: Record<string, typeof Settings2> = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Severity week trend — stacked CSS bars for Critical/Warning/Info    */
+/* Severity week trend â€” stacked CSS bars for Critical/Warning/Info    */
 /* ------------------------------------------------------------------ */
 const DOW_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -709,7 +709,7 @@ function SeverityWeekTrend({ activeSeverities }: { activeSeverities: ReadonlySet
         {EVENT_WEEK_DAYS.map((day) => {
           const dayTotal = visibleTotal(day);
           const heightPct = (segment: number) => `${Math.max(dayTotal > 0 ? (segment / maxDay) * 100 : 0, segment > 0 ? 1.5 : 0)}%`;
-          const tooltip = `${day.date} — Critical ${day.critical.toLocaleString("en-US")} · Warning ${day.warning.toLocaleString("en-US")} · Info ${day.info.toLocaleString("en-US")} · Debug ${day.debug.toLocaleString("en-US")}`;
+          const tooltip = `${day.date} â€” Critical ${day.critical.toLocaleString("en-US")} Â· Warning ${day.warning.toLocaleString("en-US")} Â· Info ${day.info.toLocaleString("en-US")} Â· Debug ${day.debug.toLocaleString("en-US")}`;
           return (
             <div key={day.label} className="flex h-full min-w-0 flex-1 flex-col items-stretch gap-1">
               <div className="flex h-full min-h-0 flex-col-reverse items-stretch justify-start gap-[0.125rem]" title={tooltip} aria-label={tooltip}>
@@ -734,7 +734,7 @@ const DB_SOURCE_HUES = [
   { bar: "oklch(0.8369 0.1644 84.43)", icon: "text-amber-500 dark:text-amber-400" },
 ] as const;
 
-/* Top database-backed sources — counts scale with severity filter */
+/* Top database-backed sources â€” counts scale with severity filter */
 /* ------------------------------------------------------------------ */
 function TopDatabaseSources({ activeSeverities, onSelect }: { activeSeverities: ReadonlySet<EventSeverity>; onSelect: (name: string) => void }) {
   const share = activeSeverities.size === 0
@@ -769,7 +769,7 @@ function TopDatabaseSources({ activeSeverities, onSelect }: { activeSeverities: 
   );
 }
 
-/** One-line insight — peak hour from the heatmap data. */
+/** One-line insight â€” peak hour from the heatmap data. */
 function QuickInsightStrip() {
   const hour = EVENT_PEAK_HOUR.hour;
   const hour12 = new Date();
@@ -778,13 +778,13 @@ function QuickInsightStrip() {
   return (
     <div className="flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-1.5 text-[0.75rem] text-blue-800 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300" role="note">
       <Info size={13} aria-hidden="true" className="shrink-0" />
-      <span className="min-w-0">Peak hour: <b>{timeLabel}</b> · {EVENT_PEAK_HOUR.count.toLocaleString("en-US")} events</span>
+      <span className="min-w-0">Peak hour: <b>{timeLabel}</b> Â· {EVENT_PEAK_HOUR.count.toLocaleString("en-US")} events</span>
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Resolution status — stacked bar + legend; Open filters the table    */
+/* Resolution status â€” stacked bar + legend; Open filters the table    */
 /* ------------------------------------------------------------------ */
 const RESOLUTION_BAR_COLOR: Record<string, string> = { Resolved: "oklch(0.6271 0.1699 149.21)", Acknowledged: "oklch(0.6658 0.1574 58.32)", Open: "oklch(0.5771 0.2152 27.33)" };
 const RESOLUTION_BADGE: Record<string, string> = {
@@ -818,7 +818,7 @@ function ResolutionStatus({ onOpenFilter }: { onOpenFilter: () => void }) {
           const item = (
             <>
               <i aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: RESOLUTION_BAR_COLOR[segment.label] }} />
-              <span className="tabular-nums">{segment.label} <b>{segment.count.toLocaleString("en-US")} · {pct.toFixed(0)}%</b></span>
+              <span className="tabular-nums">{segment.label} <b>{segment.count.toLocaleString("en-US")} Â· {pct.toFixed(0)}%</b></span>
             </>
           );
           if (segment.label === "Open") {
@@ -866,7 +866,7 @@ const BUILTIN_VIEWS: SavedView[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Row action menu — portal-rendered, smart position, full keyboard     */
+/* Row action menu â€” portal-rendered, smart position, full keyboard     */
 /* ------------------------------------------------------------------ */
 const MENU_WIDTH = 200;
 const MENU_HEIGHT_ESTIMATE = 200;
@@ -1247,16 +1247,16 @@ export function EventsExplorerDashboard() {
   const rangeEnd = Math.min(safePage * perPage, sortedEvents.length);
   const displayTotal = isDefaultFilters(applied) ? EVENT_TOTALS.total : Math.round((EVENT_TOTALS.total * sortedEvents.length) / SAMPLE_TOTAL);
 
-  const pageItems = useMemo<Array<number | "…">>(() => {
-    const items: Array<number | "…"> = [];
+  const pageItems = useMemo<Array<number | "â€¦">>(() => {
+    const items: Array<number | "â€¦"> = [];
     if (pageCount <= 7) {
       for (let index = 1; index <= pageCount; index += 1) items.push(index);
       return items;
     }
     items.push(1);
-    if (safePage > 3) items.push("…");
+    if (safePage > 3) items.push("â€¦");
     for (let index = Math.max(2, safePage - 1); index <= Math.min(pageCount - 1, safePage + 1); index += 1) items.push(index);
-    if (safePage < pageCount - 2) items.push("…");
+    if (safePage < pageCount - 2) items.push("â€¦");
     items.push(pageCount);
     return items;
   }, [pageCount, safePage]);
@@ -1302,7 +1302,7 @@ export function EventsExplorerDashboard() {
   };
 
   const saveCurrentView = () => {
-    const name = draft.query ? (draft.query.length > 32 ? `${draft.query.slice(0, 32)}…` : draft.query) : `View ${savedViews.length + 1}`;
+    const name = draft.query ? (draft.query.length > 32 ? `${draft.query.slice(0, 32)}â€¦` : draft.query) : `View ${savedViews.length + 1}`;
     const view: SavedView = { id: `view-${Date.now()}`, name, filters: { ...draft } };
     const next = [view, ...savedViews].slice(0, 8);
     setSavedViews(next);
@@ -1325,7 +1325,7 @@ export function EventsExplorerDashboard() {
     const nextDraft: AppliedFilters = { ...draft, timeRange: "Custom range", brush: { from: first.epochMs, to: last.epochMs + stepMs - 1 } };
     setBrush(next);
     setDraft(nextDraft);
-    commit(nextDraft, `Time range set to ${first.label} – ${last.label}`);
+    commit(nextDraft, `Time range set to ${first.label} â€“ ${last.label}`);
   };
 
   const selectRangeTab = (key: TrendRangeKey) => {
@@ -1459,7 +1459,7 @@ export function EventsExplorerDashboard() {
                   <button key={key} type="button" aria-pressed={trendRange === key} onClick={() => selectRangeTab(key)} className={cn("h-7 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", trendRange === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent")}>{key}</button>
                 ))}
               </div>
-              <span className="hidden text-[0.75rem] text-muted-foreground xl:block">Drag to select a window · click a bar to isolate it</span>
+              <span className="hidden text-[0.75rem] text-muted-foreground xl:block">Drag to select a window Â· click a bar to isolate it</span>
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Toggle severity series">
               {(["Critical", "Warning", "Info", "Debug"] as EventSeverity[]).map((severity) => {
@@ -1538,7 +1538,7 @@ export function EventsExplorerDashboard() {
               </div>
             </>)}
             <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-muted-foreground">
-              <span className="flex items-center gap-1.5"><RefreshCw size={12} aria-hidden="true" className="shrink-0" />Last updated: just now · Auto-refresh 30s</span>
+              <span className="flex items-center gap-1.5"><RefreshCw size={12} aria-hidden="true" className="shrink-0" />Last updated: just now Â· Auto-refresh 30s</span>
               <button type="button" onClick={() => notify("Events refreshed.")} className="inline-flex shrink-0 items-center gap-1 font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><RefreshCw size={12} aria-hidden="true" />Refresh</button>
             </div>
           </div>
@@ -1568,10 +1568,10 @@ export function EventsExplorerDashboard() {
             <DistributionBar rows={EVENT_SOURCES} />
             <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.75rem] text-muted-foreground">
               <span>Peak source: <b className="font-semibold text-foreground">{EVENT_SOURCES[0].name} ({EVENT_SOURCES[0].pct.toFixed(1)}%)</b></span>
-              <span aria-hidden="true">·</span>
+              <span aria-hidden="true">Â·</span>
               <span>Total sources: <b className="tabular-nums font-semibold text-foreground">{EVENT_SOURCES.length}</b></span>
-              <span aria-hidden="true">·</span>
-              <span>Last 7 days · <b className="tabular-nums font-semibold text-foreground">{formatCompact(EVENT_TOTALS.total)}</b> events</span>
+              <span aria-hidden="true">Â·</span>
+              <span>Last 7 days Â· <b className="tabular-nums font-semibold text-foreground">{formatCompact(EVENT_TOTALS.total)}</b> events</span>
             </div>
           </div>
         </Panel>
@@ -1581,10 +1581,10 @@ export function EventsExplorerDashboard() {
             <DistributionBar rows={EVENT_HOSTS} />
             <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.75rem] text-muted-foreground">
               <span>Busiest host: <b className="font-semibold text-foreground">{EVENT_HOSTS[0].name} ({EVENT_HOSTS[0].pct.toFixed(1)}%)</b></span>
-              <span aria-hidden="true">·</span>
+              <span aria-hidden="true">Â·</span>
               <span>Total hosts: <b className="tabular-nums font-semibold text-foreground">{EVENT_HOSTS.length}</b></span>
-              <span aria-hidden="true">·</span>
-              <span>Last 7 days · <b className="tabular-nums font-semibold text-foreground">{formatCompact(EVENT_TOTALS.total)}</b> events</span>
+              <span aria-hidden="true">Â·</span>
+              <span>Last 7 days Â· <b className="tabular-nums font-semibold text-foreground">{formatCompact(EVENT_TOTALS.total)}</b> events</span>
             </div>
           </div>
         </Panel>
@@ -1594,7 +1594,7 @@ export function EventsExplorerDashboard() {
               const StatusIcon = STATUS_META[resolveStatus(event)].icon;
               return (
                 <li key={event.id}>
-                  <Link href={`/events-explorer/${event.id}`} className="grid h-11 grid-cols-[56px_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <Link href={`/monitoring/events-explorer/${event.id}`} className="grid h-11 grid-cols-[56px_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-1 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     <time className="whitespace-nowrap text-[0.75rem] tabular-nums text-muted-foreground" dateTime={event.at}>{relativeTime(event.epochMs)}</time>
                     <span className="flex min-w-0 items-center gap-2">
                       <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-semibold", SEVERITY_BADGE[event.severity])}><i aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full", SEVERITY_DOT[event.severity])} />{event.severity}</span>
@@ -1691,7 +1691,7 @@ export function EventsExplorerDashboard() {
       </section>
 
       <Panel
-        title={`All Events (${status === "loading" ? "…" : (isDefaultFilters(applied) ? EVENT_TOTALS.total : sortedEvents.length).toLocaleString("en-US")})`}
+        title={`All Events (${status === "loading" ? "â€¦" : (isDefaultFilters(applied) ? EVENT_TOTALS.total : sortedEvents.length).toLocaleString("en-US")})`}
         className="flex min-w-0 flex-col rounded-xl p-4"
         titleClassName="text-[1rem] font-semibold"
       >
@@ -1755,8 +1755,8 @@ export function EventsExplorerDashboard() {
                   <tr
                     tabIndex={0}
                     role="link"
-                    onClick={(click) => { if ((click.target as HTMLElement).closest("button,a,input,select,details")) return; router.push(`/events-explorer/${event.id}`); }}
-                    onKeyDown={(keyEvent) => { if (keyEvent.key === "Enter") router.push(`/events-explorer/${event.id}`); }}
+                    onClick={(click) => { if ((click.target as HTMLElement).closest("button,a,input,select,details")) return; router.push(`/monitoring/events-explorer/${event.id}`); }}
+                    onKeyDown={(keyEvent) => { if (keyEvent.key === "Enter") router.push(`/monitoring/events-explorer/${event.id}`); }}
                     aria-label={`Open event ${event.id}: ${event.message}`}
                     className="cursor-pointer border-b border-border/70 align-middle transition-colors last:border-0 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                   >
@@ -1769,11 +1769,11 @@ export function EventsExplorerDashboard() {
                     <td className="whitespace-nowrap px-2 py-1.5 text-muted-foreground">{event.category}</td>
                     <td className="whitespace-nowrap px-2 py-1.5"><span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold", STATUS_META[eventStatus].className)}><StatusIcon size={11} aria-hidden="true" />{eventStatus}</span></td>
                     <td className="whitespace-nowrap px-2 py-1.5 tabular-nums text-foreground">
-                      <button type="button" onClick={(click) => { click.stopPropagation(); setExpandedId((current) => (current === event.id ? null : event.id)); }} aria-expanded={expanded} aria-label={expanded ? "Collapse occurrences" : `${event.count} occurrences, expand`} className="inline-flex items-center gap-1 rounded-lg px-1.5 py-0.5 text-xs font-semibold text-primary hover:bg-primary/10">×{event.count}<ChevronDown size={11} className={cn("transition-transform", expanded && "rotate-180")} aria-hidden="true" /></button>
+                      <button type="button" onClick={(click) => { click.stopPropagation(); setExpandedId((current) => (current === event.id ? null : event.id)); }} aria-expanded={expanded} aria-label={expanded ? "Collapse occurrences" : `${event.count} occurrences, expand`} className="inline-flex items-center gap-1 rounded-lg px-1.5 py-0.5 text-xs font-semibold text-primary hover:bg-primary/10">Ã—{event.count}<ChevronDown size={11} className={cn("transition-transform", expanded && "rotate-180")} aria-hidden="true" /></button>
                     </td>
                     <td className="whitespace-nowrap px-2 py-1.5" onClick={(click) => click.stopPropagation()}>
                       <span className="flex items-center gap-1">
-                        <Link href={`/events-explorer/${event.id}`} className="whitespace-nowrap font-semibold text-primary hover:underline">View</Link>
+                        <Link href={`/monitoring/events-explorer/${event.id}`} className="whitespace-nowrap font-semibold text-primary hover:underline">View</Link>
                         <RowActionMenu
                           eventId={event.id}
                           open={openMenuId === event.id}
@@ -1783,7 +1783,7 @@ export function EventsExplorerDashboard() {
                           onAssign={() => notify(`${event.id} assigned (mock).`)}
                           onResolve={() => { setStatusOverrides((prev) => ({ ...prev, [event.id]: "Resolved" })); notify(`${event.id} marked resolved.`); }}
                           onCreateAlertRule={() => notify(`Alert rule created from ${event.id} (mock).`)}
-                          onCopyLink={() => { void navigator.clipboard?.writeText(`${window.location.origin}/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied"); }}
+                          onCopyLink={() => { void navigator.clipboard?.writeText(`${window.location.origin}/monitoring/events-explorer/${event.id}`).catch(() => undefined); notify("Link copied"); }}
                         />
                       </span>
                     </td>
@@ -1819,7 +1819,7 @@ export function EventsExplorerDashboard() {
         </div>
 
         <div className="mt-auto flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[0.8125rem] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}–{rangeEnd}</b> of <b className="tabular-nums text-foreground">{displayTotal.toLocaleString("en-US")}</b> events</p>
+          <p className="text-[0.8125rem] text-muted-foreground">Showing <b className="tabular-nums text-foreground">{rangeStart}â€“{rangeEnd}</b> of <b className="tabular-nums text-foreground">{displayTotal.toLocaleString("en-US")}</b> events</p>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[0.75rem] text-muted-foreground">Rows per page</span>
             <Select value={String(perPage)} onValueChange={(value) => { setPerPage(Number(value)); setPage(1); }}>
@@ -1827,8 +1827,8 @@ export function EventsExplorerDashboard() {
               <SelectContent>{[10, 25, 50].map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}</SelectContent>
             </Select>
             <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={safePage === 1} aria-label="Previous page" className="grid h-8 w-8 place-items-center rounded-lg border border-border text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronLeft size={14} aria-hidden="true" /></button>
-            {pageItems.map((item, index) => item === "…"
-              ? <span key={`ellipsis-${index}`} className="px-1 text-sm text-muted-foreground">…</span>
+            {pageItems.map((item, index) => item === "â€¦"
+              ? <span key={`ellipsis-${index}`} className="px-1 text-sm text-muted-foreground">â€¦</span>
               : <button key={item} type="button" onClick={() => setPage(item)} aria-label={`Page ${item}`} aria-current={item === safePage ? "page" : undefined} className={cn("h-8 w-8 rounded-lg border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", item === safePage ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground hover:bg-accent")}>{item}</button>)}
             <button type="button" onClick={() => setPage((value) => Math.min(pageCount, value + 1))} disabled={safePage === pageCount} aria-label="Next page" className="grid h-8 w-8 place-items-center rounded-lg border border-border text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ChevronRight size={14} aria-hidden="true" /></button>
           </div>
@@ -1838,11 +1838,11 @@ export function EventsExplorerDashboard() {
       <section aria-label="Event locations and activity" className="grid items-stretch gap-4 xl:grid-cols-2">
         <Panel title="Events by Location" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<button type="button" onClick={() => notify("Full location breakdown is a mock view.")} className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={14} aria-hidden="true" /></button>}>
           <BreakdownBarList rows={EVENT_LOCATIONS} />
-          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Top {EVENT_LOCATIONS.length} regions by event volume · last 7 days</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Top {EVENT_LOCATIONS.length} regions by event volume Â· last 7 days</div>
         </Panel>
-        <Panel title="Event Activity Heatmap" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<span className="text-[0.75rem] text-muted-foreground">Last 7 days · hourly</span>}>
+        <Panel title="Event Activity Heatmap" className="flex h-full min-w-0 flex-col rounded-xl p-4" titleClassName="text-[1rem] font-semibold" action={<span className="text-[0.75rem] text-muted-foreground">Last 7 days Â· hourly</span>}>
           <ActivityHeatmap />
-          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Darker cells = more events · hover a cell for the exact count</div>
+          <div className="mt-auto border-t border-border pt-2 text-[0.75rem] text-muted-foreground">Darker cells = more events Â· hover a cell for the exact count</div>
         </Panel>
       </section>
       </>)}

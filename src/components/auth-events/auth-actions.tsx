@@ -52,7 +52,7 @@ function AdminFooterNote({ danger }: { danger?: boolean }) {
     <p className="flex items-center gap-1.5 text-xs text-muted-foreground" title={MOCK_ADMIN_PERMISSION ? undefined : ADMIN_PERMISSION_HINT}>
       <Lock size={12} aria-hidden="true" />
       {MOCK_ADMIN_PERMISSION ? "Demo: action runs with admin elevation." : ADMIN_PERMISSION_HINT}
-      {danger && <span aria-hidden="true" className="ml-1 text-red-500">· this affects production traffic</span>}
+      {danger && <span aria-hidden="true" className="ml-1 text-red-500">Â· this affects production traffic</span>}
     </p>
   );
 }
@@ -119,7 +119,7 @@ export function BlockIpDialog({ open, onOpenChange, ips, onDone }: BaseDialogPro
                   <SelectItem value="24h">24 hours</SelectItem>
                   <SelectItem value="7d">7 days</SelectItem>
                   <SelectItem value="permanent">Permanent</SelectItem>
-                  <SelectItem value="custom">Custom…</SelectItem>
+                  <SelectItem value="custom">Customâ€¦</SelectItem>
                 </SelectContent>
               </Select>
             </label>
@@ -187,7 +187,7 @@ function SessionCountDialog({ open, onOpenChange, user, kind, onDone }: BaseDial
   const confirm = () => {
     if (kind === "reset") {
       const count = forceAuthPasswordReset(user);
-      onDone({ message: `Password reset forced for ${user} · ${count} sessions invalidated` });
+      onDone({ message: `Password reset forced for ${user} Â· ${count} sessions invalidated` });
     } else {
       const count = revokeAuthSessions(user);
       onDone({ message: `${count} active sessions revoked for ${user}` });
@@ -257,7 +257,7 @@ export function MarkReviewedDialog({ open, onOpenChange, ids, onDone }: BaseDial
       <DialogContent className="w-[min(26.25rem,calc(100vw-2rem))]">
         <DialogHeader>
           <DialogTitle>Mark as reviewed</DialogTitle>
-          <DialogDescription>Marks {ids.length} {ids.length === 1 ? "event" : "events"} as triaged by your team. The finding stays visible in the feed but is tagged “Reviewed”.</DialogDescription>
+          <DialogDescription>Marks {ids.length} {ids.length === 1 ? "event" : "events"} as triaged by your team. The finding stays visible in the feed but is tagged â€œReviewedâ€.</DialogDescription>
         </DialogHeader>
         <ConfirmFooter open={open} onOpenChange={onOpenChange} confirmLabel="Mark reviewed" onConfirm={confirm} />
       </DialogContent>
@@ -280,7 +280,7 @@ export function CreateIncidentDialog({ open, onOpenChange, prefill, onDone }: Ba
   }, [open, prefill.title, prefill.impact]);
   const confirm = () => {
     const id = createAuthIncident({ title, severity, impact, hosts: prefill.hosts, tags: ["security", "auth"] });
-    onDone({ message: `Incident ${id} declared`, href: `/incidents/${id}` });
+    onDone({ message: `Incident ${id} declared`, href: `/operations/incidents/${id}` });
     onOpenChange(false);
   };
   return (
@@ -300,9 +300,9 @@ export function CreateIncidentDialog({ open, onOpenChange, prefill, onDone }: Ba
             <Select value={severity} onValueChange={(value) => setSeverity(value as "SEV1" | "SEV2" | "SEV3")}>
               <SelectTrigger className="h-9 w-full text-sm" aria-label="Incident severity"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="SEV1">SEV1 — critical impact</SelectItem>
-                <SelectItem value="SEV2">SEV2 — major degradation</SelectItem>
-                <SelectItem value="SEV3">SEV3 — minor / contained</SelectItem>
+                <SelectItem value="SEV1">SEV1 â€” critical impact</SelectItem>
+                <SelectItem value="SEV2">SEV2 â€” major degradation</SelectItem>
+                <SelectItem value="SEV3">SEV3 â€” minor / contained</SelectItem>
               </SelectContent>
             </Select>
           </label>
@@ -348,9 +348,9 @@ export function DetectionDialog({ detection, open, onOpenChange, onBlockIp, onLo
           <ul className="mt-1.5 max-h-52 divide-y divide-border overflow-y-auto rounded-lg border border-border">
             {related.map((event) => (
               <li key={event.id}>
-                <a href={`/authentication-events/${event.id}`} className="flex items-center justify-between gap-2 px-3 py-2 text-[0.8125rem] transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:bg-muted/50">
+                <a href={`/security/authentication-events/${event.id}`} className="flex items-center justify-between gap-2 px-3 py-2 text-[0.8125rem] transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:bg-muted/50">
                   <span className="min-w-0 truncate font-mono font-semibold text-primary">{event.id}</span>
-                  <span className="min-w-0 truncate text-muted-foreground">{event.method} · {event.result}</span>
+                  <span className="min-w-0 truncate text-muted-foreground">{event.method} Â· {event.result}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">{timeAgo(event.time)}</span>
                 </a>
               </li>
@@ -383,7 +383,7 @@ export function AuthToast({ toast, onUndo, onDismiss }: { toast: AuthToastState 
   return (
     <div role="status" className="fixed bottom-4 right-4 z-[1300] flex max-w-md items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-lg">
       <span className="min-w-0">{toast.message}</span>
-      {toast.href && <a href={toast.href} className="shrink-0 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">View →</a>}
+      {toast.href && <a href={toast.href} className="shrink-0 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">View â†’</a>}
       {toast.undo && <button type="button" className="shrink-0 rounded-lg font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => { toast.undo?.(); onUndo?.(toast); onDismiss(); }}>Undo</button>}
       <button type="button" onClick={onDismiss} aria-label="Dismiss notification" className="shrink-0 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"><X size={14} aria-hidden="true" /></button>
     </div>

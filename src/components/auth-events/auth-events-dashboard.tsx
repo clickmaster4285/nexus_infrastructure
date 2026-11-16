@@ -297,7 +297,7 @@ export function AuthEventsDashboard() {
     });
   }, [events, tab, resultFilter, methodFilter, typeFilter, countryFilter, userTypeFilter, riskFilter, reviewFilter, flagFilters, range, activeBucket, query, reasonFilter, sort]);
 
-  /* Live tail — fabricate a fresh mock event every 2s (in-memory only). */
+  /* Live tail â€” fabricate a fresh mock event every 2s (in-memory only). */
   const liveBuffer = useRef<AuthEvent[]>([]);
   useEffect(() => {
     if (!liveTail) return undefined;
@@ -422,7 +422,7 @@ export function AuthEventsDashboard() {
   const openEvent = useCallback((eventId: string) => {
     const top = window.scrollY;
     sessionStorage.setItem("auth-events:scroll", String(top));
-    router.push(`/authentication-events/${eventId}`);
+    router.push(`/security/authentication-events/${eventId}`);
   }, [router]);
 
   const applySavedView = useCallback((patch: Record<string, string | null>) => {
@@ -448,7 +448,7 @@ export function AuthEventsDashboard() {
     const next = [...savedViews.filter((view) => view.name !== name), { name, patch }];
     if (persistSavedViews(next)) {
       setSavedViews(next);
-      notify({ message: `View “${name}” saved` });
+      notify({ message: `View â€œ${name}â€ saved` });
     } else {
       notify({ message: "Could not persist the view (localStorage unavailable)" });
     }
@@ -495,7 +495,7 @@ export function AuthEventsDashboard() {
   }, [events, handleExport, selected]);
 
   const copyLink = useCallback((id: string) => {
-    const url = `${window.location.origin}/authentication-events/${id}`;
+    const url = `${window.location.origin}/security/authentication-events/${id}`;
     try {
       void navigator.clipboard?.writeText(url);
       notify({ message: "Event link copied to clipboard" });
@@ -560,7 +560,7 @@ export function AuthEventsDashboard() {
                 { key: "json", label: "JSON (filtered)", onSelect: () => handleExport("json") },
               ]}
             />
-            <Button  onClick={() => router.push("/alert-rules")}><BellPlus size={15} />Create Alert Rule</Button>
+            <Button  onClick={() => router.push("/operations/alert-rules")}><BellPlus size={15} />Create Alert Rule</Button>
           </div>
         }
       />
@@ -570,9 +570,9 @@ export function AuthEventsDashboard() {
         <div role="status" className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-900 dark:border-red-500/25 dark:bg-red-500/10 dark:text-red-200">
           <span className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
             <span className="flex items-center gap-2 font-semibold"><AlertTriangle size={16} aria-hidden="true" />{suspects.length} brute-force suspects</span>
-            <span className="hidden sm:inline" aria-hidden="true">�</span>
+            <span className="hidden sm:inline" aria-hidden="true">ï¿½</span>
             <span>{summary.impossibleTravel} impossible-travel logins</span>
-            <span className="hidden sm:inline" aria-hidden="true">�</span>
+            <span className="hidden sm:inline" aria-hidden="true">ï¿½</span>
             <span>{summary.lockedAccounts} locked accounts</span>
           </span>
           <button type="button" onClick={() => detectionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
@@ -582,7 +582,7 @@ export function AuthEventsDashboard() {
       ) : (
         <div role="status" className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200">
           <span className="flex items-center gap-2"><ShieldCheck size={16} aria-hidden="true" />No suspicious authentication activity</span>
-          <span className="text-xs">{summary.total.toLocaleString()} events scanned � last 24h</span>
+          <span className="text-xs">{summary.total.toLocaleString()} events scanned ï¿½ last 24h</span>
         </div>
       )}
 
@@ -596,7 +596,7 @@ export function AuthEventsDashboard() {
         <StatCard icon={<ShieldAlert size={19} />} label="Suspicious Events" value={String(summary.suspicious)} delta={summary.deltas.suspicious} deltaPercent="+3 today" goodDirection="down" iconTone="bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300" className="min-h-[7rem]" detail="in the last 24h" onClick={() => applyFilters({ tab: "suspicious" })} onClickLabel="Show suspicious events" />
       </section>
 
-      {/* Row 1 � activity chart + detections */}
+      {/* Row 1 ï¿½ activity chart + detections */}
       <section className="grid items-stretch gap-4 xl:grid-cols-12">
         <ChartCard
           title="Login Activity"
@@ -689,7 +689,7 @@ export function AuthEventsDashboard() {
                         </span>
                         <span className="flex w-full items-center gap-2 pl-9">
                           <SeverityBadge severity={detection.severity} />
-                          <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground"><b className="tabular-nums text-foreground">{detection.count.toLocaleString()}</b> events · since {timeAgo(detection.firstSeen).replace(" ago", "")}</span>
+                          <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground"><b className="tabular-nums text-foreground">{detection.count.toLocaleString()}</b> events Â· since {timeAgo(detection.firstSeen).replace(" ago", "")}</span>
                           <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{timeAgo(detection.lastSeen)}</span>
                         </span>
                       </button>
@@ -707,13 +707,13 @@ export function AuthEventsDashboard() {
               )}
             </ul>
             <div className="mt-auto border-t border-border pt-3">
-              <ViewAllLink href="/authentication-events?tab=suspicious" label="View all detections" />
+              <ViewAllLink href="/security/authentication-events?tab=suspicious" label="View all detections" />
             </div>
           </ChartCard>
         </div>
       </section>
 
-      {/* Row 2 � methods, failure reasons, locations */}
+      {/* Row 2 ï¿½ methods, failure reasons, locations */}
       <section className="grid items-stretch gap-4 xl:grid-cols-3">
         <ChartCard
           title="Auth Methods"
@@ -759,7 +759,7 @@ export function AuthEventsDashboard() {
               );
             })}
           </ul>
-          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">top reason: <b className="text-foreground">Wrong password � {Math.round((724 / AUTH_FAILURE_REASONS.reduce((acc, item) => acc + item.count, 0)) * 100)}%</b></p>
+          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">top reason: <b className="text-foreground">Wrong password ï¿½ {Math.round((724 / AUTH_FAILURE_REASONS.reduce((acc, item) => acc + item.count, 0)) * 100)}%</b></p>
         </ChartCard>
 
         <ChartCard
@@ -781,11 +781,11 @@ export function AuthEventsDashboard() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">Failed % per country � <b className="text-foreground">unusual</b> = first country seen for this tenant</p>
+          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">Failed % per country ï¿½ <b className="text-foreground">unusual</b> = first country seen for this tenant</p>
         </ChartCard>
       </section>
 
-      {/* Row 3 � targeted accounts, top IPs, privileged & service accounts */}
+      {/* Row 3 ï¿½ targeted accounts, top IPs, privileged & service accounts */}
       <section className="grid items-stretch gap-4 xl:grid-cols-3">
         <ChartCard
           title="Top Targeted Accounts"
@@ -801,7 +801,7 @@ export function AuthEventsDashboard() {
                     <InitialsAvatar name={account.user.split("@")[0]} size={26} />
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-1.5"><span className="truncate text-[0.8125rem] font-medium text-foreground">{account.user}</span>{lockedUser && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"><Lock size={10} />Locked</span>}</span>
-                      <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-rose-400" style={{ width: `${Math.round((account.failedAttempts / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{account.failedAttempts} failed � {timeAgo(new Date(Date.now() - account.lastAttemptMinutesAgo * 60_000).toISOString())}</span></span>
+                      <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-rose-400" style={{ width: `${Math.round((account.failedAttempts / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{account.failedAttempts} failed ï¿½ {timeAgo(new Date(Date.now() - account.lastAttemptMinutesAgo * 60_000).toISOString())}</span></span>
                     </span>
                   </button>
                   <button type="button" onClick={() => setLockTarget({ user: account.user, locked: Boolean(lockedUser) })} aria-label={lockedUser ? `Unlock ${account.user}` : `Lock ${account.user}`} title={lockedUser ? "Unlock account" : "Lock account"} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100">
@@ -811,7 +811,7 @@ export function AuthEventsDashboard() {
               );
             })}
           </ul>
-          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">Sorted by failed attempts � <button type="button" className="font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "failed" })}>view all failures ?</button></p>
+          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">Sorted by failed attempts ï¿½ <button type="button" className="font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "failed" })}>view all failures ?</button></p>
         </ChartCard>
 
         <ChartCard
@@ -829,7 +829,7 @@ export function AuthEventsDashboard() {
                 <CountryFlag code={source.countryCode} name={source.country} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-[0.8125rem] font-semibold text-foreground">{source.ip}{source.anonymizer && <span className="ml-1.5 rounded border border-violet-200 bg-violet-50 px-1 py-0.5 align-middle text-xs font-semibold text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300" title="Traffic via known anonymizer exit">anonymizer</span>}</p>
-                  <p className="text-xs text-muted-foreground"><b className="tabular-nums text-foreground">{source.attempts}</b> attempts � <b className="tabular-nums text-foreground">{source.users}</b> users targeted</p>
+                  <p className="text-xs text-muted-foreground"><b className="tabular-nums text-foreground">{source.attempts}</b> attempts ï¿½ <b className="tabular-nums text-foreground">{source.users}</b> users targeted</p>
                 </div>
                 <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold", source.status === "Blocked" ? "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" : source.status === "Watch" ? "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" : "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300")}>
                   <i className={cn("h-1.5 w-1.5 rounded-full", source.status === "Blocked" ? "bg-red-500" : source.status === "Watch" ? "bg-amber-500" : "bg-slate-400")} aria-hidden="true" />
@@ -849,7 +849,7 @@ export function AuthEventsDashboard() {
           <ul className="flex flex-1 flex-col divide-y divide-border">
             {PRIVILEGED_ROWS.map((account) => (
               <li key={account.account}>
-                <Link href={`/access-control?user=${encodeURIComponent(account.account)}`} className="flex items-center gap-2 py-2 rounded-md px-1 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40">
+                <Link href={`/security/access-control?user=${encodeURIComponent(account.account)}`} className="flex items-center gap-2 py-2 rounded-md px-1 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40">
                   <InitialsAvatar name={account.account.replace(/[@.-]/g, " ")} size={26} />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center gap-1.5"><span className="truncate text-[0.8125rem] font-medium text-foreground">{account.account}</span><span className={cn("inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold", account.type === "Admin" ? "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300")}>{account.type}</span>{account.interactiveService && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-500/15 dark:text-red-300" title="Interactive login from a service account"><AlertTriangle size={10} />interactive</span>}</span>
@@ -859,7 +859,7 @@ export function AuthEventsDashboard() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground"><b className="text-red-600 dark:text-red-400">backup-agent</b> signed in interactively via Password � service accounts should use tokens.</p>
+          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground"><b className="text-red-600 dark:text-red-400">backup-agent</b> signed in interactively via Password ï¿½ service accounts should use tokens.</p>
         </ChartCard>
       </section>
 
@@ -869,7 +869,7 @@ export function AuthEventsDashboard() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 pb-3">
             <div>
               <h2 className="text-base font-semibold text-foreground">Authentication Events</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">400 most recent sampled events � totals in tabs are fleet-wide (24h)</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">400 most recent sampled events ï¿½ totals in tabs are fleet-wide (24h)</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <div role="tablist" aria-label="Event tabs" className="flex flex-wrap items-center gap-1">
@@ -902,7 +902,7 @@ export function AuthEventsDashboard() {
             <FilterSelect value={range} onChange={(value) => updateParams({ range: value, page: null, bucket: null })} label="Time range" options={["1H", "24H", "7D", "30D"]} allLabel="" hideAll />
             <div className="relative min-w-[11.25rem] flex-1 sm:min-w-[13.75rem]">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search user, IP, app�" aria-label="Search events" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
+              <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search user, IP, appï¿½" aria-label="Search events" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
             </div>
             {(activeFilterCount > 0) && (
@@ -917,7 +917,7 @@ export function AuthEventsDashboard() {
                 ...(savedViews.length > 0 ? [{ key: "divider-user", label: "", divider: true } as const] : []),
                 ...savedViews.map((view) => ({ key: `user-${view.name}`, label: view.name, onSelect: () => applySavedView(view.patch) })),
                 { key: "divider-save", label: "", divider: true },
-                { key: "save", label: "Save current view�", onSelect: () => setSaveViewOpen(true) },
+                { key: "save", label: "Save current viewï¿½", onSelect: () => setSaveViewOpen(true) },
                 ...(savedViews.length > 0 ? [{ key: "clear", label: "Remove all saved views", danger: true, onSelect: () => { persistSavedViews([]); setSavedViews([]); } }] : []),
               ]}
             />
@@ -996,12 +996,12 @@ export function AuthEventsDashboard() {
                           <InitialsAvatar name={event.user.split("@")[0]} size={compact ? 22 : 28} />
                           <span className="min-w-0">
                             <span className="block max-w-[11.25rem] truncate font-medium text-foreground" title={event.user}>{event.user}</span>
-                            <span className="block text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{event.userType}{accountLocked ? " � locked" : ""}</span>
+                            <span className="block text-[0.6875rem] uppercase tracking-wide text-muted-foreground">{event.userType}{accountLocked ? " ï¿½ locked" : ""}</span>
                           </span>
                         </div>
                       </td>
                       <td className="px-2 py-2 align-middle whitespace-nowrap">
-                        <span className="flex items-center gap-1.5"><span className="font-mono text-[0.8125rem] font-semibold text-foreground">{event.id}</span><span className="text-muted-foreground">�</span><span className="text-muted-foreground">{event.eventType}</span></span>
+                        <span className="flex items-center gap-1.5"><span className="font-mono text-[0.8125rem] font-semibold text-foreground">{event.id}</span><span className="text-muted-foreground">ï¿½</span><span className="text-muted-foreground">{event.eventType}</span></span>
                       </td>
                       <td className="hidden px-2 py-2 align-middle whitespace-nowrap text-muted-foreground md:table-cell">{event.method}</td>
                       <td className="px-2 py-2 align-middle"><ResultBadge result={event.result} /></td>
@@ -1017,7 +1017,7 @@ export function AuthEventsDashboard() {
                           : <span className="text-muted-foreground">{event.target}</span>}
                       </td>
                       <td className="hidden px-2 py-2 align-middle whitespace-nowrap text-muted-foreground xl:table-cell">
-                        <span className="flex items-center gap-1.5" title={event.device}>{event.browser === "curl" || event.browser === "OpenSSH" ? <SquareTerminal size={13} aria-hidden="true" /> : <Laptop size={13} aria-hidden="true" />}{event.browser} � {event.os}</span>
+                        <span className="flex items-center gap-1.5" title={event.device}>{event.browser === "curl" || event.browser === "OpenSSH" ? <SquareTerminal size={13} aria-hidden="true" /> : <Laptop size={13} aria-hidden="true" />}{event.browser} ï¿½ {event.os}</span>
                       </td>
                       <td className="px-2 py-2 align-middle"><div className="flex flex-col gap-1"><RiskScoreBar score={risk} /><FlagChips flags={event.riskFlags} max={2} /></div></td>
                       <td className="px-2 py-2 align-middle text-right">
@@ -1036,7 +1036,7 @@ export function AuthEventsDashboard() {
                               { key: "lock", label: accountLocked ? "Unlock user" : "Lock user", onSelect: () => setLockTarget({ user: event.user, locked: accountLocked }) },
                               { key: "reset", label: "Force password reset", onSelect: () => setForceResetTarget(event.user) },
                               { key: "revoke", label: "Revoke sessions", danger: true, onSelect: () => setRevokeTarget(event.user) },
-                              { key: "incident", label: "Create incident", onSelect: () => setIncidentPrefill({ title: `${event.result === "Failed" ? "Failed login" : event.result}: ${event.user} from ${event.ip}`, impact: `Authentication anomaly on ${event.target} (${event.eventType} � ${event.method}).`, hosts: event.targetKind === "server" ? [event.target] : undefined }) },
+                              { key: "incident", label: "Create incident", onSelect: () => setIncidentPrefill({ title: `${event.result === "Failed" ? "Failed login" : event.result}: ${event.user} from ${event.ip}`, impact: `Authentication anomaly on ${event.target} (${event.eventType} ï¿½ ${event.method}).`, hosts: event.targetKind === "server" ? [event.target] : undefined }) },
                               { key: "d2", label: "", divider: true },
                               { key: "copy", label: "Copy link", onSelect: () => copyLink(event.id) },
                             ]}
@@ -1061,7 +1061,7 @@ export function AuthEventsDashboard() {
           </div>
 
           <Pagination page={clampedPage} pageSize={pageSize} totalItems={filtered.length} onPageChange={(next) => updateParams({ page: String(next) })} onPageSizeChange={(size) => { setPageSize(size); updateParams({ page: null }); }} noun="events" pageSizeOptions={[10, 25, 50]} />
-          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching events sampled from a 24h fleet-wide workload ({summary.total.toLocaleString()} events). Times shown in <b>{utc ? "UTC" : "local time"}</b> � {timeZoneLabel()}.</p>
+          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching events sampled from a 24h fleet-wide workload ({summary.total.toLocaleString()} events). Times shown in <b>{utc ? "UTC" : "local time"}</b> ï¿½ {timeZoneLabel()}.</p>
         </Card>
       </section>
 
@@ -1307,7 +1307,7 @@ function MethodDonut({ onSelect }: { onSelect: (method: string) => void }) {
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Auth methods donut chart" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <b className="font-display text-[1.125rem] leading-none text-foreground tabular-nums">{summary.total.toLocaleString()}</b>
-        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">logins · 24h</span>
+        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">logins Â· 24h</span>
       </div>
     </div>
   );

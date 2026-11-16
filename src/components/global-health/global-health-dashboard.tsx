@@ -23,7 +23,7 @@ import { formatNocIngestionRate } from "@/data/mock/live-operations";
 
 const NocOsmMap = dynamic(
   () => import("@/components/live-operations/noc-osm-map").then((mod) => mod.NocOsmMap),
-  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] animate-pulse place-items-center rounded-lg bg-slate-100 text-[0.75rem] text-slate-500 dark:bg-slate-800">Loading map…</div> },
+  { ssr: false, loading: () => <div className="grid h-full min-h-[13.75rem] animate-pulse place-items-center rounded-lg bg-slate-100 text-[0.75rem] text-slate-500 dark:bg-slate-800">Loading mapâ€¦</div> },
 );
 
 function EChart({ option, label, className, apiRef }: { option: EChartsOption; label: string; className?: string; apiRef?: React.RefObject<echarts.ECharts | null> }) {
@@ -192,7 +192,7 @@ export function GlobalHealthDashboard() {
   const trendStats = (key: typeof trendItems[number]["key"]) => {
     const values = trendRows.map((point) => point[key]);
     const lowest = Math.min(...values);
-    const lowestAt = trendRows[values.indexOf(lowest)]?.time ?? "—";
+    const lowestAt = trendRows[values.indexOf(lowest)]?.time ?? "â€”";
     return { now: values.at(-1) ?? 0, avg: values.reduce((sum, value) => sum + value, 0) / Math.max(values.length, 1), lowest, lowestAt };
   };
   const trendChartApi = useRef<echarts.ECharts | null>(null);
@@ -234,8 +234,8 @@ export function GlobalHealthDashboard() {
         const seriesValues = trendRows.map((point) => point[item.key]);
         const lowestValue = Math.min(...seriesValues);
         const lowestIndex = seriesValues.indexOf(lowestValue);
-        const lowestAt = trendRows[lowestIndex]?.time ?? "—";
-        return { name: item.name, type: "line", smooth: 0.3, showSymbol: false, symbolSize: 7, emphasis: { focus: "series", showSymbol: true }, lineStyle: { width: 2, color: item.color }, itemStyle: { color: item.color }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${item.color}35` }, { offset: 1, color: `${item.color}00` }]) }, data: seriesValues, markPoint: { symbol: "circle", symbolSize: 6, label: { show: false }, itemStyle: { color: item.color, borderColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)", borderWidth: 1.5 }, data: [{ coord: [lowestIndex, lowestValue] }], tooltip: { trigger: "item", formatter: `Lowest ${lowestValue.toFixed(1)}% · ${lowestAt}` } }, markArea: item.key === "infrastructureHealth" ? { silent: true, itemStyle: { color: "oklch(0.7686 0.1647 70.08 / 0.06)" }, data: [[{ yAxis: 97 }, { yAxis: SLA_TARGET }]] } : undefined, markLine: item.key === "infrastructureHealth" ? { symbol: "none", lineStyle: { color: "oklch(0.7106 0.1661 22.22)", type: "dashed", width: 1 }, label: { show: true, formatter: "SLA 99%", position: "insideEndTop", color: "oklch(0.5143 0.1978 16.93)", fontSize: 11, backgroundColor: isDark ? "oklch(0.3079 0.0759 354.51)" : "oklch(0.9694 0.0152 12.42)", padding: [3, 6], borderRadius: 8 }, data: [{ yAxis: SLA_TARGET }] } : undefined, } as unknown as echarts.SeriesOption;
+        const lowestAt = trendRows[lowestIndex]?.time ?? "â€”";
+        return { name: item.name, type: "line", smooth: 0.3, showSymbol: false, symbolSize: 7, emphasis: { focus: "series", showSymbol: true }, lineStyle: { width: 2, color: item.color }, itemStyle: { color: item.color }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: `${item.color}35` }, { offset: 1, color: `${item.color}00` }]) }, data: seriesValues, markPoint: { symbol: "circle", symbolSize: 6, label: { show: false }, itemStyle: { color: item.color, borderColor: isDark ? "oklch(0.2077 0.0398 265.75)" : "oklch(1 0 89.88)", borderWidth: 1.5 }, data: [{ coord: [lowestIndex, lowestValue] }], tooltip: { trigger: "item", formatter: `Lowest ${lowestValue.toFixed(1)}% Â· ${lowestAt}` } }, markArea: item.key === "infrastructureHealth" ? { silent: true, itemStyle: { color: "oklch(0.7686 0.1647 70.08 / 0.06)" }, data: [[{ yAxis: 97 }, { yAxis: SLA_TARGET }]] } : undefined, markLine: item.key === "infrastructureHealth" ? { symbol: "none", lineStyle: { color: "oklch(0.7106 0.1661 22.22)", type: "dashed", width: 1 }, label: { show: true, formatter: "SLA 99%", position: "insideEndTop", color: "oklch(0.5143 0.1978 16.93)", fontSize: 11, backgroundColor: isDark ? "oklch(0.3079 0.0759 354.51)" : "oklch(0.9694 0.0152 12.42)", padding: [3, 6], borderRadius: 8 }, data: [{ yAxis: SLA_TARGET }] } : undefined, } as unknown as echarts.SeriesOption;
       }),
     };
   }, [palette, trendRows, isDark, visibleSeries]);
@@ -300,7 +300,7 @@ export function GlobalHealthDashboard() {
                 <button type="button" onClick={() => focusDip(dip)} aria-label={`Highlight ${dip.seriesName} dip at ${dip.time}, ${dip.value.toFixed(1)} percent, ${Math.abs(dip.gap).toFixed(1)} percent below SLA`} className="grid min-h-7 w-full grid-cols-[48px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg text-left text-[0.75rem] transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <time className="tabular-nums text-muted-foreground">{dip.time}</time>
                   <span className="min-w-0 truncate text-slate-700 dark:text-slate-200">{dip.seriesName} <b className="tabular-nums">{dip.value.toFixed(1)}%</b></span>
-                  <b className="tabular-nums text-rose-600 dark:text-rose-400">(−{Math.abs(dip.gap).toFixed(1)}% vs SLA)</b>
+                  <b className="tabular-nums text-rose-600 dark:text-rose-400">(âˆ’{Math.abs(dip.gap).toFixed(1)}% vs SLA)</b>
                 </button>
               </li>
             ))}
@@ -331,7 +331,7 @@ export function GlobalHealthDashboard() {
             const historyValues = history?.values ?? [item.value];
             const delta = Number((item.value - SLA_TARGET).toFixed(1));
             const deltaText = `${delta > 0 ? "+" : ""}${delta.toFixed(1)}%`;
-            const details = `${item.name} · Last 24 hours: min ${history?.min.toFixed(1) ?? item.value}%, avg ${history?.avg.toFixed(1) ?? item.value}%, max ${history?.max.toFixed(1) ?? item.value}%. Last incident: ${history?.lastIncident ?? item.lastIncident}`;
+            const details = `${item.name} Â· Last 24 hours: min ${history?.min.toFixed(1) ?? item.value}%, avg ${history?.avg.toFixed(1) ?? item.value}%, max ${history?.max.toFixed(1) ?? item.value}%. Last incident: ${history?.lastIncident ?? item.lastIncident}`;
             const selected = selectedComponent === item.name;
 
             return <button id={`health-component-${item.name.toLowerCase()}`} key={item.name} type="button" aria-pressed={selected} aria-label={`${details}. Current health ${item.value}%. ${status === "healthy" ? "Meets SLA" : "Below SLA"}. Click to select component.`} title={details} onClick={() => setSelectedComponent(selected ? null : item.name)} className={cn("grid h-[3.25rem] w-full min-w-0 shrink-0 grid-cols-[minmax(5.5rem,1.15fr)_minmax(2.125rem,1fr)_50px_43px_43px_1rem] items-center gap-1.5 rounded-lg px-1 text-left transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:hover:bg-slate-800/60", selected && "bg-blue-50/70 dark:bg-blue-950/30")}>
@@ -353,11 +353,11 @@ export function GlobalHealthDashboard() {
         {selectedComponent && (() => {
           const selectedHistory = componentHealthHistory.find((series) => series.name === selectedComponent);
           return <div aria-live="polite" className="mt-2 rounded-md bg-slate-50 px-2.5 py-1.5 text-[0.75rem] text-slate-600 dark:bg-slate-800/70 dark:text-slate-300">
-            <b className="text-slate-800 dark:text-slate-100">{selectedComponent}</b>: 24h min {selectedHistory?.min.toFixed(1)}% · avg {selectedHistory?.avg.toFixed(1)}% · max {selectedHistory?.max.toFixed(1)}% · {selectedHistory?.lastIncident}
+            <b className="text-slate-800 dark:text-slate-100">{selectedComponent}</b>: 24h min {selectedHistory?.min.toFixed(1)}% Â· avg {selectedHistory?.avg.toFixed(1)}% Â· max {selectedHistory?.max.toFixed(1)}% Â· {selectedHistory?.lastIncident}
           </div>;
         })()}
         <footer className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-slate-500">
-          <span className="min-w-0 truncate" title={lowestComponent ? `Lowest: ${lowestComponent.name} ${lowestComponent.value.toFixed(1)}%` : undefined}><span className="font-medium">Lowest:</span> <b className="text-slate-700 dark:text-slate-300">{lowestComponent?.name ?? "—"} {lowestComponent?.value.toFixed(1) ?? "—"}%</b></span>
+          <span className="min-w-0 truncate" title={lowestComponent ? `Lowest: ${lowestComponent.name} ${lowestComponent.value.toFixed(1)}%` : undefined}><span className="font-medium">Lowest:</span> <b className="text-slate-700 dark:text-slate-300">{lowestComponent?.name ?? "â€”"} {lowestComponent?.value.toFixed(1) ?? "â€”"}%</b></span>
           <span className="shrink-0">Updated <b className="text-slate-700 dark:text-slate-300">2m ago</b></span>
         </footer>
       </Panel>
@@ -375,20 +375,20 @@ export function GlobalHealthDashboard() {
         <div className="mt-3 grid flex-1 grid-cols-2 gap-3">{resourceHealth.map((resource) => { const barColor = resource.value >= 85 ? "oklch(0.7106 0.1661 22.22)" : resource.value >= 70 ? "oklch(0.8369 0.1644 84.43)" : "oklch(0.7137 0.1434 254.62)"; return <article key={resource.label} className="flex min-w-0 flex-col justify-center rounded-lg border border-border/70 bg-slate-50 p-3 dark:bg-slate-800/60"><div className="flex items-center justify-between gap-2"><span className="flex items-center gap-1.5 text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200"><Icon name={resource.icon} size={15} className="text-blue-500" />{resource.label}</span><StatusIcon value={resource.value} size={14} /></div><b className="mt-2 text-[1.25rem] tabular-nums text-slate-900 dark:text-white">{resource.value}%</b><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div className="h-full rounded-full" style={{ width: `${resource.value}%`, backgroundColor: barColor }} /></div><span className="mt-1.5 text-[0.75rem] text-slate-500">{resource.kind}</span></article>; })}</div>
       </Panel>
 
-      <Panel title="Top Healthy Services" titleClassName="text-[1rem] font-semibold" className="flex min-h-[20.9375rem] min-w-0 flex-col p-4" action={<Link href="/processes-and-services" className="inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link>}>
+      <Panel title="Top Healthy Services" titleClassName="text-[1rem] font-semibold" className="flex min-h-[20.9375rem] min-w-0 flex-col p-4" action={<Link href="/monitoring/processes-and-services" className="inline-flex items-center gap-1 whitespace-nowrap text-[0.75rem] font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link>}>
         <ul className="mt-2 flex min-h-0 flex-1 flex-col divide-y divide-border/70">{topHealthyServices.map((service) => <li key={service.name} className="flex min-h-[2.25rem] flex-1 items-center justify-between gap-2"><span className="flex min-w-0 items-center gap-2"><TechLogo name={service.key} className="!h-6 !w-6 !rounded-md [&_svg]:!h-4 [&_svg]:!w-4" /><span className="truncate text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200">{service.name}</span></span><span className="flex shrink-0 items-center gap-1.5"><b className="whitespace-nowrap text-[0.8125rem] tabular-nums text-slate-800 dark:text-slate-100">{service.percent}%</b><StatusIcon value={service.percent} size={13} /></span></li>)}</ul>
         <footer className="mt-auto border-t border-border pt-2 text-[0.75rem] text-slate-500">Showing {topHealthyServices.length} of {totalHealthyServices} services</footer>
       </Panel>
 
       <Panel title="Health by Environment" titleClassName="text-[1rem] font-semibold" className="flex min-h-[21.875rem] min-w-0 flex-col p-4">
-        <div className="mt-2 flex items-center justify-between text-[0.75rem] text-slate-500"><span>Environment · servers · alerts</span><span className="inline-flex items-center gap-1.5"><i className="h-3 border-l-[0.0938rem] border-solid border-slate-400" />SLA {SLA_TARGET}%</span></div>
+        <div className="mt-2 flex items-center justify-between text-[0.75rem] text-slate-500"><span>Environment Â· servers Â· alerts</span><span className="inline-flex items-center gap-1.5"><i className="h-3 border-l-[0.0938rem] border-solid border-slate-400" />SLA {SLA_TARGET}%</span></div>
         <div className="mt-1 flex min-h-0 flex-1 flex-col justify-between" aria-label="Environments sorted from lowest to highest health">{sortedEnvironments.map((env) => {
           const status = statusForHealth(env.value);
           const scale = Math.max(0, Math.min(100, (env.value - 95) * 20));
           const history = environmentHealthHistory.find((series) => series.name === env.name)?.values ?? [env.value];
           const gap = Number((env.value - SLA_TARGET).toFixed(1));
           return <div id={`health-environment-${env.name.toLowerCase().replace(/\s+/g, "-")}`} key={env.name} title={`${env.name}: ${env.value}% health; ${env.servers} servers; ${env.alerts} alerts`} className="grid min-h-[3rem] grid-cols-[minmax(4.875rem,1.1fr)_minmax(2.125rem,1fr)_50px_43px_42px_1rem] items-center gap-1.5 rounded-md px-0.5 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-            <span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200">{env.name}</b><span className="block truncate text-[0.75rem] text-slate-500">{env.servers} servers · {env.alerts} alerts</span></span>
+            <span className="min-w-0"><b className="block truncate text-[0.8125rem] font-medium text-slate-700 dark:text-slate-200">{env.name}</b><span className="block truncate text-[0.75rem] text-slate-500">{env.servers} servers Â· {env.alerts} alerts</span></span>
             <span className="relative h-[0.375rem] min-w-0 rounded-full bg-slate-100 dark:bg-slate-700"><i className="absolute inset-y-[-0.25rem] left-[80%] z-10 border-l-[0.0938rem] border-solid border-slate-400" /><i className="block h-full rounded-full" style={{ width: `${scale}%`, backgroundColor: statusColors[status] }} /></span>
             <ComponentSparkline values={history} color={statusColors[status]} label={`${env.name} environment`} />
             <b className="whitespace-nowrap text-right text-[0.75rem] tabular-nums text-slate-800 dark:text-slate-100">{env.value.toFixed(1)}%</b>
@@ -396,7 +396,7 @@ export function GlobalHealthDashboard() {
             <StatusIcon value={env.value} size={14} />
           </div>;
         })}</div>
-        <footer className="mt-2 flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>Environment health · last 24h</span><b className={belowSlaEnvironments.length ? "text-amber-700 dark:text-amber-300" : "text-emerald-700 dark:text-emerald-300"}>{belowSlaEnvironments.length} of {environmentHealth.length} below SLA</b></footer>
+        <footer className="mt-2 flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>Environment health Â· last 24h</span><b className={belowSlaEnvironments.length ? "text-amber-700 dark:text-amber-300" : "text-emerald-700 dark:text-emerald-300"}>{belowSlaEnvironments.length} of {environmentHealth.length} below SLA</b></footer>
       </Panel>
     </section>
 
@@ -473,29 +473,29 @@ export function GlobalHealthDashboard() {
               if (!staleCollector) return null;
               const missingTargets = staleCollector.targetsTotal - staleCollector.targetsUp;
               return <div className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-[0.75rem] text-amber-800 dark:bg-amber-950/40 dark:text-amber-200" role="status">
-                <span className="min-w-0 truncate"><b>{staleCollector.name}</b> · {missingTargets} target{missingTargets === 1 ? "" : "s"} down · last seen {staleCollector.lastSeen}</span>
-                <Link href="/metrics-explorer" className="shrink-0 font-semibold text-amber-800 underline-offset-2 hover:underline dark:text-amber-200">Investigate</Link>
+                <span className="min-w-0 truncate"><b>{staleCollector.name}</b> Â· {missingTargets} target{missingTargets === 1 ? "" : "s"} down Â· last seen {staleCollector.lastSeen}</span>
+                <Link href="/monitoring/metrics-explorer" className="shrink-0 font-semibold text-amber-800 underline-offset-2 hover:underline dark:text-amber-200">Investigate</Link>
               </div>;
             })() : <div className="mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-[0.75rem] font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300" role="status">All collectors healthy</div>}
           </div>
         </div>
         <footer className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2 text-[0.75rem] text-slate-500">
           <span>Updated 12s ago</span>
-          <Link href="/metrics-explorer" className="group inline-flex shrink-0 items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all collectors <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" /></Link>
+          <Link href="/monitoring/metrics-explorer" className="group inline-flex shrink-0 items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all collectors <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" /></Link>
         </footer>
       </Panel>
 
       <Panel title="Needs Attention" titleClassName="text-[1rem] font-semibold" className="flex min-h-[31.25rem] min-w-0 flex-col p-4" action={<span className="rounded-full bg-amber-50 px-2 py-1 text-[0.75rem] font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">{attention.length} items</span>}>
         {attention.length ? <>
-          <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Attention summary"><span className="rounded-full bg-rose-50 px-2 py-1 text-[0.75rem] text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">Worst gap <b className="tabular-nums">−{worstAttentionGap.toFixed(2)}%</b></span><span className="rounded-full bg-amber-50 px-2 py-1 text-[0.75rem] text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">Avg gap <b className="tabular-nums">−{averageAttentionGap.toFixed(2)}%</b></span></div>
+          <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Attention summary"><span className="rounded-full bg-rose-50 px-2 py-1 text-[0.75rem] text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">Worst gap <b className="tabular-nums">âˆ’{worstAttentionGap.toFixed(2)}%</b></span><span className="rounded-full bg-amber-50 px-2 py-1 text-[0.75rem] text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">Avg gap <b className="tabular-nums">âˆ’{averageAttentionGap.toFixed(2)}%</b></span></div>
           <ul className="mt-1 flex min-h-0 flex-1 flex-col justify-between divide-y divide-border/70" aria-label="Items below SLA, worst first">{attention.map((item) => {
             const gap = Number((SLA_TARGET - item.value).toFixed(1));
             const critical = gap > 0.5;
             const severityClass = critical ? "text-rose-700 dark:text-rose-300" : "text-amber-700 dark:text-amber-300";
-            const duration = item.belowMinutes ? `${Math.floor(item.belowMinutes / 60)}h ${String(item.belowMinutes % 60).padStart(2, "0")}m` : "—";
+            const duration = item.belowMinutes ? `${Math.floor(item.belowMinutes / 60)}h ${String(item.belowMinutes % 60).padStart(2, "0")}m` : "â€”";
             const targetId = item.kind === "Component" ? `health-component-${item.name.toLowerCase()}` : `health-environment-${item.name.toLowerCase().replace(/\s+/g, "-")}`;
             return <li key={`${item.kind}-${item.name}`} className="flex min-h-[3rem] flex-col justify-center gap-1 py-1">
-              <span className="flex min-w-0 items-center justify-between gap-2"><span className="flex min-w-0 items-center gap-1.5"><b className="truncate text-[0.8125rem] font-medium text-slate-800 dark:text-slate-100">{item.name}</b><span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[0.75rem] text-slate-600 dark:bg-slate-800 dark:text-slate-300">{item.kind}</span></span><span className="flex shrink-0 items-center gap-1.5"><b className="text-[0.75rem] tabular-nums text-slate-700 dark:text-slate-200">{item.value.toFixed(1)}%</b><b className={cn("text-[0.75rem] tabular-nums", severityClass)}>−{gap.toFixed(1)}%</b><span className={cn("whitespace-nowrap rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold", critical ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300")}>{critical ? "Critical" : "Warning"}</span><StatusIcon value={item.value} size={14} /></span></span>
+              <span className="flex min-w-0 items-center justify-between gap-2"><span className="flex min-w-0 items-center gap-1.5"><b className="truncate text-[0.8125rem] font-medium text-slate-800 dark:text-slate-100">{item.name}</b><span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[0.75rem] text-slate-600 dark:bg-slate-800 dark:text-slate-300">{item.kind}</span></span><span className="flex shrink-0 items-center gap-1.5"><b className="text-[0.75rem] tabular-nums text-slate-700 dark:text-slate-200">{item.value.toFixed(1)}%</b><b className={cn("text-[0.75rem] tabular-nums", severityClass)}>âˆ’{gap.toFixed(1)}%</b><span className={cn("whitespace-nowrap rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold", critical ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300")}>{critical ? "Critical" : "Warning"}</span><StatusIcon value={item.value} size={14} /></span></span>
               <span className="flex min-w-0 items-center justify-between gap-2 pl-0.5 text-[0.75rem] text-slate-500"><span className="truncate">below SLA for {duration}</span><ComponentSparkline values={item.history} color={critical ? "oklch(0.7106 0.1661 22.22)" : "oklch(0.8369 0.1644 84.43)"} label={`${item.name} attention trend`} /><Link href={`#${targetId}`} title={`View ${item.name} health details`} aria-label={`View ${item.name} health details`} className="shrink-0 text-[0.75rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">View</Link></span>
             </li>;
           })}</ul>
@@ -511,7 +511,7 @@ export function GlobalHealthDashboard() {
           return <li key={`${event.time}-${event.name}`} className="grid min-h-[2.75rem] grid-cols-[42px_12px_minmax(0,1fr)] items-center gap-2 py-1">
             <time className="whitespace-nowrap text-[0.75rem] tabular-nums text-slate-500">{event.time}</time>
             <span className="relative z-10 mx-auto grid h-3 w-3 place-items-center rounded-full bg-card"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: changeColor }} /></span>
-            <span className="flex min-w-0 items-center gap-1.5"><span className="min-w-0 truncate text-[0.8125rem] text-slate-700 dark:text-slate-200"><b className="font-semibold text-slate-800 dark:text-slate-100">{event.name}</b> {drop ? "dropped" : "recovered"} {event.from.toFixed(1)}% → {event.to.toFixed(1)}%</span><span className={cn("inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold tabular-nums", drop ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300")}>{drop ? "▼" : "▲"} {event.delta > 0 ? "+" : ""}{event.delta.toFixed(1)}%</span></span>
+            <span className="flex min-w-0 items-center gap-1.5"><span className="min-w-0 truncate text-[0.8125rem] text-slate-700 dark:text-slate-200"><b className="font-semibold text-slate-800 dark:text-slate-100">{event.name}</b> {drop ? "dropped" : "recovered"} {event.from.toFixed(1)}% â†’ {event.to.toFixed(1)}%</span><span className={cn("inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold tabular-nums", drop ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300")}>{drop ? "â–¼" : "â–²"} {event.delta > 0 ? "+" : ""}{event.delta.toFixed(1)}%</span></span>
           </li>;
         })}</ol></div>
         <footer className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>Latest health updates</span><Link href="/overview/global-health" className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link></footer>

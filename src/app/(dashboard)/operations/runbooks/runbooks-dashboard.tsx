@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -298,7 +298,7 @@ export function RunbooksDashboard() {
         let created = 0;
         for (const item of parsed) {
           if (!item || typeof item.title !== "string" || !item.title.trim()) continue;
-          router.push(`/runbooks/new?title=${encodeURIComponent(item.title.trim())}`);
+          router.push(`/operations/runbooks/new?title=${encodeURIComponent(item.title.trim())}`);
           created += 1;
         }
         showToast(created > 0 ? `Import validated - opened editor for "${String(parsed[0]?.title ?? "")}".` : "No valid runbooks found in file.");
@@ -310,7 +310,7 @@ export function RunbooksDashboard() {
   };
 
   const copyRunbookLink = (runbook: Runbook) => {
-    const url = `${window.location.origin}/runbooks/${runbook.id}`;
+    const url = `${window.location.origin}/operations/runbooks/${runbook.id}`;
     try {
       navigator.clipboard?.writeText(url).then(() => showToast(`Link copied for ${runbook.id}.`), () => showToast(url));
     } catch {
@@ -368,7 +368,7 @@ export function RunbooksDashboard() {
     const sum = overdueDays.reduce((acc, days) => acc + days, 0);
     const longestIndex = overdueDays.length > 0 ? overdueDays.indexOf(Math.max(...overdueDays)) : -1;
     const dueSoon = runbooks.filter((runbook) => runbook.status !== "Archived" && runbook.status !== "Draft" && !isNeedsReview(runbook) && Date.now() - new Date(runbook.lastReviewedAt).getTime() > (runbook.reviewIntervalDays - 30) * DAY).length;
-    return { avg: overdueDays.length > 0 ? Math.round(sum / overdueDays.length) : 0, longest: longestIndex >= 0 ? overdueDays[longestIndex] : 0, longestOwner: longestIndex >= 0 ? overdue[longestIndex].owner : "—", dueSoon };
+    return { avg: overdueDays.length > 0 ? Math.round(sum / overdueDays.length) : 0, longest: longestIndex >= 0 ? overdueDays[longestIndex] : 0, longestOwner: longestIndex >= 0 ? overdue[longestIndex].owner : "â€”", dueSoon };
   }, [runbooks]);
   const needsReviewList = useMemo(() => runbooks.filter(isNeedsReview).sort((a, b) => +new Date(a.lastReviewedAt) - +new Date(b.lastReviewedAt)).slice(0, 5), [runbooks]);
   const mostUsed = useMemo(() => [...runbooks].filter((runbook) => (stats.usage30d.get(runbook.id) ?? 0) > 0).sort((a, b) => (stats.usage30d.get(b.id) ?? 0) - (stats.usage30d.get(a.id) ?? 0)).slice(0, 6), [runbooks, stats.usage30d]);
@@ -411,7 +411,7 @@ export function RunbooksDashboard() {
         breadcrumbs={["Operations", "Runbooks"]}
         title="Runbooks"
         subtitle="Documented remediation procedures attached to alerts, incidents and services."
-        lastUpdated={`${lastUpdated} · ${tz}`}
+        lastUpdated={`${lastUpdated} Â· ${tz}`}
         onRefresh={reload}
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
@@ -435,12 +435,12 @@ export function RunbooksDashboard() {
               width={230}
               trigger={<Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90"><FilePlus2 size={15} aria-hidden />New Runbook<ChevronDown size={13} aria-hidden className="text-primary-foreground/80" /></Button>}
               items={[
-                { key: "blank", label: "Blank runbook", onSelect: () => router.push("/runbooks/new") },
-                { key: "template-restart", label: "From template: Service restart", onSelect: () => router.push("/runbooks/new?template=service-restart") },
-                { key: "template-failover", label: "From template: Database failover", onSelect: () => router.push("/runbooks/new?template=database-failover") },
-                { key: "template-disk", label: "From template: Disk cleanup", onSelect: () => router.push("/runbooks/new?template=disk-cleanup") },
-                { key: "template-cert", label: "From template: Certificate renewal", onSelect: () => router.push("/runbooks/new?template=certificate-renewal") },
-                { key: "template-restore", label: "From template: Backup restore", onSelect: () => router.push("/runbooks/new?template=backup-restore") },
+                { key: "blank", label: "Blank runbook", onSelect: () => router.push("/operations/runbooks/new") },
+                { key: "template-restart", label: "From template: Service restart", onSelect: () => router.push("/operations/runbooks/new?template=service-restart") },
+                { key: "template-failover", label: "From template: Database failover", onSelect: () => router.push("/operations/runbooks/new?template=database-failover") },
+                { key: "template-disk", label: "From template: Disk cleanup", onSelect: () => router.push("/operations/runbooks/new?template=disk-cleanup") },
+                { key: "template-cert", label: "From template: Certificate renewal", onSelect: () => router.push("/operations/runbooks/new?template=certificate-renewal") },
+                { key: "template-restore", label: "From template: Backup restore", onSelect: () => router.push("/operations/runbooks/new?template=backup-restore") },
               ]}
             />
           </div>
@@ -450,13 +450,13 @@ export function RunbooksDashboard() {
       {/* Banner - derived from the same source the stat cards use */}
       {coverageGood ? (
         <section aria-label="Runbook coverage" className="flex h-11 items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 text-sm text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
-          <CheckCircle2 size={16} aria-hidden />All alert rules have a runbook — reviews are up to date.
+          <CheckCircle2 size={16} aria-hidden />All alert rules have a runbook â€” reviews are up to date.
         </section>
       ) : (
         <section aria-label="Runbook coverage gaps" className="flex h-11 items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 text-sm text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300">
           <span className="flex min-w-0 items-center gap-2 truncate">
             <ShieldAlert size={16} aria-hidden className="shrink-0" />
-            {stats.uncoveredRuleIds.length} alert rules have no runbook · {stats.needsReview} runbook{stats.needsReview === 1 ? "" : "s"} need{stats.needsReview === 1 ? "s" : ""} review
+            {stats.uncoveredRuleIds.length} alert rules have no runbook Â· {stats.needsReview} runbook{stats.needsReview === 1 ? "" : "s"} need{stats.needsReview === 1 ? "s" : ""} review
           </span>
           <button type="button" onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} className="shrink-0 rounded-lg text-[0.8125rem] font-semibold underline underline-offset-2 transition-colors hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:text-amber-200">
             View gaps
@@ -471,7 +471,7 @@ export function RunbooksDashboard() {
         <StatCard icon={<ShieldAlert size={19} aria-hidden />} label="Needs Review" value={String(stats.needsReview)} delta={1} deltaPercent="33%" goodDirection="down" iconTone="bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400" onClick={() => setStatusFilter("Needs review")} onClickLabel="Filter to runbooks needing review" />
         <StatCard icon={<Rocket size={19} aria-hidden />} label="Alert Coverage" value={`${stats.coveragePct}%`} delta={8} deltaPercent="pts" goodDirection="up" iconTone="bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400" detail={`${stats.coverageCount} of ${stats.coverageTotal} rules`} onClick={() => coverageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })} onClickLabel="Jump to alert coverage" />
         <StatCard icon={<Timer size={19} aria-hidden />} label="Executions (30d)" value={String(stats.executions30d)} delta={18} deltaPercent="27%" goodDirection="up" iconTone="bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400" onClick={() => { setSortKey("used"); setSortDir("desc"); }} onClickLabel="Sort library by usage" />
-        <StatCard icon={<Clock size={19} aria-hidden />} label="Avg Time to Complete" value={stats.avgMinutes != null ? formatMinutes(stats.avgMinutes) : "—"} delta={-2} deltaPercent="12%" goodDirection="down" iconTone="bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400" detail="Target ≤ 20m" />
+        <StatCard icon={<Clock size={19} aria-hidden />} label="Avg Time to Complete" value={stats.avgMinutes != null ? formatMinutes(stats.avgMinutes) : "â€”"} delta={-2} deltaPercent="12%" goodDirection="down" iconTone="bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400" detail="Target â‰¤ 20m" />
       </section>
 
       {/* Insights row 1 - equal height */}
@@ -491,8 +491,8 @@ export function RunbooksDashboard() {
                 </div>
               </div>
               <ul className="grid min-w-0 flex-1 grid-cols-1 gap-2 text-xs">
-                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-green-600" />With runbook</span><b className="tabular-nums text-foreground">{stats.coverageCount} · {stats.coveragePct}%</b></li>
-                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600" />Without runbook</span><b className="tabular-nums text-foreground">{stats.coverageTotal - stats.coverageCount} · {100 - stats.coveragePct}%</b></li>
+                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-green-600" />With runbook</span><b className="tabular-nums text-foreground">{stats.coverageCount} Â· {stats.coveragePct}%</b></li>
+                <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600" />Without runbook</span><b className="tabular-nums text-foreground">{stats.coverageTotal - stats.coverageCount} Â· {100 - stats.coveragePct}%</b></li>
                 <li className="flex items-center justify-between gap-2 rounded-lg bg-muted/50 px-2.5 py-2"><span className="flex items-center gap-1.5 text-muted-foreground"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />Total rules</span><b className="tabular-nums text-foreground">{stats.coverageTotal}</b></li>
               </ul>
             </div>
@@ -520,12 +520,12 @@ export function RunbooksDashboard() {
                 </li>
                 <li className="flex items-center justify-between gap-2">
                   <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><ShieldAlert size={12} aria-hidden className="text-amber-600 dark:text-amber-400" />Overdue for review</span>
-                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded-lg text-[0.6875rem] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} · filter <ArrowRight size={11} aria-hidden className="inline-block align-[-0.0625rem]" /></button>
+                  <button type="button" onClick={() => setStatusFilter("Needs review")} className="inline-flex items-center gap-1 rounded-lg text-[0.6875rem] font-semibold tabular-nums text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${reviewFreshness.stale} runbooks overdue - filter library to needs review`}>{reviewFreshness.stale} Â· filter <ArrowRight size={11} aria-hidden className="inline-block align-[-0.0625rem]" /></button>
                 </li>
               </ul>
             </div>
             <div className="mt-auto border-t border-border pt-3">
-              <Link href={`/runbooks/new?rule=${stats.uncoveredRuleIds[0] ?? ""}`} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+              <Link href={`/operations/runbooks/new?rule=${stats.uncoveredRuleIds[0] ?? ""}`} className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                 <FilePlus2 size={13} aria-hidden />Create runbook for {stats.uncoveredRuleIds[0] ?? "first uncovered rule"} and {stats.uncoveredRuleIds.length - 1} other{stats.uncoveredRuleIds.length - 1 === 1 ? "" : "s"}
               </Link>
             </div>
@@ -540,7 +540,7 @@ export function RunbooksDashboard() {
               const helpful = stats.helpfulPct(runbook);
               return (
                 <li key={runbook.id}>
-                  <Link href={`/runbooks/${runbook.id}`} className="group block rounded px-1 py-2 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
+                  <Link href={`/operations/runbooks/${runbook.id}`} className="group block rounded px-1 py-2 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
                     <span className="flex items-center justify-between gap-3">
                       <span className="min-w-0 truncate text-[0.8125rem] font-semibold text-foreground group-hover:text-primary">{runbook.title}</span>
                       <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{used} run{used === 1 ? "" : "s"}</span>
@@ -555,7 +555,7 @@ export function RunbooksDashboard() {
             })}
             {mostUsed.length === 0 && <li className="py-6 text-center text-xs text-muted-foreground">No executions recorded in the last 30 days.</li>}
           </ul>
-          <div className="mt-auto border-t border-border pt-3"><ViewAllLink href="/runbooks?view=list&status=Published" label="View all" /></div>
+          <div className="mt-auto border-t border-border pt-3"><ViewAllLink href="/operations/runbooks?view=list&status=Published" label="View all" /></div>
         </ChartCard>
 
         {/* Needs Review */}
@@ -567,8 +567,8 @@ export function RunbooksDashboard() {
                 <li key={runbook.id} className="flex items-center gap-2 py-2">
                   <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-amber-100 text-[0.6875rem] font-bold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">{initials(runbook.owner)}</span>
                   <span className="min-w-0 flex-1">
-                    <Link href={`/runbooks/${runbook.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{runbook.title}</Link>
-                    <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">Last reviewed {days}d ago · {runbook.owner}</span>
+                    <Link href={`/operations/runbooks/${runbook.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">{runbook.title}</Link>
+                    <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">Last reviewed {days}d ago Â· {runbook.owner}</span>
                   </span>
                   <Button variant="outline" className="shrink-0" onClick={() => { markReviewed(runbook.id); showToast(`${runbook.id} marked as reviewed.`); }} aria-label={`Mark ${runbook.id} as reviewed`}>
                     <CheckCircle2 size={13} aria-hidden />Review
@@ -576,14 +576,14 @@ export function RunbooksDashboard() {
                 </li>
               );
             })}
-            {needsReviewList.length === 0 && <li className="py-6 text-center text-xs text-muted-foreground">Nothing needs review — every runbook is within its review interval.</li>}
+            {needsReviewList.length === 0 && <li className="py-6 text-center text-xs text-muted-foreground">Nothing needs review â€” every runbook is within its review interval.</li>}
           </ul>
           {/* Review queue health - same-source signals for the rows above */}
           <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border/70 pt-3">
             {[
               { label: "Avg since review", value: `${reviewQueue.avg}d`, sub: "across overdue" },
               { label: "Longest overdue", value: `${reviewQueue.longest}d`, sub: reviewQueue.longestOwner },
-              { label: "Due ≤ 30d", value: String(reviewQueue.dueSoon), sub: "before next cycle" },
+              { label: "Due â‰¤ 30d", value: String(reviewQueue.dueSoon), sub: "before next cycle" },
             ].map((tile) => (
               <div key={tile.label} className="min-w-0 rounded-lg bg-muted/50 p-2.5">
                 <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
@@ -708,7 +708,7 @@ export function RunbooksDashboard() {
                           <button type="button" aria-label={isFavorite ? `Unfavorite ${runbook.id}` : `Favorite ${runbook.id}`} aria-pressed={isFavorite} onClick={() => toggleFavorite(runbook.id)} className="shrink-0 rounded-lg p-0.5 text-muted-foreground transition-colors hover:text-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                             <Star size={14} aria-hidden className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
                           </button>
-                          <Link href={`/runbooks/${runbook.id}`} className="min-w-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                          <Link href={`/operations/runbooks/${runbook.id}`} className="min-w-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                             <span className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary">{highlight(runbook.title, query)}</span>
                             <span className="mt-0.5 block truncate text-[0.75rem] text-muted-foreground" title={runbook.summary}>{highlight(runbook.summary, query)}</span>
                           </Link>
@@ -718,9 +718,9 @@ export function RunbooksDashboard() {
                       <td className="py-1.5 pr-2 align-middle"><RunbookSeverityBadge severity={runbook.severity} /></td>
                       <td className="py-1.5 pr-2 align-middle">
                         <span className="flex flex-wrap items-center gap-1">
-                          {linked.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}</Link>)}
+                          {linked.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/operations/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}</Link>)}
                           {linked.length > 2 && <span className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold text-muted-foreground" title={linked.join(", ")}>+{linked.length - 2}</span>}
-                          {linked.length === 0 && <span className="text-[0.75rem] text-muted-foreground">—</span>}
+                          {linked.length === 0 && <span className="text-[0.75rem] text-muted-foreground">â€”</span>}
                         </span>
                       </td>
                       <td className="hidden overflow-hidden py-1.5 pr-2 align-middle lg:table-cell" title={runbook.services.join(", ")}>
@@ -735,12 +735,12 @@ export function RunbooksDashboard() {
                       <td className="hidden py-1.5 pr-2 align-middle xl:table-cell"><span className="flex min-w-0 items-center gap-1.5"><InitialsAvatar name={runbook.owner} size={22} /><span className="truncate text-[0.75rem] text-foreground/90">{runbook.owner}</span></span></td>
                       <td className="py-1.5 pr-2 align-middle"><span className={cn("text-[0.75rem] tabular-nums", stale ? "font-semibold text-red-600 dark:text-red-400" : "text-muted-foreground")} title={formatDate(runbook.lastReviewedAt)}>{days}d ago</span></td>
                       <td className="py-1.5 pr-2 text-right align-middle tabular-nums text-foreground/90">{used}</td>
-                      <td className="py-1.5 pr-2 text-right align-middle tabular-nums text-foreground/90">{helpful != null ? `${helpful}%` : "—"}</td>
+                      <td className="py-1.5 pr-2 text-right align-middle tabular-nums text-foreground/90">{helpful != null ? `${helpful}%` : "â€”"}</td>
                       <td className="py-1.5 pr-1 align-middle">
                         <span className="flex items-center justify-end gap-1">
                           <span className="hidden items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 md:flex">
-                            <Link href={`/runbooks/${runbook.id}`} aria-label={`Open ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Eye size={15} aria-hidden /></Link>
-                            <Link href={`/runbooks/${runbook.id}?mode=run`} aria-label={`Run ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Play size={15} aria-hidden /></Link>
+                            <Link href={`/operations/runbooks/${runbook.id}`} aria-label={`Open ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Eye size={15} aria-hidden /></Link>
+                            <Link href={`/operations/runbooks/${runbook.id}?mode=run`} aria-label={`Run ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><Play size={15} aria-hidden /></Link>
                           </span>
                           <AlertMenu
                             label={`Actions for ${runbook.id}`}
@@ -748,9 +748,9 @@ export function RunbooksDashboard() {
                             width={200}
                             trigger={<button type="button" aria-label={`More actions for ${runbook.id}`} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MoreVertical size={15} aria-hidden /></button>}
                             items={[
-                              { key: "edit", label: "Edit", onSelect: () => router.push(`/runbooks/${runbook.id}?mode=edit`) },
+                              { key: "edit", label: "Edit", onSelect: () => router.push(`/operations/runbooks/${runbook.id}?mode=edit`) },
                               { key: "duplicate", label: "Duplicate", onSelect: () => { const copy = duplicate(runbook.id); showToast(copy ? `Duplicated as ${copy.id}.` : "Duplicate failed."); } },
-                              { key: "run", label: "Run", onSelect: () => router.push(`/runbooks/${runbook.id}?mode=run`) },
+                              { key: "run", label: "Run", onSelect: () => router.push(`/operations/runbooks/${runbook.id}?mode=run`) },
                               { key: "review", label: "Mark reviewed", onSelect: () => { markReviewed(runbook.id); showToast(`${runbook.id} marked as reviewed.`); } },
                               { key: "archive", label: "Archive", danger: true, onSelect: () => setConfirmArchive([runbook.id]) },
                               { key: "copy", label: "Copy link", onSelect: () => copyRunbookLink(runbook) },
@@ -781,16 +781,16 @@ export function RunbooksDashboard() {
               return (
                 <article key={runbook.id} className="flex h-full flex-col rounded-xl border border-border bg-card p-3 transition-shadow hover:shadow-md">
                   <div className="flex items-start justify-between gap-2">
-                    <Link href={`/runbooks/${runbook.id}`} className="min-w-0 rounded font-semibold leading-snug text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{highlight(runbook.title, query)}</Link>
+                    <Link href={`/operations/runbooks/${runbook.id}`} className="min-w-0 rounded font-semibold leading-snug text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{highlight(runbook.title, query)}</Link>
                     <RunbookStatusBadge status={runbook.status} className="shrink-0" />
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs leading-snug text-muted-foreground" title={runbook.summary}>{runbook.summary}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-1.5"><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{runbook.category}</span>{runbook.linkedAlertRuleIds.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent">{ruleId}</Link>)}</div>
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5"><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-[0.6875rem] font-semibold text-muted-foreground">{runbook.category}</span>{runbook.linkedAlertRuleIds.slice(0, 2).map((ruleId) => <Link key={ruleId} href={`/operations/alert-rules?rule=${ruleId}`} className="inline-flex h-6 items-center rounded bg-muted px-1.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/80 hover:bg-accent">{ruleId}</Link>)}</div>
                   <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2">
-                    <span className="text-[0.6875rem] tabular-nums text-muted-foreground">{used} runs · {runbook.estimatedMinutes}m est</span>
+                    <span className="text-[0.6875rem] tabular-nums text-muted-foreground">{used} runs Â· {runbook.estimatedMinutes}m est</span>
                     <span className="flex items-center gap-1.5">
-                      <Button variant="outline"  asChild><Link href={`/runbooks/${runbook.id}`}>Open</Link></Button>
-                      <Button  asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={12} aria-hidden />Run</Link></Button>
+                      <Button variant="outline"  asChild><Link href={`/operations/runbooks/${runbook.id}`}>Open</Link></Button>
+                      <Button  asChild><Link href={`/operations/runbooks/${runbook.id}?mode=run`}><Play size={12} aria-hidden />Run</Link></Button>
                     </span>
                   </div>
                 </article>
@@ -822,14 +822,14 @@ export function RunbooksDashboard() {
               if (!runbook) return null;
               return (
                 <li key={execution.id} className="group relative">
-                  <Link href={`/runbooks/${runbook.id}`} aria-label={`Open ${runbook.title}`} className="absolute inset-0 z-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+                  <Link href={`/operations/runbooks/${runbook.id}`} aria-label={`Open ${runbook.title}`} className="absolute inset-0 z-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
                   <div className="pointer-events-none relative z-[1] flex items-center gap-2 rounded px-1 py-2 transition-colors group-hover:bg-slate-50 dark:group-hover:bg-muted/40">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary/10 text-primary"><Play size={13} aria-hidden /></span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[0.8125rem] font-semibold text-foreground">{runbook.title}</span>
                       <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[0.6875rem] text-muted-foreground">
                         <span>{execution.by}</span>
-                        {execution.incidentId && <Link href={`/incidents/${execution.incidentId}`} className="pointer-events-auto relative z-[2] inline-flex items-center gap-0.5 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">INC <ArrowUpRight size={10} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>}
+                        {execution.incidentId && <Link href={`/operations/incidents/${execution.incidentId}`} className="pointer-events-auto relative z-[2] inline-flex items-center gap-0.5 font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">INC <ArrowUpRight size={10} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>}
                         <span className="tabular-nums">{execution.durationMs != null ? formatDurationMs(execution.durationMs) : "in progress"}</span>
                       </span>
                     </span>
@@ -847,18 +847,18 @@ export function RunbooksDashboard() {
           <ul className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
             {uncoveredRules.slice(0, 7).map((rule) => (
               <li key={rule.id} className="flex items-center gap-2 py-2">
-                <Link href={`/alert-rules?rule=${rule.id}`} className="min-w-0 flex-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Link href={`/operations/alert-rules?rule=${rule.id}`} className="min-w-0 flex-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <span className="block truncate text-[0.8125rem] font-semibold text-foreground hover:text-primary">{rule.name}</span>
                   <span className="mt-0.5 flex items-center gap-2 text-[0.6875rem] text-muted-foreground"><RunbookSeverityBadge severity={rule.severity === "Critical" ? "Critical" : rule.severity === "Warning" ? "Medium" : "Low"} /><span className="tabular-nums">{rule.fired24h} fires 24h</span></span>
                 </Link>
-                <Button variant="outline" className="shrink-0" asChild><Link href={`/runbooks/new?rule=${rule.id}`}><FilePlus2 size={12} aria-hidden />Create runbook</Link></Button>
+                <Button variant="outline" className="shrink-0" asChild><Link href={`/operations/runbooks/new?rule=${rule.id}`}><FilePlus2 size={12} aria-hidden />Create runbook</Link></Button>
               </li>
             ))}
             {uncoveredRules.length === 0 && <li className="py-6 text-center text-xs text-muted-foreground">Every alert rule has at least one runbook.</li>}
           </ul>
           {/* Uncovered impact - aggregate of the gap list above */}
           <div className="mt-2 border-t border-border/70 pt-3">
-            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Uncovered impact · 24h</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Uncovered impact Â· 24h</p>
             <div className="mt-2 grid grid-cols-3 gap-2">
               {[
                 { label: "Fires 24h", value: String(uncoveredImpact.fires), sub: `across ${uncoveredRules.length} ${uncoveredRules.length === 1 ? "rule" : "rules"}` },
@@ -879,7 +879,7 @@ export function RunbooksDashboard() {
             <ul className="mt-1.5 divide-y divide-border/60">
               {recentlyCovered.map((runbook) => (
                 <li key={runbook.id}>
-                  <Link href={`/runbooks/${runbook.id}`} className="flex items-center gap-2 rounded px-1 py-1.5 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
+                  <Link href={`/operations/runbooks/${runbook.id}`} className="flex items-center gap-2 rounded px-1 py-1.5 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-muted/40">
                     <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] font-semibold tabular-nums text-foreground/80">{runbook.linkedAlertRuleIds[0]}</span>
                     <span className="min-w-0 flex-1"><span className="block truncate text-[0.8125rem] font-semibold text-foreground">{runbook.title}</span></span>
                     <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">{timeAgo(new Date(runbook.updatedAt).getTime())}</span>
@@ -890,7 +890,7 @@ export function RunbooksDashboard() {
           </div>
           <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3">
             <span className="text-xs tabular-nums text-muted-foreground">{stats.uncoveredRuleIds.length} of {stats.coverageTotal} rules without runbook</span>
-            <Link href="/alert-rules" className="inline-flex items-center gap-1 rounded text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">All rules <ArrowRight size={13} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>
+            <Link href="/operations/alert-rules" className="inline-flex items-center gap-1 rounded text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">All rules <ArrowRight size={13} aria-hidden className="inline-block align-[-0.0625rem]" /></Link>
           </div>
         </ChartCard>
       </section>

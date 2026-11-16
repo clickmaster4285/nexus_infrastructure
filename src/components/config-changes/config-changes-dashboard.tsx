@@ -339,7 +339,7 @@ export function ConfigChangesDashboard() {
 
   const openEvent = useCallback((changeId: string) => {
     sessionStorage.setItem("config-changes:scroll", String(window.scrollY));
-    router.push(`/configuration-changes/${changeId}`);
+    router.push(`/security/configuration-changes/${changeId}`);
   }, [router]);
 
   const applySavedView = useCallback((patch: Record<string, string | null>) => applyFilters({ ...patch, page: null }), [applyFilters]);
@@ -438,7 +438,7 @@ export function ConfigChangesDashboard() {
 
   const copyLink = useCallback((id: string) => {
     try {
-      void navigator.clipboard?.writeText(`${window.location.origin}/configuration-changes/${id}`);
+      void navigator.clipboard?.writeText(`${window.location.origin}/security/configuration-changes/${id}`);
       notify({ message: "Change link copied" });
     } catch {
       notify({ message: "Clipboard unavailable in this context" });
@@ -504,9 +504,9 @@ export function ConfigChangesDashboard() {
         <div role="status" className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-900 dark:border-red-500/25 dark:bg-red-500/10 dark:text-red-200">
           <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
             <span className="flex items-center gap-2 font-semibold"><AlertTriangle size={16} aria-hidden="true" />{summary.unapproved} unapproved changes</span>
-            <span className="hidden sm:inline" aria-hidden="true">·</span>
+            <span className="hidden sm:inline" aria-hidden="true">Â·</span>
             <span>{summary.highCriticalRisk} high risk</span>
-            <span className="hidden sm:inline" aria-hidden="true">·</span>
+            <span className="hidden sm:inline" aria-hidden="true">Â·</span>
             <span>{summary.driftedAssets} assets drifted from baseline</span>
           </span>
           <button type="button" onClick={() => { applyFilters({ tab: "unapproved" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
@@ -631,8 +631,8 @@ export function ConfigChangesDashboard() {
                     <ConfigRiskBadge risk={change.risk} className="w-[4.5rem] shrink-0 justify-center" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-mono text-[0.75rem] font-semibold text-foreground" title={change.path}>{change.path}</span>
-                      <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><b className="shrink-0 text-foreground">{change.assetName}</b><span className="truncate">· {change.changeType} · {change.category}</span></span>
-                      <span className="mt-0.5 block text-[0.6875rem] tabular-nums text-muted-foreground">{mounted ? timeAgo(change.detectedAt) : "…"}{change.maintenanceWindowId ? ` · via ${change.maintenanceWindowId}` : " · outside window"}</span>
+                      <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><b className="shrink-0 text-foreground">{change.assetName}</b><span className="truncate">Â· {change.changeType} Â· {change.category}</span></span>
+                      <span className="mt-0.5 block text-[0.6875rem] tabular-nums text-muted-foreground">{mounted ? timeAgo(change.detectedAt) : "â€¦"}{change.maintenanceWindowId ? ` Â· via ${change.maintenanceWindowId}` : " Â· outside window"}</span>
                     </span>
                     <ApprovalBadge status={change.approvalStatus} className="shrink-0" />
                   </button>
@@ -652,7 +652,7 @@ export function ConfigChangesDashboard() {
             <div className="rounded-lg bg-blue-50 p-1.5 dark:bg-blue-500/10"><b className="block text-base tabular-nums text-blue-700 dark:text-blue-300">{oldestQueueAge(events)}</b><span className="text-[0.6875rem] text-muted-foreground">oldest in queue</span></div>
           </div>
           <div className="mt-3 border-t border-border pt-3">
-            <ViewAllLink href="/configuration-changes?tab=unapproved" label="Review all" />
+            <ViewAllLink href="/security/configuration-changes?tab=unapproved" label="Review all" />
           </div>
         </ChartCard>
       </section>
@@ -672,7 +672,7 @@ export function ConfigChangesDashboard() {
                 </li>
               ))}
             </ul>
-            <p className="mt-auto w-full border-t border-border pt-3 text-xs text-muted-foreground">Legend rows are clickable · filter the table by category.</p>
+            <p className="mt-auto w-full border-t border-border pt-3 text-xs text-muted-foreground">Legend rows are clickable Â· filter the table by category.</p>
           </div>
         </ChartCard>
 
@@ -694,7 +694,7 @@ export function ConfigChangesDashboard() {
             })}
             {groupDrift.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">No drift in the current window.</li>}
           </ul>
-          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Groups sourced from Server Groups · <b>{summary.driftedAssetNames.join(", ")}</b></p>
+          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Groups sourced from Server Groups Â· <b>{summary.driftedAssetNames.join(", ")}</b></p>
         </ChartCard>
 
         <ChartCard
@@ -739,7 +739,7 @@ export function ConfigChangesDashboard() {
                   <OsIcon os={asset.assetOs} className="mt-0.5" />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center gap-2"><span className="truncate font-mono text-[0.8125rem] font-semibold text-foreground">{asset.assetId}</span>{asset.unapproved > 0 && <span className="inline-flex shrink-0 items-center rounded-full bg-rose-100 px-1.5 py-0.5 text-xs font-semibold text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">{asset.unapproved} unapproved</span>}</span>
-                    <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500/80" style={{ width: `${Math.round((asset.total / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{asset.total} changes · {mounted ? timeAgo(asset.last) : "…"}</span></span>
+                    <span className="mt-0.5 flex items-center gap-2"><span className="h-1.5 w-24 overflow-hidden rounded-full bg-muted"><span className="block h-full rounded-full bg-blue-500/80" style={{ width: `${Math.round((asset.total / max) * 100)}%` }} /></span><span className="text-xs tabular-nums text-muted-foreground">{asset.total} changes Â· {mounted ? timeAgo(asset.last) : "â€¦"}</span></span>
                   </span>
                 </>
               );
@@ -752,7 +752,7 @@ export function ConfigChangesDashboard() {
               );
             })}
           </ul>
-          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Assets sampled from the 240 loaded changes · <button type="button" className="inline-flex items-center gap-1 font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "all", range: "7D" })}>view 7D <ArrowRight size={12} aria-hidden="true" /></button></p>
+          <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">Assets sampled from the 240 loaded changes Â· <button type="button" className="inline-flex items-center gap-1 font-semibold text-primary hover:underline" onClick={() => applyFilters({ tab: "all", range: "7D" })}>view 7D <ArrowRight size={12} aria-hidden="true" /></button></p>
         </ChartCard>
 
         <ChartCard title="Change Sources & Approval" actions={<AuthCardMenu label="Change sources and approval" onExport={() => handleExport("csv")} />}>
@@ -777,14 +777,14 @@ export function ConfigChangesDashboard() {
           </dl>
         </ChartCard>
 
-        <ChartCard title="Changes → Incidents" actions={<AuthCardMenu label="Changes to incidents" onExport={() => handleExport("csv")} />}>
+        <ChartCard title="Changes â†’ Incidents" actions={<AuthCardMenu label="Changes to incidents" onExport={() => handleExport("csv")} />}>
           <ul className="flex flex-1 flex-col divide-y divide-border">
             {CONFIG_INCIDENT_LINKS.map((link) => (
               <li key={link.changeId} className="flex flex-1 flex-col justify-center py-2">
                 <div className="flex items-center gap-2">
                   <button type="button" onClick={() => openEvent(link.changeId)} className="min-w-0 flex-1 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     <span className="block truncate font-mono text-[0.8125rem] font-semibold text-primary hover:underline">{link.changeId}</span>
-                    <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><span aria-hidden="true" className="text-[0.9375rem] leading-none text-muted-foreground">→</span><Link href={`/incidents/${link.incidentId}`} onClick={(event) => event.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{link.incidentId}</Link><span className="shrink-0">· {link.minutesAfter} min later</span></span>
+                    <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground"><span aria-hidden="true" className="text-[0.9375rem] leading-none text-muted-foreground">â†’</span><Link href={`/operations/incidents/${link.incidentId}`} onClick={(event) => event.stopPropagation()} className="font-mono font-semibold text-primary hover:underline">{link.incidentId}</Link><span className="shrink-0">Â· {link.minutesAfter} min later</span></span>
                   </button>
                   <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold", link.confidence === "Likely cause" ? "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300" : "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300")}>{link.confidence}</span>
                 </div>
@@ -805,7 +805,7 @@ export function ConfigChangesDashboard() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 pb-3">
             <div>
               <h2 className="text-base font-semibold text-foreground">Configuration Changes</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">240 most recent changes sampled · totals in tabs are 24h fleet-wide</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">240 most recent changes sampled Â· totals in tabs are 24h fleet-wide</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <div role="tablist" aria-label="Change tabs" className="flex flex-wrap items-center gap-1">
@@ -846,7 +846,7 @@ export function ConfigChangesDashboard() {
             <FilterSelect value={range} onChange={(value) => updateParams({ range: value, page: null, bucket: null })} label="Time range" options={["1H", "24H", "7D", "30D"]} allLabel="" hideAll />
             <div className="relative min-w-[11.25rem] flex-1 sm:min-w-[13.75rem]">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search asset, path, setting, user, ticket…" aria-label="Search changes" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
+              <input ref={searchRef} value={query} onChange={(event) => applyFilters({ q: event.target.value })} onKeyDown={(event) => { if (event.key === "Escape") applyFilters({ q: null }); }} placeholder="Search asset, path, setting, user, ticketâ€¦" aria-label="Search changes" className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-8 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
               <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
             </div>
             {activeFilterCount > 0 && (
@@ -861,7 +861,7 @@ export function ConfigChangesDashboard() {
                 ...(savedViews.length > 0 ? [{ key: "divider-user", label: "", divider: true } as const] : []),
                 ...savedViews.map((view) => ({ key: `user-${view.name}`, label: view.name, onSelect: () => applySavedView(view.patch) })),
                 { key: "divider-save", label: "", divider: true },
-                { key: "save", label: "Save current view…", onSelect: () => setSaveViewOpen(true) },
+                { key: "save", label: "Save current viewâ€¦", onSelect: () => setSaveViewOpen(true) },
                 ...(savedViews.length > 0 ? [{ key: "clear", label: "Remove all saved views", danger: true, onSelect: () => { persistSavedViews([]); setSavedViews([]); } }] : []),
               ]}
             />
@@ -917,7 +917,7 @@ export function ConfigChangesDashboard() {
                         <input type="checkbox" aria-label={`Select ${change.id}`} className="ml-1 h-4 w-4 accent-[var(--primary)]" checked={selected.has(change.id)} onClick={(clickEvent) => clickEvent.stopPropagation()} onKeyDown={(keyEvent) => keyEvent.stopPropagation()} onChange={() => toggleSelect(change.id)} />
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 align-middle" title={fullTime(change.detectedAt, utc)}>
-                        <span className="block font-semibold tabular-nums text-foreground">{mounted ? timeAgo(change.detectedAt) : "…"}</span>
+                        <span className="block font-semibold tabular-nums text-foreground">{mounted ? timeAgo(change.detectedAt) : "â€¦"}</span>
                         <span className="block text-[0.6875rem] text-muted-foreground">{dateTimeShort(change.detectedAt, utc)}{utc ? " UTC" : ""}</span>
                       </td>
                       <td className="px-2 py-2 align-middle">
@@ -962,7 +962,7 @@ export function ConfigChangesDashboard() {
                               { key: "baseline", label: "Accept as baseline", onSelect: () => setAcceptBaselineTarget(change) },
                               { key: "rollback", label: "Rollback", danger: true, onSelect: () => setRollbackTarget(change) },
                               { key: "d2", label: "", divider: true },
-                              { key: "incident", label: "Create incident", onSelect: () => setIncidentTarget({ title: `Configuration change under investigation: ${change.assetId}`, impact: `Drift on ${change.assetName}: ${change.path} (${change.changeType} · ${change.category}).`, hosts: [change.assetId], changeId: change.id }) },
+                              { key: "incident", label: "Create incident", onSelect: () => setIncidentTarget({ title: `Configuration change under investigation: ${change.assetId}`, impact: `Drift on ${change.assetName}: ${change.path} (${change.changeType} Â· ${change.category}).`, hosts: [change.assetId], changeId: change.id }) },
                               { key: "copy", label: "Copy link", onSelect: () => copyLink(change.id) },
                             ]}
                           />
@@ -986,7 +986,7 @@ export function ConfigChangesDashboard() {
           </div>
 
           <Pagination page={clampedPage} pageSize={pageSize} totalItems={filtered.length} onPageChange={(next) => updateParams({ page: String(next) })} onPageSizeChange={(size) => { setPageSize(size); updateParams({ page: null }); }} noun="changes" pageSizeOptions={[10, 25, 50]} />
-          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching changes sampled from a 24h fleet-wide workload ({summary.total24h} changes). Times shown in <b>{utc ? "UTC" : "local time"}</b> · {timeZoneLabel()}.</p>
+          <p className="border-t border-border px-4 py-2 text-[0.6875rem] text-muted-foreground">Showing the {filtered.length.toLocaleString()} most recent matching changes sampled from a 24h fleet-wide workload ({summary.total24h} changes). Times shown in <b>{utc ? "UTC" : "local time"}</b> Â· {timeZoneLabel()}.</p>
         </Card>
       </section>
 
@@ -1274,7 +1274,7 @@ function TypeDonut({ onSelect }: { onSelect: (category: string) => void }) {
       <div ref={hostRef} className="absolute inset-0" role="img" aria-label="Changes by category donut chart" />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <b className="font-display text-[1.375rem] leading-none text-foreground tabular-nums">{summary.total24h}</b>
-        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">changes · 24h</span>
+        <span className="mt-1 text-[0.625rem] uppercase tracking-wide text-muted-foreground">changes Â· 24h</span>
       </div>
     </div>
   );
@@ -1297,7 +1297,7 @@ function ComplianceGauge({ pct }: { pct: number }) {
 /** Age label of the oldest change still awaiting review (unapproved or pending). */
 function oldestQueueAge(events: Array<{ detectedAt: string; approvalStatus: string }>): string {
   const pending = events.filter((change) => change.approvalStatus === "Unapproved" || change.approvalStatus === "Pending");
-  if (pending.length === 0) return "—";
+  if (pending.length === 0) return "â€”";
   let oldest = Number.POSITIVE_INFINITY;
   for (const change of pending) {
     const at = Date.parse(change.detectedAt);

@@ -48,7 +48,7 @@ export function RoleDetail({ roleId }: RoleDetailProps) {
     return (
       <div className="space-y-4 pb-4">
         <PageHeader breadcrumbs={["Security", "Access Control", roleId]} title="Role not found" subtitle="This role does not exist." />
-        <Card className="grid min-h-[15rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No role matches “{roleId}”</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to roles</Button></div></Card>
+        <Card className="grid min-h-[15rem] place-items-center rounded-xl p-6"><div className="text-center"><SearchX className="mx-auto text-muted-foreground" size={28} /><h2 className="mt-2 text-base font-semibold">No role matches â€œ{roleId}â€</h2><Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to roles</Button></div></Card>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function RoleDetail({ roleId }: RoleDetailProps) {
         breadcrumbs={["Security", "Access Control", role.name]}
         title={role.name}
         subtitle={role.description}
-        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "…"}
+        lastUpdated={mounted ? new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "â€¦"}
         onRefresh={() => { reload(); reloadUsers(); }}
         statusBadge={<span className="flex items-center gap-1.5"><RoleBadge type={role.type} /><RiskBadge level={role.riskLevel} /></span>}
         actions={<div className="flex flex-wrap items-center gap-2"><Button variant="outline"  onClick={() => router.back()}><ArrowLeft size={15} />Back</Button>{role.type === "system" ? <Button disabled  title="System roles cannot be edited">Edit role</Button> : <Button  onClick={() => notify({ message: "Role editor opened" })}>Edit role</Button>}</div>}
@@ -90,7 +90,7 @@ export function RoleDetail({ roleId }: RoleDetailProps) {
                 {members.map((member) => (
                   <li key={member.id} className="flex items-center gap-3 py-2.5">
                     <InitialsAvatar name={member.name} size={28} />
-                    <span className="min-w-0 flex-1"><Link href={`/access-control/users/${member.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:underline">{member.name}</Link><span className="block truncate text-[0.6875rem] text-muted-foreground">{member.email}</span></span>
+                    <span className="min-w-0 flex-1"><Link href={`/security/access-control/users/${member.id}`} className="block truncate text-[0.8125rem] font-semibold text-foreground hover:underline">{member.name}</Link><span className="block truncate text-[0.6875rem] text-muted-foreground">{member.email}</span></span>
                   </li>
                 ))}
               </ul>

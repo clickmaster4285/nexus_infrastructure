@@ -62,7 +62,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
           <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Job not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No backup job with id <span className="font-mono">{jobId}</span> exists, or it was deleted.</p>
-          <Button variant="outline" className="mt-4" onClick={() => router.push("/backups-and-recovery")}>Back to Backups &amp; Recovery</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/operations/backups-and-recovery")}>Back to Backups &amp; Recovery</Button>
         </div>
       </div>
     );
@@ -86,17 +86,17 @@ export function JobDetail({ jobId }: { jobId: string }) {
       <PageHeader
         breadcrumbs={["Operations", "Backups & Recovery", job.id]}
         title={job.name}
-        subtitle={`Asset ${job.host} · owner ${job.owner} · ${job.id}`}
+        subtitle={`Asset ${job.host} Â· owner ${job.owner} Â· ${job.id}`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
             {job.taskId && (
-              <Link href="/scheduled-tasks?type=backup" className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-xs font-semibold text-primary hover:underline">
+              <Link href="/operations/scheduled-tasks?type=backup" className="inline-flex h-9 items-center gap-1 rounded-lg border border-border px-2.5 text-xs font-semibold text-primary hover:underline">
                 <Link2 size={13} aria-hidden="true" />{job.taskId}
               </Link>
             )}
             <Button variant="outline"  onClick={() => setRestoreOpen(true)}><ArchiveRestore size={14} aria-hidden="true" />Restore</Button>
             <Button variant="outline"  onClick={() => setPolicyOpen(true)}><Pencil size={14} aria-hidden="true" />Edit</Button>
-            <Button  onClick={() => router.push(`/backups-and-recovery?tab=jobs&q=${job.id}`)}>
+            <Button  onClick={() => router.push(`/operations/backups-and-recovery?tab=jobs&q=${job.id}`)}>
               <PlayCircle size={14} aria-hidden="true" />Run now
             </Button>
           </div>
@@ -106,8 +106,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>Job {jobIndex + 1} of {allJobs.length}</span>
         <div className="flex items-center gap-2">
-          <Button variant="ghost"  disabled={!prevJob} onClick={() => prevJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(prevJob.id)}`)} aria-label="Previous job"><ChevronLeft size={14} aria-hidden="true" />Prev</Button>
-          <Button variant="ghost"  disabled={!nextJob} onClick={() => nextJob && router.push(`/backups-and-recovery/jobs/${encodeURIComponent(nextJob.id)}`)} aria-label="Next job">Next<ChevronRight size={14} aria-hidden="true" /></Button>
+          <Button variant="ghost"  disabled={!prevJob} onClick={() => prevJob && router.push(`/operations/backups-and-recovery/jobs/${encodeURIComponent(prevJob.id)}`)} aria-label="Previous job"><ChevronLeft size={14} aria-hidden="true" />Prev</Button>
+          <Button variant="ghost"  disabled={!nextJob} onClick={() => nextJob && router.push(`/operations/backups-and-recovery/jobs/${encodeURIComponent(nextJob.id)}`)} aria-label="Next job">Next<ChevronRight size={14} aria-hidden="true" /></Button>
         </div>
       </div>
 
@@ -119,12 +119,12 @@ export function JobDetail({ jobId }: { jobId: string }) {
               <BackupStatusBadge status={status} />
               <BackupTypeBadge type={job.type} />
               <MetBadge met={view?.rpoMet ?? true} />
-              <span className="rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">{job.policyId === "POL-critical" ? "POL-critical · RPO 4h" : "POL-standard · RPO 24h"}</span>
+              <span className="rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">{job.policyId === "POL-critical" ? "POL-critical Â· RPO 4h" : "POL-standard Â· RPO 24h"}</span>
               {job.taskId && <span className="rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">{job.taskId}</span>}
             </div>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
               <dt className="text-muted-foreground">Asset</dt>
-              <dd className="flex justify-end"><Link href={`/server-details/${encodeURIComponent(job.host)}`} className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"><span className="font-mono">{job.host}</span><ExternalLink size={11} aria-hidden="true" /></Link></dd>
+              <dd className="flex justify-end"><Link href={`/infrastructure/server-details/${encodeURIComponent(job.host)}`} className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"><span className="font-mono">{job.host}</span><ExternalLink size={11} aria-hidden="true" /></Link></dd>
               <dt className="text-muted-foreground">Group</dt><dd className="text-right text-foreground">{job.group ?? "Ungrouped"}</dd>
               <dt className="text-muted-foreground">Owner</dt><dd className="flex items-center justify-end gap-1.5 text-foreground"><InitialsAvatar name={job.owner} size={16} /><span className="truncate">{job.owner}</span></dd>
               <dt className="text-muted-foreground">Schedule</dt><dd className="text-right font-medium tabular-nums text-foreground" title={cronForSchedule(job.schedule)}>{formatSchedule(job.schedule)}</dd>
@@ -140,7 +140,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
           <section className="rounded-xl border border-border bg-card p-4 shadow-sm" aria-label="Run history">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-foreground">Run history</h3>
-              <p className="text-xs tabular-nums text-muted-foreground">Last {Math.min(10, jobRuns.length)} runs · success rate {successRate == null ? "—" : `${successRate}%`} · avg {formatDuration(avgDurationMs)}</p>
+              <p className="text-xs tabular-nums text-muted-foreground">Last {Math.min(10, jobRuns.length)} runs Â· success rate {successRate == null ? "â€”" : `${successRate}%`} Â· avg {formatDuration(avgDurationMs)}</p>
             </div>
             <ul className="mt-2 divide-y divide-border/60">
               {jobRuns.slice(0, 10).map((run) => (
@@ -153,7 +153,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   >
                     <BackupStatusBadge status={run.status} />
                     <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
-                      {timeAgo(run.epochMs)} · {run.status === "skipped" ? "—" : formatBytes(run.sizeBytes)} · {run.status === "running" ? "in progress" : formatDuration(run.durationMs)}
+                      {timeAgo(run.epochMs)} Â· {run.status === "skipped" ? "â€”" : formatBytes(run.sizeBytes)} Â· {run.status === "running" ? "in progress" : formatDuration(run.durationMs)}
                     </span>
                     <span className="shrink-0 text-xs font-semibold text-primary">{logRunId === run.id ? "Hide log" : "Log"}</span>
                   </button>
@@ -169,17 +169,17 @@ export function JobDetail({ jobId }: { jobId: string }) {
           <section className="rounded-xl border border-border bg-card p-4 shadow-sm" aria-label="Restore points">
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-foreground">Restore points</h3>
-              <button type="button" onClick={() => setRestoreOpen(true)} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restore from point…</button>
+              <button type="button" onClick={() => setRestoreOpen(true)} className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Restore from pointâ€¦</button>
             </div>
             <ul className="mt-2 divide-y divide-border/60">
               {points.slice(0, 5).map((point) => (
                 <li key={point.id} className="flex items-center gap-2 py-1.5 text-xs">
                   <span className="font-mono text-muted-foreground">{point.id}</span>
-                  <span className="min-w-0 truncate text-muted-foreground">{timeAgo(point.epochMs)} · {formatBytes(point.sizeBytes)}</span>
+                  <span className="min-w-0 truncate text-muted-foreground">{timeAgo(point.epochMs)} Â· {formatBytes(point.sizeBytes)}</span>
                   <span className="ml-auto shrink-0"><VerifiedBadge verified={point.verified} /></span>
                 </li>
               ))}
-              {points.length === 0 && <li className="py-3 text-center text-xs text-muted-foreground">No restore points yet — created only by successful runs.</li>}
+              {points.length === 0 && <li className="py-3 text-center text-xs text-muted-foreground">No restore points yet â€” created only by successful runs.</li>}
             </ul>
           </section>
         </div>
@@ -197,7 +197,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
               <dd className={cn("text-right font-semibold tabular-nums", view?.rpoMet === false ? "text-red-600 dark:text-red-400" : "text-foreground")}>{formatRpoCell(view?.rpoLagMinutes ?? null, job.rpoTargetMinutes)}</dd>
               <dt className="text-muted-foreground">Last success</dt><dd className="text-right tabular-nums text-foreground">{view?.lastSuccessMs ? timeAgo(view.lastSuccessMs) : "never"}</dd>
               <dt className="text-muted-foreground">Last run</dt><dd className="text-right tabular-nums text-foreground">{view?.lastRun ? timeAgo(view.lastRun.epochMs) : "never"}</dd>
-              <dt className="text-muted-foreground">Next run</dt><dd className="text-right tabular-nums text-foreground">{job.enabled ? (next[0] != null ? formatCountdown(next[0]) : "—") : "Paused"}</dd>
+              <dt className="text-muted-foreground">Next run</dt><dd className="text-right tabular-nums text-foreground">{job.enabled ? (next[0] != null ? formatCountdown(next[0]) : "â€”") : "Paused"}</dd>
             </dl>
             {failed && lastRun?.error && (
               <p role="alert" className="mt-3 flex items-start gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
@@ -205,7 +205,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 {lastRun.error}
               </p>
             )}
-            {!job.enabled && <p className="mt-3 text-xs text-muted-foreground">Job is paused — no new runs until resumed.</p>}
+            {!job.enabled && <p className="mt-3 text-xs text-muted-foreground">Job is paused â€” no new runs until resumed.</p>}
           </section>
 
           {/* Linked alerts */}
@@ -216,12 +216,12 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <li key={alert.id} className="flex items-center gap-2 py-1.5 text-xs">
                   <span className={cn("w-14 shrink-0 font-semibold capitalize", SEVERITY_TONE[alert.severity] ?? "text-muted-foreground")}>{alert.severity}</span>
                   <span className="min-w-0 truncate text-foreground">{alert.ruleName}</span>
-                  <Link href="/alerts" className="ml-auto shrink-0 font-semibold text-primary hover:underline">Open</Link>
+                  <Link href="/operations/alerts" className="ml-auto shrink-0 font-semibold text-primary hover:underline">Open</Link>
                 </li>
               ))}
               {alerts.length === 0 && <li className="py-2 text-xs text-muted-foreground">No active alerts for this host.</li>}
             </ul>
-            <Link href="/alert-rules" className="mt-2 inline-flex text-xs font-semibold text-primary hover:underline">Rule RUL-212 · Backup job failed →</Link>
+            <Link href="/operations/alert-rules" className="mt-2 inline-flex text-xs font-semibold text-primary hover:underline">Rule RUL-212 Â· Backup job failed â†’</Link>
           </section>
 
           {/* Linked incidents */}
@@ -232,7 +232,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <li key={incident.id} className="flex items-center gap-2 py-1.5 text-xs">
                   <span className="w-14 shrink-0 font-semibold text-amber-600">{incident.severity}</span>
                   <span className="min-w-0 truncate text-foreground" title={incident.title}>{incident.title}</span>
-                  <Link href="/incidents" className="ml-auto shrink-0 font-semibold text-primary hover:underline">Open</Link>
+                  <Link href="/operations/incidents" className="ml-auto shrink-0 font-semibold text-primary hover:underline">Open</Link>
                 </li>
               ))}
               {incidents.length === 0 && <li className="py-2 text-xs text-muted-foreground">No incidents reference this host.</li>}
@@ -246,8 +246,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
               const linked = getRunbookForRule("RUL-212");
               return (
                 <>
-                  <p className="mt-1 text-xs text-muted-foreground">RUL-212 · Backup job failed{linked ? `: ${linked.title}` : ": verify restore integrity, check storage permissions and agent heartbeat."}</p>
-                  <Link href={linked ? `/runbooks/${linked.id}` : "/runbooks/new?rule=RUL-212"} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">Open runbook{linked ? ` ${linked.id}` : ""} →</Link>
+                  <p className="mt-1 text-xs text-muted-foreground">RUL-212 Â· Backup job failed{linked ? `: ${linked.title}` : ": verify restore integrity, check storage permissions and agent heartbeat."}</p>
+                  <Link href={linked ? `/operations/runbooks/${linked.id}` : "/operations/runbooks/new?rule=RUL-212"} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">Open runbook{linked ? ` ${linked.id}` : ""} â†’</Link>
                 </>
               );
             })()}
@@ -263,7 +263,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   <span>{formatCountdown(ms)}</span>
                 </li>
               ))}
-              {!job.enabled && <li className="py-1.5 text-xs text-muted-foreground">Paused — resume to schedule runs.</li>}
+              {!job.enabled && <li className="py-1.5 text-xs text-muted-foreground">Paused â€” resume to schedule runs.</li>}
             </ul>
           </section>
         </div>

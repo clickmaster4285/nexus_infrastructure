@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -116,7 +116,7 @@ function ServerNotFound() {
         <ServerIcon size={28} className="text-muted-foreground" aria-hidden="true" />
         <h1 className="text-lg font-semibold text-foreground">Server not found</h1>
         <p className="text-[0.8125rem] text-muted-foreground">The requested server does not exist or is no longer available.</p>
-        <Button asChild variant="outline"><Link href="/all-servers">Back to All Servers</Link></Button>
+        <Button asChild variant="outline"><Link href="/infrastructure/all-servers">Back to All Servers</Link></Button>
       </Card>
     </div>
   );
@@ -311,8 +311,8 @@ function ServerDetailsView({ server }: { server: ServerRecord }) {
 
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-3 pb-3">
-      <PageHeader breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/all-servers" }} lastUpdated={lastUpdated} statusBadge={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[0.75rem] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[0.75rem] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} title={server.name} subtitle={`${server.host} · ${server.environment} server`}>
-        <Button asChild variant="outline" ><Link href="/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
+      <PageHeader breadcrumbs={["Infrastructure", "All Servers", server.name]} breadcrumbLinks={{ "All Servers": "/infrastructure/all-servers" }} lastUpdated={lastUpdated} statusBadge={isServerInMaintenance(server.name) ? <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-2 py-1 text-[0.75rem] font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><i className="h-2 w-2 animate-pulse rounded-full bg-violet-500" aria-hidden="true" />In Maintenance</span> : <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[0.75rem] font-medium ${healthTone}`}><i className={`h-2 w-2 rounded-full ${server.health === "Offline" ? "bg-rose-500" : server.health === "Degraded" ? "bg-amber-500" : server.health === "Pending" ? "bg-slate-500" : "bg-emerald-500"}`} />{server.agent}</span>} onRefresh={refresh} title={server.name} subtitle={`${server.host} · ${server.environment} server`}>
+        <Button asChild variant="outline" ><Link href="/infrastructure/all-servers"><ChevronLeft size={15} />Back to All Servers</Link></Button>
         <Button variant="outline" onClick={refresh} ><RotateCw size={15} />Refresh</Button>
         <Button variant="outline" onClick={() => showNotice("Server report exported.")} ><Download size={15} />Export</Button>
       

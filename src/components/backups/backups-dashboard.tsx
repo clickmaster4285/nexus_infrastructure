@@ -441,7 +441,7 @@ export function BackupsDashboard() {
       const row = rows[currentIndex];
       if (row?.job) {
         event.preventDefault();
-        router.push(`/backups-and-recovery/jobs/${encodeURIComponent(row.job.id)}`);
+        router.push(`/operations/backups-and-recovery/jobs/${encodeURIComponent(row.job.id)}`);
       }
     }
   }, [rows, focusedKey, policyJobId, createOpen, runDialogOpen, testRestoreOpen, deleteIds, handleRunNow, router]);
@@ -617,7 +617,7 @@ export function BackupsDashboard() {
                 onToggleJob={handlePauseResume}
                 onDeleteJob={(jobId) => setDeleteIds([jobId])}
                 onEnableBackup={(host) => {
-                  // Quick enable via the Coverage flow — jump to the tab with the asset highlighted by name.
+                  // Quick enable via the Coverage flow â€” jump to the tab with the asset highlighted by name.
                   setFilters((current) => ({ ...current, tab: "coverage", query: host }));
                   setPage(1);
                 }}
@@ -655,7 +655,7 @@ export function BackupsDashboard() {
               <Select value={runDialogJobId} onValueChange={setRunDialogJobId}>
                 <SelectTrigger id="run-job" className="mt-1 h-9 w-full text-[0.8125rem]" aria-label="Job"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {allJobs.map((job) => <SelectItem key={job.id} value={job.id}>{job.name} · {job.host}</SelectItem>)}
+                  {allJobs.map((job) => <SelectItem key={job.id} value={job.id}>{job.name} Â· {job.host}</SelectItem>)}
                 </SelectContent>
               </Select>
             </label>

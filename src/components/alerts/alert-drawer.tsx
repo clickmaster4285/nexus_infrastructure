@@ -165,7 +165,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
           <dl className="mt-1 divide-y divide-border/70">
             <SummaryRow label="Host">{alert.host}</SummaryRow>
             <SummaryRow label="Service">{alert.service}</SummaryRow>
-            <SummaryRow label="Rule">{alert.ruleId} · {alert.ruleName}</SummaryRow>
+            <SummaryRow label="Rule">{alert.ruleId} Â· {alert.ruleName}</SummaryRow>
             <SummaryRow label="Source">{alert.source}</SummaryRow>
             <SummaryRow label="Triggered">{formatDateTime(alert.epochMs)}</SummaryRow>
             <SummaryRow label="Duration">{alertDuration(alert, Date.now())}</SummaryRow>
@@ -173,7 +173,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             <SummaryRow label="Assignee">{alert.assignee ?? "Unassigned"}</SummaryRow>
           </dl>
 
-          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Metric snapshot · last 2h</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Metric snapshot Â· last 2h</h3>
           <div className="mt-2 h-[9.375rem] w-full" aria-label={`${alert.severity === "info" ? "Metric" : "Threshold metric"} history`}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={alert.metric} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
@@ -201,7 +201,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
                 <div className="min-w-0 flex-1">
                   <p className="text-[0.8125rem] font-medium text-foreground">
                     {item.label}
-                    {item.user && <span className="ml-1.5 font-normal text-muted-foreground">· {item.user}</span>}
+                    {item.user && <span className="ml-1.5 font-normal text-muted-foreground">Â· {item.user}</span>}
                   </p>
                   {item.detail && <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">{item.detail}</p>}
                   <p className="mt-0.5 text-[0.6875rem] text-muted-foreground" title={formatDateTime(item.epochMs)}>{timeAgo(item.epochMs)}</p>
@@ -213,18 +213,18 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
           <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Related</h3>
           <div className="mt-2 flex flex-col gap-2">
             <Link
-              href={`/events-explorer/${alert.eventId}`}
+              href={`/monitoring/events-explorer/${alert.eventId}`}
               className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[0.8125rem] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink size={14} aria-hidden="true" className="text-muted-foreground" />
-              Related event · {alert.eventId}
+              Related event Â· {alert.eventId}
             </Link>
             <Link
-              href="/runbooks"
+              href="/operations/runbooks"
               className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[0.8125rem] text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <BookOpen size={14} aria-hidden="true" className="text-muted-foreground" />
-              Runbook · {alert.runbook}
+              Runbook Â· {alert.runbook}
             </Link>
             {alert.silencedUntil && (
               <p className="inline-flex items-center gap-2 text-[0.75rem] text-muted-foreground">
@@ -248,7 +248,7 @@ export function AlertDrawer({ alert, onClose, onAcknowledge, onAssign, onResolve
             <input
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              placeholder="Add an investigation note…"
+              placeholder="Add an investigation noteâ€¦"
               aria-label="Add note"
               className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-[0.8125rem] outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />

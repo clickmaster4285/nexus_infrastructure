@@ -86,7 +86,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/scheduled-tasks?task=${task.id}`);
+      await navigator.clipboard.writeText(`${window.location.origin}/operations/scheduled-tasks?task=${task.id}`);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
     } catch {
@@ -143,7 +143,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
             <Button variant="outline" onClick={() => onEdit(task)} ><Pencil size={13} aria-hidden />Edit</Button>
             {task.type === "backup" && TASK_ID_TO_BACKUP_JOB[task.id] && (
               <Link
-                href={`/backups-and-recovery?backup=${TASK_ID_TO_BACKUP_JOB[task.id]}`}
+                href={`/operations/backups-and-recovery?backup=${TASK_ID_TO_BACKUP_JOB[task.id]}`}
                 className="inline-flex h-8 items-center gap-1.5 rounded px-1 text-[0.75rem] font-semibold text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <HardDriveDownload size={13} aria-hidden />View in Backups
@@ -181,7 +181,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
               <SummaryRow label="Timeout">{task.execution.timeoutMinutes}m</SummaryRow>
               <SummaryRow label="Concurrency">{task.execution.concurrency === "skip" ? "Skip if previous run active" : "Queue after previous run"}</SummaryRow>
               <SummaryRow label="Notify">
-                <span className="inline-flex items-center gap-1.5"><Mail size={11} aria-hidden className="text-muted-foreground" />{task.notifications.channels.join(", ") || "None"}<span className="text-muted-foreground">· {task.notifications.recipients.length} recipient{task.notifications.recipients.length === 1 ? "" : "s"}</span></span>
+                <span className="inline-flex items-center gap-1.5"><Mail size={11} aria-hidden className="text-muted-foreground" />{task.notifications.channels.join(", ") || "None"}<span className="text-muted-foreground">Â· {task.notifications.recipients.length} recipient{task.notifications.recipients.length === 1 ? "" : "s"}</span></span>
               </SummaryRow>
             </dl>
           </section>
@@ -193,7 +193,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
               <span className="text-[0.625rem] tabular-nums text-muted-foreground">last {lastTen.length} of {runs.length}</span>
             </div>
             {lastTen.length === 0 ? (
-              <p className="rounded-lg border border-dashed border-border px-4 py-5 text-center text-[0.75rem] text-muted-foreground">No runs yet{task.enabled ? " — runs on the next schedule." : "."}</p>
+              <p className="rounded-lg border border-dashed border-border px-4 py-5 text-center text-[0.75rem] text-muted-foreground">No runs yet{task.enabled ? " â€” runs on the next schedule." : "."}</p>
             ) : (
               <div className="overflow-hidden rounded-lg border border-border">
                 <table className="w-full table-fixed text-left text-[0.6875rem]">
@@ -274,7 +274,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                   <div className="min-w-0">
                     <p className="text-[0.75rem] leading-snug text-foreground">
                       <span className="font-semibold">{entry.actor === CURRENT_USER_NAME ? "You" : entry.actor}</span>
-                      <span className="text-muted-foreground"> · {entry.action}</span>
+                      <span className="text-muted-foreground"> Â· {entry.action}</span>
                     </p>
                     <p className="truncate text-[0.6875rem] text-muted-foreground" title={entry.detail}>{entry.detail}</p>
                     <p className="text-[0.625rem] tabular-nums text-muted-foreground/80">{timeAgo(entry.epochMs)}</p>
@@ -286,7 +286,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
         </div>
 
         <div className="flex shrink-0 items-center justify-between border-t border-border px-5 py-2.5 text-[0.625rem] text-muted-foreground">
-          <span className="inline-flex items-center gap-1"><Users size={11} aria-hidden />Created by {task.createdBy === CURRENT_USER_NAME ? "you" : task.createdBy} · {new Date(task.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span>
+          <span className="inline-flex items-center gap-1"><Users size={11} aria-hidden />Created by {task.createdBy === CURRENT_USER_NAME ? "you" : task.createdBy} Â· {new Date(task.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span>
           <span className="font-mono">{task.id}</span>
         </div>
       </div>

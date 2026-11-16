@@ -15,7 +15,7 @@ interface SidebarProps {
 
 function isItemActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
-  // Nested routes (e.g. /incidents/new, /incidents/INC-1042) keep the parent item active.
+  // Nested routes (e.g. /operations/incidents/new, /operations/incidents/INC-1042) keep the parent item active.
   return href !== "/" && pathname.startsWith(`${href}/`);
 }
 

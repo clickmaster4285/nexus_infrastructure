@@ -745,7 +745,7 @@ export function WindowsDashboard() {
     const editable = live;
     return [
       { key: "view", label: "View details", onSelect: () => openDrawer(window.id) },
-      { key: "edit", label: "Edit", disabled: !editable, onSelect: () => router.push(`/maintenance-windows/${window.id}/edit`) },
+      { key: "edit", label: "Edit", disabled: !editable, onSelect: () => router.push(`/operations/maintenance-windows/${window.id}/edit`) },
       {
         key: "extend", label: "Extend", disabled: !editable,
         items: [
@@ -944,7 +944,7 @@ export function WindowsDashboard() {
   const prefillForDate = (date: Date) => {
     const pad = (value: number) => String(value).padStart(2, "0");
     const stamp = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T09:00`;
-    router.push(`/maintenance-windows/new?start=${encodeURIComponent(stamp)}`);
+    router.push(`/operations/maintenance-windows/new?start=${encodeURIComponent(stamp)}`);
   };
 
   const calendarDayFocus = useRef<Array<HTMLButtonElement | null>>([]);
@@ -1018,7 +1018,7 @@ export function WindowsDashboard() {
               items={exportItems}
             />
             <Link
-              href="/maintenance-windows/new"
+              href="/operations/maintenance-windows/new"
               className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <CalendarClock size={15} aria-hidden="true" />Schedule Maintenance
@@ -1219,7 +1219,7 @@ export function WindowsDashboard() {
                       const conflicted = conflictIds.has(window.id);
                       const selected = selectedIds.includes(window.id);
                       const progress = isLive ? Math.min(1, Math.max(0, (nowMs - startMs) / Math.max(1, endMs - startMs))) : 0;
-                      const muteTooltip = window.alertBehavior.allowCritical ? "Alerts muted · SEV1 allowed" : "Alerts muted";
+                      const muteTooltip = window.alertBehavior.allowCritical ? "Alerts muted Â· SEV1 allowed" : "Alerts muted";
                       return (
                         <tr
                           key={window.id}
@@ -1243,7 +1243,7 @@ export function WindowsDashboard() {
                           </td>
                           <td className="min-w-0 px-3 py-1.5 align-middle">
                             <Link
-                              href={`/maintenance-windows/${window.id}`}
+                              href={`/operations/maintenance-windows/${window.id}`}
                               onClick={(event) => event.stopPropagation()}
                               className="block rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                               title={window.title}
@@ -1531,7 +1531,7 @@ export function WindowsDashboard() {
                   const dayWindows = windowsByDayKey.get(key) ?? [];
                   return (
                     <div key={key} className="py-2">
-                      <p className={cn("text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground", key === todayKey && "text-primary")}>{date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}{key === todayKey && " · Today"}</p>
+                      <p className={cn("text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground", key === todayKey && "text-primary")}>{date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}{key === todayKey && " Â· Today"}</p>
                       <ul className="mt-1 space-y-1">
                         {dayWindows.map((window) => (
                           <li key={window.id}>
@@ -1612,7 +1612,7 @@ export function WindowsDashboard() {
                     </div>
                   ))}
                   {timelineGroups.rows.length === 0 && (
-                    <p className="border-t border-border/60 py-8 text-center text-sm text-muted-foreground">Nothing scheduled in the next 7 days. <Link href="/maintenance-windows/new" className="font-semibold text-primary hover:underline">Schedule one</Link></p>
+                    <p className="border-t border-border/60 py-8 text-center text-sm text-muted-foreground">Nothing scheduled in the next 7 days. <Link href="/operations/maintenance-windows/new" className="font-semibold text-primary hover:underline">Schedule one</Link></p>
                   )}
                 </div>
               </div>
@@ -1726,9 +1726,9 @@ export function WindowsDashboard() {
                       </div>
                       <p className="mt-1.5 text-[0.75rem] tabular-nums text-muted-foreground">
                         <span className="text-red-600 dark:text-red-400">SEV2 {nfLocale(suppressedBySeverity.SEV2)}</span>
-                        <span aria-hidden="true"> · </span>
+                        <span aria-hidden="true"> Â· </span>
                         <span className="text-amber-700 dark:text-amber-400">SEV3 {nfLocale(suppressedBySeverity.SEV3)}</span>
-                        <span aria-hidden="true"> · </span>
+                        <span aria-hidden="true"> Â· </span>
                         <span className="text-blue-600 dark:text-blue-400">SEV4 {nfLocale(suppressedBySeverity.SEV4)}</span>
                       </p>
                     </>
@@ -1819,7 +1819,7 @@ export function WindowsDashboard() {
                       <span
                         key={row.group}
                         style={{ width: `${row.pct}%`, background: color }}
-                        title={`${row.name} — ${row.windows} windows, ${row.hours}h, ${Math.round(row.pct)}% of total hours`}
+                        title={`${row.name} â€” ${row.windows} windows, ${row.hours}h, ${Math.round(row.pct)}% of total hours`}
                         className="h-full rounded-[0.125rem]"
                       />
                     );
@@ -1827,7 +1827,7 @@ export function WindowsDashboard() {
                 </div>
                 <ul className="mt-2 grid grid-cols-3 gap-x-2 gap-y-1">
                   {groupShares.map((row, index) => (
-                    <li key={row.group} className="flex min-w-0 items-center gap-1.5 text-[0.75rem] text-muted-foreground" title={`${row.name} — ${Math.round(row.pct)}%`}>
+                    <li key={row.group} className="flex min-w-0 items-center gap-1.5 text-[0.75rem] text-muted-foreground" title={`${row.name} â€” ${Math.round(row.pct)}%`}>
                       <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[0.125rem]" style={{ background: GROUP_SHARE_COLORS[index % GROUP_SHARE_COLORS.length] }} />
                       <span className="min-w-0 truncate">{row.name} <span className="tabular-nums">{Math.round(row.pct)}%</span></span>
                     </li>
@@ -2058,7 +2058,7 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
                   {mutedRules.slice(0, 6).map((rule) => (
                     <li key={rule.id} className="flex items-center justify-between gap-2 py-1.5">
                       <span className="min-w-0 truncate text-[0.8125rem] text-foreground" title={rule.name}>{rule.name}</span>
-                      <Link href={`/alert-rules?rule=${rule.id}`} className="shrink-0 font-mono text-[0.75rem] text-primary hover:underline">{rule.id}</Link>
+                      <Link href={`/operations/alert-rules?rule=${rule.id}`} className="shrink-0 font-mono text-[0.75rem] text-primary hover:underline">{rule.id}</Link>
                     </li>
                   ))}
                 </ul>
@@ -2110,7 +2110,7 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
               <ul className="mt-1.5 divide-y divide-border/60">
                 {hostAlerts.slice(0, 6).map((alert) => (
                   <li key={alert.id}>
-                    <Link href={`/alerts?alert=${alert.id}`} className="flex items-center gap-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                    <Link href={`/operations/alerts?alert=${alert.id}`} className="flex items-center gap-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                       <span className="min-w-0 flex-1 truncate text-[0.8125rem] text-foreground" title={alert.name}>{alert.name}</span>
                       <span className="shrink-0 font-mono text-[0.75rem] text-muted-foreground">{alert.id}</span>
                       {live && <span className="shrink-0 rounded bg-violet-50 px-1.5 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">Suppressed</span>}
@@ -2131,8 +2131,8 @@ function WindowDrawer({ window, nowMs, onClose, onExtend, onEndNow, onCancel, on
               <Button variant="outline"  onClick={() => onEndNow(window.id)}>End now</Button>
             </>
           )}
-          <Link href={`/maintenance-windows/${window.id}`} className="inline-flex h-9 items-center rounded-lg border border-input bg-card px-3 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open full page</Link>
-          <Link href={`/maintenance-windows/${window.id}/edit`} className="inline-flex h-9 items-center rounded-lg bg-primary px-3 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Edit</Link>
+          <Link href={`/operations/maintenance-windows/${window.id}`} className="inline-flex h-9 items-center rounded-lg border border-input bg-card px-3 text-[0.8125rem] font-medium text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Open full page</Link>
+          <Link href={`/operations/maintenance-windows/${window.id}/edit`} className="inline-flex h-9 items-center rounded-lg bg-primary px-3 text-[0.8125rem] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Edit</Link>
           <button type="button" onClick={() => onCancel(window.id)} className="ml-auto inline-flex h-9 items-center gap-1 rounded-lg px-3 text-[0.8125rem] font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:hover:bg-red-500/10">Cancel window</button>
         </footer>
       </aside>

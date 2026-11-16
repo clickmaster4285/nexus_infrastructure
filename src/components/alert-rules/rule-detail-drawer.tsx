@@ -153,7 +153,7 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
                 <BellOff size={12} aria-hidden="true" />Muted until {formatDateTime(new Date(rule.mutedUntil).getTime())}
               </span>
             )}
-            {(() => { const mutedBy = maintenanceWindowMutingRule(rule.id); return mutedBy ? <Link href={`/maintenance-windows/${mutedBy}`} className="inline-flex items-center gap-1 text-[0.75rem] font-semibold text-violet-600 hover:underline dark:text-violet-400"><BellOff size={12} aria-hidden="true" />Muted by {mutedBy}</Link> : null; })()}
+            {(() => { const mutedBy = maintenanceWindowMutingRule(rule.id); return mutedBy ? <Link href={`/operations/maintenance-windows/${mutedBy}`} className="inline-flex items-center gap-1 text-[0.75rem] font-semibold text-violet-600 hover:underline dark:text-violet-400"><BellOff size={12} aria-hidden="true" />Muted by {mutedBy}</Link> : null; })()}
           </div>
         </header>
 
@@ -165,13 +165,13 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
           <p className="mt-1 rounded-lg border border-border/80 bg-muted/30 px-3 py-2 font-mono text-[0.75rem] leading-snug text-foreground">{conditionText}</p>
           <dl className="mt-2 divide-y divide-border/70">
             <SummaryRow label="Evaluation interval">{rule.condition.evaluationInterval ?? "30s"}</SummaryRow>
-            <SummaryRow label="Target">{rule.target} · {rule.targetType}{rule.environment ? ` · ${rule.environment}` : ""}</SummaryRow>
+            <SummaryRow label="Target">{rule.target} Â· {rule.targetType}{rule.environment ? ` Â· ${rule.environment}` : ""}</SummaryRow>
             {rule.exclude && rule.exclude.length > 0 && <SummaryRow label="Excluded">{rule.exclude.join(", ")}</SummaryRow>}
-            <SummaryRow label="Tags">{rule.tags.length > 0 ? rule.tags.join(", ") : "—"}</SummaryRow>
+            <SummaryRow label="Tags">{rule.tags.length > 0 ? rule.tags.join(", ") : "â€”"}</SummaryRow>
             <SummaryRow label="Last fired">{rule.lastFiredAt ? `${timeAgo(new Date(rule.lastFiredAt).getTime())} (${formatDateTime(new Date(rule.lastFiredAt).getTime())})` : "Never"}</SummaryRow>
           </dl>
 
-          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Fire history · last 24h</h3>
+          <h3 className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Fire history Â· last 24h</h3>
           <div className="mt-2 h-[7.5rem] w-full" aria-label={`Fire history chart, ${rule.fired24h} fires in the last 24 hours`}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={history} margin={{ top: 4, right: 4, left: -22, bottom: 0 }} barCategoryGap={1}>
@@ -208,15 +208,15 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
             const linked = getRunbookForRule(rule.id);
             return linked ? (
               <p className="mt-1.5 text-[0.8125rem]">
-                <Link href={`/runbooks/${linked.id}`} className="inline-flex max-w-full items-center gap-1.5 rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Link href={`/operations/runbooks/${linked.id}`} className="inline-flex max-w-full items-center gap-1.5 rounded font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <BookOpen size={13} aria-hidden="true" className="shrink-0" />
-                  <span className="truncate">{linked.id} · {linked.title}</span>
+                  <span className="truncate">{linked.id} Â· {linked.title}</span>
                 </Link>
               </p>
             ) : (
               <p className="mt-1.5 text-[0.8125rem] text-muted-foreground">
                 No runbook linked.{" "}
-                <Link href={`/runbooks/new?rule=${rule.id}`} className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Create one →</Link>
+                <Link href={`/operations/runbooks/new?rule=${rule.id}`} className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">Create one â†’</Link>
               </p>
             );
           })()}
@@ -229,7 +229,7 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
               {rule.recentFires.map((fire) => (
                 <li key={fire.id} className="flex items-center justify-between gap-3 py-1.5">
                   <span className="min-w-0">
-                    <Link href={`/alerts?alert=${fire.id}`} className="text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
+                    <Link href={`/operations/alerts?alert=${fire.id}`} className="text-[0.8125rem] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
                       {fire.id}
                     </Link>
                     <span className="block truncate text-[0.75rem] text-muted-foreground">{fire.detail}</span>
@@ -248,12 +248,12 @@ export function RuleDetailDrawer({ rule, onClose, onEdit, onToggle, onCopyLink }
                 <span aria-hidden="true" className="relative mt-1 h-2 w-2 shrink-0 rounded-full bg-slate-400 ring-2 ring-card" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[0.8125rem] font-medium text-foreground">{entry.action}</span>
-                  <span className="block text-[0.6875rem] text-muted-foreground">{entry.actor} · {formatDateTime(entry.epochMs)}</span>
+                  <span className="block text-[0.6875rem] text-muted-foreground">{entry.actor} Â· {formatDateTime(entry.epochMs)}</span>
                 </span>
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-[0.6875rem] text-muted-foreground">Last updated by {rule.updatedBy} · {rule.updatedAt}</p>
+          <p className="mt-3 text-[0.6875rem] text-muted-foreground">Last updated by {rule.updatedBy} Â· {rule.updatedAt}</p>
         </div>
       </aside>
     </>,

@@ -185,7 +185,7 @@ export function CertificatesDashboard() {
             if (s === "Expired") expired += 1; else if (s === "Critical") critical += 1; else if (s === "Expiring soon") soon += 1; else healthy += 1;
           }
         }
-        buckets.push({ label: new Date(start).toLocaleDateString(undefined, spec.fmt), expired, critical, soon, healthy, range: `${new Date(start).toLocaleDateString(undefined, spec.rangeFmt)} – ${new Date(end - dayMs).toLocaleDateString(undefined, spec.rangeFmt)}` });
+        buckets.push({ label: new Date(start).toLocaleDateString(undefined, spec.fmt), expired, critical, soon, healthy, range: `${new Date(start).toLocaleDateString(undefined, spec.rangeFmt)} â€“ ${new Date(end - dayMs).toLocaleDateString(undefined, spec.rangeFmt)}` });
       }
     }
     return buckets;
@@ -314,7 +314,7 @@ export function CertificatesDashboard() {
     const next = [...savedViews.filter((view) => view.name !== name), { name, patch }];
     try { window.localStorage.setItem("certs:saved-views:v1", JSON.stringify(next)); } catch { /* quota */ }
     setSavedViews(next);
-    notify({ message: `View “${name}” saved` });
+    notify({ message: `View â€œ${name}â€ saved` });
     setSaveViewOpen(false);
     setSaveViewName("");
   }, [tab, statusFilter, issuerFilter, envFilter, ownerFilter, groupFilter, keyTypeFilter, autoRenewOff, weakOnly, range, query, savedViews, saveViewName, notify]);
@@ -347,7 +347,7 @@ export function CertificatesDashboard() {
         breadcrumbs={["Security", "Certificates & Expiration"]}
         title="Certificates & Expiration"
         subtitle="TLS certificate inventory with expiration alerts"
-        lastUpdated={mounted ? lastUpdated.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "…"}
+        lastUpdated={mounted ? lastUpdated.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "â€¦"}
         onRefresh={() => { reload(); setLastUpdated(new Date()); }}
         actions={
           <div className="flex items-center gap-2">
@@ -369,7 +369,7 @@ export function CertificatesDashboard() {
         <div role="status" className="flex min-h-11 flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-900 dark:border-red-500/25 dark:bg-red-500/10 dark:text-red-200">
           <span className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
             <span className="flex items-center gap-2 font-semibold"><AlertTriangle size={16} aria-hidden="true" />{summary.expired} certificates expired</span>
-            <span className="hidden sm:inline" aria-hidden="true">·</span>
+            <span className="hidden sm:inline" aria-hidden="true">Â·</span>
             <span>{summary.expiring7} expire within 7 days</span>
           </span>
           <button type="button" onClick={() => { applyFilters({ tab: "expired" }); tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="shrink-0 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">View expired <ChevronRight size={14} className="inline" aria-hidden="true" /></button>
@@ -399,7 +399,7 @@ export function CertificatesDashboard() {
               <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-orange-500" /><span className="text-muted-foreground">Critical</span></span>
               <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-amber-500" /><span className="text-muted-foreground">Expiring soon</span></span>
               <span className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[0.1875rem] bg-emerald-500" /><span className="text-muted-foreground">Healthy</span></span>
-              <span className="ml-auto tabular-nums text-muted-foreground"><b className="text-foreground">{expiringThisMonth}</b> expiring in 30 days · <b className="text-red-600 dark:text-red-400">{expiringCritical}</b> critical</span>
+              <span className="ml-auto tabular-nums text-muted-foreground"><b className="text-foreground">{expiringThisMonth}</b> expiring in 30 days Â· <b className="text-red-600 dark:text-red-400">{expiringCritical}</b> critical</span>
             </div>
             <div className="h-[14.375rem] min-h-[13.75rem] w-full flex-1" role="img" aria-label="Certificates expiring stacked area chart">
               <ResponsiveContainer width="100%" height="100%">
@@ -445,7 +445,7 @@ export function CertificatesDashboard() {
               })}
             </ul>
           </div>
-          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">All certs in scope · revoked included</p>
+          <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">All certs in scope Â· revoked included</p>
         </ChartCard>
       </section>
 
@@ -567,7 +567,7 @@ export function CertificatesDashboard() {
                   <button type="button" onClick={() => openDrawer(cert.id)} className="flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${cert.commonName} expires in ${days} days`}>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-mono text-[0.8125rem] font-semibold text-foreground">{cert.commonName}</span>
-                      <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.hostIds[0]} · {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                      <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{cert.hostIds[0]} Â· {new Date(cert.expiresAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
                     </span>
                     <span className={cn("inline-flex shrink-0 items-center rounded-full px-2 py-1 text-xs font-semibold", days <= 7 ? "bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300" : days <= 30 ? "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300" : "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300")}>in {days}d</span>
                   </button>
@@ -577,8 +577,8 @@ export function CertificatesDashboard() {
             {upcoming.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">Nothing expires in the next 60 days.</li>}
           </ul>
           <p className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3 text-xs text-muted-foreground">
-            <span>Upcoming <b className="text-foreground">{upcoming.length}</b> in 60 days · <b className="text-orange-700 dark:text-orange-400">{upcoming.filter((c) => daysUntilExpiry(c.expiresAt) <= 7).length}</b> ≤ 7 days</span>
-            <ViewAllLink href="/certificates-and-expiration?tab=expiring" label="View all expiring" />
+            <span>Upcoming <b className="text-foreground">{upcoming.length}</b> in 60 days Â· <b className="text-orange-700 dark:text-orange-400">{upcoming.filter((c) => daysUntilExpiry(c.expiresAt) <= 7).length}</b> â‰¤ 7 days</span>
+            <ViewAllLink href="/security/certificates-and-expiration?tab=expiring" label="View all expiring" />
           </p>
         </ChartCard>
       </section>
@@ -682,7 +682,7 @@ export function CertificatesDashboard() {
                       <td className="px-2 py-2 align-middle">
                         <p className="font-mono text-[0.6875rem] font-semibold text-muted-foreground">{cert.id}</p>
                         <p className="mt-0.5 truncate text-[0.8125rem] font-medium text-foreground" title={cert.commonName}>{cert.commonName}</p>
-                        <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground" title={cert.sans.join(", ")}>+{cert.sans.length} SANs · {cert.sans.slice(0, 2).join(", ")}{cert.sans.length > 2 ? "·" : ""}</p>
+                        <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground" title={cert.sans.join(", ")}>+{cert.sans.length} SANs Â· {cert.sans.slice(0, 2).join(", ")}{cert.sans.length > 2 ? "Â·" : ""}</p>
                       </td>
                       <td className="px-2 py-2 align-middle"><div className="flex flex-col items-start gap-1"><CertStatusBadge status={status} />{(weak || !cert.chainValid) && <span className="flex items-center gap-1 text-[0.625rem] text-red-600 dark:text-red-400">{weak && <AlertTriangle size={10} aria-hidden="true" />}{weak ? "Weak" : "Chain invalid"}</span>}</div></td>
                       <td className="px-2 py-2 align-middle"><DaysLeftBadge daysLeft={daysLeft} revoked={cert.revoked} /><span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{new Date(cert.expiresAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</span></td>
@@ -699,7 +699,7 @@ export function CertificatesDashboard() {
                           { key: "download", label: "Download PEM", onSelect: () => downloadPem(cert) },
                           { key: "fingerprint", label: "Copy fingerprint", onSelect: () => { try { void navigator.clipboard?.writeText(cert.fingerprintSha256); notify({ message: "Fingerprint copied" }); } catch { notify({ message: "Clipboard unavailable" }); } } },
                           { key: "revoke", label: "Revoke certificate", danger: true, onSelect: () => setRevokeFor(cert.id) },
-                          { key: "copy", label: "Copy link", onSelect: () => { try { void navigator.clipboard?.writeText(`${window.location.origin}/certificates-and-expiration/${cert.id}`); notify({ message: "Link copied" }); } catch { notify({ message: "Clipboard unavailable" }); } } },
+                          { key: "copy", label: "Copy link", onSelect: () => { try { void navigator.clipboard?.writeText(`${window.location.origin}/security/certificates-and-expiration/${cert.id}`); notify({ message: "Link copied" }); } catch { notify({ message: "Clipboard unavailable" }); } } },
                         ]} />
                       </td>
                     </tr>
@@ -790,7 +790,7 @@ function SaveViewDialog({ open, name, setName, onCancel, onSave }: { open: boole
         <p className="mt-1 text-xs text-muted-foreground">Stores the active filters as a named view in this browser.</p>
         <label className="mt-3 flex flex-col gap-1.5 text-sm font-medium">
           View name
-          <input autoFocus value={name} onChange={(event) => setName(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") onSave(); if (event.key === "Escape") onCancel(); }} placeholder="e.g. Expiring soon — internal CA" aria-label="View name" className="h-9 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+          <input autoFocus value={name} onChange={(event) => setName(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") onSave(); if (event.key === "Escape") onCancel(); }} placeholder="e.g. Expiring soon â€” internal CA" aria-label="View name" className="h-9 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
         </label>
         <div className="mt-4 flex justify-end gap-2">
           <Button variant="outline" onClick={onCancel}>Cancel</Button>

@@ -138,7 +138,7 @@ export function BackupJobsTable({
     if (el) el.indeterminate = !allVisibleSelected && someVisibleSelected;
   };
 
-  const openJob = (jobId: string) => router.push(`/backups-and-recovery/jobs/${encodeURIComponent(jobId)}`);
+  const openJob = (jobId: string) => router.push(`/operations/backups-and-recovery/jobs/${encodeURIComponent(jobId)}`);
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
@@ -225,12 +225,12 @@ export function BackupJobsTable({
                   {/* Job */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-xs text-muted-foreground">{job?.id ?? "—"}</span>
+                      <span className="font-mono text-xs text-muted-foreground">{job?.id ?? "â€”"}</span>
                       {job?.taskId && <span title={`Linked Scheduled Task ${job.taskId}`}><Link2 size={11} aria-hidden="true" className="text-muted-foreground" /></span>}
                       {job && <AssetTypeBadge label={job.assetType} className="ml-auto" />}
                     </div>
                     <span className={cn("mt-0.5 block truncate text-[0.8125rem] font-semibold text-foreground", job && "group-hover:text-primary")} title={name}>{name}</span>
-                    <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` · ${job.group}` : ""}` : `${row.unprotected!.host} · unprotected`}</span>
+                    <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` Â· ${job.group}` : ""}` : `${row.unprotected!.host} Â· unprotected`}</span>
                     {running && (
                       <span className="mt-1 flex max-w-[11.25rem] items-center gap-1.5" aria-label={`Backup running, ${progress}% complete`}>
                         <span className="h-[0.1875rem] flex-1 overflow-hidden rounded-full bg-muted">
@@ -248,7 +248,7 @@ export function BackupJobsTable({
                         <p className="mt-1 truncate text-xs font-medium text-foreground" title={formatSchedule(job.schedule)}>{formatSchedule(job.schedule)}</p>
                         <p className="mt-0.5 text-xs text-muted-foreground">Keep {job.retentionDays} days</p>
                       </>
-                    ) : <span className="text-xs text-muted-foreground">—</span>}
+                    ) : <span className="text-xs text-muted-foreground">â€”</span>}
                   </td>
                   {/* Last run */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
@@ -260,7 +260,7 @@ export function BackupJobsTable({
                       ) : (
                         <span className="text-xs text-muted-foreground">Never ran</span>
                       )
-                    ) : <span className="text-xs text-muted-foreground">—</span>}
+                    ) : <span className="text-xs text-muted-foreground">â€”</span>}
                   </td>
                   {/* Status */}
                   <td className="px-3 py-1.5 align-middle">
@@ -268,11 +268,11 @@ export function BackupJobsTable({
                   </td>
                   {/* Duration */}
                   <td className="px-3 py-1.5 align-middle text-xs tabular-nums text-muted-foreground">
-                    {row.lastRun ? (row.lastRun.status === "running" ? "—" : formatDuration(row.lastRun.durationMs)) : "—"}
+                    {row.lastRun ? (row.lastRun.status === "running" ? "â€”" : formatDuration(row.lastRun.durationMs)) : "â€”"}
                   </td>
                   {/* Size */}
                   <td className="px-3 py-1.5 align-middle text-xs tabular-nums text-muted-foreground">
-                    {row.lastRun ? (row.lastRun.sizeBytes > 0 ? formatBytes(row.lastRun.sizeBytes) : "—") : "—"}
+                    {row.lastRun ? (row.lastRun.sizeBytes > 0 ? formatBytes(row.lastRun.sizeBytes) : "â€”") : "â€”"}
                   </td>
                   {/* Next run */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
@@ -282,7 +282,7 @@ export function BackupJobsTable({
                       ) : nextRunMs ? (
                         coveringWindow ? (
                           <a
-                            href={`/maintenance-windows/${encodeURIComponent(coveringWindow.id)}`}
+                            href={`/operations/maintenance-windows/${encodeURIComponent(coveringWindow.id)}`}
                             onClick={(event) => event.stopPropagation()}
                             className="inline-flex max-w-full items-center gap-1 truncate text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
                             title={`Runs during maintenance window ${coveringWindow.id}`}
@@ -296,12 +296,12 @@ export function BackupJobsTable({
                             <p className="mt-0.5 truncate text-xs tabular-nums text-muted-foreground">{EXACT_TIME.format(nextRunMs)}</p>
                           </>
                         )
-                      ) : <p className="text-xs text-muted-foreground">—</p>
-                    ) : <span className="text-xs text-muted-foreground">—</span>}
+                      ) : <p className="text-xs text-muted-foreground">â€”</p>
+                    ) : <span className="text-xs text-muted-foreground">â€”</span>}
                   </td>
                   {/* Destination */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
-                    {job ? <LocationCell poolId={job.poolId} /> : <span className="text-xs text-muted-foreground">—</span>}
+                    {job ? <LocationCell poolId={job.poolId} /> : <span className="text-xs text-muted-foreground">â€”</span>}
                   </td>
                   {/* RPO */}
                   <td className="min-w-0 px-3 py-1.5 align-middle">
@@ -314,7 +314,7 @@ export function BackupJobsTable({
                           {formatRpoCell(row.rpoLagMinutes, row.rpoTargetMinutes)}
                         </span>
                       )
-                    ) : <span className="text-xs text-muted-foreground">—</span>}
+                    ) : <span className="text-xs text-muted-foreground">â€”</span>}
                   </td>
                   {/* Actions */}
                   <td className="px-2 py-1.5 align-middle" onClick={(event) => event.stopPropagation()}>
@@ -386,15 +386,15 @@ export function BackupJobsTable({
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs text-muted-foreground">{job?.id ?? "—"}</span>
+                  <span className="font-mono text-xs text-muted-foreground">{job?.id ?? "â€”"}</span>
                   {row.skippedMaintenance ? <SkippedMaintenanceBadge /> : <BackupStatusBadge status={job ? row.status : "none"} />}
                 </div>
                 <p className="mt-0.5 truncate text-[0.8125rem] font-semibold text-foreground">{name}</p>
-                <p className="mt-0.5 truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` · ${job.group}` : ""}` : `${row.unprotected!.host} · unprotected`}</p>
+                <p className="mt-0.5 truncate font-mono text-xs text-muted-foreground">{job ? `${job.host}${job.group ? ` Â· ${job.group}` : ""}` : `${row.unprotected!.host} Â· unprotected`}</p>
                 {job && (
                   <p className="mt-1 text-xs tabular-nums text-muted-foreground">
-                    {row.runningRun ? `Running ${row.runningRun.progress ?? 0}%` : row.lastRun ? `Last ${timeAgo(row.lastRun.epochMs)} · ${formatBytes(row.lastRun.sizeBytes)}` : "Never ran"}
-                    {" · RPO "}{formatLag(row.rpoLagMinutes)}{" / "}{formatLag(row.rpoTargetMinutes)}
+                    {row.runningRun ? `Running ${row.runningRun.progress ?? 0}%` : row.lastRun ? `Last ${timeAgo(row.lastRun.epochMs)} Â· ${formatBytes(row.lastRun.sizeBytes)}` : "Never ran"}
+                    {" Â· RPO "}{formatLag(row.rpoLagMinutes)}{" / "}{formatLag(row.rpoTargetMinutes)}
                   </p>
                 )}
               </div>

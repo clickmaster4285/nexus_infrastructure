@@ -27,9 +27,9 @@ const dotColor: Record<string, string> = {
 };
 
 const linkHrefByKind = {
-  metric: { label: "servers", href: "/all-servers" },
-  backup: { label: "backups", href: "/backups-and-recovery" },
-  latency: { label: "collectors", href: "/website-and-api-monitoring" },
+  metric: { label: "servers", href: "/infrastructure/all-servers" },
+  backup: { label: "backups", href: "/operations/backups-and-recovery" },
+  latency: { label: "collectors", href: "/monitoring/website-and-api-monitoring" },
 } as const;
 
 type SummaryServerTableProps =
@@ -137,14 +137,14 @@ export function SummaryServerTable(props: SummaryServerTableProps) {
 }
 
 function TrendIndicator({ trend }: { trend: string }) {
-  if (trend === "↑") {
+  if (trend === "â†‘") {
     return (
       <span className="inline-flex items-center justify-center text-destructive" role="img" aria-label="Increasing">
         <ArrowUp size={14} strokeWidth={2.6} />
       </span>
     );
   }
-  if (trend === "↓") {
+  if (trend === "â†“") {
     return (
       <span className="inline-flex items-center justify-center text-success" role="img" aria-label="Decreasing">
         <ArrowDown size={14} strokeWidth={2.6} />
@@ -159,12 +159,12 @@ function TrendIndicator({ trend }: { trend: string }) {
 }
 
 function LatencyTrendIndicator({ trend }: { trend: string }) {
-  const match = trend.match(/^([↑↓→])\s*(.*)$/);
+  const match = trend.match(/^([â†‘â†“â†’])\s*(.*)$/);
   if (!match) return <span className="whitespace-nowrap">{trend}</span>;
 
   const [, direction, time] = match;
-  const Icon = direction === "↑" ? ArrowUp : direction === "↓" ? ArrowDown : ArrowRight;
-  const color = direction === "↑" ? "text-destructive" : direction === "↓" ? "text-success" : "text-muted-foreground";
+  const Icon = direction === "â†‘" ? ArrowUp : direction === "â†“" ? ArrowDown : ArrowRight;
+  const color = direction === "â†‘" ? "text-destructive" : direction === "â†“" ? "text-success" : "text-muted-foreground";
 
   return (
     <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap">

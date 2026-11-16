@@ -214,7 +214,7 @@ export function AlertRulesDashboard() {
     onMute: (ids: string[], hours: number) => { muteRules(ids, hours); notify(`Muted ${ids.length === 1 ? ids[0] : `${ids.length} rules`} for ${hours}h.`); },
     onUnmute: (rule: AlertRule) => { unmuteRule(rule.id); notify(`${rule.name} unmuted.`); },
     onDelete: (rule: AlertRule) => setDeleteTargets([rule]),
-    onViewAlerts: (rule: AlertRule) => router.push(`/alerts?rule=${rule.id}`),
+    onViewAlerts: (rule: AlertRule) => router.push(`/operations/alerts?rule=${rule.id}`),
     onOpenDetail: (rule: AlertRule) => setDetailId(rule.id),
   };
 

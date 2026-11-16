@@ -178,7 +178,7 @@ const SEED_SPECS: SeedSpec[] = [
     summary: "Reclaim disk on saturated volumes: identify growth source, rotate logs, prune docker artefacts and old release directories, then verify headroom.",
     services: ["db-01", "storage-01", "worker-01"], linkedAlertRuleIds: ["RUL-206"],
     owner: "Tom Becker", team: "Infrastructure", status: "Published", version: 5, estimatedMinutes: 25,
-    prerequisites: ["Root or sudo on the target host", "Confirm no backup is running on the volume (check /backups-and-recovery)", "Screenshot current usage before reclaiming"],
+    prerequisites: ["Root or sudo on the target host", "Confirm no backup is running on the volume (check /operations/backups-and-recovery)", "Screenshot current usage before reclaiming"],
     steps: [
       st("Command", "Find the biggest consumers", 4, "Locate the top growing directories on the volume.", { command: "du -xhd1 / | sort -rh | head -12", expectedOutput: "One or two directories account for >60% of growth; typical offenders: /var/log, docker volumes, old releases." }),
       st("Command", "Rotate and compress logs", 3, "Rotate logs now and compress yesterday's logs.", { command: "logrotate -f /etc/logrotate.conf && find /var/log -mtime +1 -name '*.log' -exec gzip -9 {} \\;" }),
@@ -248,7 +248,7 @@ const SEED_SPECS: SeedSpec[] = [
     owner: "Sara Iqbal", team: "Data", status: "Published", version: 7, estimatedMinutes: 15,
     prerequisites: ["Access to Backups & Recovery", "The failing job id (BJ-####) from the alert payload", "Storage pool credentials in the vault if the job uploads off-site"],
     steps: [
-      st("Command", "Read the last run error", 3, "Pull the most recent failed run for the job.", { command: "echo 'Open /backups-and-recovery -> Jobs -> <job> -> last run' && tail -n 40 /var/log/backup/<job>.log", expectedOutput: "Error class: credentials / capacity / lock / timeout / target-down." }),
+      st("Command", "Read the last run error", 3, "Pull the most recent failed run for the job.", { command: "echo 'Open /operations/backups-and-recovery -> Jobs -> <job> -> last run' && tail -n 40 /var/log/backup/<job>.log", expectedOutput: "Error class: credentials / capacity / lock / timeout / target-down." }),
       st("Check", "Check pool headroom", 3, "Local NAS 13.4/20TB, S3 22.6/25TB, Offsite Vault 12.2/40TB. Failures at >90% used are capacity stops."),
       st("Check", "Check target reachability", 2, "For pool-vault jobs, confirm the vault endpoint and credentials; for NAS, confirm the mount."),
       st("Manual", "Fix and re-run", 5, "Address the error class, then trigger Run Backup from the job page. Watch the first 10 minutes of the run."),
@@ -968,7 +968,7 @@ export function getRunbookForRule(ruleId: string): Runbook | null {
   return candidates.find((runbook) => runbook.status === "Published") ?? candidates[0] ?? null;
 }
 
-/** Map an incident id to the most recently executed non-archived runbook for it (executions are the only incident↔runbook link). */
+/** Map an incident id to the most recently executed non-archived runbook for it (executions are the only incidentâ†”runbook link). */
 export function getRunbookForIncident(incidentId: string): Runbook | null {
   const executions = EXECUTIONS.filter((execution) => execution.incidentId === incidentId);
   for (const execution of [...executions].sort((a, b) => b.epochMs - a.epochMs)) {

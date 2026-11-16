@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -74,7 +74,7 @@ function StepCard({ step, index, anchorPrefix, onToast }: { step: RunbookStep; i
         <p className="mt-1.5 pl-9 text-[0.6875rem] leading-snug text-muted-foreground"><span className="font-semibold text-foreground/80">Expected: </span>{step.expectedOutput}</p>
       )}
       {isWarning && (
-        <p className="mt-2 flex items-start gap-1.5 pl-9 text-[0.75rem] font-semibold text-amber-800 dark:text-amber-300"><TriangleIcon />Stop and read — this step carries a risk.</p>
+        <p className="mt-2 flex items-start gap-1.5 pl-9 text-[0.75rem] font-semibold text-amber-800 dark:text-amber-300"><TriangleIcon />Stop and read â€” this step carries a risk.</p>
       )}
     </li>
   );
@@ -140,7 +140,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
           <BookOpen className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h1 className="mt-3 font-display text-base font-bold text-foreground">Runbook not found</h1>
           <p className="mt-1 text-sm text-muted-foreground">No runbook with id <span className="font-mono">{runbookId}</span> exists, or it was archived out of the mock store.</p>
-          <Button variant="outline" className="mt-4" onClick={() => router.push("/runbooks")}>Back to Runbooks</Button>
+          <Button variant="outline" className="mt-4" onClick={() => router.push("/operations/runbooks")}>Back to Runbooks</Button>
         </div>
       </div>
     );
@@ -156,7 +156,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const copyLink = () => {
-    const url = `${window.location.origin}/runbooks/${runbook.id}`;
+    const url = `${window.location.origin}/operations/runbooks/${runbook.id}`;
     try { void navigator.clipboard?.writeText(url).then(() => showToast("Link copied."), () => showToast(url)); } catch { showToast(url); }
   };
 
@@ -165,13 +165,13 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
       <PageHeader
         breadcrumbs={["Operations", "Runbooks", runbook.title]}
         title={runbook.title}
-        subtitle={`${runbook.id} · v${runbook.version} · ${runbook.category}`}
-        lastUpdated={`${lastUpdated} · ${tz}`}
+        subtitle={`${runbook.id} Â· v${runbook.version} Â· ${runbook.category}`}
+        lastUpdated={`${lastUpdated} Â· ${tz}`}
         onRefresh={() => forceRender((value) => value + 1)}
         statusBadge={<span className="flex flex-wrap items-center gap-1.5"><RunbookStatusBadge status={runbook.status} /><RunbookSeverityBadge severity={runbook.severity} /><span className="inline-flex h-6 items-center rounded border border-border px-2 text-xs font-semibold text-muted-foreground">{runbook.category}</span></span>}
         actions={
           <div className="flex h-10 shrink-0 flex-wrap items-center gap-2">
-            <Button variant="outline" asChild ><Link href="/runbooks"><ChevronLeft size={15} aria-hidden />Back to Runbooks</Link></Button>
+            <Button variant="outline" asChild ><Link href="/operations/runbooks"><ChevronLeft size={15} aria-hidden />Back to Runbooks</Link></Button>
             <AlertMenu
               label="Runbook actions"
               align="end"
@@ -184,8 +184,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                 { key: "copy", label: "Copy link", onSelect: copyLink },
               ]}
             />
-            <Button variant="outline"  asChild><Link href={`/runbooks/${runbook.id}?mode=edit`}><Pencil size={15} aria-hidden />Edit</Link></Button>
-            <Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90" asChild><Link href={`/runbooks/${runbook.id}?mode=run`}><Play size={15} aria-hidden />Run Runbook</Link></Button>
+            <Button variant="outline"  asChild><Link href={`/operations/runbooks/${runbook.id}?mode=edit`}><Pencil size={15} aria-hidden />Edit</Link></Button>
+            <Button className="bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90" asChild><Link href={`/operations/runbooks/${runbook.id}?mode=run`}><Play size={15} aria-hidden />Run Runbook</Link></Button>
           </div>
         }
       />
@@ -194,8 +194,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>Runbook {index + 1} of {allRunbooks.length}</span>
         <div className="flex items-center gap-2">
-          <Button variant="ghost"  disabled={!prevRunbook} onClick={() => prevRunbook && router.push(`/runbooks/${prevRunbook.id}`)} aria-label="Previous runbook"><ChevronLeft size={14} aria-hidden />Prev</Button>
-          <Button variant="ghost"  disabled={!nextRunbook} onClick={() => nextRunbook && router.push(`/runbooks/${nextRunbook.id}`)} aria-label="Next runbook">Next<ChevronRight size={14} aria-hidden /></Button>
+          <Button variant="ghost"  disabled={!prevRunbook} onClick={() => prevRunbook && router.push(`/operations/runbooks/${prevRunbook.id}`)} aria-label="Previous runbook"><ChevronLeft size={14} aria-hidden />Prev</Button>
+          <Button variant="ghost"  disabled={!nextRunbook} onClick={() => nextRunbook && router.push(`/operations/runbooks/${nextRunbook.id}`)} aria-label="Next runbook">Next<ChevronRight size={14} aria-hidden /></Button>
         </div>
       </div>
 
@@ -225,7 +225,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
           </section>
 
           {/* Steps */}
-          <SectionSteps title="Steps" steps={runbook.steps} anchorPrefix="step" collapsed={collapsed.steps} onToggleAll={(collapse) => setCollapsed((current) => ({ ...current, steps: collapse }))} onToast={showToast} emptyHint="No steps yet — edit this runbook to add the remediation procedure." />
+          <SectionSteps title="Steps" steps={runbook.steps} anchorPrefix="step" collapsed={collapsed.steps} onToggleAll={(collapse) => setCollapsed((current) => ({ ...current, steps: collapse }))} onToast={showToast} emptyHint="No steps yet â€” edit this runbook to add the remediation procedure." />
 
           {/* Rollback + Verification */}
           <SectionSteps title="Rollback" steps={runbook.rollback} anchorPrefix="rollback" collapsed={collapsed.rollback} onToggleAll={(collapse) => setCollapsed((current) => ({ ...current, rollback: collapse }))} onToast={showToast} emptyHint="No rollback procedure defined." />
@@ -242,7 +242,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                 {[...runbook.history].sort((a, b) => b.version - a.version).map((entry) => (
                   <li key={entry.version} className="relative pb-3 last:pb-0">
                     <span aria-hidden="true" className="absolute -left-[1.3125rem] top-1 h-2.5 w-2.5 rounded-full border-2 border-card bg-primary" />
-                    <div className="flex flex-wrap items-baseline gap-x-2"><b className="text-[0.8125rem] tabular-nums text-foreground">v{entry.version}</b><span className="text-[0.6875rem] text-muted-foreground">{entry.by} · {formatDateTime(entry.at)}</span></div>
+                    <div className="flex flex-wrap items-baseline gap-x-2"><b className="text-[0.8125rem] tabular-nums text-foreground">v{entry.version}</b><span className="text-[0.6875rem] text-muted-foreground">{entry.by} Â· {formatDateTime(entry.at)}</span></div>
                     <p className="mt-0.5 text-xs text-muted-foreground">{entry.note}</p>
                   </li>
                 ))}
@@ -260,7 +260,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                 <h3 className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Alert rules</h3>
                 <ul className="mt-1 flex flex-wrap gap-1.5">
                   {runbook.linkedAlertRuleIds.map((ruleId) => (
-                    <li key={ruleId}><Link href={`/alert-rules?rule=${ruleId}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-border bg-muted/40 px-2 text-xs font-semibold tabular-nums text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<ExternalLink size={10} aria-hidden /></Link></li>
+                    <li key={ruleId}><Link href={`/operations/alert-rules?rule=${ruleId}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-border bg-muted/40 px-2 text-xs font-semibold tabular-nums text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ruleId}<ExternalLink size={10} aria-hidden /></Link></li>
                   ))}
                   {runbook.linkedAlertRuleIds.length === 0 && <li className="text-xs text-muted-foreground">None linked.</li>}
                 </ul>
@@ -270,7 +270,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                   <h3 className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Incidents</h3>
                   <ul className="mt-1 space-y-1">
                     {linkedIncidents.map((incident) => (
-                      <li key={incident.id}><Link href={`/incidents/${incident.id}`} className="flex items-center gap-1.5 rounded text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="tabular-nums">{incident.id}</span><span className="truncate text-foreground/80">{incident.title}</span></Link></li>
+                      <li key={incident.id}><Link href={`/operations/incidents/${incident.id}`} className="flex items-center gap-1.5 rounded text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="tabular-nums">{incident.id}</span><span className="truncate text-foreground/80">{incident.title}</span></Link></li>
                     ))}
                   </ul>
                 </div>
@@ -279,7 +279,7 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
                 <h3 className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Services &amp; servers</h3>
                 <ul className="mt-1 flex flex-wrap gap-1.5">
                   {runbook.services.map((service) => (
-                    <li key={service}><Link href={`/server-details/${service}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-border px-2 text-xs font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><TechLogo name={service} className="!h-4 !w-4 !rounded-sm [&_svg]:!h-2.5 [&_svg]:!w-2.5" />{service}</Link></li>
+                    <li key={service}><Link href={`/infrastructure/server-details/${service}`} className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-border px-2 text-xs font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><TechLogo name={service} className="!h-4 !w-4 !rounded-sm [&_svg]:!h-2.5 [&_svg]:!w-2.5" />{service}</Link></li>
                   ))}
                 </ul>
               </div>
@@ -291,8 +291,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
             <h2 className="flex items-center gap-1.5 text-sm font-bold text-foreground"><ListChecks size={14} aria-hidden />On this page</h2>
             <ol className="mt-2 space-y-1 text-xs">
               {runbook.steps.map((step, index) => <li key={step.id}><a href={`#step-${step.id}`} className="block truncate rounded text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{index + 1}. {step.title}</a></li>)}
-              {runbook.rollback.map((step, index) => <li key={step.id}><a href={`#rollback-${step.id}`} className="block truncate rounded text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">↩ {index + 1}. {step.title}</a></li>)}
-              {runbook.verification.map((step, index) => <li key={step.id}><a href={`#verify-${step.id}`} className="block truncate rounded text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">✓ {step.title}</a></li>)}
+              {runbook.rollback.map((step, index) => <li key={step.id}><a href={`#rollback-${step.id}`} className="block truncate rounded text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">â†© {index + 1}. {step.title}</a></li>)}
+              {runbook.verification.map((step, index) => <li key={step.id}><a href={`#verify-${step.id}`} className="block truncate rounded text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">âœ“ {step.title}</a></li>)}
             </ol>
           </nav>
 
@@ -302,8 +302,8 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
             <div className="mt-2 grid grid-cols-3 gap-2 text-center">
               {[
                 { label: "Executions (30d)", value: String(executions.filter((execution) => Date.now() - execution.epochMs <= 30 * 86_400_000).length) },
-                { label: "Avg time", value: avgDurationMs != null ? formatDurationMs(avgDurationMs) : "—" },
-                { label: "Success", value: successPct != null ? `${successPct}%` : "—" },
+                { label: "Avg time", value: avgDurationMs != null ? formatDurationMs(avgDurationMs) : "â€”" },
+                { label: "Success", value: successPct != null ? `${successPct}%` : "â€”" },
               ].map((tile) => (
                 <div key={tile.label} className="rounded-lg bg-muted/50 p-2.5">
                   <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tile.label}</p>
@@ -316,29 +316,29 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
           {/* Was this helpful */}
           <section aria-label="Was this helpful" className="rounded-xl border border-border bg-card p-4">
             <h2 className="text-sm font-bold text-foreground">Was this helpful?</h2>
-            <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{runbook.helpfulCount} helpful · {runbook.notHelpfulCount} not helpful{helpfulPct != null ? ` · ${helpfulPct}% positive` : ""}</p>
+            <p className="mt-0.5 text-[0.6875rem] text-muted-foreground">{runbook.helpfulCount} helpful Â· {runbook.notHelpfulCount} not helpful{helpfulPct != null ? ` Â· ${helpfulPct}% positive` : ""}</p>
             {feedback === null ? (
               <div className="mt-2 flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => { recordHelpful(runbook.id, true); setFeedback("yes"); forceRender((value) => value + 1); showToast("Thanks — feedback recorded."); }}><ThumbsUp size={14} aria-hidden />Yes</Button>
+                <Button variant="outline" className="flex-1" onClick={() => { recordHelpful(runbook.id, true); setFeedback("yes"); forceRender((value) => value + 1); showToast("Thanks â€” feedback recorded."); }}><ThumbsUp size={14} aria-hidden />Yes</Button>
                 <Button variant="outline" className="flex-1" onClick={() => { recordHelpful(runbook.id, false); setFeedback("no"); forceRender((value) => value + 1); showToast("Feedback noted. Tell us what was missing."); }}><ThumbsDown size={14} aria-hidden />No</Button>
               </div>
             ) : (
               <div className="mt-2">
                 <label htmlFor="feedback-note" className="text-[0.6875rem] font-semibold text-muted-foreground">What could be better?</label>
                 <textarea id="feedback-note" value={feedbackNote} onChange={(event) => setFeedbackNote(event.target.value)} rows={2} placeholder="Missing prerequisite, wrong command, unclear step..." className="mt-1 w-full rounded-lg border border-border bg-card p-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                <Button variant="outline" className="mt-1.5" onClick={() => { setFeedbackNote(""); setFeedback(null); showToast("Thanks — feedback sent to the runbook owner."); }}>Send</Button>
+                <Button variant="outline" className="mt-1.5" onClick={() => { setFeedbackNote(""); setFeedback(null); showToast("Thanks â€” feedback sent to the runbook owner."); }}>Send</Button>
               </div>
             )}
           </section>
 
           {/* Recent executions */}
           <section aria-label="Recent executions" className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center justify-between gap-2"><h2 className="text-sm font-bold text-foreground">Recent executions</h2>{executions.length > 3 && <Link href={`/runbooks/${runbook.id}?mode=run`} className="text-[0.6875rem] font-semibold text-primary hover:underline">View all {executions.length}</Link>}</div>
+            <div className="flex items-center justify-between gap-2"><h2 className="text-sm font-bold text-foreground">Recent executions</h2>{executions.length > 3 && <Link href={`/operations/runbooks/${runbook.id}?mode=run`} className="text-[0.6875rem] font-semibold text-primary hover:underline">View all {executions.length}</Link>}</div>
             <ul className="mt-2 divide-y divide-border/60">
               {executions.slice(0, 3).map((execution) => (
                 <li key={execution.id} className="flex items-center gap-2 py-2">
                   <InitialsAvatar name={execution.by} size={22} />
-                  <span className="min-w-0 flex-1"><span className="block truncate text-xs font-semibold text-foreground">{execution.by}{execution.incidentId ? ` · ${execution.incidentId}` : ""}</span><span className="text-[0.6875rem] text-muted-foreground">{timeAgo(execution.epochMs)} · {execution.durationMs != null ? formatDurationMs(execution.durationMs) : "in progress"}</span></span>
+                  <span className="min-w-0 flex-1"><span className="block truncate text-xs font-semibold text-foreground">{execution.by}{execution.incidentId ? ` Â· ${execution.incidentId}` : ""}</span><span className="text-[0.6875rem] text-muted-foreground">{timeAgo(execution.epochMs)} Â· {execution.durationMs != null ? formatDurationMs(execution.durationMs) : "in progress"}</span></span>
                   <ExecutionResultBadge result={execution.result} />
                 </li>
               ))}

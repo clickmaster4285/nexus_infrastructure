@@ -32,7 +32,7 @@ export function timeZoneLabel(): string {
   try {
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local time";
     const offset = -new Date().getTimezoneOffset() / 60;
-    const sign = offset >= 0 ? "+" : "−";
+    const sign = offset >= 0 ? "+" : "âˆ’";
     return `${zone} (UTC${sign}${Math.abs(offset)})`;
   } catch {
     return "Local time";
@@ -41,11 +41,11 @@ export function timeZoneLabel(): string {
 
 /* ------------------------------ navigation ------------------------------- */
 
-/** /server-details link when the ops-style target maps to a canonical server; otherwise null. */
+/** /infrastructure/server-details link when the ops-style target maps to a canonical server; otherwise null. */
 export function targetHref(event: Pick<AuthEvent, "target" | "targetKind">): string | null {
   if (event.targetKind !== "server") return null;
   const canonical = OPS_TO_CANONICAL_SERVER[event.target];
-  return canonical ? `/server-details/${encodeURIComponent(canonical)}` : null;
+  return canonical ? `/infrastructure/server-details/${encodeURIComponent(canonical)}` : null;
 }
 
 /* --------------------------------- badges --------------------------------- */
@@ -115,7 +115,7 @@ export function RiskScoreBar({ score, className }: { score: number; className?: 
 }
 
 export function FlagChips({ flags, max = 2 }: { flags: AuthRiskFlag[]; max?: number }) {
-  if (flags.length === 0) return <span className="text-xs text-muted-foreground">—</span>;
+  if (flags.length === 0) return <span className="text-xs text-muted-foreground">â€”</span>;
   const shown = flags.slice(0, max);
   const extra = flags.length - shown.length;
   return (
@@ -130,9 +130,9 @@ export function FlagChips({ flags, max = 2 }: { flags: AuthRiskFlag[]; max?: num
   );
 }
 
-/* ------------------------------ card ⋮ menu ------------------------------- */
+/* ------------------------------ card â‹® menu ------------------------------- */
 
-/** Standard ⋮ card menu used by every card on the page. */
+/** Standard â‹® card menu used by every card on the page. */
 export function AuthCardMenu({ label, onExport, items }: { label: string; onExport?: () => void; items?: AlertMenuItem[] }) {
   const entries = items ?? [
     { key: "table", label: "View as table", onSelect: onExport ?? (() => undefined) },

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -29,10 +29,10 @@ const IMPACT_MAX = 500;
 const TAG_MAX = 10;
 
 const SEVERITY_CARDS: Array<{ severity: IncidentSeverity; icon: LucideIcon; title: string; description: string; active: string; radio: string }> = [
-  { severity: "SEV1", icon: ChevronsUp, title: "SEV1 · Critical", description: "Major outage or data loss. Page everyone now; exec visibility.", active: "border-red-500 bg-red-50 ring-1 ring-red-500/40 dark:border-red-500/60 dark:bg-red-500/10", radio: "accent-[oklch(0.5771_0.2152_27.33)]" },
-  { severity: "SEV2", icon: ChevronUp, title: "SEV2 · High", description: "Significant degradation for many users. Respond now.", active: "border-orange-500 bg-orange-50 ring-1 ring-orange-500/40 dark:border-orange-500/60 dark:bg-orange-500/10", radio: "accent-[oklch(0.6461_0.1943_41.12)]" },
-  { severity: "SEV3", icon: Minus, title: "SEV3 · Medium", description: "Limited impact or partial degradation. Fix during business hours.", active: "border-amber-500 bg-amber-50 ring-1 ring-amber-500/40 dark:border-amber-500/60 dark:bg-amber-500/10", radio: "accent-[oklch(0.6658_0.1574_58.32)]" },
-  { severity: "SEV4", icon: ChevronDownIcon, title: "SEV4 · Low", description: "Minor or cosmetic issue. Track and schedule.", active: "border-blue-500 bg-blue-50 ring-1 ring-blue-500/40 dark:border-blue-500/60 dark:bg-blue-500/10", radio: "accent-[oklch(0.6231_0.188_259.81)]" },
+  { severity: "SEV1", icon: ChevronsUp, title: "SEV1 Â· Critical", description: "Major outage or data loss. Page everyone now; exec visibility.", active: "border-red-500 bg-red-50 ring-1 ring-red-500/40 dark:border-red-500/60 dark:bg-red-500/10", radio: "accent-[oklch(0.5771_0.2152_27.33)]" },
+  { severity: "SEV2", icon: ChevronUp, title: "SEV2 Â· High", description: "Significant degradation for many users. Respond now.", active: "border-orange-500 bg-orange-50 ring-1 ring-orange-500/40 dark:border-orange-500/60 dark:bg-orange-500/10", radio: "accent-[oklch(0.6461_0.1943_41.12)]" },
+  { severity: "SEV3", icon: Minus, title: "SEV3 Â· Medium", description: "Limited impact or partial degradation. Fix during business hours.", active: "border-amber-500 bg-amber-50 ring-1 ring-amber-500/40 dark:border-amber-500/60 dark:bg-amber-500/10", radio: "accent-[oklch(0.6658_0.1574_58.32)]" },
+  { severity: "SEV4", icon: ChevronDownIcon, title: "SEV4 Â· Low", description: "Minor or cosmetic issue. Track and schedule.", active: "border-blue-500 bg-blue-50 ring-1 ring-blue-500/40 dark:border-blue-500/60 dark:bg-blue-500/10", radio: "accent-[oklch(0.6231_0.188_259.81)]" },
 ];
 
 const SERVICE_ICONS: Record<string, { icon: LucideIcon; color: string }> = {
@@ -51,7 +51,7 @@ const NOTIFY_CHANNELS: Array<{ id: string; label: string; icon: LucideIcon; hint
   { id: "#incidents", label: "#incidents", icon: Hash, hint: "Public incident channel" },
   { id: "#sre-oncall", label: "#sre-oncall", icon: Hash, hint: "SRE on-call rotation" },
   { id: "#engineering", label: "#engineering", icon: Hash, hint: "All engineering" },
-  { id: "email:oncall@nexus.io", label: "Email · oncall@nexus.io", icon: Mail, hint: "On-call distribution list" },
+  { id: "email:oncall@nexus.io", label: "Email Â· oncall@nexus.io", icon: Mail, hint: "On-call distribution list" },
   { id: "PagerDuty", label: "PagerDuty", icon: Phone, hint: "Pages the on-call primary" },
 ];
 
@@ -188,7 +188,7 @@ export function DeclareIncident() {
 
   const cancel = useCallback(() => {
     if (dirty && !window.confirm("Discard this incident draft? Unsaved changes will be lost.")) return;
-    router.push("/incidents");
+    router.push("/operations/incidents");
   }, [dirty, router]);
 
   const toggleService = useCallback((service: string) => {
@@ -262,7 +262,7 @@ export function DeclareIncident() {
     if (!title.trim()) list.push("Title");
     if (severity === null) list.push("Severity");
     if (services.length === 0) list.push("Affected services");
-    if (needsCommander && !commander) list.push("Commander (SEV1–2)");
+    if (needsCommander && !commander) list.push("Commander (SEV1â€“2)");
     return list;
   }, [title, severity, services.length, needsCommander, commander]);
 
@@ -273,7 +273,7 @@ export function DeclareIncident() {
     { label: "Severity", done: severity !== null },
     { label: "Affected services", done: services.length > 0 },
     { label: "Notify channels (at least 1)", done: notifyChannels.length > 0 },
-    { label: needsCommander ? "Commander (SEV1–2)" : "Commander", done: needsCommander ? commander !== "" : true, optional: !needsCommander },
+    { label: needsCommander ? "Commander (SEV1â€“2)" : "Commander", done: needsCommander ? commander !== "" : true, optional: !needsCommander },
   ], [title, severity, services.length, notifyChannels.length, needsCommander, commander]);
   const checklistDone = checklist.filter((item) => item.done).length;
   const checklistWidth = ["w-0", "w-1/5", "w-2/5", "w-3/5", "w-4/5", "w-full"][checklistDone];
@@ -306,9 +306,9 @@ export function DeclareIncident() {
     try {
       window.sessionStorage.setItem("nexus:incident-declared", id);
     } catch {
-      /* sessionStorage unavailable — redirect still works */
+      /* sessionStorage unavailable â€” redirect still works */
     }
-    router.push(`/incidents/${id}`);
+    router.push(`/operations/incidents/${id}`);
   }, [severity, tagsDraft, tags, declareIncident, title, services, impactSummary, commander, team, assignee, linkedAlertIds, notifyChannels, statusUpdate, router]);
 
   const submit = useCallback(() => {
@@ -348,7 +348,7 @@ export function DeclareIncident() {
     );
     if (isValid) return button;
     return (
-      <span title={`Missing: ${missing.join(" · ")}`} className="inline-flex">
+      <span title={`Missing: ${missing.join(" Â· ")}`} className="inline-flex">
         {button}
       </span>
     );
@@ -376,7 +376,7 @@ export function DeclareIncident() {
       <form id="declare-incident-form" onSubmit={(event) => { event.preventDefault(); submit(); }} className="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
         {/* ------------------------------- LEFT COLUMN ------------------------------ */}
         <div className="flex min-w-0 flex-col gap-4 xl:col-span-8">
-          {/* 1 · Basics */}
+          {/* 1 Â· Basics */}
           <SectionCard step={1} title="Basics">
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between gap-2">
@@ -434,7 +434,7 @@ export function DeclareIncident() {
             </fieldset>
           </SectionCard>
 
-          {/* 2 · Impact */}
+          {/* 2 Â· Impact */}
           <SectionCard step={2} title="Impact">
             <fieldset className="flex flex-col gap-1.5">
               <legend className="text-sm font-medium text-foreground">Affected services <span aria-hidden="true" className="text-red-600">*</span></legend>
@@ -445,7 +445,7 @@ export function DeclareIncident() {
                     type="text"
                     value={serviceQuery}
                     onChange={(event) => setServiceQuery(event.target.value)}
-                    placeholder="Search services…"
+                    placeholder="Search servicesâ€¦"
                     aria-label="Search services"
                     className={cn(inputClass, "pl-9")}
                   />
@@ -453,7 +453,7 @@ export function DeclareIncident() {
               )}
               <div className="flex items-center justify-end gap-1.5">
                 <button type="button" onClick={() => setServices([...INCIDENT_SERVICES])} className="rounded-lg px-2 py-1 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent">Select all</button>
-                <span aria-hidden="true" className="text-xs text-muted-foreground">·</span>
+                <span aria-hidden="true" className="text-xs text-muted-foreground">Â·</span>
                 <button type="button" onClick={() => setServices([])} className="rounded-lg px-2 py-1 text-xs font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-accent hover:text-foreground">Clear</button>
               </div>
               <div ref={servicesGroupRef} tabIndex={-1} role="group" aria-label="Toggle affected services" aria-describedby={submitted && services.length === 0 ? servicesErrorId : undefined} className="flex flex-wrap gap-1.5 rounded-lg focus:outline-none">
@@ -462,7 +462,7 @@ export function DeclareIncident() {
                   const iconMeta = SERVICE_ICONS[service];
                   const hosts = SERVICE_HOSTS[service] ?? [];
                   const similar = service === "api-server" || service === "app-server";
-                  const tooltip = `${service} — hosts: ${hosts.join(", ")}${similar ? ". Similar name: " + (service === "api-server" ? "app-server" : "api-server") : ""}`;
+                  const tooltip = `${service} â€” hosts: ${hosts.join(", ")}${similar ? ". Similar name: " + (service === "api-server" ? "app-server" : "api-server") : ""}`;
                   return (
                     <button
                       key={service}
@@ -482,7 +482,7 @@ export function DeclareIncident() {
                     </button>
                   );
                 })}
-                {filteredServices.length === 0 && <p className="py-2 text-xs text-muted-foreground">No services match “{serviceQuery}”.</p>}
+                {filteredServices.length === 0 && <p className="py-2 text-xs text-muted-foreground">No services match â€œ{serviceQuery}â€.</p>}
               </div>
               {submitted && services.length === 0 && <p id={servicesErrorId} role="alert" className={errorClass}><CircleAlert size={13} aria-hidden="true" />Select at least one affected service.</p>}
             </fieldset>
@@ -504,7 +504,7 @@ export function DeclareIncident() {
             </div>
           </SectionCard>
 
-          {/* 3 · Response */}
+          {/* 3 Â· Response */}
           <SectionCard step={3} title="Response">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex flex-col gap-1.5">
@@ -530,7 +530,7 @@ export function DeclareIncident() {
                 </Select>
                 {submitted && needsCommander && !commander
                   ? <p id={commanderErrorId} role="alert" className={errorClass}><CircleAlert size={13} aria-hidden="true" />Commander required for SEV1-2.</p>
-                  : <p className="text-xs text-muted-foreground">{needsCommander ? "Required for SEV1–2." : "Optional for SEV3–4."}</p>}
+                  : <p className="text-xs text-muted-foreground">{needsCommander ? "Required for SEV1â€“2." : "Optional for SEV3â€“4."}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="team-select" className="text-sm font-medium text-foreground">Team</label>
@@ -552,7 +552,7 @@ export function DeclareIncident() {
             </div>
           </SectionCard>
 
-          {/* 4 · Context */}
+          {/* 4 Â· Context */}
           <SectionCard step={4} title="Context">
             <fieldset className="flex flex-col gap-1.5">
               <legend className="text-sm font-medium text-foreground">Link existing alerts</legend>
@@ -562,7 +562,7 @@ export function DeclareIncident() {
                   type="text"
                   value={alertQuery}
                   onChange={(event) => setAlertQuery(event.target.value)}
-                  placeholder="Search alerts by ID or name…"
+                  placeholder="Search alerts by ID or nameâ€¦"
                   aria-label="Search alerts"
                   className={cn(inputClass, "pl-9")}
                 />
@@ -581,7 +581,7 @@ export function DeclareIncident() {
                     </label>
                   );
                 })}
-                {filteredAlerts.length === 0 && <p className="px-3 py-4 text-center text-xs text-muted-foreground">No alerts match “{alertQuery}”.</p>}
+                {filteredAlerts.length === 0 && <p className="px-3 py-4 text-center text-xs text-muted-foreground">No alerts match â€œ{alertQuery}â€.</p>}
               </div>
               <p className="text-xs text-muted-foreground">Showing the 12 most recent.{linkedAlertIds.length > 0 ? ` ${linkedAlertIds.length} linked.` : ""}</p>
             </fieldset>
@@ -650,7 +650,7 @@ export function DeclareIncident() {
             <p className="text-xs text-muted-foreground">Declaring pages the selected channels and opens the timeline.</p>
             <div className="flex items-center gap-2">
               <Button type="button" variant="outline" onClick={cancel} >Cancel</Button>
-              {declareButton(undefined, submitting ? "Declaring…" : "Declare Incident")}
+              {declareButton(undefined, submitting ? "Declaringâ€¦" : "Declare Incident")}
             </div>
           </div>
         </div>

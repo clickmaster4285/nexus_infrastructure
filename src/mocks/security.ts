@@ -19,7 +19,7 @@ export type AuthReviewState = "New" | "Reviewed" | "False positive";
 
 export interface AuthImpossibleTravel { fromCity: string; fromTime: string; toCity: string; toTime: string; distanceKm: number; minutes: number; }
 /** Authentication event across the fleet. `time` is an ISO 8601 timestamp relative to module load. */
-export interface AuthEvent { id: string; time: string; user: string; userType: AuthUserType; eventType: AuthEventType; method: AuthMethod; result: AuthResult; failureReason: AuthFailureReason | null; ip: string; country: string; countryCode: string; city: string; browser: string; os: string; /** e.g. "Chrome on macOS". */ device: string; /** App or ops-style server name (api-server-01, grafana.nexus.io, …). */ target: string; targetKind: "server" | "app"; mfaUsed: boolean; riskScore: number; riskFlags: AuthRiskFlag[]; reviewState: AuthReviewState; blocked: boolean; /** Present when the event was flagged as impossible travel. */ impossibleTravel?: AuthImpossibleTravel; }
+export interface AuthEvent { id: string; time: string; user: string; userType: AuthUserType; eventType: AuthEventType; method: AuthMethod; result: AuthResult; failureReason: AuthFailureReason | null; ip: string; country: string; countryCode: string; city: string; browser: string; os: string; /** e.g. "Chrome on macOS". */ device: string; /** App or ops-style server name (api-server-01, grafana.nexus.io, â€¦). */ target: string; targetKind: "server" | "app"; mfaUsed: boolean; riskScore: number; riskFlags: AuthRiskFlag[]; reviewState: AuthReviewState; blocked: boolean; /** Present when the event was flagged as impossible travel. */ impossibleTravel?: AuthImpossibleTravel; }
 export type AuthDetectionType = "brute_force" | "password_spray" | "impossible_travel" | "mfa_fatigue" | "off_hours";
 export type AuthDetectionStatus = "Open" | "Investigating" | "Resolved" | "False positive";
 /** Grouped auth anomaly raised by the detection engine. */
@@ -90,15 +90,15 @@ const patches: PatchStatus[] = ([
 
 const certificates: SecurityCertificate[] = domains.map(([domain, daysLeft, autoRenew], index) => ({ id: `CRT-${4100 + index}`, domain, issuer: index % 2 ? "Let's Encrypt" : "DigiCert", daysLeft, autoRenew, expiresAt: new Date(now + daysLeft * DAY).toISOString(), status: daysLeft < 7 ? "Expiring" : "Valid" }));
 /* ---------------------------------------------------------------- *
- * Authentication events — single source of truth.
+ * Authentication events â€” single source of truth.
  *
- * 24h headline totals are FIXED constants (TOTAL_24H …); everything the
+ * 24h headline totals are FIXED constants (TOTAL_24H â€¦); everything the
  * pages render (stat cards, banner, charts, tables, tabs, Security
  * Overview) derives from them or from the module-level `authEvents`
  * sample. Trend buckets are normalised so their sum matches the totals.
  * The 400-row `authEvents` array is a seeded deterministic SAMPLE of the
  * last 30 days (weighted to the last 24h); swap `loadAuthEvents` /
- * `loadAuthDetections` for real API fetches later — the types stay.
+ * `loadAuthDetections` for real API fetches later â€” the types stay.
  * ---------------------------------------------------------------- */
 
 export const AUTH_TOTAL_24H = 18_420;
@@ -119,7 +119,7 @@ export const AUTH_RANGE_STATS = {
   "30D": { uniqueUsers: 573, uniqueIps: 3_904 },
 } as const;
 
-/** Suspect IPs share these documentation (TEST-NET) ranges everywhere — never real addresses. */
+/** Suspect IPs share these documentation (TEST-NET) ranges everywhere â€” never real addresses. */
 export const AUTH_BRUTE_FORCE_SUSPECTS = [
   { ip: "203.0.113.44", country: "Russia", countryCode: "RU", city: "Moscow", attempts: 486, usersTargeted: 37, firstSeenHoursAgo: 6, status: "Watch" as const },
   { ip: "198.51.100.23", country: "China", countryCode: "CN", city: "Shanghai", attempts: 412, usersTargeted: 29, firstSeenHoursAgo: 9, status: "Watch" as const },
@@ -139,7 +139,7 @@ export const AUTH_METHOD_COUNTS = [
 
 export const AUTH_SSO_FAILURE_RATE_PCT = 2.1;
 
-/** Seven failure reasons; sums to AUTH_FAILED_24H (wrong password = 724/1240 ≈ 58%). */
+/** Seven failure reasons; sums to AUTH_FAILED_24H (wrong password = 724/1240 â‰ˆ 58%). */
 export const AUTH_FAILURE_REASONS = [
   { reason: "Wrong password", count: 724 },
   { reason: "MFA failed", count: 154 },
@@ -169,7 +169,7 @@ export const AUTH_TARGETED_ACCOUNTS = [
   { user: "sara.iqbal@nexus.io", failedAttempts: 7, locked: false, lastAttemptMinutesAgo: 256 },
 ] as const;
 
-/** Ops-style target name → All-Servers canonical name for /server-details links. */
+/** Ops-style target name â†’ All-Servers canonical name for /infrastructure/server-details links. */
 export const OPS_TO_CANONICAL_SERVER: Record<string, string> = {
   "api-server-01": "prod-api-01",
   "api-server-02": "prod-api-01",
@@ -393,7 +393,7 @@ const authDetections: AuthDetection[] = [
   { id: "DET-3101", type: "brute_force", severity: "Critical", subject: "203.0.113.44", count: 486, firstSeen: new Date(now - 6 * HOUR_MS).toISOString(), lastSeen: new Date().toISOString(), status: "Open", relatedEventIds: authEvents.filter((event) => event.ip === "203.0.113.44").slice(0, 8).map((event) => event.id), detail: "486 failed password attempts against 37 accounts from a single IP." },
   { id: "DET-3102", type: "brute_force", severity: "High", subject: "198.51.100.23", count: 412, firstSeen: new Date(now - 9 * HOUR_MS).toISOString(), lastSeen: new Date().toISOString(), status: "Open", relatedEventIds: authEvents.filter((event) => event.ip === "198.51.100.23").slice(0, 8).map((event) => event.id), detail: "412 failed attempts from a second source; same account list as DET-3101." },
   { id: "DET-3103", type: "brute_force", severity: "High", subject: "192.0.2.171", count: 342, firstSeen: new Date(now - 14 * HOUR_MS).toISOString(), lastSeen: new Date(now - 2 * HOUR_MS).toISOString(), status: "Investigating", relatedEventIds: authEvents.filter((event) => event.ip === "192.0.2.171").slice(0, 8).map((event) => event.id), detail: "342 attempts through an anonymizer exit node; auto-blocked at the edge." },
-  { id: "DET-3104", type: "impossible_travel", severity: "High", subject: "ops@nexus.io", count: 2, firstSeen: new Date(now - 3 * HOUR_MS).toISOString(), lastSeen: new Date().toISOString(), status: "Investigating", relatedEventIds: authEvents.filter((event) => event.user === "ops@nexus.io" && event.riskFlags.includes("impossible_travel")).slice(0, 8).map((event) => event.id), detail: "Karachi 10:02 → Frankfurt 10:20 (≈ 5,300 km in 18 min)." },
+  { id: "DET-3104", type: "impossible_travel", severity: "High", subject: "ops@nexus.io", count: 2, firstSeen: new Date(now - 3 * HOUR_MS).toISOString(), lastSeen: new Date().toISOString(), status: "Investigating", relatedEventIds: authEvents.filter((event) => event.user === "ops@nexus.io" && event.riskFlags.includes("impossible_travel")).slice(0, 8).map((event) => event.id), detail: "Karachi 10:02 â†’ Frankfurt 10:20 (â‰ˆ 5,300 km in 18 min)." },
   { id: "DET-3105", type: "password_spray", severity: "Medium", subject: "203.0.113.101", count: 171, firstSeen: new Date(now - 11 * HOUR_MS).toISOString(), lastSeen: new Date().toISOString(), status: "Open", relatedEventIds: authEvents.filter((event) => event.ip === "203.0.113.101").slice(0, 8).map((event) => event.id), detail: "Low-and-slow spray across 29 accounts; 1 successful login attempt observed." },
   { id: "DET-3106", type: "mfa_fatigue", severity: "Medium", subject: "legacy@nexus.io", count: 14, firstSeen: new Date(now - 5 * HOUR_MS).toISOString(), lastSeen: new Date(now - HOUR_MS).toISOString(), status: "Resolved", relatedEventIds: authEvents.filter((event) => event.user === "legacy@nexus.io").slice(0, 8).map((event) => event.id), detail: "14 consecutive MFA pushes in 30 minutes; user denied all of them." },
 ];
@@ -409,14 +409,14 @@ export function setAuthDetectionStatus(id: string, status: AuthDetectionStatus):
   const detection = authDetections.find((item) => item.id === id);
   if (!detection) return;
   detection.status = status;
-  auditAuth("Updated detection", { type: "Detection", id, name: id }, `Status → ${status}`);
+  auditAuth("Updated detection", { type: "Detection", id, name: id }, `Status â†’ ${status}`);
 }
 
 export function getAuthDetections(): AuthDetection[] {
   return authDetections.map((detection) => ({ ...detection, relatedEventIds: [...detection.relatedEventIds] }));
 }
 
-/** Async mock fetch — swap for `fetch("/api/auth/events")` later. */
+/** Async mock fetch â€” swap for `fetch("/api/auth/events")` later. */
 export function loadAuthEvents(): Promise<AuthEvent[]> {
   return new Promise((resolve) => {
     const timer = typeof window !== "undefined" ? window.setTimeout : setTimeout;
@@ -424,7 +424,7 @@ export function loadAuthEvents(): Promise<AuthEvent[]> {
   });
 }
 
-/** Async mock fetch — swap for `fetch("/api/auth/detections")` later. */
+/** Async mock fetch â€” swap for `fetch("/api/auth/detections")` later. */
 export function loadAuthDetections(): Promise<AuthDetection[]> {
   return new Promise((resolve) => {
     const timer = typeof window !== "undefined" ? window.setTimeout : setTimeout;
@@ -462,7 +462,7 @@ export function blockAuthIp(ip: string, opts: { duration: string; reason: string
   for (const event of authEvents) {
     if (event.ip === ip && event.result === "Success") event.blocked = true;
   }
-  auditAuth("Blocked IP", { type: "IP address", id: ip, name: ip }, `Blocked for ${opts.duration} · scope: ${opts.scope} · reason: ${opts.reason}`);
+  auditAuth("Blocked IP", { type: "IP address", id: ip, name: ip }, `Blocked for ${opts.duration} Â· scope: ${opts.scope} Â· reason: ${opts.reason}`);
 }
 
 export function unblockAuthIp(ip: string): void {
@@ -487,7 +487,7 @@ export function markAuthReviewed(ids: string[], state: AuthReviewState, reason?:
   );
 }
 
-/** Demo permission flag — flip to false to see admin-gated actions disable with a tooltip. */
+/** Demo permission flag â€” flip to false to see admin-gated actions disable with a tooltip. */
 export const MOCK_ADMIN_PERMISSION = true;
 
 /** Deterministic mock "active session" count for a user. */
@@ -546,13 +546,13 @@ export function createAuthIncident(input: { title: string; severity: "SEV1" | "S
 }
 
 /* ---------------------------------------------------------------- *
- * Configuration changes — single source of truth.
+ * Configuration changes â€” single source of truth.
  *
  * 24h headline totals are FIXED constants; the table/charts show a
  * seeded 240-row SAMPLE across the last 30 days (assets are the ops
  * servers from this file). Buckets are distributed with largest-
  * remainder rounding so series sums match the fixed totals exactly.
- * Swap `loadConfigChanges` for a real `/api/config/drift` later — the
+ * Swap `loadConfigChanges` for a real `/api/config/drift` later â€” the
  * types stay.
  * ---------------------------------------------------------------- */
 
@@ -651,7 +651,7 @@ export const CONFIG_WINDOW_MARKERS = [
   { id: "MW-1042", title: "Postgres minor version upgrade", assetId: "db-01", hoursAgo: 96, durationMinutes: 60 },
 ] as const;
 
-/** Curated change → incident links; incident ids reference the Incidents mock. */
+/** Curated change â†’ incident links; incident ids reference the Incidents mock. */
 export const CONFIG_INCIDENT_LINKS = [
   { changeId: "CFG-2026-004812", incidentId: "INC-1048", minutesAfter: 12, confidence: "Likely cause" as const },
   { changeId: "CFG-2026-004790", incidentId: "INC-1046", minutesAfter: 21, confidence: "Likely cause" as const },
@@ -716,7 +716,7 @@ const CONFIG_TEMPLATES: ConfigChangeSeed[] = [
   { category: "Kernel/OS", path: "kernel.sysrq", before: "176", after: "1" },
   { category: "Files", path: "/etc/sudoers: %ops", before: "ALL=(ALL) NOPASSWD: ALL", after: "ALL=(ALL:ALL) NOPASSWD: /usr/bin/systemctl" },
   { category: "Files", path: "/etc/shadow (mode)", before: "0640 root:shadow", after: "0640 root:shadow" },
-  { category: "Files", path: "/etc/ssl/certs/nexus-ca.pem", before: "sha256:9f2e�", after: "sha256:41bc�" },
+  { category: "Files", path: "/etc/ssl/certs/nexus-ca.pem", before: "sha256:9f2eï¿½", after: "sha256:41bcï¿½" },
   { category: "Registry", path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\sshd: Start", before: "2", after: "3" },
   { category: "Registry", path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate: AUOptions", before: "4", after: "3" },
   { category: "Registry", path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters: DisableIPSourceRouting", before: "1", after: "2" },
@@ -827,7 +827,7 @@ export function addConfigNote(id: string, note: string): void {
   const change = configChangeStore.find((item) => item.id === id);
   if (!change) return;
   appendTimeline(change, "note added", CURRENT_USER_NAME, note.trim());
-  auditConfig("Added note to configuration change", id, `${change.assetName} · ${change.path}`, note.trim());
+  auditConfig("Added note to configuration change", id, `${change.assetName} Â· ${change.path}`, note.trim());
 }
 
 export function approveConfigChange(id: string, opts: { ticket: string | null; reason: string }): void {
@@ -838,7 +838,7 @@ export function approveConfigChange(id: string, opts: { ticket: string | null; r
   change.ticket = opts.ticket ?? change.ticket;
   change.status = "Reviewed";
   appendTimeline(change, "approved", CURRENT_USER_NAME, opts.reason);
-  auditConfig("Approved configuration change", id, `${change.assetName} � ${change.path}`, opts.reason);
+  auditConfig("Approved configuration change", id, `${change.assetName} ï¿½ ${change.path}`, opts.reason);
 }
 
 export function rejectConfigChange(id: string, opts: { reason: string; createRollback: boolean }): void {
@@ -846,8 +846,8 @@ export function rejectConfigChange(id: string, opts: { reason: string; createRol
   if (!change) return;
   change.approvalStatus = "Unapproved";
   change.status = "Reverted";
-  appendTimeline(change, "rejected", CURRENT_USER_NAME, opts.reason + (opts.createRollback ? " � rollback task created" : ""));
-  auditConfig("Rejected configuration change", id, `${change.assetName} � ${change.path}`, opts.reason);
+  appendTimeline(change, "rejected", CURRENT_USER_NAME, opts.reason + (opts.createRollback ? " ï¿½ rollback task created" : ""));
+  auditConfig("Rejected configuration change", id, `${change.assetName} ï¿½ ${change.path}`, opts.reason);
 }
 
 export function markConfigExpected(id: string, opts: { reason: string; expiresAt: string | null }): void {
@@ -857,8 +857,8 @@ export function markConfigExpected(id: string, opts: { reason: string; expiresAt
   change.approvedBy = "system";
   change.driftFromBaseline = false;
   change.status = "Reviewed";
-  appendTimeline(change, "marked expected", CURRENT_USER_NAME, opts.reason + (opts.expiresAt ? ` � expires ${opts.expiresAt}` : ""));
-  auditConfig("Marked change as expected", id, `${change.assetName} � ${change.path}`, opts.reason);
+  appendTimeline(change, "marked expected", CURRENT_USER_NAME, opts.reason + (opts.expiresAt ? ` ï¿½ expires ${opts.expiresAt}` : ""));
+  auditConfig("Marked change as expected", id, `${change.assetName} ï¿½ ${change.path}`, opts.reason);
 }
 
 export function acceptConfigBaseline(id: string, opts: { reason: string }): void {
@@ -869,7 +869,7 @@ export function acceptConfigBaseline(id: string, opts: { reason: string }): void
   change.status = "Accepted as new baseline";
   change.approvalStatus = "Approved";
   appendTimeline(change, "accepted as baseline", CURRENT_USER_NAME, opts.reason);
-  auditConfig("Accepted change as new baseline", id, `${change.assetName} � ${change.path}`, opts.reason);
+  auditConfig("Accepted change as new baseline", id, `${change.assetName} ï¿½ ${change.path}`, opts.reason);
 }
 
 export function rollbackConfigChange(id: string, opts: { snapshotId: string }): void {
@@ -879,7 +879,7 @@ export function rollbackConfigChange(id: string, opts: { snapshotId: string }): 
   change.driftFromBaseline = false;
   change.status = "Rolled back";
   appendTimeline(change, "rolled back", CURRENT_USER_NAME, `Restored from ${opts.snapshotId}.`);
-  auditConfig("Rolled back configuration change", id, `${change.assetName} � ${change.path}`, `Restored from ${opts.snapshotId}`);
+  auditConfig("Rolled back configuration change", id, `${change.assetName} ï¿½ ${change.path}`, `Restored from ${opts.snapshotId}`);
 }
 
 export function createConfigIncident(input: { title: string; severity: "SEV1" | "SEV2" | "SEV3"; impact: string; hosts?: string[]; changeId: string }): string {
@@ -916,7 +916,7 @@ export function runConfigDriftScan(scope: { label: string }): ConfigChange[] {
     configChangeStore.unshift(change);
     return { ...change };
   });
-  for (const change of added) auditConfig("Drift detected", change.id, `${change.assetName} � ${change.path}`, `Scan scope: ${scope.label}`);
+  for (const change of added) auditConfig("Drift detected", change.id, `${change.assetName} ï¿½ ${change.path}`, `Scan scope: ${scope.label}`);
   return added;
 }
 export const SECURITY_SNAPSHOT: SecuritySnapshot = { vulnerabilities, patches, certificates, authEvents, configChanges: configChangeStore, accounts, exposures, findings };
