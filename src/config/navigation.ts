@@ -51,10 +51,10 @@ export const NAV_GROUPS: NavGroup[] = [
     title: "Overview",
     icon: LayoutDashboard,
     items: [
-      { label: "Executive Overview", href: "/executive-overview", icon: LayoutDashboard },
-      { label: "Infrastructure Dashboard", href: "/infrastructure-dashboard", icon: PanelsTopLeft },
-      { label: "Live Operations / NOC", href: "/live-operations-noc", icon: Radio },
-      { label: "Global Health", href: "/global-health", icon: Globe },
+      { label: "Executive Overview", href: "/overview/executive", icon: LayoutDashboard },
+      { label: "Infrastructure Dashboard", href: "/overview/infrastructure", icon: PanelsTopLeft },
+      { label: "Live Operations / NOC", href: "/overview/live-operations", icon: Radio },
+      { label: "Global Health", href: "/overview/global-health", icon: Globe },
     ],
   },
   {
@@ -65,6 +65,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "All Servers", href: "/all-servers", icon: Server },
       { label: "Server Groups", href: "/server-groups", icon: Boxes },
       { label: "Network Devices", href: "/network-devices", icon: Router },
+      { label: "Network Topology", href: "/infrastructure/network-topology", icon: Workflow },
       { label: "Containers & Docker", href: "/containers-and-docker", icon: Container },
       { label: "Cloud Accounts & Providers", href: "/cloud-accounts-and-providers", icon: Cloud },
       { label: "Dependencies", href: "/dependencies", icon: Workflow },
@@ -120,5 +121,5 @@ const hrefByLabel = new Map(ALL_NAV_ITEMS.map((item) => [item.label, item.href])
 
 /** Resolves a sidebar label to its route, e.g. "All Servers" -> "/all-servers". */
 export function hrefForLabel(label: string): string {
-  return hrefByLabel.get(label) ?? "/executive-overview";
+  return hrefByLabel.get(label) ?? "/overview/executive";
 }

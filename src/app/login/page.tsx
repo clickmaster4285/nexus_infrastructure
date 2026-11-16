@@ -48,7 +48,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    router.prefetch("/executive-overview");
+    router.prefetch("/overview/executive");
   }, [router]);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
     setIsSubmitting(true);
     // Any credentials are accepted in this demo — straight to the overview.
-    router.push("/executive-overview");
+    router.push("/overview/executive");
   };
 
   const providerStatus = (provider: string) => setActionStatus(t.providerStatus.replace("{provider}", provider));

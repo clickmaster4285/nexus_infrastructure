@@ -11,7 +11,7 @@ export default function NotFound() {
           The page you are looking for doesn&apos;t exist or may have been moved.
         </p>
         <Button asChild className="mt-1">
-          <Link href="/executive-overview">Back to Executive Overview</Link>
+          <Link href="/overview/executive">Back to Executive Overview</Link>
         </Button>
       </div>
     </main>

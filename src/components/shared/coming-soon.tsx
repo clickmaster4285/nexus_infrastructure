@@ -28,7 +28,7 @@ export function ComingSoon({ title, description, breadcrumbs }: ComingSoonProps)
           {description} This section is under construction — the route is wired up and ready for implementation.
         </p>
         <Button asChild variant="outline" className="mt-1">
-          <Link href="/executive-overview">
+          <Link href="/overview/executive">
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Executive Overview
           </Link>

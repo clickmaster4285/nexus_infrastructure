@@ -500,7 +500,7 @@ export function GlobalHealthDashboard() {
             </li>;
           })}</ul>
         </> : <div className="my-auto flex flex-col items-center gap-2 py-8 text-center"><CircleCheck size={28} className="text-emerald-500" /><b className="text-[0.875rem] text-slate-800 dark:text-slate-100">Everything is within SLA</b></div>}
-        <footer className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>SLA target: <b className="text-slate-700 dark:text-slate-300">{SLA_TARGET}%</b></span><Link href="/global-health" className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link></footer>
+        <footer className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>SLA target: <b className="text-slate-700 dark:text-slate-300">{SLA_TARGET}%</b></span><Link href="/overview/global-health" className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link></footer>
       </Panel>
 
       <Panel title="Recent Health Changes" titleClassName="text-[1rem] font-semibold" className="flex min-h-[31.25rem] min-w-0 flex-col p-4" action={<Clock3 size={15} className="text-slate-400" aria-hidden="true" />}>
@@ -514,7 +514,7 @@ export function GlobalHealthDashboard() {
             <span className="flex min-w-0 items-center gap-1.5"><span className="min-w-0 truncate text-[0.8125rem] text-slate-700 dark:text-slate-200"><b className="font-semibold text-slate-800 dark:text-slate-100">{event.name}</b> {drop ? "dropped" : "recovered"} {event.from.toFixed(1)}% → {event.to.toFixed(1)}%</span><span className={cn("inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[0.75rem] font-semibold tabular-nums", drop ? "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300" : "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300")}>{drop ? "▼" : "▲"} {event.delta > 0 ? "+" : ""}{event.delta.toFixed(1)}%</span></span>
           </li>;
         })}</ol></div>
-        <footer className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>Latest health updates</span><Link href="/global-health" className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link></footer>
+        <footer className="mt-auto flex items-center justify-between border-t border-border pt-2 text-[0.75rem] text-slate-500"><span>Latest health updates</span><Link href="/overview/global-health" className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary hover:underline">View all <ArrowRight size={13} /></Link></footer>
       </Panel>
     </section>
   </>;
