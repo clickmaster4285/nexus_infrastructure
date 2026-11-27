@@ -1,0 +1,75 @@
+# CLAUDE.md
+
+Guidance for Claude Code (and humans) working in this repository.
+
+## What this is
+
+**Nexus** is an infrastructure monitoring dashboard (servers, network, monitoring, alerts, incidents, backups, security).
+Today it is a **frontend-only prototype**: every page runs on seeded mock data. There is no backend yet.
+
+```
+NexusInfra/
+├── frontend/   Next.js 15 app (all current code lives here)
+├── backend/    EMPTY – reserved for the API/data plane (see PLAN.md)
+├── docs/       ARCHITECTURE.md, STATUS.md, CONVENTIONS.md
+├── PLAN.md     Roadmap and the next work to pick up
+└── CLAUDE.md   This file
+```
+
+Read before starting work:
+- [PLAN.md](PLAN.md) – what we are doing next
+- [docs/STATUS.md](docs/STATUS.md) – what exists and what is broken or duplicated
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) – how the frontend is wired
+- [docs/CONVENTIONS.md](docs/CONVENTIONS.md) – coding rules to follow
+- [frontend/AUDIT.md](frontend/AUDIT.md) – the full product/gap audit from 2026-11-13
+
+## Commands (run from `frontend/`)
+
+| Command | Purpose |
+|---|---|
+| `npm install` | Install dependencies |
+| `npm run dev` | Dev server on http://localhost:3000 (`/` redirects to `/overview/executive`) |
+| `npm run typecheck` | `tsc --noEmit`. **Must pass before any commit.** Currently clean. |
+| `npm run build` | Production build |
+
+There is **no lint script and no test suite yet**. Typecheck is the only automated gate.
+
+## Stack
+
+**Frontend:** Node ≥ 20.9 (dev machine: 22) · Next.js 16 (App Router, Turbopack) · React 19.3 · TypeScript 7 (strict, native Go compiler) · Tailwind CSS v4 (CSS-first config in `src/app/globals.css`, no tailwind.config) · tailwind-merge 3 · shadcn-style primitives (Radix) · Recharts 3 + ECharts 6 · Leaflet / react-leaflet · lucide-react 1.x. Path alias `@/*` → `frontend/src/*`.
+
+**Backend (planned, not started):** Go core (API, inventory, scheduler, auth/RBAC, audit) + small stateless Python services for network device adapters (Netmiko/NAPALM/SNMP), talking over gRPC. See [PLAN.md](PLAN.md).
+
+### Version gotchas
+- **Next 16:** `next lint` no longer exists – run ESLint directly. Route middleware file is `proxy.ts`, not `middleware.ts`. After switching versions, `rm -rf .next` (a stale cache caused a fake prerender failure).
+- **Recharts 3:** `Pie` has no `activeIndex`/`activeShape` – use `shape={(props, index) => …}` and `props.isActive`. Tooltip `formatter` values are `ValueType | undefined`, not `number`.
+- **lucide-react 1.x:** brand icons were removed. Use `simple-icons` / FontAwesome brands (already installed) for logos.
+- **Line endings:** many source files are CRLF. Keep them that way – don't rewrite whole files with tools that normalise to LF.
+
+## How a page works (the one pattern to know)
+
+```
+src/app/(dashboard)/<section>/<page>/page.tsx   thin server file: metadata + render one component
+  → src/components/<domain>/<x>-dashboard.tsx    "use client" UI
+    → src/hooks/useX.ts  or  src/mocks/useX.ts   async mock "fetch" with loading/error/success
+      → src/mocks/<domain>.ts                     seeded data + module-level store (subscribe/snapshot/mutate)
+      → src/utils/<domain>Stats.ts                pure derived calculations (KPIs, trends)
+```
+
+Hooks are written so their body can later be swapped for `fetch("/api/...")` **without changing the return shape**. Preserve that contract.
+
+## Rules
+
+- Keep `page.tsx` files thin. UI goes in `src/components/<domain>/`.
+- New nav entries go in `src/config/navigation.ts` (single source for the sidebar and `hrefForLabel`).
+- Use `PageHeader` (`components/layout/page-header.tsx`) for page titles/breadcrumbs.
+- Use `cn()` from `@/lib/utils` for class merging; use theme tokens (`bg-card`, `text-muted-foreground`, `text-success`, …) not raw colors where a token exists.
+- ECharts must be imported from `@/lib/echarts` (it converts `oklch()` colors; raw `echarts` renders invisible series).
+- Mock data must stay deterministic (no `Math.random()` at module load for seeded data) so SSR and client agree.
+- Do not add new duplicate primitives – check `components/ui` and `components/shared` first.
+- Full details: [docs/CONVENTIONS.md](docs/CONVENTIONS.md).
+
+## Git
+
+- Work on feature branches; `main` is the PR target. Current working branch: `change26/11`.
+- `frontend/.gitignore` exists; the repo root has none (`.remember/` is untracked tooling state – don't commit it).

@@ -254,7 +254,7 @@ export function TaskDetailDrawer({ task, onClose, onRunNow, onToggle, onEdit, on
                     <Tooltip
                       contentStyle={{ borderRadius: 8, border: "0.0625rem solid var(--border)", background: "var(--popover)", fontSize: 11 }}
                       labelStyle={{ color: "var(--foreground)", fontWeight: 700 }}
-                      formatter={(value: number) => [`${value}s`, "Duration"]}
+                      formatter={(value) => [`${value ?? 0}s`, "Duration"]}
                     />
                     <Line type="monotone" dataKey="seconds" stroke="oklch(0.6231 0.188 259.81)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
                   </LineChart>

@@ -11,7 +11,7 @@ import {
 import {
   Area, AreaChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart,
   ResponsiveContainer, Sector, Tooltip, XAxis, YAxis,
-  type SectorProps,
+  type PieSectorShapeProps,
 } from "recharts";
 
 import { PageHeader } from "@/components/layout/page-header";
@@ -683,8 +683,9 @@ export function ServerGroupsDashboard() {
                         cornerRadius={5}
                         stroke="var(--card)"
                         strokeWidth={1}
-                        activeIndex={hoveredHealthStatus ? healthOverview.findIndex((item) => item.name === hoveredHealthStatus) : undefined}
-                        activeShape={(props: SectorProps) => <Sector {...props} outerRadius={(Number(props.outerRadius) || 78) + 5} />}
+                        shape={(props: PieSectorShapeProps, index?: string | number) => (
+                          <Sector {...props} outerRadius={(Number(props.outerRadius) || 78) + (healthOverview[Number(index)]?.name === hoveredHealthStatus ? 5 : 0)} />
+                        )}
                         onMouseEnter={(_, index) => setHoveredHealthStatus(healthOverview[index]?.name ?? null)}
                         onMouseLeave={() => setHoveredHealthStatus(null)}
                         isAnimationActive
