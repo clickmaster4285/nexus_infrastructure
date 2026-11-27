@@ -17,7 +17,7 @@ import {
   Workflow,
   X,
 } from "lucide-react";
-import { siKubernetes } from "simple-icons";
+import { SiKubernetes } from "react-icons/si";
 
 import { Icon } from "@/components/shared/icon";
 import { OnPremIcon, ProviderLogo } from "@/components/shared/provider-logo";
@@ -61,11 +61,7 @@ function TopologyIcon({ name, size, tone }: { name: string; size: number; tone?:
     return <img className="shrink-0 object-contain" src={brandAsset} width={size} height={size} alt="" />;
   }
   if (name === "kubernetes") {
-    return (
-      <svg className="shrink-0" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" style={{ color: `#${siKubernetes.hex}` }}>
-        <path d={siKubernetes.path} fill="currentColor" />
-      </svg>
-    );
+    return <SiKubernetes className="shrink-0 text-[#326CE5]" size={size} aria-hidden="true" />;
   }
   if (name === "vpc") {
     return (

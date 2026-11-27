@@ -1,4 +1,4 @@
-import { siDebian } from "simple-icons";
+import { SiDebian } from "react-icons/si";
 
 import { cn } from "@/lib/utils";
 import { serverNetworkTrends, type Server } from "@/mocks/servers";
@@ -90,11 +90,7 @@ function OperatingSystemLogo({ type }: { type: OsType }) {
     );
   }
   if (type === "debian") {
-    return (
-      <svg className="h-[1.1875rem] w-[1.1875rem] shrink-0 text-[oklch(0.4769_0.1723_19.23)]" viewBox="0 0 24 24" aria-hidden="true">
-        <path d={siDebian.path} fill="currentColor" />
-      </svg>
-    );
+    return <SiDebian className="h-[1.1875rem] w-[1.1875rem] shrink-0 text-[oklch(0.4769_0.1723_19.23)]" aria-hidden="true" />;
   }
   return (
     <svg className="h-[1.1875rem] w-[1.1875rem] shrink-0 text-[oklch(0.6405_0.1941_37.76)]" viewBox="0 0 24 24" aria-hidden="true">

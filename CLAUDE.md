@@ -43,7 +43,7 @@ There is **no lint script and no test suite yet**. Typecheck is the only automat
 ### Version gotchas
 - **Next 16:** `next lint` no longer exists – run ESLint directly. Route middleware file is `proxy.ts`, not `middleware.ts`. After switching versions, `rm -rf .next` (a stale cache caused a fake prerender failure).
 - **Recharts 3:** `Pie` has no `activeIndex`/`activeShape` – use `shape={(props, index) => …}` and `props.isActive`. Tooltip `formatter` values are `ValueType | undefined`, not `number`.
-- **lucide-react 1.x:** brand icons were removed. Use `simple-icons` / FontAwesome brands (already installed) for logos.
+- **Icons – only these three:** `lucide-react` for UI icons · `react-icons` (`react-icons/si`, `react-icons/fa`) for brand/tech logos (lucide 1.x has no brand icons) · `country-flag-icons` for flags. Don't add another icon library.
 - **Line endings:** many source files are CRLF. Keep them that way – don't rewrite whole files with tools that normalise to LF.
 
 ## How a page works (the one pattern to know)

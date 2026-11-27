@@ -54,7 +54,7 @@ Turn the prototype into a working product **one vertical slice at a time**, with
 ## Phase 1 – Clean up the frontend (small, safe, do first)
 
 - [ ] Fix the hydration mismatch (React #418): make mock seed data use a fixed reference time instead of `Date.now()` at module load
-- [ ] Consolidate icon libraries: replace `simple-icons` (4 logos) and `@fortawesome/free-brands-svg-icons` (AWS logo only) with `react-icons` equivalents and uninstall both. Keep lucide-react (UI), react-icons (brands), country-flag-icons (flags)
+- [x] Consolidate icon libraries (done 2026-11-27): replace `simple-icons` (4 logos) and `@fortawesome/free-brands-svg-icons` (AWS logo only) with `react-icons` equivalents and uninstall both. Keep lucide-react (UI), react-icons (brands), country-flag-icons (flags)
 - [ ] Add a root `.gitignore` (node_modules, .next, .env*, .remember/)
 - [ ] Remove the legacy `infrastructure/data-centers-and-locations` route + `data-centers-dashboard.tsx` (or redirect it to `server-sites`)
 - [ ] Merge the StatCard duplicate; point all imports at one file

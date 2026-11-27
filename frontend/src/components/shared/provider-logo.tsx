@@ -1,5 +1,5 @@
-import { faAws } from "@fortawesome/free-brands-svg-icons";
-import { siDigitalocean, siHetzner } from "simple-icons";
+import { FaAws } from "react-icons/fa";
+import { SiDigitalocean, SiHetzner } from "react-icons/si";
 
 import { cn } from "@/lib/utils";
 
@@ -13,31 +13,13 @@ export function ProviderLogo({ provider, className }: ProviderLogoProps) {
   const type = provider.toLowerCase().replaceAll(" ", "-");
 
   if (type === "aws") {
-    const pathData = faAws.icon[4];
-    const d = Array.isArray(pathData) ? pathData.join(" ") : pathData;
-    return (
-      <svg
-        className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.7527_0.1546_68.93)]", className)}
-        viewBox={`0 0 ${faAws.icon[0]} ${faAws.icon[1]}`}
-        aria-hidden="true"
-      >
-        <path d={d} fill="currentColor" />
-      </svg>
-    );
+    return <FaAws className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.7527_0.1546_68.93)]", className)} aria-hidden="true" />;
   }
   if (type === "hetzner") {
-    return (
-      <svg className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.5538_0.2194_23.17)]", className)} viewBox="0 0 24 24" aria-hidden="true">
-        <path d={siHetzner.path} fill="currentColor" />
-      </svg>
-    );
+    return <SiHetzner className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.5538_0.2194_23.17)]", className)} aria-hidden="true" />;
   }
   if (type === "digitalocean") {
-    return (
-      <svg className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.6152_0.2108_256.1)]", className)} viewBox="0 0 24 24" aria-hidden="true">
-        <path d={siDigitalocean.path} fill="currentColor" />
-      </svg>
-    );
+    return <SiDigitalocean className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.6152_0.2108_256.1)]", className)} aria-hidden="true" />;
   }
   return <OnPremIcon className={cn("h-[1.0625rem] w-[1.0625rem] shrink-0 text-[oklch(0.5131_0.0511_252.79)]", className)} />;
 }

@@ -63,7 +63,8 @@ Status key: **UI** = page built on mock data · **UI+** = interactive workflows 
 | recharts | 2.15 | **3.11** |
 | lucide-react | 0.468 | **1.82** |
 | tailwind-merge | 2.6 | **3.7** |
-| @types/* , postcss, simple-icons | — | latest patch |
+| @types/* , postcss | — | latest patch |
+| simple-icons, @fortawesome/free-brands-svg-icons | installed | **removed** (5 logos moved to react-icons) |
 
 Added `"engines": { "node": ">=20.9.0" }`. Code changes needed: 2 (Recharts Pie hover shape, Tooltip formatter type).
 Verified: typecheck ✓, production build ✓ (47 static pages), all 64 routes return 200, every Recharts/ECharts chart renders in a browser.
