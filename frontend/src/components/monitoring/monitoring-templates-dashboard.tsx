@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Check, Copy, Download, FileJson, LayoutGrid, List, MoreVertical, RefreshCw, Search, ShieldAlert, SlidersHorizontal, TriangleAlert, Upload } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Panel } from "@/components/shared/panel";

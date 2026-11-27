@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { RunbooksDashboard } from "./runbooks-dashboard";
+import { RunbooksDashboard } from "@/components/runbooks/runbooks-dashboard";
 
 export const metadata: Metadata = {
   title: "Runbooks",

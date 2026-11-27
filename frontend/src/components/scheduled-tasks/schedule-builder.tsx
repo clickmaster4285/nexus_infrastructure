@@ -44,7 +44,7 @@ export function ScheduleBuilder({ value, onChange }: ScheduleBuilderProps) {
   const preview = useMemo(() => {
     if (value.kind === "cron" && cronError) return [];
     return nextRuns(value, Date.now(), 5);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [value, cronError]);
 
   const toggleWeekday = (day: number) => {

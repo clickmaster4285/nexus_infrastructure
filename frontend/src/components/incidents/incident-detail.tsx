@@ -19,7 +19,7 @@ import {
   CURRENT_USER_NAME, INCIDENT_PEOPLE, ON_CALL, STATUS_ORDER, durationMinutes, formatMinutes, isOpenIncident,
   linkedAlerts, severityRank, type Incident, type IncidentStatus,
 } from "@/mocks/incidents";
-import { useIncidents } from "@/mocks/useIncidents";
+import { useIncidents } from "@/hooks/useIncidents";
 import { getRunbookForIncident } from "@/mocks/runbooks";
 import { fullTimestamp, timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";

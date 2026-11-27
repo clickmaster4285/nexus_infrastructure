@@ -142,7 +142,7 @@ function StatusDonut({
   );
 }
 
-function DataCenterPerformance({ range }: { range: string }) {
+function ServerSitePerformance({ range }: { range: string }) {
   return (
     <>
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-[0.6875rem] text-muted-foreground">
@@ -212,7 +212,7 @@ export function ServerSitesDashboard() {
         subtitle="Monitor server site health, location availability and infrastructure performance."
         actions={<>
           <Button onClick={() => showNotice("Add Server Site form is a mockup for now.")} ><Plus size={16} />Add Server Site</Button>
-          <Button variant="outline" onClick={() => document.getElementById("global-data-centers")?.scrollIntoView({ behavior: "smooth", block: "center" })} ><Globe2 size={16} />View Map</Button>
+          <Button variant="outline" onClick={() => document.getElementById("global-server-sites")?.scrollIntoView({ behavior: "smooth", block: "center" })} ><Globe2 size={16} />View Map</Button>
         </>}
       />
 
@@ -222,7 +222,7 @@ export function ServerSitesDashboard() {
 
       <section aria-label="Global server site status" className="grid items-stretch gap-3 xl:grid-cols-[2.1fr_0.95fr_1.05fr]">
         <Panel title="Global Infrastructure Map" className="min-h-[18.125rem] min-w-0" action={<div className="flex items-center gap-2"><div className="flex rounded-md border border-border p-0.5">{["World", "Regions"].map((scope) => <button key={scope} onClick={() => setMapScope(scope)} className={`rounded-lg px-2 py-1 text-[0.6875rem] ${mapScope === scope ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground"}`}>{scope}</button>)}</div><div className="hidden items-center gap-2 xl:flex">{[["Healthy", "oklch(0.6907 0.1499 159.66)"], ["Degraded", "oklch(0.7686 0.1647 70.08)"], ["Offline", "oklch(0.6368 0.2078 25.33)"]].map(([label, color]) => <span key={label} className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-muted-foreground"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}</div></div>}>
-          <div id="global-data-centers" className="relative mt-2 min-h-[15.5rem] flex-1 overflow-hidden rounded-lg">
+          <div id="global-server-sites" className="relative mt-2 min-h-[15.5rem] flex-1 overflow-hidden rounded-lg">
             <NocOsmMap sites={healthMapSites} center={[-33.9249, 18.4241]} initialZoom={13} />
             {mapScope === "Regions" && <div className="absolute right-2 top-2 z-[500] rounded-md border border-border bg-white/95 p-2 text-[0.6875rem] text-slate-600 shadow-sm"><b>Active regions</b><div className="mt-1">North America · Europe</div><div>Asia Pacific · Middle East</div></div>}
           </div>
@@ -266,7 +266,7 @@ export function ServerSitesDashboard() {
 
       <section aria-label="Performance and location availability" className="grid items-stretch gap-3 xl:grid-cols-[1.1fr_0.9fr_1.1fr]">
         <Panel title="Server Site Performance" className="min-w-0" action={<div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">{["24h", "7d", "30d", "90d"].map((item) => <button key={item} onClick={() => setRange(item)} className={`rounded-lg px-1.5 py-1 text-[0.6875rem] font-medium ${range === item ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>{item}</button>)}</div>}>
-          <DataCenterPerformance range={range} />
+          <ServerSitePerformance range={range} />
         </Panel>
 
         <Panel title="Site Availability" className="min-w-0 p-4">

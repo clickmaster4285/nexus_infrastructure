@@ -884,7 +884,7 @@ function PerformanceChart({ theme, hidden, onToggle }: {
               { offset: 1, color: `${PALETTE.blue}00` },
             ]),
           },
-          markPoint: { symbol: "circle", symbolSize: 9, label: { show: true, position: "top" as const, distance: 7, color: theme.foreground, fontSize: 11, fontWeight: 600, formatter: (params: any) => `${params.value ?? ""} ms` }, itemStyle: { color: PALETTE.blue, borderColor: theme.card, borderWidth: 2 }, data: [{ name: "Latest response", coord: [latestPointIndex, latest.response], value: latest.response }] },
+          markPoint: { symbol: "circle", symbolSize: 9, label: { show: true, position: "top" as const, distance: 7, color: theme.foreground, fontSize: 11, fontWeight: 600, formatter: (params: { value?: unknown }) => `${params.value ?? ""} ms` }, itemStyle: { color: PALETTE.blue, borderColor: theme.card, borderWidth: 2 }, data: [{ name: "Latest response", coord: [latestPointIndex, latest.response], value: latest.response }] },
           markArea: incidentAreas.length ? { silent: true, data: incidentAreas } : undefined,
           markLine: {
             silent: true,
@@ -916,7 +916,7 @@ function PerformanceChart({ theme, hidden, onToggle }: {
           lineStyle: { width: 2, color: PALETTE.green },
           itemStyle: { color: PALETTE.green },
           emphasis: { focus: "series" as const, lineStyle: { width: 3 }, itemStyle: { borderColor: theme.card, borderWidth: 2 } },
-          markPoint: { symbol: "circle", symbolSize: 9, label: { show: true, position: "bottom" as const, distance: 7, color: theme.foreground, fontSize: 11, fontWeight: 600, formatter: (params: any) => `${params.value ?? ""}%` }, itemStyle: { color: PALETTE.green, borderColor: theme.card, borderWidth: 2 }, data: [{ name: "Latest availability", coord: [latestPointIndex, latest.availability], value: latest.availability }] },
+          markPoint: { symbol: "circle", symbolSize: 9, label: { show: true, position: "bottom" as const, distance: 7, color: theme.foreground, fontSize: 11, fontWeight: 600, formatter: (params: { value?: unknown }) => `${params.value ?? ""}%` }, itemStyle: { color: PALETTE.green, borderColor: theme.card, borderWidth: 2 }, data: [{ name: "Latest availability", coord: [latestPointIndex, latest.availability], value: latest.availability }] },
         }] : []),
       ],
     };

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { IncidentsDashboard } from "./incidents-dashboard";
+import { IncidentsDashboard } from "@/components/incidents/incidents-dashboard";
 
 export const metadata: Metadata = {
   title: "Incidents",

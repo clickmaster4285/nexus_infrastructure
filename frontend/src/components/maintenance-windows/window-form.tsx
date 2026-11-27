@@ -19,7 +19,7 @@ import {
   CURRENT_USER_NAME, overlappingWindows, rulesForScope, scopeHosts,
   type MaintenanceRecurrence, type MaintenanceWindowType,
 } from "@/mocks/maintenanceWindows";
-import { useMaintenanceWindows } from "@/mocks/useMaintenanceWindows";
+import { useMaintenanceWindows } from "@/hooks/useMaintenanceWindows";
 import { readIncidentStore } from "@/mocks/incidents";
 import { cn } from "@/lib/utils";
 

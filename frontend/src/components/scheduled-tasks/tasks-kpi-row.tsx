@@ -2,7 +2,7 @@
 
 import { ArrowDown, ArrowUp, CheckCircle2, Layers, ListChecks, PauseCircle, Timer, XCircle } from "lucide-react";
 
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Sparkline } from "@/components/shared/sparkline";
 import { cn } from "@/lib/utils";
 import type { TaskStats } from "@/utils/taskStats";

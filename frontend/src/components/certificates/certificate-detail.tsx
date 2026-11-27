@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { timeAgo, fullTime, timeZoneLabel } from "@/components/auth-events/auth-shared";
 import { daysUntilExpiry, expiryStatus, healthScore, formatValidity, type CertStatus } from "@/utils/certStats";
-import { useCertificates, useCertificate, useCertSummary } from "@/mocks/useCertificates";
+import { useCertificates, useCertificate, useCertSummary } from "@/hooks/useCertificates";
 import { renewCertificate, revokeCertificate, setCertificateAutoRenew, assignCertificateOwner, markCertificateVerified } from "@/mocks/certificates";
 
 interface CertificateDetailProps {

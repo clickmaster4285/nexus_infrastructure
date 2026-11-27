@@ -16,7 +16,7 @@ import {
 import { PageHeader } from "@/components/layout/page-header";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { ChartCard, SegmentedControl } from "@/components/logs/primitives";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ import { cn } from "@/lib/utils";
 import { computeUserStats } from "@/utils/accessStats";
 import {
   useUsers, useRoles, useApiTokens, useAccessAudit, DEMO_CURRENT_USER,
-} from "@/mocks/useAccessControl";
+} from "@/hooks/useAccessControl";
 import type { UserStatus } from "@/utils/accessStats";
 
 type MainTab = "users" | "roles" | "tokens" | "matrix" | "audit";

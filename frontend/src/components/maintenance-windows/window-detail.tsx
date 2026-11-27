@@ -20,7 +20,7 @@ import {
   CURRENT_USER_NAME, CANONICAL_TO_OPS, MAINTENANCE_TIME_ZONES, scopeHosts,
   type MaintenanceTimelineEntry, type MaintenanceWindow,
 } from "@/mocks/maintenanceWindows";
-import { useMaintenanceWindows } from "@/mocks/useMaintenanceWindows";
+import { useMaintenanceWindows } from "@/hooks/useMaintenanceWindows";
 import { ALERT_RULES } from "@/mocks/alertRules";
 import { timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";

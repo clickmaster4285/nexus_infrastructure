@@ -14,12 +14,12 @@ import {
 
 import { PageHeader } from "@/components/layout/page-header";
 import { Panel } from "@/components/shared/panel";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useLogs } from "@/mocks/useLogs";
+import { useLogs } from "@/hooks/useLogs";
 import {
   LEVEL_COUNTS, LOG_ENVIRONMENTS, LOG_HOSTS, LOG_SERVICES, LOG_SOURCES, LOG_TOTALS, LOG_TRENDS,
   NOISY_LOG_SOURCES,

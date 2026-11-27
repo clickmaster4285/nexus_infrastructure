@@ -7,14 +7,14 @@ import {
 
 import { PageHeader } from "@/components/layout/page-header";
 import { AlertMenu } from "@/components/alerts/alert-menu";
-import { TasksKpiRow, type KpiKey } from "@/components/scheduled-tasks/TasksKpiRow";
-import { ExecutionTrendCard, type TrendRange } from "@/components/scheduled-tasks/ExecutionTrendCard";
-import { TopFailingTasksCard } from "@/components/scheduled-tasks/TopFailingTasksCard";
-import { TasksFilters, type SavedView } from "@/components/scheduled-tasks/TasksFilters";
-import { TasksTable } from "@/components/scheduled-tasks/TasksTable";
-import { TaskBulkBar } from "@/components/scheduled-tasks/TaskBulkBar";
-import { TaskDetailDrawer } from "@/components/scheduled-tasks/TaskDetailDrawer";
-import { TaskEditorDrawer } from "@/components/scheduled-tasks/TaskEditorDrawer";
+import { TasksKpiRow, type KpiKey } from "@/components/scheduled-tasks/tasks-kpi-row";
+import { ExecutionTrendCard, type TrendRange } from "@/components/scheduled-tasks/execution-trend-card";
+import { TopFailingTasksCard } from "@/components/scheduled-tasks/top-failing-tasks-card";
+import { TasksFilters, type SavedView } from "@/components/scheduled-tasks/tasks-filters";
+import { TasksTable } from "@/components/scheduled-tasks/tasks-table";
+import { TaskBulkBar } from "@/components/scheduled-tasks/task-bulk-bar";
+import { TaskDetailDrawer } from "@/components/scheduled-tasks/task-detail-drawer";
+import { TaskEditorDrawer } from "@/components/scheduled-tasks/task-editor-drawer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

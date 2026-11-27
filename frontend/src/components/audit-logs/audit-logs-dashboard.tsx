@@ -6,7 +6,7 @@ import * as echarts from "@/lib/echarts";
 import type { EChartsOption } from "echarts";
 import { Activity, AlertTriangle, CheckCircle2, ChevronRight, Clock3, Download, Eye, Flag, LockKeyhole, MoreVertical, Search, ShieldCheck, UserRound, Users, XCircle } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

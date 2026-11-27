@@ -5,7 +5,7 @@ import { RotateCcw, Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { AlertSeverity } from "@/mocks/alerts";
-import type { AlertRangeKey } from "@/mocks/useAlerts";
+import type { AlertRangeKey } from "@/hooks/useAlerts";
 
 interface AlertsFiltersProps {
   query: string;

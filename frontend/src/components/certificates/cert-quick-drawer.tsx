@@ -8,7 +8,7 @@ import { CheckCircle2, ChevronRight, Copy, RotateCcw, ShieldCheck, ShieldX, Togg
 import { Button } from "@/components/ui/button";
 import { CertStatusBadge, IssuerTypeBadge, HealthBar, HostChips, DaysLeftBadge } from "@/components/certificates/cert-shared";
 import { timeAgo, fullTime } from "@/components/auth-events/auth-shared";
-import { useCertificate } from "@/mocks/useCertificates";
+import { useCertificate } from "@/hooks/useCertificates";
 import { daysUntilExpiry, expiryStatus, healthScore } from "@/utils/certStats";
 import { cn } from "@/lib/utils";
 

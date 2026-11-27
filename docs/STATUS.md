@@ -1,13 +1,13 @@
 # Project Status
 
-_Snapshot: 2026-11-27, branch `change26/11`._
+_Snapshot: 2026-11-27 (after Phase 1), branch `change26/11`._
 
 ## Summary
 
-- **Frontend:** large, polished UI prototype. 64 routes, ~317 source files, ~12k lines of mock data. Typecheck passes.
+- **Frontend:** large, polished UI prototype. 63 routes (47 prerendered pages), ~320 source files, ~12k lines of mock data. Typecheck passes.
 - **Backend:** `backend/` is an empty folder. No API, database, auth, ingestion or workers exist.
 - **Data:** 100% mock. All state lives in browser memory and resets on reload.
-- **Quality gates:** `npm run typecheck` only. No lint, no tests, no CI.
+- **Quality gates:** typecheck (TS 7), ESLint (0 errors, ~690 tracked warnings), Vitest (74 tests), CI on GitHub Actions.
 
 ## Recent history
 
@@ -34,19 +34,19 @@ Status key: **UI** = page built on mock data · **UI+** = interactive workflows 
 
 | # | Issue | Where |
 |---|---|---|
-| 1 | **Duplicate route:** legacy `data-centers-and-locations` still exists next to its replacement `server-sites` (nav points to server-sites) | `app/(dashboard)/infrastructure/data-centers-and-locations/`, `components/infrastructure/data-centers-dashboard.tsx` |
-| 2 | **Two StatCards:** `components/shared/stat-card.tsx` is just a re-export of `components/ui/StatCard.tsx` | components/ui, components/shared |
+| 1 | ~~**Duplicate route:** legacy `data-centers-and-locations` still exists next to its replacement `server-sites` (nav points to server-sites)~~ ✅ fixed 2026-11-27 | `app/(dashboard)/infrastructure/data-centers-and-locations/`, `components/infrastructure/data-centers-dashboard.tsx` |
+| 2 | ~~**Two StatCards:** `components/shared/stat-card.tsx` is just a re-export of `components/ui/StatCard.tsx`~~ ✅ fixed 2026-11-27 | components/ui, components/shared |
 | 3 | **Two chart libraries:** Recharts (~30 files) and ECharts (~43 files); chart wrappers are re-implemented per page | across components |
 | 4 | **314 inline `style={{…}}`** usages (mostly bar widths) | across components |
-| 5 | **Inconsistent placement:** some dashboards live in `app/` next to `page.tsx` (incidents, runbooks), two live at `components/` root (`audit-logs-dashboard.tsx`, `security-overview-dashboard.tsx`) | see paths |
-| 6 | **Mixed file casing:** `StatCard.tsx`, `JobDetail.tsx`, `TasksKpiRow.tsx` vs kebab-case elsewhere | components |
-| 7 | **Hooks split across two folders:** `src/hooks/` and `src/mocks/use*.ts` | hooks, mocks |
+| 5 | ~~**Inconsistent placement:** some dashboards live in `app/` next to `page.tsx` (incidents, runbooks), two live at `components/` root (`audit-logs-dashboard.tsx`, `security-overview-dashboard.tsx`)~~ ✅ fixed 2026-11-27 | see paths |
+| 6 | ~~**Mixed file casing:** `StatCard.tsx`, `JobDetail.tsx`, `TasksKpiRow.tsx` vs kebab-case elsewhere~~ ✅ fixed 2026-11-27 | components |
+| 7 | ~~**Hooks split across two folders:** `src/hooks/` and `src/mocks/use*.ts`~~ ✅ fixed 2026-11-27 | hooks, mocks |
 | 8 | Very large files (several dashboards 800–1000+ lines; `components/monitoring` ≈ 10.6k lines in 20 files) | components/monitoring, backups, maintenance-windows |
 | 9 | No auth / route protection; Access Control pages are display-only | — |
-| 10 | No tests, no lint, no CI | — |
-| 11 | Repo root has no `.gitignore` | / |
-| 12 | `next.config.js` hard-codes a LAN dev origin (`192.168.88.36`) | frontend/next.config.js |
-| 13 | **Hydration mismatch (React #418)** on ~10 pages (Alerts, Alert Rules, Alert Correlation, Logs, Events, Scheduled Tasks, Backup Job detail, Audit Logs, Live Ops). Seed data is built from `Date.now()` at module load, so build-time HTML ≠ browser render. Existed before the upgrade (confirmed on Next 15 build). | `src/mocks/*.ts` |
+| 10 | ~~No tests, no lint, no CI~~ ✅ fixed 2026-11-27 | — |
+| 11 | ~~Repo root has no `.gitignore`~~ ✅ fixed 2026-11-27 | / |
+| 12 | ~~`next.config.js` hard-codes a LAN dev origin (`192.168.88.36`)~~ ✅ fixed 2026-11-27 | frontend/next.config.js |
+| 13 | ~~**Hydration mismatch (React #418)** on ~10 pages (Alerts, Alert Rules, Alert Correlation, Logs, Events, Scheduled Tasks, Backup Job detail, Audit Logs, Live Ops). Seed data is built from `Date.now()` at module load, so build-time HTML ≠ browser render. Existed before the upgrade (confirmed on Next 15 build).~~ ✅ fixed 2026-11-27 | `src/mocks/*.ts` |
 | 14 | Recharts 3 / Processes & Services page logs many "ResizeObserver loop" warnings (harmless, noisy) | components/monitoring/processes-services-dashboard.tsx |
 
 ## Fixed since the 2026-11-13 audit

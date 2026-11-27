@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
@@ -623,7 +624,7 @@ export function DiskStorageDashboard() {
       <PageHeader breadcrumbs={["Monitoring", "Disk & Storage"]} showRefresh={false} title="Disk & Storage" subtitle="Monitor disk usage, storage performance, and I/O metrics across your infrastructure in real-time.">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={exportCsv} className="whitespace-nowrap"><Download size={15} />Export CSV</Button>
-          <Button variant="outline" asChild className="whitespace-nowrap"><a href="/monitoring/capacity-planning"><TrendingUp size={15} />Capacity forecast</a></Button>
+          <Button variant="outline" asChild className="whitespace-nowrap"><Link href="/monitoring/capacity-planning"><TrendingUp size={15} />Capacity forecast</Link></Button>
           <Button onClick={() => toast("Add Widget is a mockup action.")} className="whitespace-nowrap"><Plus size={15} />Add Widget</Button>
         </div>
       </PageHeader>

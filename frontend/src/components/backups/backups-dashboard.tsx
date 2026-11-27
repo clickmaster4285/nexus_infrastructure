@@ -12,24 +12,24 @@ function nextRunForJob(job: { enabled: boolean; schedule: import("@/utils/format
 }
 
 import { PageHeader } from "@/components/layout/page-header";
-import { CoverageBanner } from "@/components/backups/CoverageBanner";
-import { BackupsKpiRow, type BackupKpiKey } from "@/components/backups/BackupsKpiRow";
-import { BackupTrendCard } from "@/components/backups/BackupTrendCard";
-import { StorageUsageCard } from "@/components/backups/StorageUsageCard";
-import { RpoRtoComplianceCard, type TierCompliance } from "@/components/backups/RpoRtoComplianceCard";
-import { DrillsCard } from "@/components/backups/DrillsCard";
-import { RansomwareProtectionCard } from "@/components/backups/RansomwareProtectionCard";
-import { FailureReasonsCard } from "@/components/backups/FailureReasonsCard";
-import { UpcomingBackupsCard } from "@/components/backups/UpcomingBackupsCard";
-import { ActivityTimelineCard } from "@/components/backups/ActivityTimelineCard";
-import { BackupsFilters } from "@/components/backups/BackupsFilters";
-import { BackupJobsTable } from "@/components/backups/BackupJobsTable";
-import { RestorePointsTable } from "@/components/backups/RestorePointsTable";
-import { BackupBulkBar } from "@/components/backups/BackupBulkBar";
-import { BackupPolicyDrawer } from "@/components/backups/BackupPolicyDrawer";
-import { TestRestoreWizard } from "@/components/backups/TestRestoreWizard";
-import { CoverageTab, type ProtectAssetPayload } from "@/components/backups/CoverageTab";
-import { PoliciesTab } from "@/components/backups/PoliciesTab";
+import { CoverageBanner } from "@/components/backups/coverage-banner";
+import { BackupsKpiRow, type BackupKpiKey } from "@/components/backups/backups-kpi-row";
+import { BackupTrendCard } from "@/components/backups/backup-trend-card";
+import { StorageUsageCard } from "@/components/backups/storage-usage-card";
+import { RpoRtoComplianceCard, type TierCompliance } from "@/components/backups/rpo-rto-compliance-card";
+import { DrillsCard } from "@/components/backups/drills-card";
+import { RansomwareProtectionCard } from "@/components/backups/ransomware-protection-card";
+import { FailureReasonsCard } from "@/components/backups/failure-reasons-card";
+import { UpcomingBackupsCard } from "@/components/backups/upcoming-backups-card";
+import { ActivityTimelineCard } from "@/components/backups/activity-timeline-card";
+import { BackupsFilters } from "@/components/backups/backups-filters";
+import { BackupJobsTable } from "@/components/backups/backup-jobs-table";
+import { RestorePointsTable } from "@/components/backups/restore-points-table";
+import { BackupBulkBar } from "@/components/backups/backup-bulk-bar";
+import { BackupPolicyDrawer } from "@/components/backups/backup-policy-drawer";
+import { TestRestoreWizard } from "@/components/backups/test-restore-wizard";
+import { CoverageTab, type ProtectAssetPayload } from "@/components/backups/coverage-tab";
+import { PoliciesTab } from "@/components/backups/policies-tab";
 import { buildBackupRows } from "@/components/backups/display-rows";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { Button } from "@/components/ui/button";
@@ -167,7 +167,7 @@ export function BackupsDashboard() {
     const locations = params.get("locations");
     if (locations) next.locations = locations.split(",").filter(Boolean);
     if (Object.keys(next).length > 0) setFilters({ ...DEFAULT_BACKUPS_FILTERS, ...next });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // Persist filter state to the URL (shareable links).

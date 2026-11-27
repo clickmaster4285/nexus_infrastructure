@@ -2,7 +2,7 @@
 
 import { Activity, BellOff, CheckCircle2, List, TrendingUp } from "lucide-react";
 
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import type { RuleStats } from "@/utils/ruleStats";
 import { cn } from "@/lib/utils";
 

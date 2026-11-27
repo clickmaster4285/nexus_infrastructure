@@ -5,11 +5,12 @@ How code in this repo is written. Follow the existing pattern; when it conflicts
 ## Files and folders
 
 - Routes: `app/(dashboard)/<section>/<kebab-page>/page.tsx`. Keep them thin – export `metadata` and render one component.
-- Feature UI: `components/<domain>/<kebab-name>.tsx`. New files use **kebab-case** (legacy PascalCase files like `StatCard.tsx` will be renamed later).
-- Do not put new dashboards in `app/` or at the root of `components/`.
-- Data hooks: new ones go in `src/hooks/use<Name>.ts`.
+- Feature UI: `components/<domain>/<kebab-name>.tsx`. All component files are **kebab-case**.
+- `app/` holds routes only. No components at the root of `components/`.
+- Data hooks: `src/hooks/use<Name>.ts` (all of them; none in `mocks/`).
 - Seed data + domain types: `src/mocks/<domain>.ts`.
-- Pure logic: `src/utils/<domain>Stats.ts` or a descriptive name. No React in `utils/`.
+- Pure logic: `src/utils/<domain>Stats.ts` or a descriptive name. No React in `utils/`. Add a colocated `<name>.test.ts` (Vitest).
+- Internal navigation uses `next/link` `<Link>`, never a bare `<a href="/...">` (full page reload).
 
 ## Components
 
@@ -49,6 +50,6 @@ const { items, status, reload, ...actions } = useThing(filters);
 
 ## Before committing
 
-1. `cd frontend && npm run typecheck` – must be clean.
+1. `cd frontend && npm run typecheck && npm run lint && npm test` – all must pass (lint: 0 errors).
 2. Load the changed page(s) in `npm run dev`, light and dark mode.
 3. Commit on a feature branch; PRs target `main`.

@@ -20,7 +20,7 @@ import {
   CURRENT_USER_NAME, INCIDENT_PEOPLE, INCIDENT_SERVICES, INCIDENT_TEAMS, ON_CALL, SERVICE_HOSTS,
   type IncidentSeverity,
 } from "@/mocks/incidents";
-import { useIncidents } from "@/mocks/useIncidents";
+import { useIncidents } from "@/hooks/useIncidents";
 import { SAMPLE_ALERTS, type AlertSeverity } from "@/mocks/alerts";
 import { cn } from "@/lib/utils";
 

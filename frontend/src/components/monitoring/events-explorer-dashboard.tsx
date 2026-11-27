@@ -17,7 +17,7 @@ import {
 
 import { PageHeader } from "@/components/layout/page-header";
 import { Panel } from "@/components/shared/panel";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { AuditLogsDashboard } from "@/components/audit-logs-dashboard";
+import { AuditLogsDashboard } from "@/components/audit-logs/audit-logs-dashboard";
 
 export const metadata: Metadata = {
   title: "Audit Logs",

@@ -15,7 +15,7 @@ import {
 } from "recharts";
 
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/shared/stat-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

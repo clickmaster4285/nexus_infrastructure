@@ -18,7 +18,7 @@ import { AlertMenu, type AlertMenuItem } from "@/components/alerts/alert-menu";
 import { ChartCard, Chip, SegmentedControl } from "@/components/logs/primitives";
 import { MultiSelect } from "@/components/alert-rules/multi-select";
 import { InitialsAvatar } from "@/components/shared/initials-avatar";
-import { StatCard } from "@/components/shared/stat-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { ViewAllLink } from "@/components/shared/view-all-link";
 import { WindowStatusBadge, WindowTypeBadge, ApprovalBadge, WINDOW_STATUS_META } from "@/components/maintenance-windows/window-badges";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ import {
 } from "@/mocks/maintenanceWindows";
 import { SAMPLE_ALERTS } from "@/mocks/alerts";
 import { ALERT_RULES } from "@/mocks/alertRules";
-import { useMaintenanceWindows } from "@/mocks/useMaintenanceWindows";
+import { useMaintenanceWindows } from "@/hooks/useMaintenanceWindows";
 import { timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";
 

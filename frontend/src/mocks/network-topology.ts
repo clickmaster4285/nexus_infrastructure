@@ -115,7 +115,7 @@ export const topologyDiscovery = { lastRunAt: new Date(Date.now() - 42 * 60_000)
 export const topologyTotals = { devices: NETWORK_TOTAL, healthy: NETWORK_ONLINE, warning: NETWORK_WARNING, offline: NETWORK_OFFLINE };
 
 // One module-level store keeps list, graph, and inspector reads consistent during mock mutations.
-let knownDevices = new Set<string>();
+const knownDevices = new Set<string>();
 let runtimeChanges = [...topologyChanges];
 const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 export async function loadTopology(): Promise<{ nodes: TopologyNode[]; links: TopologyLink[]; sites: TopologySite[]; changes: TopologyChange[] }> {

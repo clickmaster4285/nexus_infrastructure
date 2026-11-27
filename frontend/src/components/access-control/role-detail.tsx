@@ -18,7 +18,7 @@ import {
 import { assignRole, getRoleById, removeRole } from "@/mocks/accessControl";
 import { timeAgo } from "@/components/auth-events/auth-shared";
 import { cn } from "@/lib/utils";
-import { useRole, useUsers } from "@/mocks/useAccessControl";
+import { useRole, useUsers } from "@/hooks/useAccessControl";
 import { RoleBadge, RiskBadge } from "@/components/access-control/access-badges";
 
 interface RoleDetailProps {

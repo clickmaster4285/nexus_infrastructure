@@ -15,7 +15,7 @@ import {
 import { PageHeader } from "@/components/layout/page-header";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { ChartCard, SegmentedControl } from "@/components/logs/primitives";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

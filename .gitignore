@@ -1,0 +1,40 @@
+# Repo-wide ignores. App-specific rules live in frontend/.gitignore (and backend/ later).
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Tooling state
+.remember/
+.claude/settings.local.json
+
+# Node
+node_modules/
+
+# Go (backend/core)
+/backend/**/bin/
+*.test
+*.out
+coverage.*
+
+# Python (backend adapters)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log

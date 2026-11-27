@@ -40,7 +40,8 @@ export function PageMeta({ breadcrumbs, breadcrumbLinks, demo = false, showRefre
             DEMO DATA
           </Badge>
         )}
-        <span className="hidden sm:inline">Last updated: {lastUpdated}</span>
+        {/* Pages derive this from the clock, so the prerendered HTML (build time) and the client render differ by design. */}
+        <span className="hidden sm:inline" suppressHydrationWarning>Last updated: {lastUpdated}</span>
         {showRefresh && (
           <Button variant="ghost" size="icon" aria-label="Refresh timestamp" title="Refresh timestamp" onClick={onRefresh} className="text-muted-foreground">
             <RefreshCw size={13} />

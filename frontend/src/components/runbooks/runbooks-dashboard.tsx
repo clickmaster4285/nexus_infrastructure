@@ -15,7 +15,7 @@ import {
   type Runbook, type RunbookCategory, type RunbookSeverity, type RunbookStatus,
 } from "@/mocks/runbooks";
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/shared/stat-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { ChartCard, Chip, SegmentedControl } from "@/components/logs/primitives";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { Pagination } from "@/components/shared/pagination";

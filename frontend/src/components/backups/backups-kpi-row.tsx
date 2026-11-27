@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp, CheckCircle2, Database, FlaskConical, ShieldCheck, Shield } from "lucide-react";
 
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Sparkline } from "@/components/shared/sparkline";
 import type { BackupStats } from "@/utils/backupStats";
 import { cn } from "@/lib/utils";

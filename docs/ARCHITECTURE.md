@@ -26,7 +26,7 @@ Browser
 ```
 page.tsx (server, ~11 lines: metadata + <XDashboard/>)
   └─ components/<domain>/x-dashboard.tsx  ("use client")
-       ├─ useX()  hook  ── src/hooks/*.ts  or  src/mocks/use*.ts
+       ├─ useX()  hook  ── src/hooks/*.ts
        │    • simulates async load (200–400 ms) → status: loading | error | success
        │    • `?<name>Error=1` query param forces the error state for testing
        │    • exposes actions (acknowledge, resolve, create, …) that mutate the store
@@ -45,14 +45,14 @@ Domain types are currently defined **inside the mock files** (e.g. `type Alert` 
 
 | Folder | Contents |
 |---|---|
-| `app/` | Routes only (plus a few colocated dashboards for incidents/runbooks) |
-| `components/ui/` | shadcn-style primitives: button, badge, card, dialog, input, select, tabs, StatCard |
+| `app/` | Routes only |
+| `components/ui/` | shadcn-style primitives: button, badge, card, dialog, input, select, tabs, stat-card |
 | `components/shared/` | Cross-domain pieces: panel, metric-card, pagination, sparkline, donut/chart panels, icon, provider-logo, country-flag, badges, run-log-viewer |
 | `components/layout/` | Shell, sidebar, header, page header/meta/heading, footer |
 | `components/<domain>/` | One folder per feature (alerts, backups, servers, monitoring, …) |
 | `config/navigation.ts` | Sidebar groups + `hrefForLabel()` |
-| `hooks/` | Data hooks for alert rules, backups, runbooks, scheduled tasks, storage |
-| `mocks/` | Seed data, in-memory stores, and some more data hooks (`use*.ts`) |
+| `hooks/` | All data hooks (`use*.ts`) |
+| `mocks/` | Seed data, domain types, in-memory stores |
 | `utils/` | Pure calculation/formatting helpers |
 | `lib/` | `cn()`, `echarts.ts` (oklch-safe ECharts wrapper), `slaCalculations.ts` |
 | `public/` | Logo, DB icons, login hero video/poster |

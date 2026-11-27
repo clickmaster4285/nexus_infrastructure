@@ -15,7 +15,7 @@ import {
 import { PageHeader } from "@/components/layout/page-header";
 import { AlertMenu } from "@/components/alerts/alert-menu";
 import { ChartCard, SegmentedControl } from "@/components/logs/primitives";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ import {
 import { cn } from "@/lib/utils";
 import { daysUntilExpiry, expiryStatus, healthScore, type CertStatus } from "@/utils/certStats";
 import type { Certificate } from "@/mocks/certificates";
-import { useCertificates, useCertSummary } from "@/mocks/useCertificates";
+import { useCertificates, useCertSummary } from "@/hooks/useCertificates";
 
 type MainTab = "all" | "expired" | "expiring" | "healthy" | "selfsigned";
 type SortKey = "expiresAt" | "health" | "commonName";

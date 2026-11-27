@@ -2,7 +2,7 @@
 
 import { AlertTriangle, Bell, CheckCircle2, Clock3, Zap } from "lucide-react";
 
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
 import type { AlertKpiKey, AlertStats } from "@/utils/alertStats";
 

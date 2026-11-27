@@ -117,7 +117,7 @@ export function ConfigChangeDetail({ changeId }: ConfigChangeDetailProps) {
         <Card className="grid min-h-[17.5rem] place-items-center rounded-xl p-6">
           <div className="text-center">
             <SearchX className="mx-auto text-muted-foreground" size={28} />
-            <h2 className="mt-2 text-base font-semibold">No change matches "{changeId}"</h2>
+            <h2 className="mt-2 text-base font-semibold">No change matches &ldquo;{changeId}&rdquo;</h2>
             <p className="mt-1 text-sm text-muted-foreground">It may be older than the 30-day retention window, or the link is incorrect.</p>
             <Button className="mt-4" onClick={() => router.back()}><ArrowLeft size={15} />Back to changes</Button>
           </div>

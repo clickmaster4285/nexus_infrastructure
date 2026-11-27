@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Archive, Cloud, HardDrive, Lock, MoreVertical, Eraser } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
@@ -119,7 +120,7 @@ export function StorageUsageCard({ locations, totals, onExport }: { locations: S
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
             <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">Forecast (30d) · AWS S3</p>
-            <a href="/monitoring/capacity-planning?resource=CR-POOL-S3&tab=forecast" className="text-[0.625rem] font-semibold text-amber-700 underline-offset-2 hover:underline dark:text-amber-400">Full in ~34d ({forecastEnd}) →</a>
+            <Link href="/monitoring/capacity-planning?resource=CR-POOL-S3&tab=forecast" className="text-[0.625rem] font-semibold text-amber-700 underline-offset-2 hover:underline dark:text-amber-400">Full in ~34d ({forecastEnd}) →</Link>
           </div>
           <div className="mt-1 h-[5rem] w-full" role="img" aria-label="Projected AWS S3 usage over 30 days against capacity">
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>

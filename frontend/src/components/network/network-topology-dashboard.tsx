@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Activity, AlertTriangle, ArrowDown, ArrowRight, ArrowUp, Check, Circle, CircleX, Clock3, Copy, Download, Expand, Filter, Focus, GitBranch, Globe2, HardDrive, Layers, LoaderCircle, MapPin, Minus, Network, Plus, RefreshCw, Router, Search, Server, Shield, Signal, Siren, Sparkles, X } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Card } from "@/components/ui/card";
 import { Panel } from "@/components/shared/panel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

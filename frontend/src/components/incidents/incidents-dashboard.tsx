@@ -20,7 +20,7 @@ import { InitialsAvatar } from "@/components/shared/initials-avatar";
 import { SeverityBadge, StatusBadge, SEVERITY_META } from "@/components/shared/incident-badges";
 import { TechLogo } from "@/components/shared/icon";
 import { Panel } from "@/components/shared/panel";
-import { StatCard } from "@/components/shared/stat-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { ViewAllLink } from "@/components/shared/view-all-link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ import {
   durationMinutes, formatMinutes, isOpenIncident, severityRank, snapshotOf, statusRank, trendBuckets,
   type Incident, type IncidentSeverity, type IncidentRestoreSnapshot, type StatusFilter, type TrendRange,
 } from "@/mocks/incidents";
-import { useIncidents } from "@/mocks/useIncidents";
+import { useIncidents } from "@/hooks/useIncidents";
 import { incidentsSuppressed24h } from "@/mocks/maintenanceWindows";
 import { fullTimestamp, timeAgo } from "@/mocks/logs";
 import { cn } from "@/lib/utils";
@@ -752,7 +752,7 @@ export function IncidentsDashboard() {
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
                 <span>oldest open for {formatMinutes(stats.oldestOpenMin)}</span>
                 <span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span>
-                <span>{stats.sev12Open} SEV1-2</span>{suppressedIncidents24h > 0 && (<><span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span><a href="/operations/maintenance-windows" className="inline-flex items-center gap-1 font-semibold text-red-900 underline decoration-red-300 underline-offset-2 hover:text-red-700 dark:text-red-100 dark:decoration-red-700">{suppressedIncidents24h} suppressed by maintenance</a></>)}
+                <span>{stats.sev12Open} SEV1-2</span>{suppressedIncidents24h > 0 && (<><span aria-hidden="true" className="text-red-300 dark:text-red-500">·</span><Link href="/operations/maintenance-windows" className="inline-flex items-center gap-1 font-semibold text-red-900 underline decoration-red-300 underline-offset-2 hover:text-red-700 dark:text-red-100 dark:decoration-red-700">{suppressedIncidents24h} suppressed by maintenance</Link></>)}
               </p>
               <button
                 type="button"

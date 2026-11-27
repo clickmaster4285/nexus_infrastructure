@@ -203,7 +203,7 @@ export function RenewCertificateDialog({ open, onOpenChange, certId, method, onD
               <Select value={chosenMethod} onValueChange={(value) => setChosenMethod(value as CertRenewalMethod)}>
                 <SelectTrigger className="h-9 w-full text-sm" aria-label="Renewal method"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ACME">ACME (Let's Encrypt / internal)</SelectItem>
+                  <SelectItem value="ACME">ACME (Let&apos;s Encrypt / internal)</SelectItem>
                   <SelectItem value="Manual">Manual (issue + upload PEM)</SelectItem>
                   <SelectItem value="Vendor">Vendor managed (DigiCert / Sectigo)</SelectItem>
                 </SelectContent>

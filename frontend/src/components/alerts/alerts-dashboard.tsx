@@ -17,7 +17,7 @@ import { NoisyRulesCard } from "@/components/alerts/noisy-rules-card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Alert, AlertSeverity, AlertStatus } from "@/mocks/alerts";
-import { DEFAULT_ALERTS_FILTERS, useAlerts, type AlertRangeKey } from "@/mocks/useAlerts";import { alertDuration, deriveAlertStats, formatDateTime, type AlertKpiKey, type AlertTabKey } from "@/utils/alertStats";
+import { DEFAULT_ALERTS_FILTERS, useAlerts, type AlertRangeKey } from "@/hooks/useAlerts";import { alertDuration, deriveAlertStats, formatDateTime, type AlertKpiKey, type AlertTabKey } from "@/utils/alertStats";
 import { cn } from "@/lib/utils";
 
 const TAB_ORDER: AlertTabKey[] = ["all", "firing", "acknowledged", "resolved", "silenced"];

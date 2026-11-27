@@ -51,23 +51,32 @@ Turn the prototype into a working product **one vertical slice at a time**, with
 - [x] Next 15 → 16, TypeScript 5 → 7, Recharts 2 → 3, lucide 0.x → 1.x, tailwind-merge 2 → 3, React 19.3
 - [x] Fix breaking changes; typecheck, build and all routes verified. Details in [docs/STATUS.md](docs/STATUS.md).
 
-## Phase 1 – Clean up the frontend (small, safe, do first)
+## Phase 1 – Clean up the frontend ✅ (2026-11-27)
 
-- [ ] Fix the hydration mismatch (React #418): make mock seed data use a fixed reference time instead of `Date.now()` at module load
-- [x] Consolidate icon libraries (done 2026-11-27): replace `simple-icons` (4 logos) and `@fortawesome/free-brands-svg-icons` (AWS logo only) with `react-icons` equivalents and uninstall both. Keep lucide-react (UI), react-icons (brands), country-flag-icons (flags)
-- [ ] Add a root `.gitignore` (node_modules, .next, .env*, .remember/)
-- [ ] Remove the legacy `infrastructure/data-centers-and-locations` route + `data-centers-dashboard.tsx` (or redirect it to `server-sites`)
-- [ ] Merge the StatCard duplicate; point all imports at one file
-- [ ] Move `components/audit-logs-dashboard.tsx` and `security-overview-dashboard.tsx` into `components/security/` (or matching folders)
-- [ ] Move colocated dashboards out of `app/operations/incidents` and `app/operations/runbooks` into `components/incidents` and `components/runbooks`
-- [ ] Move `mocks/use*.ts` hooks into `src/hooks/`
-- [ ] Rename PascalCase component files to kebab-case
-- [ ] Add ESLint (flat config + `eslint-config-next`; `next lint` was removed in Next 16) and a `lint` script
-- [ ] Add Vitest with first tests for `src/utils/*Stats.ts` (pure functions, easy wins)
-- [ ] Add a CI workflow: install → typecheck → lint → test → build
-- [ ] Move `allowedDevOrigins` in `next.config.js` to an env variable
+- [x] Fix the hydration mismatch (React #418): cause was the clock-based "Last updated" label (build-time HTML vs browser time); fixed once in `PageMeta` with `suppressHydrationWarning`
+- [x] Consolidate icon libraries: lucide-react (UI), react-icons (brands), country-flag-icons (flags); removed simple-icons + FontAwesome
+- [x] Add a root `.gitignore` (env files, editor/OS files, `.remember/`, future Go/Python build output)
+- [x] Remove the legacy `data-centers-and-locations` route and its duplicate dashboard (no redirect; nothing linked to it)
+- [x] Merge the StatCard duplicate → `components/ui/stat-card.tsx`
+- [x] Move root dashboards into `components/audit-logs/` and `components/security-overview/`
+- [x] Move dashboards out of `app/` into `components/incidents/` and `components/runbooks/` (`app/` now holds routes only)
+- [x] Move `mocks/use*.ts` hooks into `src/hooks/`
+- [x] Rename 30 PascalCase component files to kebab-case (`git mv`, history kept)
+- [x] ESLint 10 flat config + `eslint-config-next` + `lint` script; fixed `<a>`→`<Link>`, `any`, unescaped entities
+- [x] Vitest + 74 tests for SLA, RPO, storage forecast, cron/schedule and timezone-aware next-run logic
+- [x] CI workflow `.github/workflows/frontend-ci.yml`: install → typecheck → lint → test → build
+- [x] Move `allowedDevOrigins` to the `ALLOWED_DEV_ORIGINS` env variable (`.env.example` added)
 
-**Done when:** typecheck, lint, tests and build pass in CI; no duplicate routes or primitives.
+**Done:** CI checks pass locally from a clean install; no duplicate routes or primitives.
+
+## Phase 1.5 – Follow-ups (can run alongside Phase 2)
+
+- [ ] **React Compiler lint cleanup:** ~250 warnings from `react-hooks` v7 rules (`set-state-in-effect`, `purity`, `refs`, `preserve-manual-memoization`, `immutability`), currently downgraded to warnings in `eslint.config.mjs`. Fix per module, then switch the rules back to `error`
+- [ ] Remove ~400 unused imports/variables (`no-unused-vars` warnings)
+- [ ] Add tests for the larger stats modules (`alertStats`, `backupStats`, `taskStats`, `certStats`, `accessStats`, `vulnStats`)
+- [ ] Single typed `EChart` wrapper; migrate remaining Recharts charts to ECharts (one chart library)
+- [ ] Replace inline `style={{}}` bar widths where Tailwind can express them
+- [ ] When typescript-eslint supports TS 7.1+, drop the `@typescript/typescript6` alias
 
 ## Phase 2 – Backend foundation
 
@@ -107,4 +116,4 @@ OpenTelemetry traces/APM · dependency graph and root-cause analysis · anomaly 
 
 ## Next action
 
-Start **Phase 1**, top of the list (hydration fix first). In parallel, settle the "Still to decide" table so Phase 2 can begin without waiting.
+Phase 1 is done. Settle the "Still to decide" table, then start **Phase 2** (Go backend scaffold). Phase 1.5 items can be picked up in between.

@@ -20,7 +20,7 @@ import { assignRole, getRoleById, removeRole, revokeAllSessions, revokeSession, 
 import { timeAgo, fullTime } from "@/components/auth-events/auth-shared";
 import { UserStatusBadge, MfaBadge, RoleBadge, RiskBadge } from "@/components/access-control/access-badges";
 import { cn } from "@/lib/utils";
-import { useUser, useUsers } from "@/mocks/useAccessControl";
+import { useUser, useUsers } from "@/hooks/useAccessControl";
 
 interface UserDetailProps {
   userId: string;

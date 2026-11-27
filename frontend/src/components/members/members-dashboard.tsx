@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Check, Clock3, Download, Pencil, PhoneCall, Plus, Search, Trash2, UserCheck, Users, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

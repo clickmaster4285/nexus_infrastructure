@@ -1,6 +1,6 @@
 import { Activity, AlertTriangle, CheckCircle2, Clock, TrendingUp, Timer } from "lucide-react";
 
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
 import type { SlaSummary } from "@/mocks/uptimeSla";
 

@@ -17,7 +17,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Pagination } from "@/components/shared/pagination";
 import { Panel } from "@/components/shared/panel";
 import { ViewAllLink } from "@/components/shared/view-all-link";
-import { StatCard } from "@/components/ui/StatCard";
+import { StatCard } from "@/components/ui/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

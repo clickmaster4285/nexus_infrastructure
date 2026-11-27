@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { RunbookDetail } from "./runbook-detail";
-import { RunbookEditor } from "./runbook-editor";
-import { RunbookRunner } from "./runbook-runner";
+import { RunbookDetail } from "@/components/runbooks/runbook-detail";
+import { RunbookEditor } from "@/components/runbooks/runbook-editor";
+import { RunbookRunner } from "@/components/runbooks/runbook-runner";
 
 export const metadata: Metadata = {
   title: "Runbooks",

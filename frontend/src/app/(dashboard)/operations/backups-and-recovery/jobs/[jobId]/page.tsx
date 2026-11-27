@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { JobDetail } from "@/components/backups/JobDetail";
+import { JobDetail } from "@/components/backups/job-detail";
 import { getBackupsSnapshot } from "@/mocks/backups";
 
 interface JobDetailPageProps {

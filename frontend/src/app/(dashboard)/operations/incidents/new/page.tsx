@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { DeclareIncident } from "./declare-incident";
+import { DeclareIncident } from "@/components/incidents/declare-incident";
 
 export const metadata: Metadata = {
   title: "Declare Incident",

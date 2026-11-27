@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
 import { Icon } from "@/components/shared/icon";
-import { StatCard } from "@/components/shared/stat-card";
+import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
 import type { MetricStat } from "@/mocks/dashboard";
 

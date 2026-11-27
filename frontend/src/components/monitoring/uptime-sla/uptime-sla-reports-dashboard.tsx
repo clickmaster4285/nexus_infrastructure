@@ -10,7 +10,7 @@ import { Panel } from "@/components/shared/panel";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useUptimeSla } from "@/mocks/useUptimeSla";
+import { useUptimeSla } from "@/hooks/useUptimeSla";
 import { SlaKpiCards, SlaStatusBadge } from "@/components/monitoring/uptime-sla/sla-kpi-cards";
 import { UptimeTrendChart } from "@/components/monitoring/uptime-sla/uptime-trend-chart";
 import { ErrorBudgetCard } from "@/components/monitoring/uptime-sla/error-budget-card";

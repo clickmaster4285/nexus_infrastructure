@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { MultiSelect } from "@/components/alert-rules/multi-select";
 import { ToggleSwitch } from "@/components/alert-rules/toggle-switch";
 import { SegmentedControl } from "@/components/logs/primitives";
-import { ScheduleBuilder } from "@/components/scheduled-tasks/ScheduleBuilder";
+import { ScheduleBuilder } from "@/components/scheduled-tasks/schedule-builder";
 import { BUILTIN_ACTIONS, TASK_OWNERS, TASK_TYPE_LABELS, type ScheduledTask, type TaskType } from "@/mocks/scheduledTasks";
 import { SCOPE_GROUPS, SCOPE_SERVERS, overlappingWindows, scopeHosts } from "@/mocks/maintenanceWindows";
 import { nextRunAfter } from "@/utils/nextRun";
