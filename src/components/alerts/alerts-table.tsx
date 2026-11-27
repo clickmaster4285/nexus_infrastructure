@@ -1,0 +1,302 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowDown, ArrowUp, ArrowUpDown, BellOff, CheckCheck, CheckCircle2, Info, Zap, AlertTriangle, MoreHorizontal } from "lucide-react";
+
+import { AlertMenu, type AlertMenuItem } from "@/components/alerts/alert-menu";
+import { Badge } from "@/components/ui/badge";
+import { Pagination } from "@/components/shared/pagination";
+import { InitialsAvatar } from "@/components/shared/initials-avatar";
+import { ALERT_ASSIGNEES, type Alert, type AlertSeverity, type AlertStatus } from "@/mocks/alerts";
+import { alertDuration, formatDateTime } from "@/utils/alertStats";
+import { timeAgo } from "@/mocks/logs";
+import { isServerInMaintenance } from "@/mocks/maintenanceWindows";
+import { cn } from "@/lib/utils";
+
+interface AlertsTableProps {
+  alerts: Alert[];
+  selectedIds: string[];
+  onSelectionChange: (ids: string[]) => void;
+  onOpenDrawer: (alert: Alert) => void;
+  onAcknowledge: (ids: string[]) => void;
+  onResolve: (ids: string[]) => void;
+  onAssign: (ids: string[], user: string | null) => void;
+  onSilence: (ids: string[], hours: number) => void;
+  onCreateRule: (alert: Alert) => void;
+  onCopyLink: (alert: Alert) => void;
+}
+
+type SortKey = "severity" | "name" | "host" | "status" | "triggered" | "duration";
+
+const SEVERITY_RANK: Record<AlertSeverity, number> = { critical: 0, warning: 1, info: 2 };
+const STATUS_RANK: Record<AlertStatus, number> = { firing: 0, acknowledged: 1, silenced: 2, resolved: 3 };
+
+const PAGE_SIZES = [10, 20, 50];
+
+const SEVERITY_BADGE: Record<AlertSeverity, { label: string; icon: typeof Zap; className: string }> = {
+  critical: { label: "Critical", icon: AlertTriangle, className: "bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  warning: { label: "Warning", icon: AlertTriangle, className: "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  info: { label: "Info", icon: Info, className: "bg-blue-100 text-blue-500 dark:bg-blue-500/15 dark:text-blue-400" },
+};
+
+const STATUS_BADGE: Record<AlertStatus, { label: string; icon: typeof Zap; className: string }> = {
+  firing: { label: "Firing", icon: Zap, className: "bg-red-600/10 text-red-600 dark:bg-red-500/15 dark:text-red-400" },
+  acknowledged: { label: "Acknowledged", icon: CheckCheck, className: "bg-amber-600/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400" },
+  silenced: { label: "Silenced", icon: BellOff, className: "bg-slate-200/70 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300" },
+  resolved: { label: "Resolved", icon: CheckCircle2, className: "bg-green-600/10 text-green-600 dark:bg-emerald-500/15 dark:text-emerald-400" },
+};
+
+function SeverityBadge({ severity }: { severity: AlertSeverity }) {
+  const meta = SEVERITY_BADGE[severity];
+  const Icon = meta.icon;
+  return (
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.className)}>
+      <Icon size={11} aria-hidden="true" />
+      {meta.label}
+    </Badge>
+  );
+}
+
+function StatusBadge({ status }: { status: AlertStatus }) {
+  const meta = STATUS_BADGE[status];
+  const Icon = meta.icon;
+  return (
+    <Badge variant="outline" className={cn("gap-1 border-transparent px-2 py-0.5 text-[0.625rem] font-semibold", meta.className)}>
+      <Icon size={11} aria-hidden="true" />
+      {meta.label}
+    </Badge>
+  );
+}
+
+function AssigneeCell({ assignee }: { assignee: string | null }) {
+  if (!assignee) return <span className="text-[0.75rem] text-muted-foreground">Unassigned</span>;
+  return (
+    <span className="flex items-center gap-2" title={assignee}>
+      <InitialsAvatar name={assignee.split("@")[0] ?? assignee} size={24} />
+      <span className="hidden truncate text-[0.75rem] text-foreground xl:inline">{assignee}</span>
+    </span>
+  );
+}
+
+function kebabItemsFor(
+  alert: Alert,
+  actions: Pick<AlertsTableProps, "onAcknowledge" | "onResolve" | "onAssign" | "onSilence" | "onCreateRule" | "onCopyLink">,
+): AlertMenuItem[] {
+  return [
+    { key: "ack", label: "Acknowledge", disabled: alert.status !== "firing", onSelect: () => actions.onAcknowledge([alert.id]) },
+    {
+      key: "assign",
+      label: "Assign",
+      items: [
+        ...ALERT_ASSIGNEES.map((user) => ({ key: user, label: user, disabled: alert.assignee === user, onSelect: () => actions.onAssign([alert.id], user) })),
+        { key: "unassign", label: "Unassign", disabled: !alert.assignee, onSelect: () => actions.onAssign([alert.id], null) },
+      ],
+    },
+    {
+      key: "silence",
+      label: "Silence",
+      items: [1, 4, 24].map((hours) => ({ key: String(hours), label: hours === 1 ? "1 hour" : `${hours} hours`, onSelect: () => actions.onSilence([alert.id], hours) })),
+    },
+    { key: "resolve", label: "Resolve", disabled: alert.status === "resolved", onSelect: () => actions.onResolve([alert.id]) },
+    { key: "rule", label: "Create alert rule", onSelect: () => actions.onCreateRule(alert) },
+    { key: "copy", label: "Copy link", onSelect: () => actions.onCopyLink(alert) },
+  ];
+}
+
+/** Alerts table: sticky-free, priority columns (secondary hide on small screens),
+ *  sorting, pagination, bulk-select and keyboard navigation (J/K, A, R, Enter). */
+export function AlertsTable(props: AlertsTableProps) {
+  const { alerts, selectedIds, onSelectionChange, onOpenDrawer, ...actions } = props;
+  const [sortKey, setSortKey] = useState<SortKey>("triggered");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  const nowRef = useRef(Date.now());
+  const tableRef = useRef<HTMLTableElement | null>(null);
+
+  const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
+  const maxPage = Math.max(1, Math.ceil(alerts.length / pageSize));
+
+  useEffect(() => {
+    if (page > maxPage) setPage(1);
+  }, [page, maxPage]);
+
+  const sorted = useMemo(() => {
+    const copy = [...alerts];
+    copy.sort((a, b) => {
+      const diff =
+        sortKey === "severity" ? SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]
+        : sortKey === "name" ? a.name.localeCompare(b.name)
+        : sortKey === "host" ? a.host.localeCompare(b.host)
+        : sortKey === "status" ? STATUS_RANK[a.status] - STATUS_RANK[b.status]
+        : sortKey === "duration" ? ((b.resolvedAt ? new Date(b.resolvedAt).getTime() : nowRef.current) - b.epochMs) - ((a.resolvedAt ? new Date(a.resolvedAt).getTime() : nowRef.current) - a.epochMs)
+        : b.epochMs - a.epochMs;
+      return sortDir === "asc" ? -diff : diff;
+    });
+    return copy;
+  }, [alerts, sortKey, sortDir]);
+
+  const safePage = Math.min(page, maxPage);
+  const start = (safePage - 1) * pageSize;
+  const visible = sorted.slice(start, start + pageSize);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((current) => (current === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir(key === "triggered" || key === "severity" || key === "duration" ? "desc" : "asc");
+    }
+  };
+
+  const allVisibleSelected = visible.length > 0 && visible.every((alert) => selected.has(alert.id));
+
+  const toggleAll = () => {
+    if (allVisibleSelected) onSelectionChange(selectedIds.filter((id) => !visible.some((alert) => alert.id === id)));
+    else onSelectionChange([...new Set([...selectedIds, ...visible.map((alert) => alert.id)])]);
+  };
+
+  const toggleRow = (alert: Alert) => {
+    onSelectionChange(selected.has(alert.id) ? selectedIds.filter((id) => id !== alert.id) : [...selectedIds, alert.id]);
+  };
+
+  const moveFocus = (delta: number) => {
+    if (visible.length === 0) return;
+    const currentIndex = visible.findIndex((alert) => alert.id === focusedId);
+    const nextIndex = currentIndex === -1 ? (delta > 0 ? 0 : visible.length - 1) : Math.max(0, Math.min(visible.length - 1, currentIndex + delta));
+    setFocusedId(visible[nextIndex].id);
+    requestAnimationFrame(() => {
+      tableRef.current?.querySelector<HTMLElement>(`tr[data-alert-id="${visible[nextIndex].id}"]`)?.focus();
+    });
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    const tag = (event.target as HTMLElement).tagName;
+    if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+    const focused = visible.find((alert) => alert.id === focusedId);
+    if (event.key === "j" || event.key === "J") { event.preventDefault(); moveFocus(1); }
+    else if (event.key === "k" || event.key === "K") { event.preventDefault(); moveFocus(-1); }
+    else if ((event.key === "a" || event.key === "A") && focused) { event.preventDefault(); actions.onAcknowledge([focused.id]); }
+    else if ((event.key === "r" || event.key === "R") && focused) { event.preventDefault(); actions.onResolve([focused.id]); }
+    else if ((event.key === "Enter" || event.key === "o") && focused) { event.preventDefault(); onOpenDrawer(focused); }
+  };
+
+  const sortIndicator = (key: SortKey) =>
+    sortKey === key
+      ? sortDir === "asc"
+        ? <ArrowUp size={12} aria-hidden="true" className="text-primary" />
+        : <ArrowDown size={12} aria-hidden="true" className="text-primary" />
+      : <ArrowUpDown size={12} aria-hidden="true" className="opacity-0 transition-opacity group-hover:opacity-50" />;
+
+  const header = (key: SortKey, label: string, className?: string) => (
+    <th scope="col" aria-sort={sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : undefined} className={cn("whitespace-nowrap px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground", className)}>
+      <button type="button" onClick={() => toggleSort(key)} className="group inline-flex items-center gap-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {label}
+        {sortIndicator(key)}
+      </button>
+    </th>
+  );
+
+  if (visible.length === 0) return null;
+
+  return (
+    <div onKeyDown={onKeyDown}>
+      <table ref={tableRef} className="w-full min-w-[62rem] caption-bottom text-sm">
+        <caption className="sr-only">Alerts list. Use J and K to move between rows, A to acknowledge, R to resolve, Enter to open details.</caption>
+        <thead>
+          <tr className="border-b border-border bg-muted/40">
+            <th scope="col" className="w-9 px-3 py-2">
+              <input
+                type="checkbox"
+                aria-label="Select all rows on this page"
+                checked={allVisibleSelected}
+                onChange={toggleAll}
+                className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
+              />
+            </th>
+            {header("severity", "Severity", "hidden sm:table-cell")}
+            <th scope="col" className="px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">Alert</th>
+            {header("host", "Host / Service", "hidden lg:table-cell")}
+            {header("status", "Status", "hidden md:table-cell")}
+            {header("triggered", "Triggered")}
+            {header("duration", "Duration", "hidden xl:table-cell")}
+            <th scope="col" className="hidden px-3 py-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground sm:table-cell">Assignee</th>
+            <th scope="col" className="w-10 px-2 py-2"><span className="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {visible.map((alert) => {
+            const isSelected = selected.has(alert.id);
+            return (
+              <tr
+                key={alert.id}
+                data-alert-id={alert.id}
+                tabIndex={0}
+                onFocus={() => setFocusedId(alert.id)}
+                onClick={() => onOpenDrawer(alert)}
+                onKeyDown={(event) => { if (event.key === "Enter" && (event.target as HTMLElement).tagName !== "INPUT") onOpenDrawer(alert); }}
+                aria-selected={isSelected}
+                className={cn(
+                  "relative cursor-pointer border-b border-border/70 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+                  "hover:bg-slate-50 dark:hover:bg-accent",
+                  isSelected && "bg-primary/[0.06] dark:bg-primary/10",
+                  alert.status === "firing" && alert.severity === "critical" && "shadow-[inset_3px_0_0_oklch(0.5771_0.2152_27.33)]",
+                  alert.status === "firing" && alert.severity === "warning" && "shadow-[inset_3px_0_0_oklch(0.6658_0.1574_58.32)]",
+                )}
+              >
+                <td className="px-3 py-2.5 align-middle" onClick={(event) => event.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    aria-label={`Select alert ${alert.id}`}
+                    checked={isSelected}
+                    onChange={() => toggleRow(alert)}
+                    className="h-4 w-4 cursor-pointer rounded border-input accent-[oklch(0.5855_0.1885_255.72)]"
+                  />
+                </td>
+                <td className="hidden px-3 py-2.5 align-middle sm:table-cell"><SeverityBadge severity={alert.severity} /></td>
+                <td className="min-w-0 max-w-[21.25rem] px-3 py-2.5 align-middle">
+                  <p className="truncate text-[0.8125rem] font-semibold text-foreground">{alert.name}</p>
+                  <p className="truncate text-[0.75rem] text-muted-foreground" title={alert.message}>{alert.message}</p>
+                </td>
+                <td className="hidden px-3 py-2.5 align-middle lg:table-cell">
+                  <p className="text-[0.8125rem] text-foreground">{alert.host}</p>
+                  <p className="text-[0.75rem] text-muted-foreground">{alert.service}</p>
+                  {isServerInMaintenance(alert.host) && <span className="mt-0.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-100 px-1.5 py-0.5 text-[0.75rem] font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-violet-500" />Suppressed</span>}
+                </td>
+                <td className="hidden px-3 py-2.5 align-middle md:table-cell"><StatusBadge status={alert.status} /></td>
+                <td className="whitespace-nowrap px-3 py-2.5 align-middle">
+                  <span className="text-[0.75rem] text-foreground">{timeAgo(alert.epochMs)}</span>
+                  <span className="sr-only">{formatDateTime(alert.epochMs)}</span>
+                  <p className="hidden text-[0.6875rem] text-muted-foreground" aria-hidden="true">{formatDateTime(alert.epochMs)}</p>
+                </td>
+                <td className="hidden whitespace-nowrap px-3 py-2.5 align-middle text-[0.75rem] tabular-nums text-muted-foreground xl:table-cell">
+                  {alertDuration(alert, nowRef.current)}
+                </td>
+                <td className="hidden px-3 py-2.5 align-middle sm:table-cell"><AssigneeCell assignee={alert.assignee} /></td>
+                <td className="px-2 py-2.5 text-right align-middle" onClick={(event) => event.stopPropagation()}>
+                  <AlertMenu
+                    label={`Actions for ${alert.id}`}
+                    items={kebabItemsFor(alert, actions)}
+                    trigger={
+                      <button
+                        type="button"
+                        aria-label={`Actions for alert ${alert.id}`}
+                        className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        <MoreHorizontal size={16} aria-hidden="true" />
+                      </button>
+                    }
+                  />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {/* Pagination footer */}
+      <Pagination page={safePage} pageSize={pageSize} totalItems={alerts.length} noun="alerts" onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
+    </div>
+  );
+}
+

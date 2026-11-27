@@ -1,0 +1,78 @@
+// Audit log mock data is intentionally isolated from the security overview snapshot.
+
+export type AuditActorType = "Human" | "Service" | "System";
+export type AuditResult = "Success" | "Denied" | "Failed";
+export type AuditRisk = "Low" | "Medium" | "High" | "Critical";
+export type AuditCategory = "Access" | "Config" | "Data" | "Alerting" | "Incident" | "Backup" | "Security" | "Maintenance" | "Auth";
+export type AuditReviewState = "Unreviewed" | "Reviewed" | "Flagged";
+export interface AuditChange { field: string; before: string; after: string; }
+export interface AuditEntry {
+  id: string; seq: number; time: string; epochMs: number;
+  actor: { id: string; name: string; type: AuditActorType; role: string };
+  action: string; category: AuditCategory; resource: { type: string; id: string; name: string };
+  result: AuditResult; risk: AuditRisk; sensitive: boolean; source: "UI" | "API" | "CLI" | "System";
+  ip: string; country: string; city: string; device: string; sessionId: string; requestId: string;
+  reason?: string; changes: AuditChange[]; reviewState: AuditReviewState; reviewedBy?: string; reviewedAt?: string;
+  anomalyFlags: string[]; prevHash: string; hash: string;
+}
+export interface IntegrityStatus { status: "Verified" | "Warning" | "Broken"; lastVerifiedAt: string; entriesChecked: number; hashChain: string; }
+export interface RetentionStatus { days: number; oldestEntryAt: string; storageGB: number; legalHolds: Array<{ id: string; name: string; reason: string; scope: string; expiresAt?: string }>; }
+
+const auditActors: AuditEntry["actor"][] = [
+  { id: "ACC-01", name: "Admin", type: "Human", role: "Super Administrator" },
+  { id: "ACC-02", name: "ops@nexus.io", type: "Human", role: "Operations" },
+  { id: "ACC-04", name: "backup-agent", type: "Service", role: "Service Account" },
+  { id: "SYS-01", name: "Nexus Control Plane", type: "System", role: "System" },
+  { id: "ACC-05", name: "deploy@nexus.io", type: "Human", role: "Developer" },
+];
+const auditActions: Array<{ action: string; category: AuditCategory; resource: AuditEntry["resource"]; sensitive: boolean }> = [
+  { action: "Updated alert rule", category: "Alerting", resource: { type: "Alert Rule", id: "RUL-225", name: "High CPU usage > 90%" }, sensitive: true },
+  { action: "Acknowledged incident", category: "Incident", resource: { type: "Incident", id: "INC-1041", name: "API latency elevated" }, sensitive: false },
+  { action: "Configuration changed", category: "Config", resource: { type: "Server", id: "app-server-02", name: "app-server-02" }, sensitive: true },
+  { action: "Viewed sensitive data", category: "Data", resource: { type: "Server", id: "db-01", name: "db-01" }, sensitive: true },
+  { action: "Authentication login", category: "Auth", resource: { type: "Account", id: "ACC-02", name: "ops@nexus.io" }, sensitive: false },
+  { action: "Ran backup", category: "Backup", resource: { type: "Backup Job", id: "BKP-1004", name: "Nightly database backup" }, sensitive: false },
+  { action: "Blocked IP", category: "Security", resource: { type: "IP address", id: "203.0.113.9", name: "203.0.113.9" }, sensitive: true },
+  { action: "Exported audit log", category: "Access", resource: { type: "Audit Log", id: "AUDIT", name: "Audit Logs" }, sensitive: true },
+];
+const auditNow = Date.now();
+const auditHash = (seq: number) => seq === 1 ? "00000000" : (0xabc00000 + seq * 7919).toString(16).slice(-8);
+/* ------------------------------------------------------------------ *
+ * Hand-authored "important" auth / security activity for the demo —
+ * newest first, then the 500 generic seeded entries. Every entry is a
+ * realistic action an admin would take from Authentication Events.
+ * ------------------------------------------------------------------ */
+const authAuditSeed: AuditEntry[] = [
+  { id: "AUD-2026-05010", seq: 510, time: new Date(auditNow - 2 * 60_000).toISOString(), epochMs: auditNow - 2 * 60_000, actor: { id: "ACC-01", name: "Admin", type: "Human", role: "Super Administrator" }, action: "Blocked IP", category: "Security", resource: { type: "IP address", id: "203.0.113.44", name: "203.0.113.44" }, result: "Success", risk: "Critical", sensitive: true, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: "SES-7201", requestId: "REQ-93010", reason: "Brute force: 486 failed attempts in 24h", changes: [{ field: "blocked", before: "false", after: "true" }], reviewState: "Unreviewed", anomalyFlags: ["brute_force", "off_hours"], prevHash: auditHash(509), hash: auditHash(510) },
+  { id: "AUD-2026-05009", seq: 509, time: new Date(auditNow - 6 * 60_000).toISOString(), epochMs: auditNow - 6 * 60_000, actor: { id: "ACC-01", name: "Admin", type: "Human", role: "Super Administrator" }, action: "Locked account", category: "Auth", resource: { type: "Account", id: "legacy@nexus.io", name: "legacy@nexus.io" }, result: "Success", risk: "High", sensitive: true, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: "SES-7201", requestId: "REQ-93009", reason: "Account locked after 5 consecutive failed passwords; MFA not enrolled", changes: [{ field: "locked", before: "false", after: "true" }], reviewState: "Unreviewed", anomalyFlags: ["mfa_fatigue"], prevHash: auditHash(508), hash: auditHash(509) },
+  { id: "AUD-2026-05008", seq: 508, time: new Date(auditNow - 14 * 60_000).toISOString(), epochMs: auditNow - 14 * 60_000, actor: { id: "ACC-04", name: "backup-agent", type: "Service", role: "Service Account" }, action: "Interactive login blocked", category: "Auth", resource: { type: "Account", id: "backup-agent", name: "backup-agent" }, result: "Denied", risk: "High", sensitive: true, source: "API", ip: "192.168.88.23", country: "PK", city: "Karachi", device: "OpenSSH on Linux", sessionId: "SES-7202", requestId: "REQ-93008", reason: "Service account attempted interactive SSH login", changes: [], reviewState: "Flagged", anomalyFlags: ["service_account_login", "off_hours"], prevHash: auditHash(507), hash: auditHash(508) },
+  { id: "AUD-2026-05007", seq: 507, time: new Date(auditNow - 27 * 60_000).toISOString(), epochMs: auditNow - 27 * 60_000, actor: { id: "ACC-02", name: "ops@nexus.io", type: "Human", role: "Operations" }, action: "Flagged impossible travel", category: "Auth", resource: { type: "Account", id: "ops@nexus.io", name: "ops@nexus.io" }, result: "Success", risk: "High", sensitive: true, source: "System", ip: "198.51.100.23", country: "CN", city: "Shanghai", device: "Edge on Windows", sessionId: "SES-7203", requestId: "REQ-93007", reason: "Karachi 10:02 to Frankfurt 10:20 (~5,300 km in 18 min)", changes: [], reviewState: "Unreviewed", anomalyFlags: ["impossible_travel", "new_location", "new_device"], prevHash: auditHash(506), hash: auditHash(507) },
+  { id: "AUD-2026-05006", seq: 506, time: new Date(auditNow - 39 * 60_000).toISOString(), epochMs: auditNow - 39 * 60_000, actor: { id: "ACC-02", name: "ops@nexus.io", type: "Human", role: "Operations" }, action: "Revoked sessions", category: "Auth", resource: { type: "Account", id: "disabled@nexus.io", name: "disabled@nexus.io" }, result: "Success", risk: "Medium", sensitive: true, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: "SES-7201", requestId: "REQ-93006", reason: "All sessions revoked after account was disabled", changes: [{ field: "sessions_active", before: "4", after: "0" }], reviewState: "Reviewed", anomalyFlags: [], prevHash: auditHash(505), hash: auditHash(506) },
+  { id: "AUD-2026-05005", seq: 505, time: new Date(auditNow - 52 * 60_000).toISOString(), epochMs: auditNow - 52 * 60_000, actor: { id: "ACC-01", name: "Admin", type: "Human", role: "Super Administrator" }, action: "Forced password reset", category: "Auth", resource: { type: "Account", id: "ci-cd-bot", name: "ci-cd-bot" }, result: "Success", risk: "Medium", sensitive: true, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: "SES-7201", requestId: "REQ-93005", reason: "Anomaly: API token issued outside normal schedule", changes: [{ field: "password_changed_at", before: "120d", after: "now" }], reviewState: "Reviewed", anomalyFlags: ["off_hours"], prevHash: auditHash(504), hash: auditHash(505) },
+  { id: "AUD-2026-05004", seq: 504, time: new Date(auditNow - 74 * 60_000).toISOString(), epochMs: auditNow - 74 * 60_000, actor: { id: "SYS-01", name: "Nexus Control Plane", type: "System", role: "System" }, action: "Flagged brute force campaign", category: "Security", resource: { type: "IP address", id: "198.51.100.23", name: "198.51.100.23" }, result: "Success", risk: "Critical", sensitive: true, source: "System", ip: "198.51.100.23", country: "CN", city: "Shanghai", device: "Nexus Agent", sessionId: "SES-SYS-104", requestId: "REQ-93004", reason: "Detection DET-3102: 412 attempts against 29 accounts", changes: [], reviewState: "Unreviewed", anomalyFlags: ["brute_force"], prevHash: auditHash(503), hash: auditHash(504) },
+  { id: "AUD-2026-05003", seq: 503, time: new Date(auditNow - 96 * 60_000).toISOString(), epochMs: auditNow - 96 * 60_000, actor: { id: "SYS-01", name: "Nexus Control Plane", type: "System", role: "System" }, action: "Anonymizer blocked at edge", category: "Security", resource: { type: "IP address", id: "192.0.2.171", name: "192.0.2.171" }, result: "Denied", risk: "High", sensitive: true, source: "System", ip: "192.0.2.171", country: "NL", city: "Amsterdam", device: "Nexus Agent", sessionId: "SES-SYS-103", requestId: "REQ-93003", reason: "342 attempts via anonymizer exit node; auto-blocked", changes: [{ field: "edge_acl", before: "allow", after: "deny" }], reviewState: "Reviewed", anomalyFlags: ["anonymizer"], prevHash: auditHash(502), hash: auditHash(503) },
+  { id: "AUD-2026-05002", seq: 502, time: new Date(auditNow - 118 * 60_000).toISOString(), epochMs: auditNow - 118 * 60_000, actor: { id: "ACC-02", name: "ops@nexus.io", type: "Human", role: "Operations" }, action: "Marked reviewed", category: "Auth", resource: { type: "Auth event", id: "AUTH-90399", name: "AUTH-90399" }, result: "Success", risk: "Low", sensitive: false, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: "SES-7201", requestId: "REQ-93002", reason: "Reviewed as true positive; detection DET-3101 updated", changes: [{ field: "review_state", before: "New", after: "Reviewed" }], reviewState: "Reviewed", anomalyFlags: [], prevHash: auditHash(501), hash: auditHash(502) },
+  { id: "AUD-2026-05001", seq: 501, time: new Date(auditNow - 141 * 60_000).toISOString(), epochMs: auditNow - 141 * 60_000, actor: { id: "SYS-01", name: "Nexus Control Plane", type: "System", role: "System" }, action: "SSO assertion rejected", category: "Auth", resource: { type: "Account", id: "priya.nair@nexus.io", name: "priya.nair@nexus.io" }, result: "Failed", risk: "Medium", sensitive: false, source: "System", ip: "203.0.113.27", country: "PK", city: "Karachi", device: "Chrome on macOS", sessionId: "SES-SYS-102", requestId: "REQ-93001", reason: "SAML assertion signature invalid", changes: [], reviewState: "Reviewed", anomalyFlags: [], prevHash: auditHash(500), hash: auditHash(501) },
+];
+
+const auditEntries: AuditEntry[] = Array.from({ length: 500 }, (_, index) => {
+  const seq = index + 1; const spec = auditActions[index % auditActions.length]; const actor = auditActors[index % auditActors.length]; const external = index % 10 === 0; const ip = external ? `${["203.0.113", "198.51.100", "192.0.2"][index % 3]}.${10 + index % 200}` : `192.168.88.${20 + index % 25}`; const country = external ? (index % 3 === 0 ? "PK" : index % 3 === 1 ? "US" : "GB") : "Internal"; const city = external ? (country === "PK" ? "Karachi" : country === "US" ? "New York" : "London") : "Internal";
+  const epochMs = auditNow - index * 18 * 60 * 1000; const denied = index % 47 === 0; const failed = index % 61 === 0;
+  const result: AuditResult = denied ? "Denied" : failed ? "Failed" : "Success";
+  const risk: AuditRisk = result !== "Success" ? "High" : actor.type === "Service" && spec.action === "Exported audit log" ? "High" : spec.sensitive && index % 13 === 0 ? "Critical" : spec.sensitive ? "Medium" : "Low";
+  return { id: `AUD-2026-${String(5000 - index).padStart(6, "0")}`, seq, time: new Date(epochMs).toISOString(), epochMs, actor, action: spec.action, category: spec.category, resource: spec.resource, result, risk, sensitive: spec.sensitive, source: index % 9 === 0 ? "API" : index % 11 === 0 ? "CLI" : actor.type === "System" ? "System" : "UI", ip, country, city, device: index % 3 === 0 ? "Chrome / Windows" : "Nexus Agent", sessionId: `SES-${String(7000 + index % 40)}`, requestId: `REQ-${String(92000 + index)}`, reason: result === "Denied" ? "Insufficient permission" : undefined, changes: spec.category === "Config" ? [{ field: "threshold", before: "80", after: "90" }] : [], reviewState: spec.sensitive && index % 5 === 0 ? "Unreviewed" : index % 17 === 0 ? "Flagged" : "Reviewed", anomalyFlags: actor.type === "Service" && spec.action === "Exported audit log" ? ["service_account_export"] : result === "Denied" && index % 29 === 0 ? ["off_hours", "new_location"] : [], prevHash: auditHash(seq - 1), hash: auditHash(seq) };
+});
+auditEntries.unshift(...authAuditSeed);
+
+export const AUDIT_ENTRIES = auditEntries;
+export const AUDIT_INTEGRITY: IntegrityStatus = { status: "Verified", lastVerifiedAt: new Date(auditNow - 12 * 60 * 1000).toISOString(), entriesChecked: 4860, hashChain: "SHA-256" };
+let auditIntegrity = AUDIT_INTEGRITY;
+export function getAuditIntegrity(): IntegrityStatus { return auditIntegrity; }
+export async function verifyAuditIntegrity(): Promise<IntegrityStatus> { await new Promise((resolve) => setTimeout(resolve, 900)); auditIntegrity = { ...auditIntegrity, status: "Verified", lastVerifiedAt: new Date().toISOString(), entriesChecked: 4860 }; return auditIntegrity; }
+export const AUDIT_RETENTION: RetentionStatus = { days: 365, oldestEntryAt: auditEntries[auditEntries.length - 1].time, storageGB: 18.4, legalHolds: [] };
+export function getAuditEntries(): AuditEntry[] { return auditEntries; }
+export function getEntryById(id: string): AuditEntry | undefined { return auditEntries.find((entry) => entry.id === id); }
+export async function loadAuditEntries(): Promise<AuditEntry[]> { await new Promise((resolve) => setTimeout(resolve, 280)); return auditEntries; }
+export function logAudit(input: Pick<AuditEntry, "actor" | "action" | "category" | "resource" | "result"> & Partial<Pick<AuditEntry, "changes" | "reason">>): AuditEntry { const seq = auditEntries.length + 1; const epochMs = Date.now(); const entry: AuditEntry = { id: `AUD-2026-${String(5000 + seq).padStart(6, "0")}`, seq, time: new Date(epochMs).toISOString(), epochMs, actor: input.actor, action: input.action, category: input.category, resource: input.resource, result: input.result, risk: input.result === "Success" ? "Low" : "High", sensitive: true, source: "UI", ip: "192.168.88.10", country: "PK", city: "Karachi", device: "Chrome / Windows", sessionId: `SES-${Date.now()}`, requestId: `REQ-${Date.now()}`, changes: input.changes ?? [], reason: input.reason, reviewState: "Unreviewed", anomalyFlags: [], prevHash: auditHash(seq - 1), hash: auditHash(seq) }; auditEntries.unshift(entry); return entry; }
+export function updateAuditReview(id: string, state: AuditReviewState, reviewer = "Admin"): void { const entry = auditEntries.find((item) => item.id === id); if (entry) { entry.reviewState = state; entry.reviewedBy = reviewer; entry.reviewedAt = new Date().toISOString(); } }
+

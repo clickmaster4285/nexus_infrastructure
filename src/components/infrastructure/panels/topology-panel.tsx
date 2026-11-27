@@ -1,0 +1,738 @@
+"use client";
+
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import {
+  Expand,
+  Minus,
+  Plus,
+  Workflow,
+  X,
+} from "lucide-react";
+import { siKubernetes } from "simple-icons";
+
+import { Icon } from "@/components/shared/icon";
+import { OnPremIcon, ProviderLogo } from "@/components/shared/provider-logo";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import {
+  cloudProviders,
+  infrastructureNodes,
+  type InfrastructureNode,
+} from "@/mocks/infrastructure";
+
+const TOPOLOGY_WIDTH = 895;
+const TOPOLOGY_HEIGHT = 270;
+const TOPOLOGY_MODAL_FIT_OPTIONS = { padding: 0.04, minZoom: 0.4, maxZoom: 2.5, duration: 300 };
+
+const compactButton =
+  "flex h-8 min-w-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-2 text-[0.6875rem] font-medium text-[oklch(0.5035_0.0488_254.04)] transition-colors hover:border-[oklch(0.8218_0.0598_251.66)] hover:text-[oklch(0.5285_0.1443_251.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-[oklch(0.8592_0.0246_253.97)]";
+
+function HealthBadge({ status }: { status: string }) {
+  const degraded = status === "Degraded";
+  return (
+    <span className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.5557_0.0457_254.2)] dark:text-[oklch(0.7879_0.0377_252.13)]">
+      <span aria-hidden="true" className={cn("h-1.5 w-1.5 rounded-full bg-[oklch(0.6818_0.1505_158.51)]", degraded && "bg-[oklch(0.7675_0.1525_70.29)]")} />
+      {status}
+    </span>
+  );
+}
+
+const brandIconAssets: Record<string, string> = {
+  mysql: "/icons/mysql-original.svg",
+  postgresql: "/icons/postgresql-original.svg",
+  redis: "/icons/redis-original.svg",
+};
+
+function TopologyIcon({ name, size, tone }: { name: string; size: number; tone?: string }) {
+  if (name === "on-prem") return <OnPremIcon className="h-[1.0625rem] w-[1.0625rem]" />;
+  const brandAsset = brandIconAssets[name];
+  if (brandAsset) {
+    // Static brand SVG served from /public — plain img is intentional (no next/image optimization needed for 1-2 KB icons).
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img className="shrink-0 object-contain" src={brandAsset} width={size} height={size} alt="" />;
+  }
+  if (name === "kubernetes") {
+    return (
+      <svg className="shrink-0" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" style={{ color: `#${siKubernetes.hex}` }}>
+        <path d={siKubernetes.path} fill="currentColor" />
+      </svg>
+    );
+  }
+  if (name === "vpc") {
+    return (
+      <svg className="shrink-0 text-[oklch(0.6025_0.1638_252.96)]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+        <circle cx="12" cy="12" r="3" fill="currentColor" />
+        <circle cx="5" cy="6" r="2" fill="currentColor" />
+        <circle cx="19" cy="6" r="2" fill="currentColor" />
+        <circle cx="5" cy="18" r="2" fill="currentColor" />
+        <circle cx="19" cy="18" r="2" fill="currentColor" />
+        <path d="m6.7 7.4 3.1 3m7.5-3-3.1 3m-7.5 7.2 3.1-3m7.5 3-3.1-3" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  if (name === "staging-cloud") {
+    return (
+      <svg className="shrink-0" style={{ color: tone === "purple" ? "oklch(0.5824 0.2063 301.07)" : "oklch(0.614 0.1708 253.32)" }} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+        <path d="M7.1 19.5a5.1 5.1 0 0 1-.4-10.2A6.1 6.1 0 0 1 18.4 8a5.8 5.8 0 0 1-.2 11.5H7.1Z" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (name === "web-services") {
+    return (
+      <svg className="shrink-0 text-[oklch(0.614_0.1708_253.32)]" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+        <path d="M4 6.2A2.2 2.2 0 0 1 6.2 4h11.6A2.2 2.2 0 0 1 20 6.2v3.1H4zm0 5.8h16v5.8a2.2 2.2 0 0 1-2.2 2.2H6.2A2.2 2.2 0 0 1 4 17.8z" fill="currentColor" />
+        <circle cx="7" cy="7.7" r=".8" fill="oklch(1 0 89.88)" />
+        <circle cx="9.5" cy="7.7" r=".8" fill="oklch(1 0 89.88)" />
+        <path d="M7 14h10m-10 2.5h6" stroke="oklch(1 0 89.88)" strokeWidth="1.2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  return <Icon name={name} size={size} />;
+}
+
+const nodeKey = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+interface LayoutRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const initialTopologyLayout: Record<string, LayoutRect> = {
+  "cloud-providers": { x: 0, y: 0, width: 175, height: 185 },
+  "production-vpc": { x: 220, y: 0, width: 185, height: 79 },
+  staging: { x: 220, y: 91, width: 185, height: 79 },
+  "on-prem-office": { x: 220, y: 182, width: 185, height: 79 },
+  "kubernetes-docker": { x: 450, y: 0, width: 200, height: 99 },
+  "web-api-services": { x: 450, y: 112, width: 200, height: 94 },
+  "external-endpoints": { x: 660, y: 200, width: 170, height: 70 },
+  databases: { x: 690, y: 0, width: 205, height: 145 },
+};
+
+function alignTopologyRows(source: LayoutRect | undefined, targets: (LayoutRect | undefined)[]): (LayoutRect | undefined)[] {
+  if (!source || targets.some((target) => !target) || !targets.length) return targets;
+  const sourceCenter = targets[0]!.y + targets[0]!.height / 2;
+  const targetCenter = targets.reduce((sum, target) => sum + target!.y + target!.height / 2, 0) / targets.length;
+  const shift = Math.max(-4, Math.min(4, Math.round((targetCenter - sourceCenter) / 5) * 5));
+  return targets.map((target, index) => {
+    const vertical = index === 1 ? 0 : shift;
+    const y = Math.max(0, Math.min(TOPOLOGY_HEIGHT - target!.height, target!.y - vertical));
+    return y === target!.y ? target : { ...target!, y };
+  });
+}
+
+// Keeps the default layout optically centered: the environment column is
+// balanced against the provider card, the platform pair against that column,
+// while External Endpoints stays in the clear lane below the database card.
+function autoAlignedTopologyLayout(layout: Record<string, LayoutRect>): Record<string, LayoutRect> {
+  const next = structuredClone(layout);
+  const providers = next["cloud-providers"];
+  const environmentIds = ["production-vpc", "staging", "on-prem-office"];
+  const [production, staging, onPrem] = alignTopologyRows(providers, environmentIds.map((id) => next[id]));
+  next["production-vpc"] = production!;
+  next.staging = staging!;
+  next["on-prem-office"] = onPrem!;
+  const platformIds = ["kubernetes-docker", "web-api-services"];
+  const environmentsCenter = environmentIds.reduce((sum, id) => sum + next[id].y + next[id].height / 2, 0) / environmentIds.length;
+  const platformEdges = platformIds.map((id) => next[id]);
+  const platformCenter = (platformEdges[0].y + platformEdges[1].y + platformEdges[1].height) / 2;
+  const shift = Math.max(-6, Math.min(6, Math.round((platformCenter - environmentsCenter) / 5) * 5));
+  platformIds.forEach((id) => {
+    const node = next[id];
+    node.y = Math.max(0, Math.min(TOPOLOGY_HEIGHT - node.height, node.y - shift));
+  });
+  return next;
+}
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+function roundOrthogonalPath(points: Point[], radius = 8): string {
+  let path = `M${points[0].x} ${points[0].y}`;
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const previous = points[index - 1];
+    const current = points[index];
+    const next = points[index + 1];
+    const incomingLength = Math.hypot(current.x - previous.x, current.y - previous.y);
+    const outgoingLength = Math.hypot(next.x - current.x, next.y - current.y);
+    if (!incomingLength || !outgoingLength) continue;
+    const amount = Math.min(radius, incomingLength / 2, outgoingLength / 2);
+    const before = {
+      x: current.x - ((current.x - previous.x) / incomingLength) * amount,
+      y: current.y - ((current.y - previous.y) / incomingLength) * amount,
+    };
+    const after = {
+      x: current.x + ((next.x - current.x) / outgoingLength) * amount,
+      y: current.y + ((next.y - current.y) / outgoingLength) * amount,
+    };
+    path += ` L${before.x} ${before.y} Q${current.x} ${current.y} ${after.x} ${after.y}`;
+  }
+  const end = points[points.length - 1];
+  return `${path} L${end.x} ${end.y}`;
+}
+
+function rightToLeftPath(source: LayoutRect, target: LayoutRect): string {
+  const start = { x: source.x + source.width, y: source.y + source.height / 2 };
+  const end = { x: target.x, y: target.y + target.height / 2 };
+  const bendX = start.x + (end.x - start.x) / 2;
+  return roundOrthogonalPath([start, { x: bendX, y: start.y }, { x: bendX, y: end.y }, end]);
+}
+
+function rightToLeftPathAt(source: LayoutRect, targetPoint: Point): string {
+  const start = { x: source.x + source.width, y: source.y + source.height / 2 };
+  const bendX = start.x + (targetPoint.x - start.x) / 2;
+  return roundOrthogonalPath([start, { x: bendX, y: start.y }, { x: bendX, y: targetPoint.y }, targetPoint]);
+}
+
+function topologyEdgePaths(layout: Record<string, LayoutRect>) {
+  const provider = layout["cloud-providers"];
+  const environmentIds = ["production-vpc", "staging", "on-prem-office"];
+  const environmentCenters = environmentIds.map((id) => layout[id].y + layout[id].height / 2);
+  const branchY = Math.round((Math.min(...environmentCenters) + Math.max(...environmentCenters)) / 2);
+  const providerSource = { x: provider.x + provider.width, y: provider.y + 125 };
+  const branchX = providerSource.x + 23;
+  const providerEdges = environmentIds.map((id) => {
+    const target = layout[id];
+    const targetPoint = { x: target.x, y: target.y + target.height / 2 };
+    return roundOrthogonalPath([providerSource, { x: branchX, y: providerSource.y }, { x: branchX, y: targetPoint.y }, targetPoint]);
+  });
+
+  const kube = layout["kubernetes-docker"];
+  const web = layout["web-api-services"];
+  const endpoint = layout["external-endpoints"];
+  const databases = layout.databases;
+  const directPlatformPath = (source: string, target: string) => rightToLeftPath(layout[source], layout[target]);
+  const kubeToWeb = roundOrthogonalPath([
+    { x: kube.x + kube.width / 2, y: kube.y + kube.height },
+    { x: web.x + web.width / 2, y: web.y },
+  ]);
+  const webToEndpoint = roundOrthogonalPath([
+    { x: web.x + web.width / 2, y: web.y + web.height },
+    { x: web.x + web.width / 2, y: endpoint.y + endpoint.height / 2 },
+    { x: endpoint.x, y: endpoint.y + endpoint.height / 2 },
+  ]);
+  const kubeToDatabase = rightToLeftPathAt(kube, { x: databases.x, y: databases.y + 64.5 });
+  const webToDatabase = rightToLeftPathAt(web, { x: databases.x, y: databases.y + 99.5 });
+
+  return {
+    providerEdges,
+    connections: [
+      directPlatformPath("production-vpc", "kubernetes-docker"),
+      directPlatformPath("production-vpc", "web-api-services"),
+      directPlatformPath("staging", "web-api-services"),
+      directPlatformPath("on-prem-office", "kubernetes-docker"),
+      kubeToWeb,
+      kubeToDatabase,
+      webToDatabase,
+      webToEndpoint,
+    ],
+    branch: { x: branchX, y: branchY },
+  };
+}
+
+interface TopologyCanvasHandle {
+  fitView: (options?: { padding?: number; minZoom?: number; maxZoom?: number; duration?: number }) => void;
+  resetLayout: (options?: { padding?: number; minZoom?: number; maxZoom?: number; duration?: number }) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+}
+
+const iconToneStyles: Record<string, string> = {
+  blue: "bg-[oklch(0.956_0.0217_250.21)] text-[oklch(0.614_0.1708_253.32)]",
+  green: "bg-[oklch(0.9634_0.0223_164.52)] text-[oklch(0.6633_0.1432_158.85)]",
+  purple: "bg-[oklch(0.9487_0.0289_301)] text-[oklch(0.5824_0.2063_301.07)]",
+  teal: "bg-[oklch(0.9643_0.0203_185.5)] text-[oklch(0.6669_0.1106_184.12)]",
+};
+
+const handleIds = ["left", "right", "top", "bottom"] as const;
+
+function TopologyHandles({ nodeId }: { nodeId: string }) {
+  return (
+    <>
+      {handleIds.map((side) => (
+        <span
+          key={side}
+          id={`${nodeId}-${side}-handle`}
+          data-handle={side}
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute h-px w-px opacity-0",
+            side === "left" && "left-0 top-1/2",
+            side === "right" && "right-0 top-1/2",
+            side === "top" && "left-1/2 top-0",
+            side === "bottom" && "bottom-0 left-1/2",
+          )}
+        />
+      ))}
+    </>
+  );
+}
+
+interface DragHandlers {
+  onPointerDown: (event: React.PointerEvent<HTMLElement>) => void;
+  onPointerMove: (event: React.PointerEvent<HTMLElement>) => void;
+  onPointerUp: (event: React.PointerEvent<HTMLElement>) => void;
+  onPointerCancel: () => void;
+}
+
+interface TopologyNodeProps {
+  node: InfrastructureNode;
+  compact?: boolean;
+  position?: LayoutRect;
+  handlePrefix?: string;
+  dragHandlers?: DragHandlers;
+}
+
+function TopologyNode({ node, compact = false, position, handlePrefix = "card", dragHandlers }: TopologyNodeProps) {
+  const key = nodeKey(node.name);
+  const style = position
+    ? { left: position.x, top: position.y, width: position.width, height: position.height }
+    : undefined;
+  return (
+    <article
+      data-topology-node={key}
+      className={cn(
+        "flex min-w-0 touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-card p-2.5 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] dark:border-border",
+        !compact && "absolute",
+        compact && "relative h-[2.1875rem] w-full shrink-0 items-center gap-1.5 border-0 border-b border-[oklch(0.96_0.0063_255.48)] bg-transparent px-2 py-1.5 shadow-none last:border-b-0 dark:border-border",
+        dragHandlers && "cursor-grab active:cursor-grabbing",
+      )}
+      style={compact ? undefined : style}
+      {...dragHandlers}
+    >
+      <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles[node.tone] ?? iconToneStyles.blue)}>
+        <TopologyIcon name={node.icon} size={compact ? 16 : 19} tone={node.tone} />
+      </span>
+      <div className={cn("flex min-w-0 flex-col items-start gap-1", compact && "flex-1 flex-row items-center justify-between gap-2")}>
+        <b className="max-w-full truncate text-[0.6875rem] font-bold text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">{node.name}</b>
+        {!compact && (
+          <>
+            <HealthBadge status={node.status} />
+            <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.6577_0.0364_255.27)] dark:text-muted-foreground">
+              <Icon name="workflow" size={9} /> {node.detail}
+            </small>
+          </>
+        )}
+      </div>
+      {compact && <HealthBadge status={node.status} />}
+      <TopologyHandles nodeId={`${handlePrefix}-${key}`} />
+    </article>
+  );
+}
+
+const TopologyCanvas = forwardRef<TopologyCanvasHandle, { fitPadding?: number; fitMinZoom?: number; fitAnimationDuration?: number; idPrefix?: string; bleed?: boolean; minZoom?: number; maxZoom?: number }>(function TopologyCanvas(
+  { fitPadding = 0.05, fitMinZoom, fitAnimationDuration = 200, idPrefix = "card", bleed = false, minZoom = 0.5, maxZoom = 1.2 },
+  ref,
+) {
+  const [zoom, setZoom] = useState(1);
+  const [fitDuration, setFitDuration] = useState(200);
+  const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
+  const [layout, setLayout] = useState<Record<string, LayoutRect>>(() => autoAlignedTopologyLayout(initialTopologyLayout));
+  const minimumFitZoom = fitMinZoom ?? minZoom;
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ id: string; pointerId: number; origin: LayoutRect; startX: number; startY: number } | null>(null);
+  const panRef = useRef<{ pointerId: number; startX: number; startY: number; origin: { x: number; y: number } } | null>(null);
+  const arrowId = `topology-arrow-${idPrefix}`;
+  const edges = topologyEdgePaths(layout);
+  const trafficColor = (status: string) => status === "Degraded" ? "#f59e0b" : status === "Offline" || status === "Critical" ? "#ef4444" : "#22d3ee";
+  const providerStatuses = cloudProviders.map((provider) => provider.status);
+  const connectionStatuses = [
+    infrastructureNodes.environments[0]?.status,
+    infrastructureNodes.environments[0]?.status,
+    infrastructureNodes.environments[1]?.status,
+    infrastructureNodes.environments[2]?.status,
+    infrastructureNodes.platforms[0]?.status,
+    infrastructureNodes.platforms[0]?.status,
+    infrastructureNodes.platforms[1]?.status,
+    infrastructureNodes.platforms[1]?.status,
+  ];
+
+  const dragHandlers = (id: string): DragHandlers => ({
+    onPointerDown: (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      dragRef.current = { id, pointerId: event.pointerId, origin: layout[id], startX: event.clientX, startY: event.clientY };
+    },
+    onPointerMove: (event) => {
+      const drag = dragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+      const nextX = Math.round((drag.origin.x + (event.clientX - drag.startX) / zoom) / 5) * 5;
+      const nextY = Math.round((drag.origin.y + (event.clientY - drag.startY) / zoom) / 5) * 5;
+      setLayout((current) => ({
+        ...current,
+        [id]: { ...current[id], x: nextX, y: nextY },
+      }));
+    },
+    onPointerUp: (event) => {
+      if (dragRef.current?.pointerId === event.pointerId) dragRef.current = null;
+    },
+    onPointerCancel: () => {
+      dragRef.current = null;
+    },
+  });
+
+  const fitView = useCallback(
+    ({ padding = fitPadding, minZoom: requestedMinZoom = minimumFitZoom, maxZoom: fitMaxZoom = maxZoom, duration = fitAnimationDuration }: { padding?: number; minZoom?: number; maxZoom?: number; duration?: number } = {}) => {
+      const viewport = viewportRef.current;
+      if (!viewport) return;
+      const nextZoom = Math.min(fitMaxZoom, maxZoom, (viewport.clientWidth * (1 - padding * 2)) / TOPOLOGY_WIDTH, (viewport.clientHeight * (1 - padding * 2)) / TOPOLOGY_HEIGHT);
+      const fittedZoom = Math.max(requestedMinZoom, nextZoom || 1);
+      setFitDuration(duration);
+      setZoom(fittedZoom);
+      setCanvasOffset({
+        x: Math.max(0, (viewport.clientWidth - TOPOLOGY_WIDTH * fittedZoom) / 2),
+        y: Math.max(0, (viewport.clientHeight - TOPOLOGY_HEIGHT * fittedZoom) / 2),
+      });
+    },
+    [fitPadding, minimumFitZoom, fitAnimationDuration, maxZoom],
+  );
+
+  const zoomBy = useCallback((amount: number) => {
+    setZoom((current) => {
+      const nextZoom = Math.min(maxZoom, Math.max(minZoom, Number((current + amount).toFixed(2))));
+      const viewport = viewportRef.current;
+      if (viewport) {
+        setCanvasOffset({
+          x: Math.max(0, (viewport.clientWidth - TOPOLOGY_WIDTH * nextZoom) / 2),
+          y: Math.max(0, (viewport.clientHeight - TOPOLOGY_HEIGHT * nextZoom) / 2),
+        });
+      }
+      return nextZoom;
+    });
+  }, [maxZoom, minZoom]);
+
+  const resetLayout = useCallback((options?: { padding?: number; minZoom?: number; maxZoom?: number; duration?: number }) => {
+    setLayout(autoAlignedTopologyLayout(initialTopologyLayout));
+    fitView(options);
+  }, [fitView]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      fitView,
+      resetLayout,
+      zoomIn: () => zoomBy(0.06),
+      zoomOut: () => zoomBy(-0.06),
+    }),
+    [fitView, resetLayout, zoomBy],
+  );
+
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return undefined;
+    fitView();
+    const observer = new ResizeObserver(() => fitView());
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, [fitView]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => fitView(), 50);
+    return () => window.clearTimeout(timer);
+  }, [fitView]);
+
+  const handlePanStart = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0 || (event.target as HTMLElement).closest?.("[data-topology-node]")) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, origin: canvasOffset };
+  };
+
+  const handlePanMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const pan = panRef.current;
+    const viewport = viewportRef.current;
+    if (!pan || pan.pointerId !== event.pointerId || !viewport) return;
+    const visibleMargin = 72;
+    const rects = Object.values(layout);
+    const contentMinX = Math.min(...rects.map((rect) => rect.x));
+    const contentMinY = Math.min(...rects.map((rect) => rect.y));
+    const contentMaxX = Math.max(...rects.map((rect) => rect.x + rect.width));
+    const contentMaxY = Math.max(...rects.map((rect) => rect.y + rect.height));
+    const minX = Math.min(0, visibleMargin - contentMaxX * zoom);
+    const maxX = Math.max(0, viewport.clientWidth - visibleMargin - contentMinX * zoom);
+    const minY = Math.min(0, visibleMargin - contentMaxY * zoom);
+    const maxY = Math.max(0, viewport.clientHeight - visibleMargin - contentMinY * zoom);
+    setCanvasOffset({
+      x: Math.max(minX, Math.min(maxX, pan.origin.x + event.clientX - pan.startX)),
+      y: Math.max(minY, Math.min(maxY, pan.origin.y + event.clientY - pan.startY)),
+    });
+  };
+
+  const handlePanEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (panRef.current?.pointerId === event.pointerId) panRef.current = null;
+  };
+
+  const handleWheelZoom = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const rect = viewport.getBoundingClientRect();
+    const pointerX = event.clientX - rect.left;
+    const pointerY = event.clientY - rect.top;
+    const nextZoom = Math.min(maxZoom, Math.max(minZoom, zoom * (event.deltaY < 0 ? 1.08 : 0.92)));
+    if (nextZoom === zoom) return;
+    const contentX = (pointerX - canvasOffset.x) / zoom;
+    const contentY = (pointerY - canvasOffset.y) / zoom;
+    setZoom(nextZoom);
+    setCanvasOffset({ x: pointerX - contentX * nextZoom, y: pointerY - contentY * nextZoom });
+  };
+
+  return (
+    <div
+      ref={viewportRef}
+      onPointerDown={handlePanStart}
+      onPointerMove={handlePanMove}
+      onPointerUp={handlePanEnd}
+      onPointerCancel={handlePanEnd}
+      onWheel={handleWheelZoom}
+      className={cn(
+        "relative cursor-grab touch-none select-none overflow-hidden active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        bleed ? "mt-1 h-[26.25rem] min-h-[26.25rem] w-[calc(100%+1.5rem)] -mx-3 -mb-2.5 flex-none" : "h-full min-h-0 w-full",
+      )}
+    >
+      <div className="absolute h-[16.875rem] w-[55.9375rem] origin-top-left transition-transform" style={{ left: canvasOffset.x, top: canvasOffset.y, transform: `scale(${zoom})`, transitionDuration: `${fitDuration}ms` }}>
+        <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" viewBox="0 0 895 270" aria-hidden="true">
+          <defs>
+            {(["#22d3ee", "#f59e0b", "#ef4444"] as const).map((color, index) => (
+              <marker key={color} id={`${arrowId}-${index}`} markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M0,0 L9,4.5 L0,9 z" fill={color} />
+              </marker>
+            ))}
+          </defs>
+          <g fill="none" strokeWidth="1.4" strokeOpacity="0.72" strokeLinecap="round" strokeLinejoin="round">
+            {edges.providerEdges.map((path, index) => {
+              const color = trafficColor(providerStatuses[index] ?? "Healthy");
+              return <g key={`provider-${index}`}>
+                <path d={path} stroke={color} markerEnd={`url(#${arrowId}-${color === "#22d3ee" ? 0 : color === "#f59e0b" ? 1 : 2})`} />
+                <circle r="2.4" fill={color} stroke="none" opacity="0.95"><animateMotion path={path} dur={`${3.8 + index * 0.25}s`} begin={`${index * 0.35}s`} repeatCount="indefinite" /></circle>
+              </g>;
+            })}
+            {edges.connections.map((path, index) => {
+              const color = trafficColor(connectionStatuses[index] ?? "Healthy");
+              return <g key={`connection-${index}`}>
+                <path d={path} stroke={color} markerEnd={`url(#${arrowId}-${color === "#22d3ee" ? 0 : color === "#f59e0b" ? 1 : 2})`} />
+                <circle r="2.2" fill={color} stroke="none" opacity="0.9"><animateMotion path={path} dur={`${4.2 + (index % 3) * 0.3}s`} begin={`${(index + 1) * 0.28}s`} repeatCount="indefinite" /></circle>
+              </g>;
+            })}
+            <circle cx={edges.branch.x} cy={edges.branch.y} r="2.4" fill="#22d3ee" stroke="none" />
+          </g>
+        </svg>
+
+        <div className="absolute inset-0 z-[1] h-full w-full">
+          {/* Cloud providers column */}
+          <section
+            data-topology-node="cloud-providers"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-white/85 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border dark:bg-[oklch(0.2507_0.0423_258.76)]"
+            style={{ left: layout["cloud-providers"].x, top: layout["cloud-providers"].y, width: layout["cloud-providers"].width, height: layout["cloud-providers"].height }}
+            {...dragHandlers("cloud-providers")}
+          >
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[oklch(0.9443_0.0109_256.7)] px-2 text-[0.6875rem] font-medium text-[oklch(0.5098_0.0492_252.93)] dark:border-border dark:text-[oklch(0.8557_0.0264_253.59)]">
+              <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+                <Icon name="cloud" size={17} />
+              </span>
+              <b>Cloud Providers</b>
+            </div>
+            {cloudProviders.map((provider) => (
+              <div key={provider.name} className="grid h-[3rem] grid-cols-[27px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[oklch(0.963_0.0062_255.48)] px-2 py-1 last:border-b-0 dark:border-border">
+                <span
+                  className={cn(
+                    "grid h-[1.5625rem] w-[1.5625rem] place-items-center rounded-full",
+                    provider.tone === "orange" && "bg-[oklch(0.7611_0.1594_66.41)] text-white",
+                    provider.tone === "blue" && "bg-[oklch(0.6211_0.1895_256.06)] text-white",
+                    provider.tone === "red" && "rounded-[0.3125rem] bg-[oklch(0.5643_0.2157_19.13)] text-white",
+                  )}
+                >
+                  <ProviderLogo provider={provider.name} className="h-[1.0625rem] w-[1.0625rem] text-white" />
+                </span>
+                <div className="min-w-0">
+                  <b className="block truncate text-[0.6875rem] font-semibold leading-tight text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">{provider.name}</b>
+                  <HealthBadge status={provider.status} />
+                </div>
+                <small className="whitespace-nowrap text-[0.6875rem] text-[oklch(0.6643_0.0331_254.39)] dark:text-muted-foreground">{provider.assets} instances</small>
+              </div>
+            ))}
+            <TopologyHandles nodeId={`${idPrefix}-cloud-providers`} />
+          </section>
+
+          {/* Environment nodes */}
+          {infrastructureNodes.environments.map((node) => {
+            const key = nodeKey(node.name);
+            return <TopologyNode key={node.name} node={node} position={layout[key]} handlePrefix={idPrefix} dragHandlers={dragHandlers(key)} />;
+          })}
+
+          {/* Platform nodes */}
+          {infrastructureNodes.platforms.map((node) => {
+            const key = nodeKey(node.name);
+            return <TopologyNode key={node.name} node={node} position={layout[key]} handlePrefix={idPrefix} dragHandlers={dragHandlers(key)} />;
+          })}
+
+          {/* External endpoints */}
+          <article
+            data-topology-node="external-endpoints"
+            className="absolute flex min-w-0 cursor-grab touch-none select-none items-start gap-2 rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-card p-2.5 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border"
+            style={{ left: layout["external-endpoints"].x, top: layout["external-endpoints"].y, width: layout["external-endpoints"].width, height: layout["external-endpoints"].height }}
+            {...dragHandlers("external-endpoints")}
+          >
+            <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+              <Icon name="globe" size={17} />
+            </span>
+            <div className="flex min-w-0 flex-col items-start gap-1">
+              <b className="whitespace-nowrap text-[0.6875rem] font-bold text-[oklch(0.5198_0.0529_252.66)] dark:text-[oklch(0.8557_0.0264_253.59)]">External Endpoints</b>
+              <HealthBadge status="Healthy" />
+              <small className="flex items-center gap-1 whitespace-nowrap text-[0.6875rem] text-[oklch(0.6577_0.0364_255.27)] dark:text-muted-foreground">
+                <Icon name="workflow" size={9} /> 3 endpoints
+              </small>
+            </div>
+            <TopologyHandles nodeId={`${idPrefix}-external-endpoints`} />
+          </article>
+
+          {/* Databases column */}
+          <section
+            data-topology-node="databases"
+            className="absolute min-w-0 cursor-grab touch-none select-none overflow-hidden rounded-[0.4375rem] border border-[oklch(0.9206_0.0184_250.6)] bg-white/85 shadow-[0_1px_3px_oklch(0.3386_0.0711_251.9_/_0.031)] active:cursor-grabbing dark:border-border dark:bg-[oklch(0.2507_0.0423_258.76)]"
+            style={{ left: layout.databases.x, top: layout.databases.y, width: layout.databases.width, height: layout.databases.height }}
+            {...dragHandlers("databases")}
+          >
+            <div className="flex h-[2.4375rem] items-center gap-2 border-b border-[oklch(0.9443_0.0109_256.7)] px-2 text-[0.6875rem] font-medium text-[oklch(0.5098_0.0492_252.93)] dark:border-border dark:text-[oklch(0.8557_0.0264_253.59)]">
+              <span className={cn("grid h-[1.6875rem] w-[1.6875rem] shrink-0 place-items-center rounded-full", iconToneStyles.blue)}>
+                <Icon name="database" size={17} />
+              </span>
+              <b>Databases</b>
+            </div>
+            <div className="flex flex-col">
+              {infrastructureNodes.databases.map((node) => (
+                <TopologyNode key={node.name} node={node} compact handlePrefix={idPrefix} />
+              ))}
+            </div>
+            <TopologyHandles nodeId={`${idPrefix}-databases`} />
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+interface TopologyToolbarProps {
+  canvasRef: React.RefObject<TopologyCanvasHandle | null>;
+  onExpand: () => void;
+  onAutoLayout?: () => void;
+  modal?: boolean;
+  hideExpand?: boolean;
+  hideZoomButtons?: boolean;
+}
+
+function TopologyToolbar({ canvasRef, onExpand, onAutoLayout, modal = false, hideExpand = false, hideZoomButtons = false }: TopologyToolbarProps) {
+  const buttonClass = cn(compactButton, modal && "select-none");
+  return (
+    <div className={cn("absolute right-[2.1875rem] top-2.5 z-[3] flex gap-1.5", modal && "static inset-auto z-auto m-0 ml-auto")}>
+      <button type="button" className={buttonClass} onClick={() => (onAutoLayout ? onAutoLayout() : canvasRef.current?.resetLayout())}>
+        <Workflow size={13} aria-hidden="true" />Auto Layout
+      </button>
+      {!hideZoomButtons && (
+        <>
+          <button type="button" className={buttonClass} aria-label="Zoom out" onClick={() => canvasRef.current?.zoomOut()}>
+            <Minus size={13} />
+          </button>
+          <button type="button" className={buttonClass} aria-label="Zoom in" onClick={() => canvasRef.current?.zoomIn()}>
+            <Plus size={13} />
+          </button>
+        </>
+      )}
+      {!hideExpand && (
+        <button type="button" className={buttonClass} aria-label="Expand topology" onClick={onExpand}>
+          <Expand size={13} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function TopologyModal({ onClose }: { onClose: () => void }) {
+  const canvasRef = useRef<TopologyCanvasHandle>(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    const fitAfterResize = () => canvasRef.current?.fitView(TOPOLOGY_MODAL_FIT_OPTIONS);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", fitAfterResize);
+    const timer = window.setTimeout(fitAfterResize, 150);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", fitAfterResize);
+      window.clearTimeout(timer);
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className="animate-topology-overlay-fade fixed inset-0 z-[1000] flex items-center justify-center bg-[oklch(0.2077_0.0398_265.75_/_0.55)] p-4 backdrop-blur-[0.1875rem] motion-reduce:animate-none"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-label="Infrastructure Topology"
+        className="animate-topology-modal-scale flex h-[92vh] max-h-[62.5rem] w-[96vw] max-w-[112.5rem] flex-col overflow-hidden rounded-[0.875rem] border border-slate-200 bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)] motion-reduce:animate-none"
+      >
+        <header className="flex h-14 min-h-14 items-center gap-3 border-b border-slate-200 px-5">
+          <TopologyToolbar
+            canvasRef={canvasRef}
+            onExpand={onClose}
+            onAutoLayout={() => canvasRef.current?.resetLayout(TOPOLOGY_MODAL_FIT_OPTIONS)}
+            modal
+            hideExpand
+            hideZoomButtons
+          />
+          <button
+            type="button"
+            aria-label="Close topology"
+            onClick={onClose}
+            className="grid h-[1.6875rem] w-[1.75rem] shrink-0 cursor-pointer select-none place-items-center rounded-md border border-border bg-card text-[oklch(0.5035_0.0488_254.04)] transition-colors hover:bg-accent"
+          >
+            <X size={16} />
+          </button>
+        </header>
+        <div className="relative min-h-0 w-full flex-1 overflow-hidden">
+          <TopologyCanvas ref={canvasRef} fitPadding={0.04} fitMinZoom={0.4} fitAnimationDuration={300} idPrefix="modal" minZoom={0.3} maxZoom={2.5} />
+        </div>
+      </section>
+    </div>,
+    document.body,
+  );
+}
+
+export function TopologyPanel() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const canvasRef = useRef<TopologyCanvasHandle>(null);
+  const closeModal = useCallback(() => setIsExpanded(false), []);
+
+  return (
+    <>
+      <Card className="relative flex h-[29.5rem] min-w-0 flex-col overflow-hidden p-2.5">
+        <TopologyToolbar canvasRef={canvasRef} onExpand={() => setIsExpanded(true)} />
+        <TopologyCanvas ref={canvasRef} fitPadding={0.05} idPrefix="card" bleed />
+      </Card>
+      {isExpanded && <TopologyModal onClose={closeModal} />}
+    </>
+  );
+}

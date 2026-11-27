@@ -1,0 +1,152 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ChevronDown, X } from "lucide-react";
+
+import { NAV_GROUPS } from "@/config/navigation";
+import { cn } from "@/lib/utils";
+
+interface SidebarProps {
+  mobileOpen: boolean;
+  onClose: () => void;
+}
+
+function isItemActive(pathname: string, href: string): boolean {
+  if (pathname === href) return true;
+  // Nested routes (e.g. /operations/incidents/new, /operations/incidents/INC-1042) keep the parent item active.
+  return href !== "/" && pathname.startsWith(`${href}/`);
+}
+
+function groupContaining(pathname: string): string | null {
+  const group = NAV_GROUPS.find((entry) => entry.items.some((item) =>
+    isItemActive(pathname, item.href),
+  ));
+  return group?.title ?? null;
+}
+
+export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+  const pathname = usePathname();
+  const [expanded, setExpanded] = useState<string | null>(() => groupContaining(pathname) ?? NAV_GROUPS[0]?.title ?? null);
+
+  // Keep the active section expanded as the user navigates.
+  useEffect(() => {
+    const activeGroup = groupContaining(pathname);
+    if (activeGroup) setExpanded(activeGroup);
+  }, [pathname]);
+
+  return (
+    <>
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-30 flex w-[14.5rem] flex-col overflow-y-auto border-r border-sidebar-border bg-gradient-to-b from-[oklch(0.2558_0.057_257.39)] to-[oklch(0.2338_0.0502_256.48)] text-sidebar-foreground transition-transform duration-200 ease-in-out [scrollbar-width:thin] [scrollbar-color:oklch(0.3874_0.0489_252.35)_transparent]",
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
+          "lg:translate-x-0",
+        )}
+        aria-label="Main navigation"
+      >
+        {/* Brand */}
+        <div className="flex h-[3.375rem] min-h-[3.375rem] items-center gap-2 border-b border-sidebar-border px-4">
+          <div
+            aria-hidden="true"
+            className="font-display -skew-x-6 select-none text-[2.0625rem] font-extrabold italic leading-[2.125rem] text-[oklch(0.6798_0.1556_242.18)] [text-shadow:0_0_12px_oklch(0.627_0.1664_249.09_/_0.267)]"
+          >
+            N
+          </div>
+          <div className="min-w-0">
+            <div className="font-display text-[0.875rem] font-bold tracking-[0.1875rem] text-[oklch(0.9678_0.0086_247.91)]">NEXUS</div>
+            <div className="mt-0.5 text-[0.5rem] leading-none text-sidebar-muted">Infrastructure Monitor</div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close navigation"
+            className="ml-auto rounded-md p-1.5 text-sidebar-foreground transition-colors hover:bg-white/5 lg:hidden"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 py-1" aria-label="Primary">
+          {NAV_GROUPS.map((group) => {
+            const isExpanded = expanded === group.title;
+            const submenuId = `sidebar-submenu-${group.title.toLowerCase().replace(/\s+/g, "-")}`;
+            const GroupIcon = group.icon;
+            return (
+              <div key={group.title} className="border-b border-white/5 px-2 pb-1 pt-1.5 last:border-b-0">
+                <button
+                  type="button"
+                  aria-expanded={isExpanded}
+                  aria-controls={submenuId}
+                  onClick={() => setExpanded((current) => (current === group.title ? null : group.title))}
+                  className="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-[0.8125rem] font-medium text-[oklch(0.9678_0.0086_247.91)] outline-none transition-colors hover:bg-white/5 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30"
+                >
+                  <GroupIcon size={15} className="shrink-0 text-[oklch(0.8684_0.0245_253.96)]" aria-hidden="true" />
+                  <span className="min-w-0 flex-1 truncate">{group.title}</span>
+                  <ChevronDown
+                    size={13}
+                    aria-hidden="true"
+                    className={cn("shrink-0 text-[oklch(0.7225_0.0374_254.92)] transition-transform duration-200 motion-reduce:transition-none", !isExpanded && "-rotate-90")}
+                  />
+                </button>
+                <div
+                  id={submenuId}
+                  aria-hidden={!isExpanded}
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-200 ease-in-out motion-reduce:transition-none",
+                    isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                  )}
+                >
+                  <div className="min-h-0 overflow-hidden" inert={!isExpanded}>
+                    <ul className="flex flex-col gap-0.5 pt-0.5">
+                      {group.items.map((item) => {
+                        const isActive = isItemActive(pathname, item.href);
+                        const ItemIcon = item.icon;
+                        return (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              aria-current={isActive ? "page" : undefined}
+                              onClick={onClose}
+                              className={cn(
+                                "flex h-8 items-center gap-2 rounded-md px-2 pl-[1.625rem] text-xs font-normal text-sidebar-foreground outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white/30",
+                                isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                              )}
+                            >
+                              <ItemIcon size={14} aria-hidden="true" className={cn("shrink-0", isActive ? "text-white" : "text-[oklch(0.8242_0.0314_254.34)]")} />
+                              <span className="truncate">{item.label}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </nav>
+
+        {/* Footer status */}
+        <div className="border-t border-sidebar-border p-3.5">
+          <div className="flex items-center justify-center gap-2 text-[0.625rem] text-sidebar-muted">
+            <span>Powered by <span className="font-semibold text-[oklch(0.9169_0.0259_253.57)]">Click Master</span></span>
+            <span className="rounded bg-white/5 px-1.5 py-0.5 font-medium">V1.0</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile scrim */}
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="Close menu"
+          onClick={onClose}
+          className="fixed inset-0 z-20 cursor-default bg-[oklch(0.2035_0.043_256.48)]/60 lg:hidden"
+        />
+      )}
+    </>
+  );
+}
