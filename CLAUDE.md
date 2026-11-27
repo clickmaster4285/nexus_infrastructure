@@ -30,11 +30,9 @@ Read before starting work:
 | `npm install` | Install dependencies |
 | `npm run dev` | Dev server on http://localhost:3000 (`/` redirects to `/overview/executive`) |
 | `npm run typecheck` | `tsc --noEmit` with TypeScript 7 (fast). |
-| `npm run lint` | ESLint (0 errors required; warnings are tracked cleanup) |
-| `npm test` | Vitest unit tests (`src/**/*.test.ts`); `npm run test:watch` while developing |
 | `npm run build` | Production build |
 
-**Before every commit: typecheck, lint and test must pass.** CI (`.github/workflows/frontend-ci.yml`) runs all four on PRs touching `frontend/`.
+**Before every commit: `npm run typecheck` must pass.** No lint, tests or CI for now (removed on purpose, 2026-11-27; may return later).
 
 ## Stack
 
@@ -43,11 +41,10 @@ Read before starting work:
 **Backend (planned, not started):** Go core (API, inventory, scheduler, auth/RBAC, audit) + small stateless Python services for network device adapters (Netmiko/NAPALM/SNMP), talking over gRPC. See [PLAN.md](PLAN.md).
 
 ### Version gotchas
-- **Next 16:** `next lint` no longer exists – run ESLint directly. Route middleware file is `proxy.ts`, not `middleware.ts`. After switching versions, `rm -rf .next` (a stale cache caused a fake prerender failure).
+- **Next 16:** `next lint` no longer exists. Route middleware file is `proxy.ts`, not `middleware.ts`. After switching versions, `rm -rf .next` (a stale cache caused a fake prerender failure).
 - **Recharts 3:** `Pie` has no `activeIndex`/`activeShape` – use `shape={(props, index) => …}` and `props.isActive`. Tooltip `formatter` values are `ValueType | undefined`, not `number`.
 - **Icons – only these three:** `lucide-react` for UI icons · `react-icons` (`react-icons/si`, `react-icons/fa`) for brand/tech logos (lucide 1.x has no brand icons) · `country-flag-icons` for flags. Don't add another icon library.
-- **TypeScript 6 + 7 side by side:** `@typescript/native` (= TS 7) provides `tsc`; the `typescript` package is aliased to `@typescript/typescript6` because typescript-eslint and Next's build need the TS 6 JS API (TS 7.0 has none). Don't "fix" this alias. Remove it once typescript-eslint supports TS 7.1+.
-- **ESLint:** React Compiler rules (`react-hooks/purity`, `set-state-in-effect`, …) are set to warn because of ~250 existing hits. Don't add new ones.
+- **TypeScript 7 only:** plain `typescript@7`. Don't add `typescript-eslint`/ESLint TS rules – they need the TS 6 API and would force a TS 6 alias. (Was: `@typescript/native` (= TS 7) provides `tsc`; the `typescript` package is aliased to `@typescript/typescript6` because typescript-eslint and Next's build need the TS 6 JS API (TS 7.0 has none). Don't "fix" this alias. Removed.)
 - **Line endings:** many source files are CRLF. Keep them that way – don't rewrite whole files with tools that normalise to LF.
 
 ## How a page works (the one pattern to know)
@@ -65,7 +62,7 @@ Hooks are written so their body can later be swapped for `fetch("/api/...")` **w
 ## Rules
 
 - Keep `page.tsx` files thin. `app/` holds routes only; UI goes in `src/components/<domain>/` (kebab-case file names).
-- Data hooks live in `src/hooks/`; seed data + domain types in `src/mocks/`; pure logic in `src/utils/` with a colocated `*.test.ts`.
+- Data hooks live in `src/hooks/`; seed data + domain types in `src/mocks/`; pure logic in `src/utils/`.
 - New nav entries go in `src/config/navigation.ts` (single source for the sidebar and `hrefForLabel`).
 - Use `PageHeader` (`components/layout/page-header.tsx`) for page titles/breadcrumbs.
 - Use `cn()` from `@/lib/utils` for class merging; use theme tokens (`bg-card`, `text-muted-foreground`, `text-success`, …) not raw colors where a token exists.

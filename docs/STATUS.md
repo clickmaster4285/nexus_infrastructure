@@ -7,7 +7,7 @@ _Snapshot: 2026-11-27 (after Phase 1), branch `change26/11`._
 - **Frontend:** large, polished UI prototype. 63 routes (47 prerendered pages), ~320 source files, ~12k lines of mock data. Typecheck passes.
 - **Backend:** `backend/` is an empty folder. No API, database, auth, ingestion or workers exist.
 - **Data:** 100% mock. All state lives in browser memory and resets on reload.
-- **Quality gates:** typecheck (TS 7), ESLint (0 errors, ~690 tracked warnings), Vitest (74 tests), CI on GitHub Actions.
+- **Quality gates:** `npm run typecheck` (TypeScript 7) only. Lint, tests and CI intentionally not used for now.
 
 ## Recent history
 

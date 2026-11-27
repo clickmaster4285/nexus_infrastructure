@@ -9,7 +9,7 @@ How code in this repo is written. Follow the existing pattern; when it conflicts
 - `app/` holds routes only. No components at the root of `components/`.
 - Data hooks: `src/hooks/use<Name>.ts` (all of them; none in `mocks/`).
 - Seed data + domain types: `src/mocks/<domain>.ts`.
-- Pure logic: `src/utils/<domain>Stats.ts` or a descriptive name. No React in `utils/`. Add a colocated `<name>.test.ts` (Vitest).
+- Pure logic: `src/utils/<domain>Stats.ts` or a descriptive name. No React in `utils/`.
 - Internal navigation uses `next/link` `<Link>`, never a bare `<a href="/...">` (full page reload).
 
 ## Components
@@ -50,6 +50,6 @@ const { items, status, reload, ...actions } = useThing(filters);
 
 ## Before committing
 
-1. `cd frontend && npm run typecheck && npm run lint && npm test` – all must pass (lint: 0 errors).
+1. `cd frontend && npm run typecheck` – must pass.
 2. Load the changed page(s) in `npm run dev`, light and dark mode.
 3. Commit on a feature branch; PRs target `main`.

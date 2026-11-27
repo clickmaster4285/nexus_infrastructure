@@ -62,21 +62,18 @@ Turn the prototype into a working product **one vertical slice at a time**, with
 - [x] Move dashboards out of `app/` into `components/incidents/` and `components/runbooks/` (`app/` now holds routes only)
 - [x] Move `mocks/use*.ts` hooks into `src/hooks/`
 - [x] Rename 30 PascalCase component files to kebab-case (`git mv`, history kept)
-- [x] ESLint 10 flat config + `eslint-config-next` + `lint` script; fixed `<a>`→`<Link>`, `any`, unescaped entities
-- [x] Vitest + 74 tests for SLA, RPO, storage forecast, cron/schedule and timezone-aware next-run logic
-- [x] CI workflow `.github/workflows/frontend-ci.yml`: install → typecheck → lint → test → build
+- [x] Fixed `<a>`→`<Link>` for internal links, removed `any` types, escaped JSX entities
+- [x] ~~ESLint, Vitest tests, CI workflow~~ – added then **removed on purpose** (keep plain TypeScript 7; no CI/testing for now)
 - [x] Move `allowedDevOrigins` to the `ALLOWED_DEV_ORIGINS` env variable (`.env.example` added)
 
-**Done:** CI checks pass locally from a clean install; no duplicate routes or primitives.
+**Done:** typecheck and build pass; no duplicate routes or primitives.
 
 ## Phase 1.5 – Follow-ups (can run alongside Phase 2)
 
-- [ ] **React Compiler lint cleanup:** ~250 warnings from `react-hooks` v7 rules (`set-state-in-effect`, `purity`, `refs`, `preserve-manual-memoization`, `immutability`), currently downgraded to warnings in `eslint.config.mjs`. Fix per module, then switch the rules back to `error`
-- [ ] Remove ~400 unused imports/variables (`no-unused-vars` warnings)
-- [ ] Add tests for the larger stats modules (`alertStats`, `backupStats`, `taskStats`, `certStats`, `accessStats`, `vulnStats`)
+- [ ] (Later, when wanted) Re-add linting, unit tests and CI. Note: ESLint TS rules need the TS 6 API until typescript-eslint supports TS 7.1+
+- [ ] Remove ~400 unused imports/variables
 - [ ] Single typed `EChart` wrapper; migrate remaining Recharts charts to ECharts (one chart library)
 - [ ] Replace inline `style={{}}` bar widths where Tailwind can express them
-- [ ] When typescript-eslint supports TS 7.1+, drop the `@typescript/typescript6` alias
 
 ## Phase 2 – Backend foundation
 
