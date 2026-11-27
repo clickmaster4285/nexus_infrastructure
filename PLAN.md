@@ -34,10 +34,17 @@ Turn the prototype into a working product **one vertical slice at a time**, with
 4. Never shell out from Go to Python scripts on the hot path.
 5. If Python grows past ~60% of the backend, revisit the split.
 
-**Still to decide**
+**Decided (2026-11-27)**
 
-| Decision | Recommendation |
+| Area | Choice |
 |---|---|
+| Database | PostgreSQL + TimescaleDB (app data + metrics in one DB) |
+| Go stack | `chi` router · `sqlc` (typed Go from SQL) · `goose` migrations |
+| Auth | Email + password (argon2id/bcrypt), server-side sessions in HTTP-only cookies; OIDC-ready design |
+| Queue | NATS JetStream (when async jobs arrive) |
+| Repo layout | `backend/core` (Go), `backend/adapters/<name>` (Python), `proto/` (shared contracts) |
+
+---|---|
 | Database | PostgreSQL + TimescaleDB (relational + metrics in one DB) |
 | Go HTTP stack | `chi` or `echo` + `sqlc` for typed SQL + `goose` migrations |
 | Auth | Local email/password first, OIDC-compatible design (Keycloak / Entra later) |
@@ -113,4 +120,4 @@ OpenTelemetry traces/APM · dependency graph and root-cause analysis · anomaly 
 
 ## Next action
 
-Phase 1 is done. Settle the "Still to decide" table, then start **Phase 2** (Go backend scaffold). Phase 1.5 items can be picked up in between.
+Start **Phase 2**, step 1: scaffold `backend/core` (Go + chi), Docker Compose with Postgres/TimescaleDB, `.env.example`.
