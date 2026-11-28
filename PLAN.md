@@ -121,3 +121,5 @@ OpenTelemetry traces/APM · dependency graph and root-cause analysis · anomaly 
 ## Next action
 
 Start **Phase 2**, step 1: scaffold `backend/core` (Go + chi), Docker Compose with Postgres/TimescaleDB, `.env.example`.
+
+Backend layout, MERN→Go map, and install-as-you-go notes: [docs/BACKEND.md](docs/BACKEND.md).

@@ -9,9 +9,9 @@ Today it is a **frontend-only prototype**: every page runs on seeded mock data. 
 
 ```
 NexusInfra/
-├── frontend/   Next.js 15 app (all current code lives here)
-├── backend/    EMPTY – reserved for the API/data plane (see PLAN.md)
-├── docs/       ARCHITECTURE.md, STATUS.md, CONVENTIONS.md
+├── frontend/   Next.js app (UI prototype on mock data)
+├── backend/    Go core + later Python adapters (see docs/BACKEND.md)
+├── docs/       ARCHITECTURE, STATUS, CONVENTIONS, BACKEND
 ├── PLAN.md     Roadmap and the next work to pick up
 └── CLAUDE.md   This file
 ```
@@ -20,6 +20,7 @@ Read before starting work:
 - [PLAN.md](PLAN.md) – what we are doing next
 - [docs/STATUS.md](docs/STATUS.md) – what exists and what is broken or duplicated
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) – how the frontend is wired
+- [docs/BACKEND.md](docs/BACKEND.md) – Go folder layout, MERN map, tools, install-as-you-go
 - [docs/CONVENTIONS.md](docs/CONVENTIONS.md) – coding rules to follow
 - [frontend/AUDIT.md](frontend/AUDIT.md) – the full product/gap audit from 2026-11-13
 

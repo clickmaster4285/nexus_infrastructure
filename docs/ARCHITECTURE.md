@@ -70,7 +70,7 @@ Domain types are currently defined **inside the mock files** (e.g. `type Alert` 
 
 ## Target (planned)
 
-Stack: **Go core** (API, inventory, scheduler, polling, auth/RBAC, audit) + **stateless Python services** for network device adapters (Netmiko/NAPALM/Scrapli, SNMP), connected by gRPC and NATS. Diagram and guardrails: [PLAN.md](../PLAN.md#backend-stack--decided-go-core--python-services). Functional design: [frontend/AUDIT.md §6](../frontend/AUDIT.md).
+Stack: **Go core** (API, inventory, scheduler, polling, auth/RBAC, audit) + **stateless Python services** for network device adapters (Netmiko/NAPALM/Scrapli, SNMP), connected by gRPC and NATS. Diagram and guardrails: [PLAN.md](../PLAN.md#backend-stack--decided-go-core--python-services). Folder layout, MERN→Go map, and tool glossary: [BACKEND.md](BACKEND.md). Functional design: [frontend/AUDIT.md §6](../frontend/AUDIT.md).
 
 ```
 Collectors (host agent, Python device/SNMP adapters, cloud, K8s, OTel, synthetic probes)
